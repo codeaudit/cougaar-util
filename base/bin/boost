@@ -45,15 +45,20 @@ verbose=
 # deal with command-line arguments
 # commandline arguments before the nodename
 preargs=
+# prepreargs are low-level VM args
+prepreargs=
 # commandline arguments after the nodename
 postargs=
-# the nodename is defined to be the first name without a "-" prefix
+# the classname is defined to be the first name without a "-" prefix
 clname=
 
 while [ x"$1" != x ]; do
   case $1 in
     -v) verbose=1
 	shift
+	continue;;
+    -X*) prepreargs="$prepreargs $1"
+        shift
 	continue;;
     -*) preargs="$preargs $1"
 	shift
@@ -63,14 +68,6 @@ while [ x"$1" != x ]; do
 	break;;
   esac
 done
-# anything leftover is postargs
-postargs="$*"
-
-if [ x"$clname" == x ]; then
-    echo "Error: No classname specified! ";
-    exit;
-fi
-
 
 if [ -z "$COUGAAR_INSTALL_PATH" ]; then
     if [ "$CIP" ]; then
@@ -78,7 +75,7 @@ if [ -z "$COUGAAR_INSTALL_PATH" ]; then
     else
 	s=`echo "$0" | sed -e 's,/bin/boost,,'`
 	if [ x$s != x ] ; then
-	    echo "Warning: Defaulting COUGAAR_INSTALL_PATH to '$s'!";
+	    #echo "Warning: Defaulting COUGAAR_INSTALL_PATH to '$s'!";
 	    export COUGAAR_INSTALL_PATH=$s
 	else
 	    echo "Error: Could not find COUGAAR_INSTALL_PATH!";
@@ -86,6 +83,14 @@ if [ -z "$COUGAAR_INSTALL_PATH" ]; then
 	fi
     fi
 fi
+
+if [ x"$clname" == x ]; then
+    echo "Error: No classname specified! ";
+    exit;
+fi
+
+# anything leftover is postargs
+postargs="$*"
 
 if [ -z "$COUGAAR_WORKSPACE" ]; then
     export COUGAAR_WORKSPACE="$COUGAAR_INSTALL_PATH/workspace";
@@ -97,12 +102,13 @@ fi
 jars="$COUGAAR_INSTALL_PATH/lib/bootstrap.jar"
 
 # Cougaar Arguments: set up the cougaar application
-cargs="-Dorg.cougaar.install.path=$COUGAAR_INSTALL_PATH";
+cargs="-Dorg.cougaar.install.path=$COUGAAR_INSTALL_PATH \
+-Dorg.cougaar.workspace=$COUGAAR_WORKSPACE";
 
 # name of the bootstrapper class
 bootclass="org.cougaar.bootstrap.Bootstrapper"
 
-allargs="${bootargs} \
+allargs="$prepreargs ${bootargs} \
 ${cargs} \
 ${preargs} \
 -classpath $jars \
