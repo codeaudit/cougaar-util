@@ -1,11 +1,11 @@
 If you wish to use the Stoplight Chart, you must add the RemoteSubscriptionPlugin 
 to all agents in the society (except for the aggregation agent).  
-Currently, however, CSMART treats node agents slightly different than other agents.  
+However, CSMART treats node agents slightly different than other agents.  
 
 If you create a recipe to insert the RemoteSubscriptionPlugin into all agents, 
 this will not cause the plugin to be added to any node agents.  
 To get around this, you must modify your query to insert the RemoteSubscriptionPlugin 
-into "node" components as wellas "agent" components.  To accomplish this, you can use 
+into "node" components as well as "agent" components.  To accomplish this, you can use 
 this query when inserting the RemoteSubscriptionPlugin into agents 
 (Note that for this to work, the agent name must be 'AggAgent'):
 
@@ -14,5 +14,12 @@ recipeQueryNotAggAgent=\
  SELECT COMPONENT_ALIB_ID FROM V4_ALIB_COMPONENT WHERE COMPONENT_TYPE in ('agent', 'node') 
  AND COMPONENT_NAME NOT IN ('AggAgent')
 
+Alternately, you can create an XML file containing the org hierarchy in 
+$CIP/blackjack/data/assessment/orgTree.xml.  The Stoplight Chart will 
+then use this file rather than query the society.  This file should 
+contain all agents in the society *not including* the aggregation agent 
+and any node agents.  This means that the node agents still won't have 
+the plugin, but it won't matter because the Stoplight Chart won't try to 
+access those agents.
 
-The referenced file is checked in as orgTree.xml.sample.
+The referenced file is included as orgTree.xml.sample.
