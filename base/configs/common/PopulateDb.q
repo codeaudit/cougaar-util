@@ -132,6 +132,13 @@ queryLibPGAttribute=\
    FROM V4_LIB_PG_ATTRIBUTE \
   WHERE PG_NAME = ':pg_name:'
 
+insertLibPGAttribute=\
+ INSERT INTO V4_LIB_PG_ATTRIBUTE \
+   (PG_ATTRIBUTE_LIB_ID, PG_NAME, ATTRIBUTE_NAME, ATTRIBUTE_TYPE, AGGREGATE_TYPE) \
+  VALUES \
+     (:attribute_lib_id:, :pg_name:, :attribute_name:, 
+      :attribute_type:, :aggregate_type:)
+
 queryMaxExptId=\
  SELECT MAX(EXPT_ID) \
    FROM V4_EXPT_EXPERIMENT \
