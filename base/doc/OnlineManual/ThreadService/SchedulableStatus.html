@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>COUGAAR Thread Services in a Nutshell: SchedulableStatus</title>
+  </head>
+
+  <body>
+    <h2>org.cougaar.core.thread.SchedulableStatus</h2>
+
+    <p>The ScheduleStatus class is used to dynamically mark
+    when a thread ventures into a blocking region. It is
+      preferable to not allow threads to block and to 
+      <a href="usecases.html" target="contents">refactor</a>
+      your component into a non-blocking form. Sometimes it is not
+      possible to refactor out the blocking call. In these cases, the
+      region of the code that blocks should be marked when the pooled
+      thread enters and leaves the blocking region.
+
+    <p>To help debugging, the blocking regions are displayed as part
+    are as part of the TopServlet and the RogueThreadDetector. Since
+    the <code>Schedulable</code> is marked with the blocking region,
+    Cougaar thread scheduler policies can also use the status to help
+    determine which <code> Schedulable </code> to run next or the max
+    number of pooled threads.
+
+     <p> The following status types are defined:
+     <code>  OTHER, WAIT, FILEIO, NETIO </code> 
+    <br> A <code> NOT_BLOCKING</code> type is a negitive number.
+    <p>
+    <dl>
+      <dt> <code>void beginBlocking(int type, String excuse) </code> </dt>
+      <dd>
+	  Mark the current running <code> Schedulable </code> as
+      Blocking, with a given type and excuse. The static method finds
+      the <code>Schedulable</code> for the running thread, so you do
+      not need to do any bookkeeping your self. This call is cheap and
+	  should be used as close to the blocking region as possible
+      </dd><p>
+      <dt> <code>void beginWait(String excuse) </code> </dt>
+      <dd>
+	  Sets status type to <code> WAIT</code>
+      </dd><p>
+      <dt> <code>void beginFileIO(String excuse) </code> </dt>
+      <dd>
+	  Sets status type to <code>FILEIO</code>
+      </dd><p>
+      <dt> <code>void beginNetIO(String excuse) </code> </dt>
+      <dd>
+	  Sets status type to <code> NETIO</code>
+      </dd>  <p>    
+      <dt> <code>void endBlocking() </code> </dt>
+      <dd>
+	  Call this method when leaving the blocking region
+      </dd>   <p>  
+</dl>
+
+<p>Here is an example usage:
+<pre><code>
+try{
+ SchedulableStatus.beginNetIO("RMI reference decode");
+ object = RMIRemoteObjectDecoder.decode(ref);
+ } catch (Throwable ex) {
+   loggingService.error("Can't decode URI " +ref, ex);
+ } finally {
+  SchedulableStatus.endBlocking();
+ }
+</code> </pre>
+
+<!-- hhmts end -->
+  </body>
+</html>

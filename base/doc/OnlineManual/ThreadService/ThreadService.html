@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<html> <head>
+<title>COUGAAR Thread Services in a Nutshell: ThreadService</title>
+</head>
+
+<body>
+
+<h2>org.cougaar.core.service.ThreadService</h2>
+
+<dl>
+  
+  <dt><a name="creation">
+      <code>Schedulable getThread(Object consumer, Runnable
+      runnable, String name)
+      </code>
+      </a>
+  </dt>
+      
+  <dd> Creates a <code>Schedulable</code> with the given name
+      and running the given <code>Runnable</code> on behalf of
+      the given consumer (and <code>Object</code>). This is
+      the standard method for creating a new
+      <code>Schedulable</code>.
+      <p>
+  </dd>
+
+  <dt>
+      <code>Schedulable getThread(Object consumer, Runnable runnable)
+      </code>
+  </dt>
+      
+  <dd>
+      Creates an anonymous <code>Schedulable</code> running the
+      given <code>Runnable</code> on behalf of the given
+      consumer (and <code>Object</code>).
+      <p>
+  </dd>
+
+  <dt>
+      <code>void schedule(TimerTask task, long delay)</code>
+  </dt>
+      
+  <dd> This is the equivalent of the corresponding call on
+      <code>java.util.Timer</code>.  In fact the current
+      implementation of the Thread Services creates a Timer at
+      each layer and uses that Timer in this method, as well as
+      in the next two methods. <p> <strong>THIS METHOD IS
+      DEPRECATED</strong>. Use the corresponding <code>schedule</code>
+      on <code>Schedulable</code> instead. <p> </dd>
+
+  <dt>
+      <code>void schedule(TimerTask task, long delay, long
+      interval)
+      </code>
+  </dt>
+      
+  <dd> As above, this is the equivalent of the corresponding
+      call on <code>java.util.Timer</code>. <p> <strong>THIS METHOD IS
+      DEPRECATED</strong>. Use the corresponding <code>schedule</code>
+      on <code>Schedulable</code> instead.
+      <p>
+  </dd>
+
+  <dt>
+      <code>void scheduleAtFixedRate(TimerTask task, long delay,
+      long interval)
+      </code>
+  </dt>
+      
+  <dd>As above, this is the equivalent of the corresponding call
+      on <code>java.util.Timer</code>. <p>  <strong>THIS METHOD IS
+      DEPRECATED</strong>. Use the corresponding <code>schedule</code>
+      on <code>Schedulable</code> instead.
+      <p>
+  </dd>
+
+</dl>
+
+</body>
+
+</html>

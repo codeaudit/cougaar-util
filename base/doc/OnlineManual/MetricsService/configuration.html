@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+
+<html> <head>
+<title>Metrics Service Configuration</title>
+</head>
+
+<body>
+
+
+<h2>Configuration</h2>
+The Metrics Service is made of many components all of which are
+optional. If no components are added the Metrics Service will act as
+a black-hole with MetricsUpdates writing, but no call-backs or queries
+returned from the MetricsService (reader). The following types of
+components can be configured. The specific components are listed in
+the following sections along with their function,  insertion point and
+module (jarfile).
+
+<h3> Acme Scripts </h3>
+Acme rule scripts are available for loading the Metrics Service.
+The rules are in directory
+<code>isat/csmart/config/rules/metrics</code>. The
+<code>rule.txt</code> list the recommended rules to load the standard
+Metrics Service. Addition rules must be added in order to measure the
+length of messages (serialization) and setup the network/host
+configuration files (rss). The rule directories have the following purpose:
+<dl>
+  <dt>
+      <code>sensors</code>
+  </dt>
+      
+  <dd> Adds servlets that look at the raw sensors. These rules do
+  not load any of the Metrics Service runtime, so they should not impact
+  performance. These rules are useful for debugging and we
+  recommended that they should alway be loaded. 
+  </dd>
+
+  <dt>
+      <code>basic </code>
+  </dt>
+  <dd> Loads the basic Metrics Service which includes some
+      potentially high overhead components, such as the
+      Agent-to-Agent traffic matrix and Gossip.
+  </dd>
+
+      <dt>
+      <code>serialization </code>
+  </dt>
+  <dd> 
+      The basic MTS serialization rule for measures message
+      length. This rule conflicts with other serialization rules,
+      such as bandwidth measurement, security, and compression. These
+      other aspects must be loaded in a specific order which is
+      explained in the <code>metrics-only-serialization.rule</code>
+      Only one serialization rule should be loaded. 
+  </dd>
+      <dt>
+      <code> rss </code>
+  </dt>
+  <dd> 
+      Supplying network and host configuration data to the RSS is
+      very network specific. Each test site has its own rules which
+      tap into the local sources of system information. If you are
+      running at the TIC, you should load the rules in <code>rss/tic</code>
+  </dd>
+</dl>
+
+<h3> Sensors Components </h3>
+
+<p><b>Metrics Sensors</b> collect data about the status of Cougaar
+Plugins, Agents, Nodes and Society. Raw Sensors collect data in the
+form of a service with a table of just contains running counts. This table must
+be post-processed to generate useful statistics. Statistics Sensors
+post process raw sensor data to derive metrics which are published to
+the MetricsUpdater Service
+
+<dl>
+  <dt>
+  </dt>
+  <dd>
+  </dd>
+</dl>
+
+<h3> Gossip Components </h3>
+<dl>
+  <dt>
+  </dt>
+  <dd>
+  </dd>
+</dl>
+
+<h3> Servlets Components</h3>
+<p>org.cougaar.core.qos.metrics.MetricsServletPlugin This NodeAgent
+plugin starts five servlets: AgentLoadServlet, which displays a table
+of per-agent load and message counts; RemoteAgentServlet, which
+displays a table of various other per-agent metrics;
+NodeResourcesServlet, which displays a table of various node/host
+metrics; The MetricQueryServlet which allows remote quering metrics
+      through  the http protocol; and NodeTrafficServlet which
+      displays the message traffic into and out of an agent.
+
+<p> org.cougaar.core.mts.StatisticsPlugin This NodeAgent plugin
+installs the StatisticsServlet, which displays message statistics in a
+web page.  You will course also need to include
+org.cougaar.core.mts.StatisticsAspect in the list of loaded aspects.
+
+<dl>
+  <dt>
+  </dt>
+  <dd>
+  </dd>
+</dl>
+
+<h3> Metrics Service Components </h3>
+<dl>
+  <dt>
+  </dt>
+  <dd>
+  </dd>
+</dl>
+
+<h3>Command-line (-D) Properties</h3>
+<dl>
+  <dt>
+  </dt>
+  <dd>
+  </dd>
+</dl>
+
+<h3>RSS-Resource Status Service</h3>
+<dl>
+  <dt>
+  </dt>
+  <dd>
+  </dd>
+</dl>
+</body>
+
+</html>
+
+<!--  LocalWords:  Cougaar
+ -->

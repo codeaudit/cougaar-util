@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+
+<html> <head>
+<title>Metrics Service Use Cases</title>
+</head>
+
+<body>
+<h2>Use Cases and Examples</h2>
+
+<h3>Example Metrics Reader</h3>
+An example Metrics Service subscriber can be found in the core module.
+
+
+<pre>
+<code>
+package org.cougaar.core.qos.metrics;
+
+/**
+ * Basic Metric Service Client subscribes to a Metric path given in
+ * the Agent's .ini file and prints the value if it ever changes
+ */
+public class MetricsClientPlugin 
+    extends ParameterizedPlugin
+    implements Constants
+{
+    protected MetricsService metricsService;
+    private String paramPath = null;
+    private VariableEvaluator evaluator;
+
+  /**
+   * Metric CallBack object
+   */
+    private class MetricsCallback implements Observer {
+      /**
+       * Call back implementation for Observer
+       */
+
+      public void update(Observable obs, Object arg) {
+	    if (arg instanceof Metric) {
+		Metric metric = (Metric) arg;
+		double value = metric.doubleValue();
+		System.out.println("Metric "+ paramPath +"=" + metric);
+	    }
+	}
+    }
+  
+
+  public void load() {
+    super.load();
+    ServiceBroker sb = getServiceBroker();
+
+    evaluator = new StandardVariableEvaluator(sb);
+
+    metricsService = ( MetricsService)
+      sb.getService(this, MetricsService.class, null);
+	
+    MetricsCallback cb = new MetricsCallback();
+    paramPath = getParameter("path");
+    // If no path is given, default to the load average of the
+    // current Agent.
+    if (paramPath == null) 
+	paramPath ="$(localagent)"+PATH_SEPR+"LoadAverage";
+    
+    Object subscriptionKey=metricsService.subscribeToValue(paramPath, cb,
+							   evaluator);
+
+  }
+}
+</code>
+</pre>
+<h3>Example Metrics Writer</h3>
+
+<p> An example Metric Service  writer has the following form:
+
+<pre>
+<code>
+
+package org.cougaar.core.qos.metrics;
+
+public class MetricsTestComponent 
+    extends SimplePlugin
+    implements Constants
+{
+    
+    public void load() {
+	super.load();
+
+	ServiceBroker sb = getServiceBroker();
+	MetricsUpdateService updater = (MetricsUpdateService)
+	    sb.getService(this, MetricsUpdateService.class, null);
+
+	String key = "Current" +KEY_SEPR+ "Time" +KEY_SEPR+ "Millis";
+        // Publish the current time
+	Metric m = new MetricImpl(new Long(System.currentTimeMillis()),
+				  SECOND_MEAS_CREDIBILITY,
+				  "ms",
+                                  "MetricsTestComponent");
+	updater.updateValue(key, m);
+
+    }
+
+}
+</code>
+</pre>
+
+</body> </html>

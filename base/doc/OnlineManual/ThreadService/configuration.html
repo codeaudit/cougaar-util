@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+
+<html> <head>
+<title>Thread Services Configuration</title>
+</head>
+
+<body>
+<h2>Configuration</h2>
+
+
+
+<h3>Command-line (-D) Properties</h3>
+
+<dl>
+
+  <dt><b>org.cougaar.thread.running.max</b></dt>
+
+  <dd>Provide an integer as the value of this property to set the
+  absolute maximum number of running threads as well as the current
+  max and the size of the thread pool (default = 30).  A negative
+  value is interpreted to mean that an unlimited number of threads can
+  run.  The current max can be altered dynamically via the
+  <code>ThreadControlService</code> but can never exceed the value
+  given here. <p> </dd>
+
+  <dt><b>org.cougaar.thread.poolsize.initial</b></dt>
+  <dd>Provide a positive integer as the value of this property to set
+  the number of Java native threads that are instantiated initially in the
+  thread pool.
+  </dd>
+
+</dl>
+
+<h3> Servlets </h3>
+
+<dl>
+
+  <dt><b>org.cougaar.core.thread.TopPlugin</b></dt>
+      
+  <dd> Dumps the currently running or queued
+    <code>Schedulables</code>. It does not depend on the Metrics
+    Service. This should be loaded into the NodeAgent.<p>
+  </dd>
+  
+
+  <dt><b>org.cougaar.core.thread.AgentSensorPlugin </b></dt>
+  <dd>
+      Publishes per-agent load average data into the Metrics Service. This
+  should be loaded into the NodeAgent.<p>
+  </dd>
+
+</dl>
+
+
+</body>
+
+</html>
+
+
+
+

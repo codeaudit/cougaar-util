@@ -1,0 +1,288 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+
+<html> <head>
+<title>Thread Services Use Cases</title>
+</head>
+
+<body>
+<h2>Use Cases and Examples</h2>
+
+<h3>Code strips: avoiding calls to wait()</h3>
+
+<p>
+As explained in the overview, <code>Schedulables</code> run more
+effectively as strips of code than as loops with a <code>wait</code>,
+since the blocking behavior of the <code>wait</code> will tie up a
+limited resource needlessly.</p>
+
+<p> As an example, consider a thread-based queue pattern, which might
+look something the following. </p>
+
+<pre>
+<code>
+
+class QueueRunner implements Runnable
+{
+    private SimpleQueue queue;
+    private Thread thread;
+
+    QueueRunner() {
+	queue = new SimpleQueue(); // make the internal queue
+	thread = new Thread(this, "My Queue");
+	thread.start();  // start the thread
+    }
+
+    public void run() {
+	Object next = null;
+	while (true) {
+	    while (true) {
+		synchronized (queue) {
+		    if (!queue.isEmpty()) {
+			next = queue.pop();
+			break; // process the next item
+		    }
+		    // queue is empty, wait to be notified of new items
+		    try { queue.wait(); }
+		    catch (InterruptedException ex) {}
+		}
+	    }
+	    processNext(next);
+	}
+    }
+
+    public void add(Object x) {
+	synchronized (queue) {
+	    queue.add(x);
+	    queue.notify(); // wake up the wait()
+	}
+    }
+
+}
+
+</code>
+</pre>
+
+<p>This thread will spend most of its time in the <code>wait</code>
+call, which is not at all an effective use of a limited resource.  As
+a Schedulable it would be better written as follows:</p>
+
+
+<pre>
+<code>
+
+class QueueRunner implements Runnable
+{
+    private SimpleQueue queue;
+    private Schedulable schedulable;
+
+    QueueRunner() {
+	queue = new SimpleQueue();
+	// Create the Schedulable but don't start it yet.
+	schedulable = threadService.getThread(this, this, "MyQueue");
+    }
+
+    public void run() {
+	// Handle all items currently queued but never block
+	Object next = null;
+	while (true) {
+	    synchronized (queue) {
+		if (queue.isEmpty()) break; // done for now
+		next = queue.pop();
+	    }
+
+	    processNext(next);
+	}
+    }
+
+    void add(Object next) {
+	synchronized (queue) {
+	    queue.add(next);
+	}
+	// Restart the schedulable if it's not currently running.
+	schedulable.start();
+    }
+}
+
+</code>
+</pre>
+
+
+<h3>Code strips: avoiding calls to sleep()</h3>
+
+<p> Another popular Java Thread pattern uses a sleep in a
+never-ending loop.  As above, this uses up a thread resource even
+though the thread is rarely running.</p>
+
+<pre>
+<code>
+
+class SleepingPoller implements Runnable 
+{
+
+    private int period;
+    private String name;
+
+    SleepingPoller(String name, Object client, int period) {
+	this.name = name;
+	this.period = period;
+	ThreadService ts = (ThreadService)
+	    sb.getService(this, ThreadService.class, null);
+	ts.getThread(client, this, name).start();
+        sb.releaseService(this, ThreadService.class, ts);
+    }
+
+
+    void initialize() {
+	// Initialization code here
+    }
+
+    void executeBody()
+	throws Exception
+    {
+	// Thread body here.
+    }
+
+    public void run() {
+	initialize();
+	while (true) {
+	    try {
+		executeBody();
+	    }
+	    catch (Exception ex) {
+		log.error("Error in thread " + name, ex);
+	    }
+	    
+	    try { Thread.sleep(period); }
+	    catch { InterruptedExecption (ex) }
+	}
+    }
+}
+
+</code>
+</pre>
+
+
+<p> In this case the use of sleep can be replaced by having the run()
+method restart the thread after a delay.</p>
+
+<pre>
+<code>
+
+class Poller implements Runnable 
+{
+
+    private Schedulable schedulable;
+    private boolean initialized = false;
+    private int period;
+    private String name;
+    private ThreadService ts;
+
+    Poller(String name, Object client, int period) {
+	this.name = name;
+	this.period = period;
+	this.ts = (ThreadService)
+	    sb.getService(this, ThreadService.class, null);
+	this.schedulable = ts.getThread(client, this, name);
+
+	schedulable.start();
+    }
+
+    void ensureInitiolized() {
+	synchronized (this) {
+	    if (initialized) return;
+	    initialized = true;
+	}
+	
+	initialize();
+    }
+
+    void initialize() {
+	// Initialization code here
+    }
+
+    void executeBody()
+	throws Exception
+    {
+	// Thread body here.
+    }
+
+    public void run() {
+	ensureInitiolized();
+	try {
+	    executeBody();
+	}
+	catch (Exception ex) {
+	    log.error("Error in thread " + name, ex);
+	}
+
+        // Restart after period ms
+	schedulable.schedule(period);
+    }
+}
+
+</code>
+</pre>
+
+
+<h3>Code strips: avoiding TimerTasks</h3>
+
+<p> <code>TimerTasks</code> are not controllable and should generally
+be avoided.  Instead use the <code>schedule</code> methods on
+<code>Schedulable</code> for equivalent functionality.  In this case
+the body of the task will run as a COUGAAR thread. Compare
+<code>runTask()</code> and <code>runThreadPeriodically()</code> below.
+</p>
+
+<pre>
+<code>
+
+class MyPeriodicCode
+{
+    private int period;
+    private Schedulable schedulable;
+
+    public void body() {
+	// The body of code to be run periodically goes here.
+    }
+
+    // In this version body() runs in the Thread Service's Timer
+    // thread, which can be problematic if it takes too long.
+    void runTask() {
+	ThreadService ts = sb.getService(this, ThreadService.class, null);
+
+	TimerTask task = new TimerTask() {
+		public void run() {
+		    body();
+		}
+	    };
+	ts.schedule(task, 0, period);
+
+	sb.releaseService(this, ThreadService.class, ts);
+   }
+
+
+    // In this version body() runs periodically as a cougaar thread.
+    void runThreadPeriodically() {
+	ThreadService ts = sb.getService(this, ThreadService.class, null);
+
+	Runnable code = new Runnable () {
+		public void run() {
+		    body();
+		}
+	    };
+	schedulable = ts.getThread(this, code, "MyPeriodicCode");
+
+        // Restart the Schedulable every period ms
+        schedulable.schedule(0, period);
+
+	sb.releaseService(this, ThreadService.class, ts);
+    }
+
+}
+
+</code>
+</pre>
+
+</body>
+</html>

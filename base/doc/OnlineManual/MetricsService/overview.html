@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+
+<html> <head>
+<title>Metrics Service Overview</title>
+</head>
+
+<body>
+<h2>Overview</h2>
+
+<p> Cougaar Metrics Service construct and maintain a data model which
+integrates raw sensor values from sources throughout any given Node's
+containment hierarchy, reconciling conflicting sensor view as
+needed. The resulting metrics are accessible to any client Component
+in that Node. The data-model perspective is always local to the given
+Node, though the information may also include data about, and in some
+cases from, remote Nodes and Agents.
+
+<p> The Metrics Service data model is updated in real-time in a
+demand-based way.  As a result, a given data model becomes a more
+comprehensive view of the society as a whole not only as available
+data increases but also as demand increases.  The services themselves
+do not do any measurements.  Their function is only to collect and
+integrate raw values into a coherent and reliable data model, and to
+provide integrated best-guess metrics to clients that need them.
+
+<p> Note that the Metric Service role is limited to capturing the
+current <em>state</em> of the society and its underly resources. The
+Metrics Service gives the best guess at what the society is doing
+<em>now</em> from the local Nodes prespective. The Metrics Service
+does <em>not</em> support other kinds of statisics gathering, such as
+event/traps, time history, resource control, or policy
+management. Other Cougaar services handle these kinds of access
+mechanisms, even though the underlying statistics may be simular.
+
+<p> A Node's Metrics Service data model can be accessed by several
+ways, each tailored for a different type of consumer. When reading,
+Metrics are named based on looking of a <em>formula</em>in the data
+model. Since the lookup can follow relative relationship between
+<em>scopes</em> in the model, the lookup syntex is called a
+<a href="paths.html" target="contents">Path</a>.
+<ul>
+<li>
+    Components can read metrics using direct calls to the
+    <a href="MetricsService.html"  target="contents">MetricsService</a>
+    interface. The interface supports  both query or subscribe to specific
+    metrics. 
+</li>
+<li>
+    Operators and debuggers can access tables of metrics using <a href="operation.html" target="contents">
+    Servlets</a>
+</li>
+<li>
+    Management/Monitoring Agents can subscribe to metrics which are not
+    collected locally, but which are collected on remote nodes. 
+    <a href="gossip.html" target="contents">The Gossip Service</a>
+    will automatically transport these metrics to the local node.
+</li>
+<li>
+    The Adaptivity Engine has a standard interface and naming convention
+    for accessing metrics in rule-books.
+</li>
+<li>
+    ACME and CSMART will be able to access metrics via a Servlet
+    which returns queries in XML or Cougaar Properites format. (Not
+    available in 10.4.0).
+</li>
+<li>
+    The QuO framework for generating QoS adaptive Aspects and Comonents
+    has access to metrics, by using QuO SysConds.
+</li>
+</ul>
+    
+ <p> The Metrics Services has several ways for sensors to write metric
+ values into the Node's local data model. When writing,
+Metrics are named using on a hieractical naming convention called
+<a href="keys.html" target="contents">Keys</a>
+
+<ul>
+<li>   Components can write metrics using direct calls to the
+    <a href="MetricsUpdateService.html" target="contents">MetricsUpdateService</a>
+    
+</li>
+<li>
+    Network/System Management Systems can import external information
+    about the network and host configurations. Special DataFeeds can
+    be created to import information in different formats. For
+    example, default configuation information can be imported from a
+    web page or file using a PropertiesDataFeed, see
+        <a href="configuration.html" target="contents"> Configuring
+    The Metrics Service</a>.
+</li>
+</ul>
+</body>
+</html>
+
+
+</body> </html>

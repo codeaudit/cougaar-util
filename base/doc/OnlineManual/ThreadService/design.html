@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+
+<html> <head>
+<title>Thread Services Design and Architecture</title>
+</head>
+
+<body>
+<h2>Design and Architecture</h2>
+
+<p>
+The overall structure of the thread service system is a tree that
+tends to mimic the tree of Containers in COUGAAR. Each level of this
+tree includes its own trio of thread services which are directly
+responsible for the Threads used at that level of the hierarchy and
+indirectly responsible for its children.
+
+<p> Each level other than the root requests run-rights from its parent
+and only runs as many java Threads as it has rights. With the default
+scheduler, all requests for run-rights ultimately propogate to the
+root service, which keeps a count of running threads and refuses to
+allocate further rights if that count hits a given maximum (30 by
+default). As each Thread finishes, its run-right is released, again
+propagating to the root service. The released right will then be made
+available to the children, using a layer-specific algorithm. Each
+layer can (a) consume the right itself (if the given layer has queued
+threads); (b) recursively give it to a child; or (c) decline to accept
+it.
+
+<p>
+<table>
+  <caption align=bottom><i>Thread Service Design</i></caption>
+  <tr><td>
+      <img src="gifs/design.gif">
+  </td></tr>
+</table>
+
+<p> The direct control of local threads at any given level is handled
+by a Scheduler. If a thread at that level wants to run, the Scheduler
+is asked for a right. If a right is available a true java Thread will
+be run; if not, the request will be queued until sufficient rights are
+available. The order in which items are removed from the queue depends
+on a Comparator, which by default uses time (i.e., fifo) but which at
+any time can be replaced by an arbitrarily complex and dynamic
+Comparator via the ThreadControlService. Schedulers use a
+RightsSelector to determine the possible re-allocation of a released
+run-right. The default RightsSelector uses a round-robin algorithm,
+which provides fair scheduling between the layer's own queued requests
+and its children. The RightsSelector can be replaced at any time via
+the ThreadControlService.
+
+<p>The hierarchy skeleton is represented by a set of TreeNodes. The
+TreeNode at any given level holds pointers to the level's scheduler,
+selector, parent node and child nodes.
+ 
+
+<p>
+<table>
+  <caption align=bottom><i>Thread Services Layer Architecture </i></caption>
+  <tr><td>
+      <img src="gifs/layer.gif">
+  </td></tr>
+</table>
+
+<p>Any Container whose components wish to use the thread services
+should provide those services locally, using
+ThreadServiceProvider. This will ensure that the thread service
+hierarchy maps properly into the Component hierarchy. 
+
+<p>
+<h3>Core Internal Classes</h3>
+
+<dl>
+
+<dt>ThreadPool</dt>
+
+<dd>This is an implementation of a classic thread-pool. The threads it
+    provides are defined by an inner class, PooledThread.<p>
+</dd>
+
+<dt>SchedulableObject</dt>
+    
+<dd>This is the implementation of Schedulable. It communicates with a
+    Scheduler when it wants to request or return rights and with the
+    ThreadPool when it needs a Thread.<p>
+</dd>
+
+<dt>Scheduler</dt>
+    
+<dd>
+    This is the simplest scheduler class. It deals with run-rights
+    locally, completely ignoring the hierarchy. It's also the
+    implementation of the ThreadControlService.<p>
+</dd>
+
+<dt>PropagatingScheduler</dt>
+    
+<dd>
+    This is an extension of Scheduler that provides the standard
+    hierarchical behavior, as described above.<p>
+</dd>
+
+<dt>ThreadListenerProxy</dt>
+
+<dd>This is the implementation of ThreadListenerService.<p>
+</dd>
+
+<dt>ThreadServiceProxy</dt>
+
+<dd>
+    This is the implementation of ThreadService. It creates the
+    Thread TreeNode and the thread pool and links the pool to a
+    Scheduler.<p>
+</dd>
+
+
+</dl>
+
+<h3>Interaction between Internal Classes</h3>
+<p>
+<table>
+  <caption align=bottom><i>Thread Lifecycle Execution Graph</i></caption>
+  <tr><td>
+      <img src="gifs/LifeOfThread.gif">
+  </td></tr>
+</table>
+</body> </html>
