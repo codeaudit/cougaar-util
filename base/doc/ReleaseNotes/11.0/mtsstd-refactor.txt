@@ -1,0 +1,219 @@
+
+mtsstd-refactor -- 11.0
+
+--Reasoning--
+As a result of the 11.0 core refactoring, a new module, mtsstd was created for all mts files that could and should have been removed from org.cougaar.core.mts. All files were placed in one subdirectory (org.cougaar.mts.std), and while this may be convenient, 
+it needed organization to be in any way usable by developers or the opensource community at large. 
+It was decided two subdirectories could be created in the window of time alloted, which sufficiently organize the code into two distinct categories: 
+
+ org.cougaar.mts.base
+ - Aspect-oriented impl. of minimal mts
+   incl. stations, data striuctures & rmi/link protocols
+   1) should compile with only classes in this directory
+   2) offers all the hooks for aspects to add adaptivity.
+   3) should export NO services at the Node layer, except
+      MessageTransportService
+   4) Every Class is used (no optional classes)
+   5)tempory MTSProvider creates some aspect (watcher, agent status,
+     etc) that are in std.
+
+ org.cougaar.mts.std
+  1)contains extensions & aspects & services aspects impl.
+    and their required data structures
+  2) May export Node-level service
+  3) also incl. the MTS part of gossip
+  4) should be everything developers need to refer to
+ 
+The new layout for mtsstd module is: 
+
+ - In org.cougaar.mts.base:
+AbstractLinkSelectionPolicy.java
+CougaarIOException.java
+CommFailureException.java
+AbstractSocketControlPolicy.java
+LinkSelectionProvisionService.java
+LinkSelectionProvision.java
+LinkSelectionPolicyServiceProvider.java
+LinkProtocolService.java
+LinkProtocol.java
+LinkProtocolFactory.java
+DontRetryException.java
+DestinationQueueProviderService.java
+MessageTransportException.java
+MessageTransportAspect.java
+RMIRemoteObjectEncoder.java
+RMIRemoteObjectDecoder.java
+NameLookupException.java
+ReceiveLinkProviderService.java
+UnregisteredNameException.java
+TransientIOException.java
+SocketDelegateImplBase.java
+SocketControlProvisionService.java
+SocketControlProvision.java
+SocketControlPolicy.java
+ServerSocketWrapper.java
+SocketFactorySPC.java
+LinkSelectionPolicy.java
+SendQueue.java
+SendQueueDelegateImplBase.java
+SendLink.java
+SendLinkImpl.java
+Router.java
+RouterImpl.java
+RouterDelegateImplBase.java
+ReceiveLink.java
+ReceiveLinkImpl.java
+ReceiveLinkDelegateImplBase.java
+MT.java
+MTImpl.java
+MisdeliveredMessageException.java
+DestinationLinkDelegateImplBase.java
+DestinationLink.java
+DestinationQueueImpl.java
+DestinationQueueDelegateImplBase.java
+DestinationQueue.java
+DestinationQueueMonitorService.java
+ReceiveLinkDelegateImplBase.java
+MT.java
+MTImpl.java
+MisdeliveredMessageException.java
+DestinationLinkDelegateImplBase.java
+DestinationLink.java
+DestinationQueueImpl.java
+DestinationQueueDelegateImplBase.java
+DestinationQueue.java
+DestinationQueueMonitorService.java
+LoopbackLinkProtocol.java
+MessageDeliverer.java
+MessageReader.java
+MessageReaderDelegateImplBase.java
+MessageReaderImpl.java
+MessageTransportServiceProxy.java
+MessageWriter.java
+MessageWriterDelegateImplBase.java
+MinCostLinkSelectionPolicy.java
+BoundComponent.java
+MessageWriterImpl.java
+ReceiveLinkFactory.java
+RouterFactory.java
+SendLinkDelegateImplBase.java
+NameSupportDelegateImplBase.java
+NameSupport.java
+MessageStreamsFactory.java
+UnresolvableReferenceException.java
+SocketFactory.java
+RMILinkProtocol.java
+SendQueueFactory.java
+NameSupportImpl.java
+MessageTransportServiceProvider.java
+MessageTransportRegistryService.java
+DestinationQueueFactory.java
+MessageDelivererImpl.java
+StandardAspect.java
+MessageDelivererDelegateImplBase.java
+MessageTransportRegistry.java
+MessageDelivererFactory.java
+MessageProtectionServiceImpl.java
+SendQueueImpl.java
+MessageReply.java
+MessageQueue.java
+MessageSecurityException.java
+MessageSerializationException.java
+
+
+ - In org.cougaar.mts.std:
+RMIMessageTransport.java.txt
+PipedMessageTransport.java.txt
+MessageTransportClassic.java.txt
+LinkSender.java.txt
+LinkSenderFactory.java.txt
+StatisticsServlet.java
+StatisticsPlugin.java
+RMISocketControlService.java
+MulticastMessageAddress.java
+KeyGossip.java
+GossipTrafficRecord.java
+GossipSubscription.java
+GossipStatisticsService.java
+GossipServlet.java
+GossipQualifierService.java
+GossipPropagation.java
+Gossip.java
+DestinationQueueMonitorPlugin.java
+AgentStatusServlet.java
+AgentRemoteStatusServlet.java
+AgentLocalStatusServlet.java
+ValueGossip.java
+StepService.java
+MessageWatcherServiceImpl.java
+AspectSupport.java
+AspectSupportImpl.java
+FlushAspect.java
+DestinationQueueMonitorServlet.java
+BufferedStreamsAspect.java
+CachingStreamsAspect.java
+AspectFactory.java
+MetricsTestAspect.java
+MetricsBlastTestAspect.java
+MessageSendTimeAspect.java
+ForwardMessageLoggingAspect.java
+FutileSerializingLinkProtocol.java
+FuseServerSocket.java
+CompressingStreamsAspect.java
+ChecksumStreamsAspect.java
+AgentStatusAspect.java
+AgentFlowAspect.java
+SimpleGossipQualifierComponent.java
+DestinationQueueMonitorServlet.java
+BufferedStreamsAspect.java
+CachingStreamsAspect.java
+AspectFactory.java
+MetricsTestAspect.java
+MetricsBlastTestAspect.java
+MessageSendTimeAspect.java
+ForwardMessageLoggingAspect.java
+FutileSerializingLinkProtocol.java
+FuseServerSocket.java
+CompressingStreamsAspect.java
+ChecksumStreamsAspect.java
+AgentStatusAspect.java
+AgentFlowAspect.java
+SimpleGossipQualifierComponent.java
+SerializedRMILinkProtocol.java
+SequenceAspect.java
+SecurityAspect.java
+ScrambleAspect.java
+SampleSocketControlPolicy.java
+SSLRMILinkProtocol.java
+RMITestAspect.java
+RMISocketControlAspect.java
+MulticastAspect.java
+SerializationAspect.java
+PrioritizedThreadsAspect.java
+PreserializingStreamsAspect.java
+MessageTimeoutAspect.java
+MessageProtectionAspect.java
+HeartBeatAspect.java
+GossipAspect.java
+DeliveryVerificationAspect.java
+CountBytesStreamsAspect.java
+AttributedMessage.java
+TraceAspect.java
+StubDumperAspect.java
+SerializedMTImpl.java
+StatisticsAspect.java
+WatcherAspect.java
+SerializedMT.java
+ServiceTestAspect.java
+StepperAspect.java
+StepperControlExampleAspect.java
+WasteCPUAspect.java
+GossipStatisticsServiceAspect.java
+
+--Steps used to refactor--
+
+1) created org.cougaar.core.mts.base in module mtsstd
+2) moved all base files from org.cougaar.mts.std into org.cougaar.mts.base
+3) used mtssted-refactor.pl to rename all packages to org.cougaar.mts.base
+4) manually repaired links in all files in mtsstd and robustness modules
+5) core required just one change, a string in org.cougaar.core.node.NodeAgent used in initialisation of nodes (this will change with the dynamic component modeling of 11.0)
