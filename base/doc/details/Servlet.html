@@ -6,14 +6,175 @@
 <p>
 <center><h1>Cougaar Servlets</h1></center>
 <p>
-These notes focus upon porting the existing PSPs to the new
-Servlet API.
+These notes introduce the Cougaar Servlet support.
 <p>
 <ol>
+
 <li>
-The standard Servlet API is used by the "ServletService".  You <i>don't</i>
-need to be an expert at the Servlet API to begin writing Cougaar Servlets,
-but here are some tutorials and documentation:
+See the webserver doc for installation and testing notes:<br>
+<a href="../../webserver/doc/install.html"
+>webserver/doc/install.html</a>.<br>
+It will walk you through:
+<ul>
+  <li>optionally changing the HTTP port (8800 by default),
+      optionally turning on HTTPS (typically port 8400),
+      and other configuration details.</li>
+  <li>loading the existing servlets (such as the "/tasks" servlet)</li>
+  <li>running and testing the servlets</li>
+</ul>
+</li><p>
+
+<li>
+On Internet Explorer you should disable the
+"friendly HTML error page" option:
+<pre>
+  tools-&gt;Internet Options-&gt;Advanced-&gt;Show Friendly HTTP error messages == UNCHECKED
+</pre>
+otherwise some helpful "no such path" error response messages will
+be hidden by your browser.
+</li><p>
+
+<li>
+There are a handful of built-in servlets that are always loaded.  These
+are useful for both general users and developers.
+<p>
+The examples below assume:
+<ul>
+  <li>Host "localhost" is running a cougaar node with HTTP support
+      on port 8800.</li>
+  <li>On "localhost:8800" there's an agent named "foo".</li>
+  <li>Agent "foo" has an internally registered (user-developed)
+      servlet with path "/hello".  See the example section below
+      for a sample "HelloServlet" implementation.</li>
+  <li>There's no agent named "junk" in the society.</li>
+  <li>Suppose that there's a second cougaar node on host "x.com"
+      and HTTP port 9876.</li>
+</ul>
+<p>
+Here are the built-in servlets:
+<ul>
+  <li><a href="http://localhost:8800">http://localhost:8800</a><br>
+      <a href="http://localhost:8800/">http://localhost:8800/</a><br>
+      Generate a simple help page, plus links to some of the
+      built-in servlets listed below.<br>
+      This is the best place to start.
+    </li><p>
+  <li><a href="http://localhost:8800/agents"
+       >http://localhost:8800/agents</a><br>
+      List agent names.  This servlet supports any combination of
+      these URL-parameters:
+      <ul>
+        <li>"?local" -- list local agent names (default)</li>
+        <li>"?all"   -- list all agent names (instead of "?local")</li>
+        <li>"?html"  -- generate a pretty html page (default) </li>
+        <li>"?text"  -- generate plain text, one name per line
+                        (instead of "?html")</li>
+      </ul>
+      For example, 
+      <a href="http://localhost:8800/agents?all&amp;text"
+      >http://localhost:8800/agents?all&amp;text</a>
+      will generate a plain-text listing of all agent names in the 
+      society.
+      <p>
+      More precisely, the "?all" option will list all
+      <i>web-registered</i> agents in the society, so if some agents
+      in a society have HTTP/HTTPS disabled (via the "-D" properties
+      described in the 
+      <a href="../../webserver/doc/install.html"
+      >webserver/doc/install.html</a>)
+      then they will
+      not be listed.  By default all nodes and agents are registered,
+      so this is typically not an issue.
+      </li><p>
+   <li><a href="http://localhost:8800/$foo"
+       >http://localhost:8800/$foo</a><br>
+       <a href="http://localhost:8800/$foo"
+       >http://localhost:8800/$foo/</a><br>
+       Generate a help page for agent "foo", with a link to the
+       "/$foo/list" servlet described below.
+       </li><p>
+   <li><a href="http://localhost:8800/$foo/list"
+       >http://localhost:8800/$foo/list</a><br>
+       List all the servlet paths registered on agent "foo".  In
+       our example this should list:<ol>
+         <li>/$foo/agents</li>
+         <li>/$foo/hello</li>
+         <li>/$foo/list</li>
+       </ol>
+       </li><p>
+   <li><a href="http://localhost:8800/$foo/agents"
+       >http://localhost:8800/$foo/agents</a><br>
+       Run the "/agents" servlet on the node that is running agent 
+       "foo".  This is handy for listing co-located agents.
+       </li><p>
+   <li><a href="http://localhost:8800/$foo/hello"
+       >http://localhost:8800/$foo/hello</a><br>
+       Invoke agent "foo"'s "/hello" servlet.  This is how all 
+       user-developed servlets are invoked.
+       </li><p>
+   <li><a href="http://x.com:9876/$foo/hello"
+       >http://x.com:9876/$foo/hello</a><br>
+       This request to the wrong node is automatically redirected 
+       to 
+       <a href="http://localhost:8800/$foo/hello"
+       >http://localhost:8800/$foo/hello</a>.
+       In general a
+       client can use any node's server as a "gateway" to
+       all the agents in the distributed society and depend
+       upon the built-in redirection to send the request
+       to the right node.
+       </li><p>
+   <li><a href="http://localhost:8800/$/hello"
+       >http://localhost:8800/$/hello</a><br>
+       <a href="http://localhost:8800/hello"
+       >http://localhost:8800/hello</a><br>
+       This lets the node pick a <b>random</b> local agent
+       and pass the "/hello" request to that agent.
+       <p>
+       This is only useful when you know (<i>a priori</i>) that
+       all the agents have the same path registered and that they'll
+       all generate an equivalent response.  For example, the "/tasks"
+       servlet generates the same generic HTML frame no matter
+       which agent it is started in.  The latter "/$/" is preferred,
+       since it is more explicit that a random agent is being
+       selected.
+       </li><p>
+   <li><a href="http://localhost:8800/$junk/hello"
+       >http://localhost:8800/$junk/hello</a><br>
+       This will generate an HTML error page with all local agent
+       names and the "/hello" path tacked onto the end.  This
+       is a bit of a hack, but can be used as a shortcut to calling
+       "/agents" then typing one of the listed agent names and the
+       "/hello".  Like the "/$/" above, this assumes that all the
+       local agents have the "/hello" path registered.
+       </li><p>
+   <li><a href="http://localhost:8800/robots.txt"
+       >http://localhost:8800/robots.txt</a><br>
+       Generate this hard-coded response:<pre>
+          User-agent: *
+          Disallow: /
+       </pre> which is used to exclude search engines, such as
+       "google", from scanning cougaar web pages.
+       </li><p>
+</ul>
+</li>
+
+<li>
+<a name="ini">
+All user-developed servlets are loaded like plugins, with ".ini"-style 
+"plugin = " lines.  There are also corresponding CSMART recipes that 
+can be used.
+<p>
+Here's an example ".ini" line for loading the "/tasks" servlet:<pre>
+   plugin = org.cougaar.core.servlet.SimpleServletComponent(org.cougaar.planning.servlet.PlanViewServlet, /tasks)
+</pre>
+</li><p>
+
+<li>
+For servlet developers, the standard Servlet API is used by the 
+"ServletService".  You <i>don't</i> need to be an expert at the 
+Servlet API to begin writing Cougaar Servlets, but here are some 
+tutorials and reference documentation:
 <ul>
   <li><a href=
   "http://java.sun.com/docs/books/tutorial/servlets"
@@ -25,99 +186,8 @@ but here are some tutorials and documentation:
   "http://www.novocode.com/doc/servlet-essentials"
   >Another good tutorial</a></li>
 </ul>
-Most of the API is very similar to the existing PSP API -- there 
-are methods for parsing URL parameters, reading passed data,
-and writing to the response output (text or data).
-</li><p>
-
-<li>
-See the webserver doc for Cougaar installation and testing notes:<br>
-<a href="../../webserver/doc/install.html"
->webserver/doc/install.html</a>.<br>
-It will walk you through:
-<ul>
-  <li>enabling the new Servlet server (which is disabled by default)</li>
-  <li>enabling the (optional) HTTPS and client authentication support</li>
-  <li>loading the existing Servlets (such as the 
-      <a href="#planview">ported TASKS.PSP</a>)</li>
-  <li>running and testing the Servlets</li>
-</ul>
-I recommend trying the example Servlets listed in the above "install.html"
-before you start writing your own Servlets.
-</li><p>
-
-<li>
-The default port for the Servlet server is HTTP on port 8800 and HTTPS 
-on port 8400.  These and other server properties can be configured
-with system properties -- see the "install.html" document and the 
-properties list in "Parameters.html" for details.
-</li><p>
-
-<li>
-<a name="ini">
-All Servlets are loaded by ".ini"-style "plugin = " lines, *not* from
-a "default.psps.xml" file.  There's a corresponding CSMART recipe
-that can be used.
-<p>
-The existing "plugin = ..PlanViewerPlugin" can be removed from
-the agent's configuration once all neccessary PSPs have been
-ported to Servlets.
-</li><p>
-
-<li>
-There are two important browser/client API change for PSP porters to
-note:  
-<ol>
-<li>The first is that the URL parameter separator has been 
-<b>fixed</b> from:<br>
-  url?arg1=val1?arg2=val2?arg3=val3<br>
-to the HTTP/1.1 compliant:<br>
-  url?arg1=val1&amp;arg2=val2&amp;arg3=val3<br>
-See 
-<a href=
-"https://www.alpine.bbn.com/bugzilla/show_bug.cgi?id=20">
-bug 20</a>.  In both the client code and the ported PSP this URL 
-parameter-passing must be modified to match.  Typically this can
-be done by skimming the client code for uses of "?".
-</li>
-<p>
-<li>
-The second change is in the use of "GET v.s. POST v.s. PUT" as the 
-HTTP request method.  HTML-generating Servlets should only use 
-"doGet(..)", where HTML "&lt;a hrefs=..&gt;" are the same as before, 
-but HTML FORMs should look like: <pre>
-  &lt;form method="GET" .. /&gt;  <i>not POST!</i>
-  ... <i>various "input" and "select" statements</i>
-  &lt;/form&gt;
-</pre> Java clients that need to upload binary data to the Servlet, 
-such as serialized Java Objects, should use "PUT" instead of the 
-default "POST" method: <pre>
-   UrlConnection uc = ...;
-   ((HttpUrlConnection) uc).setRequestMethod("PUT");  <i>//new line!</i>
-   OutputStream os = uc.getOutputStream();
-   ...  <i>//usual "upload-data" code</i>
-</pre> and the Servlet should support the "doPut(..)" method.
-<p>
-The reason for the above "use GET &amp; use PUT instead of POST" 
-nonsense is that POST requests will not be redirected between Nodes 
-(typically the POST data is lost), whereas GET and PUT will be correctly 
-redirected.  The exact redirection rules are in the HTTP specification 
-and implemented in the browser/URLConnection code itself:
-<ul>
-  <li><a href=
-  "http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html"
-  >HTTP/1.1 spec on request methods</a></li>
-  <li><a href=
-  "http://ppewww.ph.gla.ac.uk/~flavell/www/post-redirect.html"
-  >Further notes on POST redirection</a></li>
-</ul>
-</li>
-</ol>
-<p>
-Other than those two changes, the existing browser/user API is the 
-same for both PSPs and Servlets.  You can pass the same URL parameters
-and/or data-structures as before, and the internal logic can remain 
-the same.
+The API includes methods for parsing URL parameters, reading passed data,
+writing to the response output (text or data), etc.
 </li><p>
 
 <li>
@@ -130,157 +200,120 @@ This defines the basic "register(servlet, path)" API.
 </li><p>
 
 <li>
-<a name="helloComp">
-See the example "HelloComponent" for a "raw" use of the 
-"ServletService" API:
-<br><tt>
-&nbsp;  core/examples/org/cougaar/core/examples/servlet/HelloComponent.java
+There are several example servlets in the core's "examples"
+directory:<br><tt>
+&nbsp;  core/examples/org/cougaar/core/examples/servlet/*
 </tt><br>
-This illustrates the use of a ServiceBroker to obtain the
-ServletService and the registration of a Servlet within the
-"Component.load()" method.
+See the "README" in that directory for details.
 <p>
-In general any Component can obtain and use the ServletService, 
-including existing subscription-based Plugins and even the Agent 
-or Blackboard itself.  Most existing PSPs follow the more simple
-Plugin-like usage of the ServletService that's described below.
-</li><p>
-
-<li>
-Most Servlet developers will use the simple Servlet loader that's 
-in core:
-<br><tt>
-&nbsp;  core/src/org/cougaar/core/servlet/SimpleServletComponent.java
-</tt><br>
-A quick glance at the code will show that this 
-"SimpleServletComponent" is strongly based upon the "HelloComponent",
-which is just another user of the <a href="#api">"ServletService"</a>.  
-There's nothing special about this simple loader...
-<p>
-The loader takes two args:  (classname, path), and will pass a
-"SimpleServletSupport" API to the created Servlet instance:
-<br><tt>
-&nbsp;  core/src/org/cougaar/core/servlet/SimpleServletSupport.java
-</tt><br>
-<p>
-This loader is ideal for either "pure-Servlets" (i.e. Servlets
-with no need to access Cougaar Services) or Servlets that 
-<b>ONLY</b> need to:
-<ul>
-  <li>know the agent's name</li>
-  <li>query the blackboard</li>
-  <li>know the names of all the agents in the society</li>
+The examples cover:<ul><p>
+  <li>Use of the "SimpleServletComponent" to load non-cougaar
+      servlets, such as the typical "Hello world!" servlet
+      that is found in virtually all tutorials.</li><p>
+  <li>Use of the SimpleServletComponent to provide the
+      "SimpleServletSupport" API to the servlet, which
+      makes it easy to write servlets that just need to:
+      <ul>
+        <li>know the agent's name</li>
+        <li>query the blackboard</li>
+        <li>know the names of all the agents in the society</li>
+      </ul></li><p>
+  <li>Extension of the "BaseServletComponent" class,
+      which allows a servlet to access the full ServiceBroker
+      and BindingSite capabilities.</li><p>
+  <li>Use of the "raw" ServletService API, which allows
+      any Component to register servlets.</li><p>
 </ul>
-Since most PSPs are relatively simple data-gatherers and 
-data-formatters, most PSPs can be ported by using the simple 
-loader.  See the ported "PlanViewServlet" as an example:
-<br><tt>
-  <a name="planview">
-&nbsp;  core/src/org/cougaar/planning/servlet/PlanViewServlet.java
-</tt><br>
+Note that these example classes are not compiled into the 
+"core.jar"; you'll need to compile them yourself.
 <p>
-More complicated Servlets, such as those that need access to 
-need blackboard publishAdd access or other Services, should 
-<b>NOT</b> be based of the existing loader.  These are valid 
-operations for a Servlet to do, but this would clutter the 
-<i>simple</i> loader and waste resources.  Instead, you should use 
-the ServletService directly -- see the 
-<a href="#helloComp">example "HelloComponent"</a> for details.
+Several PSPs have already been ported to servlets, such as
+the port of the "/alpine/demo/TASKS.PSP" PSP
+(<tt>org.cougaar.lib.planserver.psp.PSP_PlanView</tt>)
+to the "/tasks" servlet
+(<tt>org.cougaar.planning.servlet.PlanViewServlet</tt>).
 </li><p>
 
 <li>
-Here's a "hello world" example that can be loaded with the
-simple loader:
-<pre>
-------------------------------------------------------------
-import java.io.IOException;
-import java.io.PrintWriter;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import org.cougaar.core.servlet.*;
-
-public class HelloServlet extends HttpServlet {
-  private SimpleServletSupport support;
-  public HelloServlet(SimpleServletSupport support) {
-     this.support = support;
-  }
-  public void doGet(
-      HttpServletRequest request,
-      HttpServletResponse response) throws IOException {
-    PrintWriter out = response.getWriter();
-    out.print("Hello from agent "+support.getEncodedAgentName());
-  }
-}
-------------------------------------------------------------
+Here are some important notes on the use "GET v.s. POST v.s. PUT" as 
+the HTTP request method:
+<p>
+HTML-generating servlets should only use "doGet(..)", where HTML 
+"&lt;a hrefs=..&gt;" are the same as before, but HTML FORMs should 
+look like: <pre>
+  &lt;form method="GET" .. /&gt;  <i>not POST!</i>
+  ... <i>various "input" and "select" statements</i>
+  &lt;/form&gt;
 </pre>
+<p>
+Java clients that simply use URL-parameters can without writing
+to the servlet can remain as-is, since HTTP GET works fine.
+Java clients that need to upload data to the servlet, such as 
+serialized Java Objects or a streamed 'dialog', should use PUT
+instead of the default POST method: <pre>
+   UrlConnection uc = ...;
+   ((HttpUrlConnection) uc).setRequestMethod("PUT");
+   OutputStream os = uc.getOutputStream();
+   ...  <i>// usual "upload-data" code</i>
+</pre> and the servlet should support the "doPut(..)" method.  Note
+that the UrlConnection's setting of the "GET v.s. POST" method is 
+not well documented in the Sun javadocs.
+<p>
+The reason for the above "use GET &amp; use PUT instead of POST"
+nonsense is that POST requests will not be redirected between nodes
+(typically the POST data is lost), whereas GET and PUT will be correctly
+redirected.  The exact redirection rules are in the HTTP specification
+and built into the browser/URLConnection code itself:
+<ul>
+  <li><a href=
+  "http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html"
+  >HTTP/1.1 spec on request methods</a></li>
+  <li><a href=
+  "http://ppewww.ph.gla.ac.uk/~flavell/www/post-redirect.html"
+  >Further notes on POST redirection</a></li>
+</ul>
 </li><p>
 
 <li>
-The <a href="#planview">PlanViewServlet</a> illustrates a 
-recommended design pattern, which is generalized here:
-<pre>
-------------------------------------------------------------
-import <i>packages</i>;
-
-public class <i>Your</i>Servlet
-extends HttpServlet 
-{
-
-  private SimpleServletSupport support;
-
-  public <i>Your</i>Servlet(SimpleServletSupport support) {
-    this.support = support;
-  }
-
-  public void doGet(
-      HttpServletRequest request,
-      HttpServletResponse response) throws IOException, ServletException
-  {
-    // create a new "<i>YourWorker</i>" context per request
-    <i>YourWorker</i> yw = new <i>YourWorker</i>(support);
-    yw.execute(request, response);  
-  }
-
-  /**
-   * This inner class does all the work.
-   * 
-   * A new class is created per request, to keep all the
-   * instance fields separate.  If there was only one
-   * instance then multiple simultaneous requests would
-   * corrupt the instance fields (e.g. the "out" stream).
-   * 
-   * This acts as a <b>context</b> per request.
-   */
-  private static class <i>YourWorker</i> {
-
-    // all per-request state:
-    private <i>your-variables</i>;
-
-    public <i>YourWorker</i>(SimpleServletSupport support) {
-      this.support = support;
-    }
-
-    public void execute(
-        HttpServletRequest request, 
-        HttpServletResponse response) throws IOException, ServletException 
-    {
-      <i>set your-variables based upon URL-params</i>
-      <i>handle the request!</i>
-    }
-  }
-}
-------------------------------------------------------------
-<pre>
-This design is (relatively) cleaner and thread-safe than the
-"static-methods/PSPState" design used in many existing PSPs.
-<p>
-If you have state that must be shared across requests, and 
-therefore must be <tt>synchronized</tt>, the <i>YourWorker</i> 
-class can be made non-static and the fields of the outer 
-<i>YourServlet</i> class can be accessed (including 
-<i>support</i>, if you want to trim the code down).  Each
-agent will load a separate Servlet instance, as instructed
-by the <a href="#ini">INI file</a>.
+There are a couple important browser/client API change for PSP porters to
+note: 
+<ol><p>
+<li>
+All PSP classes (org.cougaar.lib.planserver.*) have been deprecated
+and will be removed in a future release (likely 9.2).  See
+<a href=
+"https://www.alpine.bbn.com/bugzilla/show_bug.cgi?id=1017"
+>bug 1017</a>
+.
+</li><p>
+<li>
+The "default.psps.xml" file is now ignored.  All servlets are loaded
+like plugins, with ".ini" lines or equivalent CSMART recipies.
+</li><p>
+<li>
+See the "GET v.s.POST v.s. PUT" notes listed above.  All PSPs
+that generate HTML FORMs must be modified to use "GET" instead of
+"POST".  All Java-based clients that upload binary data to their
+PSP must be modified to use "PUT" instead of the default "POST".
+</li><p>
+<li>
+Lastly, the old PSP-server's URL parameter separator has been 
+fixed from:<br>
+&nbsp;&nbsp;<tt>  url?arg1=val1?arg2=val2?arg3=val3</tt> <br>
+to the HTTP/1.1 compliant:<br>
+&nbsp;&nbsp;<tt>  url?arg1=val1&amp;arg2=val2&amp;arg3=val3</tt> <br>
+See
+<a href=
+"https://www.alpine.bbn.com/bugzilla/show_bug.cgi?id=20"
+>bug 20</a>.  In both the client code and the ported PSP this URL
+parameter-passing must be modified to match.  Typically this can
+easily be done by skimming the code for uses of "?".
+</li><p>
+</ol>
+Other than the changes listed above, the existing browser/user API is the
+same for both PSPs and servlets.  You can pass the same URL parameters
+and/or data-structures as before, and the internal logic can remain
+exactly the same.
 </li><p>
 
 </ol>
