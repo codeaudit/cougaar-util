@@ -32,6 +32,7 @@
   <li> <a href="#bugs">Known bugs and bugs resolved since Cougaar
   release 9.4.1</a></li>
   <li> <a href="#organization">Organization of a Release</a></li>
+  <li> <a href="#install">Installing Cougaar</a></li>
   <li> <a href="#example">Example Society Implementations</a></li>
   <li> <a href="#delivering">Delivering Software Products (Plugins and other
 Components)</a></li>
@@ -787,9 +788,9 @@ Older Change details are available in <a href="CHANGES">CIP/doc/CHANGES</a>.
  <ul>
   <li> Cougaar <a href="http://cougaar.org/faq.html">FAQ</a></li>
   <li> Cougaar <a href="http://cougaar.cougaar.org/wiki/wiki.pl">WIKI</a>.</li>
-  <li> Cougaar Developers' Guide, v11.0 (March 2004), available on
+  <li> Cougaar Developers' Guide, v11.4 (December 2004), available on
 the Cougaar website (see <a href="http://cougaar.org/docman/?group_id=17">http://cougaar.org/docman/?group_id=17</a>)</li>
-  <li> Cougaar Architecture Document, v11.0 (dated March 2004), also available
+  <li> Cougaar Architecture Document, v11.4 (dated December 2004), also available
 on the Cougaar website</li>
   <li> Release Notes for other modules such as:</li> 
      <ul>
@@ -804,7 +805,11 @@ on the Cougaar website</li>
 archive has been installed (see <a href="../core/doc/api">Core Javadoc</a> in particular)</li>
   <li> <a href="api/Parameters.html">Parameters.html</a>
  which is a catalog of System Properties (-D flags) used. The file is generated
-on the basis of @property javadoc tags in the source code. .&nbsp;</li>
+on the basis of @property javadoc tags in the source code. Note that
+  often this is split in per-module Parameters files. Start with <a href="../core/doc/api/Parameters.html">core</a>.&nbsp;</li>
+  <li> <a href="http://tutorials.cougaar.org/pizza">Pizza sample
+  application</a> serves as a good learning tool.</li>
+  <li> Try the <a href="http://tutorials.cougaar.org/">Cougaar Tutorials</a>.</li>
       </ul>
 
  <!-- ---------------------------------------------------------------------- -->
@@ -839,53 +844,17 @@ at <a href="http://bugs.cougaar.org/">Cougaar website -&gt; Bug Lists</a>.
  When you download a Cougaar release, there are several logical
  pieces. For details, see <a href="Contents.html">Contents</a>.<br>
 <br>
-  <b>To install Cougaar</b>: <br>
-<ol>
-<li>  Go to the cougaar website (<a
-href="http://www.cougaar.org">www.cougaar.org</a>). For standard
-Cougaar, go to <a href="http://cougaar.org/projects/cougaar/">the
-CougaarSE project</a>, where official releases are posted at <a
-href="http://cougaar.org/frs/?group_id=17">http://cougaar.org/frs/?group_id=17</a>.
-</li>
-<li> Download <i>either</i> the ".bin" Linux installer / ".exe"
-Windows installer for an installer that helps with MySQL setup, <i>or</i> the ".zip"
-to install by hand.
-</li>
-<li> To install from the Windows or Linux installers: This will allow
-users to run off of a local MySQL database (not required).
-      <p>(<br><b>Note</b> that if you are installing MySQL on Linux or Unix, you must 
-instruct the database to translate all table names to lowercase (which 
-is the default on Windows machines).&nbsp; To do this, you must set the variable
-lower_case_table_names=1 by including the line in /etc/my.cnf: </p>
-      <p>[mysqld] <br>
-set-variable&nbsp;&nbsp; =&nbsp;&nbsp; lower_case_table_names=1 </p>
-      <p>)</p>
-      <p>Download the installer and execute it!
-</li>
-<li> <b>Alternative</b>, manual install:
-<ol>
-<li>You'll need cougaar.zip and cougaar-support.zip (the first time) to
-get a runnable system.&nbsp; The rest are extras.&nbsp; Furthermore,
-the cougaar-support contents do not change very often.
-<li> The zips are designed to be unpacked in the same directory, e.g. 
-on unix: <br>
-<pre>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; mkdir cougaar 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cd cougaar 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unzip /tmp/cougaar.zip 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unzip -o /tmp/cougaar-support.zip 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setenv COUGAAR_INSTALL_PATH `pwd` 
-</pre>
-      </li>
-      <li>You are now ready to run. Try the tutorials (see the slides
-      on cougaar.org). Alternately, try running the <b>Pizza Party</b>
-      application. For details, see the <a href="../pizza/doc/Readme.html">Pizza Readme</a>.</li>
-    </ol>
-</li>
-</ol>
+ <h2> <a name="install"/>Installing Cougaar</h2>
+To (download and) install Cougaar, see the <a
+href="install.html">Install Instructions</a>.
       <br>
 For instructions on installing and using CSMART, see the <a
 href="../csmart/doc/InstallAndTest.html"> CSMART installation document</a>.<br>
+      <p>You are now ready to run. Try the tutorials (see the slides
+      on cougaar.org). Alternately, try running the <b>Pizza Party</b>
+      application. For details, see the <a
+      href="../pizza/doc/Readme.html">Pizza Readme</a>.
+<p>
 
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->
@@ -901,42 +870,14 @@ or distributed across multiple computers.&nbsp;
   <p>The primary example society for testing an installation, and core
  changes, is the <p>Pizza Party</b> application, available in the
  "pizza" module. Use this for testing your installation. See the <a href="../pizza/doc/Readme.html">Pizza Readme</a>.</p>
+
   <p>Another society, <b> minitestconfig</b> 
 will work "out of the box", but uses many deprecated classes and
  patterns. Plugin and component developers are encouraged to use
  pizza as their initial starting point, but <b>minitestconfig</b> may
- also be useful. Minitestconfig can also be run as a multiple node,
- multiple host society.&nbsp; </p>
-  <p>MiniTest is a simple 4 agent planning and logistics
- application. To run it as a single Node:
-<pre>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cd $COUGAAR_INSTALL_PATH/configs/minitestconfig 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cougaar MiniNode.xml MiniNode
-</pre>
-You should see something like:
-<pre>
-/cougaar/B11_2/configs/minitestconfig $ cougaar.bat MiniNode.xml MiniNode
-
-COUGAAR 11.2.2 built on Thu Nov 18 19:23:35 GMT 2004
-Repository: B11_2 on Thu Nov 18 19:20:17 GMT 2004
-VM: JDK 1.4.2_03-b02 (mixed mode)
-OS: Windows 2000 (5.0)
-2004-11-19 14:25:01,109 SHOUT [XMLComponentInitializerServiceProvider] - Initializing node
- "MiniNode" from XML file "MiniNode.xml"
-2004-11-19 14:25:08,329 WARN  [ExecutionTimer] - Multi-node societies will have execution-
-time clock skew: Set org.cougaar.core.society.startTime or society.timeOffset to avoid thi
-s problem.
-2004-11-19 14:25:08,329 WARN  [ExecutionTimer] - Starting Time set to Wed Aug 10 00:05:00
-GMT 2005 offset=22757991671ms
-2004-11-19 14:25:09,330 SHOUT [AssetInitializerServiceComponent] - Not using a database, i
-nitializing solely from Files.
-2004-11-19 02:25:11,293 SHOUT [DOTS] - +-+-+-+-+-.
-.....
-</pre>
-At this point, push the "Publish Oplan" button. Then push the "Send
-GLS Root" button. You should see 20 succesful Allocations in the
-Allocations window. You have a running Cougaar install!
-</p>
+ also be useful. For details on MiniTest, see <a
+ href="../configs/minitestconfig/Readme.txt">Minitestconfig Readme</a>.
+<p>
 <p>An alternate test society is the "ping" society. See for starting
 instructions, the simple Ping <a href="../ping/configs/ping/README">README</a>.</p>
 
