@@ -51,7 +51,7 @@ java.class.path=/opt/cougaar/lib/bootstrap.jar
 #
 # Here we override the default configuration path to include both
 # the "common" directory and "GLMTrans" directory.
-org.cougaar.config.path="/opt/cougaar/configs/common\;/opt/cougaar/configs/glmtrans\;"
+org.cougaar.config.path="/opt/cougaar/configs/common\;/opt/cougaar/configs/glmtrans\;/opt/cougaar/configs/minitestconfig\;"
 
 # Tell java to use the Server HotSpot virtual machine
 # This should be done only on a Node running the AggAgent
