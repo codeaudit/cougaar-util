@@ -27,9 +27,18 @@ insertLibComponent=\
 
 checkComponentHierarchy=\
  SELECT COMPONENT_ALIB_ID \
-   FROM V4_ASB_COMPONENT_HIERARCHY \
-  WHERE ASSEMBLY_ID :assembly_match: \
-    AND COMPONENT_ALIB_ID = :component_alib_id:
+   FROM V4_ASB_COMPONENT_HIERARCHY ACH, V4_EXPT_TRIAL_ASSEMBLY ETA \
+  WHERE ACH.ASSEMBLY_ID = ETA.ASSEMBLY_ID \
+    AND ETA.TRIAL_ID = ':trial_id:' \
+    AND ACH.COMPONENT_ALIB_ID = :component_alib_id:
+
+checkComponentHierarchy.mysql=\
+ SELECT COMPONENT_ALIB_ID \
+   FROM V4_ASB_COMPONENT_HIERARCHY ACH \
+  INNER JOIN V4_EXPT_TRIAL_ASSEMBLY ETA \
+     ON ACH.ASSEMBLY_ID = ETA.ASSEMBLY_ID \
+  WHERE ETA.TRIAL_ID = ':trial_id:' \
+    AND ACH.COMPONENT_ALIB_ID = :component_alib_id:
 
 insertComponentHierarchy=\
  INSERT INTO V4_ASB_COMPONENT_HIERARCHY \
@@ -46,16 +55,29 @@ insertComponentArg=\
 insertAgentOrg=\
  INSERT INTO V4_ASB_AGENT_ORG \
     (COMPONENT_LIB_ID, AGENT_ORG_PROTOTYPE) \
- VALUES
+ VALUES \
     (:component_lib_id:, :agentOrgPrototype:)
 
 checkRelationship=\
- SELECT '1' FROM V4_ASB_AGENT_RELATION \
-  WHERE ASSEMBLY_ID :assembly_match: \
-    AND ROLE = :role: \
-    AND SUPPORTING_COMPONENT_ALIB_ID = :supporting: \
-    AND SUPPORTED_COMPONENT_ALIB_ID = :supported: \
-    AND START_DATE = :start_date:
+ SELECT '1' \
+   FROM V4_ASB_AGENT_RELATION AAR, V4_EXPT_TRIAL_ASSEMBLY ETA \
+  WHERE AAR.ASSEMBLY_ID = ETA.ASSEMBLY_ID \
+    AND ETA.TRIAL_ID = ':trial_id:' \
+    AND AAR.ROLE = :role: \
+    AND AAR.SUPPORTING_COMPONENT_ALIB_ID = :supporting: \
+    AND AAR.SUPPORTED_COMPONENT_ALIB_ID = :supported: \
+    AND AAR.START_DATE = :start_date:
+
+checkRelationship.mysql=\
+ SELECT '1' \
+   FROM V4_ASB_AGENT_RELATION AAR \
+  INNER JOIN V4_EXPT_TRIAL_ASSEMBLY ETA \
+     ON AAR.ASSEMBLY_ID = ETA.ASSEMBLY_ID \
+    AND ETA.TRIAL_ID = ':trial_id:' \
+    AND AAR.ROLE = :role: \
+    AND AAR.SUPPORTING_COMPONENT_ALIB_ID = :supporting: \
+    AND AAR.SUPPORTED_COMPONENT_ALIB_ID = :supported: \
+    AND AAR.START_DATE = :start_date:
 
 insertRelationship=\
  INSERT INTO V4_ASB_AGENT_RELATION \
@@ -112,27 +134,45 @@ insertTrialAssembly=\
  INSERT INTO V4_EXPT_TRIAL_ASSEMBLY (EXPT_ID, TRIAL_ID, ASSEMBLY_ID, DESCRIPTION) \
  VALUES (':expt_id:', ':trial_id:', :assembly_id:, ':assembly_type: assembly')
 
-ocleanTrialAssembly=\
- DELETE FROM V4_EXPT_TRIAL_ASSEMBLY \
-  WHERE EXPT_ID = ':expt_id:' \
-    AND TRIAL_ID = ':trial_id:' \
-    AND ASSEMBLY_ID IN \
-        (SELECT ASSEMBLY_ID \
-           FROM V4_ASB_ASSEMBLY \
-          WHERE ASSEMBLY_TYPE = ':assembly_type:')
-
 cleanTrialAssembly=\
  DELETE FROM V4_EXPT_TRIAL_ASSEMBLY \
   WHERE EXPT_ID = ':expt_id:' \
-    AND TRIAL_ID NOT IN \
-(SELECT TRIAL_ID \
-   FROM V4_ASB_ASSEMBLY \
-  WHERE ASSEMBLY_TYPE IN (':cmt_type:', ':hna_type:'))
+    AND TRIAL_ID = ':trial_id:' \
+    AND ASSEMBLY_ID IN :assemblies_to_clean:
+
+queryAssembliesToClean=\
+ SELECT AA.ASSEMBLY_ID \
+   FROM V4_ASB_ASSEMBLY AA, V4_EXPT_TRIAL_ASSEMBLY ETA \
+  WHERE AA.ASSEMBLY_ID = ETA.ASSEMBLY_ID \
+    AND ETA.TRIAL_ID = ':trial_id:' \
+    AND AA.ASSEMBLY_TYPE != ':cmt_type:'
+
+copyCMTAssembliesQueryNames=copyCMTAssemblies
 
 copyCMTAssemblies=\
  INSERT INTO V4_EXPT_TRIAL_ASSEMBLY (EXPT_ID, TRIAL_ID, ASSEMBLY_ID, DESCRIPTION) \
- SELECT ':expt_id:', ':trial_id:', ETA.ASSEMBLY_ID, ETA.DESCRIPTION \
+ SELECT ':expt_id:', ':new_trial_id:', ETA.ASSEMBLY_ID, ETA.DESCRIPTION \
    FROM V4_EXPT_TRIAL_ASSEMBLY ETA, V4_ASB_ASSEMBLY AA \
   WHERE ETA.ASSEMBLY_ID = AA.ASSEMBLY_ID \
     AND ETA.TRIAL_ID = ':old_trial_id:' \
     AND AA.ASSEMBLY_TYPE = ':cmt_type:'
+
+copyCMTAssembliesQueryNames.mysql=copyCMTAssemblies1 copyCMTAssemblies2 copyCMTAssemblies3
+
+copyCMTAssemblies1=\
+ CREATE TEMPORARY TABLE `TMP_CMTA_:expt_id:` AS \
+ SELECT ':expt_id:' as EXPT_ID, \
+        ':new_trial_id:' as TRIAL_ID, \
+        ETA.ASSEMBLY_ID as ASSEMBLY_ID, \
+        ETA.DESCRIPTION as DESCRIPTION \
+   FROM V4_EXPT_TRIAL_ASSEMBLY ETA, V4_ASB_ASSEMBLY AA \
+  WHERE ETA.ASSEMBLY_ID = AA.ASSEMBLY_ID \
+    AND ETA.TRIAL_ID = ':old_trial_id:' \
+    AND AA.ASSEMBLY_TYPE = ':cmt_type:'
+
+copyCMTAssemblies2=\
+ INSERT INTO V4_EXPT_TRIAL_ASSEMBLY (EXPT_ID, TRIAL_ID, ASSEMBLY_ID, DESCRIPTION) \
+ SELECT EXPT_ID, TRIAL_ID, ASSEMBLY_ID, DESCRIPTION \
+   FROM `TMP_CMTA_:expt_id:`
+
+copyCMTAssemblies3=DROP TABLE `TMP_CMTA_:expt_id:`
