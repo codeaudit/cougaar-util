@@ -1,4 +1,4 @@
-Database = ${org.cougaar.database}
+Database = ${blackjack.database}
 Username = ${blackjack.database.user}
 Password = ${blackjack.database.password}
 MIN_IN_POOL= 1

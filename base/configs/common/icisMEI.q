@@ -1,4 +1,4 @@
-Database = ${org.cougaar.database}
+Database = ${icis.database}
 Username = ${icis.database.user}
 Password = ${icis.database.password}
 MIN_IN_POOL= 1
