@@ -84,6 +84,8 @@ XSL Template for NodeAgent, which reuses most of SimpleAgent.
 
     <xsl:call-template name="init_node"/>
 
+    <xsl:call-template name="HIGH_node_pre0"/>
+
     <xsl:call-template name="HIGH_agent_0"/>
     <xsl:call-template name="HIGH_config"/>
     <xsl:call-template name="HIGH_agent_1"/>
@@ -124,14 +126,7 @@ XSL Template for NodeAgent, which reuses most of SimpleAgent.
     </xsl:call-template>
   </xsl:template>
 
-  <xsl:template name="HIGH_node_1b">
-    <!-- busy indicator -->
-    <component
-      name="org.cougaar.core.node.NodeBusyComponent()"
-      class="org.cougaar.core.node.NodeBusyComponent"
-      priority="HIGH"
-      insertionpoint="Node.AgentManager.Agent.Component"/>
-
+  <xsl:template name="HIGH_node_pre0">
     <!-- ConfigurationService -->
     <component
       name="org.cougaar.core.node.ConfigurationServiceComponent()"
@@ -139,6 +134,15 @@ XSL Template for NodeAgent, which reuses most of SimpleAgent.
       priority="HIGH"
       insertionpoint="Node.AgentManager.Agent.Component"/>
 
+    <!-- SuicideService -->
+    <component 
+      name="org.cougaar.core.node.SuicideServiceComponent()"
+      class="org.cougaar.core.node.SuicideServiceComponent"
+      priority="HIGH"
+      insertionpoint="Node.AgentManager.Agent.Component"/>
+  </xsl:template>
+
+  <xsl:template name="HIGH_node_1b">
     <!-- thread service -->
     <component
       name="org.cougaar.core.thread.ThreadServiceProvider()"
@@ -306,14 +310,6 @@ XSL Template for NodeAgent, which reuses most of SimpleAgent.
          priority="HIGH"
          insertionpoint="Node.AgentManager.Agent.Component"/>
     </xsl:if>
-
-    <!-- SuicideService -->
-    <component 
-      name="org.cougaar.core.node.SuicideServiceComponent()"
-      class="org.cougaar.core.node.SuicideServiceComponent"
-      priority="HIGH"
-      insertionpoint="Node.AgentManager.Agent.Component"/>
-
   </xsl:template>
 
   <xsl:template name="BINDER_node_pre0">
@@ -334,6 +330,13 @@ XSL Template for NodeAgent, which reuses most of SimpleAgent.
          priority="BINDER"
          insertionpoint="Node.AgentManager.Agent.Component"/>
     </xsl:if>
+
+    <!-- busy indicator, to observe blackboard persistence -->
+    <component
+      name="org.cougaar.core.node.NodeBusyComponent()"
+      class="org.cougaar.core.node.NodeBusyComponent"
+      priority="HIGH"
+      insertionpoint="Node.AgentManager.Agent.Component"/>
   </xsl:template>
 
   <xsl:template name="LOW_node_1b">
