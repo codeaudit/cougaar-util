@@ -1,5 +1,0 @@
-# Sample site-specific properties file for NodeServer
-#
-java.class.path=/home/mthome/lib/classes\:/home/mthome/alp.install/lib/core.jar
-org.cougaar.install.path=/home/mthome/alp.install
-org.cougaar.server.verbose=true

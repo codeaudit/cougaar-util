@@ -1,5 +1,0 @@
-# Sample Windows configuration file.
-# Note that "\", ":" and ";" are quoted with "\"
-#
-java.class.path=e\:\\lib\\classes\;e\:\\alp.install\\lib\\core.jar
-org.cougaar.install.path=e\:\\alp.install
