@@ -286,7 +286,17 @@ cleanTrialRecipe=\
  DELETE FROM V4_EXPT_TRIAL_MOD_RECIPE \
   WHERE TRIAL_ID = ':trial_id:'
 
+checkAsbAgent=\
+ SELECT '1' \
+   FROM V4_ASB_AGENT \
+  WHERE COMPONENT_ALIB_ID = :component_alib_id: \
+   AND ASSEMBLY_ID :assembly_match:
 
+insertAsbAgent=\
+ INSERT INTO V4_ASB_AGENT \
+  (ASSEMBLY_ID, COMPONENT_ALIB_ID, COMPONENT_LIB_ID, CLONE_SET_ID, COMPONENT_NAME) \
+  VALUES \
+   (:assembly_id:,:component_alib_id:,:component_lib_id:,:clone_set_id:, :component_name:)
 
 ########
 # Sample recipe queries follow
