@@ -73,6 +73,11 @@ public class ServerDaemon {
   private Registry registry = null;
   private ServerHostController server = null;
 
+  public static final String DEFAULT_NAME = "ServerHook";
+  public static final String DEFAULT_HOST = "localhost";
+  public static final int    DEFAULT_PORT = 8484;
+
+
   private final ServerConfig serverConfig;
   private final String[] args;
 
@@ -159,9 +164,6 @@ public class ServerDaemon {
 
     private static final boolean DEFAULT_VERBOSITY = false;
     private static final boolean DEFAULT_LOAD_DEFAULT_PROPS = false;
-    private static final String DEFAULT_NAME = "ServerHook";
-    private static final String DEFAULT_HOST = "localhost";
-    private static final int    DEFAULT_PORT = 8484;
     private static final String DEFAULT_TEMP_PATH = ("."+File.separatorChar);
 
     public final boolean verbose;
