@@ -27,4 +27,9 @@ UTC String ""
 SRC String ""
 Hierarchy2525 String "5.X.4.1"
 IsReserve boolean false
-HomeLocation GeolocLocation "GeolocCode=BELA-PAK, InstallationTypeCode=, CountryStateCode=, CountryStateName=, Name=Bela_Pakistan, Latitude=Latitude 25.9000degrees, Longitude=Longitude 67.0000degrees"
+# When you load this into CSMART, the fake geoloc won't be recognized
+# when trying to run and you'll get an exception.
+# Also note that only the geoloc code is every  read in CSMART.
+# To fix this, for 9.2 is is changed to use a real GEOLOC.
+# HomeLocation GeolocLocation "GeolocCode=BELA-PAK, InstallationTypeCode=, CountryStateCode=, CountryStateName=, Name=Bela_Pakistan, Latitude=Latitude 25.9000degrees, Longitude=Longitude 67.0000degrees"
+HomeLocation GeolocLocation "GeolocCode=LYSY, InstallationTypeCode=CTY, CountryStateCode=PK, CountryStateName=PAKISTAN, Name=KARACHI, Latitude=Latitude 24.8667degrees, Longitude=Longitude 67.0833degrees"
