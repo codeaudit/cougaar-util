@@ -143,10 +143,4 @@ implements NodeServesClient {
       snc = null;
     }
   }
-  public String getHostName() throws Exception {
-    return snc.getHostName();
-  }
-  public List getClusterIdentifiers() throws Exception {
-    return snc.getClusterIdentifiers();
-  }
 }

@@ -65,7 +65,5 @@ extends Remote {
   int waitForCompletion(long millis) throws RemoteException;
   int getExitValue() throws RemoteException;
   void destroy() throws RemoteException;
-  String getHostName() throws RemoteException;
-  List getClusterIdentifiers() throws RemoteException;
 
 }

@@ -39,10 +39,6 @@ import org.cougaar.tools.server.NodeEventFilter;
 
 import org.cougaar.tools.server.system.*;
 
-// RMI hook to actual Node
-import org.cougaar.core.society.ExternalNodeController;
-import org.cougaar.core.society.ExternalNodeActionListener;
-
 public class ServerNodeControllerImpl 
 extends UnicastRemoteObject 
 implements ServerNodeController {
@@ -77,18 +73,11 @@ implements ServerNodeController {
   // process identifier corresponding to the sysProc
   private long sysPid;
 
-  // node registers itself to RMI
-  private ExternalNodeController extNode;
-
-  // server's implementation of ExternalNodeActionListener
-  private ServerNodeEventListener snel;
-
   private ServerNodeEventBuffer sneb;
 
   // various watcher Runnables
   private HeartbeatWatcher hbWatcher;
   private IdleWatcher idleWatcher;
-  private NodeRegistrationWatcher nrWatcher; 
   private OutputWatcher stdOutWatcher;
   private OutputWatcher stdErrWatcher;
   private ProcessCompletionWatcher pcWatcher;
@@ -96,7 +85,6 @@ implements ServerNodeController {
   // Threads to run the watchers
   private Thread hbWatcherThread;
   private Thread idleWatcherThread;
-  private Thread nrWatcherThread;
   private Thread stdOutWatcherThread;
   private Thread stdErrWatcherThread;
   private Thread pcWatcherThread;
@@ -173,6 +161,8 @@ implements ServerNodeController {
     // spawn the node
     sysProc = Runtime.getRuntime().exec(execCmdLine, envVars);
 
+    bufferEvent(NodeEvent.NODE_CREATED);
+
     InputStream procIn = sysProc.getInputStream();
 
     if (pl != null) {
@@ -205,9 +195,7 @@ implements ServerNodeController {
           NodeEvent.STANDARD_ERR,
           -1);
 
-    nrWatcher = 
-      new NodeRegistrationWatcher(
-          rmiHost, rmiPort, nodeName, 20000);
+    // <would create a registration-watcher here>
 
     pcWatcher = 
       new ProcessCompletionWatcher();
@@ -222,10 +210,6 @@ implements ServerNodeController {
       new Thread(idleWatcher, nodeName+"-idle");
     idleWatcherThread.setPriority(Thread.MIN_PRIORITY);
     idleWatcherThread.start();
-
-    nrWatcherThread =
-      new Thread(nrWatcher, nodeName+"-register");
-    nrWatcherThread.start();
 
     stdOutWatcherThread = 
       new Thread(stdOutWatcher, nodeName+"-stdOut");
@@ -273,7 +257,6 @@ implements ServerNodeController {
       NodeEventFilter nef) {
     assertIsAlive();
     try {
-      //extNode.setNodeEventFilter(nef);
       sneb.setNodeEventFilter(nef);
       this.nef = nef;
     } catch (Exception e) {
@@ -380,11 +363,9 @@ implements ServerNodeController {
 
   public boolean waitForRegistration(long millis) {
     if (state == STATE_WAITING_FOR_REGISTRATION) {
-      try {
-        nrWatcherThread.join(millis);
-      } catch (InterruptedException e) {
-      }
-      return (state == STATE_REGISTERED);
+      // <would "regWatcherThread.join(millis)" here>
+      throw new UnsupportedOperationException(
+          "Node registration is currently disabled");
     } else if (state == STATE_REGISTERED) {
       return true;
     } else {
@@ -457,7 +438,6 @@ implements ServerNodeController {
   public void destroy() {
     if (state != STATE_DEAD) {
       state = STATE_DEAD;
-      extNode = null;
       if (sysProc != null) {
         sysProc.destroy();
         try {
@@ -504,7 +484,8 @@ implements ServerNodeController {
   //
 
   //
-  // These require (isRegistered()) and use node's (RMI) controller
+  // These require (isRegistered()) and communicate with a 
+  //   running node.
   //
 
   private void assertIsRegistered() {
@@ -512,8 +493,7 @@ implements ServerNodeController {
       case STATE_WAITING_FOR_REGISTRATION:
         // waiting for node to register
         //
-        // could "nrWatcherThread.join()", but for now make the client 
-        //   use "waitForRegistration()"
+        // make the client use "waitForRegistration()"
         throw new IllegalStateException(
             "Waiting for node to register");
       case STATE_REGISTERED:
@@ -527,39 +507,9 @@ implements ServerNodeController {
     }
   }
 
-  public String getHostName() {
-    assertIsRegistered();
-    try {
-      return extNode.getHostName();
-    } catch (Exception e) {
-      if (VERBOSE) {
-        System.err.println("Lost node control: Killing "+nodeName);
-        //e.printStackTrace();
-      }
-      destroy();
-      throw new IllegalStateException(
-          "Lost node control");
-    }
-  }
-
-  public List getClusterIdentifiers() {
-    assertIsRegistered();
-    try {
-      return extNode.getClusterIdentifiers();
-    } catch (Exception e) {
-      if (VERBOSE) {
-        System.err.println("Lost node control: Killing "+nodeName);
-        //e.printStackTrace();
-      }
-      destroy();
-      throw new IllegalStateException(
-          "Lost node control");
-    }
-  }
-
-  //
-  // Many more ExternalNodeController methods can be added here
-  //
+  // A remote-method capability will be added for interaction 
+  //   with a running Node.  For now the Node will not register
+  //   back to the server.
 
   //
   // These are inner-class output wrappers
@@ -657,110 +607,10 @@ implements ServerNodeController {
     }
   }
 
-  /**
-   * Waits for node to register, which provides "this" with the
-   * <code>ExternalNodeController</code>.
-   * <p>
-   * Could convert this from a poll to a Node-push by having the
-   * Node call a method in a ServerDaemon-registed object.
-   */
-  class NodeRegistrationWatcher implements Runnable {
-
-    public static final long MIN_PAUSE_MILLIS = 2000;
-
-    private final String rmiName;
-    private final int rmiPort;
-    private final String regName;
-    private final long pauseMillis;
-
-    public NodeRegistrationWatcher(
-        String rmiName,
-        int rmiPort,
-        String regName,
-        long pauseMillis) {
-
-      // configure
-      this.rmiName = rmiName;
-      this.rmiPort = rmiPort;
-      this.regName = regName;
-      this.pauseMillis = 
-        ((pauseMillis > MIN_PAUSE_MILLIS) ?
-         (pauseMillis) :
-         (MIN_PAUSE_MILLIS));
-    }
-
-    public void run() {
-      try {
-        // pause
-        try {
-          Thread.sleep(pauseMillis);
-        } catch (Exception e) {
-        }
-
-        if (!(ServerNodeControllerImpl.this.isAlive())) {
-          return;
-        }
-
-        // get registry
-        Registry reg = 
-          LocateRegistry.getRegistry(rmiName, rmiPort);
-
-        ExternalNodeController enc;
-        while (true) {
-          // get node's controller
-          try {
-            enc = (ExternalNodeController)reg.lookup(regName);
-            if (enc != null) {
-              if (VERBOSE) {
-                System.err.println("lookup succeeded");
-              }
-              break;
-            }
-          } catch (Exception e) {
-            if (VERBOSE) {
-              System.err.println("lookup failed: "+e.getMessage());
-            }
-          }
-
-          // pause
-          try {
-            Thread.sleep(pauseMillis);
-          } catch (Exception e) {
-          }
-
-          if (!(ServerNodeControllerImpl.this.isAlive())) {
-            return;
-          }
-
-          // give up after some MAX retries?
-        }
-
-        // register the "cnel" with the Node for
-        //   intra-node listening (e.g. "added cluster")
-        //
-        // note that we will miss some activity, due to the RMI 
-        //   sleep/lookup above!  Alternative is to indicate that
-        //   there will be a listener at startup and then queue within
-        //   the Node until the listener is set...
-        ServerNodeEventListener snel =
-          new ServerNodeEventListenerImpl(sneb);
-        enc.setExternalNodeActionListener(snel);
-
-        // node has been created and is running
-        ServerNodeControllerImpl.this.extNode = enc;
-        ServerNodeControllerImpl.this.snel = snel;
-        ServerNodeControllerImpl.this.state = STATE_REGISTERED;
-
-        bufferEvent(NodeEvent.NODE_CREATED);
-      } catch (Exception e) {
-        if (VERBOSE) {
-          System.err.println("Client died (registration): Killing "+nodeName);
-          e.printStackTrace();
-        }
-        ServerNodeControllerImpl.this.destroy();
-      }
-    }
-  }
+  //
+  // <would add a Runnable to watch for the Node to
+  //   register back with the controller here>
+  //
 
   /**
    * <code>Writer</code> that buffers the output and sends output events.

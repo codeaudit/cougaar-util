@@ -96,7 +96,6 @@ public class Console {
     private JButton dumpThreadsButton;
     private JButton listNodeProcessesButton;
     private JButton listAllProcessesButton;
-    private JButton listClustersButton;
     private JButton getFileButton;
     private JButton listFilesButton;
     private JButton stopButton;
@@ -140,8 +139,7 @@ public class Console {
       dumpThreadsButton = new JButton("Trigger-Stack-Trace");
       listNodeProcessesButton = new JButton("List-Node-Procs");
       listAllProcessesButton = new JButton("List-All-Procs");
-      listClustersButton = new JButton("List-Clusters");
-      getFileButton = new JButton("Get-File");
+      getFileButton = new JButton("Get-\"./dir/test.txt\"");
       listFilesButton = new JButton("List-Files");
       flushNodeEventsButton = new JButton("Flush-Output");
       stopButton = new JButton("Stop");
@@ -228,14 +226,6 @@ public class Console {
           });
 
 
-      // handle "List-Clusters" button
-      listClustersButton.addActionListener(
-          new ActionListener() {    
-            public void actionPerformed(ActionEvent e) {
-              listClusters(selectedNodeName);
-            }
-          });
-
       // handle "Get-File" button
       getFileButton.addActionListener(
           new ActionListener() {    
@@ -310,9 +300,9 @@ public class Console {
       buttons2.add(listNodeProcessesButton);
       buttons2.add(listAllProcessesButton);
 
-      buttons2.add(listClustersButton);
       buttons2.add(getFileButton);
       buttons2.add(listFilesButton);
+      // empty slot
     }  
 
     /**
@@ -495,43 +485,6 @@ public class Console {
         // show terse details
         System.out.println("  "+pi.toString(false));
       }
-    }
-
-    private void listClusters(String name) {
-      NodeServesClient nsc = (NodeServesClient)myNodes.get(name);
-      if (nsc == null) {
-        System.err.println(
-            "Unknown node name: "+name);
-        return;
-      }
-
-      boolean isRegistered;
-      try {
-        isRegistered = nsc.isRegistered();
-      } catch (Exception e) {
-        isRegistered = false;
-      }
-      if (!(isRegistered)) {
-        // replace with pretty GUI code...
-        System.out.println(
-            "Can only list clusters once the Node has registered");
-        return;
-      }
-
-      java.util.List l;
-      try {
-        l = nsc.getClusterIdentifiers();
-      } catch (Exception e) {
-        System.err.println(
-            "Unable to query \""+name+"\" for cluster identifiers");
-        e.printStackTrace();
-        l = null;
-      }
-
-      int n = ((l != null) ? l.size() : 0);
-
-      // replace with pretty GUI code...
-      System.out.println("clusters["+n+"]: "+l);
     }
 
     private void getFile() {

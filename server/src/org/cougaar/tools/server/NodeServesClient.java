@@ -25,9 +25,6 @@ import java.util.List;
 
 import org.cougaar.tools.server.system.ProcessStatus;
 
-// Note that "getClusterIdentifiers" returns ClusterIdentifiers!
-//import org.cougaar.core.cluster.ClusterIdentifier;
-
 /**
  * Client support from a Node -- this is the communication path from the
  * client <u>to</u> the Node.
@@ -176,23 +173,8 @@ public interface NodeServesClient {
   // These require (isRegistered()).
   //
 
-  /**
-   * Get the host name for the controlled Node.
-   * <p>
-   * Requires <tt>isRegistered()</tt>.
-   */
-  String getHostName() throws Exception;
-
-  /**
-   * Return a <code>List</code> of <code>ClusterIdentifier</code>s for
-   * all the clusters currently running on the Node.
-   * Requires <tt>isRegistered()</tt>.
-   */
-  List getClusterIdentifiers() throws Exception;
-
-  //
-  // Lots of other capabilities soon... see 
-  // "org.cougaar.core.society.ExternalNodeController" for details.
-  //
+  // A remote-method capability will be added for interaction 
+  //   with a running Node.  For now the Node will not register
+  //   back to the server.
 
 }
