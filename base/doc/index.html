@@ -87,7 +87,7 @@ additional functionality and address known issues in 9.2.
 The standard initializer service implementations will no longer construct
 ComponentDescription with empty lists when no parameter list is
 given.  Component.setParameter will be called IFF 
-the .ini file or csmart database actually specifies arguments.  The
+the .ini file or CSMART database actually specifies arguments.  The
 implication is that Componentes should not put initialization code in
 the setParameter method if the Component ever is constructed without
 parameters.
@@ -99,15 +99,35 @@ subcomponent pass).  Furthermore, there is a new class
 which provides a variety of static methods giving access to loggers
 and allowing the set up of thread-specific logging contexts.
 </li>
-<li>CSMART: Add Dos Recipe export scripts</li>
 <li>Minor fix to support running TPFDD Viewer. Avoids necessity for
 workaround described in 9.2.2 - errata.</li>
-<li>CSMART: Minor fix to allow seeing non-Plugin Agent contents in
+<li>CSMART configuration database has changed slightly. You should
+re-load your configuration database to get the latest functionality,
+in particular Community construction and initialization.</li>
+<li>The domain database (ie mysqldump.9.2.txt) now includes additional
+data, and should also be re-loaded.</li>
+<li>CSMART now includes an interface for editing Community
+information. Separate community configurations are available for each
+CSMART Experiment. This new tool is available from the "Communities"
+pane in the CSMART Experiment Builder.</li>
+<li>CSMART includes numerous usability and bug fixes, all described in
+detail in the CSMART <a href="../csmart/doc/release-notes.txt">release notes</a>.</li>
+<li>CSMART bug fixes include several to address items in the errata
+for 9.2.2, including: <br><ul>
+<li>Add Dos Recipe export scripts</li>
+<li>Minor fix to allow seeing non-Plugin Agent contents in
 Console Node Info window.</li>
-<li>CSMART: Avoid some NPEs. See the CSMART release <a
+<li>Avoid some NPEs. See the CSMART release <a
 href="../csmart/doc/release-notes.txt">notes</a> for details.</li>
-<li>CSMART: Allow arbitrary insertion points in Specific Insertion
+<li>Allow arbitrary insertion points in Specific Insertion
 recipes. This solves bug 1387 mentioned in the errata document.</li>
+</ul></li>
+<li>The Community Domain is now included by default, using the
+LDMDomain.ini file, and need not be included specially. In addition,
+CSMART 1AD societies (from the CSMART database) include the Community
+Plugin in all domain Agents. However, if you wish to use Communities
+from a Node Agent, or add new Agents, you must still include the
+Community Plugin via a recipe.</li>
 <li>
 The Bootstrapper now, by default, uses XURLClassLoader rather than
 BootstrapClassLoader.  XURLClassLoader is pretty much identical to 
