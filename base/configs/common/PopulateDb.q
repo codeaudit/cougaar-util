@@ -14,6 +14,16 @@ checkAlibComponent=\
    FROM V4_ALIB_COMPONENT \
   WHERE COMPONENT_ALIB_ID = :component_alib_id:
 
+checkLibComponent=\
+ SELECT COMPONENT_LIB_ID \
+   FROM V4_LIB_COMPONENT \
+  WHERE COMPONENT_LIB_ID = :component_lib_id:
+
+insertLibComponent=\
+ INSERT INTO V4_LIB_COMPONENT \
+    (COMPONENT_LIB_ID, COMPONENT_TYPE, COMPONENT_CLASS, INSERTION_POINT, DESCRIPTION) \
+ VALUES (:component_lib_id:, :component_category:, :component_class:, :insertion_point:, :description:)
+
 checkComponentHierarchy=\
  SELECT COMPONENT_ALIB_ID \
    FROM V4_ASB_COMPONENT_HIERARCHY \
