@@ -4,6 +4,7 @@ import org.cougaar.tools.server.system.SystemAccessFactory;
 import org.cougaar.tools.server.system.ProcessLauncher;
 import org.cougaar.tools.server.system.JavaThreadDumper;
 import org.cougaar.tools.server.system.ProcessStatusReader;
+import org.cougaar.tools.server.system.ProcessKiller;
 
 /**
  * Linux-specific factory for system access.
@@ -17,6 +18,7 @@ extends SystemAccessFactory {
   private final LinuxProcessLauncher lpl;
   private final LinuxJavaThreadDumper ljtd;
   private final LinuxProcessStatusReader lpsr;
+  private final LinuxProcessKiller lpk;
 
   /**
    * Obtain an instance of the Linux-specific factory.
@@ -40,6 +42,7 @@ extends SystemAccessFactory {
     lpl = new LinuxProcessLauncher();
     ljtd = new LinuxJavaThreadDumper();
     lpsr = new LinuxProcessStatusReader();
+    lpk = new LinuxProcessKiller();
   }
 
   public ProcessLauncher createProcessLauncher() {
@@ -53,4 +56,9 @@ extends SystemAccessFactory {
   public ProcessStatusReader createProcessStatusReader() {
     return lpsr;
   }
+
+  public ProcessKiller createProcessKiller() {
+    return lpk;
+  }
+
 }

@@ -62,4 +62,11 @@ public abstract class SystemAccessFactory {
    */
   public abstract ProcessStatusReader createProcessStatusReader();
 
+  /**
+   * Create a <code>ProcessKiller</code> for this
+   * Operating System, or <tt>null</tt> if the
+   * service is not supported.
+   */
+  public abstract ProcessKiller createProcessKiller();
+
 }

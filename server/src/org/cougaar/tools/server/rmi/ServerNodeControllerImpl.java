@@ -52,6 +52,9 @@ implements ServerNodeController {
   private static final int STATE_REGISTERED               = 1;
   private static final int STATE_DEAD                     = 2;
 
+  // max milliseconds for destroy
+  private static final long MAX_DESTROY_TIMEOUT = 5*1000;
+
   private String nodeName;
   private String[] cmdLine;
   private String[] envVars;
@@ -342,6 +345,37 @@ implements ServerNodeController {
     return ret;
   }
 
+  // for internal "destroy()" use only!
+  private void killProcess() throws Exception {
+    if (sysPid < 0) {
+      throw new UnsupportedOperationException(
+          "Process kill not available"+
+          " (process-id not known)");
+    }
+
+    // create a process killer
+    ProcessKiller pk = saf.createProcessKiller();
+    if (pk == null) {
+      throw new UnsupportedOperationException(
+          "Process kill not available");
+    }
+
+    // get the command line
+    String[] cmd = pk.getCommandLine(sysPid);
+
+    // invoke the command
+    InputStream in = InvokeUtility.invokeCommand(cmd);
+
+    // parse the response
+    boolean ret = pk.parseResponse(in);
+
+    if (!(ret)) {
+      // should alter API to just throw exception upon failure...
+      throw new RuntimeException(
+          "Process kill failed for an unknown reason");
+    }
+  }
+
   //
   // Test the state of the node
   //
@@ -439,12 +473,48 @@ implements ServerNodeController {
     if (state != STATE_DEAD) {
       state = STATE_DEAD;
       if (sysProc != null) {
-        sysProc.destroy();
         try {
-          sysProc.waitFor();
-        } catch (InterruptedException e) {
+          if (USE_PROCESS_LAUNCHER) {
+            // launch destroy in separate thread, kill after timeout
+            //
+            // sometimes "Process.destroy()" fails, either due
+            //   to the JVM or shell scripts.  The "kill" is
+            //   a last-ditch effort after a timeout...
+            Runnable r = new Runnable() {
+              public void run() {
+                // wait for destroy
+                sysProc.destroy();
+                try {
+                  sysProc.waitFor();
+                } catch (InterruptedException e) {
+                }
+              }
+            };
+            Thread t = new Thread(r);
+            t.start();
+            t.join(MAX_DESTROY_TIMEOUT);
+            if (t.isAlive()) {
+              t.interrupt();
+              // tired of waiting -- kill
+              if (VERBOSE) {
+                System.err.println(
+                    "Using \"kill\" to destroy the Node");
+              }
+              killProcess();
+            }
+          } else {
+            // wait for destroy
+            sysProc.destroy();
+            try {
+              sysProc.waitFor();
+            } catch (InterruptedException e) {
+            }
+          }
+        } catch (Exception e) {
+          // ignore
+          System.err.println(
+              "Unable to destroy process: "+e.getMessage());
         }
-        sysProc = null;
       }
       try {
         bufferEvent(NodeEvent.NODE_DESTROYED);

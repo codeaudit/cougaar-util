@@ -272,7 +272,6 @@ class ServerHostControllerImpl
       String classpath = 
         (String) javaProps.remove("class.path");
       if (classpath != null) {
-        classpath = classpath.trim();
         if (classpath.length() == 0) {
           throw new IllegalArgumentException(
               "Classpath must be non-empty");
@@ -282,11 +281,43 @@ class ServerHostControllerImpl
         cmdList.add(classpath);
       }
 
+      // check for "Xbootclasspath"s
+      for (Iterator iter = javaProps.entrySet().iterator();
+           iter.hasNext();
+           ) {
+        Map.Entry me = (Map.Entry) iter.next();
+        String name = (String)me.getKey();
+        if (name.startsWith("Xbootclasspath")) {
+          iter.remove();
+          // expecting name to be one of:
+          //   Xbootclasspath
+          //   Xbootclasspath/a
+          //   Xbootclasspath/p
+          String nameTail = 
+            name.substring("Xbootclasspath".length());
+          if (nameTail.equals("") ||
+              nameTail.equals("/a") ||
+              nameTail.equals("/p")) {
+            // valid
+          } else {
+            throw new IllegalArgumentException(
+                "Expecting \"Xbootclasspath[|/a|/p]\", not \""+
+                name+"\"");
+          }
+          String value = (String)me.getValue();
+          if (value.length() == 0) {
+            throw new IllegalArgumentException(
+                "\""+name+"\" must be non-empty");
+          }
+          // SECURITY -- examine path
+          cmdList.add("-"+name+":"+value);
+        }
+      }
+
       // take classname for later use
       String classname = 
         (String) javaProps.remove("class.name");
       if (classname != null) {
-        classname = classname.trim();
         if (classname.length() == 0) {
           throw new IllegalArgumentException(
               "Classname must be non-empty");
@@ -304,7 +335,7 @@ class ServerHostControllerImpl
         String name = (String)me.getKey();
         String value = (String)me.getValue();
 
-        // SECURITY -- maybe block some pairs (e.g. "XBootclasspath=..")
+        // SECURITY -- maybe block some pairs
         if (value.length() > 0) {
           cmdList.add("-"+name+"="+value);
         } else {
