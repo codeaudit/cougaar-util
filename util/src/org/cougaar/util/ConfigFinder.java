@@ -30,6 +30,9 @@ import org.xml.sax.SAXException;
 import org.xml.sax.EntityResolver;
 import org.w3c.dom.Document;
 
+import org.cougaar.util.log.Logger;
+import org.cougaar.util.log.Logging;
+
 /**
  * ConfigFinder provides utilitites to search for a named file in
  * several specified locations, returning the first location where a
@@ -78,6 +81,8 @@ public final class ConfigFinder {
   private boolean verbose = false;
   public void setVerbose(boolean b) { verbose = b; }
 
+  private static final Logger logger = Logging.getLogger(ConfigFinder.class);
+
   public ConfigFinder() {
     this(defaultConfigPath, defaultProperties);
   }
@@ -108,6 +113,9 @@ public final class ConfigFinder {
   }
 
   private void appendPathElement(URL url) {
+    if (logger.isInfoEnabled()) {
+      logger.info("Adding Path Element "+url);
+    }
     configPath.add(url);
   }
 
@@ -156,7 +164,7 @@ public final class ConfigFinder {
       }
     } 
     catch (Exception e) {
-      System.err.println("Failed to interpret " + el + " as url: " + e);
+      logger.warn("Failed to interpret path element \""+el+"\"", e);
     }
   }
 
@@ -171,19 +179,19 @@ public final class ConfigFinder {
         try {
           URL fileURL = new URL(url, aFilename);
           File result = new File(fileURL.getFile());
-          if (verbose) { System.err.print("Looking for "+result+": "); }
           if (result.exists()) {
-            if (verbose) { System.err.println("Found it. File " + aFilename + 
-                               " is " + fileURL); }
+            if (logger.isInfoEnabled()) {
+              logger.info("Found "+aFilename+" as " +fileURL);
+            }
             return result;
-          } else {
-            if (verbose) { System.err.println(); }
           }
-        }
-        catch (MalformedURLException mue) {
+        } catch (MalformedURLException mue) {
           continue;
         }
       }
+    }
+    if (logger.isInfoEnabled()) {
+      logger.info("Couldn't find "+aFilename);
     }
     return null;
   }
@@ -198,18 +206,23 @@ public final class ConfigFinder {
       URL base = (URL) configPath.get(i);
       try {
         URL url = new URL(base, aURL);
-        if (verbose) { System.err.print("Trying "+url+": "); }
         InputStream is = url.openStream();
         if (is == null) continue; // Don't return null
-        if (verbose) { System.err.println("Found it. File " + aURL + " is " + url); }
+        if (logger.isInfoEnabled()) {
+          logger.info("Found "+aURL+" as "+url);
+        }
         return is;
-      }
+      } 
       catch (MalformedURLException mue) {
-        if (verbose) { System.err.println(); }
+        if (logger.isDebugEnabled()) {
+          logger.debug("Exception while looking for "+aURL+" at "+base, mue);
+        }
         continue;
       }
       catch (IOException ioe) {
-        if (verbose) { System.err.println(); }
+        if (logger.isDebugEnabled()) {
+          logger.debug("Exception while looking for "+aURL+" at "+base, ioe);
+        }
         continue;
       }
     }
@@ -218,12 +231,21 @@ public final class ConfigFinder {
     String sb = st.nextToken() + ".zip";
     try {
       File file = locateFile(sb);
-      if (file != null) return openZip(aURL, file.toString());
+      if (file != null) {
+        return openZip(aURL, file.toString());
+      }
     } catch (IOException ioe) {
-      ioe.printStackTrace();
+      if (logger.isDebugEnabled()) {
+        logger.debug("Exception while looking for "+aURL+" in zip "+sb, ioe);
+      }
     } catch (NullPointerException npe) {
-      System.out.println("Can't locate File " + aURL + " or " + sb);
-      npe.printStackTrace();
+      if (logger.isDebugEnabled()) {
+        logger.debug("Exception while looking for "+aURL+" in zip "+sb, npe);
+      }
+    }
+
+    if (logger.isInfoEnabled()) {
+      logger.info("Couldn't find "+aURL);
     }
 
     throw new FileNotFoundException(aURL);
@@ -239,20 +261,25 @@ public final class ConfigFinder {
       URL base = (URL) configPath.get(i);
       try {
         URL url = new URL(base, aURL);
-        if (verbose) { System.err.print("Trying "+url+": "); }
         InputStream is = url.openStream();
         if (is == null) continue; // Don't return null
         is.close();
+        if (logger.isInfoEnabled()) {
+          logger.info("Found "+aURL+" as "+url);
+        }
         return url;
       }
       catch (MalformedURLException mue) {
-        if (verbose) { System.err.println(); }
         continue;
       }
       catch (IOException ioe) {
-        if (verbose) { System.err.println(); }
         continue;
       }
+    }
+    //if (logger.isInfoEnabled()) 
+    {
+      // it isn't really an error, but I think we'd like to see these.
+      logger.warn("Failed to find "+aURL);
     }
     return null;
   }
@@ -307,8 +334,7 @@ public final class ConfigFinder {
       }
       parser.parse(is);
     } catch (SAXException e) {
-      System.out.println("Error parsing file: " + xmlfile);
-      e.printStackTrace();
+      logger.error("Exception parsing XML file \""+xmlfile+"\"", e);
     }    
 
     return parser.getDocument();
@@ -370,36 +396,14 @@ public final class ConfigFinder {
         }
         is = new InputSource(istream);
       } catch(IOException e) {
-        System.err.println("Error getting input source for file " + filename);
-        e.printStackTrace();
+        logger.error("Error getting input source for file \""+filename+"\"", e);
        }
       
       if(is == null) {
-        throw new RuntimeException("Null InputSource for file " + filename);
+        logger.error("Null InputSource for file \""+filename+"\"");
       }
 
       return is;
    } 
   }
-
-  /**
-   * Point test for ConfigFinder.  prints the first line of the
-   * URL passed as each argument.
-   **/
-  public static void main(String argv[]) {
-    ConfigFinder ff = getInstance();
-    ff.setVerbose(true);
-    for (int i = 0; i <argv.length; i++) {
-      String url = argv[i];
-      try {
-        InputStream is = ff.open(url);
-        BufferedReader br = new BufferedReader(new InputStreamReader(is));
-        String s = br.readLine();
-        System.out.println("url = "+url+" read: "+s);
-      } catch (IOException ioe) {
-        System.out.println("url = "+url+" exception: "+ioe);
-      }
-    }
-  }
-      
 }
