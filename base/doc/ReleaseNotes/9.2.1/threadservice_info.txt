@@ -1,0 +1,58 @@
+Release Notes for "Thread Service under Cougaar 9.2.1" 
+------------------------------------------------------
+
+1. The ControllablePool class is now called SchedulableThreadPool.
+
+2. The ControllableThread has been broken into two pieces,
+SchedulableThread and SchedulableObject (see below).
+
+3. SchedulableThread is a new extension of ReusableThread. These are
+managed by the SchedulableThreadPool.
+
+4. A new interface Schedulable defines a pseudo-Thread class.  The
+primary ThreadService now returns these, instead of returning true
+Threads.
+
+public interface Schedulable
+{
+    public void start();
+    public int getState();
+    public boolean cancel();
+}
+
+Unlike Thread, start() can be called more than once.  If it's called
+while the Schedulable's corresponding Thread is running, the
+Schedulable will restart itself automatically when the run() method
+finishes.
+
+The cancel() method works as follow.  If the Schedulable is queued, it
+will be removed from the queue and will therefore never run again.  If
+the Shedulable is not queued and the corresponding thread is not
+running, it will never run. If the corresponding thread is running, it
+will be interrupted.  The return value is 'true' in the first two
+cases, 'false' in the third case.
+
+The getState() method returns one of the THREAD_ constants in
+CougaarThread:
+
+    public static final int THREAD_SUSPENDED = 1;
+    public static final int THREAD_PENDING = 2;
+    public static final int THREAD_DORMANT = 3;
+
+5.  The implementation of Schedulable is SchedulableObject, which does
+most of the work that was previously done by ControllableThread.  An
+actual java Thread (ie a SchedulableThread) is only fetched from the
+pool when this Schedulable is about to run.
+
+6.  The two getThread methods on ThreadService now return
+Schedulables, not Threads.
+
+    Schedulable getThread(Object consumer, Runnable runnable);
+    Schedulable getThread(Object consumer, Runnable runnable, String name);
+
+7.  The ThreadListeners are now called with Schedulables, not
+Threads.
+
+    void threadPending(Schedulable schedulable, Object consumer);
+    void threadStarted(Schedulable schedulable, Object consumer);
+    void threadStopped(Schedulable schedulable, Object consumer); 
