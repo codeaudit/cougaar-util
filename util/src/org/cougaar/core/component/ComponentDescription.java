@@ -251,6 +251,7 @@ public final class ComponentDescription implements Serializable {
    * <p>
    * In the future this may be modified to ignore the
    * certificate, lease, and/or policy.
+   * @note Priority is not considered when testing components for priority.
    */
   public boolean equals(Object o) {
     if (o == this) {
@@ -268,8 +269,7 @@ public final class ComponentDescription implements Serializable {
         eq(parameter, cd.parameter) &&
         eq(certificate, cd.certificate) &&
         eq(lease, cd.lease) &&
-        eq(policy, cd.policy) &&
-        priority == priority) {
+        eq(policy, cd.policy)) {
       return true;
     }
     return false;
