@@ -8,25 +8,25 @@
 </head>
 <body>
 <b><font color="#000099"><font size=+3>Cougaar 9.0 Repackaging
-Details</font></font></b><font color="#000099"><font size=+3></font></font>
+Details</font></font></b>
 <p><font color="#000099"><font size=+2>Package Cheat Sheet (new packages
-are in bold)</font></font><font color="#000099"></font>
+are in bold)</font></font>
 <p><font color="#000099">org.cougaar.core.cluster</font>
 <br><font color="#000099">in general split into:&nbsp; <b>org.cougaar.core.agent</b>
-&amp; <b>org.cougaar.core.blackboard</b></font><font color="#000099"></font>
+&amp; <b>org.cougaar.core.blackboard</b></font>
 <p><font color="#000099">org.cougaar.core.society</font>
 <br><font color="#000099">in general split into:&nbsp; <b>org.cougaar.core.node</b>
-&amp; <b>org.cougaar.core.mts</b></font><font color="#000099"></font>
+&amp; <b>org.cougaar.core.mts</b></font>
 <p><font color="#000099">org.cougaar.domain no longer exits</font>
 <br><font color="#000099">org.cougaar.domain.mlm. and org.cougaar.domain.glm
 become:</font>
-<br><b><font color="#000099">org.cougaar.mlm </font></b><font color="#000099">and
-<b>org.cougaar.glm</b></font><font color="#000099"></font>
+<br><font color="#000099"><b>org.cougaar.mlm </b>and
+<b>org.cougaar.glm</b></font>
 <p><font color="#000099">Domain, Factory, Registry, RootDomain, etc. can
 be found in</font>
-<br><font color="#000099">org.cougaar.core.domain</font><u><font color="#000099"></font></u>
+<br><font color="#000099">org.cougaar.core.domain</font>
 <p><font color="#000099">All Service APIs are in:</font>
-<br><b><font color="#000099">org.cougaar.core.service</font></b><font color="#000099"></font>
+<br><b><font color="#000099">org.cougaar.core.service</font></b>
 <p><font color="#000099">All Service impls are in their components packages...
 for example:</font>
 <br><font color="#000099">org.cougaar.core.agent.service has</font>
@@ -34,29 +34,43 @@ for example:</font>
 <br><font color="#000099">domain.*</font>
 <br><font color="#000099">registry.*</font>
 <br><font color="#000099">uid.*</font>
-<br><font color="#000099">etc</font><font color="#000099"></font>
-<p><font color="#000099"><font size=+2>Where to find commonly used classes</font></font><font color="#000099"></font>
-<p><font color="#000099">ClusterImpl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br><font color="#000099">etc</font>
+<p><font color="#000099"><font size=+2>Where to find commonly used classes</font></font>
+<p><font color="#000099">ClusterImpl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
 <b>org.cougaar.core.agent.ClusterImpl</b></font>
-<br><font color="#000099">Node&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br><font color="#000099">Node&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
 <b>org.cougaar.core.node.Node</b></font>
-<br><font color="#000099">ComponentPlugin&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br><font color="#000099">ComponentPlugin&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
 <b>org.cougaar.core.plugin.ComponentPlugin</b></font>
-<br><font color="#000099">Task&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br><font color="#000099">Task&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
 <b>org.cougaar.planning.ldm.plan.Task</b></font>
 <br><font color="#000099">Allocation&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
 <b>org.cougaar.planning.ldm.plan.Allocation</b></font>
 <br><font color="#000099">BlackboardService&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
 <b>org.coguaar.core.service.BlackboardService</b></font>
 <br><font color="#000099">MessageTransportService&nbsp;&nbsp;&nbsp; <b>org.cougaar.core.service.MessageTransportService</b></font>
 <br><font color="#000099">GLSInitServlet&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
 <b>org.cougaar.mlm.plugin.organization.GLSInitServlet</b></font>
 <br><font color="#000099">GeneralInventoryManager&nbsp;&nbsp;&nbsp; <b>org.cougaar.glm.plugins.inventoryGeneralInventoryManager</b></font>
-<br><b><font color="#000099"></font></b>&nbsp;<b><font color="#000099"><font size=+2></font></font></b>
+<br>&nbsp;
 <p><font color="#000099"><font size=+2>How to Repackage your code</font></font>
-<br><font color="#000099">See the <a href="README">README</a> file.</font><font color="#000099"></font>
+<br><font color="#000099">See the <a href="README">README</a> file.</font>
+<br>&nbsp;
+<br><font color="#000099"><font size=+2></font></font>&nbsp;<font color="#000099"><font size=+2></font></font>
 <p><font color="#000099"><font size=+2>Cougaar 9.0 Package Maps</font></font>
-<br><font color="#000099"><font size=+2></font></font>&nbsp;
-<br><font color="#000099"></font>&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<p><img SRC="PackageMap90a.gif" height=749 width=1062>
+<br>&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<p><img SRC="PackageMap90b.gif" height=767 width=1043>
 </body>
 </html>
