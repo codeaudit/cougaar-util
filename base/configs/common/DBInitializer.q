@@ -94,8 +94,8 @@ queryAgentProperties = \
 queryAgentRelation.oracle = \
  SELECT ASB_REL.ROLE, SPTD.COMPONENT_NAME ITEM_IDENTIFICATION, \
         ASB_PG.ATTRIBUTE_VALUE TYPE_IDENTIFICATION, SPTD.COMPONENT_NAME SUPPORTED, \
-        TO_CHAR(start_date, 'MM/DD/YYYY HH:MI AM'), \
-        TO_CHAR(end_date, 'MM/DD/YYYY HH:MI AM') \
+        TO_CHAR(ASB_REL.start_date, 'MM/DD/YYYY HH:MI AM'), \
+        TO_CHAR(ASB_REL.end_date, 'MM/DD/YYYY HH:MI AM') \
    FROM V4_ASB_AGENT_RELATION ASB_REL, \
         V4_LIB_PG_ATTRIBUTE LIB_PG, \
         V4_ASB_AGENT_PG_ATTR ASB_PG, \
@@ -114,8 +114,8 @@ queryAgentRelation.oracle = \
 queryAgentRelation.mysql = \
  SELECT ASB_REL.ROLE, SPTD.COMPONENT_NAME ITEM_IDENTIFICATION, \
         ASB_PG.ATTRIBUTE_VALUE TYPE_IDENTIFICATION, SPTD.COMPONENT_NAME SUPPORTED, \
-        date_format(start_date, '%m/%e/%Y %l:%i %p'), \
-        date_format(end_date, '%m/%e/%Y %l:%i %p') \
+        date_format(ASB_REL.start_date, '%m/%e/%Y %l:%i %p'), \
+        date_format(ASB_REL.end_date, '%m/%e/%Y %l:%i %p') \
    FROM V4_ASB_AGENT_RELATION ASB_REL, \
         V4_LIB_PG_ATTRIBUTE LIB_PG, \
         V4_ASB_AGENT_PG_ATTR ASB_PG, \
