@@ -349,6 +349,7 @@ In the "mySociety.xml" file the agent would specify the template:
         class="org.cougaar.core.wp.server.ServerContainer"
         priority="COMPONENT"
         insertionpoint="Node.AgentManager.Agent.WPServer"/>
+      <!-- server -->
       <component
         name="org.cougaar.core.wp.bootstrap.ConfigManager()"
         class="org.cougaar.core.wp.bootstrap.ConfigManager"
@@ -359,6 +360,17 @@ In the "mySociety.xml" file the agent would specify the template:
         class="org.cougaar.core.wp.bootstrap.PeersManager"
         priority="COMPONENT"
         insertionpoint="Node.AgentManager.Agent.WPServer.Component"/>
+      <component
+        name="org.cougaar.core.wp.server.ServerTransport()"
+        class="org.cougaar.core.wp.server.ServerTransport"
+        priority="COMPONENT"
+        insertionpoint="Node.AgentManager.Agent.WPServer.Component"/>
+      <component
+        name="org.cougaar.core.wp.server.RootAuthority()"
+        class="org.cougaar.core.wp.server.RootAuthority"
+        priority="COMPONENT"
+        insertionpoint="Node.AgentManager.Agent.WPServer.Component"/>
+      <!-- bootstrap advertise -->
       <component
         name="org.cougaar.core.wp.bootstrap.AdvertiseManager()"
         class="org.cougaar.core.wp.bootstrap.AdvertiseManager"
@@ -374,23 +386,9 @@ In the "mySociety.xml" file the agent would specify the template:
         class="org.cougaar.core.wp.bootstrap.http.HttpAdvertise"
         priority="COMPONENT"
         insertionpoint="Node.AgentManager.Agent.WPServer.Component"/>
-      <!--
-      -->
       <component
         name="org.cougaar.core.wp.bootstrap.rmi.RMIAdvertise()"
         class="org.cougaar.core.wp.bootstrap.rmi.RMIAdvertise"
-        priority="COMPONENT"
-        insertionpoint="Node.AgentManager.Agent.WPServer.Component"/>
-      <!--
-      -->
-      <component
-        name="org.cougaar.core.wp.server.ServerTransport()"
-        class="org.cougaar.core.wp.server.ServerTransport"
-        priority="COMPONENT"
-        insertionpoint="Node.AgentManager.Agent.WPServer.Component"/>
-      <component
-        name="org.cougaar.core.wp.server.RootAuthority()"
-        class="org.cougaar.core.wp.server.RootAuthority"
         priority="COMPONENT"
         insertionpoint="Node.AgentManager.Agent.WPServer.Component"/>
     </xsl:if>

@@ -197,6 +197,11 @@ XSL Template for NodeAgent, which reuses most of SimpleAgent.
       priority="HIGH"
       insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
     <component
+      name="org.cougaar.core.wp.bootstrap.config.ConfigDiscovery()"
+      class="org.cougaar.core.wp.bootstrap.config.ConfigDiscovery"
+      priority="HIGH"
+      insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
+    <component
       name="org.cougaar.core.wp.bootstrap.multicast.MulticastDiscovery()"
       class="org.cougaar.core.wp.bootstrap.multicast.MulticastDiscovery"
       priority="HIGH"
