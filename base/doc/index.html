@@ -86,7 +86,29 @@ $CIP/$MOD/configs/$CONFIG;$CIP/$MOD/configs;$CIP/$MOD/data/$CONFIG;$CIP/$MOD/dat
 See the class JavaDoc for details.</li>
 <li>Used the new above methods, and moved CSMART related .q files to
 csmart/data/common. The preferred location for recipeQueries.q is now
-csmart/data/common, <em>however</em> the old location will still work.</li>
+csmart/data/common, <em>however</em> the old location will still
+work.</li>
+<li>Remove unused plugins: AssetDataPluginFile, AssetDataPluginDB,
+OrgDataPluginFile, and OrgDataPluginDB. Additionally, removed
+AssetDataPlugin (unused) and replaced it with the renamed
+AssetDataPluginBase.</li>
+<li>Bug 1611: Cleaned up Node initialization. Note that all changes
+are completely backwards compatible. By specifying a system
+property, <code>org.cougaar.core.node.InitializationComponent</code>,
+you can specify how component configurations are obtained. "File" is
+shorthand for INI files, "DB" is shorthand for the CSMART database,
+and "XML" allows running from XML files (only minimally supported so
+far). The default Asset (Entity or Organization) Initialization
+service will initialize from the CSMART DB if the Node did, from a new
+reference database if the Node initialized from XML (only minimally
+supported), otherwise from INI files as before. However, users may
+specify a new component at BINDER priority that provides an
+AssetInitializerService, to use other behavior. Additionally,
+Communities are initialized from the CSMART DB if the Node was,
+otherwise from the (XML) file. Again, an alternate may be provided at
+BINDER priority. Note that CSMART now provides this -D argument in all
+Nodes by default, indicating that Nodes should completely initialize
+from the CSMART database.</li>
 </ul>
 
   <!-- COUGAAR 10.0 COUGAAR 10.0 COUGAAR 10.0 COUGAAR 10.0 COUGAAR 10.0 -->

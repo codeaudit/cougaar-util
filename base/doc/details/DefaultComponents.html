@@ -92,8 +92,8 @@ loading sequence.
 <hr><pre>
   <b>&lt;Node constructor&gt;:</b>
     NodeIdentificationService
-    DBInitializerService
-    ComponentInitializerService
+    ComponentInitializerService (as specified by system properties)
+         (Optional: DBInitializerService, as needed by the ComponentInitializerService)
     AgentManager
 
   <b>initialize:</b>
@@ -136,8 +136,8 @@ loading sequence.
             <i>&lt; ".ini" PRIORITY_BINDER &gt;</i>
 
   <b>load(PRIORITY_COMPONENT):</b>
-    CommunityInitializerService
-    AssetInitializerService
+    CommunityInitializerService (unless already loaded, or disabled by -D argument)
+    AssetInitializerService (unless already loaded, or disabled by -D argument)
         AgentContainmentService
         UIDService
         ThreadService  (as non-root)
