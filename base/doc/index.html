@@ -2,7 +2,7 @@
 <html>
 <head>
    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-   <meta name="GENERATOR" content="Mozilla/4.77 [en] (Windows NT 5.0; U) [Netscape]">
+   <meta name="GENERATOR" content="Mozilla/4.76 [en] (X11; U; Linux 2.4.2-2 i686) [Netscape]">
    <meta name="Template" content="C:\Program Files\Microsoft Office\Office\html.dot">
    <title>Release Notes</title>
 </head>
@@ -75,17 +75,38 @@ in the repackaging directory (doc/ReleaseNotes/9.0/repackaging).</li>
 <li>
 Servlets</li>
 
-<li>Basic Training Course Tutorials.  <ul><li>The basic training course tutorial has been upgraded to include the use of the new servlet capability which will replace the deprecated PSP capability.  For each of the PSPs in the basic training course, a servlet has been implemented to provide the identical capability. 
-</li><li>The basic course tutorial exercises which use servlets have had their build scripts, run scripts, and configuration files have been updated to work effectively with the servlets.
-</li></ul>
 <li>
-Bug 850 indicated a problem with using the batch file to run the HanoiNode tutorial.  This has been fixed in version 9.0.
-</li>
+Basic Training Course Tutorials.&nbsp;</li>
+
+<ul>
+<li>
+The basic training course tutorial has been upgraded to include the use
+of the new servlet capability which will replace the deprecated PSP capability.
+For each of the PSPs in the basic training course, a servlet has been implemented
+to provide the identical capability.&nbsp;</li>
+
+<li>
+The basic course tutorial exercises which use servlets have had their build
+scripts, run scripts, and configuration files have been updated to work
+effectively with the servlets.</li>
+</ul>
+
+<li>
+Bug 850 indicated a problem with using the batch file to run the HanoiNode
+tutorial. This has been fixed in version 9.0.</li>
+
 <li>
 Node Manager</li>
 
 <li>
 MTS Componentization</li>
+
+<li>
+GLSClient and GLSInitServlet replace GLSGUIInitPlugIn, GLSRescindPlugIn,
+and SQLOplanPlugIn. Now when starting one of the logistics domain societies,
+users must also run GLSClient.[sh|bat] to initiate processing (assuming
+that the three latter plugins have been replaced in the configuration by
+GLSInitServlet).</li>
 </ul>
 Build 8.8.0 is a point release along COUGAAR 8.0 and represents 8.6.0 with
 assorted bugs fixed and some minor new features, specifically to support
@@ -101,7 +122,9 @@ Bugs fixed.</li>
 <li>
 <i>Manager</i> is an experimental/proof-of-concept module which attempts
 to detect and react to unexpected node and server death. Right now, this
-is a demo capability only, but may serve as a sneak preview into 9.x functionality. A small (linux-only) example is documented in <a href="ReleaseNotes/9.0/NodeManager.txt">Node Manager Demo Instructions</a>.</li>
+is a demo capability only, but may serve as a sneak preview into 9.x functionality.
+A small (linux-only) example is documented in <a href="ReleaseNotes/9.0/NodeManager.txt">Node
+Manager Demo Instructions</a>.</li>
 
 <li>
 MessageTransport Adaptability enhancements to include Traffic Generation
