@@ -35,17 +35,32 @@ import java.io.Reader;
 import java.io.InputStream;
 
 /**
- * A database connection manager that creates pools of db connections that can
- * be reused to improve performance.
+ * A database connection manager that creates pools of db connections
+ * that can be reused to improve performance. DBConnectionPool should
+ * be used in exactly the same way as the DriverManager class. That
+ * is, call DBConnectionPool.getConnection() to get a Connection, use
+ * the connection and close it. The same issues that exist for
+ * Connections obtained from the DriverManager exist for Connections
+ * obtained from DBConnectionPool. In particular, ResultSets should be
+ * closed when you are finished with them so that you do not exceed
+ * the limit on open ResultSets and Statements should be closed when
+ * you are finished with them so you do not exceed the limit on open
+ * Statements. In the same way as for Connections obtained from the
+ * DriverManager, ResultSets that are not closed will be closed when
+ * you close the Statement and Statements that are not closed will be
+ * closed when you close the Connection.
  * 
- * @property org.cougaar.util.DBConnectionPool.maxConnections  number of simulataneous 
- * connections allowed per pool (10).
- * @property org.cougaar.util.DBConnectionPool.timeoutCheckInterval milliseconds between
- * checks to see if any old connections should be collected (5000).
- * @property org.cougaar.util.DBConnectionPool.timeout milliseconds that a connection
- * must be idle in order to be collected by the reaper (10000).
- * @property org.cougaar.util.DBConnectionPool.verbosity should verbose debugging
- * messages be turned on? 0=off (default) 1=progress, 2=warnings, 3=loud progress.
+ * @property org.cougaar.util.DBConnectionPool.maxConnections number
+ * of simulataneous connections allowed per pool (10).
+ * @property org.cougaar.util.DBConnectionPool.timeoutCheckInterval
+ * milliseconds between checks to see if any old connections should be
+ * collected (5000).
+ * @property org.cougaar.util.DBConnectionPool.timeout milliseconds
+ * that a connection must be idle in order to be collected by the
+ * reaper (10000).
+ * @property org.cougaar.util.DBConnectionPool.verbosity should
+ * verbose debugging messages be turned on? 0=off (default)
+ * 1=progress, 2=warnings, 3=loud progress.
  **/
 public class DBConnectionPool {
   
