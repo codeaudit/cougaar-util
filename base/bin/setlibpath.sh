@@ -18,6 +18,6 @@ if [ "$COUGAAR_DEV_PATH" != "" ]; then
 fi
 BOOTPATH=$COUGAAR_INSTALL_PATH/lib/javaiopatch.jar
 if [ "$COUGAAR3RDPARTY" = "" ]; then
-     COUGAAR3RDPARTY=/opt/alp-jars
+     COUGAAR3RDPARTY=/opt/cougaar-jars
      export COUGAAR3RDPARTY
 fi

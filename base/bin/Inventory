@@ -1,7 +1,7 @@
 #!/bin/csh -f
 
 if (! $?COUGAAR3RDPARTY) then
-    setenv COUGAAR3RDPARTY /opt/alp-jars
+    setenv COUGAAR3RDPARTY /opt/cougaar-jars
 endif
 
 set LIBPATHS=$COUGAAR_INSTALL_PATH/lib/core.jar
