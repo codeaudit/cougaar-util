@@ -1,8 +1,8 @@
-<!-- Autobuild-generated ANT script for building the Cougaar module "contract". -->
+<!-- Autobuild-generated ANT script for building the Cougaar module "server". -->
 <!-- The source for this file is in build/data/moduleTemplate.xml -->
 
 <!-- autobuild might execute this with something like:
-  ant -DTARGETBASE=/tmp/target -DMODSOURCE=/tmp/cougaar/latest/src/contract 
+  ant -DTARGETBASE=/tmp/target -DMODSOURCE=/tmp/cougaar/latest/src/server 
       -DTMP=/tmp/tmpdir               -->
 
 <!-- Instructions for individual users:
@@ -25,30 +25,30 @@
      Individuals may choose to edit or override in particular the 'Tool options' below
      (compiler, toggle deprecation warnings, etc). 
 
-     For target options, from the "contract" directory or a
+     For target options, from the "server" directory or a
      sub-directory, do:
           ant -projecthelp
      Or more generally, do:
-          ant -b $COUGAAR_INSTALL_PATH/contract/build.xml -projecthelp
+          ant -b $COUGAAR_INSTALL_PATH/server/build.xml -projecthelp
 
      Target default is 'compile', to compile the module, leaving class files in
-     contract/tmp/classes, which should then be your setting for
+     server/tmp/classes, which should then be your setting for
      COUGAAR_DEV_PATH.
 
      Other typical targets:
      'clean' -- remove old module jar files (from TARGETBASE/lib ie
      usually COUGAAR_INSTALL_PATH/lib), plus class files
 
-     'dist-module' -- generate a new jar file TARGETBASE/lib/contract-date.jar
-         (ie typically COUGAAR_INSTALL_PATH/lib/contract-date.jar)
+     'dist-module' -- generate a new jar file TARGETBASE/lib/server-date.jar
+         (ie typically COUGAAR_INSTALL_PATH/lib/server-date.jar)
      -->
 
      <!-- Note use of JAVA_HOME, java.class.path, jikes.class.path -->
 
   <!-- -----------------------------------------------------------   -->
-<project name="contract" default="compile">
-    <property name="module" value="contract"/>
-    <property name="moduleUp" value="contract"/>
+<project name="server" default="compile">
+    <property name="module" value="server"/>
+    <property name="moduleUp" value="server"/>
 
     <!-- ================ Tool options ================ -->
     <!-- Individual users may choose to modify these settings. -->
@@ -120,7 +120,7 @@
     <!-- These properties are filled out by the autobuilder -->
     
     <!-- jarfiles required by this module, relative to various other paths -->
-    <property name="compile.jarlist" value="${target.lib}/core.jar,${target.lib}/util.jar,${target.sys}/xerces.jar"/>
+    <property name="compile.jarlist" value="${target.lib}/core.jar,${target.lib}/util.jar,${target.lib}/bootstrap.jar"/>
     <!-- javadoc package spec for building javadocs -->
     <property name="javadoc.packages" value=""/>
     
