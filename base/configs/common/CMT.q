@@ -30,20 +30,20 @@ getCFWInstancesFromGroup = \
  SELECT CFW_ID FROM cfw_group_member WHERE CFW_GROUP_ID=':cfw_group_id'
 
 unusedAssemblies = \
- SELECT AA.ASSEMBLY_ID FROM \
+ SELECT DISTINCT AA.ASSEMBLY_ID FROM \
   asb_assembly AA \
   WHERE AA.ASSEMBLY_ID NOT IN \
-  (SELECT ASSEMBLY_ID FROM expt_trial_assembly) \
+  (SELECT DISTINCT ASSEMBLY_ID FROM expt_trial_assembly) \
    AND \
    AA.ASSEMBLY_ID NOT IN \
-  (SELECT ASSEMBLY_ID FROM expt_trial_config_assembly) \
+  (SELECT DISTINCT ASSEMBLY_ID FROM expt_trial_config_assembly) \
    AND \
    AA.ASSEMBLY_ID NOT IN \	
-  (SELECT ARG_VALUE FROM lib_mod_recipe_arg)
+  (SELECT DISTINCT ARG_VALUE FROM lib_mod_recipe_arg)
 
 # FIXME - this double left join may not work, may be slow
 unusedAssemblies.mysql = \
- SELECT AA.ASSEMBLY_ID FROM \
+ SELECT DISTINCT AA.ASSEMBLY_ID FROM \
   asb_assembly AA LEFT JOIN  expt_trial_config_assembly ETA \
   ON (AA.ASSEMBLY_ID=ETA.ASSEMBLY_ID) \
     LEFT JOIN expt_trial_assembly ETAR \
