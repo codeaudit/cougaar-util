@@ -144,3 +144,23 @@ queryExptsWithRecipe = \
 	AND M.NAME = ':recipeName'
 
 
+# get the property groups for a plugin
+
+queryPGId = \
+	SELECT PG_ATTRIBUTE_LIB_ID \
+	FROM V4_ASB_AGENT_PG_ATTR \
+	WHERE COMPONENT_ALIB_ID = ':agent_name' \
+	AND ASSEMBLY_ID :assemblyMatch
+
+queryPGAttrs = \
+	SELECT PG_NAME, ATTRIBUTE_NAME, ATTRIBUTE_TYPE, AGGREGATE_TYPE \
+	FROM V4_LIB_PG_ATTRIBUTE \
+	WHERE PG_ATTRIBUTE_LIB_ID = ':pgAttrLibId'
+
+queryPGValues = \
+	SELECT ATTRIBUTE_VALUE, START_DATE, END_DATE \
+	FROM V4_ASB_AGENT_PG_ATTR \
+	WHERE PG_ATTRIBUTE_LIB_ID = ':pgAttrLibId' \
+	AND COMPONENT_ALIB_ID = ':agent_name' \
+	AND ASSEMBLY_ID :assemblyMatch
+
