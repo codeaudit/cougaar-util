@@ -30,8 +30,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.EntityResolver;
 import org.w3c.dom.Document;
 
-import org.cougaar.util.log.Logger;
-import org.cougaar.util.log.Logging;
+import org.apache.log4j.*;
 
 /**
  * ConfigFinder provides utilitites to search for a named file in
@@ -81,7 +80,7 @@ public final class ConfigFinder {
   private boolean verbose = false;
   public void setVerbose(boolean b) { verbose = b; }
 
-  private static final Logger logger = Logging.getLogger(ConfigFinder.class);
+  private static final Category logger = Category.getInstance(ConfigFinder.class);
 
   public ConfigFinder() {
     this(defaultConfigPath, defaultProperties);
