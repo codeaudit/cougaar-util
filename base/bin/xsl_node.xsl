@@ -98,7 +98,7 @@ Example use:
       <xsl:value-of select="substring(substring-after($string, $arg),1)"/>
      </xsl:when>
      <xsl:otherwise>
-       <xsl:value-of select="."/>
+       <xsl:value-of select="$string"/>
      </xsl:otherwise>
    </xsl:choose>
  </xsl:template>
