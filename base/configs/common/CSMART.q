@@ -27,8 +27,9 @@ queryNodes = \
    AND ALIB.COMPONENT_TYPE='node'
 
 queryHosts = \
- SELECT MACHINE_NAME \
-   FROM V4_LIB_MACHINE
+ SELECT COMPONENT_LIB_ID \
+   FROM V4_LIB_COMPONENT \
+  WHERE COMPONENT_TYPE = ':component_type'
 
 queryHostNodes = \
   SELECT HC.COMPONENT_NAME AS HOST_NAME, NC.COMPONENT_NAME AS NODE_NAME \
@@ -37,6 +38,17 @@ queryHostNodes = \
    AND NC.COMPONENT_ALIB_ID = H.COMPONENT_ALIB_ID \
    AND H.ASSEMBLY_ID :assemblyMatch \
    AND HC.COMPONENT_TYPE = 'host'
+
+queryMetrics = \
+  SELECT METRIC_ID \
+    FROM V4_EXPT_TRIAL_METRIC \
+   WHERE TRIAL_ID = ':trial_id' \
+    AND EXPT_ID = ':expt_id'
+
+queryMetricProperties = \
+  SELECT PROP_NAME, PROP_VALUE \
+    FROM V4_EXPT_TRIAL_METRIC_PROP \
+   WHERE TRIAL_ID = ':trial_id' AND METRIC_ID = ':metric_id'
 
 queryExperiment = \
  SELECT ASSEMBLY_ID \
