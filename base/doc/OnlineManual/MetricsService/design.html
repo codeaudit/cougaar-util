@@ -24,16 +24,16 @@ tagged input in the form of key-value pairs, which it can process very
 efficiently.  The entities which handle this input are known as
 <em>DataFeeds</em>. This low-level data is then propagated through a
 hierarchical graph of data-encapuslating nodes known as
-<em>DataScopes</em>, using both forward and backward chaining.  Each
-DataScope supports one or more <em>DataFormulas</em>, each of which in
+<em>Resource Contexts</em>, using both forward and backward chaining.  Each
+Resource Context supports one or more <em>DataFormulas</em>, each of which in
 turn can calculate a value using the encapsulated data as well as data
 derived from other DataFormulas.  DataFormulas, in other words, form a
 dependency chain that transforms and processes data.  The final result
 of all this is raw sensor-like data coming in and processed
 domain-relevant data going out.
 
-<p>The specific subclasses of DataScope in any given RSS depends on
-the domain.  In the case of COUGAAR, interesting DataScopes represent
+<p>The specific subclasses of Resource Context in any given RSS depends on
+the domain.  In the case of COUGAAR, interesting Resource Contexts represent
 Agents, Nodes, Hosts, inter-Agent data flows, inter-Host data flows,
 etc.  Similarly, the specific subclasses of DataFeed in any given RSS
 depends on the raw data sources that are available. In the case of
@@ -43,10 +43,10 @@ number of open sockets, etc), and data specified directly through the
 MetricsUpdateService.
 
 <p>Queries into the MetricsService use path specifications to indicate
-the location of a given DataScope in the RSS knowledge base, and a
-formula on that DataScope.  If the DataScope itself can handle the
+the location of a given Resource Context in the RSS knowledge base, and a
+formula on that Resource Context.  If the Resource Context itself can handle the
 query it will do so.  If not it will pass it to its parent.  This
-makes it possible to ask, say, an Agent DataScope for Node or Host
+makes it possible to ask, say, an Agent Resource Context for Node or Host
 data.
 
 

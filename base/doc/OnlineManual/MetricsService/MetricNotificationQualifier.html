@@ -6,11 +6,16 @@
 </head>
 
 <body>
-<h2>org.cougaar.core.qos.metrics.MetricNotificationQualifier</h1>
+<h2>org.cougaar.core.qos.metrics.MetricNotificationQualifier</h2>
 
 <p>
-<i> Intro Text; To Be Done </i>
 
+This qualifier is used to restrict the frequency of callbacks, for
+example by specifying the smallest change that should trigger one. The
+qualifier is used as part of the Metrics Service subscribeToValue()
+method, an instance is given for each subscription. In order to filter
+the notifications, the MetricsNotificationQualifier will need some
+state, such as the value of the last notification. 
 <hr>
 
 <dl>

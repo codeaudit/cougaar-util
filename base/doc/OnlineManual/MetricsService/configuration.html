@@ -173,16 +173,27 @@ qos.jar
 
 <h3>RSS-Resource Status Service</h3>
 The Metric Service need access to configuration files to define
-the expected network and host capacity. This DataFeed will look for
-configuration files on the Cougaar configuration path. The
-Sites.config file is required and the Hosts.config file is optional. 
+the expected network and host capacity. The
+Metrics-Sites.conf file is required and
+the Metrics-Defaults.conf file is optional. Example files are
+in the overlay at .../configs/rss or source in in qos/configs/rss.
+Also, the data feed with the name "sites" has the special purpose of
+defining the sites themselves (i.e.subnet masks),
+so other Metrics Keys should not be put in this conf file.
+<p> The cougaarconfig: url scheme means the files are on the cougaar
+config path. Otherwise, the url is normal and will just down load the
+conf files. Putting the configuration files on a web server is useful
+for a cougaar applications which run at a site with a complicated
+topology. Also, Network and Host management systems can update the
+files with real data. (Note the conf files are down-loaded only once
+at startup)
 <dl>
   <dt>
       org.cougaar.core.qos.rss.ConfigFinderDataFeedComponent
   </dt>
   <dd> Two Components should be loaded with the following parameters
-      <br><code> "name=sites","url=cougaarconfig:Sites.conf" </code>
-      <br><code> "name=hosts","url=cougaarconfig:Hosts.conf"</code>
+      <br><code> "name=sites","url=cougaarconfig:Metrics-Sites.conf" </code>
+      <br><code> "name=hosts","url=cougaarconfig:Metrics-Defaults.conf"</code>
       
       The insertion point is Node.AgentManager.Agent.MetricsServices.Component
   </dd>
@@ -191,7 +202,7 @@ Sites.config file is required and the Hosts.config file is optional.
 <h2> Acme Scripts </h2>
 Acme rule scripts are available for loading the Metrics Service.
 The rules are in directory
-<code>isat/csmart/config/rules/metrics</code>. The
+<code>qos/csmart/config/rules/metrics</code>. The
 <code>rule.txt</code> list the recommended rules to load the standard
 Metrics Service. Addition rules must be added in order to measure the
 length of messages (serialization) and setup the network/host
