@@ -28,15 +28,6 @@ ECHO COUGAAR_INSTALL_PATH not set!
 GOTO L_END
 :L_2
 
-REM Make sure that COUGAAR3RDPARTY is specified
-IF NOT "%COUGAAR3RDPARTY%" == "" GOTO L_3
-
-REM Unable to find "sys" path for 3rd-party jars
-REM This is usually COUGAAR_INSTALL_PATH/sys
-ECHO COUGAAR3RDPARTY not set! Defaulting to CIP\sys
-SET COUGAAR3RDPARTY=%COUGAAR_INSTALL_PATH%\sys
-:L_3
-
 REM Make sure that COUGAAR_WORKSPACE is set
 IF NOT "%COUGAAR_WORKSPACE%" == "" GOTO L_4
 
