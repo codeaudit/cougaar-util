@@ -1,9 +1,0 @@
-<commands>
-  <command>
-    <task verb="Supply" />
-        <allocate>
-      <relation type="Supporting" />
-        <role name="AmmunitionProvider" />
-    </allocate>
-  </command>
-  </commands>
