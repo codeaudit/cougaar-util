@@ -15,11 +15,11 @@ defines common Paths.
 are the values from a real-time model of the status of the Cougaar
 Society and system resources. The MetricsService allow access to
 <em>formulas</em> in the model. Formulas are relative to a <em>
-Scope</em>, which define instances of modeled entries and there
+Resource Context</em>, which define instances of modeled entries and there
 relationship between each other.
 
 <p> Containment is a major relationship which is modeled. Child
-scopes inherit all the formulas of its parent. The useful
+context inherit all the formulas of its parent. The useful
 containment relationship in Cougaar are
 <code>Host-&gt;Node-&gt;Agent</code>.
 For example, Agents have all the formulas of their hosts, and when
@@ -28,14 +28,14 @@ agents moves to a new host the metrics track new hosts values.
 
 <h3> Path Syntax </h3>
 
-<p>A Path is a series of Scopes followed by a Formula. If there is
-more than one child Scope of the same type in the parent Scope, then
-the child Scope is narrowed by Parameters. Each Scope has a fixed
-number of parameters and parameter order is import. The Scope type is used as
-the name of the scope. Scope and Formula names are case sensitive. For example:
+<p>A Path is a series of Contexts followed by a Formula. If there is
+more than one child Context of the same type in the parent Context, then
+the child Context is narrowed by Parameters. Each Context has a fixed
+number of parameters and parameter order is important. The Context type is used as
+the name of the context. Context and Formula names are case sensitive. For example:
 <pre><code>IpFlow(128.33.15.114,128.33.15.113):CapacityMax</code></pre>
 <p>
-The separator between Scopes and formulas is the ":" and the separator
+The separator between Contexts and formulas is the ":" and the separator
 between parameters is the ",". But your code you should use the
 constant <code>PATH_SEPR</code> defined in interface
 <code>org.cougaar.core.qos.metrics.Constants</code>:
@@ -44,11 +44,11 @@ constant <code>PATH_SEPR</code> defined in interface
 The following sections will use the convention of writing variable parameter fields in brackets [] for variable parameters; using ":"
 as the Path Separator; and "," as the parameter separator.
 The syntax is as follows
-<pre><code>ScopeType1([parameter1],[parameter2]...):ScopeType2([parameter]):Formula</code></pre>
+<pre><code>ContextType1([parameter1],[parameter2]...):ContextType2([parameter]):Formula(parameter)</code></pre>
 <p>
-The Averaging Period are sometimes hardwired into the Formula name,
-(yuck!). The Averaging Periods are: "1SecAvg", "10SecAvg",
-"100SecAvg", and "1000SecAvg". This section will use the
+The Averaging Period are parameters for some Formulas.
+The Averaging Periods are: "10",
+"100", and "1000". This section will use the
 convention 1xxxSecAvg to represent the averaging period.
 <p>
 Also, please use the constants interface in core module
@@ -56,11 +56,11 @@ Also, please use the constants interface in core module
     possible. This will allow compile time detection of errors, when 
     the Metrics Service interface inevitably changes in the future
 
-<h3> Host Scope </h3>
+<h3> Host Context </h3>
 
-Host Scopes can be accessed at root level and take one parameter which
+Host Contexts can be accessed at root level and take one parameter which
 is the Host address. The Host address can be IP V4 address or the
-domain name. Hosts scopes are not contained in other Scopes.
+domain name. Hosts contexts are not contained in other Contexts.
 
 <dl>
   <dt> <b><code>Host([host Addr]):EffectiveMJips</code> </b></dt>
@@ -97,18 +97,89 @@ domain name. Hosts scopes are not contained in other Scopes.
 
 </dl>
 
-<h3> Node Scope </h3>
-Node Scopes can be accessed at root level and take one parameter which is the
+<h3> Node Context </h3>
+Node Contexts can be accessed at root level and take one parameter which is the
 the Node's Message address. The Node is also contained within a Host
-Scope and inherits all the Host Scope's formulas.
+Context and inherits all the Host Context's formulas.
 
-<p> No additional formulas are defined for Nodes
+<dl>
+    <dt> <b><code>Node([Node ID]):CPULoadAvg(1xxxSecAvg)</code> </b></dt>
+      
+  <dd>The average number of threads working for all component on this  Node during the
+  Averaging Period. <p> </dd>
 
-<h3> Agent Scope </h3>
-Agent Scopes can be accessed at root level and take one parameter which is the
-the Agent's Message address. The Agent Scope is also contained within a Node
-Scope and inherits all the Node Scope's formulas. When an
-Agent moves to a new Node, the Agent Scope will be moved the the
+  <dt> <b><code>Node([Node ID]):CPULoadMJips(1xxxSecAvg)</code> </b></dt>
+      
+  <dd>The average MJIPS used by all the threads for all components on
+  this  Node during the
+  Averaging Period. <p> </dd>
+
+  <dt> <b><code>Node([Node ID]):MsgIn(1xxxSecAvg)</code> </b></dt>
+      
+  <dd>The average messages into all Agents on this Node during the
+  Averaging Period. <p> </dd>
+
+  <dt> <b><code>Node([Node ID]):MsgOut(1xxxSecAvg)</code> </b></dt>
+      
+  <dd>The average messages out of All Agents this Node during the
+  Averaging Period. <p> </dd>
+
+      
+  <dt> <b><code>Node([Node ID]):BytesIn(1xxxSecAvg)</code> </b></dt>
+      
+  <dd>The average number of bytes (for all messages) into all Agents
+  on this Node during the
+  Averaging Period. <p> </dd>
+
+  <dt> <b><code>Node([Node ID]):BytesOut(1xxxSecAvg)</code> </b></dt>
+      
+  <dd>The average number of bytes (for all messages) out of All Agents
+   on this Node during the Averaging Period.
+   <p> </dd>
+
+
+  <dt> <b><code>Node([Node ID]):VMSizet</code> </b></dt>
+  <dd>Size in Bytes of the Node's VM <p> </dd>
+      
+<dt> <b><code>Node([node Addr]):Destination([Agent ID]):MsgTo(1xxSecAvg)</code> </b></dt>
+  <dd> Message per second from all agents on the Node, to the
+      destination Agent <p> </dd>
+
+<dt> <b><code>Node([node Addr]):Destination([Agent ID]):MsgFrom(1xxSecAvg)</code> </b></dt>
+  <dd> Message per second to any agent on the Node, from the
+      destination Agent <p> </dd>
+  
+
+<dt> <b><code>Node([node Addr]):Destination([Agent ID]):BytesTo(1xxSecAvg)</code> </b></dt>
+  <dd> Bytes per second from all agents on the Node, to the
+      destination Agent <p> </dd>
+
+<dt> <b><code>Node([node Addr]):Destination([Agent ID]):BytesFrom(1xxSecAvg)</code> </b></dt>
+  <dd> Bytes per second to any agent on the Node, from the
+      destination Agent <p> </dd>
+
+<dt> <b><code>Node([node Addr]):Destination([Agent ID]):AgentIpAddress</code> </b></dt>
+  <dd> Ip address of destination Agent 
+      <p> </dd>
+
+<dt> <b><code>Node([node Addr]):Destination([Agent ID]):CapacityMax</code> </b></dt>
+  <dd> Maximum capacity of the network between Node and destination Agent.
+      <p> </dd>
+
+<dt> <b><code>Node([node Addr]):Destination([Agent ID]):OnSameSecureLAN</code> </b></dt>
+  <dd> True if Node and Destination are on the same secure LAN. The
+      current formula just checks if the network capacity between the
+      Node and Agent is greater than or equal to 10 Mbps.
+      <p> </dd>
+
+</dl>
+  
+
+<h3> Agent Context </h3>
+Agent Contexts can be accessed at root level and take one parameter which is the
+the Agent's Message address. The Agent Context is also contained within a Node
+Context and inherits all the Node Context's formulas. When an
+Agent moves to a new Node, the Agent Context will be moved the the
 corresponding Node, i.e. all the re-wiring is automatic, but may be
 slightly delayed due to discovery issues.
 
@@ -126,42 +197,36 @@ slightly delayed due to discovery issues.
   <dd> Seconds since last error in communications. This is a large
   number with 0.0 credibility, if no error has occurred. <p> </dd>
 
-  <dt> <b><code>Agent([Agent ID]):CPULoadAvg1xxxSecAvg</code> </b></dt>
+  <dt> <b><code>Agent([Agent ID]):CPULoadAvg(1xxxSecAvg)</code> </b></dt>
       
   <dd>The average number of threads working for this Agent during the
-  Averaging Period. The Averaging Periods are: "1SecAvg", "10SecAvg",
-"100SecAvg", and "1000SecAvg". <p> </dd>
+  Averaging Period. <p> </dd>
 
-  <dt> <b><code>Agent([Agent ID]):CPULoadMJips1xxxSecAvg</code> </b></dt>
+  <dt> <b><code>Agent([Agent ID]):CPULoadMJips(1xxxSecAvg)</code> </b></dt>
       
   <dd>The average MJIPS used by all the threads for this Agent during the
-  Averaging Period. The Averaging Periods are: "1SecAvg", "10SecAvg",
-"100SecAvg", and "1000SecAvg". <p> </dd>
+  Averaging Period. <p> </dd>
 
-  <dt> <b><code>Agent([Agent ID]):MsgIn1xxxSecAvg</code> </b></dt>
+  <dt> <b><code>Agent([Agent ID]):MsgIn(1xxxSecAvg)</code> </b></dt>
       
   <dd>The average messages into this Agent during the
-  Averaging Period. The Averaging Periods are: "1SecAvg", "10SecAvg",
-"100SecAvg", and "1000SecAvg". <p> </dd>
+  Averaging Period. <p> </dd>
 
-  <dt> <b><code>Agent([Agent ID]):MsgOut1xxxSecAvg</code> </b></dt>
+  <dt> <b><code>Agent([Agent ID]):MsgOut(1xxxSecAvg)</code> </b></dt>
       
   <dd>The average messages out of this Agent during the
-  Averaging Period. The Averaging Periods are: "1SecAvg", "10SecAvg",
-"100SecAvg", and "1000SecAvg". <p> </dd>
+  Averaging Period. <p> </dd>
 
       
-  <dt> <b><code>Agent([Agent ID]):BytesIn1xxxSecAvg</code> </b></dt>
+  <dt> <b><code>Agent([Agent ID]):BytesIn(1xxxSecAvg)</code> </b></dt>
       
   <dd>The average number of bytes (for all messages) into this Agent during the
-  Averaging Period. The Averaging Periods are: "1SecAvg", "10SecAvg",
-"100SecAvg", and "1000SecAvg". <p> </dd>
+  Averaging Period. <p> </dd>
 
-  <dt> <b><code>Agent([Agent ID]):BytesOut1xxxSecAvg</code> </b></dt>
+  <dt> <b><code>Agent([Agent ID]):BytesOut(1xxxSecAvg)</code> </b></dt>
       
   <dd>The average number of bytes (for all messages) out of this Agent during the
-  Averaging Period. The Averaging Periods are: "1SecAvg", "10SecAvg",
-"100SecAvg", and "1000SecAvg". <p> </dd>
+   <p> </dd>
 
 
   <dt> <b><code>Agent([Agent ID]):PersistSizeLast</code> </b></dt>
@@ -171,8 +236,8 @@ slightly delayed due to discovery issues.
 </dl>
 
 
-<h3> IpFlow Scope </h3>
-IpFlow Scope can be accessed at root level and takes two parameters which is the
+<h3> IpFlow Context </h3>
+IpFlow Context can be accessed at root level and takes two parameters which is the
  source and destination host addresses. The Host address can be the IP V4
 address or the domain name.
 
@@ -187,23 +252,19 @@ address or the domain name.
 </dl>
 
 
-<h3> AgentFlow Scope </h3>
-AgentFlow Scope can be accessed at root level and takes two
+<h3> AgentFlow Context </h3>
+AgentFlow Context can be accessed at root level and takes two
 parameters which is the source and destination agent message address. 
 <p>
-In 10.4.2 AgentFlow will Inherit formulas from the corresponding IpFlow
-Scope between the Agent's hosts.
+Since 11.2 the AgentFlow context is no longer used, because it added
+too many formulas to the metrics service when societies are large.
 <dl>
-  <dt><b><code>AgentFlow([SrcAddr],[DstAddr]):MsgRate1xxxSecAvg</code></b></dt>
+  <dt><b><code>AgentFlow([SrcAddr],[DstAddr]):MsgRate(1xxxSecAvg)</code></b></dt>
 
-  <dd> Messages per Second from Source Agent to Destination Agent. The
-      Averaging Periods are: "1SecAvg", "10SecAvg", "100SecAvg", and
-      "1000SecAvg"<p> </dd>
+  <dd> Messages per Second from Source Agent to Destination Agent."<p> </dd>
       
-  <dt><b><code>AgentFlow([SrcAddr],[DstAddr]):ByteRate1xxxSecAvg</code></b></dt>
-  <dd> Bytes per Second from Source Agent to Destination Agent. The
-      Averaging Periods are: "1SecAvg", "10SecAvg", "100SecAvg", and
-      "1000SecAvg"<p> </dd>
+  <dt><b><code>AgentFlow([SrcAddr],[DstAddr]):ByteRate(1xxxSecAvg)</code></b></dt>
+  <dd> Bytes per Second from Source Agent to Destination Agent.<p> </dd>
 </dl>
 
 </body>
