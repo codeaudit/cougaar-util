@@ -48,6 +48,7 @@ import org.apache.log4j.*;
  * $CONFIG signifies <org.cougaar.config>
  * $CWD signifies <user.dir>
  * $HOME signifies <user.home>
+ * $MOD signifies the name of a Cougaar module - a sub-directory of $INSTALL
  *
  * The default value for org.cougaar.config.path is defined in the static
  * variable defaultConfigPath:
@@ -59,6 +60,18 @@ import org.apache.log4j.*;
  * $INSTALL. URLs may be absolute in which case some or all of the
  * base URL may be ignored.
  *
+ * By default, $MOD is not set. However, when an object requests
+ * a ConfigFinder, it may specify a String value for $MOD. If specified,
+ * the search path used is augmented, adding 4 directories to the start
+ * of the search path:
+ * <ul>
+ * <li>$INSTALL/$MOD/configs/$CONFIG</li>
+ * <li>$INSTALL/$MOD/configs</li>
+ * <li>$INSTALL/$MOD/data/$CONFIG</li>
+ * <li>$INSTALL/$MOD/data</li>
+ * </ul>
+ * <br>
+ *
  * Set org.cougaar.core.util.ConfigFinder.verbose=true to enable 
  * additional debugging logs.
  * @property org.cougaar.install.path Used as the base path for config file finding.
@@ -66,6 +79,7 @@ import org.apache.log4j.*;
  * documentation for details.
  * @property org.cougaar.core.util.ConfigFinder.verbose When set to <em>true</em>, report
  * progress while finding each config file.
+ * @property org.cougaar.config The configuration being run, for example minitestconfig or small-135. Setting this property means that CIP/configs/<value of this property> will be searched before configs/common
  **/
 public final class ConfigFinder {
   /** this is the default string used if org.cougaar.config.path is not defined.
@@ -90,7 +104,43 @@ public final class ConfigFinder {
     this(s, defaultProperties);
   }
 
+  /**
+   * Construct a ConfigFinder that will first search within
+   * the specified module, and then in the directories on the 
+   * given search path, using the default Property substitutions.<br>
+   *
+   * When searching the given module, we search the following 4
+   * directories (if defined) before any other directories:
+   * <ul>
+   * <li>$INSTALL/$module/configs/$CONFIG</li>
+   * <li>$INSTALL/$module/configs</li>
+   * <li>$INSTALL/$module/data/$CONFIG</li>
+   * <li>$INSTALL/$module/data</li>
+   * </ul>
+   **/
+  public ConfigFinder(String module, String path) {
+    this(module, path, defaultProperties);
+  }
+
   public ConfigFinder(String s, Map props) {
+    this(null, s, props);
+  }
+
+  /**
+   * Construct a ConfigFinder that will first search within
+   * the specified module, and then in the directories on the 
+   * given search path, using the given Property substitutions.<br>
+   *
+   * When searching the given module, we search the following 4
+   * directories (if defined) before any other directories:
+   * <ul>
+   * <li>$INSTALL/$module/configs/$CONFIG</li>
+   * <li>$INSTALL/$module/configs</li>
+   * <li>$INSTALL/$module/data/$CONFIG</li>
+   * <li>$INSTALL/$module/data</li>
+   * </ul>
+   **/
+  public ConfigFinder(String module, String s, Map props) {
     if ("true".equals(System.getProperty("org.cougaar.core.util.ConfigFinder.verbose", "false")))
       setVerbose(true);
 
@@ -104,7 +154,27 @@ public final class ConfigFinder {
     // append the default if we end with a ';'
     if (s.endsWith(";")) s += defaultConfigPath;
 
-    Vector v = StringUtility.parseCSV(s, ';');
+    Vector mv = null;
+    if (module != null) {
+      props.put("MOD", module);
+      // Tack on to the front of the search path CIP/module/configs/$CONFIG
+      // CIP/module/configs, CIP/module/data/CONFIG, CIP/module/data
+      mv = new Vector(4);
+      mv.add("$INSTALL/$MOD/configs/$CONFIG");
+      mv.add("$INSTALL/$MOD/configs");
+      mv.add("$INSTALL/$MOD/data/$CONFIG");
+      mv.add("$INSTALL/$MOD/data");
+    }
+
+    Vector v;
+
+    if (mv != null)
+      v = new Vector(mv);
+    else 
+      v = new Vector();
+    
+    v.addAll(StringUtility.parseCSV(s, ';'));
+
     int l = v.size();
     for (int i = 0; i < l; i++) {
       appendPathElement((String) v.elementAt(i));
@@ -199,6 +269,10 @@ public final class ConfigFinder {
             if (logger.isInfoEnabled()) {
               logger.info("Found "+aFilename+" as " +fileURL);
             }
+	    // If the URL contains configs/common....
+// 	    if (url.toString().indexOf("configs/common") != -1 || url.toString().indexOf("configs\\common") != -1) {
+// 	      logger.warn("configs/common file: " + aFilename, new Throwable());
+// 	    }
             return result;
           }
         } catch (MalformedURLException mue) {
@@ -227,6 +301,10 @@ public final class ConfigFinder {
         if (logger.isInfoEnabled()) {
           logger.info("Found "+aURL+" as "+url);
         }
+	// If the URL contains configs/common....
+// 	if (url.toString().indexOf("configs/common") != -1 || url.toString().indexOf("configs\\common") != -1) {
+// 	  logger.warn("configs/common file: " + aURL, new Throwable());
+// 	}
         return is;
       } 
       catch (MalformedURLException mue) {
@@ -283,6 +361,10 @@ public final class ConfigFinder {
         if (logger.isInfoEnabled()) {
           logger.info("Found "+aURL+" as "+url);
         }
+	// If the URL contains configs/common....
+// 	if (url.toString().indexOf("configs/common") != -1 || url.toString().indexOf("configs\\common") != -1) {
+// 	  logger.warn("configs/common file: " + aURL, new Throwable());
+// 	}
         return url;
       }
       catch (MalformedURLException mue) {
@@ -357,6 +439,9 @@ public final class ConfigFinder {
     return parser.getDocument();
   }
 
+  // hash of the default module config finders
+  private static Map moduleConfigFinders;
+
   // Singleton pattern
   private static ConfigFinder defaultConfigFinder;
   private static Map defaultProperties;
@@ -394,8 +479,40 @@ public final class ConfigFinder {
     defaultConfigFinder = new ConfigFinder(config_path);
   }
 
+  /**
+   * Return the default static instance of the ConfigFinder,
+   * configured using the system properties.
+   **/
   public static ConfigFinder getInstance() {
     return defaultConfigFinder;
+  }
+
+  /**
+   * Return a new ConfigFinder that uses the system properties
+   * for most configuration details, adding the four module-specific
+   * directories to the front of the search path.
+   **/
+  public static ConfigFinder getInstance(String module) {
+    if (module == null || module.equals("")) {
+      return defaultConfigFinder;
+    }
+    
+    String config_path = System.getProperty("org.cougaar.config.path");
+    if (config_path != null && 
+	config_path.charAt(0) == '"' &&
+	config_path.charAt(config_path.length()-1) == '"')	
+      config_path = config_path.substring(1, config_path.length()-1);
+    
+    // Build static hash on $module of these
+    if (moduleConfigFinders == null)
+      moduleConfigFinders = new HashMap();
+
+    ConfigFinder mcf = (ConfigFinder)moduleConfigFinders.get(module);
+    if (mcf == null) {
+      mcf = new ConfigFinder(module, config_path);
+      moduleConfigFinders.put(module, mcf);
+    }
+    return mcf;
   }
 
   class ConfigResolver implements EntityResolver {
