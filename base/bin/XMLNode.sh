@@ -117,7 +117,7 @@ fi
 # add your cougaar options here (or on the command line):
 # To quiet the complainingLP:
 # -Dorg.cougaar.planning.ldm.lps.ComplainingLP.level=0
-coptions="-Dorg.cougaar.core.agent.startTime=08/10/2005"
+coptions="-Dorg.cougaar.core.agent.startTime=07/11/2005"
 
 # vm arguments to adjust (defaults are given).  You can tune the VM performance
 # by fooling with these values... or you can render your society unrunnable.
