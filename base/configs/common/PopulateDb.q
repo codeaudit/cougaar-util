@@ -58,13 +58,22 @@ queryLibPGAttribute=\
 queryMaxAssemblyId=\
  SELECT MAX(ASSEMBLY_ID) \
    FROM V4_ASB_ASSEMBLY \
-  WHERE ASSEMBLY_TYPE = 'CSM' \
+  WHERE ASSEMBLY_TYPE = ':assembly_type' \
     AND ASSEMBLY_ID LIKE ':assembly_id_pattern'
 
 insertAssemblyId=\
  INSERT INTO V4_ASB_ASSEMBLY (ASSEMBLY_ID, ASSEMBLY_TYPE, DESCRIPTION) \
- VALUES (:assembly_id, 'CSM', 'CSM assembly')
+ VALUES (:assembly_id, ':assembly_type', ':assembly_type assembly')
 
 insertTrialAssembly=\
  INSERT INTO V4_EXPT_TRIAL_ASSEMBLY (EXPT_ID, TRIAL_ID, ASSEMBLY_ID, DESCRIPTION) \
- VALUES (':expt_id', ':trial_id', :assembly_id, 'CSM assembly')
+ VALUES (':expt_id', ':trial_id', :assembly_id, ':assembly_type assembly')
+
+cleanTrialAssembly=\
+ DELETE FROM V4_EXPT_TRIAL_ASSEMBLY \
+  WHERE EXPT_ID = ':expt_id' \
+    AND TRIAL_ID = ':trial_id' \
+    AND ASSEMBLY_ID IN \
+        (SELECT ASSEMBLY_ID \
+           FROM V4_ASB_ASSEMBLY \
+          WHERE ASSEMBLY_TYPE = ':assembly_type')
