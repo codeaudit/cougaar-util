@@ -63,8 +63,9 @@ org.cougaar.core.agent.startTime=08/10/2005
 org.cougaar.planning.ldm.lps.ComplainingLP.level=0
 org.cougaar.message.transport.aspects=org.cougaar.core.mts.StatisticsAspect
 
-# Set the classname to "Node"
-java.class.name=org.cougaar.core.node.Node
+# Set the classname to the Bootstrapper. You must supply a command-line
+# argument for the class to run, usually org.cougaar.core.node.Node
+java.class.name=org.cougaar.bootstrap.Bootstrapper
 
 # You can also turn on/off http/s. Turn of by setting the port to -1
 # Note that HTTPS is off by default, and HTTP is at 8800
