@@ -1,0 +1,4 @@
+# Solaris-specific ALP property file
+
+# use native threads because Solaris has m-n threading model.
+org.cougaar.tools.server.vm.green=false

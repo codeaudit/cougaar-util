@@ -1,0 +1,72 @@
+Properties file for controlling the ALP Server.
+
+Property files should usually end with a ".props" extension.  The
+syntax is trivial and is defined by the JDK Properties.load() method.
+
+Server control properties (with defaults given)
+# The port of the server's RMI Registry
+# (do not change)
+alp.server.port=8484
+
+# The name of the server in the RMI Registry at alp.server.port 
+# (do not change)
+alp.server.name=ALPServer
+
+# The class of RemoteALPServer to instantiate 
+# (do not change)
+alp.server.class=alp.server.RemoteALPServerImpl
+
+# when true, the server will report on various activities
+alp.server.verbose=false
+
+# The class of Node to start
+# (do not change)
+alp.server.node.class=alp.society.Node
+
+# The java vm command to run nodes with
+alp.server.java=java
+
+# some standard memory settings
+alp.server.vm.memory=-Xms100m -Xmx300m
+
+# use green threads?
+# should be true for jdk1.2 under linux
+alp.server.vm.green=false
+
+# The classpath to use to run nodes - defaults to the classpath of the 
+# server environment. Note that only core.jar needs to be in here.
+java.class.path=.../core.jar
+
+# where alp is installed - no default
+# This should be set to the value of $ALP_INSTALL_PATH
+alp.install.path=
+
+# may specify additional -D arguments
+alp.vm.arguments=
+
+In addition, the console will send the following properties to the
+server in order to start the Node 
+
+# which config directory to use, e.g. integ-config
+# no default, required.
+alp.config=
+
+# Which node of a config to start - e.g. SingleNode
+# no default, required
+alp.node.name=
+
+# additional arguments to Node
+# no default, optional
+alp.node.arguments=
+
+# Communications server and ports.
+# Defines where the nameserver will run and which port the
+# PSP webserver will run on.
+# format is "hostname:nameserverport:PSPport"
+# example: "alp42:9999:6666"
+# The port numbers should be > 1000 and must not conflict with any
+# other nodes running on the same set of computers.
+# The standard alpserver clients provide this value automatically.
+# if no value is passed, the nodes started will fall back to 
+# using the alpreg.ini config file.
+alp.name.server=

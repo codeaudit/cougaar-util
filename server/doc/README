@@ -1,0 +1,64 @@
+This is the ALP (node) server module.
+
+To run the server:
+
+	java alp.server.ALPServer [<site.props> ..]
+or
+	java -jar server.jar [<site.props> ...]
+or (if your system allows jar file execution):
+	server.jar [<site.props> ..]
+
+"<site.props>" is zero or more optional files which should (minimally)
+specify where alp.install.path and the minimal classpath needed to
+start a node. 
+
+The server accumulates properties by reading properties from the
+following locations (in order):
+	System.Properties	(of the server VM - e.g. -D arguments)
+	Common.props		(usually in the jar file)
+	Windows.props		(iff the OS is a windows varient)
+	<OS>.props 		(where <OS> is the OS of the machine
+				e.g. "Linux".  If the OS name has
+				embedded spaces, they are replaced
+				with '_' characters - e.g. "Windows_NT.props")
+	<site.props>		(any passed arguments)
+
+Later properties have precedence.
+
+
+To run the client (Console):
+
+	java alp.server.Console hosts config props
+
+where:
+	hosts = a file with a list of hosts where the server might be running.
+	config = a file with a list of node names that might be run
+	props = a file with additional properties to send to the
+		client.
+The console props file will add properties to those of the server to
+determine the final set used to start the Node.  Many server control
+properties cannot be overriden from the console side.
+
+See the documentation file Properties.txt for a list of the standard
+properties used and syntax.
+
+The first node to be run will be assigned to run the nameserver for
+the society.  The port(s) to be used are determined by the
+alp.server.nameserver.ports property in the argument props or
+"8888:5555". The first number is the nameserver port.  The second
+number is the PSP (webserver) port.  There is no need to supply this
+parameter unless multiple people are running nodes on the same machine 
+(server).
+
+Once running, the user selects a node from column A and a machine from 
+column B and then presses the run button to launch the node.  The
+output from that node will appear in a new tabbed text display.
+
+Examples:
+(The data files mentioned below are all in server/data/)
+
+Starting a server instance:
+	java alp.server.ALPServer draught.props
+
+Starting the gui:
+	java alp.server.Console sample.hosts minitestconfig sample.props

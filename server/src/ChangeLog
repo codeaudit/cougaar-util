@@ -1,0 +1,35 @@
+2000-10-18  Michael Thome  <mthome@bbn.com>
+
+	* Console
+	Error output shows up in red.  Cleaned up the Writers, too.
+
+	* Console
+	Output tabs go away when a node is manually killed.  auto-selects
+	the first host if none selected when go is pressed.
+
+2000-10-03  Michael Thome  <mthome@bbn.com>
+
+	* RemoteProcessImpl
+	Quiet complaints when client is killed before the Nodes.  Also
+	print short messages when the Node exits.
+
+	* Console, RemoteALPServerImpl
+	Set the nameserver properties for the user.  See documentation for 
+	alp.server.nameserver.ports for more info.
+
+2000-10-02  Michael Thome  <mthome@bbn.com>
+
+	* Console
+	Keep a record of Nodes and make stop work.  Need to detect and
+	recycle text output boxes so that restarts work.
+
+	* Console
+	Each node node dumps its output stream(s) into the correct pane
+	and to 	a node-specific log file.
+
+	* ALPServer
+	Modified to replace ' ' chars with '_' in OS name for Windows*.
+	Also searches "Windows.props" immediately before the specific
+	OSName.props on windows* platforms.
+
+
