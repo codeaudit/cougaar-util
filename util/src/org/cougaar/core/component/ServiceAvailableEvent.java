@@ -19,7 +19,7 @@
  * </copyright>
  */
 package org.cougaar.core.component;
-
+import java.beans.beancontext.*; /*make @see reference work*/
 
 /** ServiceAvailableEvent indicates that a new service is available
  * to clients of a ServiceBroker.

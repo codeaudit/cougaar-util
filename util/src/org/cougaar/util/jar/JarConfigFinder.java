@@ -159,7 +159,7 @@ public class JarConfigFinder
    * Locate a file.
    * In most cases, the parameter being passed is a file name,
    * but it could be a partial or complete URL.
-   * @param aFileName - The name of a file being searched
+   * @param aFilename - The name of a file being searched
    */
   public File locateFile(String aFilename) {
     if (getLogger().isDebugEnabled()) {
@@ -241,7 +241,7 @@ public class JarConfigFinder
   /**
    * Resolve a logical reference to a URL
    * @param aFileName the name of a file to be resolved
-   * @returns null if no file can be found at that location
+   * @return null if no file can be found at that location
    */
   protected URL resolveUrl(String aFileName) {
     URL theURL = null;

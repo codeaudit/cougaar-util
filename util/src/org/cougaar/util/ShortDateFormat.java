@@ -59,7 +59,7 @@ public class ShortDateFormat {
    * <p>
    * @param date date to adjust (current date if null)
    * @param months adjust by number of months
-   * @param date adjust by number of days
+   * @param days adjust by number of days
    * @return adjusted date
    */
   public static Date adjustDate(Date date, int months, int days) {

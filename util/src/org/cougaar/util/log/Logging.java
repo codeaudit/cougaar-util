@@ -27,7 +27,7 @@ import java.util.WeakHashMap;
 /** 
  * Static access to simple logging facilities.
  * <p>
- * Components may be better served by using the {@link org.cougaar.core.service.LoggingService LoggingService}
+ * Cougaar components may be better served by using org.cougaar.core.service.LoggingService LoggingService
  */
 public final class Logging 
 {

@@ -95,8 +95,6 @@ public class PipedOutputStream extends java.io.OutputStream {
    * Write part of an array of bytes to the pipe. Some of the bytes in
    * the array are put into the connected PipedInputStream.
    * @param b the byte to put.
-   * @param off the index of the first byte to put
-   * @param len the number of bytes to put
    * @exception IOException if this stream is closed or not connected
    * or connected to a closed PipedInputStream.
    **/

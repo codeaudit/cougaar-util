@@ -288,7 +288,7 @@ public class ConfigFinder {
    * will convert "$INSTALL/configs/common/foo.txt" to
    * "file:/opt/cougaar/20030331/configs/common/foo.txt"
    * or somesuch.
-   * @returns null if unresolvable.
+   * @return null if unresolvable.
    **/
   public URL resolveName(String logicalName) throws MalformedURLException {
     return Configuration.urlify(Configuration.substituteProperties(logicalName,properties));

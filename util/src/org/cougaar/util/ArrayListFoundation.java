@@ -157,7 +157,7 @@ public class ArrayListFoundation extends AbstractList
   /**
    * Returns <tt>true</tt> if this list contains the specified element.
    *
-   * @param o element whose presence in this List is to be tested.
+   * @param elem element whose presence in this List is to be tested.
    */
   public boolean contains(Object elem) {
     return indexOf(elem) >= 0;
@@ -433,8 +433,6 @@ public class ArrayListFoundation extends AbstractList
    * undefined if the specified Collection is this list, and this
    * list is nonempty.)
    *
-   * @param index index at which to insert first element
-   *			  from the specified collection.
    * @param c elements to be inserted into this list.
    * @throws    IndexOutOfBoundsException if index out of range <tt>(index
    *		  &lt; 0 || index &gt; size())</tt>.
@@ -657,7 +655,7 @@ public class ArrayListFoundation extends AbstractList
    * (If <tt>toIndex==fromIndex</tt>, this operation has no effect.)
    *
    * @param fromIndex index of first element to be removed.
-   * @param fromIndex index after last element to be removed.
+   * @param toIndex index after last element to be removed.
    */
   protected void removeRange(int fromIndex, int toIndex) {
     modCount++;

@@ -21,6 +21,7 @@
 package org.cougaar.core.component;
 
 import java.util.Iterator;
+import java.beans.beancontext.*; /*make @see reference work*/
 
 /** Cougaar component Service Broker.
  * Note that this was previously called Services in deference to

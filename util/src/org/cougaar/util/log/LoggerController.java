@@ -61,7 +61,7 @@ public interface LoggerController {
   /**
    * Set the logging level.
    *
-   * @param a Logger level constant (DEBUG, INFO, etc)
+   * @param level Logger level constant (DEBUG, INFO, etc)
    *
    * @see Logger
    */

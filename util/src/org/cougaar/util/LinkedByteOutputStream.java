@@ -58,7 +58,7 @@ public class LinkedByteOutputStream extends OutputStream {
    * Creates a new linked byte output stream with the specified
    * initial size.
    *
-   * @param initialSize the initial size.
+   * @param size the initial size.
    */
   public LinkedByteOutputStream(int size) {
     this.initialSize = size;

@@ -19,7 +19,7 @@
  * </copyright>
  */
 package org.cougaar.core.component;
-
+import java.beans.beancontext.*; /*make @see reference work*/
 
 /** ServiceRevokedEvent indicates that a service has been 
  * revoked in a service context.
