@@ -43,6 +43,31 @@ public class PropagatingServiceBroker
   }
 
   private ServiceBroker delegate;
+  private ServiceAvailableListener availableListener;
+  private ServiceRevokedListener revokedListener;
+
+  /**
+   * Disconnect this propagating service broker from its parent.
+   * <p>
+   * This method removes the revokation listeners, which allows
+   * the broker to be garbage-collected.
+   * <p>
+   * The expected usage is for the Container to have a private 
+   * static inner-class that is a subclass of this class.  The
+   * subclass should has an added method, "void myDestroy()", 
+   * which simply calls "destroy()":
+   *     private static class MyPropSB 
+   *       extends PropagatingServiceBroker {
+   *          public MyPropSB(BindingSite sb) { super(sb); }
+   *          private void myDestroy() { super.destroy(); }
+   *       }
+   * This allows the container to call "myDestroy()" during its
+   * "unload()", but still hide this method from the child 
+   * components (due to the private class access).
+   */
+  protected void destroy() {
+    disconnectFromDelegate(delegate);
+  }
 
   protected ServiceBroker getDelegate() {
     return delegate;
@@ -50,16 +75,38 @@ public class PropagatingServiceBroker
 
   protected void connectToDelegate(ServiceBroker d) {
     // listen to the delegating service and relay events to our clients.
-    d.addServiceListener(new ServiceAvailableListener() {
-        public void serviceAvailable(ServiceAvailableEvent ae) {
-          applyListeners(new ServiceAvailableEvent(PropagatingServiceBroker.this, ae.getService()));
-        }
-      });
-    d.addServiceListener(new ServiceRevokedListener() {
-        public void serviceRevoked(ServiceRevokedEvent ae) {
-          applyListeners(new ServiceRevokedEvent(PropagatingServiceBroker.this, ae.getService())); 
-        }
-      });
+    if (availableListener == null) {
+      availableListener = 
+        new ServiceAvailableListener() {
+          public void serviceAvailable(ServiceAvailableEvent ae) {
+            applyListeners(
+                new ServiceAvailableEvent(PropagatingServiceBroker.this, ae.getService()));
+          }
+        };
+      d.addServiceListener(availableListener);
+    }
+    if (revokedListener == null) {
+      revokedListener =
+        new ServiceRevokedListener() {
+          public void serviceRevoked(ServiceRevokedEvent ae) {
+            applyListeners(
+                new ServiceRevokedEvent(PropagatingServiceBroker.this, ae.getService())); 
+          }
+        };
+      d.addServiceListener(revokedListener);
+    }
+  }
+
+  protected void disconnectFromDelegate(ServiceBroker d) {
+    // remove our delegating listeners
+    if (availableListener != null) {
+      d.removeServiceListener(availableListener);
+      availableListener = null;
+    }
+    if (revokedListener != null) {
+      d.removeServiceListener(revokedListener);
+      revokedListener = null;
+    }
   }
 
   /** is the service currently available in this broker or in the Delegate? **/
