@@ -240,8 +240,9 @@ public class Log4jLoggerFactory
       //System.out.println("Filename arg as URL wouldn't open.");
       try {
 	// This call interprets the COUGAAR_INSTALL_PATH in and creates a URL from this
-	URL base = Configuration.canonicalizeElement("$INSTALL/configs/common");
+	URL base = Configuration.urlify(Configuration.resolveValue("$INSTALL/configs/common"));
 	if (base != null) {
+	  //System.out.println("URLified configs/common: " + base);
 	  url = new URL(base, fileName);
 	  InputStream is = url.openStream();
 	  if (is == null) {
@@ -252,6 +253,7 @@ public class Log4jLoggerFactory
 	  }
 	}
       } catch (MalformedURLException mue) {
+	//System.out.println("Got malformed URL: " + mue);
 	url = null;
       } catch (IOException ioe) {
 	url = null;
