@@ -296,6 +296,12 @@ public class ConfigFinder {
         }
         continue;
       }
+      catch (RuntimeException rte) {
+        if (getLogger().isDebugEnabled()) {
+          getLogger().debug("Exception while looking for "+aURL+" at "+base, rte);
+        }
+        continue;
+      }
     }
 
     traceLog(aURL, null);
