@@ -60,12 +60,20 @@ import org.cougaar.bootstrap.SystemProperties;
  * properties; see
  * <a href="http://jakarta.apache.org/log4j/docs/manual.html">the log4j manual</a>
  * for valid file contents.
+ * @property org.cougaar.core.logging.*
+ *    Non-"config.filename" properties are stripped of their 
+ *    "org.cougaar.core.logging." prefix and passed to the
+ *    logger configuration.  These properties override any 
+ *    properties defined in the (optional) 
+ *    "org.cougaar.core.logging.config.filename=STRING" 
+ *    property.
  */
 public class Log4jLoggerFactory 
   extends LoggerFactory 
 {
   public static final String PREFIX = "org.cougaar.core.logging.";
   public static final String FILE_NAME_PROPERTY = PREFIX + "config.filename";
+  public static final String LOG4JCONF = "log4j.configuration";
 
   /**
    * Default configuration only prints WARN or higher
@@ -103,8 +111,12 @@ public class Log4jLoggerFactory
 
     String name;
     name = System.getProperty(LF_CONFIG_PROP);
-    if (name == null) name = System.getProperty(FILE_NAME_PROPERTY);
-    if (name == null) name = System.getProperty("log4j.configuration");
+    if (name == null) {
+      name = System.getProperty(FILE_NAME_PROPERTY);
+    }
+    if (name == null) {
+      name = System.getProperty(LOG4JCONF);
+    }
 
     try {
       if (name != null) {
@@ -120,6 +132,7 @@ public class Log4jLoggerFactory
             PropertyConfigurator.configure(cu);
           }
           org.apache.log4j.Logger.getLogger(Log4jLoggerFactory.class).info("Configured logging from "+cu);
+          configureFromSystemProperties();
           return;
         } else {
           err = new RuntimeException("Could not resolve "+name+" to a URL.");
@@ -140,6 +153,25 @@ public class Log4jLoggerFactory
     if (err != null) {
       org.apache.log4j.Logger.getLogger(Log4jLoggerFactory.class).error("Failed standard log4j initialization", err);
     }
+    configureFromSystemProperties();
+  }
+
+  private void configureFromSystemProperties() {
+    Properties props = SystemProperties.getSystemPropertiesWithPrefix(PREFIX);
+    Properties cp = new Properties();
+
+    for (Iterator it = props.keySet().iterator(); it.hasNext(); ) {
+      String name = (String) it.next();
+      if (name.equals(FILE_NAME_PROPERTY)) {
+        continue;
+      }
+
+      String value = props.getProperty(name);
+      name = name.substring(PREFIX.length());
+      cp.put(name, value);
+    }
+    PropertyConfigurator.configure(cp);
+    org.apache.log4j.Logger.getLogger(Log4jLoggerFactory.class).info("Configured logging from "+cp.size()+" System Properties");
   }
 
   // ugh. bashing of static structure... sigh.
