@@ -17,7 +17,7 @@
 <b><font size=+2>Release Notes</font></b></h2>
 
 <h2>
-<b><font size=+2>COUGAAR 8.6.2</font></b></h2>
+<b><font size=+2>COUGAAR 9.0</font></b></h2>
 </td>
 
 <td ALIGN=CENTER WIDTH="200"><a href="http://www.cougaar.org"><img SRC="cougaar-smalllogo.jpg" BORDER=0 ></a></td>
@@ -64,30 +64,70 @@
 <hr>
 <h2>
 <a NAME="overview"></a>Overview of this Release</h2>
-Build 8.6.2 is a point release along COUGAAR 8.0 and represents 8.6.0
-with assorted bugs fixed and some minor new features, specifically to
-support and incorporate Ultra*Log integration work previously done in 8.4.1.
-Notable additions for this release include:
+Build 9.0 is a major release of COUGAAR. Essential differences between
+8.8 and 9.0 include:
 <ul>
 <li>
-Bugs fixed.
-</li>
+Repackaging.&nbsp; See the repackaging diagrams for details.&nbsp; To repackage
+your source code use the <a href="ReleaseNotes/9.0/repackage/README">scripts</a>
+in the repackaging directory (doc/ReleaseNotes/9.0/repackaging).</li>
+
+<li>
+Servlets</li>
+
+<li>
+Node Manager</li>
+
+<li>
+MTS Componentization</li>
 </ul>
-
-
-Build 8.6.1 is a point release along COUGAAR 8.0 and represents 8.6.0
-with assorted bugs fixed and some minor new features, specifically to
-support and incorporate Ultra*Log integration work previously done in 8.4.1.
-Notable additions for this release include:
+Build 8.8.0 is a point release along COUGAAR 8.0 and represents 8.6.0 with
+assorted bugs fixed and some minor new features, specifically to support
+and incorporate Ultra*Log integration work previously done in 8.4.1. In
+Particular, 8.8.0 is intended to be the final release before 9.0. 8.8.0
+is the final snapshot of the 8.6.2 integration branch. Any third-party
+software which works with 8.6.2 will work with 8.8.0. Notable additions
+for this release include:
 <ul>
 <li>
-Third-party jars have been significantly updated.  See
-<a href="../sys/index.html">cougaar-support.zip:sys/index.html</a> for
-a list of the packages, the included version numbers, notes and
-download references.
-</li>
+Bugs fixed.</li>
+
+<li>
+<i>Manager</i> is an experimental/proof-of-concept module which attempts
+to detect and react to unexpected node and server death. Right now, this
+is a demo capability only, but may serve as a sneak preview into 9.x functionality.
+See manager/doc for some rough documentation and a small (linux-only) example.</li>
+
+<li>
+MessageTransport Adaptability enhancements to include Traffic Generation
+to aide in masking actual Cougaar message traffic.&nbsp; Its important
+to note that single pieces of the the Message Transport Adaptibility architecture,
+such as Secure Name Service access and Traffic Generation can be turned
+on and off using -D arguments.&nbsp; For more details, please see the Parameters.html
+catalog found in $COUGAAR_INSTALL_PATH/doc/api, the <a href="details/JSSE-Keystore-Instructions.txt">JSSE
+and keystore creation instructions</a> and the <a href="details/MTS-Adapt-Demo.htm">Message
+Transport Adaptibility Demo document</a>.</li>
 </ul>
 
+<p><br>Build 8.6.2 is a point release along COUGAAR 8.0 and represents
+8.6.0 with assorted bugs fixed and some minor new features, specifically
+to support and incorporate Ultra*Log integration work previously done in
+8.4.1. Notable additions for this release include:
+<ul>
+<li>
+Bugs fixed.</li>
+</ul>
+Build 8.6.1 is a point release along COUGAAR 8.0 and represents 8.6.0 with
+assorted bugs fixed and some minor new features, specifically to support
+and incorporate Ultra*Log integration work previously done in 8.4.1. Notable
+additions for this release include:
+<ul>
+<li>
+Third-party jars have been significantly updated. See
+<a href="../sys/index.html">cougaar-support.zip:sys/index.html</a>
+for a list of the packages, the included version numbers, notes and download
+references.</li>
+</ul>
 Build 8.6.0 is a point release along COUGAAR 8.0 and will be the final
 release under the ALP project.&nbsp; Future Cougaar releases will be under
 the Ultra*Log project. Notable additions for this release include:
@@ -104,25 +144,25 @@ database exports for running the SMALL-135 configuration are posted on
 the Cougaar web site.&nbsp; <a href="details/HeterogeneousDatabase.html">HeterogeneousDatabase</a></li>
 
 <li>
-New Configuration database to replace "ini" files. This new database
-and the Node enhancements that support reading from it allow running
-societies without distributing multiple configuration files. For
-details, see the JavaDocs for Node, the Cougaar Developer's Guide, and
-the CSMART User's Guide.</li>
+New Configuration database to replace "ini" files. This new database and
+the Node enhancements that support reading from it allow running societies
+without distributing multiple configuration files. For details, see the
+JavaDocs for Node, the Cougaar Developer's Guide, and the CSMART User's
+Guide.</li>
 
 <li>
-CSMART enhancements to support configuring, executing, and monitoring
-large distributed societies using the above configuration database. This is
-now the preferred mechanism for configuring, running, and monitoring
-large distributed societies. For further details, see the CSMART
-User's Guide and release documention in the CSMART module
-(csmart/doc/CSMART-Readme.txt to start).</li>
+CSMART enhancements to support configuring, executing, and monitoring large
+distributed societies using the above configuration database. This is now
+the preferred mechanism for configuring, running, and monitoring large
+distributed societies. For further details, see the CSMART User's Guide
+and release documention in the CSMART module (csmart/doc/CSMART-Readme.txt
+to start).</li>
 
 <li>
-The AppServer, which is used by CSMART to remotely create and destroy 
-Cougaar Node processes, has been enhanced to meet the new CSMART 
-requirements.  The CSMART documentation contains basic usage details,
-and the "server" module includes a "server/doc/README" text file.</li>
+The AppServer, which is used by CSMART to remotely create and destroy Cougaar
+Node processes, has been enhanced to meet the new CSMART requirements.
+The CSMART documentation contains basic usage details, and the "server"
+module includes a "server/doc/README" text file.</li>
 
 <li>
 Generic <a href="details/Logging.html">logging facility</a>. Both logging
@@ -143,127 +183,6 @@ better ability to defined task parameters, ability to specify more than
 2 levels of expansion, and the ability to expand levels fully or expand
 them into a single flat workflow. For details please see glm/doc/UniversalExpanderPlugIn.html</li>
 </ul>
-Build 8.4.2 is a patch release of COUGAAR 8.4.0.&nbsp; Notable additions
-for this release include:
-<ul>
-<li>
-<b>Additional javadoc support </b>New javadoc doclet generates additional
-file <a href="api/Parameters.html">Parameters.html</a> which is a catalog
-of System Properties (-D flags) used. The file is generated on the basis
-of @property javadoc tags in the source code. Also, generated javadoc is
-now placed within doc directories rather than parallel to the doc directory.&nbsp;</li>
-
-<li>
-Added a logging service for the standardized logging of messages and a
-logging control service to control how those messages are ouput. Also added
-a PSP that controls logging output using this service.</li>
-</ul>
-Build 8.4.1 is a patch release of COUGAAR 8.4.0.&nbsp; Notable additions
-for this release include:
-<ul>
-<li>
-Secure Whitepages/Yellowpages (naming) communications implementation using
-SSL.&nbsp;</li>
-
-<li>
-<a href="#jvm">Requires installation of Java Secure Socket Extension (JSSE).</a></li>
-
-<li>
-Extended INI-format: see <a href="details/INIFormat.txt">details/INIFormat.txt</a>.</li>
-
-<li>
-Full support for layered/combined Binders at all levels.</li>
-</ul>
-Build 8.4 is a point release along COUGAAR 8.0.&nbsp; Notable additions
-for this release include:
-<ul>
-<li>
-Initial implementation of Mobile Agents (for details see <a href="details/AgentMobility.txt">AgentMobility.txt</a>)</li>
-
-<li>
-Componentization of Blackboard.&nbsp; StandardBlackboard is now a child
-component of Agent which encapsulates the old Blackboard and Distributor
-functionality.&nbsp; BlackboardClients should still access the Blackboard
-via the BlackboardService.</li>
-
-<li>
-New JNDI compliant Naming Service implementation (for details see Cougaar
-Developers' Guide v8.4 section 5.2.4 Naming Service)</li>
-
-<li>
-Componentize Message Transport and hook the new MessageTransportService
-into the component model.&nbsp; Also repackaged message transport related
-code to org.cougaar.core.mts. (for details see <a href="details/MessageTransport-8.4.htm">MessageTransport-8.4.html</a>)</li>
-
-<li>
-Prototype of the QoS Montoring services were added. These Node-level services
-can determine the status of remote agents and their underlying resources
-(CPU and Bandwidth).&nbsp;</li>
-
-<li>
-Reimplement metrics data services to componentize node and agent level
-metrics (for details see <a href="details/MetricsServices.html">MetricsServices.html</a>)</li>
-
-<li>
-Further componentization and cleanup of the agent infrastructure.</li>
-</ul>
-Build 8.3 is an <i>experimental</i> point release along the COUGAAR 8.0
-development branch. Notable additions for this release include:
-<ul>
-<li>
-New usage patterns for plugin development that directly interact with the
-8.x component infrastructure (see javadoc for org.cougaar.core.plugin.ComponentPlugin
-and org.cougaar.mlm.plugin.organization.GLSExpanderPlugIn)</li>
-
-<li>
-Sample implementation of a PluginBinder wrapping Blackboard services</li>
-
-<li>
-The capability to load binders and components specified in "ini" files
-(for details see <a href="details/INIFormat.txt">INIFormat.txt</a>)</li>
-
-<li>
-Support at the Node level for implementing additional services and component
-managers</li>
-
-<li>
-Further componentization of the agent infrastructure</li>
-
-<li>
-Further refactoring of MessageTransport (for details see <a href="MessageTransport.htm">MessageTransport.htm</a>)</li>
-
-<li>
-The StrategicTransport package formerly known as TOPS has been replaced
-with a simpler package called glm-trans.</li>
-</ul>
-Build 8.2 is a point release along COUGAAR 8.0. Notable additions for this
-release include:
-<blockquote>
-<li>
-DelayedLP actions which allow batching of things like Notifications</li>
-
-<li>
-New component architecture APIs&nbsp;</li>
-
-<li>
-Component APIs and implementations of PluginBinder, MessageTransportBinder
-and BlackboardService</li>
-
-<li>
-Dynamic Component API</li>
-</blockquote>
-Build 8.0 is a major release of COUGAAR. Essential differences between
-7.2 and 8.0 include:&nbsp;
-<ul>
-<li>
-Support for JDK 1.3.</li>
-
-<li>
-Minor naming changes.&nbsp;</li>
-
-<li>
-Additional patches.</li>
-</ul>
 For additional details, please review the following documentation:
 <ul>
 <li>
@@ -281,6 +200,11 @@ docs</li>
 api/index.html if the cougaar-api.zip archive has been installed).</li>
 
 <li>
+<a href="api/Parameters.html">Parameters.html</a> which is a catalog of
+System Properties (-D flags) used. The file is generated on the basis of
+@property javadoc tags in the source code. .&nbsp;</li>
+
+<li>
 Cougaar Developers Guide, v8.6 (dated 1-November-2001)</li>
 
 <li>
@@ -295,6 +219,10 @@ core/src/Changelog</li>
 <li>
 Ultra*Log Developer Workshop presentations (on the <a href="http://www.ultralog.net">Ultra*Log
 website</a>)</li>
+
+<li>
+<a href="details/JSSE-Keystore-Instructions.txt">Installing JSSE and creating
+keystores</a> for use with SSL enabled Cougaar functionality.</li>
 </ul>
 
 <h2>
@@ -407,8 +335,8 @@ releases in size and complexity to test new infrastructure features and
 to provide reference examples of components component and service design
 patterns. Plugin and component developers are encouraged to use <b>minitestconfig</b>
 as a starting point for testing their software for compliance with the
-latest infrastructure release. Minitestconfig can be run as a multiple node, multiple host
-society.&nbsp;
+latest infrastructure release. Minitestconfig can be run as a multiple
+node, multiple host society.&nbsp;
 <p>In addition, there is a much larger configuration in
 <b>configs/small-135</b>.
 The default configuration supports running a relatively small but interesting
@@ -489,25 +417,10 @@ website.&nbsp;
 
 <ul>
 <li>
-OutOfMemory error/thread problem when running a 2 node small-135 society
-on one Linux machine.&nbsp; Its best to use 2 machines if running a multi-node
-small-135 society.</li>
-
-<li>
 The NodeServer module (server.jar) does not currently work as an executable
 jar file because of an unresolved dependency on core.jar. Until this is
 fixed, an appserver instance will have to have a specified classpath which
 includes core.jar.</li>
-
-<li>
-The Inventory Manager does not handle blanket failed allocations very well.
-If a universal allocator at a leaf unit fails all refills to an InventoryManager
-immediately below that supply point, there are failed refills, but the
-level below that there is no shortfall and no failed refills. This is related
-to a bug where confidence levels 0.5 or below should not be counted as
-success and aggregating failed allocations back to their expansion is not
-working properly. This should be fixed in a future release. Until this
-is fixed large shortfalls of supply do not reflect very well in the result.</li>
 </ul>
 </td>
 </tr>
