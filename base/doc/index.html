@@ -2,7 +2,7 @@
 <html>
 <head>
    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-   <meta name="GENERATOR" content="Mozilla/4.76 [en] (X11; U; Linux 2.4.2-2 i686) [Netscape]">
+   <meta name="GENERATOR" content="Mozilla/4.77 [en] (Windows NT 5.0; U) [Netscape]">
    <meta name="Template" content="C:\Program Files\Microsoft Office\Office\html.dot">
    <title>Release Notes</title>
 </head>
@@ -65,54 +65,69 @@ Build 9.0 is a major release of COUGAAR. Essential differences between
 8.8 and 9.0 include:
 <ul>
 <li>
-Repackaging.&nbsp; See the repackaging diagrams for details.&nbsp; To repackage
-your source code use the <a href="ReleaseNotes/9.0/repackage/README">scripts</a>
-in the repackaging directory (doc/ReleaseNotes/9.0/repackage).</li>
+Repackaging.&nbsp; See <a href="ReleaseNotes/9.0/repackage/Cougaar9.0RepackagingDetails.html">repackaging
+details and package maps</a>.&nbsp; To repackage your source code use the
+<a href="ReleaseNotes/9.0/repackage/README">scripts</a> in the repackaging
+directory (doc/ReleaseNotes/9.0/repackage).</li>
 
 <li>
-Servlets:<br>
-The Servlet server is now enabled by default 
-(HTTP port 8800) and replaces the PSP server.  During node 
-initialization you will now see this message:<br>
-&nbsp; &nbsp; <tt> Starting HTTP  server on port: 8800</tt><br>
-All PSP base-classes
-have been deprecated, and all PSPs must be ported to Servlets 
-(see bug 1017).  The existing PSP server will be removed in 
-the 9.2 release and will no longer be supported.<br> 
-Many PSPs and PSP-client-applications have already 
-been ported to use the new servlet server, including:
+Servlets:</li>
+
+<br>The Servlet server is now enabled by default (HTTP port 8800) and replaces
+the PSP server. During node initialization you will now see this message:
+<br>&nbsp;&nbsp;&nbsp; <tt>Starting HTTP server on port: 8800</tt>
+<br>All PSP base-classes have been deprecated, and all PSPs must be ported
+to Servlets (see bug 1017). The existing PSP server will be removed in
+the 9.2 release and will no longer be supported.
+<br>Many PSPs and PSP-client-applications have already been ported to use
+the new servlet server, including:
 <ul>
-  <li>"/tasks" <i>(the ported "/alpine/demo/TASKS.PSP", 
-      which is used to view an agent's blackboard)</i></li>
-  <li>"/completion" <i>(view task allocation-result 
-      statistics)</i></li>
-  <li>"/hierarchy"  <i>(view agent relationships)</i></li>
-  <li>"/load" <i>(merge of "?LOAD" and "PLUGIN_LOADER.PSP")</i>
-      </li>
-  <li>all 6 CSMART PSPs</li>
-  <li>the Inventory PSP</li>
-  <li>both TPFDD/datagrabber PSPs</li>
-  <li>the agg-agent PSPs</li>
-  <li>the tutorial PSPs</li>
+<li>
+"/tasks" <i>(the ported "/alpine/demo/TASKS.PSP", which is used to view
+an agent's blackboard)</i></li>
+
+<li>
+"/completion" <i>(view task allocation-result statistics)</i></li>
+
+<li>
+"/hierarchy" <i>(view agent relationships)</i></li>
+
+<li>
+"/load" <i>(merge of "?LOAD" and "PLUGIN_LOADER.PSP")</i>&nbsp;</li>
+
+<li>
+all 6 CSMART PSPs</li>
+
+<li>
+the Inventory PSP</li>
+
+<li>
+both TPFDD/datagrabber PSPs</li>
+
+<li>
+the agg-agent PSPs</li>
+
+<li>
+the tutorial PSPs</li>
 </ul>
 See:
 <ul>
-  <li><a href="details/Servlet.html">doc/details/Servlet.html</a>
-      for an introduction to the servlet server, including example 
-      servlets and PSP-porting instructions.</li>
-  <li><a href="../webserver/doc/install.html"
-       >webserver/doc/install.html</a> for server configuration 
-       options, including optional HTTPS support.</li>
-  <li><a href="details/PortedPSPs.html"
-       >doc/details/PortedPSPs.html</a> for a table of
-       (old-PSP  --&gt;  new-Servlet)</li>
-</ul>
-</li>
+<li>
+<a href="details/Servlet.html">doc/details/Servlet.html</a> for an introduction
+to the servlet server, including example servlets and PSP-porting instructions.</li>
 
 <li>
-Enhanced "LoggingService" support for logging within plugins and
-other components.
-</li>
+<a href="../webserver/doc/install.html">webserver/doc/install.html</a>
+for server configuration options, including optional HTTPS support.</li>
+
+<li>
+<a href="details/PortedPSPs.html">doc/details/PortedPSPs.html</a> for a
+table of (old-PSP --> new-Servlet)</li>
+</ul>
+
+<li>
+Enhanced "LoggingService" support for logging within plugins and other
+components.</li>
 
 <li>
 Basic Training Course Tutorials.&nbsp;</li>
@@ -135,9 +150,6 @@ tutorial. This has been fixed in version 9.0.</li>
 </ul>
 
 <li>
-Node Manager</li>
-
-<li>
 App-Server enhancements to support the Node Manager</li>
 
 <li>
@@ -151,23 +163,45 @@ that the three latter plugins have been replaced in the configuration by
 GLSInitServlet).</li>
 
 <li>
-CSMART cleanup: See <a href="../csmart/doc/release-notes.txt">CSMART
-release notes</a> for details. Notable highlights include:<ul>
-<li>Upgraded required Grappa to most recent version 1.2, which
-includes the BBN modifications. See <a href="../sys/index.html">required jar file documentation</a></li>
-<li>Upgraded Ant build script to require Ant1.4.1</li>
-<li>Repackaging and code cleanup</li>
-<li>Use core logging service</li>
-<li>Remove PSP support, using Servlets throughout instead, including
-new GLSInitServlet</li>
-<li>New Servlet Insertion Recipe</li>
-</ul></li>
-<li>TPFDD Viewer added features :&nbsp;</li>
-        <ul>
-          <li>TPFDD Display status line that shows total items, tons, volume, and time to create the TPFDD.</li>
-          <li>An Export feature on the TPFDD Display that exports the TPFDD data in a csv format suitable for Excel. <br>(See the datagrabber/doc/TPFDDViewer-Introduction.html file for more information on these new features.)</li>
-        </ul></ul>
+CSMART cleanup: See <a href="../csmart/doc/release-notes.txt">CSMART release
+notes</a> for details. Notable highlights include:</li>
 
+<ul>&nbsp;
+<li>
+Upgraded required Grappa to most recent version 1.2, which includes the
+BBN modifications. See <a href="../sys/index.html">required jar file documentation</a></li>
+
+<li>
+Upgraded Ant build script to require Ant1.4.1</li>
+
+<li>
+Repackaging and code cleanup</li>
+
+<li>
+Use core logging service</li>
+
+<li>
+Remove PSP support, using Servlets throughout instead, including new GLSInitServlet</li>
+
+<li>
+New Servlet Insertion Recipe</li>
+</ul>
+
+<li>
+TPFDD Viewer added features :&nbsp;</li>
+
+<ul>
+<li>
+TPFDD Display status line that shows total items, tons, volume, and time
+to create the TPFDD.</li>
+
+<li>
+An Export feature on the TPFDD Display that exports the TPFDD data in a
+csv format suitable for Excel.&nbsp;</li>
+
+<br>(See the datagrabber/doc/TPFDDViewer-Introduction.html file for more
+information on these new features.)</ul>
+</ul>
 Build 8.8.0 is a point release along COUGAAR 8.0 and represents 8.6.0 with
 assorted bugs fixed and some minor new features, specifically to support
 and incorporate Ultra*Log integration work previously done in 8.4.1. In
@@ -204,13 +238,22 @@ to support and incorporate Ultra*Log integration work previously done in
 <ul>
 <li>
 Bugs fixed.</li>
-<li>CSMART enhancements (See: <a href="../csmart/doc/release-notes.txt">CSMART
-release notes</a> for details)<ul>
-<li>Added support for assessment societies defined in MySQL
-database</li>
-<li>New concept: Recipe - for adding components to a society</li>
-<li>Multiple improvements to ability to configure and control societies from CSMART</li>
-</ul></li>
+
+<li>
+CSMART enhancements (See: <a href="../csmart/doc/release-notes.txt">CSMART
+release notes</a> for details)</li>
+
+<ul>&nbsp;
+<li>
+Added support for assessment societies defined in MySQL database</li>
+
+<li>
+New concept: Recipe - for adding components to a society</li>
+
+<li>
+Multiple improvements to ability to configure and control societies from
+CSMART</li>
+</ul>
 </ul>
 Build 8.6.1 is a point release along COUGAAR 8.0 and represents 8.6.0 with
 assorted bugs fixed and some minor new features, specifically to support
@@ -393,7 +436,6 @@ on
 Cougaar start time with the following Node argument:
 <br>-Dorg.cougaar.core.cluster.startTime=08/010/2005
 <br>This start time is optimal for the Oplan used with the small-135 society.&nbsp;
-
 <h2>
 <a NAME="example"></a>Test Harness Example Implementations</h2>
 We only maintain society configurations that we are currently using for
@@ -483,9 +525,7 @@ can be submitted through the <a href="http://www.cougaar.org">COUGAAR</a>
 website.&nbsp;
 <h2>
 <a NAME="bugs"></a>Known bugs and other issues</h2>
-
-See the online <a href="http://www.cougaar.org/bugs">bug tracker</a>.
-</td>
+See the online <a href="http://www.cougaar.org/bugs">bug tracker</a>.</td>
 </tr>
 </table>
 
