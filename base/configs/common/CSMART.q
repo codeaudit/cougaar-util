@@ -226,3 +226,119 @@ queryAgentAssetData = \
         FROM v4_asb_agent \
         WHERE ASSEMBLY_ID = ':assembly_id' \
         AND COMPONENT_ALIB_ID = ':agent:'
+
+queryCommunities = \
+  SELECT DISTINCT COMMUNITY_ID \
+    FROM community_attribute
+
+queryEntities = \
+  SELECT DISTINCT ENTITY_ID \
+    FROM community_entity_attribute \
+   WHERE COMMUNITY_ID = ':community_id'
+
+queryMemberType = \
+  SELECT ATTRIBUTE_VALUE \
+    FROM community_entity_attribute \
+   WHERE ENTITY_ID = ':entity_id' \
+     AND ATTRIBUTE_ID = 'MemberType'
+
+queryAllCommunityInfo = \
+  SELECT community_entity_attribute.COMMUNITY_ID, \
+         community_entity_attribute.ENTITY_ID, \
+         community_entity_attribute.ATTRIBUTE_ID, \
+         community_entity_attribute.ATTRIBUTE_VALUE, \
+         community_attribute.ATTRIBUTE_ID, \
+         community_attribute.ATTRIBUTE_VALUE \
+    FROM community_attribute, community_entity_attribute \
+   WHERE community_attribute.COMMUNITY_ID = \
+            community_entity_attribute.COMMUNITY_ID \
+     AND community_attribute.COMMUNITY_ID = ':community_id'
+
+queryCommunityInfo = \
+  SELECT * FROM community_attribute \
+   WHERE COMMUNITY_ID = ':community_id'
+
+queryEntityInfo = \
+  SELECT ENTITY_ID, ATTRIBUTE_ID, ATTRIBUTE_VALUE \
+    FROM community_entity_attribute \
+   WHERE COMMUNITY_ID = ':community_id' \
+     AND ENTITY_ID = ':entity_id'
+
+queryChildrenEntityInfo = \
+  SELECT ENTITY_ID, ATTRIBUTE_ID, ATTRIBUTE_VALUE \
+    FROM community_entity_attribute \
+   WHERE COMMUNITY_ID = ':community_id' \
+     AND ENTITY_ID IN (':children_entity_ids')
+
+queryInsertCommunityInfo = \
+  INSERT INTO community_attribute \
+  VALUES (':community_id', 'CommunityType', ':community_type')
+
+queryInsertCommunityAttribute = \
+  INSERT INTO community_attribute \
+  VALUES (':community_id', '', '')
+
+queryInsertEntityInfo = \
+  INSERT INTO community_entity_attribute \
+  VALUES (':community_id', ':entity_id', ':attribute_id', ':attribute_value')
+
+queryInsertEntityAttribute = \
+  INSERT INTO community_entity_attribute \
+  VALUES (':community_id', ':entity_id', '', '')
+
+queryDeleteCommunityInfo = \
+  DELETE FROM community_attribute \
+   WHERE COMMUNITY_ID = ':community_id'
+
+queryDeleteEntityInfo = \
+  DELETE FROM community_entity_attribute \
+   WHERE COMMUNITY_ID = ':community_id' \
+     AND ENTITY_ID = ':entity_id'
+
+queryIsCommunityInUse = \
+  SELECT ENTITY_ID \
+    FROM community_entity_attribute \
+   WHERE COMMUNITY_ID = ':community_id'
+
+queryUpdateCommunityAttributeId  = \
+  UPDATE community_attribute \
+     SET ATTRIBUTE_ID = ':attribute_id' \
+   WHERE COMMUNITY_ID = ':community_id' \
+     AND ATTRIBUTE_ID = ':prev_attribute_id' \
+     AND ATTRIBUTE_VALUE = ':attribute_value'
+
+queryUpdateCommunityAttributeValue = \
+  UPDATE community_attribute \
+     SET ATTRIBUTE_VALUE = ':attribute_value' \
+   WHERE COMMUNITY_ID = ':community_id' \
+     AND ATTRIBUTE_ID = ':attribute_id' \
+     AND ATTRIBUTE_VALUE = ':prev_attribute_value'
+
+queryUpdateEntityAttributeId  = \
+  UPDATE community_entity_attribute \
+     SET ATTRIBUTE_ID = ':attribute_id' \
+   WHERE COMMUNITY_ID = ':community_id' \
+     AND ENTITY_ID = ':entity_id' \
+     AND ATTRIBUTE_ID = ':prev_attribute_id' \
+     AND ATTRIBUTE_VALUE = ':attribute_value'
+
+queryUpdateEntityAttributeValue = \
+  UPDATE community_entity_attribute \
+     SET ATTRIBUTE_VALUE = ':attribute_value' \
+   WHERE COMMUNITY_ID = ':community_id' \
+     AND ENTITY_ID = ':entity_id' \
+     AND ATTRIBUTE_ID = ':attribute_id' \
+     AND ATTRIBUTE_VALUE = ':prev_attribute_value'
+
+queryDeleteCommunityAttribute = \
+  DELETE FROM community_attribute \
+   WHERE COMMUNITY_ID = ':community_id' \
+     AND ATTRIBUTE_ID = ':attribute_id' \
+     AND ATTRIBUTE_VALUE = ':attribute_value'
+
+queryDeleteEntityAttribute = \
+  DELETE FROM community_entity_attribute \
+   WHERE COMMUNITY_ID = ':community_id' \
+     AND ENTITY_ID = ':entity_id' \
+     AND ATTRIBUTE_ID = ':attribute_id' \
+     AND ATTRIBUTE_VALUE = ':attribute_value'
