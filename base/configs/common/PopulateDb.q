@@ -180,6 +180,18 @@ cleanTrialAssembly=\
     AND TRIAL_ID = ':trial_id:' \
     AND ASSEMBLY_ID IN :assemblies_to_clean:
 
+cleanASBAssembly=\
+ DELETE FROM V4_ASB_ASSEMBLY \
+  WHERE ASSEMBLY_ID IN :assemblies_to_clean:
+
+cleanASBComponentArg=\
+ DELETE FROM V4_ASB_COMPONENT_ARG \
+  WHERE ASSEMBLY_ID IN :assemblies_to_clean:
+
+cleanASBComponentHierarchy=\
+ DELETE FROM V4_ASB_COMPONENT_HIERARCHY \
+  WHERE ASSEMBLY_ID IN :assemblies_to_clean:
+
 queryAssembliesToClean=\
  SELECT AA.ASSEMBLY_ID \
    FROM V4_ASB_ASSEMBLY AA, V4_EXPT_TRIAL_ASSEMBLY ETA \
