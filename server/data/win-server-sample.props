@@ -60,6 +60,13 @@ java.class.path=D\:\\opt\\cougaar\\lib\\bootstrap.jar
 org.cougaar.config.path="D\:\\opt\\cougaar\\configs\\common\;D\:\\opt\\cougaar\\glmtrans\\configs\\demo-config\\config\;"
 
 # Use the Server HotSpot Java Virtual Machine
+# Warning: The JRE does not include this VM. You must have the full
+# JDK installed, and must have <JDK_HOME>/bin on your System
+# Environment path _before_ SYSTEMROOT/system32 (where the JRE version
+# of java.exe is usually placed). 
+# If you get an error like: Error: no `server' JVM at `C:\Program
+# Files\Java\j2re1.4.0\bin\server\jvm.dll'.
+# then this is usually the cause.
 java.server
 
 # Set some standard JVM memory settings.
