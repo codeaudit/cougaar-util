@@ -67,5 +67,8 @@ org.cougaar.core.agent.startTime=08/10/2005
 csmart.log.severity=PROBLEM 
 org.cougaar.planning.ldm.lps.ComplainingLP.level=0 
 org.cougaar.message.transport.aspects=org.cougaar.core.mts.StatisticsAspect
-org.cougaar.lib.web.https.port=-1
+
+# Turn on/off http/s for the servlets. Turn off by setting port to -1
+# Note that HTTPS is off by default, and HTTP is on port 8800
+#org.cougaar.lib.web.https.port=-1
 

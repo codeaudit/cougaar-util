@@ -64,7 +64,9 @@ csmart.log.severity=PROBLEM
 org.cougaar.planning.ldm.lps.ComplainingLP.level=0
 org.cougaar.message.transport.aspects=org.cougaar.core.mts.StatisticsAspect
 
-org.cougaar.lib.web.https.port=-1
+# You can also turn on/off http/s. Turn of by setting the port to -1
+# Note that HTTPS is off by default, and HTTP is at 8800
+#org.cougaar.lib.web.https.port=-1
 
 # Default to localhost popups, which also requires that localhost
 #   have "xhost +localhost" for local X authorization.
