@@ -5,20 +5,20 @@ Password = ${marine.database.plugin.password}
 
 # First, get the personnel and generate an aggregate asset
 %SQLAggregateAssetCreator
-query = select 'Personnel' NSN, SUM(personnel) QTY_OH, 'MilitaryPersonnel' NOMENCLATURE \
+query = select 'Personnel' AS NSN, SUM(personnel) AS QTY_OH, 'MilitaryPersonnel' AS NOMENCLATURE \
 	from ue_summary_mtmc \
     	where uic = :uic
 
 # Then, get the Fly-in Element(FE) pallets and generate an aggregate asset
 %SQLAggregateAssetCreator
-query = select NSN, SUM(QTY_OH), 'PALLET, AIRCRAFT 463L' NOMENCLATURE \
+query = select NSN, SUM(QTY_OH), 'PALLET, AIRCRAFT 463L' AS NOMENCLATURE \
 	from jtav_equipment \
 	where nsn = '1679008204896' and uic = :uic and uln like '%A' \
         group by nsn
 
 # Then, get the Fly-in Element(FE) and generate an aggregate asset
 %marine.plugin.ldm.SQLMDSAggregateAssetCreator
-query = select NSN, SUM(QTY_OH), '' NOMENCLATURE \
+query = select NSN, SUM(QTY_OH) AS "SUM(QTY_OH)", 'NONE' AS  NOMENCLATURE \
 	from jtav_equipment \
 	where uic = :uic and \
         NSN in ( '000000000MV22',\
@@ -72,7 +72,7 @@ query = select NSN, SUM(QTY_OH), '' NOMENCLATURE \
 
 # Now, get all 'non-pacing' assets as aggregates from JTAV
 %SQLAggregateAssetCreator
-query = select NSN, SUM(QTY_OH), '' NOMENCLATURE \
+query = select NSN, SUM(QTY_OH) AS "SUM(QTY_OH)", 'NONE' AS  NOMENCLATURE \
 	from jtav_equipment \
         where uic = :uic and uln like '%A' and \
         NSN in ( '0000000000000', \
