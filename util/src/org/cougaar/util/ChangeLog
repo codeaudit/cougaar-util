@@ -1,3 +1,11 @@
+2002-06-14  Ray Tomlinson  <RTomlinson@bbn.com>
+
+	* Collectors.java:
+	Fix BOZO comments. There is no BOZO. New comments explain the
+	situation that was apparently anomalous to the previous commenter.
+	No code was harmed or otherwise changed in the performance of this
+	edit.
+
 2002-04-25  Ray Tomlinson  <RTomlinson@bbn.com>
 
 	* DBConnectionPool.java:
