@@ -94,11 +94,87 @@ example, the errata page for Cougaar 11.0 is <a href="http://cougaar.org/errata/
 
 
   <!-- COUGAAR 11.2 COUGAAR 11.2 COUGAAR 11.2 COUGAAR 11.2 COUGAAR 11.2 -->
-<p> <b>Build 11.2</b>
+<p>
+<b>Build 11.2</b> is a minor release, including a backwards-compatible
+core refactor, performance optimizations, and multiple bug fixes.
+<p>
 <ul>
-<li>Converted minitestconfig and tutorials to run completely from XML. Running of MiniNode
-does not require the database.  All ini files have been removed as they
-are no longer supported.</li>
+<li>
+Applied updated &amp; simplified BSD-derived 
+<a href="http://cougaar.org/license.html">copyright notice</a>.
+</li>
+<li>
+Converted minitestconfig and tutorials to run completely from XML.
+Running of MiniNode does not require the database.  All "*.INI" files
+have been removed as they are no longer supported.
+</li>
+<li>
+Refactored core to support node and agent templates, moving most
+formerly hard-coded components to new XSL style sheets.  For
+example, a developer can modify the "configs/common/NodeAgent.xsl"
+to replace the MTS, disable the blackboard, etc.  See the Cougaar 
+Developers' Guide version 11.2 for details.
+</li>
+<li>
+New XML Node startup scripts (bin/XSLNode) to use -D system
+properties ("&lt;vm_parameter&gt;") specified in XML files.
+For most developers, this simplifies configuration management,
+since per-node system properties can be maintained in the same
+XML file as the node and agent configurations.
+</li>
+<li>
+The RescindLP now does many sanity checks on the addition and
+removal of objects. In particular, it enforces that Tasks are added
+before PlanElements that handle them, and child tasks after the
+PlanElements. Typically the result is that many tasks without a parent
+task (because an infrastructure rescind is in progress) are
+removed. System properties permit disabling this behavior.
+</li>
+<li>
+Multiple fixes to minimize persistence overhead.  Disabled
+persistence now has nearly zero overhead, since the agents no
+longer do trivial "P" persists or hold onto change tuples.
+When persistence is enabled, redundant tuples are now consolidated 
+between persists, allowing early GC; for example, an object
+publishAdded and publishRemoved between persist cycles can now be
+GC'ed before the next persist.
+</li>
+<li>
+Drop explicit GC before persistence. This means persistence
+may temporarily store removed objects, but the new design is more
+efficient if a node contains many agents.</li>
+<li>
+New component model load order of "initialize()", "load()", and
+"start()": now all components are initialized before any are loaded,
+etc.  In particular, all plugins are now loaded before any are
+started, where start schedules the "setupSubscriptions()".  This
+should be transparent to most developers.
+</li>
+<li>
+Many fewer native threads created directly - more use of the Cougaar
+ThreadService (bug 3542).  For example, JVM thread dumps will no
+longer show per-agent "RQ" message handler threads.
+</li>
+<li>
+Alarms now use the ThreadService for scheduling.
+</li>
+<li>
+Multiple enhancements in initializers to reduce String consing,
+LogginService instances, and other memory enhancements. In particular,
+community file is only parsed once per Node.
+</li>
+<li>
+Do not propogate add/change of Allocations of Tasks that are not
+on the blackboard (have just been rescinded).
+</li>
+<li>
+Added a SimpleRelayExample to core/relay package.
+</li>
+<li>
+Support running plugins in a mode where only a single transaction may
+be open at one time (default is off: that is, fully parallel plugin
+operation). See cougaar bug 3664.
+</li>
 <li>
 org.cougaar.planning.plugin.PluginSanityBinder is an optional new
 binder for use with plugins.  When inserted, it will complain whenever
@@ -108,9 +184,15 @@ good example of a simple but functional Binder.
 </li>
 <li>
 There is a service alternative to ConfigFinder in the form of
-ConfigurationService. The service is provided by org.cougaar.core.node.ConfigurationServiceComponent
+ConfigurationService. The service is provided by 
+org.cougaar.core.node.ConfigurationServiceComponent
 which is loaded by default only in XML configurations. 
 See cougaar bug (RFE) 2569.
+</li>
+<li>
+Multiple planning object tweaks: synchronize access to key members,
+avoid serializing un-necessary members, and add debug logging on acess
+to other members.
 </li>
 <li>
 ActiveSubscriptionObject actions may now be delayed from immediate
@@ -126,98 +208,110 @@ turns on extensive debugging code which notes problematic usage. (see
 cougaar bug 3663)
 </li>
 <li>
-Support running plugins in a mode where only a single transaction may
-be open at one time (default is off: that is, fully parallel plugin
-operation). See cougaar bug 3664.
-</li>
-<li>GLSExpanderPlugin supports a -D argument which forces a
+GLSExpanderPlugin supports a -D argument which forces a
 persistence after the GLS task has been propogated. See the source for
 that plugin.
 </li>
-<li>The RescindLP now does many sanity checks on the addition and
-removal of objects. In particular, it enforces that Tasks are added
-before PlanElements that handle them, and child tasks after the
-PlanElements. Typically the result is that many tasks without a parent
-task (because an infrastructure rescind is in progress) are
-removed. System properties permit disabling this behavior.
+<li>
+Added new method to PluginHelper which plugins should use when 
+removing a task from its workflow, to recalculate the aggregated 
+Allocation Result if necessary.
 </li>
 <li>
-New XSL Style sheets.
-</li>
-<li> New XML Node startup scripts to use -D args specified in XML
-files and apply XSL style sheets.</li>
-<li>
-New Components and component load order, removing hard coded
-components.
+Further work for propogating Allocation Result changes up to a
+task that was Expanded. In particular support a change to
+undefined. See bug 3462.
 </li>
 <li>
-Many fewer native threads created directly - more use of the Thread
-Service.
+New OperationalSuperior concept.
 </li>
-<li> New OperationalSuperior concept.
+<li>
+Restore prototype cache on rehydration.
 </li>
-<li> New optional core servlet, QuiescenceStateServlet, which shows the
+<li>
+Improve algorithm efficiency for detecting Node-level queiscence.
+</li>
+<li>
+New optional core servlet, QuiescenceStateServlet, which shows the
 quiescence status of individual Nodes and the agents within those
 nodes.
 </li>
-<li> Multiple planning object tweaks: synchronize access to key members,
-avoid serializing un-necessary members, and add debug logging on acess
-to other members.
+<li>
+Added components to restrict the number of threads per node or
+per agent.
 </li>
-<li> Added component to restrict the number of threads per node. </li>
-<li> Added component to restrict the number of threads per agent. </li>
-<li> PluginHelper: New method which plugins should use when removing a
-task from its workflow, to recalculate the aggregated Allocation
-Result if necessary.</li>
-<li> Added multiple utilities.</li>
-<li> Multiple enhancements in initializers to reduce String consing,
-LogginService instances, and other memory enhancements. In particular,
-community file is only parsed once per Node. </li>
-<li> Added new BlackboardAlert object for indicating a problem on the
-local blackboard for higher-level application resolution.</li>
-<li> MessageTransportClient API change: added getIncarnationNumber. </li>
-<li> Added DestinationLink validity support. </li>
-<li> Added MTS OldIncarnationAspect to ignore messages from an old
-instance of an agent that has restarted elsewhere. </li>
-<li> Restore prototype cache on rehydration. </li>
-<li> Added more regression tests.</li>
-<li> Further work for propogating Allocation Result changes up to a
-task that was Expanded. In particular support a change to
-undefined. See bug 3462.</li>
-<li> Multiple fixes to optimize performance when persistence is
-disabled. In particular, consolidate tuples to allow GC of un-ncessary
-tuples between persists.</li>
-<li> Multiple fixes to avoid locking agent when persistence is
-slow.</li>
-<li> Drop explicit garbage collection before persistence. This means
-persistence may temporarily store removed objects.</li>
-<li> Improve algorithm efficiency for detecting Node-level
-queiscence. </li>
-<li> Reduce usage of deprecated blocking WP calls. </li>
-<li> Modified API for PluginAlarm to take an absolute time instead of
-a delay, allowing for consistent usage between base classes.</li>
-<li> Alarms now use the ThreadService for scheduling.</li>
-<li> Added a SimpleRelayExample to core/relay package.</li>
-<li> Moved Ping society and configuration to new ping module. </li>
-<li> Shortened Node quiescence announcement delay to 20 seconds, and
-added -D argument to configure this value.</li>
-<li> Suppress some YP errors that may be transient while component
-re-tries. </li>
-<li> Updated Vishnu server 3rd party jar to include a performance
-improvement.</li>
-<li> Support community service access control. </li>
-<li> Added new -D argument to suppress reconciliation
-(org.cougaar.core.node.SkipReconciliation). </li>
-<li> Added trivial single-node MTS implementation. </li>
-<li> Apply updated & simplified BSD-derived copyright notice. </li>
-<li> Require reasonable AspectScorePoints in ScoringFunctions. </li>
-<li> Do not propogate add/change of Allocations of Tasks that are not
-on the blackboard (have just been rescinded).</li>
-<li> Multi-threading fixes to GLM's ClusterOPlan fix to ensure start &
-end times are consistent.</li>
-<li> Javadoc cleanup.</li>
-<li> Suppress resending the self Organization if only LocalPG changes
-have happened (as in OPlanWatcherLP).</li>
+<li>
+Added multiple utilities.
+</li>
+<li>
+Added new generic BlackboardAlert object for indicating a problem 
+on the local blackboard for higher-level application resolution. 
+</li>
+<li>
+MessageTransportClient API change: added getIncarnationNumber, to
+avoid WP lookup for the incarnation numbers of local agents.
+</li>
+<li>
+Added DestinationLink validity support.
+</li>
+<li>
+Added MTS OldIncarnationAspect to ignore messages from an old
+instance of an agent that has restarted elsewhere.
+</li>
+<li>
+Added more regression tests.
+</li>
+<li>
+Multiple fixes to avoid locking agent when persistence is
+slow.
+</li>
+<li>
+Reduce usage of deprecated blocking WP calls.
+</li>
+<li>
+Modified API for PluginAlarm to take an absolute time instead of
+a delay, allowing for consistent usage between base classes.
+</li>
+<li>
+Moved Ping society and configuration from core to new ping module.
+</li>
+<li>
+Shortened Node quiescence announcement delay to 20 seconds, and
+added -D argument to configure this value.
+</li>
+<li>
+Suppress some YP errors that may be transient while component
+re-tries.
+</li>
+<li>
+Updated Vishnu server 3rd party jar to include a performance
+improvement.
+</li>
+<li>
+Support community service access control.
+</li>
+<li>
+Added new -D argument to suppress reconciliation
+(org.cougaar.core.node.SkipReconciliation).
+</li>
+<li>
+Added trivial single-node MTS implementation.  See
+"configs/common/NodeAgent.xsl" for details.
+</li>
+<li>
+Require reasonable AspectScorePoints in ScoringFunctions.
+</li>
+<li>
+Multi-threading fixes to GLM's ClusterOPlan fix to ensure start &amp;
+end times are consistent.
+</li>
+<li>
+Suppress resending the self Organization if only LocalPG changes
+have happened (as in OPlanWatcherLP).
+</li>
+<li>
+Javadoc cleanup.
+</li>
 </ul>
 
   <!-- COUGAAR 11.0 COUGAAR 11.0 COUGAAR 11.0 COUGAAR 11.0 COUGAAR 11.0 -->
