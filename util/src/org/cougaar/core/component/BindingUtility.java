@@ -70,6 +70,23 @@ public abstract class BindingUtility {
     }
   }
 
+  public static boolean setServiceBroker(Object child, ServiceBroker serviceBroker) {
+    Class childClass = child.getClass();
+    try {
+      Method m;
+      try {
+        m = childClass.getMethod("setServiceBroker", new Class[]{ServiceBroker.class});
+      } catch (NoSuchMethodException e) {
+        return false;
+      }
+
+      m.invoke(child, new Object[]{serviceBroker});
+      return true;
+    } catch (Exception e) {
+      throw new ComponentLoadFailure("Couldn't set ServiceBroker", child, e);
+    }
+  }
+
   private static class SetServiceInvocation {
     final Method m;
     final Object o;
@@ -92,6 +109,10 @@ public abstract class BindingUtility {
   }
 
   public static boolean setServices(Object child, ServiceBroker servicebroker) {
+    // first set the service broker, acting as if ServiceBroker
+    // implements Service (which it may become someday).
+    setServiceBroker(child, servicebroker);
+
     Class childClass = child.getClass();
     // failures are Object[] tuples of Service and Throwable
     ArrayList failures = new ArrayList(1); // remember the errors if we have to bail out
@@ -106,6 +127,7 @@ public abstract class BindingUtility {
         Method m = methods[i];
         String s = m.getName();
         if ("setBindingSite".equals(s)) continue;
+        if ("setServiceBroker".equals(s)) continue;
         Class[] params = m.getParameterTypes();
         if (s.startsWith("set") &&
             params.length == 1) {
