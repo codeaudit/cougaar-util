@@ -9,7 +9,7 @@
 <table border="0" cellspacing="0" cellpadding="0" width="600">
  <tbody>
     <tr>
- <td align="Center" width="200"><a href="HTTPS://www.alpine.bbn.com/"><img src="cougaar_small_left.jpg" border="0" height="83" width="95"></a>
+ <td align="Center" width="200"><a href="http://www.cougaar.org/"><img src="cougaar_small_left.jpg" border="0"></a>
       </td>
   <td align="Center" width="200"> 
       <h2> <b><font size="+2">Release Notes</font></b></h2>
@@ -30,7 +30,8 @@
       <hr> 
       <p>Jump down to:&nbsp; </p>
       <ul>
- <li> <a href="#overview">Overview of this Release</a></li>
+  <li> <a href="#introduction">Introduction</a></li>
+  <li> <a href="#overview">Overview of this Release</a></li>
   <li> <a href="#documentation">Additional Documentation</a></li>
   <li> <a href="#bugs">Known bugs and bugs resolved since Cougaar
   release 9.4.1</a></li>
@@ -38,18 +39,30 @@
   <li> <a href="#example">Example Society Implementations</a></li>
   <li> <a href="#delivering">Delivering Software Products (Plugins and other
 Components)</a></li>
-  <li> <a href="#developing">Developing and Running COUGAAR Societies</a></li>
+  <li> <a href="#developing">Developing and Running Cougaar Societies</a></li>
   <li> <a href="#jvm">Java Virtual Machine Requirements</a></li>
   <li> <a href="#future">Future Releases</a></li>
   <li> <a href="#questions">Questions and Submission of Bug Reports</a></li>  
       </ul>
   
       <hr>  
+
+      <h2> <a name="introduction"></a>Introduction</h2>
+
+This file contains the release notes for Cougaar 10.0.
+<p>
+Please see our <a href="FAQ.html">Cougaar FAQ</a> for a high-level
+introduction to the Cougaar agent architecture, system requirements,
+and pointers to additional documentation.
+<p>
+Please also visit our
+<a href="http://www.cougaar.org">Cougaar Website</a> for the latest
+news, documentation, and Cougaar builds. 
+
       <h2> <a name="errata"></a>Errata</h2>
-  Check the Cougaar website at <a href="www.cougaar.org">www.cougaar.org</a>
- <!-- update hyperlink as soon as errate file is on the website --> for the
-latest information on problems/workarounds that were detected/posted after 
-the current Cougaar version was released.  
+
+Please see our website for updated information on problems/workarounds
+that were detected/posted after this Cougaar version was released.
 
       <h2> <a name="overview"></a>Overview of this Release</h2>
 
@@ -57,43 +70,105 @@ the current Cougaar version was released.
 
 <p> <b>Build 10.0</b> is a major release, including significant code
 repackaging and cleanup.
+<p>
+Please see the <a href="ReleaseNotes/10.0/PortingNotes.html">porting notes</a>
+for documentation on how to port Cougaar 9.4 code to Cougaar 10.0.
+<p>
 <ul>
-<li> A <a href="FAQ.html">Cougaar FAQ</a> and the <a href="ReleaseNotes/10.0/PackageMap.html">Cougaar 10.0 Package Map</a> are now available with the release.
+<li> A new <a href="FAQ.html">Cougaar FAQ</a> and 
+<a href="ReleaseNotes/10.0/PackageMap.html">Package Map</a>
+are now available with the release.
 </li>
-<li><a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html">Concurrent.jar</a> added to the standard jar set.  This is Doug Lea's 
-excellent threading and synchronization package which forms the basis
-of <a href="http://gee.cs.oswego.edu/dl/concurrent/dist/docs/index.html">JSR-166</a>.
-</li>
-<li>ClusterIdentifier <b>-- FIXME</b>
+<li>ClusterIdentifier has been replaced by MessageAddress, and static 
+MessageAddress factory methods have been added (bugs 
+<a href="https://www.alpine.bbn.com/bugzilla/show_bug.cgi?id=1116">1116</a>,
+<a href="https://www.alpine.bbn.com/bugzilla/show_bug.cgi?id=1325">1325</a>,
+<a href="https://www.alpine.bbn.com/bugzilla/show_bug.cgi?id=2496">2496</a>).
+The included <a href="ReleaseNotes/10.0/PortingNotes.html#fixCID.pl">fixCID</a> script
+can be used to help automate the porting of pre-Cougaar-10.0 source code.<br>
 As part of this change, the CSMART configuration database has
 changed. We recommend reloading your database, following the CSMART
 install instructions. You may also update your database in-place,
 using the provided update script in
-csmart/data/database/scripts/mysql/sql/cluster-id-removal.sql
+<code>csmart/data/database/scripts/mysql/sql/cluster-id-removal.sql</code>
 Finally, at experiment load time, if CSMART still sees a ClusterIdentifier
 in a PropertyGroup, it will replace it with a MessageAddress. You will
 need to re-save your experiment though.</li>
-<li>AspectValue -- <b>FIXME</b></li>
-<li>Planning split -- <b>FIXME</b></li>
-<li>BindingSite -- <b>FIXME</b></li>
-<li>ComponentPlugin is now a simple extension of
-BlackboardClientComponent. As a result, users may not assume that
-getBindingSite() returns a PluginBindingSite. Plugins should use call
-getAgentIdentifier() or getConfigFinder on the Plugin, and not on the
-BindingSite. For simplicity, a script is provided in
-./ReleaseNotes/10.0/fixBindingSite.pl for making the necessary (minor)
-changes. </li>
-<li>A list of the hard-coded components that are loaded in all agents
-and node-agents has been documented in
-<a href="details/DefaultComponents.html">doc/details/DefaultComponents.html</a>.
+<li>AspectValues have been refactored to be immutable and support
+static factory methods (bugs
+<a href="https://www.alpine.bbn.com/bugzilla/show_bug.cgi?id=2430">2430</a>
+and
+<a href="https://www.alpine.bbn.com/bugzilla/show_bug.cgi?id=2529">2529</a>).
+The included <a href="ReleaseNotes/10.0/PortingNotes.html#fixAV.pl">fixAV</a> script
+can be used to help automate the porting of pre-Cougaar-10.0 source code.
+</li>
+<li>The planning domain has been separated from the core and a new
+"planning.jar" is now included in the release.  Several classes have been
+assigned new package names to better fit into core (org.cougaar.core.*)
+or planning (org.cougaar.planning.*).
+The included <a href="ReleaseNotes/10.0/PortingNotes.html#core-repackage">core-repackage</a>
+script can be used to help automate the porting of pre-Cougaar-10.0 source code.
+</li>
+<li>As part of the core/planning split, the Cougaar Domain APIs have been
+significantly refactored.  Domain developers should see the
+<a href="ReleaseNotes/10.0/PortingNotes.html#domains">domain porting notes</a>.
+</li>
+<li>The use of custom BindingSites has been almost entirely removed (bug
+<a href="https://www.alpine.bbn.com/bugzilla/show_bug.cgi?id=1375">1375</a>).
+The PluginBindingSite API in particular has been removed, which means
+that plugins that extend ComponentPlugin (which extends 
+BlackboardClientComponent) must use the plugin's "getAgentIdentifier()"
+and "getConfigFinder()" methods instead of casting the binding site.
+The included <a href="ReleaseNotes/10.0/PortingNotes.html#fixBindingSite.pl">fixBindingSite</a>
+script can be used to help automate the porting of pre-Cougaar-10.0 source code.
+</li>
+<li>Related to the above BindingSite refactoring, most of the old 
+"<i>X</i>Serves<i>Y</I>" interfaces, such as "ClusterServesPlugin"
+and "LogPlanServesLogicProvider", have been replaced with equivalent
+Service-based APIs.
+</li>
+<li>The <code>XMLizable</code> marker interface has been removed.
+The "/tasks" servlet's XML encoder now assumes that all blackboard
+objects can be inspected (via reflection/BeanInfo).  This simplifies
+most blackboard data structures, since they were found to universally
+implement the default XMLizable behavior.
+</li>
+<li>PSP support has been removed and officially replaced by servlets
+(bug 
+<a href="https://www.alpine.bbn.com/bugzilla/show_bug.cgi?id=1017">1017</a>).
+All PSPs have been removed (most were already ported to equivalent
+servlets).  Most of the MLM-UI code, which depended upon PSPs, was also
+removed (<code>org.cougaar.mlm.ui.*</code>) except for the TPFDD data
+grabber.</li>
+<li>The initial WhitePagesService, which will replace the current
+NamingService, has been defined and a JDNI-based implementation has
+been implemented.  Please see the Cougaar Developers' Guide for
+details.
+</li>
+<li>The servlet server has been updated to use the new white pages
+service instead of the JDNI naming service.  A new "/wp" servlet
+(<code>org.cougaar.core.util.WhitePagesServlet</code>) has been added
+to view the contents of the white pages.  The built-in "/agents"
+servlet has been enhanced to traverse the naming hierarchy instead of
+listing all agent names.
+</li>
+<li>The "/tasks" servlet has been enhanced to use the "/agents"
+servlet for its drop-down selection of agent names, a pattern that
+will be required for future servlets.  Servlets should no longer use
+the "getAllEncodedAgentNames()" utilities, since these will not scale.
+</li>
 <li>Insertion points for the major components are now defined by
 public constants in the appropriate classes. For example, the
 insertion point for an Agent is
 org.cougaar.core.agent.Agent.INSERTION_POINT (Plugin is
 org.cougaar.core.plugin.PluginBase). Use these constants wherever
 possible.</li>
+<li>Message transport was updated to use new white pages naming
+services and topology service. The LinkProtocol API has changed
+slightly as a result.</li>
 <li>Made multiple CSMART Changes. As usual, see the <a
-href="../csmart/doc/release-notes.txt">CSMART Release Notes</a> for details.
+href="../csmart/doc/release-notes.txt">CSMART Release Notes</a> for
+details.
   <ul>
     <li>Removed various obsolete and unused pieces of code. This
     includes the CSMART Domain (change your LDMDomains.ini as
@@ -105,12 +180,59 @@ href="../csmart/doc/release-notes.txt">CSMART Release Notes</a> for details.
     ClusterImpl, and updated to use MessageAddress instead of
     ClusterIdentifier. Reload your database to match.</li>
   </ul>
-</li>
 <li>Support for dynamic service discovery has been added through the
 servicediscovery module. The default society configurations still use 
 the static client/provider relationships defined by the CSMART config
-database.  If you would like to use dynamic service discovery, see the <a href="../servicediscovery/doc/SD-SocietyStartup.html">COUGAAR Service Discovery Installation Guide</a> for details.
+database.  If you would like to use dynamic service discovery, see the 
+<a href="../servicediscovery/doc/SD-SocietyStartup.html">COUGAAR Service Discovery Installation Guide</a> for details.
 </li>
+<li>Strawman Scalable YellowPages implementation<br>Cougaar 10.0
+introduces a new naming facility which is essentially an
+in-band web-services (UDDI) hierarchical registry.  The initial
+implementation is discussed in <a href="../yp/doc/yp.txt">yp/doc/yp.txt</a>.
+Note that two third-party packages which are prerequisites have
+been slightly modified to support cougaar use.  You can find
+patchfiles for both in <a href="ReleaseNotes/10.0/">ReleaseNotes/10.0</a> 
+as uddi4j2_0-cougaar10_0.patch and soapuddi0_3_1-cougaar10_0.patch.
+</li>
+</li>
+<li>A list of the hard-coded components that are loaded in all agents
+and node-agents has been documented in
+<a href="details/DefaultComponents.html"
+>doc/details/DefaultComponents.html</a>, as part of bug
+<a href="https://www.alpine.bbn.com/bugzilla/show_bug.cgi?id=2522">2522</a>.
+</li>
+<li>
+Embedded Cougaar prototype: The minimum set of Cougaar jars and
+files has been dramatically reduced in 10.0. Cougaar 10.0
+can run with a minimum code foot print of 2.1MB,
+down from 10.7MB for Cougaar 9.6.
+The minimum jars and files are:(/lib/core.jar /lib/util.jar
+/lib/javaiopatch.jar /lib/bootstrap.jar /sys/log4j.jar /core/bin/Node)
+<br>The following services can now be disabled:
+<ul>
+  <li>Planning: -Dorg.cougaar.core.load.planning=false (default=true)</li>
+  <li>Servlets: -Dorg.cougaar.core.load.servlet=false  (default=true)</li>
+  <li>Communities: -Dorg.cougaar.core.load.community=false (default=true)</li>
+  <li>Metric Service: remove the lib/qos.jar and sys/quoSumo.jar </li>
+</ul>
+Note Embedded Cougaar is just a reduction in the Cougaar 10.0
+footprint and is NOT Cougaar ME (Micro Edition), which uses a
+different code-base and restricted Java VM.
+</li>
+<li><a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html">Concurrent.jar</a> added to the standard jar set.  This is Doug Lea's 
+excellent threading and synchronization package which forms the basis
+of <a href="http://gee.cs.oswego.edu/dl/concurrent/dist/docs/index.html">JSR-166</a>.
+</li>
+<li>
+Metric Service has been componentized.  The
+    metrics service property file is no-longer necessary, i.e. the
+    configuration can be specified, via CSMART or .ini files. (see
+    Cougaar Developers' Guide) The
+    <code>-Dorg.cougaar.metrics.properties</code> flag is still supported, but
+    deprecated. 
+</li>
+  
 </ul>
 
   <!-- COUGAAR 9.6 COUGAAR 9.6 COUGAAR 9.6 COUGAAR 9.6 COUGAAR 9.6 -->
@@ -527,7 +649,7 @@ and Agent Components (including NodeAgent). </li>
         <li> The Thread Service API has changed, see <a href="ReleaseNotes/9.2.1/threadservice_info.txt">
 ThreadService Changes</a>
 . </li>
-        <li> As of 9.2.1, COUGAAR now provides more fine-grained control
+        <li> As of 9.2.1, Cougaar now provides more fine-grained control
  over the externalization of AttributedMessages. In particular, a new set
 of  join points has been defined in the interfaces MessageWriter and  MessageReader.
 Attaching Aspect delegates at these interfaces provides the  ability to control
@@ -566,7 +688,7 @@ times for blackboard objects, and its service-based API (BlackboardTimestampServ
 user requests an unknown servlet path (also addresses Bugs 1242, 1298). </li>
       </ul>
    <!-- COUGAAR 9.2 COUGAAR 9.2 COUGAAR 9.2 COUGAAR 9.2 COUGAAR 9.2 -->  
-      <p> <b>Build 9.2</b> is a point release along COUGAAR 9.0.  It includes assorted
+      <p> <b>Build 9.2</b> is a point release along Cougaar 9.0.  It includes assorted
       <a href="#bugs">bug fixes</a>
  and  several new infrastructure features, specifically to support Ultra*Log
 defense team development for 2002.  </p>
@@ -702,7 +824,7 @@ Cougaar Bugzilla site</a>
  
       </ul>
     <!-- COUGAAR 9.1 COUGAAR 9.1 COUGAAR 9.1 COUGAAR 9.1 COUGAAR 9.1 -->  
-      <p> <b>Build 9.1</b> is an interim release of COUGAAR. Essential differences 
+      <p> <b>Build 9.1</b> is an interim release of Cougaar. Essential differences 
 	    between 9.0 and 9.1 include: </p>
       <ul>
   <li> JDK version change.  Cougaar 9.1 (and all future versions) requires 
@@ -723,7 +845,7 @@ agent, as defined in an xml file.  <br>
         <p>  </p>
       </ul>
   <!-- COUGAAR 9.0 COUGAAR 9.0 COUGAAR 9.0 COUGAAR 9.0 COUGAAR 9.0 -->  
-      <p> <b>Build 9.0</b> is a major release of COUGAAR. Essential differences
+      <p> <b>Build 9.0</b> is a major release of Cougaar. Essential differences
 between 8.8 and 9.0 include:  </p>
       <ul>
  <li> Repackaging.&nbsp; See <a href="ReleaseNotes/9.0/repackage/Cougaar9.0RepackagingDetails.html">
@@ -1007,9 +1129,9 @@ CSMART installation document</a>.<br>
  <!-- ---------------------------------------------------------------------- -->
  <h2> <a name="example"></a>Test Harness Example Implementations</h2>
 We only maintain society configurations that we are currently using for testing
-purposes and for&nbsp; COUGAAR demonstrations. These society configurations 
+purposes and for&nbsp; Cougaar demonstrations. These society configurations 
 are available in subdirectories under "configs" in the release. To execute 
-these COUGAAR societies, these nodes can be executed on a single computer 
+these Cougaar societies, these nodes can be executed on a single computer 
 or distributed across multiple computers.&nbsp; 
   <p>One society, <b><a
   href="ReleaseNotes/common/MiniTestConfig.html">minitestconfig</a></b> 
@@ -1066,7 +1188,7 @@ File.separatorChar + "myData.dat";</font></font></dt>
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->  
- <h2> <a name="developing"></a>Developing and Running COUGAAR Societies</h2>
+ <h2> <a name="developing"></a>Developing and Running Cougaar Societies</h2>
   
   <h3> General Development&nbsp;</h3>  
    <ul>
@@ -1093,8 +1215,10 @@ JDK 1.4 installation.  For details, see:
  <!-- ---------------------------------------------------------------------- -->  
   <h2> <a name="future"></a>Future Releases</h2>
 There will be further releases as we address system enhancements and deficiencies. 
-Please watch the cougaar-developers@cougaar.org and cougaar-information@cougaar.org 
-email lists and carefully read the latest Cougaar Developers Guide (CDG),
+Please watch the 
+<a href="mailto:cougaar-developers@cougaar.org">developers mailing list</a> and
+<a href="mailto:cougaar-information@cougaar.org">information mailing list</a>
+and carefully read the latest Cougaar Developers Guide (CDG),
 the Cougaar Architecture Document (CAD), and all release notes.&nbsp;  
 
  <!-- ---------------------------------------------------------------------- -->
@@ -1104,9 +1228,8 @@ the Cougaar Architecture Document (CAD), and all release notes.&nbsp;
  <!-- ---------------------------------------------------------------------- --> 
  <h2> <a name="questions"></a>Questions and Submission of Bug Reports</h2>
 In addition, email infrastructure questions and initiate community discussions 
-through cougaar-developers@cougaar.org. Bug and system-enhancement reports 
-can be submitted through the <a href="http://www.cougaar.org">COUGAAR</a> 
-website.&nbsp;  </td>
+through our <a href="mailto:cougaar-developers@cougaar.org">mailing list</a>. Bug and system-enhancement reports 
+can be submitted through the <a href="http://www.cougaar.org">Cougaar website</a>.&nbsp;  </td>
        </tr>
   </tbody>
  </table> 

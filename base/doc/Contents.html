@@ -1,0 +1,332 @@
+<html>
+<head>
+<title>Contents of this Cougaar Release</title>
+</head>
+<body>
+<h2>Contents of this Cougaar Release</h2>
+<p>
+This file documents the contents of this release and the
+general layout of Cougaar software modules.
+<p>
+<h3>BUILD ORGANIZATION</h3>
+<p>
+This is a list of the various zip files available from releases.
+<p>
+<table border=1>
+<tr><td>
+cougaar.zip
+</td><td>
+Cougaar runtime - all "lib/" jar files, scripts, configuration files,
+and minimum documentation.
+</td></tr><tr><td>
+cougaar-support.zip
+</td><td>
+Third-party supporting jar files.  Unpacks into "sys/" subdirectory
+where Bootstrapper will find them.
+</td></tr><tr><td>
+cougaar-api.zip
+</td><td>
+The javadoc for all the main cougaar classes in one place.  Unpacks
+to the local directory, so you may wish to create a separate "api/"
+directory.
+</td></tr><tr><td>
+cougaar-src.zip
+</td><td>
+Source code for each "lib/" module.  Unpacks to the local directory,
+so you may wish to create a separate "src/" directory.
+</td></tr><tr><td>
+md5sums.txt
+</td><td>
+MD5 checksums for all the above zips.
+</td></tr><tr><td>
+build.out
+</td><td>
+Output of the build process 
+</td></tr><tr><td>
+errors.out
+</td><td>
+Error output of the build process, including deprecation warnings.
+</td></tr>
+</table>
+<p>
+Notes:
+<ul>
+<li>
+You'll need cougaar.zip and cougaar-support.zip (the first time)
+to get a runnable system.  The rest are extras.  Furthermore, the
+cougaar-support contents do not change very often.
+</li><p>
+<li>
+The zips are designed to be unpacked in the same directory, e.g.
+on UNIX:
+<pre>
+       mkdir cougaar
+       cd cougaar
+       unzip /tmp/cougaar.zip
+       unzip /tmp/cougaar-support.zip
+       setenv COUGAAR_INSTALL_PATH `pwd`
+</pre></li><p>
+<li>
+The zips include version information in their respective
+"Manifest/" directories.  The content looks something like:
+<pre>
+       NAME=cougaar-support
+       COMMENT=cougaar thirdparty jars
+       REPOSITORY_TAG=V10_0                 # CVS branch
+       REPOSITORY_TIME=1/28/2003 13:00:08   # CVS checkout time
+       ARCHIVE_TIME=1/28/2003 13:29:27      # zip time
+</pre>
+All your zips should have the same REPOSITORY_TAG and
+REPOSITORY_TIME.  Each generated "lib/*.jar" file also contains
+its version information.
+</li><p>
+</ul>
+<p>
+<h3>MODULE LIST</h3>
+<p>
+The Cougaar software distribution (cougaar.zip) contains a number of
+separate modules of related classes with supporting documentation and
+sources.
+<p>
+These modules, which correspond to "lib/*.jar" files, are listed in
+approximate order of compilation dependency:
+<p>
+<table border=1>
+<tr><td>
+build
+</td><td>
+Release and build scripts, with code generators.
+</td></tr><tr><td>
+javaiopatch
+</td><td>
+Patch to jdk's java.io to support incremental
+persistence of Agents with Blackboards.
+</td></tr><tr><td>
+bootstrap
+</td><td>
+Class loader that scans "lib/*.jar" and "sys/*.jar"
+</td></tr><tr><td>
+util
+</td><td>
+Utility code, including the Cougaar Component Model
+and Log4j logging facility.
+</td></tr><tr><td>
+core
+</td><td>
+Criticial Core Cougaar infrastructure.
+</td></tr><tr><td>
+planning
+</td><td>
+Planning domain for Tasks, Assets, etc.
+</td></tr><tr><td>
+contract
+</td><td>
+Experimental predicate language.
+</td></tr><tr><td>
+toolkit
+</td><td>
+Collection of utilities including configgen
+which is a society configuration tool.
+</td></tr><tr><td>
+yp
+</td><td>
+Yellow pages directory naming service (UDDI).
+</td></tr><tr><td>
+glm
+</td><td>
+Generic Logistics Model domain.  Currently also
+includes the Military Logistics Model domain.
+</td></tr><tr><td>
+scalability
+</td><td>
+Toolkit for scalability and performance analysis.
+</td></tr><tr><td>
+aggagent
+</td><td>
+Agent that aggregates data from multiple remote
+agents.
+</td></tr><tr><td>
+vishnu
+</td><td>
+Optimizing transportation scheduler.
+</td></tr><tr><td>
+datagrabber
+</td><td>
+TPDFF transportation schedule viewer.
+</td></tr><tr><td>
+uiframework
+</td><td>
+A generalized User interface framework.
+</td></tr><tr><td>
+blackjack
+</td><td>
+Military supply support.
+</td></tr><tr><td>
+tutorial
+</td><td>
+The Cougaar tutorial.
+</td></tr><tr><td>
+csmart
+</td><td>
+Cougaar configuration and experimentation UI.
+</td></tr><tr><td>
+quo
+</td><td>
+Quality of Objects support (metrics).
+</td></tr><tr><td>
+qos
+</td><td>
+Quality of Service support.
+</td></tr><tr><td>
+server
+</td><td>
+Application server to launch Cougaar nodes.
+</td></tr><tr><td>
+manager
+</td><td>
+Agent health checking and restart manager.
+</td></tr><tr><td>
+webserver
+</td><td>
+Servlet service support excluding the server
+itself.
+</td></tr><tr><td>
+webtomcat
+</td><td>
+Tomcat servlet server implementation for use by
+webserver module.
+</td></tr><tr><td>
+community
+</td><td>
+Agent peer group support.
+</td></tr><tr><td>
+albbn
+</td><td>
+BBN military inventory and transportation support.
+</td></tr><tr><td>
+alsra
+</td><td>
+SRA military demand projection support.
+</td></tr><tr><td>
+stoplight
+</td><td>
+Military supply UI.
+</td></tr><tr><td>
+servicediscovery
+</td><td>
+Agent discovery using the yellow pages.
+</td></tr>
+</table>
+<p>
+<h3>INTRA-MODULE ORGANIZATION</h3>
+<p>
+Each module subdirectory is organized in a similar way in the source
+repository:
+<table border=1>
+<tr><td>
+build.xml
+</td><td>
+ANT compilation script.
+</td></tr><tr><td>
+src/
+</td><td>
+Head of java sources for module, arranged like
+javac would expect to see in a CLASSPATH.
+</td></tr><tr><td>
+bin/
+</td><td>
+Executables, scripts and support
+</td></tr><tr><td>
+data/
+</td><td>
+Arbitrary (static) data for runtime use.
+</td></tr><tr><td>
+doc/
+</td><td>
+Documentation, in text and html
+</td></tr><tr><td>
+configs/
+</td><td>
+Configuration directories.  Usually contains
+only subdirectories, each is a valid
+configuration.
+</td></tr><tr><td>
+examples/
+</td><td>
+Like src, but is never shipped compiled. 
+The build process should attempt to
+compile and regression-test anything in here,
+but generated class files are never actually
+shipped. 
+</td></tr><tr><td>
+regress/
+</td><td>
+Unit test sources for this module.  Will be
+compiled and run by build process, reporting
+on compile, runtime and test failures. produced
+binaries are never installed or packaged.  test
+should be the root of a java package tree -
+consider following "junit" format conventions.
+</td></tr><tr><td>
+test/
+</td><td>
+For Cougaar integration team use.  May contain
+additional regression tests and jigs.  Suggested
+format for organizations submitting software
+to the cougaar maintainers is a mirror of the
+top directory, aimed at integrators.  Eg:
+<pre>
+    src/    integration sources
+    doc/    integrations notes, etc
+    data/
+    configs/
+    ...
+</pre>
+test will not be considered by autobuilds and
+will not be (re)distributed.
+</td></tr>
+</table>
+<p>
+<h3>PACKAGE ORGANIZATION</h3>
+<p>
+Software intended to replace core functionality should match the below
+package layout (or provide detailed arguments why it should be
+changed).
+<p>
+Software intended to augment the core and/or provide optional core
+functionality, but is not intended to replace the "standard" software
+suite, should mirror the above layout rooted in a new
+"organization/project/product-specific" package rather override
+the core's "org.cougaar" package names.  For example, an
+alternate implementation of the agent base class
+<pre>
+    core/org.cougaar.core.agent.SimpleAgent
+</pre>
+which was optimized for small devices might be delivered as part of
+company "foo"'s module as
+<pre>
+    fooco/com.foo.cougaar.palmtop.agent.EmbeddedAgent
+</pre>
+where:
+<pre>
+    "fooco/" is the module
+    "com.foo." is the company package prefix
+    "cougaar.palmtop." is the project's root
+    "agent" is the parallel to the core's package.
+    "EmbeddedAgent" is the class name
+</pre>
+
+None-core functionality should follow standard java package
+arrangement standards and so should not interset with any core
+packages.  In particular, "org.cougaar" may only be used by core
+cougaar software, and use of "mil.darpa.log" may only be used on
+approval. 
+
+The current package map is documented in the latest "ReleaseNotes/"
+directory, such as this Cougaar 10.0 package map:
+<pre>
+   <a href="ReleaseNotes/10.0/PackageMap.html"
+   >ReleaseNotes/10.0/PackageMap.html</a>
+</pre>
+</body>
+</html>

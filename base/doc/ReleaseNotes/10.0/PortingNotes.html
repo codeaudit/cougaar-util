@@ -1,0 +1,120 @@
+<html>
+<head>
+<title>Porting Notes for Cougaar 10.0</title>
+</head>
+<body>
+<h2>Porting Notes for Cougaar 10.0</h2>
+<p>
+The <code>ReleaseNotes/10.0</code> directory contains several scripts
+that will help developer port their code from Cougaar 9.4 to Cougaar 10.0:
+<p>
+<ul>
+<li>
+<a name="core-repackage">
+<b>
+<code>
+<a href="core-repackage">core-repackage</a>
+</code>
+</b>:<br>
+This script fixes the packages for the split of the planning 
+domain from core.  Note that all planning-related classes 
+(org.cougaar.planning.*) are now contained in the new 
+planning module (lib/planning.jar).
+<p>
+The script runs the 
+<code>
+<a href="core-rpkg.pl">core-rpkg.pl</a>
+</code>
+perl script with the Cougaar 10.0 repackage list (
+<code>
+<a href="core_plan.pkg">core_plan.pkg</a>
+</code>
+).
+<p>
+Developers can view the 
+<code>
+<a href="core_plan.pkg">core_plan.pkg</a>
+</code>
+file to see
+a concise list of all the new package names.  For example, the
+line:<pre>
+    occ.blackboard.AssetSet                   ocp.ldm.asset.AssetSet
+</pre>
+indicates that the class "org.cougaar.core.blackboard.AssetSet"
+has been moved to "org.cougaar.planning.ldm.asset.AssetSet".
+<p>
+Developers should also see the new
+<code>
+<a href="PackageMap.html">PackageMap.html</a>
+</code> that lists the latest Cougaar package names.
+</li><p>
+
+<li>
+<a name="fixCID.pl">
+<b>
+<code>
+<a href="fixCID.pl">fixCID.pl</a>
+</code>
+</b>:<br>
+This script replaces references to ClusterIdentifier with MessageAddress
+(bugs
+<a href="https://www.alpine.bbn.com/bugzilla/show_bug.cgi?id=1116">1116</a>,
+<a href="https://www.alpine.bbn.com/bugzilla/show_bug.cgi?id=1325">1325</a>,
+<a href="https://www.alpine.bbn.com/bugzilla/show_bug.cgi?id=2496">2496</a>).
+</li><p>
+
+<li>
+<a name="fixBindingSite.pl">
+<b>
+<code>
+<a href="fixBindingSite.pl">fixBindingSite.pl</a>
+</code>
+</b>:<br>
+This script replaces the use of PluginBindingSite with equivalent
+uses of the ComponentPlugin's "getAgentIdentifier()" and
+"getConfigFinder()" methods (bug
+<a href="https://www.alpine.bbn.com/bugzilla/show_bug.cgi?id=1375">1375</a>).
+</li><p>
+
+<li>
+<a name="fixAV.pl">
+<b>
+<code>
+<a href="fixAV.pl">fixAV.pl</a>
+</code>
+</b>:<br>
+This script fixes the use of "new AspectValue(..)" to use the
+new AspectValue factory methods (bugs
+<a href="https://www.alpine.bbn.com/bugzilla/show_bug.cgi?id=2430">2430</a>
+and
+<a href="https://www.alpine.bbn.com/bugzilla/show_bug.cgi?id=2529">2529</a>).
+</li><p>
+
+<li>
+<a name="domains">
+Domains have been refactored to match the core/planning split.
+<p>
+Plugin developers that develop in the planning domain must specify the
+new PlanningFactory, which has the name
+"planning".  This is available from the DomainService:<pre>
+  PlanningFactory ldmf = (PlanningFactory) 
+    domainService.getFactory("planning");
+</pre>
+The planning plugin base class (PluginAdapter) has already been ported
+to obtain the correct "planning" factory, so most plugins will not
+require any modifications.
+<p>
+Domain developers must port their DomainAdapter subclasses by hand -- this was
+too complex to automate with a script.  A new core "root" domain was
+created to support basic domain actions (blackboard add/change/remove,
+message send/receive) and relays.  A new "planning" domain was created
+to support planning applications (create task, create asset, etc).
+The interface between domains and the rest of Cougaar was refactored to
+use services and precise domain APIs.  Domain developers should examine
+the provided Cougaar "*Domain.java" classes for example code.
+</li><p>
+
+</li><p>
+
+</ul>
+</body></html>
