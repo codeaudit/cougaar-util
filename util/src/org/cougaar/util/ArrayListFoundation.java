@@ -53,6 +53,8 @@ import java.util.*;
 public class ArrayListFoundation extends AbstractList 
   implements List, Cloneable, java.io.Serializable 
 {
+  private static final long serialVersionUID = 1203987682910938923L;
+
   /**
    * The array buffer into which the elements of the ArrayListFoundation are stored.
    * The capacity of the ArrayListFoundation is the length of this array buffer.
