@@ -17,7 +17,7 @@
 <b><font size=+2>Release Notes</font></b></h2>
 
 <h2>
-<b><font size=+2>COUGAAR 9.1</font></b></h2>
+<b><font size=+2>COUGAAR 9.2</font></b></h2>
 </td>
 
 <td ALIGN=CENTER WIDTH="200"><a href="http://www.cougaar.org"><img SRC="cougaar-smalllogo.jpg" BORDER=0 ></a></td>
@@ -32,6 +32,12 @@
 <ul>
 <li>
 <a href="#overview">Overview of this Release</a></li>
+
+<li>
+<a href="#documentation">Additional Documentation</a></li>
+
+<li>
+<a href="#bugs">Known bugs and bugs resolved since Cougaar release 9.0</a></li>
 
 <li>
 <a href="#organization">Organization of a Release</a></li>
@@ -52,40 +58,65 @@
 <a href="#future">Future Releases</a></li>
 
 <li>
-<a href="#questions">Questions and Bug Reports</a></li>
+<a href="#questions">Questions and Submission of Bug Reports</a></li>
 
-<li>
-<a href="#bugs">Known bugs and other issues</a></li>
 </ul>
 
 <hr>
 <h2>
 <a NAME="overview"></a>Overview of this Release</h2>
+
+<!-- COUGAAR 9.2 COUGAAR 9.2 COUGAAR 9.2 COUGAAR 9.2 COUGAAR 9.2 -->
+
 <p>
-Build 9.2 is a point release along COUGAAR 9.0 and with assorted bugs 
-fixes and several infrastructure feature enhancements, specifically to 
-support Ultra*Log defense team development for 2002.
+Build 9.2 is a point release along COUGAAR 9.0. 
+It includes assorted <a href="#bugs">bug fixes</a> and 
+several new infrastructure features, specifically to support
+Ultra*Log defense team development for 2002.
+
 <ul>
 <li>
-JDK 1.4 is now required, and some 1.4 library features are now in use.
-</li>
+JDK version change. Cougaar 9.2 requires JDK 1.4 to compile and run.
 <li>
-<i>Adaptivity Engine</i>
-</li>
+New Packages and Repackaging.
+The main change is that core.jar (core.*, planning.*, util.*) is now split
+into bootstrap.jar (bootstrap.*), util.jar (util.*, core.component.*) and
+core.jar (core.* exluding core.component.*, planning.*).
+The Cougaar Developers' Guide includes a picture of the Package Mapping.
+<ul>
+<li>
+For a list of all packages see <a href="ReleaseNotes/9.2/Packages92.htm">Packages92.htm</a>.
+<li>
+For a list of all modules and the packages contained 
+in each module see <a href="ReleaseNotes/9.2/PackagesToModules92.htm">PackagesToModules92.htm</a>.
+</ul>
+<li>
+The Cougaar Adaptivity Engine has been added which is responsible for setting the 
+operating modes of a number of sub-components based on conditions within a component.
+For details on this new Cougaar mechanism see the Adaptivity Engine section
+of the Cougaar Developer's Guide (CDG) available on the Cougaar website.
 <li>
 Agent mobility has been redesigned to provide a service-based API and
 a blackboard-based "MoveAgent" API, which simplifies plugin usage.  A
 response code is now returned to the requestor, indicating the move
 status (SUCCESS/FAILURE).  An example servlet is provided to initiate 
-agent mobility from a browser.  See the
-<a href="http://www.cougaar.org/documents/pdg.html"
->Cougaar Developer Guide (CDG)</a> for details.
+agent mobility from a browser. See the CDG for details.
+<li>
+The Cougaar Communitiy Infrastructure has been added (Community Service API,
+Community Blackboard Objects). See the CDG for details on this new mechanism.
 </li>
 <li>
-<i>Communities</i>
-</li>
-<li>
-<i>Componentization of domains</i>
+Domain componentization. 
+Starting with Cougaar 9.2, domains will be implemented as org.cougaar.core.components.Components
+contained by an org.cougaar.core.DomainManager. This change primarily impacts domain developers
+ans is discussed in more detail in the CDG. Interactions with the domains continue to be
+provided by the org.cougaar.core.service.DomainService which has not changed.
+As a result of the domain componentization, it is now possible to load domains into an agent
+through the agent.ini file. LDMDomains.ini continues to specify a common set of domains for the entire
+society and command line arguments can be used to specify domains for a given node.
+Domains loaded through the agent.ini are only available within that agent.
+Agents which communicate with each other should load the same set of domains.
+Without a common set of domains cross agent messages will not be correctly interpreted.
 </li>
 <li>
 "Relay" support has been added.  A Relay is a generic interface for a 
@@ -96,19 +127,29 @@ it will likely be used to define other agent-to-agent(s) protocols.
 See the CDG for details.
 </li>
 <li>
-<i>Attribute-based message addresses</i>
+Support for <i> attribute-based message addresses </i> has been added
+which allows to specify the recipient(s) of a message based on the attributes
+of an agent within the community. See the CDG for details.
 </li>
 <li>
-<i>Metrics service</i>
+HealthReport and ManagementAgent. The manager module includes a demo configuration
+designed to display a preliminary implementation of the HealthReport functionality.
+The configuration expands minitestconfig by adding a Manager. The Manager agent registers
+itself as a Manager in NameServer (in the future, the CommunityService should be used instead).
+In addition, OplanHealthReportPlugin has been added to each of the other agents which generates
+a HealthReport each time an Oplan is added. The HealthReport uses an AttributeBasedAddress
+to direct the report to all agents which have registered as Managers. See manager.doc.README.txt
+and the CDG for details.
 </li>
 <li>
-<i>Thread service</i>
-</li>
-<li>
-<i>Node-agent</i>
-</li>
-<li>
-<i>Persistence</i>
+NodeAgent implementation.
+Starting with Cougaar 9.2, most of the node-level services are implemented
+as plugins and other subcomponents of a new object, the NodeAgent. 
+This is a real Cougaar agent that has the task of providing node-level 
+lifeline and management services to its node. For details, see the
+new section in the Cougaar Architecture Document (CAD) and the
+documentation on the NodeControlService and the AgentIdentificationService
+in the CDG.
 </li>
 <li>
 Logging has been adopted in several sections of the infrastructure, 
@@ -122,15 +163,36 @@ tell if an object was "publishChange()"'d without specifying a
 ChangeReport.  See the CDG for details.
 </li>
 <li>
-The 
-<a href="details/Servlet.html"
->Servlet server</a> has been upgraded to Tomcat 4.0.
+The <a href="details/Servlet.html">Servlet server</a> has been upgraded to Tomcat 4.0.
 </li>
-<p>
+<li>
+Metrics service. Zinky at noon.
+<li>
+Thread service. Zinky at noon.
+</li>
+<li> Persistence supports writing snapshots to multiple media using
+media-specific plugins. This allows persistence data to be stored 
+locally, remotely, redundantly, and in general, robustly.
+Persistence parameters can be controlled by the adaptivity engine
+through the PersistenceControlPlugin.
+<li> <a href="ReleaseNotes/9.2/bol_info.txt">BooksOnLine (BOL)</a> lessons 1 and 2 are part of the distribution.</li>
+<li> <a href="ReleaseNotes/9.2/stoplight_info.txt">Stoplight Chart Usage</a>.</li>
+<li> Windows users of the AppServer must include a line in their server properties file
+setting the SYSTEMROOT environment variable for database driver support.
+See server/data/win-server-sample.props for details.
+</li>
+<li> Added and fixed <a href="ReleaseNotes/9.2/compload_info.txt">ContainmentService and LoadServlet</a>.</li>
 </ul>
+
+
+
+<!-- COUGAAR 9.1 COUGAAR 9.1 COUGAAR 9.1 COUGAAR 9.1 COUGAAR 9.1 -->
+
+<p>
 Build 9.1 is an unstable release of COUGAAR. Essential differences
 	    between 9.0 and 9.1 include:
 <ul>
+
 <li>
 JDK version change.  Cougaar 9.1 (and all future versions) requires
 JDK 1.4 to compile and run. As
@@ -147,11 +209,19 @@ JDBC 3.0 drivers are now supported.  org.cougaar.util.DBConnectionPool
 	      (LDMSQLPlugin is uneffected).
 </li>
 <li>The GLM Stimulator Servlet, which allows injection of tasks into an agent, as defined in an xml file. 
-<br><a href="../../glm/doc/StimulatorServlet.html">Click here for details.</a></li>
+<br><a href="../../glm/doc/StimulatorServlet.html">Click here for details.</a>
+</li>
+
 <p>
+
 </ul>
+
+<!-- COUGAAR 9.0 COUGAAR 9.0 COUGAAR 9.0 COUGAAR 9.0 COUGAAR 9.0 -->
+
+<p>
 Build 9.0 is a major release of COUGAAR. Essential differences between
 8.8 and 9.0 include:
+
 <ul>
 <li>
 Repackaging.&nbsp; See <a href="ReleaseNotes/9.0/repackage/Cougaar9.0RepackagingDetails.html">repackaging
@@ -176,6 +246,7 @@ to Servlets (see bug 1017). The existing PSP server will be removed in
 the 9.2 release and will no longer be supported.
 <br>Many PSPs and PSP-client-applications have already been ported to use
 the new servlet server, including:
+
 <ul>
 <li>
 "/tasks" <i>(the ported "/alpine/demo/TASKS.PSP", which is used to view
@@ -255,7 +326,7 @@ MTS Componentization</li>
 <li>
 GLSClient and GLSInitServlet replace GLSGUIInitPlugin, GLSRescindPlugin,
 and SQLOplanPlugin. Now when starting one of the logistics domain societies,
-users must also run GLSClient.[sh|bat] to initiate processing (assuming
+users must also run GLSInit.[sh|bat] to initiate processing (assuming
 that the three latter plugins have been replaced in the configuration by
 GLSInitServlet).</li>
 
@@ -272,7 +343,7 @@ BBN modifications. See <a href="../sys/index.html">required jar file documentati
 Upgraded Ant build script to require Ant1.4.1</li>
 
 <li>
-Repackaging and code cleanup</li>
+Repackaging and code cleanup</li>For a list of currently known/open bugs
 
 <li>
 Use core logging service</li>
@@ -423,49 +494,46 @@ better ability to defined task parameters, ability to specify more than
 2 levels of expansion, and the ability to expand levels fully or expand
 them into a single flat workflow. For details please see glm/doc/UniversalExpanderPlugin.html</li>
 </ul>
+
+<!-- ---------------------------------------------------------------------- -->
+<!-- ---------------------------------------------------------------------- -->
+<!-- ---------------------------------------------------------------------- -->
+<!-- ---------------------------------------------------------------------- -->
+<!-- ---------------------------------------------------------------------- -->
+
+<h2>
+<a NAME="documentation"></a>Additional Documentation
+</h2>
+
 For additional details, please review the following documentation:
-<ul>
-<li>
-Release Notes for other modules such as:</li>
 
 <ul>
-<li>
-csmart/doc/index.html</li>
-
-<li>
-glm/doc/index.html</li>
+<li> Release Notes for other modules such as:</li>
+<ul>
+<li> csmart/doc/index.html</li>
+<li> glm/doc/index.html</li>
 </ul>
 
-<li>
-<a href="ComponentModel/ComponentModel_Index.html">Component Model</a>
+<li> Attachments to previous release notes such as:
+<ul>
+<li> <a href="ComponentModel/ComponentModel_Index.html">Component Model</a>
 docs</li>
+<li> <a href="ComponentModel/DynamicComponents.html">Dynamic Component </a>docs</li>
+</ul>
 
-<li>
-<a href="ComponentModel/DynamicComponents.html">Dynamic Component </a>docs</li>
+<li> several ChangeLog files (e.g., core/src/ChangeLog) and files under doc/details</li>
 
-<li>
-<a href="CHANGES">CHANGES</a> and doc/details</li>
-
-<li>
-<a href="api/index.html">Core infrastructure javadoc</a> (available in
-api/index.html if the cougaar-api.zip archive has been installed).</li>
+<li> Core infrastructure javadocs available in
+api/index.html if the cougaar-api.zip archive has been installed</li>
 
 <li>
 <a href="api/Parameters.html">Parameters.html</a> which is a catalog of
 System Properties (-D flags) used. The file is generated on the basis of
 @property javadoc tags in the source code. .&nbsp;</li>
 
-<li>
-Cougaar Developers Guide, v8.6 (dated 1-November-2001)</li>
+<li> Cougaar Developers' Guide, v9.2 (dated 1-May-2002), available on the Cougaar website</li>
 
-<li>
-Cougaar Architecture Document, v8.6 (dated 1-November-2001)</li>
-
-<li>
-core/src/Changelog</li>
-
-<li>
-<a href="SoftwareOrganization.txt">Principles of COUGAAR Software Organization&nbsp;</a></li>
+<li> Cougaar Architecture Document, v9.2 (dated 1-May-2002), available on the Cougaar website</li>
 
 <li>
 Ultra*Log Developer Workshop presentations (on the <a href="http://www.ultralog.net">Ultra*Log
@@ -476,24 +544,47 @@ website</a>)</li>
 keystores</a> for use with SSL enabled Cougaar functionality.</li>
 </ul>
 
+<!-- ---------------------------------------------------------------------- -->
+<!-- ---------------------------------------------------------------------- -->
+<!-- ---------------------------------------------------------------------- -->
+<!-- ---------------------------------------------------------------------- -->
+<!-- ---------------------------------------------------------------------- -->
+
+<h2>
+<a NAME="bugs"></a>Known bugs and bugs resolved/closed since Cougaar release 9.0</h2>
+
+The Cougaar bug tracker (Bugzilla, the Mozilla bug system)
+is online available at <a href="http://www.cougaar.org/bugs">Cougaar website -> Bug Lists</a>.
+
+<ul>
+<li>
+For a list of bugs that were resolved/closed since Cougaar release 9.0
+see <a href="ReleaseNotes/9.2/ClosedBugs90-92.htm">ClosedBugs90-92.htm</a>.
+</ul>
+
+Both lists are results of Bugzilla queries run on May 1, 2002.
+
+<!-- ---------------------------------------------------------------------- -->
+<!-- ---------------------------------------------------------------------- -->
+<!-- ---------------------------------------------------------------------- -->
+<!-- ---------------------------------------------------------------------- -->
+<!-- ---------------------------------------------------------------------- -->
+
 <h2>
 <a NAME="organization"></a>Organization of a Release&nbsp;</h2>
 The files in an COUGAAR release fall into the following organizational
 areas:
+
 <ul>
 <li>
 "core:" domain independent agent architecture</li>
-
 <li>
 "glm:" LDM and Plugins which have a logistics domain focus based on the
 ALP program objectives</li>
-
 <li>
 "utility:" GSS and Plugin Contracts</li>
-
 <li>
 "tools:" scalability and test tools</li>
-
 <li>
 "tutorial:" non-logistics sample societies and Plugins</li>
 
@@ -502,28 +593,25 @@ ALP program objectives</li>
 and demonstration</li>
 </ul>
 The COUGAAR release will contain the following zip files:
+
 <ul>
 <li>
 cougaar.zip:&nbsp; COUGAAR demo runtime - all built jar files, configs,
 data, bin, minimum doc.</li>
-
 <li>
 cougaar-support.zip:&nbsp; All non-built supporting .jars (unpacks into
 "sys" subdirectory where Bootstrapper will find them).</li>
-
 <li>
 cougaar-api.zip:&nbsp; the javadoc for all the main cougaar classes in
 one place. unpacks to api/* instead of under doc as in previous releases.</li>
-
 <li>
 *-dev.zip:&nbsp; sources, docs (including javadoc) for each "public" module.</li>
-
 <li>
 md5sums.txt:&nbsp; md5 checksums of all the zips.</li>
-
 <li>
 build.out: output of the build process</li>
 </ul>
+
 <b>To install Cougaar</b>:
 <br>Go to the cougaar website (<a href="http://www.cougaar.org">www.cougaar.org</a>)
 to get the latest windows Cougaar installer which will install Cougaar
@@ -555,6 +643,13 @@ on
 Cougaar start time with the following Node argument:
 <br>-Dorg.cougaar.core.cluster.startTime=08/010/2005
 <br>This start time is optimal for the Oplan used with the small-135 society.&nbsp;
+
+<!-- ---------------------------------------------------------------------- -->
+<!-- ---------------------------------------------------------------------- -->
+<!-- ---------------------------------------------------------------------- -->
+<!-- ---------------------------------------------------------------------- -->
+<!-- ---------------------------------------------------------------------- -->
+
 <h2>
 <a NAME="example"></a>Test Harness Example Implementations</h2>
 We only maintain society configurations that we are currently using for
@@ -575,6 +670,13 @@ node, multiple host society.&nbsp;
 The default configuration supports running a relatively small but interesting
 two node society distributed across two machines.&nbsp; See the small-135.readme.html
 file in the configuration directory for more information.&nbsp;
+
+<!-- ---------------------------------------------------------------------- -->
+<!-- ---------------------------------------------------------------------- -->
+<!-- ---------------------------------------------------------------------- -->
+<!-- ---------------------------------------------------------------------- -->
+<!-- ---------------------------------------------------------------------- -->
+
 <h2>
 <a NAME="delivering"></a>Delivering Software Products&nbsp;</h2>
 Please see the Integration Information Area that can be found on the <a href="http://www.ultralog.net">UltraLog</a>
@@ -604,6 +706,12 @@ props.getProperty("file.separator") + "myData.dat";</font></font></dt>
 </dl>
 </dir>
 
+<!-- ---------------------------------------------------------------------- -->
+<!-- ---------------------------------------------------------------------- -->
+<!-- ---------------------------------------------------------------------- -->
+<!-- ---------------------------------------------------------------------- -->
+<!-- ---------------------------------------------------------------------- -->
+
 <h2>
 <a NAME="developing"></a>Developing and Running COUGAAR Societies</h2>
 
@@ -620,31 +728,49 @@ General Development&nbsp;</h3>
 
 <h3>
 <a NAME="jvm"></a>Java Virtual Machine Requirements&nbsp;</h3>
-Cougaar is compiled and tested using the 1.3.1 release of JDK. We recommend
-that users use this release. Cougaar uses the following Java extensions
-that are not part of the default JDK 1.3.1 installation. These packages
-should be obtained and installed according to the instructions accompanying
-them:
+Cougaar is compiled and tested using the 1.4 release of JDK. 
+We recommend that users use this release. 
+
+Cougaar uses the following Java extensions that are not part of the 
+default JDK 1.4 installation. 
+These packages should be obtained and installed 
+according to the instructions accompanying them:
 <ul>
 <li>
 <a href="http://java.sun.com/products/jsse/">Java Secure Socket Extension
 (JSSE)</a></li>
 </ul>
 
+<!-- ---------------------------------------------------------------------- -->
+<!-- ---------------------------------------------------------------------- -->
+<!-- ---------------------------------------------------------------------- -->
+<!-- ---------------------------------------------------------------------- -->
+<!-- ---------------------------------------------------------------------- -->
+
 <h2>
 <a NAME="future"></a>Future Releases</h2>
 There will be further releases as we address system enhancements and deficiencies.
-Please watch the cougaar-developers@cougaar.org email list and carefully
-read the latest Cougaar Developers Guide (CDG) and all release notes.&nbsp;
+Please watch the cougaar-developers@cougaar.org and cougaar-information@cougaar.org
+email lists and carefully
+read the latest Cougaar Developers Guide (CDG), the Cougaar Architecture
+Document (CAD), and all release notes.&nbsp;
+
+<!-- ---------------------------------------------------------------------- -->
+<!-- ---------------------------------------------------------------------- -->
+<!-- ---------------------------------------------------------------------- -->
+<!-- ---------------------------------------------------------------------- -->
+<!-- ---------------------------------------------------------------------- -->
+
 <h2>
-<a NAME="questions"></a>Questions and Bug Reports</h2>
+<a NAME="questions"></a>Questions and Submission of Bug Reports</h2>
 In addition, email infrastructure questions and initiate community discussions
 through cougaar-developers@cougaar.org. Bug and system-enhancement reports
 can be submitted through the <a href="http://www.cougaar.org">COUGAAR</a>
 website.&nbsp;
-<h2>
-<a NAME="bugs"></a>Known bugs and other issues</h2>
-See the online <a href="http://www.cougaar.org/bugs">bug tracker</a>.</td>
+
+
+
+</td>
 </tr>
 
 <tr>
@@ -654,3 +780,5 @@ See the online <a href="http://www.cougaar.org/bugs">bug tracker</a>.</td>
 
 </body>
 </html>
+
+
