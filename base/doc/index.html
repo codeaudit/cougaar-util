@@ -70,6 +70,12 @@ that were detected/posted after this Cougaar version was released.
   pieces of functionality.
 <p>
 <ul>
+<li>GLS tasks may no longer be rescinded. For each Oplan stage, the
+GLSInitServlet now sends a new GLS task with the additional oplan
+stage - leaving the old tasks behind. It is generally bad usage to
+modify a task in place to have entirely different meaning. In this
+case, it appeared to cause confusion about the meaning of the
+allocation results. See bug 3407.</li>
 </ul>
 <p>
   <!-- COUGAAR 10.4.6 COUGAAR 10.4.6 COUGAAR 10.4.6 COUGAAR 10.4.6 COUGAAR 10.4.6 -->
