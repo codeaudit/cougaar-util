@@ -41,6 +41,10 @@ import java.util.*;
  * methods.  You may also synchronize on the instance for consecutive
  * access safety, but then you are getting fewer of the benefits of
  * this class without avoiding any of the costs.
+ * @note This implementation has near-zero read impact, versus best-base
+ * ArrayList, but can have a very high mutate impact (10-100 times),
+ * particularly for large arrays.  Large arrays or many mutates would
+ * be better served by a different implementation.
  **/
 
 public class DoubleBufferedList 
