@@ -68,13 +68,14 @@ if [ ! -f $NODE_PROPS_FILE ]; then
     exit 1
 fi
 
-if [! -f $COUGAAR_WORKSPACE]; then
+if [ "x$COUGAAR_WORKSPACE" = "x" ]; then
     echo "Defaulting COUGAAR_WORKSPACE to CIP/workspace"
     COUGAAR_WORKSPACE=$COUGAAR_INSTALL_PATH/workspace
-    if [ ! -f $COUGAAR_WORKSPACE ]; then
+    if [ ! -e $COUGAAR_WORKSPACE ]; then
       mkdir $COUGAAR_WORKSPACE
-    endif
-endif
+    fi
+fi
+
 
 #
 # The remaining settings should not require modifications
@@ -118,4 +119,3 @@ exec \
   $SERVERCONFIG \
   org.cougaar.tools.server.AppServer \
   $NODE_PROPS_FILE
-
