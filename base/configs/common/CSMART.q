@@ -71,7 +71,7 @@ queryRecipeByName = \
    WHERE NAME = ':recipe_name:'
 
 queryRecipe = \
-  SELECT MOD_RECIPE_LIB_ID, NAME, JAVA_CLASS \
+  SELECT MOD_RECIPE_LIB_ID, NAME, JAVA_CLASS, DESCRIPTION \
     FROM lib_mod_recipe \
    WHERE MOD_RECIPE_LIB_ID = ':recipe_id'
 
@@ -238,6 +238,11 @@ queryGetBinderClasses = \
   SELECT DISTINCT COMPONENT_CLASS \
     FROM lib_component \
    WHERE COMPONENT_TYPE = 'agent binder'
+
+queryGetAgentNames = \
+SELECT DISTINCT COMPONENT_NAME \
+   FROM alib_component \
+  WHERE COMPONENT_TYPE = 'agent' 
 
 ##############################################
 # Community editing queries follow
