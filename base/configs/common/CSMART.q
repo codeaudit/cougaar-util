@@ -370,3 +370,8 @@ queryDeleteEntityAttribute = \
      AND ATTRIBUTE_ID = ':attribute_id' \
      AND ATTRIBUTE_VALUE = ':attribute_value' \
      AND ASSEMBLY_ID :assembly_match:
+
+queryGetPluginClasses = \
+  SELECT COMPONENT_CLASS \
+    FROM v4_lib_component \
+   WHERE COMPONENT_TYPE = 'plugin'
