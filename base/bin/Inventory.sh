@@ -25,4 +25,4 @@ source $COUGAAR_INSTALL_PATH/bin/setarguments.sh
 
 MYCLASSES="org.cougaar.mlm.ui.planviewer.inventory.InventoryChartUI"
 
-exec java $MYPROPERTIES -classpath $LIBPATHS $BOOTSTRAPPER $DEVP $MYCLASSES $*
+exec java -Dorg.cougaar.log.loginventorytimes=%COUGAAR_INSTALL_PATH%\InventoryTimes.log $MYPROPERTIES -classpath $LIBPATHS $BOOTSTRAPPER $DEVP $MYCLASSES $*

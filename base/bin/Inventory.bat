@@ -29,5 +29,5 @@ set MYCLASSES=org.cougaar.mlm.ui.planviewer.inventory.InventoryChartUI
 set BS=org.cougaar.core.node.Bootstrapper
 @ECHO ON
 
-java.exe %MYPROPERTIES% %MYMEMORY% -classpath %LIBPATHS% %BS% %MYCLASSES% %1
+java.exe -Dorg.cougaar.log.loginventorytimes=%COUGAAR_INSTALL_PATH%\InventoryTimes.log %MYPROPERTIES% %MYMEMORY% -classpath %LIBPATHS% %BS% %MYCLASSES% %1
 
