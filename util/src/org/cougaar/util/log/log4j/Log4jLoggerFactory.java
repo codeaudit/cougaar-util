@@ -64,7 +64,7 @@ public class Log4jLoggerFactory
 
   public Log4jLoggerFactory() {
     Map m = new HashMap();
-
+    configure(m);
     // take filename property, load from file
     String filename = System.getProperty(LF_CONFIG_PROP);
     if (filename == null) filename = System.getProperty(FILE_NAME_PROPERTY);
