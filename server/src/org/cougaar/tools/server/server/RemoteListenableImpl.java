@@ -67,14 +67,18 @@ class RemoteListenableImpl implements RemoteListenable {
   private OutputStream stdErr;
 
   //
+  // these are locked by the "watcherLock"
+  //
+  private final Object watcherLock = new Object();
+  private OutputWatcher stdOutWatcher;
+  private OutputWatcher stdErrWatcher;
+  private Thread stdOutWatcherThread;
+  private Thread stdErrWatcherThread;
+
+  //
   // the rest is locked by the "sendLock"
   //
   private final Object sendLock = new Object();
-  private OutputWatcher stdOutWatcher;
-  private OutputWatcher stdErrWatcher;
-
-  private Thread stdOutWatcherThread;
-  private Thread stdErrWatcherThread;
 
   // a map of (id, ol) pairs
   private final Map listeners = new HashMap(5);
@@ -128,7 +132,9 @@ class RemoteListenableImpl implements RemoteListenable {
 
       stdOut = ob.getDualStreamBuffer().getOutputStream(true);
       stdErr = ob.getDualStreamBuffer().getOutputStream(false);
+    }
 
+    synchronized (watcherLock) {
       stdOutWatcher = 
         new OutputWatcher(newIn, true);
 
@@ -267,8 +273,35 @@ class RemoteListenableImpl implements RemoteListenable {
     }
 
     // wait for the streams to end
-    stdOutWatcherThread.join();
-    stdErrWatcherThread.join();
+    //
+    // must carefully handle possible simultaneous "close()"
+    // called by the output threads themselves, e.g. due to
+    // I/O errors.
+    synchronized (watcherLock) {
+      Thread thisThread = Thread.currentThread();
+      if (stdOutWatcherThread != null) {
+        if (stdOutWatcherThread != thisThread) {
+          try {
+            stdOutWatcherThread.join();
+          } catch (Exception e) {
+            System.err.println(
+                "Unable to wait for std-out completion");
+          }
+        }
+        stdOutWatcherThread = null;
+      }
+      if (stdErrWatcherThread != null) {
+        if (stdErrWatcherThread != thisThread) {
+          try {
+            stdErrWatcherThread.join();
+          } catch (Exception e) {
+            System.err.println(
+                "Unable to wait for std-err completion");
+          }
+        }
+        stdErrWatcherThread = null;
+      }
+    }
   }
 
   //
