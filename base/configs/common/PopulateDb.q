@@ -315,9 +315,9 @@ cleanASBCommEntity=\
 # Get the (single) Comm assembly from runtime
 # for the given experiment / trial
 queryExptCommAsb=\
- SELECT eta.ASSEMBLY_ID FROM v4_expt_trial_assembly eta, \
+ SELECT eta.ASSEMBLY_ID FROM v4_expt_trial_config_assembly eta, \
                             v4_asb_assembly aa \
-  WHERE eta.EXPERIMENT_ID = ':expt_id:' \
+  WHERE eta.EXPT_ID = ':expt_id:' \
     AND eta.TRIAL_ID = ':trial_id:' \
     AND aa.ASSEMBLY_TYPE = ':comm_type:' \
     AND aa.ASSEMBLY_ID = eta.ASSEMBLY_ID
