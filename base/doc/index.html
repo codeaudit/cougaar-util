@@ -186,6 +186,14 @@ call it (
 use the new API (
 <a href="http://bugs.cougaar.org/show_bug.cgi?id=3724">bug 3724</a>
 ).</li>
+<li>Added new "-Dorg.cougaar.jar.path" system property to change the
+Bootstrapper jar finder path, which was previously hard-coded to look
+for jars in "-Dorg.cougaar.class.path" and in the
+"-Dorg.cougaar.install.path"'s "lib/" and "sys/" directories.
+The new system property makes it easier to create a shared read-only
+Cougaar install with per-user read/write overlays (
+<a href="http://bugs.cougaar.org/show_bug.cgi?id=3717#c8">bug 3717</a>
+).</li>
 <li>Added a simple component parameter parser for parameters of the
 form name=value.  See org.cougaar.util.Arguments (
 <a href="http://bugs.cougaar.org/show_bug.cgi?id=3830">bug 3830</a>
