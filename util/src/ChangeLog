@@ -1,3 +1,13 @@
+2002-05-20  Michael Thome  <mthome@bbn.com>
+
+	* org/cougaar/core/component/ComponentDescriptions.java
+	Make extractDirectComponents work correctly, though it was
+	previously unused.  Add some javadoc.
+
+	* org/cougaar/core/component/ContainerSupport.java
+	Implement Collection.addAll(). Make externalComponentDescription
+	api a little cleaner 
+
 2002-05-17  Michael Thome  <mthome@bbn.com>
 
 	* org/cougaar/core/component/ComponentFactory.java

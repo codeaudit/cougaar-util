@@ -61,30 +61,36 @@ public class ComponentDescriptions {
     return cds;
   }
 
-  /** Return a list of the components which are direct subcomponents of the specified containment point. 
-   *
-   * Always returns a new array.
+  /** Return a list of the components which are direct subcomponents of the specified 
+   * containment point.  The ContainmentPoint parameter should not end with a '.'.
+   * Always returns a newly created list.  The elements are always in priority-sorted order.
    **/
   public List extractDirectComponents(String cp) {
-    if (!cp.endsWith(".")) {
-      cp = cp+".";
-    }
-    int cpl = cp.length();
+    if (cp.endsWith(".")) {
+      // assert would be better
+      throw new IllegalArgumentException("ContainmentPoint should not end with '.': \""+cp+"\"");
+    } 
+    String prefix = cp+".";
+    int prefixl = prefix.length();
 
     List l = new ArrayList();
     for (Iterator it = cds.iterator(); it.hasNext(); ) {
       ComponentDescription cd = (ComponentDescription) it.next();
       String ip = cd.getInsertionPoint();
-      if (ip.startsWith(cp) &&  	// is cp a prefix and
-          ip.indexOf(".", cpl+1) >= 0   // there are no more '.'s?
+      if (ip.startsWith(prefix) &&  	// is prefix a prefix and
+          ip.indexOf(".", prefixl+1) == -1   // there are no more '.'s?
           ) {
         l.add(cd);
+      } else {
+        //System.err.println("Rejecting "+cd);
       }
     }
+    sort(l);
     return l;
   }
 
   /** extract a list of ComponentDescriptions which have a specified insertion point
+   * Always returns a newly created list.  The elements are always in priority-sorted order.
    **/
   public List extractInsertionPointComponent(String dip) {
     List l = new ArrayList();
@@ -95,6 +101,7 @@ public class ComponentDescriptions {
         l.add(cd);
       }
     }
+    sort(l);
     return l;
   }    
 

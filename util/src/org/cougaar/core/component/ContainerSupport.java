@@ -393,6 +393,17 @@ public abstract class ContainerSupport
     return true;
   }
 
+  /** Add all elements of Collection to the collection, in the order specified **/
+  public boolean addAll(Collection c) {
+    boolean allAdded = true;
+    for (Iterator it = c.iterator(); it.hasNext(); ) {
+      if (!add(it.next())) {
+        allAdded = false;
+      }
+    }
+    return allAdded;
+  }
+
   public void clear() {
     throw new UnsupportedOperationException();
   }
@@ -405,9 +416,6 @@ public abstract class ContainerSupport
     throw new UnsupportedOperationException();
   }
   public boolean containsAll(Collection c) {
-    throw new UnsupportedOperationException();
-  }
-  public boolean addAll(Collection c) {
     throw new UnsupportedOperationException();
   }
   public boolean removeAll(Collection c) {
@@ -538,6 +546,11 @@ public abstract class ContainerSupport
 
   private ComponentDescriptions externalComponentDescriptions = null;
 
+  /** Matching setter for getExternalComponentDescriptions **/
+  protected final void setExternalComponentDescriptions(ComponentDescriptions cds) {
+    externalComponentDescriptions = cds;
+  }
+
   /** return a ComponentDescriptions object which contains a set of ComponentDescriptions
    * defined externally to be loaded into this Container. 
    * This will return the value computed by findExternalComponentDescriptions()
@@ -566,7 +579,7 @@ public abstract class ContainerSupport
    **/
   public void load() {
     super.load();
-    externalComponentDescriptions = findExternalComponentDescriptions();
+    setExternalComponentDescriptions(findExternalComponentDescriptions());
     loadHighPriorityComponents();
     loadInternalPriorityComponents();
     loadBinderPriorityComponents();
