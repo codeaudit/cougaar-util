@@ -248,36 +248,42 @@ implements Serializable {
   }
 
   public String toString() {
+    return toString(true);
+  }
+
+  public String toString(boolean showFullDetails) {
     StringBuffer buf = new StringBuffer();
     
     buf.append("pid=").append(getProcessIdentifier());
 
-    buf.append(" mark=").append(getMarkAsString());
+    if (showFullDetails) {
+      buf.append(" mark=").append(getMarkAsString());
 
-    buf.append(" parent={");
-    if (getParent() != null) {
-      buf.append(getParent().getProcessIdentifier());
-    }
-    buf.append("}");
-
-    List c = getChildren();
-    int n = c.size();
-    buf.append(" children[").append(n).append("]={");
-    for (int i = 0; i < n; i++) {
-      ProcessStatus ci = (ProcessStatus)c.get(i);
-      buf.append(ci.getProcessIdentifier());
-      if (i < (n - 1)) {
-        buf.append(", ");
+      buf.append(" parent={");
+      if (getParent() != null) {
+        buf.append(getParent().getProcessIdentifier());
       }
+      buf.append("}");
+
+      List c = getChildren();
+      int n = c.size();
+      buf.append(" children[").append(n).append("]={");
+      for (int i = 0; i < n; i++) {
+        ProcessStatus ci = (ProcessStatus)c.get(i);
+        buf.append(ci.getProcessIdentifier());
+        if (i < (n - 1)) {
+          buf.append(", ");
+        }
+      }
+      buf.append("}");
+
+      buf.append(" ppid=").append(getParentProcessIdentifier());
+
+      java.util.Date d = new java.util.Date(getStartTime());
+      buf.append(" start=\"").append(d).append("\"");
+
+      buf.append(" user=\"").append(getUserName()).append("\"");
     }
-    buf.append("}");
-
-    buf.append(" ppid=").append(getParentProcessIdentifier());
-
-    java.util.Date d = new java.util.Date(getStartTime());
-    buf.append(" start=\"").append(d).append("\"");
-
-    buf.append(" user=\"").append(getUserName()).append("\"");
 
     buf.append(" cmd=\"").append(getCommand()).append("\"");
 

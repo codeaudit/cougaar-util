@@ -143,7 +143,7 @@ class ServerHostControllerImpl
       ClientNodeEventListener cnel,
       NodeEventFilter nef,
       ConfigurationWriter cw)
-    throws IOException
+    throws Exception
   {
     // write config files
     if (cw != null) {
@@ -396,18 +396,12 @@ class ServerHostControllerImpl
             rmiPort,
             cnel,
             nef);
-    } catch (IOException ioe) {
+    } catch (Exception e) {
       if (verbose) {
         System.out.println("Unable to create Node:");
-        ioe.printStackTrace();
+        e.printStackTrace();
       }
-      throw ioe;
-    } catch (RuntimeException re) {
-      if (verbose) {
-        System.out.println("Unable to create Node:");
-        re.printStackTrace();
-      }
-      throw re;
+      throw e;
     }
 
     nodes.put(nodeId, snc);

@@ -491,7 +491,9 @@ public class Console {
           ((showAll) ? "All" : "Node's")+
           " ProcessStatus["+n+"] for node "+name+":");
       for (int i = 0; i < n; i++) {
-        System.out.println("  "+psa[i]);
+        ProcessStatus pi = psa[i];
+        // show terse details
+        System.out.println("  "+pi.toString(false));
       }
     }
 

@@ -55,8 +55,9 @@ extends Remote {
   String getName() throws RemoteException;
   String[] getCommandLine() throws RemoteException;
   boolean isAlive() throws RemoteException;
-  void dumpThreads() throws RemoteException;
-  ProcessStatus[] listProcesses(boolean showAll) throws RemoteException;
+  void dumpThreads() throws Exception, RemoteException;
+  ProcessStatus[] listProcesses(
+      boolean showAll) throws Exception, RemoteException;
   boolean isRegistered() throws RemoteException;
   boolean waitForRegistration() throws RemoteException;
   boolean waitForRegistration(long millis) throws RemoteException;

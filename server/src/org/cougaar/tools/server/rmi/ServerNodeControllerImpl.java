@@ -37,7 +37,7 @@ import org.cougaar.tools.server.NodeEvent;
 import org.cougaar.tools.server.NodeEventListener;
 import org.cougaar.tools.server.NodeEventFilter;
 
-import org.cougaar.tools.server.system.ProcessStatus;
+import org.cougaar.tools.server.system.*;
 
 // RMI hook to actual Node
 import org.cougaar.core.society.ExternalNodeController;
@@ -48,6 +48,9 @@ extends UnicastRemoteObject
 implements ServerNodeController {
 
   private static final boolean VERBOSE = true;
+
+  // may want to make this a parameter
+  private static final boolean USE_PROCESS_LAUNCHER = true;
 
   private static final int STATE_WAITING_FOR_REGISTRATION = 0;
   private static final int STATE_REGISTERED               = 1;
@@ -65,8 +68,14 @@ implements ServerNodeController {
 
   private int exitVal;
 
+  // factory for "dumpThreads()" and other system utilities
+  private SystemAccessFactory saf;
+
   // system process to spawn node
   private Process sysProc;
+
+  // process identifier corresponding to the sysProc
+  private long sysPid;
 
   // node registers itself to RMI
   private ExternalNodeController extNode;
@@ -99,7 +108,7 @@ implements ServerNodeController {
       String rmiHost,
       int rmiPort,
       ClientNodeEventListener cnel,
-      NodeEventFilter nef) throws IOException {
+      NodeEventFilter nef) throws Exception {
 
     // check arguments
     if (cnel == null) {
@@ -125,8 +134,22 @@ implements ServerNodeController {
     this.envVars = envVars;
     this.cnel = cnel;
     this.nef = nef;
-
     this.sneb = new ServerNodeEventBuffer(cnel, nef);
+
+    // get the system factory
+    this.saf = SystemAccessFactory.getInstance();
+    
+    // create the process-launcher
+    ProcessLauncher pl = 
+      ((USE_PROCESS_LAUNCHER) ? 
+       (saf.createProcessLauncher()) :
+       (null));
+
+    // get the modified command line
+    String[] execCmdLine =
+      ((pl != null) ?
+       (pl.getCommandLine(cmdLine)) :
+       (cmdLine));
 
     if (VERBOSE) {
       System.err.println("Creating node: ");
@@ -138,10 +161,27 @@ implements ServerNodeController {
       for (int i = 0; i < nEnvVars; i++) {
         System.err.println("  "+envVars[i]);
       }
+
+      if (execCmdLine != cmdLine) {
+        System.err.println("Launching node with:");
+        for (int i = 0; i < execCmdLine.length; i++) {
+          System.err.println("  "+execCmdLine[i]);
+        }
+      }
     }
 
     // spawn the node
-    sysProc = Runtime.getRuntime().exec(cmdLine, envVars);
+    sysProc = Runtime.getRuntime().exec(execCmdLine, envVars);
+
+    InputStream procIn = sysProc.getInputStream();
+
+    if (pl != null) {
+      // read the process-id from the stream
+      this.sysPid = pl.parseProcessIdentifier(procIn);
+    } else {
+      // process identification disabled
+      this.sysPid = -1;
+    }
 
     // create all the "watcher" Runnables
 
@@ -155,7 +195,7 @@ implements ServerNodeController {
 
     stdOutWatcher = 
       new OutputWatcher(
-          sysProc.getInputStream(), 
+          procIn,
           NodeEvent.STANDARD_OUT,
           -1);
 
@@ -267,13 +307,56 @@ implements ServerNodeController {
   // interact with the system
   //
 
-  public void dumpThreads() {
-    System.out.println("$$$$$$$$$$$ dumpThreads $$$$$$$$$$$$$");
+  public void dumpThreads() throws Exception {
+    if (sysPid < 0) {
+      throw new UnsupportedOperationException(
+          "Java Thread-Dump not available"+
+          " (process-id not known)");
+    }
+
+    // create a thread-dumper
+    JavaThreadDumper jtd = saf.createJavaThreadDumper();
+    if (jtd == null) {
+      throw new UnsupportedOperationException(
+          "Java Thread-Dump not available");
+    }
+
+    // get the command line
+    String[] cmd = jtd.getCommandLine(sysPid);
+
+    // invoke the command
+    InputStream in = InvokeUtility.invokeCommand(cmd);
+
+    // parse the response
+    boolean ret = jtd.parseResponse(in);
+
+    if (!(ret)) {
+      // should alter API to just throw exception upon failure...
+      throw new RuntimeException(
+          "Java Thread-Dump failed for an unknown reason");
+    }
   }
 
-  public ProcessStatus[] listProcesses(boolean showAll) {
-    System.out.println("$$$$$$$$$$$ listProcesses("+showAll+") $$$$$$$$$$$$$");
-    return new ProcessStatus[0];
+  public ProcessStatus[] listProcesses(boolean showAll) 
+      throws Exception{
+
+    // create a process-status reader
+    ProcessStatusReader psr = saf.createProcessStatusReader();
+    if (psr == null) {
+      throw new UnsupportedOperationException(
+          "Process status listing not available");
+    }
+
+    // get the command line
+    String[] cmd = psr.getCommandLine(showAll);
+
+    // invoke the command
+    InputStream in = InvokeUtility.invokeCommand(cmd);
+
+    // parse the response
+    ProcessStatus[] ret = psr.parseResponse(in);
+
+    return ret;
   }
 
   //

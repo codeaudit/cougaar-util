@@ -46,7 +46,7 @@ extends Remote {
       ClientNodeEventListener cListener,
       NodeEventFilter nef,
       ConfigurationWriter cw)
-    throws IOException, RemoteException;
+    throws Exception, RemoteException;
 
   /** 
    * Kill the named Node.
