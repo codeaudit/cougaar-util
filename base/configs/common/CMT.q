@@ -12,6 +12,12 @@ updateAssemblyID = \
    SET ASSEMBLY_ID=ASSEMBLY_ID \
    WHERE ASSEMBLY_ID = ':assembly_id'
 
+getAssemblyIDOnExpt = \
+ SELECT ASSEMBLY_ID \
+   FROM V4_EXPT_TRIAL_ASSEMBLY \
+  WHERE expt_id = ':experiment_id' \
+   AND ASSEMBLY_ID LIKE ':match_pattern'
+
 getCFWInstancesFromGroup = \
  SELECT CFW_ID FROM V6_CFW_GROUP_MEMBER WHERE CFW_GROUP_ID=':cfw_group_id'
 
