@@ -47,7 +47,7 @@ import org.xml.sax.InputSource;
  * becomes essentially<code>
  *    (and (or (isNull (true))) (false))</code></pre>
  * <p>
- * @see ParenProducer for "semi-Lisp" implementation
+ * @see ParenParser for "semi-Lisp" implementation
  */
 public class XMLParser {
 

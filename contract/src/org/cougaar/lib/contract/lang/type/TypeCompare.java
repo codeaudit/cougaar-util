@@ -36,7 +36,7 @@ public class TypeCompare {
   private TypeCompare() {}
 
   /**
-   * @see getHeirarchy
+   * @see #getHeirarchy
    */
   public static final int ONE_EQUALS_TWO = 0;
   public static final int ONE_INSTANCEOF_TWO = 1;
@@ -89,7 +89,7 @@ public class TypeCompare {
    *   C = Class, e.g.Exception.
    * </pre>
    * <p>
-   * @see getCompareID
+   * @see #getCompareID
    */
   public static final int CC =    0;
   public static final int CI =    1;
@@ -224,7 +224,7 @@ public class TypeCompare {
 
   /**
    * Tests if old[N](C|I) implies new[N](C|I).
-   * @see compare
+   * @see #compare
    */
   public static final boolean implies(
       final Type oldType,
@@ -236,7 +236,7 @@ public class TypeCompare {
 
   /**
    * Tests if old[N](C|I) implies new[N](C|I).
-   * @see compare
+   * @see #compare
    */
   public static final boolean implies(
       final Type oldType,
@@ -249,7 +249,7 @@ public class TypeCompare {
 
   /**
    * Tests if old[N](C|I) implies new[N](C|I).
-   * @see compare
+   * @see #compare
    */
   public static final boolean implies(
       final boolean oldNot, final Class oldCl,
@@ -261,7 +261,7 @@ public class TypeCompare {
   }
   /**
    * Tests if old[N](C|I) implies new[N](C|I).
-   * @see compare
+   * @see #compare
    */
   public static final boolean implies(
       final boolean oldNot, final Class oldCl,
@@ -272,7 +272,7 @@ public class TypeCompare {
   }
 
   /**
-   * @see checkGuard
+   * @see #checkGuard
    */
   public static final int USE_GIVEN = 0;
   public static final int USE_GUARD = 1;
@@ -351,7 +351,7 @@ public class TypeCompare {
   }
 
   /**
-   * @see compare
+   * @see #compare
    */
   public static final int ADDS_DETAIL = 0;
   public static final int REPLACEMENT_DETAIL = 1;

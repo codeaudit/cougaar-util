@@ -30,7 +30,7 @@ import org.cougaar.lib.contract.lang.*;
  * Class reflection utilities.
  * <p>
  * Add cache here.  
- * @see <code>org.cougaar.core.util.StringObjectFactory</code>.
+ * @see org.cougaar.core.util.StringObjectFactory
  **/
 public final class ClassCache {
 

@@ -45,13 +45,13 @@ public interface VisitTokenizer {
 
   /** 
    * Set the marker at the current point. 
-   * @see reset
+   * @see #reset
    */
   public void mark();
 
   /** 
    * Move to the marker. 
-   * @see mark
+   * @see #mark
    */
   public void reset();
   

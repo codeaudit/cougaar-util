@@ -44,7 +44,7 @@ public interface OpParser {
   public Op nextOp() throws ParseException;
 
   /**
-   * @see org.cougaar.lib.contract.lang.type.TypeList
+   * @see org.cougaar.lib.contract.lang.TypeList
    */
   public void setTypeList(final TypeList tl);
   public void setTypeList(final Class cl);

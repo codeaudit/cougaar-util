@@ -61,7 +61,7 @@ public final class MethodCache {
    * @param name Method name
    * @param isStatic Method static/nonstatic -- see IS_STATIC_EXPLICIT
    * <p>
-   * @see IS_STATIC_EXPLICIT
+   * @see #IS_STATIC_EXPLICIT
    **/
   public static final Object lookup(
       final Class c, 
@@ -107,7 +107,7 @@ public final class MethodCache {
    * @param params Class[] of Method arguments
    * @param isStatic Method static/nonstatic -- see IS_STATIC_EXPLICIT
    * <p>
-   * @see IS_STATIC_EXPLICIT
+   * @see #IS_STATIC_EXPLICIT
    **/
   public static final Object lookup(
       final Class c, 
