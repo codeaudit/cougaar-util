@@ -76,6 +76,9 @@ In the "mySociety.xml" file the agent would specify the template:
   <xsl:param name="planning">true</xsl:param>
   <xsl:param name="communities">true</xsl:param>
 
+  <!-- NodeAgent.xsl overrides this -->
+  <xsl:param name="wpserver">false</xsl:param>
+
   <!--
   if an agent "template" attribute is not specified, the "defaultAgent"
   value is assumed, which defaults to this template file.
@@ -122,6 +125,8 @@ In the "mySociety.xml" file the agent would specify the template:
 
     <xsl:call-template name="BINDER_config"/>
     <xsl:call-template name="BINDER_agent_0"/>
+
+    <xsl:call-template name="COMPONENT_agent_wp_server"/>
 
     <xsl:call-template name="COMPONENT_config"/>
 
@@ -327,6 +332,68 @@ In the "mySociety.xml" file the agent would specify the template:
       class="org.cougaar.core.blackboard.StandardBlackboard"
       priority="BINDER"
       insertionpoint="Node.AgentManager.Agent.Component"/>
+  </xsl:template>
+
+  <xsl:template name="COMPONENT_agent_wp_server">
+    <!--
+    wp server
+   
+    Look for a dummy "Server" component.
+
+    For backwards compatibility we also support a "wpserver" XSL
+    parameter to disable the default server.
+    -->
+    <xsl:if test="component[@class='org.cougaar.core.wp.server.Server'] or ($wpserver = 'true' and ../node)">
+      <component
+        name="org.cougaar.core.wp.server.ServerContainer()"
+        class="org.cougaar.core.wp.server.ServerContainer"
+        priority="COMPONENT"
+        insertionpoint="Node.AgentManager.Agent.WPServer"/>
+      <component
+        name="org.cougaar.core.wp.bootstrap.ConfigManager()"
+        class="org.cougaar.core.wp.bootstrap.ConfigManager"
+        priority="COMPONENT"
+        insertionpoint="Node.AgentManager.Agent.WPServer.Component"/>
+      <component
+        name="org.cougaar.core.wp.bootstrap.PeersManager()"
+        class="org.cougaar.core.wp.bootstrap.PeersManager"
+        priority="COMPONENT"
+        insertionpoint="Node.AgentManager.Agent.WPServer.Component"/>
+      <component
+        name="org.cougaar.core.wp.bootstrap.AdvertiseManager()"
+        class="org.cougaar.core.wp.bootstrap.AdvertiseManager"
+        priority="COMPONENT"
+        insertionpoint="Node.AgentManager.Agent.WPServer.Component"/>
+      <component
+        name="org.cougaar.core.wp.bootstrap.multicast.MulticastAdvertise()"
+        class="org.cougaar.core.wp.bootstrap.multicast.MulticastAdvertise"
+        priority="COMPONENT"
+        insertionpoint="Node.AgentManager.Agent.WPServer.Component"/>
+      <component
+        name="org.cougaar.core.wp.bootstrap.http.HttpAdvertise()"
+        class="org.cougaar.core.wp.bootstrap.http.HttpAdvertise"
+        priority="COMPONENT"
+        insertionpoint="Node.AgentManager.Agent.WPServer.Component"/>
+      <!--
+      -->
+      <component
+        name="org.cougaar.core.wp.bootstrap.rmi.RMIAdvertise()"
+        class="org.cougaar.core.wp.bootstrap.rmi.RMIAdvertise"
+        priority="COMPONENT"
+        insertionpoint="Node.AgentManager.Agent.WPServer.Component"/>
+      <!--
+      -->
+      <component
+        name="org.cougaar.core.wp.server.ServerTransport()"
+        class="org.cougaar.core.wp.server.ServerTransport"
+        priority="COMPONENT"
+        insertionpoint="Node.AgentManager.Agent.WPServer.Component"/>
+      <component
+        name="org.cougaar.core.wp.server.RootAuthority()"
+        class="org.cougaar.core.wp.server.RootAuthority"
+        priority="COMPONENT"
+        insertionpoint="Node.AgentManager.Agent.WPServer.Component"/>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template name="COMPONENT_config">

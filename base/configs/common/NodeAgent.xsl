@@ -96,6 +96,8 @@ XSL Template for NodeAgent, which reuses most of SimpleAgent.
 
     <xsl:call-template name="BINDER_agent_0"/>
 
+    <xsl:call-template name="COMPONENT_agent_wp_server"/>
+
     <xsl:call-template name="COMPONENT_config"/>
 
     <xsl:call-template name="LOW_agent_0"/>
@@ -156,25 +158,68 @@ XSL Template for NodeAgent, which reuses most of SimpleAgent.
 
     <!-- wp cache -->
     <component
+      name="org.cougaar.core.wp.resolver.ResolverContainer()"
+      class="org.cougaar.core.wp.resolver.ResolverContainer"
+      priority="HIGH"
+      insertionpoint="Node.AgentManager.Agent.WPClient"/>
+    <component
+      name="org.cougaar.core.wp.bootstrap.ConfigManager()"
+      class="org.cougaar.core.wp.bootstrap.ConfigManager"
+      priority="HIGH"
+      insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
+    <component
+      name="org.cougaar.core.wp.resolver.SelectManager()"
+      class="org.cougaar.core.wp.resolver.SelectManager"
+      priority="HIGH"
+      insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
+    <component
+      name="org.cougaar.core.wp.resolver.ClientTransport()"
+      class="org.cougaar.core.wp.resolver.ClientTransport"
+      priority="HIGH"
+      insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
+    <component
+      name="org.cougaar.core.wp.resolver.LeaseManager()"
+      class="org.cougaar.core.wp.resolver.LeaseManager"
+      priority="HIGH"
+      insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
+    <component
+      name="org.cougaar.core.wp.resolver.CacheManager()"
+      class="org.cougaar.core.wp.resolver.CacheManager"
+      priority="HIGH"
+      insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
+    <component
       name="org.cougaar.core.wp.resolver.Resolver()"
       class="org.cougaar.core.wp.resolver.Resolver"
       priority="HIGH"
-      insertionpoint="Node.AgentManager.Agent.WPClient"/>
-
-    <!--
-    wp server
-   
-    For backwards compatibility we use a "wpserver" spreadsheet
-    parameter to disable this component through a system property
-    that's passed by the XML parser.
-    -->
-    <xsl:if test="$wpserver = 'true'">
-      <component
-        name="org.cougaar.core.wp.server.Server()"
-        class="org.cougaar.core.wp.server.Server"
-        priority="HIGH"
-        insertionpoint="Node.AgentManager.Agent.WPServer"/>
-    </xsl:if>
+      insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
+    <component
+      name="org.cougaar.core.wp.bootstrap.DiscoveryManager()"
+      class="org.cougaar.core.wp.bootstrap.DiscoveryManager"
+      priority="HIGH"
+      insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
+    <component
+      name="org.cougaar.core.wp.bootstrap.multicast.MulticastDiscovery()"
+      class="org.cougaar.core.wp.bootstrap.multicast.MulticastDiscovery"
+      priority="HIGH"
+      insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
+    <component
+      name="org.cougaar.core.wp.bootstrap.http.HttpDiscovery()"
+      class="org.cougaar.core.wp.bootstrap.http.HttpDiscovery"
+      priority="HIGH"
+      insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
+    <component
+      name="org.cougaar.core.wp.bootstrap.rmi.RMIDiscovery()"
+      class="org.cougaar.core.wp.bootstrap.rmi.RMIDiscovery"
+      priority="HIGH"
+      insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
+    <component
+      name="org.cougaar.core.wp.bootstrap.EnsureIsFoundManager()"
+      class="org.cougaar.core.wp.bootstrap.EnsureIsFoundManager"
+      priority="HIGH"
+      insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
+    <xsl:call-template name="findAll">
+      <xsl:with-param name="insertionpoint">Node.AgentManager.Agent.WPClient.</xsl:with-param>
+    </xsl:call-template>
 
     <!-- metrics -->
     <xsl:choose>
