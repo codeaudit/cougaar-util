@@ -243,31 +243,32 @@ public class DBProperties extends java.util.Properties {
     /**
      * Does the actual work. Called twice for each query.
      **/
-    private String getQuery1(String queryName, Map substitutions) {
-      // FIXME: Use Stringbuffers, not Strings
-        String query = getProperty(queryName);
-        if (query != null && substitutions != null &&
-            !substitutions.isEmpty()) {
-            for (Iterator keys = substitutions.keySet().iterator(); keys.hasNext(); ) {
-                String key = (String) keys.next();
-                int ix = 0;
-                while ((ix = query.indexOf(key, 0)) >= 0) {
-                    String subst = (String) substitutions.get(key);
-                    if (subst == null)
-                        throw new IllegalArgumentException("Null value for " + key);
-                    query = query.substring(0, ix)
-                        + subst
-                        + query.substring(ix + key.length());
-                    ix += subst.length();
-                }
-            }
-        }
-        if (query != null && debug) {
-            System.out.println(this + ": " + queryName + "->" + query);
-        }
-        return query;
+  private String getQuery1 (String queryName, Map substitutions) {
+    String tmp = getProperty(queryName);
+    if(tmp == null) return null;
+    
+    StringBuffer query = new StringBuffer(tmp);
+    if (substitutions != null) {
+      for (Iterator entries = substitutions.entrySet().iterator();
+           entries.hasNext(); ) {
+        Map.Entry entry = (Map.Entry) entries.next();
+        String key = (String)entry.getKey();
+        int ix = 0;
+        while ((ix = query.indexOf(key, ix)) >= 0) {
+          String subst = (String) entry.getValue();
+          if (subst == null)
+            throw new IllegalArgumentException("Null value for " + key);
+          else {
+            query.replace(ix, ix+key.length(), subst);
+            ix = ix + key.length();
+          }}}}
+    if (debug) {
+      System.out.println(this + ": " + queryName + "->" + query);
     }
-
+    return query.substring(0);
+  }
+  
+  
     /**
      * Enable debugging. When debugging is enabled, the queries are
      * printed after substitution has been performed
