@@ -1,0 +1,177 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Qos Metrics Runtime Notes</title>
+</head>
+
+<body>
+
+<h1>Qos Metrics: Runtime Notes and Example Plugins</h1>
+
+<h2>JVM flags</h2>
+<ol>
+<li><h3>Enabling CORBA TypedEventChannels</h3>
+<p>
+Each Node in a society can share metrics data with other Nodes by
+running a CORBA TypedEventChannel.  Channels also allow metrics to be
+provided and displayed by non-Cougaar software components.
+
+<p>There are five relevant jvm properties:
+<dl>
+<dt>
+<i>org.omg.CORBA.ORBClass</i>  
+<dd>
+To use CORBA, this must be set to 'org.jacorb.org.ORB'.  The default
+is null.
+
+
+<p><dt>
+<i>org.omg.CORBA.ORBSingletonClass</i>  
+<dd>
+To use CORBA this must be set to'org.jacorb.org.ORBSingleton'.  The
+default is null.
+
+
+<p><dt>
+<i>jacorb.verbosity</i>  
+<dd>
+Set this to '0' to suppress JacORB's debug messages (a warning will
+still print when the ORB starts up). The default is null.
+
+
+<p><dt>
+<i>org.cougaar.metrics.stec.mesh</i>
+<dd>
+Set this to 'true' to connect the channels in a ring.  The default is
+'false'; in this mode, the channel can be used to access local
+host/Node data but not to share data between Nodes.
+
+
+<p><dt>
+<i>org.cougaar.metrics.topology.iorfile</i>
+<dd>
+Provide a filename here to allow external CORBA applications to
+provide or access metrics data.  This is only relevant if the channels
+are connected (org.cougaar.metrics.stec.mesh=true).  The default is
+null.
+
+</dl>
+
+</li>
+
+<li><h3>Configurating the RSS</h3> 
+
+The RSS can be configured to read data from additional data feeds,
+include static data in property-file format. The full specification
+language is described elsewhere (see <a href="rssconfig.html">[to be
+done]</a>).  The following property gives the location of the
+configuration URL:
+
+<p><dl>
+
+<dt><i>org.cougaar.metrics.properties</i> <dd> The value should be a
+URL which contains RSS configuration properties. The default is null.
+
+</dl>
+
+</li>
+
+
+</ol>
+
+<h2>Example Plugins and Servlets</h2>
+
+Release 9.4 contains some relatively simple plugins and servlets that
+either provide or display useful metrics data.  These plugins and
+servlets, described below, are also handy as example code for more
+complex uses of the metrics services.
+
+<dl>
+
+<p><dt><i>org.cougaar.core.mts.StatisticsPlugin</i>
+<dd>
+This NodeAgent plugin installs the StatisticsServlet, which displays
+message statistics in a web page.  You will course also need to
+include org.cougaar.core.mts.StatisticsAspect in the list of loaded
+aspects.
+
+
+<p><dt><i>org.cougaar.core.thread.AgentSensorPlugin</i>
+<dd>
+This NodeAgent plugin runs the LoadWatcher, which publishes per-agent
+load average data based on ThreadListenerService callbacks.
+
+
+<p><dt><i>org.cougaar.core.qos.metrics.AgentLoadLoggerPlugin</i>
+<dd>
+This NodeAgent plugin can be used to generate a tab-separated-values
+file of per-agent load data, suitable for importing into Excel.
+
+
+<p><dt><i>org.cougaar.core.qos.metrics.MetricsServletPlugin</i>
+<dd>
+This NodeAgent plugin starts three servlets: AgentLoadServlet, which
+displays a table of per-agent load and message counts;
+RemoteAgentServlet, which displays a table of various other per-agent
+metrics; and NodeResourcesServlet, which displays a table of various
+node/host metrics.
+
+
+<p><dt><i>org.cougaar.core.thread.AgentControlPlugin</i>
+<dd>
+This Agent plugin runs the SchedulerWatcher, which publishes agent
+thread usage data based on ThreadListenerService callbacks.
+
+
+
+</dl>
+
+<h2>MetricsServletPlugin images</h2>
+
+
+<p>
+Following are some gifs of the data displayed by the
+MetricsServletPlugin for SMALL-135.  In the current implementation
+only some columns have actual data.  A color key is provided at the
+end.
+
+<hr>
+
+<p>
+<img alt="" src="metrics-runtime-load.gif">    
+<p> In the Load display, only the load itself and the credibility of
+the metric are significant.  This snapshot was capture while SMALL-135
+was starting up, so only some Agents are listed.
+<hr>
+
+<p>
+<img alt="" src="metrics-runtime-status.gif">    
+<p>
+In the status display, the only real values are "Spoke to" (seconds
+since the last message was sent to this Agent), "Heard from" (seconds
+since this Agent last sent a message), and "eMJIPS" (effective mjips).
+The jips value is constant per-host, and in this case all Agents were
+running on the same host.
+<hr>
+
+<p>
+<img alt="" src="metrics-runtime-resources.gif">    
+<p>
+In the Resource display all values are real.  This is a per-Host
+display.
+
+<hr>
+<p>
+<img alt="" src="metrics-runtime-key.gif">    
+<p>
+This key describes the use of color in the other displays.
+
+
+<hr>
+<address><a href="mailto:rshapiro@bbn.com">R Shapiro</a></address>
+<!-- Created: Mon Jun 24 09:20:53 EDT 2002 -->
+<!-- hhmts start -->
+Last modified: Wed Jun 26 12:53:20 EDT 2002
+<!-- hhmts end -->
+</body>
+</html>
