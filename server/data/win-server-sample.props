@@ -54,6 +54,9 @@ java.class.path=D\:\\opt\\cougaar\\lib\\bootstrap.jar
 # the "common" directory and "GLMTrans" directory.
 org.cougaar.config.path="D\:\\opt\\cougaar\\configs\\common\;D\:\\opt\\cougaar\\glmtrans\\configs\\demo-config\\config\;"
 
+# Use the Server HotSpot Java Virtual Machine
+java.server
+
 # Set some standard JVM memory settings.
 #
 # These are not usually modified.

@@ -91,7 +91,7 @@ if ("$os" == "Linux") then
 endif
 
 #set javaargs="$osargs $MYPROPERTIES $MYMEMORY -classpath $LIBPATHS -Dorg.cougaar.message.isLogging=true -Djava.rmi.server.logCalls=true -Dsun.rmi.server.exceptionTrace=true -Dsun.rmi.transport.tcp.readTimeout=150000 "
-set javaargs="$osargs $devp $MYPROPERTIES $MYMEMORY -classpath $LIBPATHS org.cougaar.bootstrap.Bootstrapper org.cougaar.core.node.Node"
+set javaargs="-server $osargs $devp $MYPROPERTIES $MYMEMORY -classpath $LIBPATHS org.cougaar.bootstrap.Bootstrapper org.cougaar.core.node.Node"
 #set javaargs="$osargs $MYPROPERTIES $MYMEMORY -classpath $LIBPATHS -Dorg.cougaar.nameserver.verbosity=20"
 
 if ($?COUGAAR_DEV_PATH) then
