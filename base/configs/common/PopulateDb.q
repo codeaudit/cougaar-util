@@ -149,7 +149,7 @@ insertAttribute=\
 queryLibPGAttribute=\
  SELECT PG_NAME, ATTRIBUTE_NAME, PG_ATTRIBUTE_LIB_ID, ATTRIBUTE_TYPE, AGGREGATE_TYPE \
    FROM V4_LIB_PG_ATTRIBUTE \
-  WHERE PG_NAME = :pg_name:
+  WHERE PG_NAME = ':pg_name:'
 
 queryMaxExptId=\
  SELECT MAX(EXPT_ID) \
