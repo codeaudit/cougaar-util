@@ -551,6 +551,12 @@ queryMaxRecipeId=\
    FROM v4_lib_mod_recipe \
   WHERE MOD_RECIPE_LIB_ID LIKE ':max_id_pattern:'
 
+# PdbBase.reallyChangeRecipeName
+updateRecipeName=\
+ UPDATE v4_lib_mod_recipe \
+    SET NAME = ':new_name:' \
+  WHERE NAME = ':old_name:'
+
 insertLibRecipe=\
  INSERT INTO v4_lib_mod_recipe \
     (MOD_RECIPE_LIB_ID, NAME, JAVA_CLASS, DESCRIPTION) \
