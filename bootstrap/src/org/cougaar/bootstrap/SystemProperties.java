@@ -29,6 +29,8 @@ package org.cougaar.bootstrap;
 
 import java.util.Enumeration;
 import java.util.Properties;
+import java.security.PrivilegedAction;
+import java.security.AccessController;
 
 /** This utility class allows to retrieve system properties without
     requiring write access (which would be a security vulnerability).
@@ -79,16 +81,12 @@ public class SystemProperties {
       System.out.println("getSystemPropertiesWithPrefix: " + prefix);
     }
 
-    /*
-      // disable to allow it to function with NAI SecurityManager 
     Enumeration names = (Enumeration) AccessController.doPrivileged(new PrivilegedAction() {
 	public Object run() {
 	  Enumeration n = System.getProperties().propertyNames();
 	  return n;
 	}
       });
-    */
-    Enumeration names = System.getProperties().propertyNames();
 
     while (names.hasMoreElements()) {
       String key = (String) names.nextElement();
