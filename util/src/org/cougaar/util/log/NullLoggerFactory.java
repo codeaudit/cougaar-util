@@ -40,7 +40,7 @@ public class NullLoggerFactory
 
   public void configure(Properties props) {}
   public void configure(Map m) {}
-  public Logger createLogger(Object requestor) {
+  public Logger instantiateLogger(Object requestor) {
     return NullLogger.getLogger();
   }
 
