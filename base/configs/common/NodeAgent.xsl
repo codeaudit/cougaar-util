@@ -40,6 +40,7 @@ XSL Template for NodeAgent, which reuses most of SimpleAgent.
   -->
   <xsl:param name="metrics">full</xsl:param>
   <xsl:param name="mts">full</xsl:param>
+  <xsl:param name="pluginThreadPool">30</xsl:param>
   <!--
   these xsl parameters are already defined in SimpleAgent.xsl:
   <xsl:param name="servlets">true</xsl:param>
@@ -145,7 +146,7 @@ XSL Template for NodeAgent, which reuses most of SimpleAgent.
       priority="HIGH"
       insertionpoint="Node.AgentManager.Agent.Component">
       <argument>isRoot=true</argument>
-      <argument>BestEffortAbsCapacity=30</argument>
+      <argument>BestEffortAbsCapacity=<xsl:value-of select="$pluginThreadPool"/></argument>
       <argument>WillBlockAbsCapacity=300</argument>
       <argument>CpuIntenseAbsCapacity=2</argument>
       <argument>WellBehavedAbsCapacity=2</argument>
