@@ -25,6 +25,12 @@ queryNodes = \
    FROM V4_ALIB_COMPONENT ALIB \
   WHERE ALIB.COMPONENT_TYPE='node'
 
+queryComponentArgs = \
+ SELECT ARGUMENT \
+   FROM V4_ASB_COMPONENT_ARG \
+   WHERE COMPONENT_ALIB_ID=':comp_alib_id' \
+   AND ASSEMBLY_ID :assemblyMatch
+
 queryHosts = \
  SELECT COMPONENT_LIB_ID \
    FROM V4_LIB_COMPONENT \
