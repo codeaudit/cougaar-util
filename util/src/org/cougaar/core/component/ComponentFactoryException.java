@@ -23,7 +23,7 @@ package org.cougaar.core.component;
 import java.util.*;
 
 /** RuntimeException thrown by ComponentFactory
- * @note was a checked exception until Cougaar 9.2.
+ * This was a checked exception until Cougaar 9.2.
  **/
 public class ComponentFactoryException extends ComponentRuntimeException
 {
@@ -36,7 +36,7 @@ public class ComponentFactoryException extends ComponentRuntimeException
   }
 
   /** 
-   * @note in versions prior to Cougaar 9.2, returned Exception rather than Throwable.
+   * In versions prior to Cougaar 9.2, returned Exception rather than Throwable.
    * @deprecated use Throwable.getCause() instead. 
    **/
   public Throwable getNestedException() { 
