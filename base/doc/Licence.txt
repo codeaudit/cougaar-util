@@ -1,6 +1,6 @@
 The Cougaar Open Source License Agreement
 
-Copyright (c) 1999-2001 The Cougaar Group. All rights reserved.
+Copyright (c) 1999-2002 The Cougaar Group. All rights reserved.
 
 This Agreement sets forth the terms and conditions under which the
 software known as ("Cougaar" Software) sponsored by the Defense
