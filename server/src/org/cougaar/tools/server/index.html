@@ -1,0 +1,41 @@
+<html>
+</head><title>Notes on server/rmi code</title></head>
+<body>
+
+<font size=+2>Some notes on the <tt>org.cougaar.tools.server</tt> code:</font>
+
+<p>
+
+There are three important interfaces for a Console designer:<pre>
+  "CommunityServesClient"
+  "NodeServesClient"
+  "NodeActionListener"</pre>
+
+<p>
+
+The "CommunityServesClient" allows the client (console) to create
+new nodes (NodeServesClient) and register a listener for activities
+within the node (NodeActionListener).  The "NodeServesClient" and
+"NodeActionListener" interfaces are simple for now, but more capabilities
+will be added in the future.
+
+<p>
+
+"NodeServer" is used to create the server-daemon process on the
+remote hosts -- this daemon listens for "createNode" requests and
+spawns the appropriate processes.  The "*.props" files are used
+to configure the properties used in creating the node.
+
+<p>
+
+"Console" is an example Swing-based client that uses the three basic
+interfaces.  It is intended to be simple -- a more complex implementation 
+should be created in another package.  The current console expects
+two text files to be specified in the command line:
+<ol>
+  <li>a file containing lines of Node names</li>
+  <li>a file containing lines of host names</li>
+</ol>
+
+</body>
+</html>

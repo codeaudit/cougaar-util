@@ -8,11 +8,7 @@
  * </copyright>
  */
 
-package org.cougaar.tools.server;
-
-/** 
- * Remote NodeServer API
- **/
+package org.cougaar.tools.server.rmi;
 
 import java.util.*;
 import java.io.*;
@@ -20,16 +16,26 @@ import java.net.*;
 import java.rmi.*;
 import java.rmi.registry.*;
 
-public interface RemoteNodeServer extends Remote {
+/** 
+ * Server-side API to create and control Nodes on a single machine.
+ **/
+public interface ServerCommunityController 
+extends Remote {
+
   /** Launch a new Node **/
-  RemoteProcess createNode(String nodeName, Properties props, String args[], 
-                           RemoteOutputStream out, RemoteOutputStream err)
+  ServerNodeController createNode(
+      String nodeName, 
+      Properties props, 
+      String args[], 
+      ClientNodeActionListener cListener,
+      ClientOutputStream cOut, 
+      ClientOutputStream cErr)
     throws IOException, RemoteException;
 
   /** Kill the named Node **/
   boolean destroyNode(String nodeName) throws RemoteException;
   
-  /** @return the RemoteProcesses of known Nodes **/
+  /** @return the controllers of all known Nodes **/
   Collection getNodes() throws RemoteException;
 
   /** returns the number of active nodes on appserver **/
@@ -37,4 +43,5 @@ public interface RemoteNodeServer extends Remote {
 
   /** Kill all running Nodes.  Should not generally be used. **/
   void reset() throws RemoteException;
+
 }

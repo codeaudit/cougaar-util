@@ -8,15 +8,17 @@
  * </copyright>
  */
 
-package org.cougaar.tools.server;
+package org.cougaar.tools.server.rmi;
 
-import java.rmi.Remote;
-import java.rmi.RemoteException;
 import java.io.Serializable;
 import java.io.IOException;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 
-public interface RemoteOutputStream extends Remote {
+public interface ClientOutputStream extends Remote {
+
   void write(ByteArray bytes) throws RemoteException, IOException;
+
   void close() throws RemoteException, IOException;
 
   public static class ByteArray implements Serializable {
@@ -25,5 +27,7 @@ public interface RemoteOutputStream extends Remote {
     public ByteArray(int size) {
       buffer = new byte[size];
     }
+
+    // should write read/write object methods to only send nBytes
   }
 }
