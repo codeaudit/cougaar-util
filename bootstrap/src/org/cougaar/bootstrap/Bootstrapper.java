@@ -42,13 +42,19 @@ import java.security.cert.*;
  * have to maintain many different script files.
  * <p>
  * <pre/>
- * The following locations are examined, in order:
- *  -Dorg.cougaar.class.path=...	(like a classpath)
- *  $COUGAAR_INSTALL_PATH/lib/*.{jar,zip,plugin}
- *  $COUGAAR_INSTALL_PATH/plugins/*.{jar,zip,plugin}
- *  -Dorg.cougaar.system.path=whatever/*.{jar,zip,plugin}
- *  $COUGAAR_INSTALL_PATH/sys/*.{jar,zip,plugin}
+ * The following locations specified by system properties are examined, in order:
+ *  org.cougaar.class.path	(interpreted like a classpath)
+ *  org.cougaar.install.path/lib/*.{jar,zip,plugin}
+ *  org.cougaar.install.path/plugins/*.{jar,zip,plugin}
+ *  org.cougaar.system.path/*.{jar,zip,plugin}
+ *  org.cougaar.install.path/sys/*.{jar,zip,plugin}
  * </pre>
+ * The system property org.cougaar.class.path is typically filled in from the environment variable
+ * COUGAAR_DEV_PATH, and org.cougaar.install.path is typically from COUGAAR_INSTALL_PATH. <p>
+ * Most scripts do not supply a value for org.cougaar.system.path. 
+ * org.cougaar.class.path is used primarily by developers as a mechanism to override the infrastructure
+ * and application jars with development code.  Most packaged cougaar applications do not use these
+ * optional system properties.
  * <p>
  * As an added bonus, Bootstrapper may be run as an application
  * which takes the fully-qualified class name of the class to run
@@ -56,7 +62,7 @@ import java.security.cert.*;
  * along as a String array as the single argument to the class.
  * The class must provide a public static launch(String[]) or
  * main(String[]) method (searched for in that order).
- *
+ * <p>
  * The Boostrapper's classloader will not load any classes which
  * start with "java.". This
  * list may be extended by supplying a -Dorg.cougaar.core.society.bootstrapper.exclusions=foo.:bar.
@@ -88,9 +94,12 @@ import java.security.cert.*;
  * about where each loaded class comes from.
  * @property org.cougaar.properties.url=URL Set to specify where an additional
  * set of System Properties should be loaded from.
- * @property org.cougaar.install.path The directory where this Cougaar instance is installed. <em>REQUIRED</em>
+ * @property org.cougaar.install.path The directory where this Cougaar instance is installed, usually
+ * supplied by a script from the COUGAAR_INSTALL_PATH environment variable. <em>REQUIRED</em>
  * @property org.cougaar.class.path Classpath-like setting searched immediately before discovered lib jars.
+ * Usually supplied by a script from the COUGAAR_DEV_PATH environment variable.  <em>optional</em>
  * @property org.cougaar.system.path Classpath-like setting searched immediately before discovered sys jars.
+ * Not supplied by most scripts.  <em>optional</em>
  * @property org.cougaar.bootstrapper.exclusions Allow explicitly excluding package prefixes from 
  * the Bootstrap Classloader's concern.
  * @property org.cougaar.bootstrap.class Bootstrapper class to use to bootstrap the
