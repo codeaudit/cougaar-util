@@ -53,10 +53,15 @@ public abstract class LoggerFactory {
 
   public abstract Logger createLogger(Object requestor);
 
+  public abstract Logger createLogger(Class requestorClass);
+
   public abstract Logger createLogger(String name);
 
   public abstract LoggerController createLoggerController(
       Object requestor);
+
+  public abstract LoggerController createLoggerController(
+      Class requestorClass);
 
   public abstract LoggerController createLoggerController(
       String name);
