@@ -130,6 +130,9 @@ implements java.io.Serializable, Cloneable
       ((group != null) ? ("\""+group+"\"") : "(none)");
   }
 
+  public int hashCode() {
+    return name.hashCode();
+  }
   public boolean equals(Object o) {
     if (o == this) {
       return true;
