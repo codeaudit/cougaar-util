@@ -128,6 +128,7 @@ public class CircularQueue extends AbstractCollection
     while (i!=x) {
       result[j] = elements[i];
       i=nextIndex(i);
+      j++;
     }
     return result;
   }
@@ -139,6 +140,7 @@ public class CircularQueue extends AbstractCollection
     while (i!=x) {
       result[j] = elements[i];
       i=nextIndex(i);
+      j++;
     }
     return result;
   }
