@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # <copyright>
-#  Copyright 2001-2003 BBNT Solutions, LLC
+#  Copyright 2001-2004 BBNT Solutions, LLC
 #  under sponsorship of the Defense Advanced Research Projects Agency (DARPA).
 # 
 #  This program is free software; you can redistribute it and/or modify
@@ -37,6 +37,8 @@
 # cougaar-application related options.  Only COUGAAR_INSTALL_PATH is passed to the
 # bootstrapper.
 #
+# !!!WARNING TO THOSE MODIFYING THIS SCRIPT!!!  Arguments must be separated by
+# newlines!
 
 scriptname=`basename $0`
 
@@ -57,10 +59,12 @@ while [ x"$1" != x ]; do
     -v) verbose=1
 	shift
 	continue;;
-    -X*) prepreargs="$prepreargs $1"
+    -X*) prepreargs="$prepreargs
+$1"
         shift
 	continue;;
-    -*) preargs="$preargs $1"
+    -*) preargs="$preargs
+$1"
 	shift
 	continue;;
     *) clname="$1"
@@ -102,19 +106,27 @@ fi
 jars="$COUGAAR_INSTALL_PATH/lib/bootstrap.jar"
 
 # Cougaar Arguments: set up the cougaar application
-cargs="-Dorg.cougaar.install.path=$COUGAAR_INSTALL_PATH \
--Dorg.cougaar.workspace=$COUGAAR_WORKSPACE \
+cargs="-Dorg.cougaar.install.path=$COUGAAR_INSTALL_PATH
+-Dorg.cougaar.workspace=$COUGAAR_WORKSPACE
 -Dorg.cougaar.system.path=$COUGAAR3RDPARTY";
 
 # name of the bootstrapper class
 bootclass="org.cougaar.bootstrap.Bootstrapper"
 
-allargs="$prepreargs ${bootargs} \
-${cargs} \
-${preargs} \
--classpath $jars \
-${bootclass} ${clname} \
+allargs="$prepreargs
+${bootargs}
+${cargs}
+${preargs}
+-classpath
+$jars
+${bootclass}
+${clname}
 ${postargs}"
 
-if [ $verbose ]; then echo "java $allargs"; fi
+if [ $verbose ]; then 
+    unspaced=`echo $allargs | sed -e 's,\n, ,'`
+    echo "java $unspaced"; 
+fi
+
+IFS=$'\n'
 exec java $allargs

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # <copyright>
-#  Copyright 2001-2003 BBNT Solutions, LLC
+#  Copyright 2001-2004 BBNT Solutions, LLC
 #  under sponsorship of the Defense Advanced Research Projects Agency (DARPA).
 # 
 #  This program is free software; you can redistribute it and/or modify
@@ -33,6 +33,8 @@
 # of Cougaar if not set, the script will check $CIP and then will attempt to 
 # guess based on where the Node script is located.
 #
+# !!!WARNING TO THOSE MODIFYING THIS SCRIPT!!!  Arguments must be separated by
+# newlines!
 
 scriptname=`basename $0`
 verbose=
@@ -88,11 +90,13 @@ fi
 # add your cougaar options here (or on the command line):
 # To quiet the complainingLP:
 # -Dorg.cougaar.planning.ldm.lps.ComplainingLP.level=0
-coptions="-Dorg.cougaar.core.agent.startTime=08/10/2005"
+coptions="-Dorg.cougaar.core.agent.startTime=08/10/2005 00:05:00"
 
 # vm arguments to adjust (defaults are given).  You can tune the VM performance
 # by fooling with these values... or you can render your society unrunnable.
-vmargs="-Xmx768m -Xms64m -Xoss256k"
+vmargs="-Xmx768m
+-Xms64m
+-Xoss256k"
 
 # environment arguments - e.g. set timezone to GMT to avoid confusion
 eargs="-Duser.timezone=GMT";
@@ -106,22 +110,27 @@ bootargs="-Xbootclasspath/p:${COUGAAR_INSTALL_PATH}/lib/javaiopatch.jar"
 # name of the node class
 nodeclass="org.cougaar.core.node.Node"
 
-allargs="${bootargs} \
-${vmargs} \
-${eargs} \
-${preargs} \
-${nodeargs} \
+allargs="${bootargs}
+${vmargs}
+${eargs}
+${preargs}
+${nodeargs}
 ${coptions}"
 
-if [ $verbose ]; then allargs="-v $allargs"; fi
+if [ $verbose ]; then allargs="-v
+$allargs"; fi
 
 if [ x"$socname" != x ]; then
   #uncomment this to turn on validation
   #xmlvalidate="-Dorg.cougaar.core.node.validate=true"
   xmlvalidate=""
-  xmlargs="-Dorg.cougaar.core.node.InitializationComponent=XML -Dorg.cougaar.society.file=${socname}.xml $xmlvalidate"
-  allargs="$allargs $xmlargs"
+  xmlargs="-Dorg.cougaar.core.node.InitializationComponent=XML
+-Dorg.cougaar.society.file=${socname}.xml
+$xmlvalidate"
+  allargs="$allargs
+$xmlargs"
 fi
+IFS=$'\n'
 
 exec /bin/sh $COUGAAR_INSTALL_PATH/bin/boost $allargs $nodeclass $*
 
