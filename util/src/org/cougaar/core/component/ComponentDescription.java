@@ -222,11 +222,20 @@ public final class ComponentDescription implements Serializable {
   public URL getCodebase() { return codebase; }
 
   /**
-   * A parameter supplied to the constructor of classname,
-   * often some sort of structured object (xml document, etc).
+   * A parameter supplied to the component immediately 
+   * after construction by calling <pre>instance.setParameter(param);</pre>
+   * using reflection.
    * <p>
-   * This is defined as just an Object, but we will likely 
-   * have to impose additional restrictions (e.g. Serializable) 
+   * setParameter will be called IFF the parameter is non-null.  It is an error
+   * for a ComponentDescription to specify a non-null parameter, but for the
+   * actual Component to not define the setParameter method:
+   * <pre>
+   *    public void setParameter(Object parameter);
+   * </pre>
+   * <p>
+   * A parameter is often some sort of structured object (xml document, etc).
+   * While is is defined as just an Object, most implementations
+   * impose additional restrictions (e.g. Serializable)
    * for safety reasons.
    **/
   public Object getParameter() { return parameter; }
