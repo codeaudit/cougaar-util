@@ -130,7 +130,6 @@ implements Serializable
         ((o instanceof StateTuple) ?
          (((StateTuple) o).getComponentDescription()) :
          ((ComponentDescription) o));
-      String ip = cd.getInsertionPoint();
       if (priority == cd.getPriority()) {
         l.add(o);
       }
