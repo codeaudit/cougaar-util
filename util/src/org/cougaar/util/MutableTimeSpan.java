@@ -76,4 +76,28 @@ public class MutableTimeSpan implements NewTimeSpan, Serializable {
       throw new IllegalArgumentException();
     }
   }
+
+  /** 
+   * equals - performs field by field comparison
+   *
+   * @param object Object to compare
+   * @return boolean if 'same' 
+   */
+  public boolean equals(Object object) {
+    if (object == this) {
+      return true;
+    }
+
+    if (!(object instanceof TimeSpan)) {
+      return false;
+    }
+
+    TimeSpan other = (TimeSpan) object;
+    return ((getStartTime() == other.getStartTime()) &&
+	    (getEndTime() == other.getEndTime()));
+  }
+      
+  public int hashCode() {
+    return (int) (myStartTime + (myEndTime * 1000));
+  }
 }
