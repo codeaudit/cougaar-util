@@ -42,7 +42,7 @@ IF NOT "%COUGAAR_WORKSPACE%" == "" GOTO L_4
 
 REM Path for runtime output not set.
 REM Default is CIP/workspace
-ECHO COUGAAR_WORKSPACE not set. Defaulting to CIP/workspace
+ECHO COUGAAR_WORKSPACE not set. Defaulting to CIP\workspace
 SET COUGAAR_WORKSPACE=%COUGAAR_INSTALL_PATH%\workspace
 :L_4
 
@@ -52,14 +52,10 @@ CALL %COUGAAR_INSTALL_PATH%\bin\setlibpath.bat
 CALL %COUGAAR_INSTALL_PATH%\bin\setarguments.bat
 
 REM pass in "NodeName" to run a specific named Node
-REM pass in "admin" to run SANode separately
-set MYARGUMENTS= -c -n "%1"
-if "%1"=="admin" set MYARGUMENTS= -n Administrator -c -r -p 8000
-if "%1"=="admin" set MYMEMORY= -Djava.compiler=NONE -Xms16m 
-if "%1"=="EmptyNode" set MYMEMORY= -Xms16m 
+set MYNODEPROP=-Dorg.cougaar.node.name="%1"
 
 @ECHO ON
 
-java.exe %MYPROPERTIES% %MYMEMORY% -classpath %LIBPATHS% %MYCLASSES% %MYARGUMENTS% %2 %3
+java.exe %MYPROPERTIES% %MYNODEPROP% %MYMEMORY% -classpath %LIBPATHS% %MYCLASSES% %2 %3
 
 :L_END

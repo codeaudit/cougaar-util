@@ -52,26 +52,18 @@ shift
 node="$1"
 shift
 rest="$*"
-if [ -z "$node" ]; then
-  node="Clusters"
-fi
 
-if [ "$node" = "admin" ]; then
-    args="-c -r -n Administrator -p 8000 $rest"
-    MYMEMORY="-Djava.compiler=NONE"
-else 
-    args="-n $node -c $rest"
-    # arguments to adjust (defaults are given)
-    # -Xmx64m	      # max java heap
-    # -Xms3m	      # min (initial) java heap
-    # -Xmaxf0.6       # max heap free percent
-    # -Xminf0.35      # min heap free percent
-    # -Xmaxe4m        # max heap expansion increment
-    # -Xmine1m	      # min heap expansion increment
-    # -Xoss400k       # per-thread *java* stack size
-    MYMEMORY="-Xmx768m -Xms64m -Xmaxf0.9 -Xminf0.1 -Xoss128k"
-    #set MYMEMORY="-Xmx300m -Xms100m"
-fi
+args="$rest"
+# arguments to adjust (defaults are given)
+# -Xmx64m	      # max java heap
+# -Xms3m	      # min (initial) java heap
+# -Xmaxf0.6       # max heap free percent
+# -Xminf0.35      # min heap free percent
+# -Xmaxe4m        # max heap expansion increment
+# -Xmine1m	      # min heap expansion increment
+# -Xoss400k       # per-thread *java* stack size
+MYMEMORY="-Xmx768m -Xms64m -Xmaxf0.9 -Xminf0.1 -Xoss128k"
+#set MYMEMORY="-Xmx300m -Xms100m"
 
 if [ "$OS" = "Linux" ]; then
     # set some system runtime limits
@@ -88,18 +80,15 @@ if [ "$OS" = "Linux" ]; then
     #setenv JAVA_COMPILER javacomp
 fi
 
-#set javaargs="$osargs $MYPROPERTIES $MYMEMORY -classpath $LIBPATHS -Dorg.cougaar.core.message.isLogging=true -Djava.rmi.server.logCalls=true -Dsun.rmi.server.exceptionTrace=true -Dsun.rmi.transport.tcp.readTimeout=150000 "
-
 # Use the other version of this to validate the society XML schema - MAY BE SLOW!
 #xmlvalidate="-Dorg.cougaar.core.node.validate=true"
 xmlvalidate=""
 
-javaargs="$MYPROPERTIES $MYMEMORY  -Dorg.cougaar.core.node.InitializationComponent=XML -Dorg.cougaar.society.file=$societyfile $xmlvalidate -classpath $LIBPATHS $DEVP $BOOTSTRAPPER $MYCLASSES"
+javaargs="$MYPROPERTIES $MYMEMORY -Dorg.cougaar.node.name=$node -Dorg.cougaar.core.node.InitializationComponent=XML -Dorg.cougaar.society.file=$societyfile $xmlvalidate -classpath $LIBPATHS $DEVP $BOOTSTRAPPER $MYCLASSES"
 
 if [ "$COUGAAR_DEV_PATH" != "" ]; then
     echo java $javaargs $args
 fi
 
 # exec instead of eval
-echo exec java $javaargs $args
 exec java $javaargs $args
