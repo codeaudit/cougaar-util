@@ -28,13 +28,24 @@ import java.util.Properties;
 public interface CommunityServesClient {
 
   /**
-   * Create a new Node.
+   * Contact a host:port for client control.
+   * <p>
+   * The client should cache the result for efficiency.
+   */
+  public HostServesClient getHost(
+      String hostName,
+      int hostPort) throws Exception;
+
+  /**
+   * <b>deprecated</b> Create a new Node.
    * <pre>
    * Parameters are:
    *   - "where" information  (hostName, hostPort, regName)
    *   - "what" information   (nodeName, properties, args)
    *   - "callback" hooks     (listener, listenFilter)
    * </pre>
+   *
+   * @deprecated use "createHost", then "HostServesClient#createNode(..)"
    */
   public NodeServesClient createNode(
       String hostName, 
@@ -47,7 +58,4 @@ public interface CommunityServesClient {
       NodeEventFilter nef,
       ConfigurationWriter cw) throws Exception;
 
-  //
-  // could add lookup features here
-  //
 }

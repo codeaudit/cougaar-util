@@ -19,17 +19,21 @@ import java.rmi.server.*;
 import org.cougaar.tools.server.*;
 
 /** 
- * Server create/control (node) processes.
+ * Server implementation to create and control Nodes on a single host,
+ * plus basic file-system support.
  */
-class ServerCommunityControllerImpl 
+class ServerHostControllerImpl 
   extends UnicastRemoteObject
-  implements ServerCommunityController 
+  implements ServerHostController 
 {
+
+  private static char pathSeparator = File.separatorChar;
+  private static String dotPath = "."+pathSeparator;
+
   private boolean verbose;
-  String rmiHost;
-  int rmiPort;
-  //private File alpInstallPath;
-  //private File configsPath;
+  private String rmiHost;
+  private int rmiPort;
+  private String tempPath;
 
   private static final String DEFAULT_NODE = 
     "org.cougaar.core.society.Node";
@@ -41,7 +45,7 @@ class ServerCommunityControllerImpl
     
   private Properties commonProperties; 
 
-  public ServerCommunityControllerImpl(
+  public ServerHostControllerImpl(
       Properties commonProperties) throws RemoteException {
     this.commonProperties = commonProperties;
     verbose = 
@@ -56,6 +60,31 @@ class ServerCommunityControllerImpl
       Integer.parseInt(
           commonProperties.getProperty(
             "org.cougaar.tools.server.port"));
+    tempPath = 
+      commonProperties.getProperty(
+          "org.cougaar.temp.path",
+          dotPath);
+
+    // tempPath uses the system-style path separator
+    //
+    // fix a relative ".[/\\]" path to an absolute path
+    if (tempPath.startsWith(dotPath)) {
+      // fix to be the full system-style path
+      try {
+        File dotF = new File(".");
+        String absPath = dotF.getAbsolutePath();
+        if (absPath.endsWith(".")) {
+          absPath = absPath.substring(0, (absPath.length() - 1));
+        }
+        tempPath = absPath + tempPath.substring(2);
+      } catch (Exception e) {
+        // ignore?
+      }
+    }
+    // path must end in "[/\\]"
+    if (tempPath.charAt(tempPath.length()-1) != pathSeparator) {
+      tempPath = tempPath + pathSeparator;
+    }
   }
 
   /** 
@@ -71,7 +100,9 @@ class ServerCommunityControllerImpl
       ConfigurationWriter cw)
     throws IOException
   {
-    if (cw != null) cw.writeConfigFiles(new File("."));
+    if (cw != null) {
+      cw.writeConfigFiles(new File(tempPath));
+    }
 
     // p is a merge of server-set properties and passed-in props
     Properties p = new Properties(commonProperties);
@@ -227,6 +258,140 @@ class ServerCommunityControllerImpl
   public void reset() {
   }
 
+  /**
+   * List files on a host.
+   */
+  public String[] list(
+      String path) {
+    // check the path
+    if (!(path.startsWith("./"))) {
+      throw new IllegalArgumentException(
+          "Path must start with \"./\", not \""+path+"\"");
+    } else if (path.indexOf("..") > 0) {
+      throw new IllegalArgumentException(
+          "Path can not contain \"..\": \""+path+"\"");
+    } else if (path.indexOf("\\") > 0) {
+      throw new IllegalArgumentException(
+          "Path must use the \"/\" path separator, not \"\\\": \""+path+"\"");
+    } else if (!(path.endsWith("/"))) {
+      throw new IllegalArgumentException(
+          "Path must end in \"/\", not \""+path+"\"");
+    }
+    // other checks?  Security manager?
+
+    // fix the path to use the system path-separator and be relative to 
+    //   the "tempPath"
+    String sysPath = path;
+    if (pathSeparator != '/') {
+      sysPath = sysPath.replace('/', pathSeparator);
+    }
+    sysPath = tempPath + sysPath.substring(2);
+
+    // open a File for the sysPath
+    File d = new File(sysPath);
+
+    // make sure it's a readable directory, etc
+    if (!(d.exists())) {
+      throw new IllegalArgumentException(
+          "Path does not exist: \""+path+"\"");
+    } else if (!(d.isDirectory())) {
+      throw new IllegalArgumentException(
+          "Path is not a directory: \""+path+"\"");
+    } else if (!(d.canRead())) {
+      throw new IllegalArgumentException(
+          "Unable to read from path: \""+path+"\"");
+    }
+
+    // get a directory listing of file names
+    String[] ret = d.list();
+    if (ret == null) {
+      throw new IllegalArgumentException(
+          "Unable to get a directory listing for path: \""+path+"\"");
+    }
+
+    // fix to be relative paths to all start with the dotPath
+    for (int i = 0; i < ret.length; i++) {
+      ret[i] = path + ret[i];
+    }
+
+    // return the list of file names
+    return ret;
+  }
+
+  /**
+   * Open a file for reading.
+   */
+  public ServerInputStream open(
+      String filename) {
+    // check the path  (should merge this code with the "list(..)" code)
+    if (!(filename.startsWith("./"))) {
+      throw new IllegalArgumentException(
+          "Filename must start with \"./\", not \""+filename+"\"");
+    } else if (filename.indexOf("..") > 0) {
+      throw new IllegalArgumentException(
+          "Filename can not contain \"..\": \""+filename+"\"");
+    } else if (filename.indexOf("\\") > 0) {
+      throw new IllegalArgumentException(
+          "Filename must use the \"/\" path separator, not \"\\\": \""+
+          filename+"\"");
+    } else if (filename.endsWith("/")) {
+      throw new IllegalArgumentException(
+          "Filename can not end in \"/\": \""+filename+"\"");
+    }
+    // other checks?  Security manager?
+
+    // fix the filename path to use the system path-separator and be 
+    //   relative to the "tempPath"
+    String sysFilename = filename;
+    if (pathSeparator != '/') {
+      sysFilename = sysFilename.replace('/', pathSeparator);
+    }
+    sysFilename = tempPath + sysFilename.substring(2);
+
+    // open the file
+    File f = new File(sysFilename);
+    
+    // make sure that the file is not a directory, etc
+    if (!(f.exists())) {
+      throw new IllegalArgumentException(
+          "File does not exist: \""+filename+"\"");
+    } else if (!(f.isFile())) {
+      throw new IllegalArgumentException(
+          "File is "+
+          (f.isDirectory() ?  "a directory" : "not a regular file")+
+          ": \""+filename+"\"");
+    } else if (!(f.canRead())) {
+      throw new IllegalArgumentException(
+          "Unable to read file: \""+filename+"\"");
+    }
+
+    // get an input stream for the file
+    FileInputStream fin;
+    try {
+      fin = new FileInputStream(f);
+    } catch (FileNotFoundException fnfe) {
+      // shouldn't happen -- I already checked "f.exists()"
+      throw new IllegalArgumentException(
+          "File does not exist: \""+filename+"\"");
+    }
+
+    // wrap the file's input stream in a ServerInputStream
+    ServerInputStream sin;
+    try {
+      sin = new ServerInputStreamImpl(fin);
+    } catch (Exception e) {
+      // shouldn't fail...
+      throw new IllegalArgumentException(
+          "Unable to wrap file stream for \""+filename+"\": "+e);
+    }
+    
+    // return the wrapped stream!
+    return sin;
+  }
+
+  //
+  // utility method
+  //
 
   private static final List explode(String s, char sep) {
     ArrayList v = new ArrayList();

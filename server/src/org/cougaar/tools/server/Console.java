@@ -83,6 +83,8 @@ public class Console {
     private JButton runButton;
     private JButton flushNodeEventsButton;
     private JButton listClustersButton;
+    private JButton getFileButton;
+    private JButton listFilesButton;
     private JButton stopButton;
 
     // node & host from gui
@@ -122,6 +124,8 @@ public class Console {
 
       runButton = new JButton("Run");
       listClustersButton = new JButton("List-Clusters");
+      getFileButton = new JButton("Get-File");
+      listFilesButton = new JButton("List-Files");
       flushNodeEventsButton = new JButton("Flush-Output");
       stopButton = new JButton("Stop");
 
@@ -197,6 +201,22 @@ public class Console {
             }
           });
 
+      // handle "Get-File" button
+      getFileButton.addActionListener(
+          new ActionListener() {    
+            public void actionPerformed(ActionEvent e) {
+              getFile();
+            }
+          });
+
+      // handle "List-File" button
+      listFilesButton.addActionListener(
+          new ActionListener() {    
+            public void actionPerformed(ActionEvent e) {
+              listFiles();
+            }
+          });
+
       // handle stop button
       stopButton.addActionListener(
           new ActionListener() {    
@@ -249,6 +269,8 @@ public class Console {
       buttons2.add(runButton);
       buttons2.add(flushNodeEventsButton);
       buttons2.add(listClustersButton);
+      buttons2.add(getFileButton);
+      buttons2.add(listFilesButton);
       buttons2.add(stopButton);
     }  
 
@@ -417,6 +439,51 @@ public class Console {
 
       // replace with pretty GUI code...
       System.out.println("clusters["+n+"]: "+l);
+    }
+
+    private void getFile() {
+      // for now this test is hard-coded
+      System.out.println(
+          "Test -- read file \"./dir/test.txt\" from \"localhost:8484\"");
+      try {
+        HostServesClient hsc =
+          communitySupport.getHost(
+              "localhost",
+              8484);
+        InputStream in = hsc.open("./dir/test.txt");
+        BufferedReader r = new BufferedReader(new InputStreamReader(in));
+        for (int i = 0; ; ) {
+          String s = r.readLine();
+          if (s == null) {
+            break;
+          }
+          System.out.println(i+"\t"+s);
+        }
+      } catch (Exception e) {
+        System.err.println("Failed: "+e);
+        e.printStackTrace();
+      }
+    }
+
+    private void listFiles() {
+      // for now this test is hard-coded
+      System.out.println(
+          "Test -- list files in \"./dir/\" from \"localhost:8484\"");
+      try {
+        HostServesClient hsc =
+          communitySupport.getHost(
+              "localhost",
+              8484);
+        String[] ret = hsc.list("./dir/");
+        int nret = ((ret != null) ? ret.length : 0);
+        System.out.println("listing["+nret+"]:");
+        for (int i = 0; i < nret; i++) {
+          System.out.println(i+"\t"+ret[i]);
+        }
+      } catch (Exception e) {
+        System.err.println("Failed: "+e);
+        e.printStackTrace();
+      }
     }
 
     private void stopNode(String name) {

@@ -33,10 +33,10 @@ public class ServerDaemon {
   public static final String DEFAULT_PORT = "8484";
   public static final String DEFAULT_NAME = "ServerHook";
   public static final String DEFAULT_CLASS = 
-    "org.cougaar.tools.server.rmi.ServerCommunityControllerImpl";
+    "org.cougaar.tools.server.rmi.ServerHostControllerImpl";
 
   private Registry registry = null;
-  private ServerCommunityController server = null;
+  private ServerHostController server = null;
 
   private Properties properties;
   private boolean verbose = false;
@@ -119,8 +119,7 @@ public class ServerDaemon {
     return LocateRegistry.createRegistry(rmiPort);
   }
 
-  private ServerCommunityController createServer() throws Exception {
-
+  private ServerHostController createServer() throws Exception {
     // get the class name
     String classname = 
       properties.getProperty(
@@ -136,7 +135,7 @@ public class ServerDaemon {
     // create an instance
     Object[] argv = new Object[1];
     argv[0] = properties;
-    return (ServerCommunityController)serverNew.newInstance(argv);
+    return (ServerHostController)serverNew.newInstance(argv);
   }
 
   /**
