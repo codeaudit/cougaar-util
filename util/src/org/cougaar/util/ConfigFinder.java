@@ -110,7 +110,20 @@ public final class ConfigFinder {
     for (int i = 0; i < l; i++) {
       appendPathElement((String) v.elementAt(i));
     }
+
+    configPath = Collections.unmodifiableList(configPath); //  make it unmodifiable
   }
+
+  /** get the config path as an unmodifiable List of URL instances
+   * which describes, in order, the set of base locations searched by
+   * this instance of the ConfigFinder.
+   **/
+  public List getConfigPath() { return configPath; }
+
+  /** @return the current Cougaar Install Path **/
+  public URL getInstallURL() { return installUrl; }
+  /** @return the current config directory (or common, if undefined) **/
+  public URL getConfigURL() { return configUrl; }
 
   private void appendPathElement(URL url) {
     if (logger.isInfoEnabled()) {
@@ -147,24 +160,28 @@ public final class ConfigFinder {
     return s;
   }
 
+  private static URL urlify(String s) {
+    s = s.replace('\\', '/').replace('\\', '/'); // These should be URL-like
+    try {
+      if (!s.endsWith("/")) s += "/";
+      return new URL(s);
+    } catch (MalformedURLException mue) {}
+
+    try {
+      File f = new File(s);
+      return (new File(s)).getCanonicalFile().toURL();
+    } catch (Exception e) {
+      logger.warn("Failed to interpret path element \""+s+"\"");        
+      return null;
+    }
+  }
+    
   private void appendPathElement(String el) {
     String s = el;
-    try {
-      s = substituteProperties(el);
-      s = s.replace('\\', '/').replace('\\', '/'); // These should be URL-like
-      try {
-        if (!s.endsWith("/")) s += "/";
-        appendPathElement(new URL(s));
-      }
-      catch (MalformedURLException mue) {
-        File f = new File(s);
-        if (f.isDirectory()) {
-          appendPathElement(new File(s).getCanonicalFile().toURL());
-        } // else skip it.
-      }
-    } 
-    catch (Exception e) {
-      logger.warn("Failed to interpret path element \""+el+"\"", e);
+    s = substituteProperties(el);
+    URL u = urlify(s);
+    if (u != null) {
+      appendPathElement(u);
     }
   }
 
@@ -303,7 +320,8 @@ public final class ConfigFinder {
 	    BufferedReader in = new BufferedReader(new InputStreamReader(is));
 	    while (in.ready()) {
 	      String text = in.readLine();
-	      appendPathElement(text.substring(0, text.lastIndexOf(File.separator)));
+              // this is seriously wrong (MIK)
+	      //appendPathElement(text.substring(0, text.lastIndexOf(File.separator)));
 	    }
 	  }
 	} catch (IOException ioe) {	
@@ -343,6 +361,8 @@ public final class ConfigFinder {
   // Singleton pattern
   private static ConfigFinder defaultConfigFinder;
   private static Map defaultProperties;
+  private static URL installUrl;
+  private static URL configUrl;
   static {
     Map m = new HashMap();
     defaultProperties = m;
@@ -351,6 +371,7 @@ public final class ConfigFinder {
     try { ipf = ipf.getCanonicalFile(); } catch (IOException ioe) {}
     String ipath = ipf.toString();
     m.put("INSTALL", ipath);
+    installUrl = urlify(ipath);
 
     m.put("HOME", System.getProperty("user.home"));
     m.put("CWD", System.getProperty("user.dir"));
@@ -359,6 +380,7 @@ public final class ConfigFinder {
     try { csf = csf.getCanonicalFile(); } catch (IOException ioe) {}
     String cspath = csf.toString();
     m.put("CONFIGS", cspath);
+    configUrl = urlify(cspath);
 
     String cs = System.getProperty("org.cougaar.config", "common");
     if (cs != null)
