@@ -544,6 +544,14 @@ recipeQueryAllAgents=\
     AND (H.COMPONENT_ALIB_ID = C.COMPONENT_ALIB_ID OR H.PARENT_COMPONENT_ALIB_ID = C.COMPONENT_ALIB_ID) \
     AND H.ASSEMBLY_ID :assembly_match:
 
+# Find all agents including NodeAgents
+recipeQueryAllAgentsAndNodeAgents=\
+ SELECT C.COMPONENT_ALIB_ID \
+   FROM v4_alib_component C, v4_asb_component_hierarchy H \
+  WHERE (C.COMPONENT_TYPE='agent' OR C.COMPONENT_TYPE='node') \
+    AND (H.COMPONENT_ALIB_ID = C.COMPONENT_ALIB_ID OR H.PARENT_COMPONENT_ALIB_ID = C.COMPONENT_ALIB_ID) \
+    AND H.ASSEMBLY_ID :assembly_match:
+
 # Find some agents by name - in this case, subordinates of 2BDE
 recipeQuery2BDE_Sub_AgentsByName=\
  SELECT C.COMPONENT_ALIB_ID \
