@@ -23,6 +23,7 @@ package org.cougaar.util.log.log4j;
 
 import java.io.InputStream;
 import java.io.IOException;
+import java.io.File;
 import java.net.URL;
 import java.net.MalformedURLException;
 import java.util.*;
@@ -197,7 +198,7 @@ public class Log4jLoggerFactory
    **/
   public static final String getConfigFileName() {
     String configFileName = System.getProperty(LF_CONFIG_PROP);
-    if (configFileName == null) configFileName = System.getProperty(LF_PREFIX + "config.filename");
+    if (configFileName == null) configFileName = System.getProperty(LF_PREFIX + ".config.filename");
     if (configFileName == null) configFileName = System.getProperty(FILE_NAME_PROPERTY);
     if (configFileName == null) configFileName = System.getProperty(LOG4JCONF);
     return configFileName;
@@ -297,7 +298,7 @@ public class Log4jLoggerFactory
         continue;
       }
 
-      if (name.equals(LF_CONFIG_PROP) || name.equals(LF_PREFIX + "config.filename")) {
+      if (name.equals(LF_CONFIG_PROP) || name.equals(LF_PREFIX + ".config.filename")) {
 	continue;
       }
 
@@ -306,19 +307,49 @@ public class Log4jLoggerFactory
       if (name.indexOf(PREFIX) != -1)
 	name = name.substring(PREFIX.length());
 
+      // Note that you must add one for the "."
       if (name.indexOf(LF_PREFIX) != -1)
- 	name = name.substring(LF_PREFIX.length());
+ 	name = name.substring(LF_PREFIX.length() + 1);
+
+      // Look for props that end with .File to check that dirs exist
+      // Ugly, but the Log4J configurator refuses to try to create the directory
+      if (name.endsWith(".File")) {
+	if (value == null)
+	  continue;
+
+	File log = new File(value);
+	//System.out.println("Using log file " + log);
+	File parentdir = log.getParentFile();
+	//System.out.println("Using parent dir " + parentdir);
+	if (parentdir != null && ((! parentdir.exists() && ! parentdir.mkdirs()) || ! parentdir.canWrite())) {
+	  System.err.println("Log4JLoggerFactory: Couldn't create / write to directory for File appender " + name + " for file " + value);
+	  System.err.println(" -- Will skip that logging property.");
+	  // can't write to the dir denoted. Skip it
+	  continue;
+	} else {
+	  //System.out.println("Dir is OK");
+	}
+      }
 
 //      System.out.println("Adding to list of system props: " + name + "=" + value);
+
       // Add this new prop to that from the info - over-riding
       // any previous value for that property
       props.put(name, value);
     } // end of loop over SystemProperties props to overlay
 
+    // For debug: Print out logging properties
+//     for (Iterator it = props.keySet().iterator(); it.hasNext(); ) {
+//       String name = (String) it.next();
+//       String value = props.getProperty(name);
+//       System.out.println(name + "=" + value);
+//     }
+
+    // Have Log4J configure itself from the collected properties.
     PropertyConfigurator.configure(props);
+
     org.apache.log4j.Logger.getLogger(Log4jLoggerFactory.class).info("Configured logging from "+spProps.size()+" System Properties" + (inputProps > 0 ? (" overlaid on " + inputProps + " Properties from " + configFileName) : ""));
   }
-
 
   // ugh. bashing of static structure... sigh.
   public void configure(Properties props) {
