@@ -18,6 +18,9 @@ oc.	=	org.cougaar.
 occ.	=	org.cougaar.core.
 ocp.	=	org.cougaar.planning.
 
+# move this to util as it doesn't really belong in occ.component
+occ.component.Trigger		oc.util.Trigger
+
 # move blackboard service apis to the service package (will have to move affected
 # impls back below )
 occ.blackboard.BlackboardService		occ.service.BlackboardService
@@ -154,6 +157,8 @@ occ.cluster.MessageManager			occ.blackboard.MessageManager
 # society special cases
 
 # move to agent
+occ.society.AgentManagementMessage		occ.agent.AgentManagementMessage
+occ.society.CloneAgentMessage			occ.agent.CloneAgentMessage
 occ.society.MoveAgentMessage			occ.agent.MoveAgentMessage
 
 # move to mts
@@ -171,6 +176,7 @@ occ.society.UID			occ.util.UID
 occ.society.UniqueObject	occ.util.UniqueObject
 occ.society.OwnedUniqueObject	occ.util.OwnedUniqueObject
 occ.society.SimpleUniqueObject	occ.util.SimpleUniqueObject
+occ.society.XURLClassLoader	occ.util.XURLClassLoader
 
 #  move node stuff to occ.node
 occ.society.ArgTableIfc				occ.node.ArgTableIfc
@@ -201,8 +207,16 @@ occ.society.NodeMetricsServiceProvider		occ.node.NodeMetricsServiceProvider
 occ.society.NodeMetricsService			occ.service.NodeMetricsService
 occ.society.NodeXMLParser			occ.node.NodeXMLParser
 occ.society.Node				occ.node.Node
+occ.society.PolicyMulticastMessage		occ.node.PolicyMulticastMessage
 occ.society.SignedMessageSecurityManager	occ.node.SignedMessageSecurityManager
 occ.society.SecureMessage			occ.node.SecureMessage
+occ.society.TrustStatusServiceProvider		occ.node.TrustStatusServiceProvider
+occ.society.TrustStatusServiceImpl		occ.node.TrustStatusServiceImpl
+occ.society.TrustStatusService			occ.node.TrustStatusService
+
+# move to occ.security
+occ.society.SecurityComponent			occ.security.SecurityComponent
+occ.society.StandardSecurityComponent		occ.security.StandardSecurityComponent
 
 #
 # org.cougaar.domain.planning.ldm

@@ -6,9 +6,9 @@ core:	core-repackage.bat mycougaarcvs/core/src mynewcougaar/core
 problems with the perl script moving/renaming files with the extra directory level.
 
 glm:	glm-repackage.bat mycoguaarcvs/glm/src mynewcougaar/glm
-** again note its beth to specify glm/src (do the rest of the module separately)
+** again note that it is best to specify glm/src (do the rest of the module separately)
 ** note that a hand edit is neccessary to compile...
-in org/cougaar/core/glm/ldm/asset/alpprops.def
+in org/cougaar/glm/ldm/asset/alpprops.def
 remove domain in the following line
 includedefs=org/cougaar/domain/planning/ldm/asset/properties.def
 
