@@ -225,6 +225,14 @@ insertLibRecipeProp=\
     (MOD_RECIPE_LIB_ID, ARG_NAME, ARG_VALUE, ARG_ORDER) \
  VALUES (':recipe_id:', ':arg_name:', ':arg_value:', ':arg_order:')
 
+deleteLibRecipe=\
+ DELETE FROM V4_LIB_MOD_RECIPE \
+  WHERE MOD_RECIPE_LIB_ID = ':recipe_id:'
+
+deleteLibRecipeArgs=\
+ DELETE FROM V4_LIB_MOD_RECIPE_ARG \
+  WHERE MOD_RECIPE_LIB_ID = ':recipe_id:'
+
 insertTrialRecipe=\
  INSERT INTO V4_EXPT_TRIAL_MOD_RECIPE \
     (TRIAL_ID, MOD_RECIPE_LIB_ID, RECIPE_ORDER, EXPT_ID) \
