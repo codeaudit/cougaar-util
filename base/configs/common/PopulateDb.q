@@ -733,5 +733,5 @@ recipeQuerySelectNothing=\
 recipeQueryNCAAgent=\
  SELECT COMPONENT_ALIB_ID FROM alib_component WHERE COMPONENT_TYPE = 'agent' AND COMPONENT_NAME='NCA'
 
-recipeQuery47-FSBAgent=\
+recipeQuery47FSBAgent=\
  SELECT COMPONENT_ALIB_ID FROM alib_component WHERE COMPONENT_TYPE = 'agent' AND COMPONENT_NAME='47-FSB'
