@@ -11,9 +11,10 @@ MYDOMAINS=""
 BOOTSTRAPPER=org.cougaar.core.society.Bootstrapper
 MYCLASSES=org.cougaar.core.society.Node
 OS=`uname`
-if [ "$OS" == "Linux" ]; then
-  MYPROPERTIES="-green"
-fi
+# No green threads in jdk 1.3.1
+#if [ "$OS" == "Linux" ]; then
+#  MYPROPERTIES="-green"
+#fi
 MYPROPERTIES="$MYPROPERTIES $MYDOMAINS  -Dorg.cougaar.system.path=$COUGAAR3RDPARTY -Dorg.cougaar.install.path=$COUGAAR_INSTALL_PATH"
 MYPROPERTIES="$MYPROPERTIES -Duser.timezone=GMT -Dorg.cougaar.core.useBootstrapper=true"
 

@@ -60,8 +60,8 @@ endif
 set osargs=""
 set os=`uname`
 if ("$os" == "Linux") then
-    # only run with green threads, since SMP is still rare
-    set osargs="-green"
+    # No green threads in jdk 1.3.1
+    # set osargs="-green"
     # set some system runtime limits
     limit stacksize 16m    #up from 8m
     limit coredumpsize 0   #down from 1g
