@@ -46,11 +46,11 @@ public class OperatorFactoryImpl extends OperatorFactory {
     String[] packages = new String[7];
     packages[0] = "java.lang.";
     packages[1] = "java.util.";
-    packages[2] = "org.cougaar.domain.planning.ldm.plan.";
-    packages[3] = "org.cougaar.domain.planning.ldm.asset.";
-    packages[4] = "org.cougaar.domain.planning.ldm.measure.";
-    packages[5] = "org.cougaar.domain.glm.";
-    packages[6] = "org.cougaar.domain.glm.ldm.asset.";
+    packages[2] = "org.cougaar.planning.ldm.plan.";
+    packages[3] = "org.cougaar.planning.ldm.asset.";
+    packages[4] = "org.cougaar.planning.ldm.measure.";
+    packages[5] = "org.cougaar.glm.";
+    packages[6] = "org.cougaar.glm.ldm.asset.";
     ClassCache.setPackages(packages);
   }
 

@@ -183,7 +183,7 @@ structures.  These examples are formatted in XML, one of many
 <b>"A Task"</b>
 &lt;is:Task/&gt;
 <b>-- note</b> the short-hand use of a <a href="#imports">default package prefix</a>
-  for "Task", which is short for "org.cougaar.domain.planning.ldm.plan.Task".
+  for "Task", which is short for "org.cougaar.planning.ldm.plan.Task".
 
 <b>"A URL"</b>
 &lt;is:java.net.URL/&gt;
@@ -302,7 +302,7 @@ structures.  These examples are formatted in XML, one of many
   &lt;getTask&gt;
     &lt;getVerb&gt;
       &lt;equals&gt;
-        &lt;org.cougaar.domain.glm.Constants.Verb:ReportForDuty/&gt;
+        &lt;org.cougaar.glm.Constants.Verb:ReportForDuty/&gt;
       &lt;/equals&gt;
     &lt;/getVerb&gt;
   &lt;/getTask&gt;
@@ -537,10 +537,10 @@ classname := [packagename "."] <i>name_of_a_Java_class</i>
                               are currently:
                                 java.lang
                                 java.util
-                                org.cougaar.domain.planning.ldm.plan
-                                org.cougaar.domain.planning.ldm.asset
-                                org.cougaar.domain.planning.ldm.measure
-                                org.cougaar.domain.glm.asset
+                                org.cougaar.planning.ldm.plan
+                                org.cougaar.planning.ldm.asset
+                                org.cougaar.planning.ldm.measure
+                                org.cougaar.glm.asset
                               references to other packages must
                               use the full classname, such as
                               "(is:java.net.URL)"
