@@ -114,7 +114,6 @@ public final class MethodCache {
       final Class[] params,
       final boolean isStatic) {
     int nparams = params.length;
-    Method foundMethod = null;
     Method[] allMeths = c.getMethods();
     for (int i = allMeths.length-1; i >= 0; i--) {
       Method m = allMeths[i];
