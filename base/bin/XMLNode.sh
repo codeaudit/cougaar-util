@@ -48,7 +48,8 @@ source $COUGAAR_INSTALL_PATH/bin/setlibpath.sh
 source $COUGAAR_INSTALL_PATH/bin/setarguments.sh
 
 societyfile="$1"
-node="$2"
+shift
+node="$1"
 shift
 rest="$*"
 if [ -z "$node" ]; then
