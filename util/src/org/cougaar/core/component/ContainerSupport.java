@@ -22,6 +22,7 @@ package org.cougaar.core.component;
 
 import java.util.*;
 import org.cougaar.util.log.*;
+import org.cougaar.util.GenericStateModel;
 import org.cougaar.util.GenericStateModelAdapter;
 
 /** A basic implementation of a Container.
@@ -384,8 +385,25 @@ public abstract class ContainerSupport
 
     // unload the removed direct child
     try {
-      removedBinder.halt();
-      removedBinder.unload();
+      switch (removedBinder.getModelState()) {
+        case GenericStateModel.ACTIVE:
+          removedBinder.suspend();
+          // fall-through
+        case GenericStateModel.IDLE:
+          removedBinder.stop();
+          // fall-through
+        case GenericStateModel.LOADED:
+          removedBinder.unload();
+          // fall-through
+        case GenericStateModel.UNLOADED:
+          // unloaded
+          break;
+        default:
+          // should never happen
+          throw new IllegalStateException(
+              "Illegal binder state: "+
+              removedBinder.getModelState());
+      }
     } catch (RuntimeException e) {
       throw new ComponentRuntimeException(
           "Removed component with unclean unload", cd, e);
