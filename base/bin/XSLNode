@@ -50,7 +50,7 @@ fi
 if [ -z $CIP ]; then
   CIP=$COUGAAR_INSTALL_PATH
 fi
-xsl=$CIP/bin/linux_node.xsl
+xsl=$CIP/bin/xsl_node.xsl
 
 cmd=`java org.apache.xalan.xslt.Process -in $xml -xsl $xsl $node`
 if [ -z "$cmd" ]; then
