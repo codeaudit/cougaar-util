@@ -1,5 +1,9 @@
 2003-04-24  Ray Tomlinson  <RTomlinson@bbn.com>
 
+	* ConfigFinder.java:
+	Bug #2836 -- RuntimeException in ConfigFinder is not caught
+	Add catch clause for RuntimeException
+
 	* CSVUtility.java:
 	Bug #2835 -- CSVUtility.parse does not replace StringUtility.parseCSV
 	Added variant of parse method accepting a separator character
