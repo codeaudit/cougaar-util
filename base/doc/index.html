@@ -201,6 +201,14 @@ form name=value.  See org.cougaar.util.Arguments (
 better progress feedback (
 <a href="http://bugs.cougaar.org/show_bug.cgi?id=3720#c11">bug 3720</a>
 )</li>
+<li>Copied ACME log4j SocketAppender for EventService logging from
+the ACME
+<a href="http://cougaar.org/cgi-bin/viewcvs.cgi/acme/cougaar/socketappender.jar?cvsroot=acme">socketappender.jar</a> to the standard util module,
+which simplifies the use of ACME.  The util version also includes
+an enhancement to use STDOUT/STDERR log4j categories instead of
+the "root" category, which simplifies log4j filtering (
+<a href="http://bugs.cougaar.org/show_bug.cgi?id=3899">bug 3899</a>
+)</li>
 <li>Fixed WP RMI-based bootstrap where two nodes on the same host
 specify "-Dorg.cougaar.name.server=SomeAgent@localhost:8800" to 
 correctly use the specified agent.</li>
