@@ -215,18 +215,4 @@ public class Parameters {
   public static String findParameter(String param) {
     return findParameter(param, null);
   }
-
-  /*
-  public static void main(String argv[]) {
-    for (int i = 0; i <argv.length; i++) {
-      String arg = argv[i];
-      System.out.print(arg+" -> ");
-      try {
-        System.out.println(replaceParameters(arg));
-      } catch (RuntimeException re) {
-        System.out.println(re);
-      }
-    }
-  }
-  */
 }

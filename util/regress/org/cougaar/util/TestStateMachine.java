@@ -56,20 +56,16 @@ public class TestStateMachine extends TestCase {
   }    
 
   public void test_step() {
-    System.out.println("Hey");
     TestSM sm = createSM();
     while (sm.getState() != StateMachine.DONE) {
       sm.step();
     }
     assertEquals(sm.getSeq(), "A B C D DONE");
-    //System.err.println("step = "+sm.getSeq());
   }    
 
   public void test_stepUntilDone() {
-    System.err.println("Hey");
     TestSM sm = createSM();
     sm.stepUntilDone();
-    System.err.println("stepUntilDone = "+sm.getSeq());
     assertEquals(sm.getSeq(), "A B C D DONE");
   }
   
@@ -87,7 +83,6 @@ public class TestStateMachine extends TestCase {
     while (sm.getState() != StateMachine.DONE) {
       sm.go();
     }
-    System.err.println("go = "+sm.getSeq());
     assertEquals(sm.getSeq(), "A B B B C D DONE");
   }
   
@@ -96,7 +91,6 @@ public class TestStateMachine extends TestCase {
     sm.stepUntilDone();
     sm.reset("A");
     sm.stepUntilDone();
-    System.err.println("reset = "+sm.getSeq());
     assertEquals(sm.getSeq(), "A B C D DONE A B C D DONE");
   } 
 }

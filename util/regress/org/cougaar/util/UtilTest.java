@@ -38,6 +38,8 @@ public class UtilTest extends TestCase {
     TestSuite suite= new TestSuite("Cougaar Utility Class Tests");
     suite.addTest(new TestSuite(TestCircularQueue.class));
     suite.addTest(new TestSuite(TestStateMachine.class));
+    suite.addTest(new TestSuite(TestDBProperties.class));
+    suite.addTest(new TestSuite(TestNonOverlappingTimeSpanSet.class));
     return suite;
   }
 }

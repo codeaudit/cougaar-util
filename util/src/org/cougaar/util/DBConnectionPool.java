@@ -2355,82 +2355,9 @@ public class DBConnectionPool {
     }
   }
 
-  /*
-  
-  // hack test routine - take three args "host:port:SID" "user" "password" 
-  public static void main(String arg[]) {
-    try {
-      DBConnectionPool.registerDriver("oracle.jdbc.driver.OracleDriver");
-
-      final String url = "jdbc:oracle:thin:@"+arg[0];
-      final String user = arg[1];
-      final String password = arg[2];
-      
-      int nthreads = 100;
-
-      Thread threads[] = new Thread[nthreads];
-
-      // each cycle hits the database with lots at the same time
-      for (int cycle = 0; cycle<10; cycle++) {
-	System.out.print("Cycle "+cycle+":");
-        
-	class Acc {
-	  long x;
-	}
-	final Acc waitA = new Acc();
-	final Acc queryA = new Acc();
-
-	for (int i = 0; i< nthreads; i++) {
-	  threads[i] = new Thread(new Runnable() {
-	      public void run() {
-		try {
-		  long t0 = System.currentTimeMillis();
-		  Connection c = DBConnectionPool.getConnection(url,user,password);
-		  long t1 = System.currentTimeMillis();
-		  waitA.x += (t1-t0);
-		  Statement s = c.createStatement();
-		  ResultSet rs = s.executeQuery("select container_20_ft_qty from ue_summary_mtmc");
-		  int n =0;
-		  while(rs.next()) { n++; }
-		  // 44 rows
-		  if (n != 44) throw new RuntimeException("Oops! Got the wrong count.");
-		  s.close();
-		  c.close();
-		  long t2 = System.currentTimeMillis();
-		  queryA.x += (t2-t1);
-		} catch (SQLException e) {
-		  e.printStackTrace();
-		}
-	      }
-	    });
-	}
-	System.out.print(" .");
-	for (int i = 0; i< nthreads; i++) {
-	  threads[i].start();
-	}
-	System.out.print(" .");
-	for (int i = 0; i< nthreads; i++) {
-	  threads[i].join();
-	}
-        
-	double avwait = waitA.x/((double)nthreads);
-	double avquery = queryA.x/((double)nthreads);
-	System.out.println();
-	System.out.println("\tAverage Connection wait = "+avwait);
-	System.out.println("\tAverage Query wait  = "+avquery);
-
-	// wait for a bit to let the reaper run
-	Thread.sleep(2*1000);
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+  static interface PreparedStatementConstructor {
+    PreparedStatement create() throws SQLException;
   }
-  */
-
 }
 
-interface PreparedStatementConstructor {
-  PreparedStatement create() throws SQLException;
-}
 
