@@ -67,8 +67,8 @@ Build 9.0 is a major release of COUGAAR. Essential differences between
 <li>
 Repackaging.&nbsp; See <a href="ReleaseNotes/9.0/repackage/Cougaar9.0RepackagingDetails.html">repackaging
 details and package maps</a>.&nbsp; To repackage your source code use the
-<a href="ReleaseNotes/9.0/repackage/README">scripts</a> in the repackaging
-directory (doc/ReleaseNotes/9.0/repackage).</li>
+<a href="ReleaseNotes/9.0/repackage/README">scripts</a>
+in the repackaging directory (doc/ReleaseNotes/9.0/repackage).</li>
 
 <li>
 Servlets:</li>
@@ -411,12 +411,18 @@ md5sums.txt:&nbsp; md5 checksums of all the zips.</li>
 <li>
 build.out: output of the build process</li>
 </ul>
-To install Cougaar:
+<b>To install Cougaar</b>:
 <br>Go to the cougaar website (<a href="http://www.cougaar.org">www.cougaar.org</a>)
 to get the latest windows Cougaar installer which will install Cougaar
 as well as a MySQL database.&nbsp; This will allow users to run off of
 a local MySQL database rather than accessing an Oracle database located
-in Cambridge, MA at BBN Technologies.
+in Cambridge, MA at BBN Technologies.<b></b>
+<p><b>Note that if you are installing MySQL on linux or unix, you must
+instruct the database to translate all table names to lowercase</b> (which
+is the default on Windows machines).&nbsp; To do this, you must set the
+variable lower_case_table_names=1 by including the line in /etc/my.cnf:
+<p>[mysqld]
+<br>set-variable&nbsp;&nbsp; =&nbsp;&nbsp; lower_case_table_names=1
 <p>Alternatively you can follow these instructions.
 <br>1. You'll need cougaar.zip and cougaar-support.zip (the first time)
 to get a
