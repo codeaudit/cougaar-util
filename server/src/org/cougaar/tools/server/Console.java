@@ -96,7 +96,12 @@ public class Console {
               hostList.setSelectedIndex(0);
               host_name = (String) hostList.getSelectedValue();
             }
-            PassConfig(node_name, ConfigFileName, host_name, additionalArgs, port, 1);
+            String[] additionalArgs = new String[2];
+            additionalArgs[0] = "-f";
+            additionalArgs[1] = node_name+".ini";
+            PassConfig(
+              node_name, ConfigFileName, host_name, 
+              additionalArgs, port, 1);
           }
         });
 
@@ -312,7 +317,6 @@ public class Console {
   private JPanel content;                 // for main pane
   private JTabbedPane nodePane;
   private String HostFileName, ConfigFileName;
-  private String[] additionalArgs = null;
 
   // -------------------------------------
   // init() which makes a new pane
