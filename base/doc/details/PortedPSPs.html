@@ -1,0 +1,58 @@
+<html><head><title>PSPs ported to Servlets</title></head>
+<body>
+<h2>PSPs ported to Servlets</h2>
+<p>
+<a name="x">
+In the table below, 
+<table border=2 bgcolor="white">
+<tr>
+  <td>..</td>
+  <td>..</td>
+  <td>/test</td>
+  <td> <font size=+2><a href="#x">*</a></font> testClass</td>
+</tr>
+</table>
+is short for:
+<table border=2 bgcolor="white">
+<tr>
+  <td>..</td>
+  <td>..</td>
+  <td>/test</td>
+  <td>plugin = org.cougaar.core.servlet.SimpleServletComponent(testClass, /test)</td>
+</tr>
+</table>
+<p>
+<h2>Table:</h2>
+<p>
+<table border=2 bgcolor="white">
+<tr>
+  <th colspan=2><font size=+2>PSP</font></th>
+  <th colspan=2><font size=+2>Servlet</font></th>
+</tr>
+<tr>
+  <th><font size=+2>path</font></th>
+  <th><font size=+2>classname</font></th>
+  <th><font size=+2>path</font></th>
+  <th><font size=+2>INI <i>"plugin = "</i> loading line</font></th>
+</tr>
+
+<tr>
+  <td>/alpine/demo/TASKS.PSP</td>
+  <td>org.cougaar.lib.planserver.psp.PSP_PlanView</td>
+  <td>/tasks</td>
+  <td> <a href="#x">*</a> org.cougaar.planning.servlet.PlanViewServlet</td>
+</tr>
+
+<tr>
+  <td>/alpine/demo/COMPLETION.PSP</td>
+  <td>org.cougaar.glm.trans.ui.psp.transit.PSP_Completion</td>
+  <td>/completion</td>
+  <td> <a href="#x">*</a> org.cougaar.planning.servlet.CompletionServlet</td>
+</tr>
+
+<!-- add new TR entries here! -->
+
+</table>
+
+</body>
+</html>
