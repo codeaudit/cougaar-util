@@ -43,7 +43,7 @@ classes, methods, and argument names were modified to match
 * 8.2.0
 
 Initial integration of Component and Service Model (CSM).  Reimplementation
-of PlugInAdapter in terms of CSM.  First pass reimplementation of
+of PluginAdapter in terms of CSM.  First pass reimplementation of
 MessageTransport.
 
 Forward-port 7.2 (ALP Demo2000) features and bugfixes into 8.x world.
@@ -228,7 +228,7 @@ the run model of LPs internally consistant - that is, they are both
 invoked at a sub-transaction level and (now) have visibility into the
 logplan at the same level of granularity.
 
-PlugIns may now use DynamicUnaryPredicate rather than UnaryPredicate
+Plugins may now use DynamicUnaryPredicate rather than UnaryPredicate
 for subscribing using predicates which select for things which are
 expected to change.  Essentially, the new facility will automatically
 add or remove objects as a result of change events when the internal
@@ -239,8 +239,8 @@ not the default.  It still may only be used for standard subscriptions
 and the base objects that are being selected must be publishChanged by
 someone in order to pick up the modifications.
 
-PlugIn.query(UnaryPredicate) is now *much* more efficient than
-one-shot subscriptions.  PlugIn should now use query in place of any
+Plugin.query(UnaryPredicate) is now *much* more efficient than
+one-shot subscriptions.  Plugin should now use query in place of any
 existing subscribe/unsubscribe patterns.
 
 New Transaction objects are kept in thread-local references.

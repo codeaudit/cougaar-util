@@ -102,7 +102,7 @@ sub process_domain {
 	# find the package line and put the import lines after it.
 	if (substr($input_line,0,7) eq "package") {
 	    $found++;
-	    printf OUT ("\nimport org.cougaar.core.domain.LDMServesPlugIn\;\n");
+	    printf OUT ("\nimport org.cougaar.core.domain.LDMServesPlugin\;\n");
 	}
 
     }

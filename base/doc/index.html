@@ -40,7 +40,7 @@
 <a href="#example">MiniTestConfig Example Implementations</a></li>
 
 <li>
-<a href="#delivering">Delivering Software Products (PlugIns)</a></li>
+<a href="#delivering">Delivering Software Products (Plugins)</a></li>
 
 <li>
 <a href="#developing">Developing and Running COUGAAR Societies</a></li>
@@ -156,8 +156,8 @@ App-Server enhancements to support the Node Manager</li>
 MTS Componentization</li>
 
 <li>
-GLSClient and GLSInitServlet replace GLSGUIInitPlugIn, GLSRescindPlugIn,
-and SQLOplanPlugIn. Now when starting one of the logistics domain societies,
+GLSClient and GLSInitServlet replace GLSGUIInitPlugin, GLSRescindPlugin,
+and SQLOplanPlugin. Now when starting one of the logistics domain societies,
 users must also run GLSClient.[sh|bat] to initiate processing (assuming
 that the three latter plugins have been replaced in the configuration by
 GLSInitServlet).</li>
@@ -315,11 +315,11 @@ details and screen shots from a test run, please see the <a href="details/Archiv
 Test document</a>.</li>
 
 <li>
-Enhancements to the generic UniversalExpanderPlugIn which expands tasks
+Enhancements to the generic UniversalExpanderPlugin which expands tasks
 according to sub-tasks defined in a database table. Enhancements include
 better ability to defined task parameters, ability to specify more than
 2 levels of expansion, and the ability to expand levels fully or expand
-them into a single flat workflow. For details please see glm/doc/UniversalExpanderPlugIn.html</li>
+them into a single flat workflow. For details please see glm/doc/UniversalExpanderPlugin.html</li>
 </ul>
 For additional details, please review the following documentation:
 <ul>
@@ -383,17 +383,17 @@ areas:
 "core:" domain independent agent architecture</li>
 
 <li>
-"glm:" LDM and PlugIns which have a logistics domain focus based on the
+"glm:" LDM and Plugins which have a logistics domain focus based on the
 ALP program objectives</li>
 
 <li>
-"utility:" GSS and PlugIn Contracts</li>
+"utility:" GSS and Plugin Contracts</li>
 
 <li>
 "tools:" scalability and test tools</li>
 
 <li>
-"tutorial:" non-logistics sample societies and PlugIns</li>
+"tutorial:" non-logistics sample societies and Plugins</li>
 
 <li>
 "server:" centralized society initiation and management for testing, integration
@@ -477,7 +477,7 @@ file in the configuration directory for more information.&nbsp;
 <a NAME="delivering"></a>Delivering Software Products&nbsp;</h2>
 Please see the Integration Information Area that can be found on the <a href="http://www.ultralog.net">UltraLog</a>
 web site.
-<p>All PlugIn software must use the Java system parameter "org.cougaar.install.path"
+<p>All Plugin software must use the Java system parameter "org.cougaar.install.path"
 or the environment variable COUGAAR_INSTALL_PATH to find data files, scripts,
 and external programs. For example, if your product is "tops," your classes
 will be in:&nbsp;

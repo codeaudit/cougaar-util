@@ -56,7 +56,7 @@ using the alpine certificate as above.  For example:
 and then use alpalp as the password.  Note that alpine will be signing 
 the plugin jar files for the demo.
 
-PlugIn code is searched for in the following locations (in order):
+Plugin code is searched for in the following locations (in order):
 	AIP/lib/*		always trusted.
 	AIP/plugins/*		must be signed.
 	AIP/PRODUCT/lib/*	trusted iff loaded in the context of a

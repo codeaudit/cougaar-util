@@ -32,7 +32,7 @@ set MYCLASSES=org.cougaar.core.node.Node
 set TOPS_DEMO_PATH=%COUGAAR_INSTALL_PATH%\tops\configs\demo-config
 set TOPS_TEST_PATH=%COUGAAR_INSTALL_PATH%\tops\configs\test-config
 
-set MYPROPERTIES=-Dorg.cougaar.system.path=%COUGAAR3RDPARTY% -Dorg.cougaar.install.path=%COUGAAR_INSTALL_PATH% -Dorg.cougaar.config.path=%TOPS_DEMO_PATH%\data;%TOPS_DEMO_PATH%\data\PROTOTYPES;%TOPS_DEMO_PATH%\data\CLUSTERINPUT; -Duser.timezone=GMT -Dorg.cougaar.core.agent.startTime=08/10/2005 -Dorg.cougaar.planning.ldm.lps.ComplainingLP.level=0 -Dorg.cougaar.core.agent.SharedPlugInManager.watching=false
+set MYPROPERTIES=-Dorg.cougaar.system.path=%COUGAAR3RDPARTY% -Dorg.cougaar.install.path=%COUGAAR_INSTALL_PATH% -Dorg.cougaar.config.path=%TOPS_DEMO_PATH%\data;%TOPS_DEMO_PATH%\data\PROTOTYPES;%TOPS_DEMO_PATH%\data\CLUSTERINPUT; -Duser.timezone=GMT -Dorg.cougaar.core.agent.startTime=08/10/2005 -Dorg.cougaar.planning.ldm.lps.ComplainingLP.level=0 -Dorg.cougaar.core.agent.SharedPluginManager.watching=false
 
 set MYMEMORY=-Xms100m -Xmx300m
 

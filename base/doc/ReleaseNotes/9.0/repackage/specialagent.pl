@@ -57,7 +57,7 @@ sub process_dir {
 	} elsif (substr($file, -19) eq "ClusterContext.java") {
 	    $found++;
 	    process_service($_);
-	} elsif (substr($file, -24)eq "ClusterServesPlugIn.java") {
+	} elsif (substr($file, -24)eq "ClusterServesPlugin.java") {
 	    $found++;
 	    process_alarm($_);
 	} elsif (substr($file, -16)eq "ClusterImpl.java") {

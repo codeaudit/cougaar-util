@@ -57,13 +57,13 @@ sub process_dir {
 	} elsif (substr($file, -23) eq "LDMServiceProvider.java") {
 	    $found++;
 	    process_domain($_);
-	} elsif (substr($file, -11) eq "PlugIn.java") {
+	} elsif (substr($file, -11) eq "Plugin.java") {
 	    $found++;
 	    process_domain($_);
-	} elsif (substr($file, -18) eq "PlugInAdapter.java") {
+	} elsif (substr($file, -18) eq "PluginAdapter.java") {
 	    $found++;
 	    process_domainandservice($_);
-	} elsif (substr($file, -18) eq "PlugInContext.java") {
+	} elsif (substr($file, -18) eq "PluginContext.java") {
 	    $found++;
 	    process_domain($_);
 	}

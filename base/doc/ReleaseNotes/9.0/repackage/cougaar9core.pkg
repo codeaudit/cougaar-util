@@ -63,7 +63,7 @@ occ.cluster.SchedulerService		occ.service.SchedulerService
 
 # SharedThreadingService
 occ.cluster.SharedThreadingServiceProvider	occ.agent.service.sharedthreading.SharedThreadingServiceProvider
-occ.cluster.SharedPlugInManager			occ.agent.service.sharedthreading.SharedPlugInManager
+occ.cluster.SharedPluginManager			occ.agent.service.sharedthreading.SharedPluginManager
 occ.cluster.SharedThreadingService		occ.service.SharedThreadingService
 
 #UID Service
@@ -90,7 +90,7 @@ occ.cluster.ClusterStateModel			occ.agent.ClusterStateModel
 occ.cluster.Cluster				occ.agent.Cluster
 occ.cluster.MetricsSnapshot			occ.agent.MetricsSnapshot	# (only for backward compat!)
 occ.cluster.NoResponseException			occ.agent.NoResponseException
-occ.cluster.PlugInLoader			occ.agent.PlugInLoader
+occ.cluster.PluginLoader			occ.agent.PluginLoader
 occ.cluster.RestartLogicProvider		occ.agent.RestartLogicProvider
 occ.cluster.LogicProvider			occ.agent.LogicProvider	#is there a better home?
 
@@ -226,7 +226,7 @@ occ.society.StandardSecurityComponent		occ.security.StandardSecurityComponent
 ocp.ldm.PrototypeRegistryServiceProvider	occ.agent.service.registry.PrototypeRegistryServiceProvider
 ocp.ldm.PrototypeRegistryService		occ.service.PrototypeRegistryService
 ocp.ldm.PrototypeRegistry			occ.agent.service.registry.PrototypeRegistry
-ocp.ldm.DefaultPrototypeProviderPlugIn		occ.agent.service.registry.DefaultPrototypeProviderPlugIn
+ocp.ldm.DefaultPrototypeProviderPlugin		occ.agent.service.registry.DefaultPrototypeProviderPlugin
 
 # Domain Service
 ocp.ldm.DomainServiceProvider	occ.agent.service.domain.DomainServiceProvider
@@ -242,10 +242,10 @@ ocp.ldm.Factory			occ.domain.Factory
 ocp.ldm.RootDomain		occ.domain.RootDomain
 ocp.ldm.RootFactory		occ.domain.RootFactory
 ocp.ldm.LDMServesClient		occ.domain.LDMServesClient
-ocp.ldm.LDMServesPlugIn		occ.domain.LDMServesPlugIn
+ocp.ldm.LDMServesPlugin		occ.domain.LDMServesPlugin
 
 # move to ocp.plugin for parallelism with glm structures
-ocp.ldm.DeletionPlugIn		ocp.plugin.DeletionPlugIn
+ocp.ldm.DeletionPlugin		ocp.plugin.DeletionPlugin
 
 
 

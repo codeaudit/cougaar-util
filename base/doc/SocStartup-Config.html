@@ -57,16 +57,16 @@ warnings</font>
 <br><font size=+0>using the right argument to unzip.&nbsp; on unix "unzip
 -o" will do the trick.</font>
 <p>To verify correct installation of the COUGAAR software, a small but
-non-trivial test society relying only on ALPINE PlugIns is included in
+non-trivial test society relying only on ALPINE Plugins is included in
 "alpine\configs\minitestconfig." This society is configured to run in a
 single node on a single computer. This configuration can be modified as
-required for PlugIn testing.&nbsp; Minitestconfig features a reduced 4-cluster
+required for Plugin testing.&nbsp; Minitestconfig features a reduced 4-cluster
 society with GLS initiating at 3ID and flowing down to subordinate clusters.
 The ARBN cluster generates Transport tasks that are eventually allocated
 to MCCGlobalMode. These tasks are allocated and the allocation results
 propagated back to the task originator. The task originator (ARBN) evaluates
 the results and modifies the task preferences to achieve an acceptable
-solution. Subcontractors are encouraged to bring their PlugIns up to full
+solution. Subcontractors are encouraged to bring their Plugins up to full
 compliance with the new infrastructure modifications, possibly using the
 minitestconfig society. A separate document provides a <a href="MiniTestConfig.html">functional
 description of the minitestconfig</a> society.
@@ -78,7 +78,7 @@ configuration and are located in the cougaar\lib and cougaar\sys directories:
 core.jar: COUGAAR core infrastructure</li>
 
 <li>
-glm.jar: domain infrastructure support and Logistics Model PlugIns</li>
+glm.jar: domain infrastructure support and Logistics Model Plugins</li>
 
 <li>
 toolkit.jar: standalone utilities tools</li>
@@ -263,19 +263,19 @@ the COUGAAR release.
 <b>Installation and Configuration</b></h2>
 Please read the following information carefully. The following information
 describes the current organization of "jar" and data files and system parameters.
-In addition, this information describes the organization of PlugIn software
-submissions and how PlugIns must reference private data files and software
+In addition, this information describes the organization of Plugin software
+submissions and how Plugins must reference private data files and software
 libraries.
 <p>Unpacking the release packages (zip files) should produce the following
 directory structure inside the new alp-&lt;builddate> directory:
 <ul>
 <li>
-lib ---------------- "jar" files for the infrastructure, ALPINE PlugIns,
+lib ---------------- "jar" files for the infrastructure, ALPINE Plugins,
 and COTS libraries</li>
 
 <li>
 sys --------------- "jar" and "zip" 3rd party software used by the infrastructure
-and PlugIns</li>
+and Plugins</li>
 
 <li>
 bin ---------------- "bat" and "csh" scripts for setting environment variables
@@ -297,11 +297,11 @@ api ------"javadoc" for COUGAAR infrastructure</li>
 
 <li>
 &lt;product*>------ product specific data files and non-java executables
-(each PlugIn or COUGAAR participant will have a corresponding subdirectory)</li>
+(each Plugin or COUGAAR participant will have a corresponding subdirectory)</li>
 </ul>
 The following information describes the configuration scheme for Cougaar
 software distributions. Please note the new organization of release software
-and data files for PlugIn software and society configuration directories.
+and data files for Plugin software and society configuration directories.
 <ol>
 <li>
 There are environment variables and Java system properties as defined in
@@ -313,7 +313,7 @@ or Node.csh files.</li>
 The environment variable COUGAAR_INSTALL_PATH must point to the installation
 directory "cougaar". This is used to set the (java) system property org.cougaar.install.path
 which must point to the same directory. These variables will allow the
-infrastructure and PlugIns to find the necessary "jar" files (lib and sys)
+infrastructure and Plugins to find the necessary "jar" files (lib and sys)
 and data files (&lt;product-n>).</li>
 
 <li>
@@ -454,12 +454,12 @@ default for optimal use of the small-135 society and Oplan.</td>
 <h2>
 <b>Populating Clusters with Assets</b></h2>
 The initial population of assets for a particular organization is handled
-by Data PlugIns, specifically the LDMXMLPlugIn&nbsp; that reads assets
-from an XML formated file. Also included in the release is an LDMSQLPlugIn
+by Data Plugins, specifically the LDMXMLPlugin&nbsp; that reads assets
+from an XML formated file. Also included in the release is an LDMSQLPlugin
 that reads assets from the JTAV snapshot database on eiger. Examples can
-be found in the alpine.plugin package. On start-up, the XML PlugIns query
+be found in the alpine.plugin package. On start-up, the XML Plugins query
 the XML files and create the specified LDM objects.
-<p>The JDBC drivers required for the LDMSQLPlugIns are freely available.&nbsp;
+<p>The JDBC drivers required for the LDMSQLPlugins are freely available.&nbsp;
 Please refer to the <a href="details/HeterogeneousDatabase.html">Heterogeneous
 Database Capability</a> document to read about Cougaar running with Oracle,
 MySQL and PostgreSQL databases.

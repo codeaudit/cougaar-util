@@ -82,7 +82,7 @@ Access to an unhandled property results in an UndefinedValueException.
 
 * LDM Plugin implementation
 
-LDM PlugIns may do something like the following:
+LDM Plugins may do something like the following:
 
 void fillInProperties(final Asset asset) {
   NewSamplePG pg = ...;

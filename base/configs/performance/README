@@ -62,21 +62,21 @@ FILENAME:
 	There are several set of plugins and that can be 
 	configured to run several versions of this society.
 
-OneTaskAddAndRescindPlugIn: 
+OneTaskAddAndRescindPlugin: 
 	Adds one task and removes it from the  blackboard
 
-SimpleAddRescindPlugIn: 
+SimpleAddRescindPlugin: 
 	keeps adding task and removing it once it gets the 
 	AllocationResult
 
 
-MultipleOutStandingPlugIn: 
+MultipleOutStandingPlugin: 
 	Sends a burst of tasks and when any  of the allocation results 
 	arrive, resends another burst --thus have a set of outstanding 
 	messages in the queue at a time.
 
 
-ManagerPlugIn:
+ManagerPlugin:
 	Can create different set of tasks (with different verbs) and 
 	thus yet another way of outstanding messages in the queue 
 	at a time.

@@ -91,20 +91,20 @@
 ./glm/src/org/cougaar/lib/gss/GSTaskVerbMatch.java
 ./glm/src/org/cougaar/lib/gss/GSValueAccessor.java 1 changes
 ./glm/src/org/cougaar/lib/gss/GSBoolean.java
-./glm/src/org/cougaar/lib/gss/plugins/UTILGSSBufferingPlugInAdapter.java
-./glm/src/org/cougaar/lib/gss/plugins/UTILGSSBufferingPlugIn.java
-./glm/src/org/cougaar/lib/gss/plugins/UTILGSSAllocatorPlugIn.java 1 changes
-./glm/src/org/cougaar/lib/gss/plugins/UTILGSSAggregatorPlugIn.java
-./glm/src/org/cougaar/lib/gss/plugins/UTILGSSExpanderPlugIn.java
+./glm/src/org/cougaar/lib/gss/plugins/UTILGSSBufferingPluginAdapter.java
+./glm/src/org/cougaar/lib/gss/plugins/UTILGSSBufferingPlugin.java
+./glm/src/org/cougaar/lib/gss/plugins/UTILGSSAllocatorPlugin.java 1 changes
+./glm/src/org/cougaar/lib/gss/plugins/UTILGSSAggregatorPlugin.java
+./glm/src/org/cougaar/lib/gss/plugins/UTILGSSExpanderPlugin.java
 ./glm/src/org/cougaar/lib/gss/GSTaskClassMatch.java
 ./glm/src/org/cougaar/lib/gss/GSAssetMethod.java
 ./glm/src/org/cougaar/domain/glm/gss/GLMTravelTime.java
 ./glm/src/org/cougaar/domain/glm/gss/GLMLocationAccessor.java
 ./glm/src/org/cougaar/domain/glm/gss/GLMSpecsHandler.java
 ./glm/src/org/cougaar/domain/glm/gss/GLMTaskClassMatch.java
-./glm/src/org/cougaar/domain/glm/gss/plugins/GLMGSSAllocatorPlugIn.java
-./glm/src/org/cougaar/domain/glm/gss/plugins/GLMGSSExpanderPlugIn.java
-./glm/src/org/cougaar/domain/glm/gss/plugins/GLMGSSAggregatorPlugIn.java
+./glm/src/org/cougaar/domain/glm/gss/plugins/GLMGSSAllocatorPlugin.java
+./glm/src/org/cougaar/domain/glm/gss/plugins/GLMGSSExpanderPlugin.java
+./glm/src/org/cougaar/domain/glm/gss/plugins/GLMGSSAggregatorPlugin.java
 ./glm/src/org/cougaar/domain/glm/gss/GSTestSpecs.java
 ./glm/src/org/cougaar/domain/glm/gss/GLMTaskAccessorImpl.java
 ./glm/src/org/cougaar/domain/glm/ldm/lps/TransferableLP.java 2 changes
@@ -221,7 +221,7 @@ cvs server: use 'cvs commit' to remove this file permanently
 cvs server: scheduling file `./glm/src/org/cougaar/domain/glm/ldm/GLMDomain.java' for addition
 cvs server: use 'cvs commit' to add this file permanently
 ./glm/src/org/cougaar/domain/glm/ldm/Constants.java
-./glm/src/org/cougaar/domain/glm/ldm/QueryLDMPlugIn.java 1 changes
+./glm/src/org/cougaar/domain/glm/ldm/QueryLDMPlugin.java 1 changes
 ./glm/src/org/cougaar/domain/glm/xml/parser/LocationParser.java 2 changes
 ./glm/src/org/cougaar/domain/glm/xml/parser/ItineraryParser.java
 ./glm/src/org/cougaar/domain/glm/xml/parser/TaskParser.java
@@ -248,14 +248,14 @@ cvs server: use 'cvs commit' to add this file permanently
 ./glm/src/org/cougaar/domain/glm/callback/GLMPhysicalAssetCallback.java
 ./glm/src/org/cougaar/domain/glm/callback/GLMNotOrganizationCallback.java
 ./glm/src/org/cougaar/domain/glm/execution/eg/ManagerBase.java
-./glm/src/org/cougaar/domain/glm/execution/eg/PlugIn.java
+./glm/src/org/cougaar/domain/glm/execution/eg/Plugin.java
 ./glm/src/org/cougaar/domain/glm/execution/eg/TimeGUI.java
 ./glm/src/org/cougaar/domain/glm/execution/eg/EGDate.java
 ./glm/src/org/cougaar/domain/glm/execution/eg/InventoryReportManager.java
 ./glm/src/org/cougaar/domain/glm/execution/eg/EGFailureConsumptionRateHandler.java
 ./glm/src/org/cougaar/domain/glm/execution/eg/EGTableModel.java
 ./glm/src/org/cougaar/domain/glm/execution/eg/EGTaskEventReportHandler.java
-./glm/src/org/cougaar/domain/glm/execution/eg/FailureConsumptionPlugIn.java
+./glm/src/org/cougaar/domain/glm/execution/eg/FailureConsumptionPlugin.java
 ./glm/src/org/cougaar/domain/glm/execution/eg/InventoryScheduleManager.java
 ./glm/src/org/cougaar/domain/glm/execution/eg/FailureConsumptionSegment.java
 ./glm/src/org/cougaar/domain/glm/execution/eg/TimedTaskEventReport.java
@@ -263,13 +263,13 @@ cvs server: use 'cvs commit' to add this file permanently
 ./glm/src/org/cougaar/domain/glm/execution/eg/EventGroup.java
 ./glm/src/org/cougaar/domain/glm/execution/eg/ExecutionListener.java
 ./glm/src/org/cougaar/domain/glm/execution/eg/Timed.java
-./glm/src/org/cougaar/domain/glm/execution/eg/InventoryDefaultPlugIn.java
-./glm/src/org/cougaar/domain/glm/execution/eg/PlugInSpecification.java
-./glm/src/org/cougaar/domain/glm/execution/eg/FailureConsumptionPlugInItem.java
+./glm/src/org/cougaar/domain/glm/execution/eg/InventoryDefaultPlugin.java
+./glm/src/org/cougaar/domain/glm/execution/eg/PluginSpecification.java
+./glm/src/org/cougaar/domain/glm/execution/eg/FailureConsumptionPluginItem.java
 ./glm/src/org/cougaar/domain/glm/execution/eg/EventMonitorListener.java
 ./glm/src/org/cougaar/domain/glm/execution/eg/FilterGUI.java
 ./glm/src/org/cougaar/domain/glm/execution/eg/TimeGUI2.java
-./glm/src/org/cougaar/domain/glm/execution/eg/InventoryPilferPlugIn.java
+./glm/src/org/cougaar/domain/glm/execution/eg/InventoryPilferPlugin.java
 ./glm/src/org/cougaar/domain/glm/execution/eg/TimedFailureConsumptionReport.java
 ./glm/src/org/cougaar/domain/glm/execution/eg/ClusterInfo.java
 ./glm/src/org/cougaar/domain/glm/execution/eg/SteppedInventoryReportSchedule.java
@@ -278,7 +278,7 @@ cvs server: use 'cvs commit' to add this file permanently
 ./glm/src/org/cougaar/domain/glm/execution/eg/InventoryReportFilterGUI.java
 ./glm/src/org/cougaar/domain/glm/execution/eg/ReportManagerGUI.java
 ./glm/src/org/cougaar/domain/glm/execution/eg/FailureConsumptionReportManager.java
-./glm/src/org/cougaar/domain/glm/execution/eg/InventoryPlugIn.java
+./glm/src/org/cougaar/domain/glm/execution/eg/InventoryPlugin.java
 ./glm/src/org/cougaar/domain/glm/execution/eg/EGConstraintElementHandler.java
 ./glm/src/org/cougaar/domain/glm/execution/eg/EGInventoryReportHandler.java
 ./glm/src/org/cougaar/domain/glm/execution/eg/TimeControlListener.java
@@ -289,10 +289,10 @@ cvs server: use 'cvs commit' to add this file permanently
 ./glm/src/org/cougaar/domain/glm/execution/eg/FailureConsumptionRateFilterGUI.java
 ./glm/src/org/cougaar/domain/glm/execution/eg/EGInventoryReportScheduleHandler.java
 ./glm/src/org/cougaar/domain/glm/execution/eg/TaskEventFilterGUI.java
-./glm/src/org/cougaar/domain/glm/execution/eg/FailureConsumptionDefaultPlugIn.java
-./glm/src/org/cougaar/domain/glm/execution/eg/DODICSpecialPlugIn.java
+./glm/src/org/cougaar/domain/glm/execution/eg/FailureConsumptionDefaultPlugin.java
+./glm/src/org/cougaar/domain/glm/execution/eg/DODICSpecialPlugin.java
 ./glm/src/org/cougaar/domain/glm/execution/eg/ConstraintElementListener.java
-./glm/src/org/cougaar/domain/glm/execution/eg/POLSpecialPlugIn.java
+./glm/src/org/cougaar/domain/glm/execution/eg/POLSpecialPlugin.java
 ./glm/src/org/cougaar/domain/glm/execution/eg/EGTableModelBase.java
 ./glm/src/org/cougaar/domain/glm/execution/eg/FilterAspect.java
 ./glm/src/org/cougaar/domain/glm/execution/eg/TaskEventReportManager.java
@@ -301,8 +301,8 @@ cvs server: use 'cvs commit' to add this file permanently
 ./glm/src/org/cougaar/domain/glm/execution/eg/Listener.java
 ./glm/src/org/cougaar/domain/glm/execution/eg/TimedInventoryReport.java
 ./glm/src/org/cougaar/domain/glm/execution/eg/TimeConstants.java
-./glm/src/org/cougaar/domain/glm/execution/eg/TaskEventPlugIn.java
-./glm/src/org/cougaar/domain/glm/execution/eg/TaskEventDefaultPlugIn.java
+./glm/src/org/cougaar/domain/glm/execution/eg/TaskEventPlugin.java
+./glm/src/org/cougaar/domain/glm/execution/eg/TaskEventDefaultPlugin.java
 ./glm/src/org/cougaar/domain/glm/execution/eg/InventoryReportListener.java
 ./glm/src/org/cougaar/domain/glm/execution/cluster/PSP_TaskConstraints.java
 ./glm/src/org/cougaar/domain/glm/execution/cluster/PSP_EventMonitor.java
@@ -351,39 +351,39 @@ cvs server: use 'cvs commit' to add this file permanently
 ./glm/src/org/cougaar/domain/glm/packer/PreferenceAggregator.java
 ./glm/src/org/cougaar/domain/glm/packer/Filler.java
 ./glm/src/org/cougaar/domain/glm/parser/GLMTaskParser.java
-./glm/src/org/cougaar/domain/glm/plugin/deletion/TestDeletionPlugIn.java
-./glm/src/org/cougaar/domain/glm/plugins/OplanObserverPlugIn.java
-./glm/src/org/cougaar/domain/glm/plugins/tools/GLMStimulatorPlugIn.java 5 changes
+./glm/src/org/cougaar/domain/glm/plugin/deletion/TestDeletionPlugin.java
+./glm/src/org/cougaar/domain/glm/plugins/OplanObserverPlugin.java
+./glm/src/org/cougaar/domain/glm/plugins/tools/GLMStimulatorPlugin.java 5 changes
 ./glm/src/org/cougaar/domain/glm/plugins/inventory/ExternalAllocator.java
 ./glm/src/org/cougaar/domain/glm/plugins/inventory/InventoryPolicy.java
 ./glm/src/org/cougaar/domain/glm/plugins/inventory/WithdrawAllocator.java
 ./glm/src/org/cougaar/domain/glm/plugins/inventory/InventoryProcessor.java 3 changes
 ./glm/src/org/cougaar/domain/glm/plugins/inventory/DaysOnHandPolicy.java
-./glm/src/org/cougaar/domain/glm/plugins/inventory/InventoryPlugIn.java
+./glm/src/org/cougaar/domain/glm/plugins/inventory/InventoryPlugin.java
 ./glm/src/org/cougaar/domain/glm/plugins/inventory/InventoryManager.java
 ./glm/src/org/cougaar/domain/glm/plugins/inventory/DeletionProcessor.java
 ./glm/src/org/cougaar/domain/glm/plugins/inventory/SupplyExpander.java
 ./glm/src/org/cougaar/domain/glm/plugins/inventory/GeneralInventoryManager.java 1 changes
 ./glm/src/org/cougaar/domain/glm/plugins/ClusterOPlan.java
 ./glm/src/org/cougaar/domain/glm/plugins/TimeUtils.java
-./glm/src/org/cougaar/domain/glm/plugins/GLMDecorationPlugIn.java
+./glm/src/org/cougaar/domain/glm/plugins/GLMDecorationPlugin.java
 ./glm/src/org/cougaar/domain/glm/plugins/AssetUtils.java
 ./glm/src/org/cougaar/domain/glm/plugins/projection/GenerateSupplyDemandExpander.java
 ./glm/src/org/cougaar/domain/glm/plugins/projection/SupplyProjectionDecorator.java
 ./glm/src/org/cougaar/domain/glm/plugins/projection/GenerateDemandExpander.java 1 changes
 ./glm/src/org/cougaar/domain/glm/plugins/projection/DemandProjectionPolicy.java
-./glm/src/org/cougaar/domain/glm/plugins/projection/DemandProjectionPolicyPlugIn.java
+./glm/src/org/cougaar/domain/glm/plugins/projection/DemandProjectionPolicyPlugin.java
 ./glm/src/org/cougaar/domain/glm/plugins/projection/ConsumerSpec.java 3 changes
-./glm/src/org/cougaar/domain/glm/plugins/projection/SupplyProjectionPlugIn.java
-./glm/src/org/cougaar/domain/glm/plugins/DecorationPlugIn.java
-./glm/src/org/cougaar/domain/glm/plugins/PlugInDecorator.java
+./glm/src/org/cougaar/domain/glm/plugins/projection/SupplyProjectionPlugin.java
+./glm/src/org/cougaar/domain/glm/plugins/DecorationPlugin.java
+./glm/src/org/cougaar/domain/glm/plugins/PluginDecorator.java
 ./glm/src/org/cougaar/domain/glm/plugins/BasicProcessor.java
 ./glm/src/org/cougaar/domain/glm/plugins/TaskUtils.java
 ./glm/src/org/cougaar/domain/glm/plugins/ScheduleUtils.java 3 changes
-./glm/src/org/cougaar/domain/glm/plugins/GLMPolicyPlugIn.java
+./glm/src/org/cougaar/domain/glm/plugins/GLMPolicyPlugin.java
 ./glm/src/org/cougaar/domain/glm/plugins/PublicationKey.java
 ./glm/src/org/cougaar/domain/glm/plugins/FileUtils.java
-./glm/src/org/cougaar/domain/glm/GLMPlugIn.java
+./glm/src/org/cougaar/domain/glm/GLMPlugin.java
 ./glm/src/org/cougaar/domain/mlm/ui/psp/plan/PSP_OplanEdit.java
 ./glm/src/org/cougaar/domain/mlm/ui/psp/plan/RelationsTest.java
 ./glm/src/org/cougaar/domain/mlm/ui/psp/plan/PSP_InputTaskAssetVolume.java 2 changes
@@ -986,7 +986,7 @@ cvs server: use 'cvs commit' to add this file permanently
 ./glm/src/org/cougaar/domain/mlm/debug/ui/UserInputTask.java
 ./glm/src/org/cougaar/domain/mlm/debug/ui/UIPenaltyValueNode.java
 ./glm/src/org/cougaar/domain/mlm/debug/ui/UIFile.java
-./glm/src/org/cougaar/domain/mlm/debug/ui/UIPlugInException.java
+./glm/src/org/cougaar/domain/mlm/debug/ui/UIPluginException.java
 ./glm/src/org/cougaar/domain/mlm/debug/ui/UITaskCollectionNode.java
 ./glm/src/org/cougaar/domain/mlm/debug/ui/UIPlanNode.java
 ./glm/src/org/cougaar/domain/mlm/debug/ui/UITimeLine.java
@@ -1008,7 +1008,7 @@ cvs server: use 'cvs commit' to add this file permanently
 ./glm/src/org/cougaar/domain/mlm/debug/ui/UIDisplayError.java
 ./glm/src/org/cougaar/domain/mlm/debug/ui/UIAssets.java
 ./glm/src/org/cougaar/domain/mlm/debug/ui/UIClusterAssetsNode.java
-./glm/src/org/cougaar/domain/mlm/debug/ui/UIPlugIn.java
+./glm/src/org/cougaar/domain/mlm/debug/ui/UIPlugin.java
 ./glm/src/org/cougaar/domain/mlm/debug/ui/UIBarGraphDisplay.java
 ./glm/src/org/cougaar/domain/mlm/debug/ui/UISubscriber.java
 ./glm/src/org/cougaar/domain/mlm/debug/ui/UIAssetNode.java
@@ -1029,18 +1029,18 @@ cvs server: use 'cvs commit' to add this file permanently
 ./glm/src/org/cougaar/domain/mlm/plugin/ldm/SQLAssetPrototypeProvider.java
 ./glm/src/org/cougaar/domain/mlm/plugin/ldm/XMLAssetCreator.java
 ./glm/src/org/cougaar/domain/mlm/plugin/ldm/AlpLocQueryHandler.java 2 changes
-./glm/src/org/cougaar/domain/mlm/plugin/ldm/LDMSQLPlugIn.java 1 changes
+./glm/src/org/cougaar/domain/mlm/plugin/ldm/LDMSQLPlugin.java 1 changes
 ./glm/src/org/cougaar/domain/mlm/plugin/ldm/OrgActivityQueryHandler.java
-./glm/src/org/cougaar/domain/mlm/plugin/ldm/LDMQueryPlugIn.java
+./glm/src/org/cougaar/domain/mlm/plugin/ldm/LDMQueryPlugin.java
 ./glm/src/org/cougaar/domain/mlm/plugin/ldm/SQLOplanQueryHandler.java
 ./glm/src/org/cougaar/domain/mlm/plugin/ldm/LDMConnectionPool.java
 ./glm/src/org/cougaar/domain/mlm/plugin/ldm/QueryHandler.java
 ./glm/src/org/cougaar/domain/mlm/plugin/ldm/GeoLocQueryHandler.java 2 changes
 ./glm/src/org/cougaar/domain/mlm/plugin/ldm/SQLNamedAssetCreator.java
-./glm/src/org/cougaar/domain/mlm/plugin/ldm/OPlanPlugIn.java
+./glm/src/org/cougaar/domain/mlm/plugin/ldm/OPlanPlugin.java
 ./glm/src/org/cougaar/domain/mlm/plugin/ldm/AssetPropertyProvider.java
 ./glm/src/org/cougaar/domain/mlm/plugin/ldm/OplanQueryHandler.java
-./glm/src/org/cougaar/domain/mlm/plugin/ldm/SQLOplanPlugIn.java
+./glm/src/org/cougaar/domain/mlm/plugin/ldm/SQLOplanPlugin.java
 ./glm/src/org/cougaar/domain/mlm/plugin/ldm/LDMConnection.java
 ./glm/src/org/cougaar/domain/mlm/plugin/ldm/PropertyProvider.java
 ./glm/src/org/cougaar/domain/mlm/plugin/ldm/LDMService.java
@@ -1049,73 +1049,73 @@ cvs server: use 'cvs commit' to add this file permanently
 ./glm/src/org/cougaar/domain/mlm/plugin/ldm/SQLAggregateAssetCreator.java
 ./glm/src/org/cougaar/domain/mlm/plugin/ldm/QueryHandlerExample.java
 ./glm/src/org/cougaar/domain/mlm/plugin/ldm/SQLGlobalAirProtoCreator.java
-./glm/src/org/cougaar/domain/mlm/plugin/ldm/XMLPolicyPlugIn.java
+./glm/src/org/cougaar/domain/mlm/plugin/ldm/XMLPolicyPlugin.java
 ./glm/src/org/cougaar/domain/mlm/plugin/ldm/LDMConnectionDriver.java
-./glm/src/org/cougaar/domain/mlm/plugin/ldm/LDMEssentialPlugIn.java
-./glm/src/org/cougaar/domain/mlm/plugin/ldm/LDMXMLPlugIn.java
-./glm/src/org/cougaar/domain/mlm/plugin/ldm/GetOplanPlugIn.java 3 changes
-./glm/src/org/cougaar/domain/mlm/plugin/sql/JDBCPlugIn.sav 2 changes
-./glm/src/org/cougaar/domain/mlm/plugin/xml/XMLPrototypeProviderPlugIn.java
+./glm/src/org/cougaar/domain/mlm/plugin/ldm/LDMEssentialPlugin.java
+./glm/src/org/cougaar/domain/mlm/plugin/ldm/LDMXMLPlugin.java
+./glm/src/org/cougaar/domain/mlm/plugin/ldm/GetOplanPlugin.java 3 changes
+./glm/src/org/cougaar/domain/mlm/plugin/sql/JDBCPlugin.sav 2 changes
+./glm/src/org/cougaar/domain/mlm/plugin/xml/XMLPrototypeProviderPlugin.java
 ./glm/src/org/cougaar/domain/mlm/plugin/RandomButtonPusher.java
-./glm/src/org/cougaar/domain/mlm/plugin/organization/GLSGUIBasePlugIn.java
-./glm/src/org/cougaar/domain/mlm/plugin/organization/GLSRescindPlugIn.java
-./glm/src/org/cougaar/domain/mlm/plugin/organization/GLSAllocatorPlugIn.java
-./glm/src/org/cougaar/domain/mlm/plugin/organization/GLSExpanderPlugIn.java
-./glm/src/org/cougaar/domain/mlm/plugin/organization/GLSAllocatorPlugIn2.java
-./glm/src/org/cougaar/domain/mlm/plugin/organization/GLSGUIInitPlugIn.java
-./glm/src/org/cougaar/domain/mlm/plugin/organization/OrgReportPlugIn.java
-./glm/src/org/cougaar/domain/mlm/plugin/organization/OrgRTDataPlugIn.java 12 changes
-./glm/src/org/cougaar/domain/mlm/plugin/organization/OrgTPRTDataPlugIn.java 17 changes
+./glm/src/org/cougaar/domain/mlm/plugin/organization/GLSGUIBasePlugin.java
+./glm/src/org/cougaar/domain/mlm/plugin/organization/GLSRescindPlugin.java
+./glm/src/org/cougaar/domain/mlm/plugin/organization/GLSAllocatorPlugin.java
+./glm/src/org/cougaar/domain/mlm/plugin/organization/GLSExpanderPlugin.java
+./glm/src/org/cougaar/domain/mlm/plugin/organization/GLSAllocatorPlugin2.java
+./glm/src/org/cougaar/domain/mlm/plugin/organization/GLSGUIInitPlugin.java
+./glm/src/org/cougaar/domain/mlm/plugin/organization/OrgReportPlugin.java
+./glm/src/org/cougaar/domain/mlm/plugin/organization/OrgRTDataPlugin.java 12 changes
+./glm/src/org/cougaar/domain/mlm/plugin/organization/OrgTPRTDataPlugin.java 17 changes
 ./glm/src/org/cougaar/domain/mlm/plugin/generic/DestinationPredicate.java
 ./glm/src/org/cougaar/domain/mlm/plugin/generic/TransferableSubscriptions.java
-./glm/src/org/cougaar/domain/mlm/plugin/generic/GenericTablePlugIn.dtd
-./glm/src/org/cougaar/domain/mlm/plugin/generic/PropagationPlugIn.java
-./glm/src/org/cougaar/domain/mlm/plugin/generic/GenericScriptablePlugIn.java
-./glm/src/org/cougaar/domain/mlm/plugin/generic/GenericTablePlugIn.java
-./glm/src/org/cougaar/domain/mlm/plugin/generic/GenericBufferedTablePlugIn.java
+./glm/src/org/cougaar/domain/mlm/plugin/generic/GenericTablePlugin.dtd
+./glm/src/org/cougaar/domain/mlm/plugin/generic/PropagationPlugin.java
+./glm/src/org/cougaar/domain/mlm/plugin/generic/GenericScriptablePlugin.java
+./glm/src/org/cougaar/domain/mlm/plugin/generic/GenericTablePlugin.java
+./glm/src/org/cougaar/domain/mlm/plugin/generic/GenericBufferedTablePlugin.java
 ./glm/src/org/cougaar/domain/mlm/plugin/generic/GenericScriptHelper.java
 ./glm/src/org/cougaar/domain/mlm/plugin/generic/TransferablePredicate.java
-./glm/src/org/cougaar/domain/mlm/plugin/generic/GenericAssessorPlugIn.java
+./glm/src/org/cougaar/domain/mlm/plugin/generic/GenericAssessorPlugin.java
 ./glm/src/org/cougaar/domain/mlm/plugin/UICoordinator.java
-./glm/src/org/cougaar/domain/mlm/plugin/perturbation/PerturbationPlugIn.java
+./glm/src/org/cougaar/domain/mlm/plugin/perturbation/PerturbationPlugin.java
 ./glm/src/org/cougaar/domain/mlm/plugin/perturbation/Perturbation.java
 ./glm/src/org/cougaar/domain/mlm/plugin/perturbation/PerturbationReader.java
 ./glm/src/org/cougaar/domain/mlm/plugin/perturbation/PerturbationNode.java
 ./glm/src/org/cougaar/domain/mlm/plugin/perturbation/PerturbationScheduler.java
-./glm/src/org/cougaar/domain/mlm/plugin/sample/AllocationAssessorPlugIn.java
-./glm/src/org/cougaar/domain/mlm/plugin/sample/MCCPredictorPlugIn.java
-./glm/src/org/cougaar/domain/mlm/plugin/sample/ModifyOrgActivityGUIPlugIn.java
-./glm/src/org/cougaar/domain/mlm/plugin/sample/StrategicTransportSourceGUIPlugIn.java
-./glm/src/org/cougaar/domain/mlm/plugin/sample/StrategicTransportProjectionExpanderPlugIn.java
-./glm/src/org/cougaar/domain/mlm/plugin/sample/MCCTriggerCreatorPlugIn.java
-./glm/src/org/cougaar/domain/mlm/plugin/sample/MCCAllocatorPlugIn.java
-./glm/src/org/cougaar/domain/mlm/plugin/sample/AddAssetsGUIPlugIn.java 1 changes
-./glm/src/org/cougaar/domain/mlm/plugin/sample/MessageStatisticsPlugIn.java
-./glm/src/org/cougaar/domain/mlm/plugin/sample/AlternateAllocationAssessorPlugIn.java
-./glm/src/org/cougaar/domain/mlm/plugin/sample/LoadAllocatorPlugIn.java 1 changes
-./glm/src/org/cougaar/domain/mlm/plugin/sample/TaskAssessorPlugIn.java
+./glm/src/org/cougaar/domain/mlm/plugin/sample/AllocationAssessorPlugin.java
+./glm/src/org/cougaar/domain/mlm/plugin/sample/MCCPredictorPlugin.java
+./glm/src/org/cougaar/domain/mlm/plugin/sample/ModifyOrgActivityGUIPlugin.java
+./glm/src/org/cougaar/domain/mlm/plugin/sample/StrategicTransportSourceGUIPlugin.java
+./glm/src/org/cougaar/domain/mlm/plugin/sample/StrategicTransportProjectionExpanderPlugin.java
+./glm/src/org/cougaar/domain/mlm/plugin/sample/MCCTriggerCreatorPlugin.java
+./glm/src/org/cougaar/domain/mlm/plugin/sample/MCCAllocatorPlugin.java
+./glm/src/org/cougaar/domain/mlm/plugin/sample/AddAssetsGUIPlugin.java 1 changes
+./glm/src/org/cougaar/domain/mlm/plugin/sample/MessageStatisticsPlugin.java
+./glm/src/org/cougaar/domain/mlm/plugin/sample/AlternateAllocationAssessorPlugin.java
+./glm/src/org/cougaar/domain/mlm/plugin/sample/LoadAllocatorPlugin.java 1 changes
+./glm/src/org/cougaar/domain/mlm/plugin/sample/TaskAssessorPlugin.java
 ./glm/src/org/cougaar/domain/mlm/plugin/sample/MCCPredictor.java
-./glm/src/org/cougaar/domain/mlm/plugin/sample/ProvideEstimatesPlugIn.java
+./glm/src/org/cougaar/domain/mlm/plugin/sample/ProvideEstimatesPlugin.java
 ./glm/src/org/cougaar/domain/mlm/plugin/sample/CompletionAssessor.java
-./glm/src/org/cougaar/domain/mlm/plugin/sample/AlertReaderPlugIn.java
-./glm/src/org/cougaar/domain/mlm/plugin/sample/MCCAggregatorPlugIn.java
-./glm/src/org/cougaar/domain/mlm/plugin/sample/PredictorExpanderPlugIn.java
-./glm/src/org/cougaar/domain/mlm/plugin/sample/UniversalAllocatorPlugIn.java
-./glm/src/org/cougaar/domain/mlm/plugin/sample/StrategicTransportProjectorPlugIn.java
-./glm/src/org/cougaar/domain/mlm/plugin/sample/PolicyPlugIn.java
+./glm/src/org/cougaar/domain/mlm/plugin/sample/AlertReaderPlugin.java
+./glm/src/org/cougaar/domain/mlm/plugin/sample/MCCAggregatorPlugin.java
+./glm/src/org/cougaar/domain/mlm/plugin/sample/PredictorExpanderPlugin.java
+./glm/src/org/cougaar/domain/mlm/plugin/sample/UniversalAllocatorPlugin.java
+./glm/src/org/cougaar/domain/mlm/plugin/sample/StrategicTransportProjectorPlugin.java
+./glm/src/org/cougaar/domain/mlm/plugin/sample/PolicyPlugin.java
 ./glm/src/org/cougaar/domain/mlm/plugin/DMPIClusterStartup.java
-./glm/src/org/cougaar/domain/mlm/plugin/assessor/ConsumptionAssessorPlugIn.java
-./glm/src/org/cougaar/domain/mlm/plugin/assessor/SupportingUnitAssessorPlugIn.java
-./glm/src/org/cougaar/domain/mlm/plugin/strategictransport/TopsStubExpanderPlugIn.java
-./glm/src/org/cougaar/domain/mlm/plugin/strategictransport/StrategicTransportAllocatorPlugIn.java
-./glm/src/org/cougaar/domain/mlm/plugin/strategictransport/StrategicTransportExpanderPlugIn.java
-./glm/src/org/cougaar/domain/mlm/plugin/strategictransport/TaskStrategicTransportAllocatorPlugIn.java
-./glm/src/org/cougaar/domain/mlm/plugin/strategictransport/SimpleMultilegExpanderPlugIn.java
-./glm/src/org/cougaar/domain/mlm/examples/TriggerTesterPlugIn.java
+./glm/src/org/cougaar/domain/mlm/plugin/assessor/ConsumptionAssessorPlugin.java
+./glm/src/org/cougaar/domain/mlm/plugin/assessor/SupportingUnitAssessorPlugin.java
+./glm/src/org/cougaar/domain/mlm/plugin/strategictransport/TopsStubExpanderPlugin.java
+./glm/src/org/cougaar/domain/mlm/plugin/strategictransport/StrategicTransportAllocatorPlugin.java
+./glm/src/org/cougaar/domain/mlm/plugin/strategictransport/StrategicTransportExpanderPlugin.java
+./glm/src/org/cougaar/domain/mlm/plugin/strategictransport/TaskStrategicTransportAllocatorPlugin.java
+./glm/src/org/cougaar/domain/mlm/plugin/strategictransport/SimpleMultilegExpanderPlugin.java
+./glm/src/org/cougaar/domain/mlm/examples/TriggerTesterPlugin.java
 ./glm/src/org/cougaar/domain/mlm/examples/ClockTest.java 1 changes
-./glm/src/org/cougaar/domain/mlm/examples/PropertyProviderPlugInExample.java 2 changes
+./glm/src/org/cougaar/domain/mlm/examples/PropertyProviderPluginExample.java 2 changes
 ./glm/src/org/cougaar/domain/mlm/examples/BulkEstimateTester.java
-./glm/src/org/cougaar/domain/mlm/examples/PrototypeProviderPlugInExample.java
+./glm/src/org/cougaar/domain/mlm/examples/PrototypeProviderPluginExample.java
 ./glm/src/org/cougaar/domain/mlm/examples/ChangeReporter.java
 ./glm/src/PLUGIN
 ./glm/src/build.properties
@@ -2498,8 +2498,8 @@ cvs server: use 'cvs commit' to add this file permanently
 ./core/doc/details/BehaviorGroups.txt 1 changes
 ./core/doc/details/Properties.txt
 ./core/doc/details/DataQuality.txt
-./core/doc/LDMQueryPlugIn.html
-./core/doc/PlugInPackaging.txt
+./core/doc/LDMQueryPlugin.html
+./core/doc/PluginPackaging.txt
 ./core/doc/exampleCFG.html
 ./core/doc/SocStartup-Config.html 11 changes
 ./core/doc/example.cougaarrc
@@ -2531,7 +2531,7 @@ cvs server: use 'cvs commit' to add this file permanently
 ./core/src/org/cougaar/core/cluster/LogPlan.java 11 changes
 ./core/src/org/cougaar/core/cluster/AckSet.java
 ./core/src/org/cougaar/core/cluster/PlanElementSet.java
-./core/src/org/cougaar/core/cluster/PlugInLoader.java
+./core/src/org/cougaar/core/cluster/PluginLoader.java
 ./core/src/org/cougaar/core/cluster/ClusterServesMessageTransport.java
 ./core/src/org/cougaar/core/cluster/ClusterServesLogicProvider.java
 ./core/src/org/cougaar/core/cluster/LogPlanServesLogicProvider.java 1 changes
@@ -2576,7 +2576,7 @@ cvs server: use 'cvs commit' to add this file permanently
 ./core/src/org/cougaar/core/cluster/PersistenceEnvelope.java
 ./core/src/org/cougaar/core/cluster/MessageManagerImpl.java
 ./core/src/org/cougaar/core/cluster/SubscriptionException.java
-./core/src/org/cougaar/core/cluster/SharedPlugInManager.java
+./core/src/org/cougaar/core/cluster/SharedPluginManager.java
 ./core/src/org/cougaar/core/cluster/PersistenceSubscriber.java
 ./core/src/org/cougaar/core/cluster/PrivilegedClaimant.java
 ./core/src/org/cougaar/core/cluster/ClusterContext.java
@@ -2607,7 +2607,7 @@ cvs server: use 'cvs commit' to add this file permanently
 ./core/src/org/cougaar/core/cluster/persist/Persistence.java
 ./core/src/org/cougaar/core/cluster/persist/IdentityTable.java
 ./core/src/org/cougaar/core/cluster/MessageManager.java
-./core/src/org/cougaar/core/cluster/ClusterServesPlugIn.java 3 changes
+./core/src/org/cougaar/core/cluster/ClusterServesPlugin.java 3 changes
 ./core/src/org/cougaar/core/cluster/ExecutionTimer.java
 ./core/src/org/cougaar/core/cluster/LogPlanLogicProvider.java
 ./core/src/org/cougaar/core/cluster/ClusterContextTable.java
@@ -2701,41 +2701,41 @@ cvs server: use 'cvs commit' to add this file permanently
 ./core/src/org/cougaar/core/society/NameServer.java
 ./core/src/org/cougaar/core/society/UniqueObject.java
 ./core/src/org/cougaar/core/society/CitizenProfile.java
-./core/src/org/cougaar/core/plugin/PlugInStateModel.java
+./core/src/org/cougaar/core/plugin/PluginStateModel.java
 ./core/src/org/cougaar/core/plugin/util/ExpandableTasksPredicate.java
 ./core/src/org/cougaar/core/plugin/util/PredicateFactory.java
 ./core/src/org/cougaar/core/plugin/util/ExpanderHelper.java
 ./core/src/org/cougaar/core/plugin/util/AllocationsPredicate.java
-./core/src/org/cougaar/core/plugin/util/PlugInHelper.java
+./core/src/org/cougaar/core/plugin/util/PluginHelper.java
 ./core/src/org/cougaar/core/plugin/util/NewAllocatableWFPredicate.java
 ./core/src/org/cougaar/core/plugin/util/AllocatableWFPredicate.java
 ./core/src/org/cougaar/core/plugin/util/NewExpandableTasksPredicate.java
 ./core/src/org/cougaar/core/plugin/util/NewAllocationsPredicate.java
 ./core/src/org/cougaar/core/plugin/util/AllocatorHelper.java
-./core/src/org/cougaar/core/plugin/SimplePlugIn.java
-./core/src/org/cougaar/core/plugin/SimplifiedPlugIn.java
-./core/src/org/cougaar/core/plugin/PlugIn.java
-./core/src/org/cougaar/core/plugin/PlugInContext.java
-./core/src/org/cougaar/core/plugin/PersistencePlugIn.java
-./core/src/org/cougaar/core/plugin/PlugInDelegate.java
-./core/src/org/cougaar/core/plugin/PlugInServesCluster.java
-./core/src/org/cougaar/core/plugin/LDMPlugInServesLDM.java
+./core/src/org/cougaar/core/plugin/SimplePlugin.java
+./core/src/org/cougaar/core/plugin/SimplifiedPlugin.java
+./core/src/org/cougaar/core/plugin/Plugin.java
+./core/src/org/cougaar/core/plugin/PluginContext.java
+./core/src/org/cougaar/core/plugin/PersistencePlugin.java
+./core/src/org/cougaar/core/plugin/PluginDelegate.java
+./core/src/org/cougaar/core/plugin/PluginServesCluster.java
+./core/src/org/cougaar/core/plugin/LDMPluginServesLDM.java
 ./core/src/org/cougaar/core/plugin/Assessor.java
-./core/src/org/cougaar/core/plugin/PlugInAdapter.java 3 changes
+./core/src/org/cougaar/core/plugin/PluginAdapter.java 3 changes
 ./core/src/org/cougaar/core/plugin/Annotation.java
 ./core/src/org/cougaar/core/plugin/StateModelAdapter.java
 ./core/src/org/cougaar/core/plugin/PropertyProvider.java
-./core/src/org/cougaar/core/plugin/ScheduleablePlugIn.java
-./core/src/org/cougaar/core/plugin/StatelessPlugInAdapter.java
+./core/src/org/cougaar/core/plugin/ScheduleablePlugin.java
+./core/src/org/cougaar/core/plugin/StatelessPluginAdapter.java
 ./core/src/org/cougaar/core/plugin/PrototypeProvider.java
-./core/src/org/cougaar/core/plugin/ParameterizedPlugIn.java
-./core/src/org/cougaar/core/plugin/RemovePlugInMessage.java
+./core/src/org/cougaar/core/plugin/ParameterizedPlugin.java
+./core/src/org/cougaar/core/plugin/RemovePluginMessage.java
 ./core/src/org/cougaar/core/plugin/LatePropertyProvider.java
-./core/src/org/cougaar/core/plugin/AddPlugInMessage.java
-./core/src/org/cougaar/core/plugin/SimplifiedPlugInTest.java
-./core/src/org/cougaar/core/plugin/SingleThreadedPlugIn.java
-./core/src/org/cougaar/core/plugin/ThinPlugIn.java
-./core/src/org/cougaar/core/plugin/SimplifiedFatPlugIn.java
+./core/src/org/cougaar/core/plugin/AddPluginMessage.java
+./core/src/org/cougaar/core/plugin/SimplifiedPluginTest.java
+./core/src/org/cougaar/core/plugin/SingleThreadedPlugin.java
+./core/src/org/cougaar/core/plugin/ThinPlugin.java
+./core/src/org/cougaar/core/plugin/SimplifiedFatPlugin.java
 ./core/src/org/cougaar/util/TimeSpan.java
 ./core/src/org/cougaar/util/CircularQueue.java
 ./core/src/org/cougaar/util/MutableTimeSpan.java
@@ -2991,7 +2991,7 @@ cvs server: use 'cvs commit' to add this file permanently
 ./core/src/org/cougaar/domain/planning/ldm/plan/NewTransferableVerification.java
 ./core/src/org/cougaar/domain/planning/ldm/Registry.java
 ./core/src/org/cougaar/domain/planning/ldm/LDMServesClient.java
-./core/src/org/cougaar/domain/planning/ldm/LDMServesPlugIn.java
+./core/src/org/cougaar/domain/planning/ldm/LDMServesPlugin.java
 ./core/src/org/cougaar/domain/planning/ldm/asset/AssetSkeletonBase.java
 ./core/src/org/cougaar/domain/planning/ldm/asset/PropertyGroup.java
 ./core/src/org/cougaar/domain/planning/ldm/asset/Null_PG.java
@@ -3041,14 +3041,14 @@ cvs server: use 'cvs commit' to add this file permanently
 ./core/src/org/cougaar/domain/planning/ldm/measure/Derivative.java
 ./core/src/org/cougaar/domain/planning/ldm/measure/measures.def
 ./core/src/org/cougaar/domain/planning/ldm/measure/measures.gen
-./core/src/org/cougaar/domain/planning/ldm/DeletionPlugIn.java
+./core/src/org/cougaar/domain/planning/ldm/DeletionPlugin.java
 ./core/src/org/cougaar/domain/planning/ldm/Domain.java 5 changes
 ./core/src/org/cougaar/domain/planning/ldm/trigger/TriggerAction.java
 ./core/src/org/cougaar/domain/planning/ldm/trigger/TriggerPredicateBasedMonitor.java
 ./core/src/org/cougaar/domain/planning/ldm/trigger/TriggerTester.java
 ./core/src/org/cougaar/domain/planning/ldm/trigger/TriggerRescindAction.java
 ./core/src/org/cougaar/domain/planning/ldm/trigger/TriggerMakeStaleAction.java
-./core/src/org/cougaar/domain/planning/ldm/trigger/TriggerManagerPlugIn.java
+./core/src/org/cougaar/domain/planning/ldm/trigger/TriggerManagerPlugin.java
 ./core/src/org/cougaar/domain/planning/ldm/trigger/TriggerStaleTester.java
 ./core/src/org/cougaar/domain/planning/ldm/trigger/TriggerMakeTaskAction.java
 ./core/src/org/cougaar/domain/planning/ldm/trigger/TriggerThresholdTester.java
@@ -3057,7 +3057,7 @@ cvs server: use 'cvs commit' to add this file permanently
 ./core/src/org/cougaar/domain/planning/ldm/trigger/Trigger.java
 ./core/src/org/cougaar/domain/planning/ldm/trigger/TriggerMonitor.java
 ./core/src/org/cougaar/domain/planning/ldm/RootFactory.java
-./core/src/org/cougaar/domain/planning/ldm/DefaultPrototypeProviderPlugIn.java
+./core/src/org/cougaar/domain/planning/ldm/DefaultPrototypeProviderPlugin.java
 ./core/src/org/cougaar/domain/planning/ldm/policy/EnumerationRuleParameter.java
 ./core/src/org/cougaar/domain/planning/ldm/policy/IntegerRuleParameter.java
 ./core/src/org/cougaar/domain/planning/ldm/policy/DoubleRuleParameter.java
@@ -3078,10 +3078,10 @@ cvs server: use 'cvs commit' to add this file permanently
 ./core/src/org/cougaar/domain/planning/ldm/DomainManager.java
 ./core/src/org/cougaar/domain/planning/ldm/FactoryException.java
 ./core/src/build.properties
-./core/examples/org/cougaar/core/examples/SimpleSinkAllocatorPlugIn.java
-./core/examples/org/cougaar/core/examples/ReportCreatorPlugIn.java
-./core/examples/org/cougaar/core/examples/AlertCreatorPlugIn.java
-./core/examples/org/cougaar/core/examples/AssetCreationJdbcPlugIn.java
+./core/examples/org/cougaar/core/examples/SimpleSinkAllocatorPlugin.java
+./core/examples/org/cougaar/core/examples/ReportCreatorPlugin.java
+./core/examples/org/cougaar/core/examples/AlertCreatorPlugin.java
+./core/examples/org/cougaar/core/examples/AssetCreationJdbcPlugin.java
 ./aggagent/doc/readme.txt
 ./aggagent/src/org/cougaar/lib/aggagent/ldm/DocumentSignature.java
 ./aggagent/src/org/cougaar/lib/aggagent/ldm/HTMLPlanObject.java
@@ -3220,7 +3220,7 @@ cvs server: use 'cvs commit' to add this file permanently
 ./configgen/build.xml
 ./scalability/src/org/cougaar/tools/scalability/scalability/RemoteOutputStream.java
 ./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityDomain.java 6 changes
-./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityAllocatorPlugIn.java
+./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityAllocatorPlugin.java
 ./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityHostList.java
 ./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityHostsGUI.java
 ./scalability/src/org/cougaar/tools/scalability/scalability/SocietyEditor.java
@@ -3228,15 +3228,15 @@ cvs server: use 'cvs commit' to add this file permanently
 ./scalability/src/org/cougaar/tools/scalability/scalability/LocalHost.java
 ./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityTestManager.java
 ./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityFileFormatException.java
-./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityLeafPlugIn.java
-./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityLDMPlugIn.java
+./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityLeafPlugin.java
+./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityLDMPlugin.java
 ./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityTestParameterSet.java
 ./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityConfigurationException.java
 ./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityTopologyKey.java
 ./scalability/src/org/cougaar/tools/scalability/scalability/IntTokenizer.java
 ./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityTestReader.java
 ./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityHostManager.java
-./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityDummyLoadPlugIn.java
+./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityDummyLoadPlugin.java
 ./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityConstants.java
 ./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityServerImpl.java 1 changes
 ./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityTestIndex.java
@@ -3253,14 +3253,14 @@ cvs server: use 'cvs commit' to add this file permanently
 ./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilitySubscriptionsException.java
 ./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityServer.java 1 changes
 ./scalability/src/org/cougaar/tools/scalability/scalability/Memory.java
-./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityExpanderPlugIn.java
+./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityExpanderPlugin.java
 ./scalability/src/org/cougaar/tools/scalability/scalability/scalabilityassets.def
 ./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityFactory.java
-./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityPlugIn.java
+./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityPlugin.java
 ./scalability/src/org/cougaar/tools/scalability/scalability/Tests.sct
 ./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityFileVersion.java
 ./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityTest.java
-./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityStatisticsPlugIn.java
+./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityStatisticsPlugin.java
 ./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityResultSetGUI.java
 ./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityResultSet.java
 ./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityServerImpl_Stub.java
@@ -3279,10 +3279,10 @@ cvs server: use 'cvs commit' to add this file permanently
 ./scalability/src/org/cougaar/tools/scalability/scalability/ConsumerPlugin.java 1 changes
 ./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityRawResult.java
 ./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilitySociety.java 1 changes
-./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityInitializerPlugIn.java
+./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityInitializerPlugin.java
 ./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityResult.java
 ./scalability/src/org/cougaar/tools/scalability/scalability/RemoteOutputStreamImpl.java
-./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityPlugInsException.java
+./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityPluginsException.java
 ./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityTopologyLayout.java
 ./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityTestSetIterator.java
 ./scalability/src/org/cougaar/tools/scalability/scalability/ScalabilityHostPropertiesGUI.java
@@ -3383,7 +3383,7 @@ cvs server: use 'cvs commit' to add this file permanently
 ./toolkit/src/org/cougaar/lib/util/UTILExpand.java
 ./toolkit/src/org/cougaar/lib/util/UTILAllocate.java 2 changes
 ./toolkit/src/org/cougaar/lib/util/UTILItinerary.java
-./toolkit/src/org/cougaar/lib/util/UTILPlugInException.java
+./toolkit/src/org/cougaar/lib/util/UTILPluginException.java
 ./toolkit/src/org/cougaar/lib/util/IllFormedObjectException.java
 ./toolkit/src/org/cougaar/lib/param/ShortParam.java
 ./toolkit/src/org/cougaar/lib/param/ParamHandler.java
@@ -3419,32 +3419,32 @@ cvs server: use 'cvs commit' to add this file permanently
 ./toolkit/src/org/cougaar/lib/callback/UTILFilterCallbackListener.java
 ./toolkit/src/org/cougaar/lib/callback/UTILAlienTaskCallback.java
 ./toolkit/src/org/cougaar/lib/callback/UTILExpandableTaskCallback.java
-./toolkit/src/org/cougaar/lib/filter/UTILExpanderPlugIn.java
-./toolkit/src/org/cougaar/lib/filter/UTILAllocatorPlugInAdapter.java 1 changes
+./toolkit/src/org/cougaar/lib/filter/UTILExpanderPlugin.java
+./toolkit/src/org/cougaar/lib/filter/UTILAllocatorPluginAdapter.java 1 changes
 ./toolkit/src/org/cougaar/lib/filter/UTILTimeoutBufferingThread.java 1 changes
 ./toolkit/src/org/cougaar/lib/filter/UTILTaskChecker.java
-./toolkit/src/org/cougaar/lib/filter/UTILSingleTaskWorkflowPlugIn.java
-./toolkit/src/org/cougaar/lib/filter/UTILBufferingPlugInAdapter.java
-./toolkit/src/org/cougaar/lib/filter/UTILBufferingPlugIn.java
-./toolkit/src/org/cougaar/lib/filter/UTILAllocatorPlugIn.java
-./toolkit/src/org/cougaar/lib/filter/UTILSingleTaskAllocatorPlugIn.java
-./toolkit/src/org/cougaar/lib/filter/UTILTimeoutBufferingPlugIn.java
-./toolkit/src/org/cougaar/lib/filter/UTILPlugInAdapter.java
-./toolkit/src/org/cougaar/lib/filter/UTILExpanderPlugInAdapter.java
-./toolkit/src/org/cougaar/lib/filter/UTILAirBufferingPlugIn.java
-./toolkit/src/org/cougaar/lib/filter/UTILAggregatorPlugInAdapter.java
-./toolkit/src/org/cougaar/lib/filter/UTILPlugIn.java
-./toolkit/src/org/cougaar/lib/filter/UTILAggregatorPlugIn.java
+./toolkit/src/org/cougaar/lib/filter/UTILSingleTaskWorkflowPlugin.java
+./toolkit/src/org/cougaar/lib/filter/UTILBufferingPluginAdapter.java
+./toolkit/src/org/cougaar/lib/filter/UTILBufferingPlugin.java
+./toolkit/src/org/cougaar/lib/filter/UTILAllocatorPlugin.java
+./toolkit/src/org/cougaar/lib/filter/UTILSingleTaskAllocatorPlugin.java
+./toolkit/src/org/cougaar/lib/filter/UTILTimeoutBufferingPlugin.java
+./toolkit/src/org/cougaar/lib/filter/UTILPluginAdapter.java
+./toolkit/src/org/cougaar/lib/filter/UTILExpanderPluginAdapter.java
+./toolkit/src/org/cougaar/lib/filter/UTILAirBufferingPlugin.java
+./toolkit/src/org/cougaar/lib/filter/UTILAggregatorPluginAdapter.java
+./toolkit/src/org/cougaar/lib/filter/UTILPlugin.java
+./toolkit/src/org/cougaar/lib/filter/UTILAggregatorPlugin.java
 ./toolkit/src/org/cougaar/lib/filter/UTILListeningBufferingThread.java
 ./toolkit/src/org/cougaar/lib/filter/UTILBufferingThread.java 1 changes
 ./toolkit/src/org/cougaar/lib/plugin/UTILEntityResolver.java
-./toolkit/src/org/cougaar/lib/plugin/UTILLdmXMLPlugIn.java 2 changes
-./toolkit/src/org/cougaar/lib/plugin/UTILPlugIn.java
+./toolkit/src/org/cougaar/lib/plugin/UTILLdmXMLPlugin.java 2 changes
+./toolkit/src/org/cougaar/lib/plugin/UTILPlugin.java
 ./toolkit/src/build.properties
 ./planserver/src/org/cougaar/lib/planserver/psp/PSP_ClusterMetrics.java
 ./planserver/src/org/cougaar/lib/planserver/psp/PSP_EditPSPBlackBoard.java
 ./planserver/src/org/cougaar/lib/planserver/psp/PSP_KeepAlive.java
-./planserver/src/org/cougaar/lib/planserver/psp/PSP_PlugInLoader.java
+./planserver/src/org/cougaar/lib/planserver/psp/PSP_PluginLoader.java
 ./planserver/src/org/cougaar/lib/planserver/psp/PSP_LocateClusters.java
 ./planserver/src/org/cougaar/lib/planserver/psp/PSP_SocietyMetrics.java
 ./planserver/src/org/cougaar/lib/planserver/psp/PSP_PlanView.java
@@ -3453,7 +3453,7 @@ cvs server: use 'cvs commit' to add this file permanently
 ./planserver/src/org/cougaar/lib/planserver/PlanServiceUtilities.java
 ./planserver/src/org/cougaar/lib/planserver/KeepAlive.java
 ./planserver/src/org/cougaar/lib/planserver/HttpInput.java 1 changes
-./planserver/src/org/cougaar/lib/planserver/PlanServerPlugIn.java 2 changes
+./planserver/src/org/cougaar/lib/planserver/PlanServerPlugin.java 2 changes
 ./planserver/src/org/cougaar/lib/planserver/PSP_BaseAdapter.java
 ./planserver/src/org/cougaar/lib/planserver/server/slp/SLP_LocalResource.java
 ./planserver/src/org/cougaar/lib/planserver/server/slp/SLP_FileDocument.java
@@ -3478,9 +3478,9 @@ cvs server: use 'cvs commit' to add this file permanently
 ./planserver/src/org/cougaar/lib/planserver/server/ProxyMap.java
 ./planserver/src/org/cougaar/lib/planserver/server/HttpInputAdapter.java 2 changes
 ./planserver/src/org/cougaar/lib/planserver/server/HttpTokenizerImpl.java
-./planserver/src/org/cougaar/lib/planserver/server/DummyServerPlugIn.java
+./planserver/src/org/cougaar/lib/planserver/server/DummyServerPlugin.java
 ./planserver/src/org/cougaar/lib/planserver/server/Session.java
-./planserver/src/org/cougaar/lib/planserver/server/ServerPlugInSupportWrapper.java
+./planserver/src/org/cougaar/lib/planserver/server/ServerPluginSupportWrapper.java
 ./planserver/src/org/cougaar/lib/planserver/server/FirstServiceLP.java
 ./planserver/src/org/cougaar/lib/planserver/server/LoggingSupportAdapter.java
 ./planserver/src/org/cougaar/lib/planserver/server/PlanServiceProviderHarness.ok
@@ -3502,7 +3502,7 @@ cvs server: use 'cvs commit' to add this file permanently
 ./planserver/src/org/cougaar/lib/planserver/PSPBlackBoard.java
 ./planserver/src/org/cougaar/lib/planserver/PlanServiceContext.java
 ./planserver/src/org/cougaar/lib/planserver/NamedPSP.java 1 changes
-./planserver/src/org/cougaar/lib/planserver/ServerPlugInSupport.java
+./planserver/src/org/cougaar/lib/planserver/ServerPluginSupport.java
 ./planserver/src/org/cougaar/lib/planserver/RuntimePSPException.java
 ./planserver/src/org/cougaar/lib/planserver/UISubscriber.java
 ./planserver/src/org/cougaar/lib/planserver/UseDirectSocketOutputStream.java
@@ -3572,31 +3572,31 @@ cvs server: use 'cvs commit' to add this file permanently
 ./tutorial/doc/HANOI_README.txt 4 changes
 ./tutorial/doc/README_FIRST.txt 8 changes
 ./tutorial/doc/BINARY_README.txt 6 changes
-./tutorial/src/org/cougaar/tutorial/faststart/hanoi/HanoiInitPlugIn.java
+./tutorial/src/org/cougaar/tutorial/faststart/hanoi/HanoiInitPlugin.java
 ./tutorial/src/org/cougaar/tutorial/faststart/hanoi/HanoiUtils.java
 ./tutorial/src/org/cougaar/tutorial/faststart/hanoi/PolePosition.java
-./tutorial/src/org/cougaar/tutorial/faststart/hanoi/HanoiPlugIn.java
-./tutorial/src/org/cougaar/tutorial/faststart/hanoi/HanoiMoverPlugIn.java
+./tutorial/src/org/cougaar/tutorial/faststart/hanoi/HanoiPlugin.java
+./tutorial/src/org/cougaar/tutorial/faststart/hanoi/HanoiMoverPlugin.java
 ./tutorial/src/org/cougaar/tutorial/faststart/Organization.java 1 changes
-./tutorial/src/org/cougaar/tutorial/faststart/calendar/CalendarManagerPlugIn.java
+./tutorial/src/org/cougaar/tutorial/faststart/calendar/CalendarManagerPlugin.java
 ./tutorial/src/org/cougaar/tutorial/faststart/calendar/CalendarAsset.java
-./tutorial/src/org/cougaar/tutorial/faststart/calendar/CalendarAllocatorPlugIn.java
-./tutorial/src/org/cougaar/tutorial/faststart/calendar/CalendarAssessorPlugIn.java
-./tutorial/src/org/cougaar/tutorial/faststart/calendar/CalendarPerturbingPlugIn.java
+./tutorial/src/org/cougaar/tutorial/faststart/calendar/CalendarAllocatorPlugin.java
+./tutorial/src/org/cougaar/tutorial/faststart/calendar/CalendarAssessorPlugin.java
+./tutorial/src/org/cougaar/tutorial/faststart/calendar/CalendarPerturbingPlugin.java
 ./tutorial/src/org/cougaar/tutorial/faststart/calendar/CalendarUtils.java
-./tutorial/src/org/cougaar/tutorial/faststart/calendar/CalendarRequesterPlugIn.java
-./tutorial/src/org/cougaar/tutorial/faststart/binary/BinaryResponderPlugIn.java
-./tutorial/src/org/cougaar/tutorial/faststart/binary/BinaryDispatcherPlugIn.java
+./tutorial/src/org/cougaar/tutorial/faststart/calendar/CalendarRequesterPlugin.java
+./tutorial/src/org/cougaar/tutorial/faststart/binary/BinaryResponderPlugin.java
+./tutorial/src/org/cougaar/tutorial/faststart/binary/BinaryDispatcherPlugin.java
 ./tutorial/src/org/cougaar/tutorial/faststart/binary/BinaryUtils.java
-./tutorial/src/org/cougaar/tutorial/faststart/binary/BinaryIteratorPlugIn.java
+./tutorial/src/org/cougaar/tutorial/faststart/binary/BinaryIteratorPlugin.java
 ./tutorial/src/org/cougaar/tutorial/faststart/computer/assets/computer_assets.def
 ./tutorial/src/org/cougaar/tutorial/faststart/computer/assets/properties.def
-./tutorial/src/org/cougaar/tutorial/faststart/computer/ComputerLDMPlugIn.java
-./tutorial/src/org/cougaar/tutorial/faststart/computer/ComputerShopperPlugIn.java
+./tutorial/src/org/cougaar/tutorial/faststart/computer/ComputerLDMPlugin.java
+./tutorial/src/org/cougaar/tutorial/faststart/computer/ComputerShopperPlugin.java
 ./tutorial/src/org/cougaar/tutorial/faststart/computer/ComputerUtils.java
-./tutorial/src/org/cougaar/tutorial/faststart/computer/ComputerStorePlugIn.java
-./tutorial/src/org/cougaar/tutorial/faststart/computer/ComputerAssetListerPlugIn.java
-./tutorial/src/org/cougaar/tutorial/faststart/TutorialHookupPlugIn.java
+./tutorial/src/org/cougaar/tutorial/faststart/computer/ComputerStorePlugin.java
+./tutorial/src/org/cougaar/tutorial/faststart/computer/ComputerAssetListerPlugin.java
+./tutorial/src/org/cougaar/tutorial/faststart/TutorialHookupPlugin.java
 ./tutorial/src/org/cougaar/tutorial/faststart/TutorialUtils.java
 ./tutorial/src/build.properties
 ./tutorial/data/tutorial.psps.xml 1 changes
@@ -3627,12 +3627,12 @@ cvs server: use 'cvs commit' to add this file permanently
 ./tutorial/exercises/Exercise2/default.psps.xml
 ./tutorial/exercises/Exercise2/Run.bat 6 changes
 ./tutorial/exercises/Exercise2/build.bat 4 changes
-./tutorial/exercises/Exercise2/tutorial/ProgrammerLDMPlugIn.java-with-more-hints 1 changes
-./tutorial/exercises/Exercise2/tutorial/ProgrammerLDMPlugIn.java 1 changes
+./tutorial/exercises/Exercise2/tutorial/ProgrammerLDMPlugin.java-with-more-hints 1 changes
+./tutorial/exercises/Exercise2/tutorial/ProgrammerLDMPlugin.java 1 changes
 ./tutorial/exercises/Exercise2/tutorial/ProgrammerAssetAdapter.java 1 changes
 ./tutorial/exercises/Exercise2/tutorial/assets/programmer_assets.def
 ./tutorial/exercises/Exercise2/tutorial/assets/properties.def
-./tutorial/exercises/Exercise2/tutorial/ProgrammerLDMPlugIn.java-with-hints 1 changes
+./tutorial/exercises/Exercise2/tutorial/ProgrammerLDMPlugin.java-with-hints 1 changes
 ./tutorial/exercises/Exercise2/tutorial/Schedule.java
 ./tutorial/exercises/Exercise2/ExerciseTwo.ini
 ./tutorial/exercises/Exercise3/makeassets.bat 2 changes
@@ -3642,17 +3642,17 @@ cvs server: use 'cvs commit' to add this file permanently
 ./tutorial/exercises/Exercise3/default.psps.xml
 ./tutorial/exercises/Exercise3/Run.bat 6 changes
 ./tutorial/exercises/Exercise3/build.bat 4 changes
-./tutorial/exercises/Exercise3/tutorial/ManagerPlugIn.java-with-hints 1 changes
-./tutorial/exercises/Exercise3/tutorial/ManagerPlugIn.java 1 changes
-./tutorial/exercises/Exercise3/tutorial/ProgrammerLDMPlugIn.java 1 changes
-./tutorial/exercises/Exercise3/tutorial/ManagerAllocatorPlugIn.java-with-more-hints 1 changes
+./tutorial/exercises/Exercise3/tutorial/ManagerPlugin.java-with-hints 1 changes
+./tutorial/exercises/Exercise3/tutorial/ManagerPlugin.java 1 changes
+./tutorial/exercises/Exercise3/tutorial/ProgrammerLDMPlugin.java 1 changes
+./tutorial/exercises/Exercise3/tutorial/ManagerAllocatorPlugin.java-with-more-hints 1 changes
 ./tutorial/exercises/Exercise3/tutorial/ProgrammerAssetAdapter.java 1 changes
 ./tutorial/exercises/Exercise3/tutorial/assets/programmer_assets.def
 ./tutorial/exercises/Exercise3/tutorial/assets/properties.def
-./tutorial/exercises/Exercise3/tutorial/ManagerAllocatorPlugIn.java 1 changes
-./tutorial/exercises/Exercise3/tutorial/ManagerAllocatorPlugIn.java-with-hints 1 changes
+./tutorial/exercises/Exercise3/tutorial/ManagerAllocatorPlugin.java 1 changes
+./tutorial/exercises/Exercise3/tutorial/ManagerAllocatorPlugin.java-with-hints 1 changes
 ./tutorial/exercises/Exercise3/tutorial/Schedule.java
-./tutorial/exercises/Exercise3/tutorial/ManagerPlugIn.java-with-more-hints 1 changes
+./tutorial/exercises/Exercise3/tutorial/ManagerPlugin.java-with-more-hints 1 changes
 ./tutorial/exercises/Exercise4/makeassets.bat 2 changes
 ./tutorial/exercises/Exercise4/Management-prototype-ini.dat
 ./tutorial/exercises/Exercise4/LDMDomains.ini 1 changes
@@ -3661,18 +3661,18 @@ cvs server: use 'cvs commit' to add this file permanently
 ./tutorial/exercises/Exercise4/Development-prototype-ini.dat
 ./tutorial/exercises/Exercise4/Run.bat 6 changes
 ./tutorial/exercises/Exercise4/build.bat 4 changes
-./tutorial/exercises/Exercise4/tutorial/ManagerPlugIn.java 1 changes
-./tutorial/exercises/Exercise4/tutorial/ProgrammerLDMPlugIn.java 1 changes
-./tutorial/exercises/Exercise4/tutorial/ManagerAllocatorPlugIn.java-with-more-hints 1 changes
+./tutorial/exercises/Exercise4/tutorial/ManagerPlugin.java 1 changes
+./tutorial/exercises/Exercise4/tutorial/ProgrammerLDMPlugin.java 1 changes
+./tutorial/exercises/Exercise4/tutorial/ManagerAllocatorPlugin.java-with-more-hints 1 changes
 ./tutorial/exercises/Exercise4/tutorial/ProgrammerAssetAdapter.java 1 changes
 ./tutorial/exercises/Exercise4/tutorial/assets/programmer_assets.def
 ./tutorial/exercises/Exercise4/tutorial/assets/properties.def
-./tutorial/exercises/Exercise4/tutorial/ManagerAllocatorPlugIn.java 1 changes
-./tutorial/exercises/Exercise4/tutorial/DevelopmentAllocatorPlugIn.java 1 changes
-./tutorial/exercises/Exercise4/tutorial/ManagerAllocatorPlugIn.java-with-hints 1 changes
-./tutorial/exercises/Exercise4/tutorial/DevelopmentAllocatorPlugIn.java-more-hints 1 changes
+./tutorial/exercises/Exercise4/tutorial/ManagerAllocatorPlugin.java 1 changes
+./tutorial/exercises/Exercise4/tutorial/DevelopmentAllocatorPlugin.java 1 changes
+./tutorial/exercises/Exercise4/tutorial/ManagerAllocatorPlugin.java-with-hints 1 changes
+./tutorial/exercises/Exercise4/tutorial/DevelopmentAllocatorPlugin.java-more-hints 1 changes
 ./tutorial/exercises/Exercise4/tutorial/Schedule.java
-./tutorial/exercises/Exercise4/tutorial/DevelopmentAllocatorPlugIn.java-hints 1 changes
+./tutorial/exercises/Exercise4/tutorial/DevelopmentAllocatorPlugin.java-hints 1 changes
 ./tutorial/exercises/Exercise5/makeassets.bat 2 changes
 ./tutorial/exercises/Exercise5/Management-prototype-ini.dat
 ./tutorial/exercises/Exercise5/LDMDomains.ini 1 changes
@@ -3682,13 +3682,13 @@ cvs server: use 'cvs commit' to add this file permanently
 ./tutorial/exercises/Exercise5/Development.ini
 ./tutorial/exercises/Exercise5/Run.bat 6 changes
 ./tutorial/exercises/Exercise5/build.bat 4 changes
-./tutorial/exercises/Exercise5/tutorial/ManagerPlugIn.java 1 changes
-./tutorial/exercises/Exercise5/tutorial/ProgrammerLDMPlugIn.java 1 changes
+./tutorial/exercises/Exercise5/tutorial/ManagerPlugin.java 1 changes
+./tutorial/exercises/Exercise5/tutorial/ProgrammerLDMPlugin.java 1 changes
 ./tutorial/exercises/Exercise5/tutorial/ProgrammerAssetAdapter.java 1 changes
 ./tutorial/exercises/Exercise5/tutorial/assets/programmer_assets.def
 ./tutorial/exercises/Exercise5/tutorial/assets/properties.def
-./tutorial/exercises/Exercise5/tutorial/ManagerAllocatorPlugIn.java 1 changes
-./tutorial/exercises/Exercise5/tutorial/DevelopmentAllocatorPlugIn.java 1 changes
+./tutorial/exercises/Exercise5/tutorial/ManagerAllocatorPlugin.java 1 changes
+./tutorial/exercises/Exercise5/tutorial/DevelopmentAllocatorPlugin.java 1 changes
 ./tutorial/exercises/Exercise5/tutorial/PSP_ProgrammerSchedule.java-with-more-hints
 ./tutorial/exercises/Exercise5/tutorial/Schedule.java
 ./tutorial/exercises/Exercise5/tutorial/htmlintro.html
@@ -3706,19 +3706,19 @@ cvs server: use 'cvs commit' to add this file permanently
 ./tutorial/exercises/Exercise6/Development.ini
 ./tutorial/exercises/Exercise6/Run.bat 6 changes
 ./tutorial/exercises/Exercise6/build.bat 4 changes
-./tutorial/exercises/Exercise6/tutorial/ManagerPlugIn.java-with-hints 1 changes
-./tutorial/exercises/Exercise6/tutorial/ManagerPlugIn.java 1 changes
-./tutorial/exercises/Exercise6/tutorial/ProgrammerLDMPlugIn.java 1 changes
-./tutorial/exercises/Exercise6/tutorial/DevelopmentAllocatorPlugIn.java-with-more-hints 1 changes
+./tutorial/exercises/Exercise6/tutorial/ManagerPlugin.java-with-hints 1 changes
+./tutorial/exercises/Exercise6/tutorial/ManagerPlugin.java 1 changes
+./tutorial/exercises/Exercise6/tutorial/ProgrammerLDMPlugin.java 1 changes
+./tutorial/exercises/Exercise6/tutorial/DevelopmentAllocatorPlugin.java-with-more-hints 1 changes
 ./tutorial/exercises/Exercise6/tutorial/ProgrammerAssetAdapter.java 1 changes
-./tutorial/exercises/Exercise6/tutorial/DevelopmentAllocatorPlugIn.java-with-hints 1 changes
+./tutorial/exercises/Exercise6/tutorial/DevelopmentAllocatorPlugin.java-with-hints 1 changes
 ./tutorial/exercises/Exercise6/tutorial/assets/programmer_assets.def
 ./tutorial/exercises/Exercise6/tutorial/assets/properties.def
-./tutorial/exercises/Exercise6/tutorial/ManagerAllocatorPlugIn.java 1 changes
-./tutorial/exercises/Exercise6/tutorial/DevelopmentAllocatorPlugIn.java 1 changes
+./tutorial/exercises/Exercise6/tutorial/ManagerAllocatorPlugin.java 1 changes
+./tutorial/exercises/Exercise6/tutorial/DevelopmentAllocatorPlugin.java 1 changes
 ./tutorial/exercises/Exercise6/tutorial/Schedule.java
 ./tutorial/exercises/Exercise6/tutorial/PSP_ProgrammerSchedule.java
-./tutorial/exercises/Exercise6/tutorial/ManagerPlugIn.java-with-more-hints 1 changes
+./tutorial/exercises/Exercise6/tutorial/ManagerPlugin.java-with-more-hints 1 changes
 ./tutorial/exercises/Exercise6/Management.ini
 ./tutorial/exercises/Exercise7/makeassets.bat 2 changes
 ./tutorial/exercises/Exercise7/Management-prototype-ini.dat
@@ -3730,17 +3730,17 @@ cvs server: use 'cvs commit' to add this file permanently
 ./tutorial/exercises/Exercise7/Run.bat 6 changes
 ./tutorial/exercises/Exercise7/build.bat 4 changes
 ./tutorial/exercises/Exercise7/ExerciseSevenNode.ini
-./tutorial/exercises/Exercise7/tutorial/ManagerPlugIn.java 1 changes
-./tutorial/exercises/Exercise7/tutorial/ProgrammerLDMPlugIn.java 1 changes
-./tutorial/exercises/Exercise7/tutorial/DevelopmentAllocatorPlugIn.java-with-more-hints 1 changes
-./tutorial/exercises/Exercise7/tutorial/ManagerAllocatorPlugIn.java-with-more-hints 1 changes
+./tutorial/exercises/Exercise7/tutorial/ManagerPlugin.java 1 changes
+./tutorial/exercises/Exercise7/tutorial/ProgrammerLDMPlugin.java 1 changes
+./tutorial/exercises/Exercise7/tutorial/DevelopmentAllocatorPlugin.java-with-more-hints 1 changes
+./tutorial/exercises/Exercise7/tutorial/ManagerAllocatorPlugin.java-with-more-hints 1 changes
 ./tutorial/exercises/Exercise7/tutorial/ProgrammerAssetAdapter.java 1 changes
-./tutorial/exercises/Exercise7/tutorial/DevelopmentAllocatorPlugIn.java-with-hints 1 changes
+./tutorial/exercises/Exercise7/tutorial/DevelopmentAllocatorPlugin.java-with-hints 1 changes
 ./tutorial/exercises/Exercise7/tutorial/assets/programmer_assets.def
 ./tutorial/exercises/Exercise7/tutorial/assets/properties.def
-./tutorial/exercises/Exercise7/tutorial/ManagerAllocatorPlugIn.java 1 changes
-./tutorial/exercises/Exercise7/tutorial/DevelopmentAllocatorPlugIn.java 1 changes
-./tutorial/exercises/Exercise7/tutorial/ManagerAllocatorPlugIn.java-with-hints 1 changes
+./tutorial/exercises/Exercise7/tutorial/ManagerAllocatorPlugin.java 1 changes
+./tutorial/exercises/Exercise7/tutorial/DevelopmentAllocatorPlugin.java 1 changes
+./tutorial/exercises/Exercise7/tutorial/ManagerAllocatorPlugin.java-with-hints 1 changes
 ./tutorial/exercises/Exercise7/tutorial/Schedule.java
 ./tutorial/exercises/Exercise7/tutorial/PSP_ProgrammerSchedule.java
 ./tutorial/exercises/Exercise7/Management.ini
@@ -3754,18 +3754,18 @@ cvs server: use 'cvs commit' to add this file permanently
 ./tutorial/exercises/Exercise8/Development.ini
 ./tutorial/exercises/Exercise8/Run.bat 6 changes
 ./tutorial/exercises/Exercise8/build.bat 4 changes
-./tutorial/exercises/Exercise8/tutorial/DevelopmentExpanderPlugIn.java-with-more-hints 1 changes
-./tutorial/exercises/Exercise8/tutorial/ManagerPlugIn.java 1 changes
-./tutorial/exercises/Exercise8/tutorial/ProgrammerLDMPlugIn.java 1 changes
-./tutorial/exercises/Exercise8/tutorial/DevelopmentExpanderPlugIn.java 1 changes
-./tutorial/exercises/Exercise8/tutorial/DevelopmentAllocatorPlugIn.java-with-more-hints 1 changes
+./tutorial/exercises/Exercise8/tutorial/DevelopmentExpanderPlugin.java-with-more-hints 1 changes
+./tutorial/exercises/Exercise8/tutorial/ManagerPlugin.java 1 changes
+./tutorial/exercises/Exercise8/tutorial/ProgrammerLDMPlugin.java 1 changes
+./tutorial/exercises/Exercise8/tutorial/DevelopmentExpanderPlugin.java 1 changes
+./tutorial/exercises/Exercise8/tutorial/DevelopmentAllocatorPlugin.java-with-more-hints 1 changes
 ./tutorial/exercises/Exercise8/tutorial/ProgrammerAssetAdapter.java 1 changes
-./tutorial/exercises/Exercise8/tutorial/DevelopmentAllocatorPlugIn.java-with-hints 1 changes
+./tutorial/exercises/Exercise8/tutorial/DevelopmentAllocatorPlugin.java-with-hints 1 changes
 ./tutorial/exercises/Exercise8/tutorial/assets/programmer_assets.def
 ./tutorial/exercises/Exercise8/tutorial/assets/properties.def
-./tutorial/exercises/Exercise8/tutorial/DevelopmentExpanderPlugIn.java-with-hints 1 changes
-./tutorial/exercises/Exercise8/tutorial/ManagerAllocatorPlugIn.java 1 changes
-./tutorial/exercises/Exercise8/tutorial/DevelopmentAllocatorPlugIn.java 1 changes
+./tutorial/exercises/Exercise8/tutorial/DevelopmentExpanderPlugin.java-with-hints 1 changes
+./tutorial/exercises/Exercise8/tutorial/ManagerAllocatorPlugin.java 1 changes
+./tutorial/exercises/Exercise8/tutorial/DevelopmentAllocatorPlugin.java 1 changes
 ./tutorial/exercises/Exercise8/tutorial/Schedule.java
 ./tutorial/exercises/Exercise8/tutorial/PSP_ProgrammerSchedule.java
 ./tutorial/exercises/Exercise8/Management.ini
@@ -3779,24 +3779,24 @@ cvs server: use 'cvs commit' to add this file permanently
 ./tutorial/exercises/Exercise9/Development.ini
 ./tutorial/exercises/Exercise9/Run.bat 6 changes
 ./tutorial/exercises/Exercise9/build.bat 4 changes
-./tutorial/exercises/Exercise9/tutorial/DevelopmentExpanderPlugIn.java-with-more-hints 1 changes
-./tutorial/exercises/Exercise9/tutorial/ManagerPlugIn.java 1 changes
-./tutorial/exercises/Exercise9/tutorial/ProgrammerLDMPlugIn.java 1 changes
-./tutorial/exercises/Exercise9/tutorial/DevelopmentExpanderPlugIn.java 1 changes
-./tutorial/exercises/Exercise9/tutorial/DevelopmentAllocatorPlugIn.java-with-more-hints 1 changes
-./tutorial/exercises/Exercise9/tutorial/DevelopmentAssessorPlugIn.java 1 changes
+./tutorial/exercises/Exercise9/tutorial/DevelopmentExpanderPlugin.java-with-more-hints 1 changes
+./tutorial/exercises/Exercise9/tutorial/ManagerPlugin.java 1 changes
+./tutorial/exercises/Exercise9/tutorial/ProgrammerLDMPlugin.java 1 changes
+./tutorial/exercises/Exercise9/tutorial/DevelopmentExpanderPlugin.java 1 changes
+./tutorial/exercises/Exercise9/tutorial/DevelopmentAllocatorPlugin.java-with-more-hints 1 changes
+./tutorial/exercises/Exercise9/tutorial/DevelopmentAssessorPlugin.java 1 changes
 ./tutorial/exercises/Exercise9/tutorial/ProgrammerAssetAdapter.java 1 changes
-./tutorial/exercises/Exercise9/tutorial/DevelopmentAllocatorPlugIn.java-with-hints 1 changes
+./tutorial/exercises/Exercise9/tutorial/DevelopmentAllocatorPlugin.java-with-hints 1 changes
 ./tutorial/exercises/Exercise9/tutorial/PSP_ScheduleVacation.java
 ./tutorial/exercises/Exercise9/tutorial/assets/programmer_assets.def
 ./tutorial/exercises/Exercise9/tutorial/assets/properties.def
-./tutorial/exercises/Exercise9/tutorial/DevelopmentExpanderPlugIn.java-with-hints 1 changes
-./tutorial/exercises/Exercise9/tutorial/ManagerAllocatorPlugIn.java 1 changes
-./tutorial/exercises/Exercise9/tutorial/DevelopmentAllocatorPlugIn.java 1 changes
+./tutorial/exercises/Exercise9/tutorial/DevelopmentExpanderPlugin.java-with-hints 1 changes
+./tutorial/exercises/Exercise9/tutorial/ManagerAllocatorPlugin.java 1 changes
+./tutorial/exercises/Exercise9/tutorial/DevelopmentAllocatorPlugin.java 1 changes
 ./tutorial/exercises/Exercise9/tutorial/Schedule.java
-./tutorial/exercises/Exercise9/tutorial/DevelopmentAssessorPlugIn.java-with-more-hints 1 changes
+./tutorial/exercises/Exercise9/tutorial/DevelopmentAssessorPlugin.java-with-more-hints 1 changes
 ./tutorial/exercises/Exercise9/tutorial/PSP_ProgrammerSchedule.java
-./tutorial/exercises/Exercise9/tutorial/DevelopmentAssessorPlugIn.java-with-hints 1 changes
+./tutorial/exercises/Exercise9/tutorial/DevelopmentAssessorPlugin.java-with-hints 1 changes
 ./tutorial/exercises/Exercise9/Management.ini
 ./tutorial/exercises/Exercise10/makeassets.bat 2 changes
 ./tutorial/exercises/Exercise10/Management-prototype-ini.dat
@@ -3807,16 +3807,16 @@ cvs server: use 'cvs commit' to add this file permanently
 ./tutorial/exercises/Exercise10/Development.ini
 ./tutorial/exercises/Exercise10/Run.bat 6 changes
 ./tutorial/exercises/Exercise10/build.bat 4 changes
-./tutorial/exercises/Exercise10/tutorial/ManagerPlugIn.java 1 changes
-./tutorial/exercises/Exercise10/tutorial/ProgrammerLDMPlugIn.java 1 changes
-./tutorial/exercises/Exercise10/tutorial/DevelopmentExpanderPlugIn.java 1 changes
-./tutorial/exercises/Exercise10/tutorial/DevelopmentAssessorPlugIn.java 1 changes
+./tutorial/exercises/Exercise10/tutorial/ManagerPlugin.java 1 changes
+./tutorial/exercises/Exercise10/tutorial/ProgrammerLDMPlugin.java 1 changes
+./tutorial/exercises/Exercise10/tutorial/DevelopmentExpanderPlugin.java 1 changes
+./tutorial/exercises/Exercise10/tutorial/DevelopmentAssessorPlugin.java 1 changes
 ./tutorial/exercises/Exercise10/tutorial/ProgrammerAssetAdapter.java 1 changes
 ./tutorial/exercises/Exercise10/tutorial/PSP_ScheduleVacation.java
 ./tutorial/exercises/Exercise10/tutorial/assets/programmer_assets.def
 ./tutorial/exercises/Exercise10/tutorial/assets/properties.def
-./tutorial/exercises/Exercise10/tutorial/ManagerAllocatorPlugIn.java 1 changes
-./tutorial/exercises/Exercise10/tutorial/DevelopmentAllocatorPlugIn.java 1 changes
+./tutorial/exercises/Exercise10/tutorial/ManagerAllocatorPlugin.java 1 changes
+./tutorial/exercises/Exercise10/tutorial/DevelopmentAllocatorPlugin.java 1 changes
 ./tutorial/exercises/Exercise10/tutorial/Schedule.java
 ./tutorial/exercises/Exercise10/tutorial/PSP_ProgrammerSchedule.java
 ./tutorial/exercises/Exercise10/Management.ini
@@ -3825,16 +3825,16 @@ cvs server: use 'cvs commit' to add this file permanently
 ./tutorial/exercises/solutions/Exercise1/ExerciseOneNode.ini
 ./tutorial/exercises/solutions/Exercise1/Run.bat 6 changes
 ./tutorial/exercises/solutions/Exercise1/build.bat 4 changes
-./tutorial/exercises/solutions/Exercise1/tutorial/WorkerPlugIn.java 1 changes
+./tutorial/exercises/solutions/Exercise1/tutorial/WorkerPlugin.java 1 changes
 ./tutorial/exercises/solutions/Exercise1/tutorial/Job.java
-./tutorial/exercises/solutions/Exercise1/tutorial/ManagerPlugIn.java 1 changes
+./tutorial/exercises/solutions/Exercise1/tutorial/ManagerPlugin.java 1 changes
 ./tutorial/exercises/solutions/Exercise2/makeassets.bat 2 changes
 ./tutorial/exercises/solutions/Exercise2/ExerciseTwoNode.ini
 ./tutorial/exercises/solutions/Exercise2/alpreg.ini
 ./tutorial/exercises/solutions/Exercise2/default.psps.xml
 ./tutorial/exercises/solutions/Exercise2/Run.bat 6 changes
 ./tutorial/exercises/solutions/Exercise2/build.bat 4 changes
-./tutorial/exercises/solutions/Exercise2/tutorial/ProgrammerLDMPlugIn.java 1 changes
+./tutorial/exercises/solutions/Exercise2/tutorial/ProgrammerLDMPlugin.java 1 changes
 ./tutorial/exercises/solutions/Exercise2/tutorial/ProgrammerAssetAdapter.java 1 changes
 ./tutorial/exercises/solutions/Exercise2/tutorial/assets/programmer_assets.def
 ./tutorial/exercises/solutions/Exercise2/tutorial/assets/properties.def
@@ -3847,12 +3847,12 @@ cvs server: use 'cvs commit' to add this file permanently
 ./tutorial/exercises/solutions/Exercise3/default.psps.xml
 ./tutorial/exercises/solutions/Exercise3/Run.bat 6 changes
 ./tutorial/exercises/solutions/Exercise3/build.bat 4 changes
-./tutorial/exercises/solutions/Exercise3/tutorial/ManagerPlugIn.java 1 changes
-./tutorial/exercises/solutions/Exercise3/tutorial/ProgrammerLDMPlugIn.java 1 changes
+./tutorial/exercises/solutions/Exercise3/tutorial/ManagerPlugin.java 1 changes
+./tutorial/exercises/solutions/Exercise3/tutorial/ProgrammerLDMPlugin.java 1 changes
 ./tutorial/exercises/solutions/Exercise3/tutorial/ProgrammerAssetAdapter.java 1 changes
 ./tutorial/exercises/solutions/Exercise3/tutorial/assets/programmer_assets.def
 ./tutorial/exercises/solutions/Exercise3/tutorial/assets/properties.def
-./tutorial/exercises/solutions/Exercise3/tutorial/ManagerAllocatorPlugIn.java 1 changes
+./tutorial/exercises/solutions/Exercise3/tutorial/ManagerAllocatorPlugin.java 1 changes
 ./tutorial/exercises/solutions/Exercise3/tutorial/Schedule.java
 ./tutorial/exercises/solutions/Exercise4/makeassets.bat 2 changes
 ./tutorial/exercises/solutions/Exercise4/Management-prototype-ini.dat
@@ -3864,13 +3864,13 @@ cvs server: use 'cvs commit' to add this file permanently
 ./tutorial/exercises/solutions/Exercise4/Development.ini
 ./tutorial/exercises/solutions/Exercise4/Run.bat 6 changes
 ./tutorial/exercises/solutions/Exercise4/build.bat 4 changes
-./tutorial/exercises/solutions/Exercise4/tutorial/ManagerPlugIn.java 1 changes
-./tutorial/exercises/solutions/Exercise4/tutorial/ProgrammerLDMPlugIn.java 1 changes
+./tutorial/exercises/solutions/Exercise4/tutorial/ManagerPlugin.java 1 changes
+./tutorial/exercises/solutions/Exercise4/tutorial/ProgrammerLDMPlugin.java 1 changes
 ./tutorial/exercises/solutions/Exercise4/tutorial/ProgrammerAssetAdapter.java 1 changes
 ./tutorial/exercises/solutions/Exercise4/tutorial/assets/programmer_assets.def
 ./tutorial/exercises/solutions/Exercise4/tutorial/assets/properties.def
-./tutorial/exercises/solutions/Exercise4/tutorial/ManagerAllocatorPlugIn.java 1 changes
-./tutorial/exercises/solutions/Exercise4/tutorial/DevelopmentAllocatorPlugIn.java 1 changes
+./tutorial/exercises/solutions/Exercise4/tutorial/ManagerAllocatorPlugin.java 1 changes
+./tutorial/exercises/solutions/Exercise4/tutorial/DevelopmentAllocatorPlugin.java 1 changes
 ./tutorial/exercises/solutions/Exercise4/tutorial/Schedule.java
 ./tutorial/exercises/solutions/Exercise4/Management.ini
 ./tutorial/exercises/solutions/Exercise5/makeassets.bat 2 changes
@@ -3882,13 +3882,13 @@ cvs server: use 'cvs commit' to add this file permanently
 ./tutorial/exercises/solutions/Exercise5/Development.ini
 ./tutorial/exercises/solutions/Exercise5/Run.bat 6 changes
 ./tutorial/exercises/solutions/Exercise5/build.bat 4 changes
-./tutorial/exercises/solutions/Exercise5/tutorial/ManagerPlugIn.java 1 changes
-./tutorial/exercises/solutions/Exercise5/tutorial/ProgrammerLDMPlugIn.java 1 changes
+./tutorial/exercises/solutions/Exercise5/tutorial/ManagerPlugin.java 1 changes
+./tutorial/exercises/solutions/Exercise5/tutorial/ProgrammerLDMPlugin.java 1 changes
 ./tutorial/exercises/solutions/Exercise5/tutorial/ProgrammerAssetAdapter.java 1 changes
 ./tutorial/exercises/solutions/Exercise5/tutorial/assets/programmer_assets.def
 ./tutorial/exercises/solutions/Exercise5/tutorial/assets/properties.def
-./tutorial/exercises/solutions/Exercise5/tutorial/ManagerAllocatorPlugIn.java 1 changes
-./tutorial/exercises/solutions/Exercise5/tutorial/DevelopmentAllocatorPlugIn.java 1 changes
+./tutorial/exercises/solutions/Exercise5/tutorial/ManagerAllocatorPlugin.java 1 changes
+./tutorial/exercises/solutions/Exercise5/tutorial/DevelopmentAllocatorPlugin.java 1 changes
 ./tutorial/exercises/solutions/Exercise5/tutorial/Schedule.java
 ./tutorial/exercises/solutions/Exercise5/tutorial/PSP_ProgrammerSchedule.java
 ./tutorial/exercises/solutions/Exercise5/ExerciseFiveNode.ini
@@ -3903,13 +3903,13 @@ cvs server: use 'cvs commit' to add this file permanently
 ./tutorial/exercises/solutions/Exercise6/Development.ini
 ./tutorial/exercises/solutions/Exercise6/Run.bat 6 changes
 ./tutorial/exercises/solutions/Exercise6/build.bat 4 changes
-./tutorial/exercises/solutions/Exercise6/tutorial/ManagerPlugIn.java 1 changes
-./tutorial/exercises/solutions/Exercise6/tutorial/ProgrammerLDMPlugIn.java 1 changes
+./tutorial/exercises/solutions/Exercise6/tutorial/ManagerPlugin.java 1 changes
+./tutorial/exercises/solutions/Exercise6/tutorial/ProgrammerLDMPlugin.java 1 changes
 ./tutorial/exercises/solutions/Exercise6/tutorial/ProgrammerAssetAdapter.java 1 changes
 ./tutorial/exercises/solutions/Exercise6/tutorial/assets/programmer_assets.def
 ./tutorial/exercises/solutions/Exercise6/tutorial/assets/properties.def
-./tutorial/exercises/solutions/Exercise6/tutorial/ManagerAllocatorPlugIn.java 1 changes
-./tutorial/exercises/solutions/Exercise6/tutorial/DevelopmentAllocatorPlugIn.java 1 changes
+./tutorial/exercises/solutions/Exercise6/tutorial/ManagerAllocatorPlugin.java 1 changes
+./tutorial/exercises/solutions/Exercise6/tutorial/DevelopmentAllocatorPlugin.java 1 changes
 ./tutorial/exercises/solutions/Exercise6/tutorial/Schedule.java
 ./tutorial/exercises/solutions/Exercise6/tutorial/PSP_ProgrammerSchedule.java
 ./tutorial/exercises/solutions/Exercise6/Management.ini
@@ -3923,13 +3923,13 @@ cvs server: use 'cvs commit' to add this file permanently
 ./tutorial/exercises/solutions/Exercise7/Run.bat 6 changes
 ./tutorial/exercises/solutions/Exercise7/build.bat 4 changes
 ./tutorial/exercises/solutions/Exercise7/ExerciseSevenNode.ini
-./tutorial/exercises/solutions/Exercise7/tutorial/ManagerPlugIn.java 1 changes
-./tutorial/exercises/solutions/Exercise7/tutorial/ProgrammerLDMPlugIn.java 1 changes
+./tutorial/exercises/solutions/Exercise7/tutorial/ManagerPlugin.java 1 changes
+./tutorial/exercises/solutions/Exercise7/tutorial/ProgrammerLDMPlugin.java 1 changes
 ./tutorial/exercises/solutions/Exercise7/tutorial/ProgrammerAssetAdapter.java 1 changes
 ./tutorial/exercises/solutions/Exercise7/tutorial/assets/programmer_assets.def
 ./tutorial/exercises/solutions/Exercise7/tutorial/assets/properties.def
-./tutorial/exercises/solutions/Exercise7/tutorial/ManagerAllocatorPlugIn.java 1 changes
-./tutorial/exercises/solutions/Exercise7/tutorial/DevelopmentAllocatorPlugIn.java 1 changes
+./tutorial/exercises/solutions/Exercise7/tutorial/ManagerAllocatorPlugin.java 1 changes
+./tutorial/exercises/solutions/Exercise7/tutorial/DevelopmentAllocatorPlugin.java 1 changes
 ./tutorial/exercises/solutions/Exercise7/tutorial/Schedule.java
 ./tutorial/exercises/solutions/Exercise7/tutorial/PSP_ProgrammerSchedule.java
 ./tutorial/exercises/solutions/Exercise7/Management.ini
@@ -3945,14 +3945,14 @@ cvs server: use 'cvs commit' to add this file permanently
 ./tutorial/exercises/solutions/Exercise8/Development.ini
 ./tutorial/exercises/solutions/Exercise8/Run.bat 6 changes
 ./tutorial/exercises/solutions/Exercise8/build.bat 4 changes
-./tutorial/exercises/solutions/Exercise8/tutorial/ManagerPlugIn.java 1 changes
-./tutorial/exercises/solutions/Exercise8/tutorial/ProgrammerLDMPlugIn.java 1 changes
-./tutorial/exercises/solutions/Exercise8/tutorial/DevelopmentExpanderPlugIn.java 1 changes
+./tutorial/exercises/solutions/Exercise8/tutorial/ManagerPlugin.java 1 changes
+./tutorial/exercises/solutions/Exercise8/tutorial/ProgrammerLDMPlugin.java 1 changes
+./tutorial/exercises/solutions/Exercise8/tutorial/DevelopmentExpanderPlugin.java 1 changes
 ./tutorial/exercises/solutions/Exercise8/tutorial/ProgrammerAssetAdapter.java 1 changes
 ./tutorial/exercises/solutions/Exercise8/tutorial/assets/programmer_assets.def
 ./tutorial/exercises/solutions/Exercise8/tutorial/assets/properties.def
-./tutorial/exercises/solutions/Exercise8/tutorial/ManagerAllocatorPlugIn.java 1 changes
-./tutorial/exercises/solutions/Exercise8/tutorial/DevelopmentAllocatorPlugIn.java 1 changes
+./tutorial/exercises/solutions/Exercise8/tutorial/ManagerAllocatorPlugin.java 1 changes
+./tutorial/exercises/solutions/Exercise8/tutorial/DevelopmentAllocatorPlugin.java 1 changes
 ./tutorial/exercises/solutions/Exercise8/tutorial/Schedule.java
 ./tutorial/exercises/solutions/Exercise8/tutorial/PSP_ProgrammerSchedule.java
 ./tutorial/exercises/solutions/Exercise8/Management.ini
@@ -3966,16 +3966,16 @@ cvs server: use 'cvs commit' to add this file permanently
 ./tutorial/exercises/solutions/Exercise9/Development.ini
 ./tutorial/exercises/solutions/Exercise9/Run.bat 6 changes
 ./tutorial/exercises/solutions/Exercise9/build.bat 4 changes
-./tutorial/exercises/solutions/Exercise9/tutorial/ManagerPlugIn.java 1 changes
-./tutorial/exercises/solutions/Exercise9/tutorial/ProgrammerLDMPlugIn.java 1 changes
-./tutorial/exercises/solutions/Exercise9/tutorial/DevelopmentExpanderPlugIn.java 1 changes
-./tutorial/exercises/solutions/Exercise9/tutorial/DevelopmentAssessorPlugIn.java 1 changes
+./tutorial/exercises/solutions/Exercise9/tutorial/ManagerPlugin.java 1 changes
+./tutorial/exercises/solutions/Exercise9/tutorial/ProgrammerLDMPlugin.java 1 changes
+./tutorial/exercises/solutions/Exercise9/tutorial/DevelopmentExpanderPlugin.java 1 changes
+./tutorial/exercises/solutions/Exercise9/tutorial/DevelopmentAssessorPlugin.java 1 changes
 ./tutorial/exercises/solutions/Exercise9/tutorial/ProgrammerAssetAdapter.java 1 changes
 ./tutorial/exercises/solutions/Exercise9/tutorial/PSP_ScheduleVacation.java
 ./tutorial/exercises/solutions/Exercise9/tutorial/assets/programmer_assets.def
 ./tutorial/exercises/solutions/Exercise9/tutorial/assets/properties.def
-./tutorial/exercises/solutions/Exercise9/tutorial/ManagerAllocatorPlugIn.java 1 changes
-./tutorial/exercises/solutions/Exercise9/tutorial/DevelopmentAllocatorPlugIn.java 1 changes
+./tutorial/exercises/solutions/Exercise9/tutorial/ManagerAllocatorPlugin.java 1 changes
+./tutorial/exercises/solutions/Exercise9/tutorial/DevelopmentAllocatorPlugin.java 1 changes
 ./tutorial/exercises/solutions/Exercise9/tutorial/Schedule.java
 ./tutorial/exercises/solutions/Exercise9/tutorial/PSP_ProgrammerSchedule.java
 ./tutorial/exercises/solutions/Exercise9/Management.ini
@@ -3989,16 +3989,16 @@ cvs server: use 'cvs commit' to add this file permanently
 ./tutorial/exercises/solutions/Exercise10/Development.ini
 ./tutorial/exercises/solutions/Exercise10/Run.bat 6 changes
 ./tutorial/exercises/solutions/Exercise10/build.bat 4 changes
-./tutorial/exercises/solutions/Exercise10/tutorial/ManagerPlugIn.java 1 changes
-./tutorial/exercises/solutions/Exercise10/tutorial/ProgrammerLDMPlugIn.java 1 changes
-./tutorial/exercises/solutions/Exercise10/tutorial/DevelopmentExpanderPlugIn.java 1 changes
-./tutorial/exercises/solutions/Exercise10/tutorial/DevelopmentAssessorPlugIn.java 1 changes
+./tutorial/exercises/solutions/Exercise10/tutorial/ManagerPlugin.java 1 changes
+./tutorial/exercises/solutions/Exercise10/tutorial/ProgrammerLDMPlugin.java 1 changes
+./tutorial/exercises/solutions/Exercise10/tutorial/DevelopmentExpanderPlugin.java 1 changes
+./tutorial/exercises/solutions/Exercise10/tutorial/DevelopmentAssessorPlugin.java 1 changes
 ./tutorial/exercises/solutions/Exercise10/tutorial/ProgrammerAssetAdapter.java 1 changes
 ./tutorial/exercises/solutions/Exercise10/tutorial/PSP_ScheduleVacation.java
 ./tutorial/exercises/solutions/Exercise10/tutorial/assets/programmer_assets.def
 ./tutorial/exercises/solutions/Exercise10/tutorial/assets/properties.def
-./tutorial/exercises/solutions/Exercise10/tutorial/ManagerAllocatorPlugIn.java 1 changes
-./tutorial/exercises/solutions/Exercise10/tutorial/DevelopmentAllocatorPlugIn.java 1 changes
+./tutorial/exercises/solutions/Exercise10/tutorial/ManagerAllocatorPlugin.java 1 changes
+./tutorial/exercises/solutions/Exercise10/tutorial/DevelopmentAllocatorPlugin.java 1 changes
 ./tutorial/exercises/solutions/Exercise10/tutorial/Schedule.java
 ./tutorial/exercises/solutions/Exercise10/tutorial/PSP_ProgrammerSchedule.java
 ./tutorial/exercises/solutions/Exercise10/ExerciseTenNodeA.ini
@@ -4025,20 +4025,20 @@ cvs server: use 'cvs commit' to add this file permanently
 ./whatif/src/WhatIfTag.java
 ./whatif/src/BranchImpl.java
 ./whatif/src/LogPlanServesLogicProvider.java 1 changes
-./whatif/src/GenericTablePlugIn.java
+./whatif/src/GenericTablePlugin.java
 ./whatif/src/BranchRequestImpl.java
 ./whatif/src/PublishableAdapter.java
-./whatif/src/WhatIfAllocatorPlugIn.java
+./whatif/src/WhatIfAllocatorPlugin.java
 ./whatif/src/build.properties
 ./whatif/src/NotificationLP.java 1 changes
 ./whatif/src/TaskImpl.java
 ./whatif/src/SuperSubscription.java
-./whatif/src/PlanServerPlugIn.java 2 changes
+./whatif/src/PlanServerPlugin.java 2 changes
 ./whatif/src/IncrementalSubscription.java
-./whatif/src/ServerPlugInSupportWrapper.java
+./whatif/src/ServerPluginSupportWrapper.java
 ./whatif/src/RemoteClusterAllocationLP.java 1 changes
-./whatif/src/PlugInAdapter.java 3 changes
-./whatif/src/OrgReportPlugIn.java
+./whatif/src/PluginAdapter.java 3 changes
+./whatif/src/OrgReportPlugin.java
 ./whatif/src/ReceiveTaskLP.java
 ./whatif/src/PlanElement.java
 ./whatif/src/BranchQuerySubscription.java
@@ -4049,14 +4049,14 @@ cvs server: scheduling file `./whatif/src/Blackboard.java' for addition
 cvs server: use 'cvs commit' to add this file permanently
 ./whatif/src/ClusterObjectFactory.java
 ./whatif/src/Publishable.java
-./whatif/src/WhatIfInitPlugIn.java
+./whatif/src/WhatIfInitPlugin.java
 ./whatif/src/BranchCollectionSubscription.java
 ./whatif/src/SuperUIDLookupSubscription.java
 ./whatif/src/BranchRequestLP.java 1 changes
 ./whatif/src/BranchIncrementalSubscription.java
 ./whatif/src/Policy.java
 ./whatif/src/AllocationImpl.java
-./whatif/src/ServerPlugInSupport.java
+./whatif/src/ServerPluginSupport.java
 ./whatif/src/OrganizationAdapter.java 1 changes
 ./whatif/src/TaskPESubscription.java
 ./whatif/src/BranchReplyAssignment.java
@@ -4068,7 +4068,7 @@ cvs server: use 'cvs commit' to add this file permanently
 ./whatif/src/ReceiveNotificationLP.java
 ./whatif/src/PSP_PlanView.java
 ./whatif/src/CollectionSubscription.java
-./whatif/src/MultiWorldPlugIn.java
+./whatif/src/MultiWorldPlugin.java
 ./whatif/src/Trigger.java
 ./whatif/src/BranchRequestAssignment.java
 ./whatif/configs/whatif/WI.ini
@@ -4091,7 +4091,7 @@ cvs server: use 'cvs commit' to add this file permanently
 ./uiframework/src/mil/darpa/log/alpine/blackjack/assessui/middletier/BJDBMaintainerBean.java
 ./uiframework/src/mil/darpa/log/alpine/blackjack/assessui/middletier/BJDBMaintainerHome.java
 ./uiframework/src/mil/darpa/log/alpine/blackjack/assessui/middletier/BJDBMaintainer.java
-./uiframework/src/mil/darpa/log/alpine/blackjack/assessui/society/ProcessDOMPlugIn.java
+./uiframework/src/mil/darpa/log/alpine/blackjack/assessui/society/ProcessDOMPlugin.java
 ./uiframework/src/mil/darpa/log/alpine/blackjack/assessui/society/DueOutQueryAdapter.java
 ./uiframework/src/mil/darpa/log/alpine/blackjack/assessui/society/InventoryQueryAdapter.java
 ./uiframework/src/mil/darpa/log/alpine/blackjack/assessui/society/DemandQueryAdapter.java
@@ -4261,7 +4261,7 @@ cvs server: use 'cvs commit' to add this file permanently
 ./uiframework/src/org/cougaar/lib/uiframework/ui/orgui/OrgSubAdapter.java
 ./uiframework/src/org/cougaar/lib/uiframework/ui/orgui/RelationSpan.java
 ./uiframework/src/org/cougaar/lib/uiframework/ui/orgui/PSP_OrgSub.java
-./uiframework/src/org/cougaar/lib/uiframework/ui/orgui/OrgSubPlugIn.java
+./uiframework/src/org/cougaar/lib/uiframework/ui/orgui/OrgSubPlugin.java
 ./uiframework/src/org/cougaar/lib/uiframework/ui/orgui/TableWrapper.java
 ./uiframework/src/org/cougaar/lib/uiframework/ui/orgui/PSP_TestAdapter.java
 ./uiframework/src/org/cougaar/lib/uiframework/ui/orgui/RelationTimeMap.java
@@ -4350,7 +4350,7 @@ cvs server: use 'cvs commit' to add this file permanently
 ./uiframework/src/org/cougaar/lib/uiframework/ui/orglocation/data/SimpleTPLocation.java
 ./uiframework/src/org/cougaar/lib/uiframework/ui/orglocation/data/TPLocation.java
 ./uiframework/src/org/cougaar/lib/uiframework/ui/orglocation/data/TPLocTable.java
-./uiframework/src/org/cougaar/lib/uiframework/ui/orglocation/plugin/LocSchedulePlugIn.java
+./uiframework/src/org/cougaar/lib/uiframework/ui/orglocation/plugin/LocSchedulePlugin.java
 ./uiframework/src/org/cougaar/lib/uiframework/ui/orglocation/plugin/TableSeeker.java
 ./uiframework/src/org/cougaar/lib/uiframework/ui/orglocation/plugin/TestScheduleDoms.java
 ./uiframework/src/org/cougaar/lib/uiframework/transducer/configs/SqlTableMap.java

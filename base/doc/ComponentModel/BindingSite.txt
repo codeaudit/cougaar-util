@@ -14,7 +14,7 @@ ContainmentBindingSite
 
 DomainBindingSite
 	Access to Object factories and other Domain objects.  In ALP,
-	this function is provided to plugins via the LDMServesPlugIn
+	this function is provided to plugins via the LDMServesPlugin
 	api, without a real Binder.
 
 MessageTransportBindingSite
