@@ -1,6 +1,6 @@
 /*
  * <copyright>
- *  Copyright 2000-2001 BBNT Solutions, LLC
+ *  Copyright 2000-2002 BBNT Solutions, LLC
  *  under sponsorship of the Defense Advanced Research Projects Agency (DARPA).
  * 
  *  This program is free software; you can redistribute it and/or modify
@@ -23,6 +23,9 @@ package org.cougaar.core.component;
 import java.util.*;
 
 /** Base class ComponentModel RuntimeException.
+ * This exception and it's extending classes is used by the component model 
+ * internals to signal problems.  It should not generally be thrown by implementations
+ * of services, serviceproviders or components.
  * @since 9.2
  **/
 public class ComponentRuntimeException extends RuntimeException
