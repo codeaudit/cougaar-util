@@ -131,6 +131,8 @@ deletion API. See org.cougaar.core.plugin.deletion package. </li>
 <li>The uiframework no longer requires the non-open source
 datagrabber module for compilation. Actual usage of some pieces will
 likely still require that software.</li>
+<li>Reworked quiescence detection mechanism to avoid logic
+problems. Quiescence detection is now more sensitive. (Bug 3359)</li>
 <li>Task.getPreferredValue now returns Double.NaN instead of -1.0 when
 the value is undefined (cbug 2919).
 </li>
