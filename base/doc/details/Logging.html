@@ -99,10 +99,10 @@ In the future the underlying implemention may be modified to use
 Sun's JSR47, so LoggingService clients shouldn't make log4j 
 assumptions when using the LoggingService.
 <p>
-By default Cougaar will write all logging calls to system-out, 
-in a form like:
+By default Cougaar will write all logging calls at WARN or
+higher to system-out, in a form like:
 <pre>
-   [Thread-name] DEBUG classname - your message
+   2002-03-08 22:26:34,898 WARN [YourClass] - your message
 </pre>
 This can be configured at node creation time by setting "-D"
 system properties.  Currently these properties use log4j-style
@@ -120,12 +120,13 @@ The system properties are:
       contents.</li>
 </ul>
 <p>
-Here is a minimal log4j property file:
+Here is a minimal log4j property file that matches the Cougaar
+default logging configuration:
 <pre>
-  log4j.rootCategory=DEBUG,A1
+  log4j.rootCategory=WARN,A1
   log4j.appender.A1=org.apache.log4j.ConsoleAppender
   log4j.appender.A1.layout=org.apache.log4j.PatternLayout
-  log4j.appender.A1.layout.ConversionPattern=%d %-4r [%t] %-5p %c %x - %m%n
+  log4j.appender.A1.layout.ConversionPattern=%d{ISO8601} %-5p [%c{1}] - %m%n
 </pre>
 Additional examples are provided in 
 <a href="http://jakarta.apache.org/log4j/docs/manual.html"
