@@ -1,3 +1,49 @@
+* 10.0
+AspectValues are now immutable.  This allows dramatic reduction in
+object copying, increased security and some significant performance
+improvements. There are several minor api changes implied by this
+change:
+	AspectValue av = preference.getAV();
+	// av.setValue(47.0); 				// old
+	preference.setAV(av.dupAspectValue(4.70));	// new
+
+Also, AspectValue is no longer Clonable, since there isn't any point.
+
+The AspectValue constructors have been replaced by factory methods:
+	AspectValue newAspectValue(int type, long value);
+	AspectValue newAspectValue(int type, double value);
+	AspectValue newAspectValue(int type, float value);
+	AspectValue newAspectValue(int type, int value);
+	AspectValue newAspectValue(int type, Object o);
+The last defers to the type's factory to choose how to interpret o.
+
+AspectValue no longer implements AspectType.
+
+New AspectValue classes should include an AspectType.Factory instance
+which should be registered with AspectType.registry (See the source
+for AspectType for more information).  AspectValue classes are
+strongly encouraged to have non-public constructors and public factory
+methods.  For example:
+// old 
+AspectValue av = new TimeAspectValue(AspectType.END_TIME, today);
+// new direct replacement - specific class factory
+AspectValue av = TimeAspectValue.create(AspectType.END_TIME, today);
+// the global factory has been updated to construct all the standard
+// (and, if registered, extended) aspects:
+// new - global factory
+AspectValue av = AspectValue.newAspectValue(AspectType.END_TIME, today);
+// new - slightly faster factory
+AspectValue av = AspectValue.newAspectValue(AspectType.EndTime, today);
+
+Basic AspectValue classes now use more appropriate actual storage
+types rather than all using double.  e.g. dates are stored as longs,
+most floating-point values are stored as floats, etc.
+
+* 9.4.1
+Many bugs fixed.
+
+* 9.4
+
 * 9.2.1
 
 Bootstrapper has been refactored to allow convenient subclassing and 
