@@ -72,6 +72,19 @@ that were detected/posted after this Cougaar version was released.
   features and some repackaging.
 <p>
 <ul>
+<li>UltraLog specific configuration information has been removed from 
+  the open source Cougaar release. This simplifies basic Cougaar installation
+  and slims the download. However, there is not longer a complex configuration
+  utilizing all the power of Cougaar supplied with the Cougaar distribution.
+</li>
+<li>Several obsolete modules have been removed from the Cougaar distribution,
+  including the blackjack module, and the dbms module.
+</li>
+<li>The CSMART Experiment controller has been refactored for improved
+  performance and readability. Additionally, the controller is now
+  capable of running standalone, and reading Experiment definitions
+  from XML files that conform with core/configs/common/society.xsd
+</li>
 <li>Minitestconfig now includes the WhitePages servlet. It also uses
   the newer GLM completion servlet instead of the older one.
 </li>
@@ -1077,9 +1090,9 @@ archive has been installed</li>
   <li> <a href="api/Parameters.html">Parameters.html</a>
  which is a catalog of System Properties (-D flags) used. The file is generated
 on the basis of @property javadoc tags in the source code. .&nbsp;</li>
-  <li> Cougaar Developers' Guide, v9.4 (dated 1-July-2002), available on
+  <li> Cougaar Developers' Guide, v10.4 (dated 1-May-2003), available on
 the Cougaar website</li>
-  <li> Cougaar Architecture Document, v9.4 (dated 1-July-2002), available
+  <li> Cougaar Architecture Document, v10.4 (dated 1-May-2003), available
 on the Cougaar website</li>
   <li> Ultra*Log Developer Workshop presentations (on the <a href="http://www.ultralog.net">
 Ultra*Log website</a>
@@ -1094,7 +1107,7 @@ creating keystores</a>
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->  
- <h2> <a name="bugs"></a>Known bugs and bugs resolved/closed since Cougaar release 9.4.1</h2>
+ <h2> <a name="bugs"></a>Known bugs and bugs resolved/closed since Cougaar release 10.2</h2>
 The Cougaar bug tracker (Bugzilla, the Mozilla bug system) is online available
 at <a href="http://www.cougaar.org/bugs">Cougaar website -&gt; Bug Lists</a>.  
  <ul>
@@ -1136,11 +1149,8 @@ which subdirectory is found here, and includes common data files. Some simple
 flat-file base Cougaar society definitions are also found here.</li>
       <li>aggagent/: This software module includes the Aggregation Agent architecture
 for collecting data from various Cougaar Agents and summarizing it.</li>
-      <li>blackjack/: This software module defines some military logistics supply-chain
-Plugins and related classes and data files.</li>
       <li>bootstrap/: Cougaar classloader that ensures jar files in usual places
 are included, without requiring CLASSPATH modifications.</li>
-      <li>bol/: The Books Online Cougaar example application.</li>
       <li>build/: The scripts used to compile and build a Cougaar release.</li>
       <li>community/: Support for defining communities of Agents and their communitications.</li>
       <li>contract/: Plugin contracts - not completely supported.</li>
@@ -1152,11 +1162,8 @@ Tool. Use it to configure, run, and monitor large Cougaar societies. See
       particular TPFDD (military logistics) displays.</li>
       <li>glm/: Defines Plugins and data model for a military logistics domain
 and application.</li>
-      <li>glmtrans/: Transportation Plugins to support a military logistics application.</li>
       <li>javaiopatch/: Small JDK over-rides to support persistence.</li>
-      <li>manager/: Support for management Agents to monitor the health of a Cougaar
 application.</li>
-      <li>planserver/: Deprecated interface support - use servlets instead.</li>
       <li>qos/: Quality of Service support for Message Transport</li>
       <li>quo/: More Message Transport support</li>
       <li>scalability/: Testing society for evaluating the scalability of the
@@ -1249,23 +1256,6 @@ design patterns. Plugin and component developers are encouraged to use
 <b>minitestconfig</b> as a starting point for testing their software for compliance
 with the latest infrastructure release. Minitestconfig can be run as a multiple 
 node, multiple host society.&nbsp; </p>
-  <p>Included in the distribution is a standard society derived from the military logistics
-domain.<br>
- </p>
- <ul>
-  <li><b>Tiny/Small/Full-1AD</b>: This is a set of database based societies
-where the configuration information is provided through the CSMART
-database. They use
-several military units and simulate various operations.  These configurations
-are entirely configured and run through CSMART. These span in size from
-TINY (fits on one machine) through SMALL (best run on 3 or 4 machines)
-through FULL (usually requires at least 6 machines).  Each of these
-may include the full-fledged TRANSCOM transportation scheduler (more 
-compute intensive) or just a Stub scheduler (those with the -STUB  
-suffix).  For details on configuring and running these CSMART societies,
-see the <a href="../csmart/doc/InstallAndTest.html">CSMART
-Installation instructions</a>.</li> 
-  </ul>
 
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->
