@@ -29,13 +29,33 @@ import java.util.*;
 public class CSVUtility {
   private CSVUtility() {}
 
-  private static final Pattern p = Pattern.compile("\\G\\s*(?!$)(\\\"[^\\\"]*(?:\\\"\\\"[^\\\"]*)*\\\"|[^,\\\"]*),?");
+  private static final String patternPrefix = "\\G\\s*(?!$)(\\\"[^\\\"]*(?:\\\"\\\"[^\\\"]*)*\\\"|[^";
+  private static final String patternMiddle = "\\\"]*)";
+  private static final String patternSuffix = "?";
+  private static final Pattern p = buildPattern(',');
 
-  private static final String[] emptyStrings = new String[] {};
+  private static Pattern buildPattern(char comma) {
+    return Pattern.compile(patternPrefix + comma + patternMiddle + comma + patternSuffix);
+  }
+
+  private static final String[] emptyStrings = {};
 
   /** Parse a single string in mocrosift-like CSV format **/
   public static String[] parse(String str) {
-    ArrayList l = new ArrayList();
+    return parse(str, p);
+  }
+  
+  public static String[] parse(String str, char sep) {
+    return parse(str, buildPattern(sep));
+  }
+
+  private static String[] parse(String str, Pattern p) {
+    List l = parseToList(str, p);
+    return (String[]) l.toArray(emptyStrings);
+  }
+
+  private static List parseToList(String str, Pattern p) {
+    List l = new ArrayList();
     Matcher m = p.matcher(str);
     while (m.find()) {
       String v = m.group(1);
@@ -46,17 +66,11 @@ public class CSVUtility {
       }
       l.add(v);
     }
-    return (String[]) l.toArray(emptyStrings);
+    return l;
   }
 
   public static Collection parseToCollection(String str) {
-    String[] elements = parse(str);
-    int l = elements.length;
-    ArrayList c = new ArrayList(l);
-    for (int i=0; i<l; i++) {
-      c.add(elements[i]);
-    }
-    return c;
+    return parseToList(str, p);
   }
 }  
 
