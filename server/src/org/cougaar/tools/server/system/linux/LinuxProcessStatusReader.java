@@ -229,7 +229,7 @@ implements ProcessStatusReader {
       }
       String sstart = s.substring(i, j);
       time = parseLongDate(sstart);
-      pos.i = j+1;
+      pos.i = j;
     } catch (RuntimeException re) {
       throw new IllegalArgumentException(
           "Illegal lstart: \""+s+"\"");
