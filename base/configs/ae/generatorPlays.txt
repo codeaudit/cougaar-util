@@ -1,0 +1,16 @@
+TaskRateSensorPlugin.TASKRATE / CPURemoteTestPlugin.CPU in    0 to    8: [Agent.Provider]AdaptiveUniversalAllocatorPlugin.SPEED = 512;
+TaskRateSensorPlugin.TASKRATE / CPURemoteTestPlugin.CPU in    8 to   16: [Agent.Provider]AdaptiveUniversalAllocatorPlugin.SPEED = 256;
+TaskRateSensorPlugin.TASKRATE / CPURemoteTestPlugin.CPU in   16 to   32: [Agent.Provider]AdaptiveUniversalAllocatorPlugin.SPEED = 128;
+TaskRateSensorPlugin.TASKRATE / CPURemoteTestPlugin.CPU in   32 to   64: [Agent.Provider]AdaptiveUniversalAllocatorPlugin.SPEED =  64;
+TaskRateSensorPlugin.TASKRATE / CPURemoteTestPlugin.CPU in   64 to  128: [Agent.Provider]AdaptiveUniversalAllocatorPlugin.SPEED =  32;
+TaskRateSensorPlugin.TASKRATE / CPURemoteTestPlugin.CPU in  128 to  256: [Agent.Provider]AdaptiveUniversalAllocatorPlugin.SPEED =  16;
+TaskRateSensorPlugin.TASKRATE / CPURemoteTestPlugin.CPU in  256 to  512: [Agent.Provider]AdaptiveUniversalAllocatorPlugin.SPEED =   8;
+TaskRateSensorPlugin.TASKRATE / CPURemoteTestPlugin.CPU in  512 to 1024: [Agent.Provider]AdaptiveUniversalAllocatorPlugin.SPEED =   4;
+TaskRateSensorPlugin.TASKRATE / CPURemoteTestPlugin.CPU in 1024 to 2048: [Agent.Provider]AdaptiveUniversalAllocatorPlugin.SPEED =   2;
+TaskRateSensorPlugin.TASKRATE / CPURemoteTestPlugin.CPU >= 2048        : [Agent.Provider]AdaptiveUniversalAllocatorPlugin.SPEED =   1;
+TRUE
+  :Persistence.lcl.interval =  5000:Persistence.lcl.consolidationPeriod = 6
+  :Persistence.foo.interval = 10000:Persistence.foo.consolidationPeriod = 3
+  :Persistence.bar.interval = 30000:Persistence.bar.consolidationPeriod = 1;
+TRUE:Persistence.foo.signing=OFF:Persistence.bar.encryption=OFF:Persistence.lcl.signing=OFF;
+TRUE:Persistence.lcl.encryption=OFF:Persistence.bar.signing=OFF:Persistence.foo.encryption=OFF;
