@@ -34,5 +34,5 @@ if "%1"=="EmptyNode" set MYMEMORY= -Xms16m
 
 @ECHO ON
 
-java.exe -Dorg.cougaar.core..persistence.enable=true -Xbootclasspath:%COUGAAR_INSTALL_PATH%\lib\javaiopatch.jar;%JDK_INSTALL_PATH%\jre\lib\rt.jar %MYPROPERTIES% %MYMEMORY% -classpath %LIBPATHS% %MYCLASSES% %MYARGUMENTS% %2 %3
+java.exe -Dorg.cougaar.core.persistence.enable=true -Xbootclasspath:%COUGAAR_INSTALL_PATH%\lib\javaiopatch.jar;%JDK_INSTALL_PATH%\jre\lib\rt.jar %MYPROPERTIES% %MYMEMORY% -classpath %LIBPATHS% %MYCLASSES% %MYARGUMENTS% %2 %3
 
