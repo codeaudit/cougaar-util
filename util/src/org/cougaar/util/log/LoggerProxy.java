@@ -17,8 +17,9 @@ package org.cougaar.util.log;
  *
  * @see Logger
  */
-public class LoggerProxy implements Logger {
-
+public class LoggerProxy 
+  extends LoggerAdapter
+{
   protected Logger l;
 
   public LoggerProxy(Logger l) {
@@ -30,88 +31,7 @@ public class LoggerProxy implements Logger {
   }
 
   public void log(
-      int level, String message) { 
-    l.log(level, message);
-  }
-  public void log(
       int level, String message, Throwable t) { 
     l.log(level, message, t);
-  }
-
-  public boolean isDebugEnabled() { 
-    return l.isDebugEnabled(); 
-  }
-  public boolean isInfoEnabled() { 
-    return l.isInfoEnabled(); 
-  }
-  public boolean isWarnEnabled() { 
-    return l.isWarnEnabled(); 
-  }
-  public boolean isErrorEnabled() { 
-    return l.isErrorEnabled(); 
-  }
-  public boolean isShoutEnabled() { 
-    return l.isShoutEnabled(); 
-  }
-  public boolean isFatalEnabled() { 
-    return l.isFatalEnabled(); 
-  }
-
-  public void debug(
-      String message) { 
-    l.debug(message);
-  }
-  public void debug(
-      String message, Throwable t) { 
-    l.debug(message, t);
-  }
-
-  public void info(
-      String message) { 
-    l.info(message);
-  }
-  public void info(
-      String message, Throwable t) { 
-    l.info(message, t);
-  }
-
-  public void warn(
-      String message) { 
-    l.warn(message);
-  }
-  public void warn(
-      String message, Throwable t) { 
-    l.warn(message, t);
-  }
-
-  public void error(
-      String message) { 
-    l.error(message);
-  }
-  public void error(
-      String message, Throwable t) { 
-    l.error(message, t);
-  }
-
-  public void shout(
-      String message) { 
-    l.shout(message);
-  }
-  public void shout(
-      String message, Throwable t) { 
-    l.shout(message, t);
-  }
-
-  public void fatal(
-      String message) { 
-    l.fatal(message);
-  }
-  public void fatal(
-      String message, Throwable t) { 
-    l.fatal(message, t);
-  }
-
-  public String toString() {
-    return l.toString();
   }
 }

@@ -1,3 +1,32 @@
+2002-06-05  Michael Thome  <mthome@bbn.com>
+
+	* org/cougaar/util/log/LoggerFactory.java
+	Refactored logger facility, added ability to specify factory
+	implementation, implemented singleton, simplified API.
+	
+	* org/cougaar/util/log/LoggerAdapter.java, LoggerProxy.java, NullLogger.java
+	New adapter class implements api in terms of two abstract
+	methods.  Refactored other implementations to use it.
+
+	* org/cougaar/util/log/log4j/Log4jLoggerFactory.java
+	refactored.  Moved property parsing code from core
+	(LoggingService) to here, simplified API.
+
+	* org/cougaar/util/log/log4j/LoggerImpl.java
+	refactor in terms of LoggerAdapter
+	
+	* org/cougaar/util/log/log4j/Util.java
+	use log4j priority constants.
+
+	* org/cougaar/util/log/NullLoggerFactory.java
+	Implement LoggerFactory for real for nulls.
+
+	* org/cougaar/util/log/Logging.java
+	New utility class for simplified, static access to loggers.
+	Incudes logger cache and facility for setting up and retrieving
+	thread-specific loggers.
+	
+
 2002-05-20  Michael Thome  <mthome@bbn.com>
 
 	* org/cougaar/core/component/ComponentDescriptions.java

@@ -42,7 +42,7 @@ class LoggerControllerImpl implements LoggerController {
 
   public LoggerControllerImpl(String name) {
     this.name = name;
-    if (name.equals("root")) {
+    if ("root".equals(name)) {
       this.cat = Category.getRoot();
     } else {
       this.cat = Category.getInstance(name);
@@ -54,8 +54,8 @@ class LoggerControllerImpl implements LoggerController {
    * <p>
    * This should be moved to a different interface...
    */
-  public LoggerController getLoggerController(String name) {
-    return new LoggerControllerImpl(name);
+  public LoggerController getLoggerController(String o) {
+    return new LoggerControllerImpl(o);
   }
 
   /**

@@ -87,6 +87,7 @@ public interface Logger {
    */
   boolean isEnabledFor(int level);
 
+
   /**
    * Append the specified message to the log, but <i>only</i> if the 
    * logger includes the specified logging level.

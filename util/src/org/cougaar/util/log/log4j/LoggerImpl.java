@@ -10,9 +10,8 @@
 
 package org.cougaar.util.log.log4j;
 
-import org.apache.log4j.Category;
 import org.apache.log4j.Priority;
-
+import org.apache.log4j.Category;
 import org.cougaar.util.log.*;
 
 /**
@@ -28,8 +27,8 @@ import org.cougaar.util.log.*;
  *
  * @see LoggerFactory
  */
-class LoggerImpl implements Logger {
-
+class LoggerImpl extends LoggerAdapter
+{
   // log4j category, which does the real work...
   private final Category cat;
 
@@ -39,8 +38,14 @@ class LoggerImpl implements Logger {
    *
    * @param requestor Object requesting this service.
    */
-  public LoggerImpl(String name) {
-    cat = Category.getInstance(name);
+  public LoggerImpl(Object obj) {
+    String s;
+    if (obj instanceof Class) {
+      s = ((Class)obj).getName();
+    } else {
+      s = obj.toString();
+    }
+    cat = Category.getInstance(s);
   }
 
   /**
@@ -55,105 +60,9 @@ class LoggerImpl implements Logger {
     }
   }
 
-  //
-  // "log(level, ..)" methods:
-  //
-
-  public void log(int level, String message) {
-    Priority p = Util.convertIntToPriority(level);
-    cat.log(p, message);
-  }
-
   public void log(int level, String message, Throwable t) {
     Priority p = Util.convertIntToPriority(level);
     cat.log(p, message, t);
-  }
-
-  //
-  // specific "isEnabledFor(..)" shorthand methods:
-  //
-
-  public boolean isDebugEnabled() {
-    return cat.isDebugEnabled();
-  }
-  public boolean isInfoEnabled() {
-    return cat.isInfoEnabled();
-  }
-  public boolean isWarnEnabled() {
-    return cat.isEnabledFor(Priority.WARN);
-  }
-  public boolean isErrorEnabled() {
-    return cat.isEnabledFor(Priority.ERROR);
-  }
-  public boolean isShoutEnabled() {
-    return cat.isEnabledFor(ShoutPriority.SHOUT);
-  }
-  public boolean isFatalEnabled() {
-    return cat.isEnabledFor(Priority.FATAL);
-  }
-
-  //
-  // specific "level" shorthand methods:
-  //
-
-  /**
-   * Equivalent to "log(DEBUG, ..)".
-   */ 
-  public void debug(String message) {
-    cat.debug(message);
-  }
-  public void debug(String message, Throwable t) {
-    cat.debug(message, t);
-  }
-
-  /**
-   * Equivalent to "log(INFO, ..)".
-   */ 
-  public void info(String message) {
-    cat.info(message);
-  }
-  public void info(String message, Throwable t) {
-    cat.info(message, t);
-  }
-
-  /**
-   * Equivalent to "log(WARN, ..)".
-   */ 
-  public void warn(String message) {
-    cat.warn(message);
-  }
-  public void warn(String message, Throwable t) {
-    cat.warn(message, t);
-  }
-
-  /**
-   * Equivalent to "log(ERROR, ..)".
-   */ 
-  public void error(String message) {
-    cat.error(message);
-  }
-  public void error(String message, Throwable t) {
-    cat.error(message, t);
-  }
-
-  /**
-   * Equivalent to "log(SHOUT, ..)".
-   */ 
-  public void shout(String message) {
-    cat.log(ShoutPriority.SHOUT, message);
-  }
-  public void shout(String message, Throwable t) {
-    cat.log(ShoutPriority.SHOUT, message, t);
-  }
-
-  /**
-   * Equivalent to "log(FATAL, ..)".
-   */ 
-  public void fatal(String message) {
-    cat.fatal(message);
-  }
-  public void fatal(String message, Throwable t) {
-    cat.fatal(message, t);
   }
 
   public String toString() {

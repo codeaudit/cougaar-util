@@ -16,74 +16,28 @@ package org.cougaar.util.log;
  *
  * @see Logger
  */
-public class NullLogger implements Logger {
-
+public class NullLogger 
+  extends LoggerAdapter
+{
   // singleton:
   private static final NullLogger NULL_LOGGER_SINGLETON = 
     new NullLogger();
 
+  /** @deprecated old version of getLogger() **/
   public static NullLogger getNullLogger() {
     return NULL_LOGGER_SINGLETON;
   }
 
-  protected NullLogger() {
-    // use "getNullLogger()"
+  /** Get the singleton instance of the NullLogger **/
+  public static Logger getLogger() {
+    return NULL_LOGGER_SINGLETON;
   }
-
-  // all "is*()" methods return false:
 
   public boolean isEnabledFor(int level) {
     return false;
   }
-  public boolean isDebugEnabled() { 
-    return false;
-  }
-  public boolean isInfoEnabled() { 
-    return false;
-  }
-  public boolean isWarnEnabled() { 
-    return false;
-  }
-  public boolean isErrorEnabled() { 
-    return false;
-  }
-  public boolean isShoutEnabled() { 
-    return false;
-  }
-  public boolean isFatalEnabled() { 
-    return false;
-  }
 
-  // all other methods are empty:
-
-  public void log(int level, String message) { 
-  }
-  public void log(int level, String message, Throwable t) { 
-  }
-  public void debug(String message) { 
-  }
-  public void debug(String message, Throwable t) { 
-  }
-  public void info(String message) { 
-  }
-  public void info(String message, Throwable t) { 
-  }
-  public void warn(String message) { 
-  }
-  public void warn(String message, Throwable t) { 
-  }
-  public void error(String message) { 
-  }
-  public void error(String message, Throwable t) { 
-  }
-  public void shout(String message) { 
-  }
-  public void shout(String message, Throwable t) { 
-  }
-  public void fatal(String message) { 
-  }
-  public void fatal(String message, Throwable t) { 
-  }
+  public void log(int level, String message, Throwable t) { }
 
   public String toString() {
     return "null-logger";
