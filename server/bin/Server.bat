@@ -70,7 +70,7 @@ GOTO END
 :PROPS_EXISTS
 
 IF EXIST %COUGAAR_INSTALL_PATH%\workspace GOTO SETWORKSPACE
-mkdir %COUGAAR_INSTALL_PATH%\workspace
+mkdir "%COUGAAR_INSTALL_PATH%\workspace"
 :SETWORKSPACE
 SET COUGAAR_WORKSPACE=%COUGAAR_INSTALL_PATH%\workspace
 
@@ -91,8 +91,7 @@ REM #SET SERVERCONFIG = "-Dorg.cougaar.tools.server.verbose=true"
 SET SERVERCONFIG="-Dorg.cougaar.tools.server.temp.path=%COUGAAR_WORKSPACE%"
 
 REM Only the "server.jar" should be in the classpath:
-SET LIBPATHS=^
-%COUGAAR_INSTALL_PATH%\lib\server.jar
+SET LIBPATHS="%COUGAAR_INSTALL_PATH%\lib\server.jar"
 
 SET JAVA_ARGS=^
   -classpath %LIBPATHS%
