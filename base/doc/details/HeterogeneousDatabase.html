@@ -102,7 +102,9 @@ Cougaar.rc file&nbsp;</a></li>
 The Oracle driver dependencies have been removed from a group of SQL query
 based LDMPlugins that are used to retrieve data from an Oracle database.&nbsp;
 The LDMPlugins now support connecting to any database via a JDBC database
-driver.&nbsp; All data needed to support running of the SMALL-135 configuration
+driver.&nbsp; All data needed to support running of the included
+militarly logistics configurations (the CSMART 1AD configuration or
+the deprecated SMALL-135 configuration)
 have been ported to both MySQL and PostgreSQL.&nbsp; These database exports
 are available on the COUGAAR web site.&nbsp; Below is a highlight of the
 changes made in 8.6 and capabilities in the current Cougaar Release.
@@ -187,7 +189,7 @@ type from the database parameter: “jdbc:mysql://localhost/database01.”&nbsp;
 The database type value is used in determining which driver to load and
 which query to execute.&nbsp;
 <p>Please see <a href="DataAccess.html">DataAccess.html</a> for the current
-list of parameters needed to run a small-135 society.
+list of parameters needed to run a CSMART 1AD society.
 <h3>
 <a NAME="Changes to the format of the .q"></a>Changes to the format of
 the .q files</h3>
@@ -337,7 +339,9 @@ and the number or rows in each table.
 <a NAME="Running the"></a>Running the Society</h2>
 Once you have imported the data into the database and have modified the
 cougaar.rc to reflect the appropriate database name, user, password, and
-driver, you should be able to successfully run the SMALL-135 society.&nbsp;
+driver, you should be able to run the SMALL-135 society. Remember
+however that this society is no longer actively supported. Users
+should instead use the 1AD societies included with the CSMART database.&nbsp;
 See the small-135.readme.html file in the configuration directory for more
 information.&nbsp;
 <h2>
