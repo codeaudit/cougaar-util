@@ -1,44 +1,79 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <html> <head>
-<title>Metric Sensors Design & Creation</title>
+<title>Adding New Metrics to the Metric Service</title>
 </head>
 
 <body>
-<h1>Metrics Sensors Design & Creation</h1>
+<h1>Adding New Metrics to the Metrics Service</h1>
 <p>
 The Metrics Package has helper classes for collecting raw sensor
 values, converting them into metrics, adding them into the path
-model, and displaying them in a servlet.
+model, and displaying them in a servlet. In this section, we
+explain how these helper classes can be used to add new metrics to
+the Metrics Service. 
 
 <p>
-Sources of data to the Metrics Service & the creation of new metrics
-can easily be described as differnent "flows" into the Metrics
-Service. <br>
-There are <b>3 sources</b> of originating data into the Metrics Service,
+The Metric Service gets its data from several sources and integrates
+them into a up-to-date picture of the environment in which the Node
+finds itself. There are three ways of originating data into the Metrics Service,
 these are:
 <ul>
-  <li>Sensor data from code</li>
-  <li>Network Management Configuration Files &</li>
-  <li>Host Level probes</li>
+  <li>Sensor data from Cougaar code measures the internal consumption
+      of resource by Agents and Nodes. For example, the number of
+      messages sent by an Agent or the amount of CPU or memory
+      consumed by an Agent</li>
+  <li>Network Management Configuration Files are used to get
+      information about network characteristics from external Network
+      Management Systems.</li>
+  <li>Host Level probes are used to measure the characteristics of the
+      Node's host </li>
 </ul>
 
-These three sources can be more easily understood using a picture
-of the different <a href="#SensorDataFlow"><i>flows</i></a>.
-<p>
-This picture represents the process of data which flows into the Metrics
-Service through sensors, config files, or host probes, the conversion
-into meaningful, ratified data through formulas, its insertion into
-the Metrics Service with accessible keys, and its corresponding
-extrction from the system with paths, or observing the changing
-Metrics with guis. <br>
-This process is described, in more detail, in the following
-secions. Some explanations of this process are more easily understood
-when referencing specific pieces of the code, which will be
-highlighted in <font color="006633">green</font> for emphasis. 
+<p> All these sources of data use the same "patterns" for capturing
+and processing the data. The processing of Metrics can be described as
+a data flow, which is processed by different components. Each
+component does a different job in converting raw sensor data into
+usable metrics.  <a href="#SensorDataFlow"><i>Figure</i></a>.
+represents the processing of data as it flows through the Metrics
+Service:
 
-<h2> Metrics Producers </h2>
-<h4>Sensor </h4> <p> There are 3 kinds of
-"Sensors" available to the Metrics Service, which can reside in either
+<ul>
+  <li><b>Sensors</b> instrument the system and store raw statistics
+      records. The records can be accessed via a service, which takes
+      a snapshot of the record.
+  <li><b>Rate-Converters</b> gathers snapshots of sensor records and
+      converts them into metrics. The metrics are published into the
+      Metrics service
+  <li><b>Metrics Service</b> models the environment. Internal to the
+      model, formulas can depend on the raw metrics that are published into
+      the Metrics service. The formulas can be accessed from the
+      metrics service using paths.
+  <li><b>QoS Adaptive Components</b> use the Metrics Service
+      environment model to adapt to the Node's processing to changes
+      in the environment. 
+  <li><b>Servlets</b> are used to view both Metrics and raw sensor records.
+</ul>
+<p>	  
+The patterns used to create these components are described in the
+following sections. Some explanations of this process are more easily understood
+when referencing specific pieces of the code, which will be
+highlighted in <font color="006633">green</font> for emphasis.
+
+<table>
+  <caption align=bottom><i>Sensor Dataflow </i></caption>
+  <tr><td>
+      <a name="SensorDataFlow"><img src="gifs/SensorDataflow.gif"></a>
+  </td></tr>
+</table>
+
+<h4>Sensor </h4>
+<p>
+Sensors have probes in the critical path of the basic operation of
+the Node. The probes must have very little overhead, so they have
+limited functionality. Probes only have time to detect that an event has
+happened and tally the results in a statistics record. The record
+holds many raw sensor values. There are 3 kinds of
+raw sensors values, which can reside in either
 the code or host probes.  which are:
 <ul> <li> <b><i>Gauge</i></b>: This is an instantaneous value, such as
     utilization, current resource
@@ -52,33 +87,54 @@ the code or host probes.  which are:
     color="006633">org.cougaar.core.qos.metrics.AgentLoadServlet</font>
     is one gui where they user can observe this data.</li>
 <li>
-    <b><i>Integrator</i></b>: Counter that is a weighted Summation of
-    delta t * the value in that period.  </li>
+    <b><i>Integrator</i></b>: Counter that is a weighted summation of
+    delta t * the value in that period.  Integrators are used find the
+    average value of gauge values over a time period. For example,
+    Agent's CPU consumption is measured by the average number of
+    threads used to process the Agent's code. (This is call the
+    Agent's Load Average)
+    <font  color="006633">org.cougaar.core.thread.AgentLoadSensorPlugin</font>
+    is an example of such a Sensor, continuously counting the
+    MsgIn/Out & BytesIn/Out for local agents of a node, and the sums
+    for the node itself.  </li>
 </ul>
-
 <p>
-When a Sensor samples data, it usually takes a <b>Snapshot</b> in any
-point in time, resulting in a collection of these snapshots which can
-then be inserted into the <b>sensor service</b>.
-<b>
-<br>***JZINKY --- Describe what you mean here</b>
+An external clients of the Sensor component can sample the statistics
+record using a service offered by the Sensor. 
+When a client samples data, it takes a <b>Snapshot</b> at a
+point in time, resulting in a collection of these snapshots which need
+to be processed to create usable Metrics. Notice the processing of
+the raw statistics is not done as part of the critical path, but done by
+an independent component with its own threads. The processing of
+snapshots is the subject of the next section.
 
 <h4>Rate Conversion </h4>
 <p>
-When snapshots are collated in the Sensor Service, they are
-interpreted as snapshots in some point in time. To make them
-meaningful, we process them to put them in context. 
+Rate converter are clients to a sensor service and periodically take
+snapshots of the sensors record. The two snapshots are processed to
+create meaningful metrics. The time between snapshots defines the
+averaging interval for the metric. The processing is different for each field
+in the record, depending on the kind of sensor value. For example to calculate
+rate of messages being sent by an agent, the sensor value for the
+count of messages from the agent is needed. The change in count is
+subtracted from two snapshots and the change in time is subtracted
+from the snapshot timestamps. The message rate is calculated by
+dividing the change in count by the change in time.
+<p> Rate converters have the following internal structure:
 <ul>
   <li>
       <b><i>Record Processing</i></b>: Data snapshots are collated and
-      computed as a rolling average of change in time & value, something
-      we call Decaying Histroy.
+      computed as a rolling average of changes in time & value. A 
+      Decaying History object is used to store the snapshots and call
+      the record processing.
   </li>
   <li>    
-      <b><i>Decaying History</i></b>: The term used to expressed the
-      processing of data snapshots into some meaningful context to express
-      Metrics (1, 10, 100-second averages are common).  <font
-      color="006633"> org.cougaar.core.qos.metrics.AgentStatusRatePlugin</font>
+      <b><i>Decaying History</i></b>: Is an object which coordinates
+      the storage and processing of snapshots. It maintains a decay
+      stor of snapshots and call the processing of data snapshots for
+      several averaging periods.( 10, 100, 1000-second averages are
+      common).
+      <font color="006633"> org.cougaar.core.qos.metrics.AgentStatusRatePlugin</font>
       is one plugin which implements the DecayingHistory's <font
       color="006633">newAddition()</font>, which updates the
       Metrics Service with the processed value. 
@@ -91,55 +147,54 @@ meaningful, we process them to put them in context.
   </li>
 </ul>
 
-<h2> Metrics Service </h2>
-
 <h4>Metrics Service Models</h4>
-<b>***JZINKY, fill in here?>>---</b>
+The Metrics Service maintains a model of the environment for the
+Cougaar society. The model includes contexts for the Hosts, Nodes,
+and Agents in the society. Each Node maintains its own instance of
+the model and updates it using Metrics published into the Metrics
+Updater Service. 
+
 <ul>
   <li>
-      <b>Resource Context</b>: After the Metric is inserted in the
-      Metrics System, it is then 
-</li>
-      <li><b>Formula</b>:
-	  </li>
-  <li><b>IntegatorDS</b>
-	  </li>
-
-</ul>
-  
-<h4>Constants</h4>
-<p>
-There are several noteworthy constants which reside in the Metrics
-Service. They are used to reference Metrics & the type of Metrics
-available. The list of constants is documented in <font
-color="006633">org.coguaar.core.qos.metrics.Constants</font> 
-<ul>
-  <li><b>Metrics Name</b>: Quite obviously, the name of the Metric, as
-      it applies to its measurement & key generation. Ususally, <font
-      color="006633">CPU_LOAD_AVG, CPU_LOAD_MJIPS, MSG_IN, MSG_OUT, BYTES_IN, BYTES_OUT</font>
-      </li>
-  <li><b>Averaging intervals</b>: Used in the Key of a Metric,
-      referring to the averaging interval of value to time of that
-      value. The current intervals are:  <font color="006633">1_SEC_AVG, 10_SEC_AVG,
-      100_SEC_AVG, 1000_SEC_AVG</font>.  
+  <b>Resource Context</b>: model a specific entity in the
+  environment. Resource Contexts can contain child contexts. The
+  children inherit all the attributes of its parent. For example, an
+  Agent context is a child of Node, which is a child of Host. The
+  Agent has a CPU count attribute that it inherits from its Host.
+  <font color="006633">
+  org.cougaar.core.qos.rss.AgentDS</font> is an example of a Resource
+  Context. 
+  </li>
+      
+  <li><b>Formula</b>: calculate attributes of a context. Formulas may
+      depend on other formulas or raw Metrics published to the Metrics
+      service. The
+      <font color="006633">
+      org.cougaar.core.qos.rss.DecayingHistoryFormula</font> is a helper
+      class which create formulas that get their values directly from
+      Metrics published by a Decaying History object. 
+  </li>
+      
+  <li><b>IntegatorDS</b> integrate published metrics from many
+      DataFeeds into a single value. Resource Contexts Formulas get the
+      values for published Metrics by subscribing to Integrator formulas,
+      instead of getting the Metrics directly from the feeds themselves.
+      The IntegratorDS is part of the QuO RSS, which is outside of
+      the Cougaar code. 
   </li>
 </ul>
+  
 
-<h2> Metrics Consumers </h2>
+<h4> Metrics Servlet</h4>
+
 <p>
 Evaluating the Metrics Service & Observing the system is usually done
-through GUIs in the Cougaar system, using Java Servlets. In the
+through GUIs in the Cougaar system, using Cougaar Servlets. In the
 Metrics Service, there resides many differnent servlets pertaining to
 communications, resource constraints, etc., please refer to <a
 href="operation.html" target="contents">Operation Using Servlets</a>
 for the different kinds of servlets currently available. 
 
-<p>
-Metrics Servlets are an integral part of using the Metrics Service,
-and fit in with QoS-adaptive components & circuitry, and require some
-explaining as to interpretaion.
-
-<h4> Metrics Servlet</h4>
 <p>
 Metrics Servlets all extend a Metrics Servlet template, which is
 formatted to make easy interpretation of the Metrics with tables,
@@ -176,32 +231,36 @@ visual.
 </ul>
 
 <h4>Sensor Servlet</h4>
+Sensor Servlets allow viewing of a raw sensor servlet. The main use
+of sensor servlets is for debugging. 
 
-<h4>QoS Adaptation Components</h4>
-  <p> subscription
-   <p>call back
-   <p>metrics qualifier
+<h4>QoS Adaptive Components</h4>
+QoS Adaptive components subscribe to Metrics using the Metrics
+Service. How to create QoS Adaptive Components is out of scope for
+this section. 
 
+<h4>Constants</h4>
 <p>
-<table>
-  <caption align=bottom><i>Sensor Dataflow </i></caption>
-  <tr><td>
-      <a name="SensorDataFlow"><img src="gifs/SensorDataflow.gif"></a>
-  </td></tr>
-</table>
+The same name for a metric must be used throughout all components of
+the metrics service. To aid consistency, we recommend using the
+metrics constants.  The list of constants is documented in <font
+color="006633">org.coguaar.core.qos.metrics.Constants</font> 
+<ul>
+  <li><b>Metrics Name</b>: Quite obviously, the name of the Metric, as
+      it applies to its measurement & key generation. Ususally, <font
+      color="006633">CPU_LOAD_AVG, CPU_LOAD_MJIPS, MSG_IN, MSG_OUT, BYTES_IN, BYTES_OUT</font>
+      </li>
+  <li><b>Averaging intervals</b>: Used in the Key of a Metric,
+      referring to the averaging interval of value to time of that
+      value. The current intervals are:  <font color="006633">1_SEC_AVG, 10_SEC_AVG,
+      100_SEC_AVG, 1000_SEC_AVG</font>.  
+  </li>
+</ul>
 
-<h2>Processing Trace </h2>
 
-<p> The following example trace shows how Sensor instrumentation in a
-Cougaar component is converted into a rate-Metric, published in the Metric
-Service, integrated into the Society Model and displayed by a Servlet.
 
-<ol>
-  <li>
-</ol>
-<hr>
 <address></address>
 <!-- hhmts start -->
-Last modified: Tue Nov  9 17:18:40 EST 2004
+Last modified: Wed Nov 10 04:41:12 EST 2004
 <!-- hhmts end -->
 </body> </html>
