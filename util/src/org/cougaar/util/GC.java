@@ -46,7 +46,7 @@ public class GC {
   /** when did we last do a GC, guarded by gcLock **/
   private static long gcTime = 0L;
 
-  public static final long minGCInterval_DEFAULT = 3000000L;
+  public static final long minGCInterval_DEFAULT = 5*60*1000L;
   public static final String minGCInterval_DEFPROP = "org.cougaar.core.persistence.lazyInterval";
   public static final String minGCInterval_PROP = "org.cougaar.util.GC.minGCInterval";
   private static final long minGCInterval = 
@@ -61,7 +61,7 @@ public class GC {
    *
    * @property org.cougaar.util.GC.minGCInterval
    * Minimum number of milliseconds between IdentityTable-directed gcs.
-   * Defaults to 3000000 (5 minutes).  Garbage Collections not invoked
+   * Defaults to 300000 (5 minutes).  Garbage Collections not invoked
    * through this interface are invisible.  The default value 
    * is actually supplied by the property org.cougaar.core.persistence.lazyInterval,
    * if available.
