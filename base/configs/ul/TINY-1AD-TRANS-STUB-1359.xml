@@ -419,7 +419,7 @@
           order='180000.0'
           insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
           <argument order='0.0'>
-            fdm_equip.q
+            fdm_equip_ref.q
           </argument>
         </component>
       </agent>
@@ -814,7 +814,7 @@
           order='180000.0'
           insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
           <argument order='0.0'>
-            fdm_equip.q
+            fdm_equip_ref.q
           </argument>
         </component>
       </agent>
@@ -1197,7 +1197,7 @@
           order='180000.0'
           insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
           <argument order='0.0'>
-            fdm_equip.q
+            fdm_equip_ref.q
           </argument>
         </component>
       </agent>
@@ -1989,7 +1989,7 @@
           order='180000.0'
           insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
           <argument order='0.0'>
-            fdm_equip.q
+            fdm_equip_ref.q
           </argument>
         </component>
       </agent>
@@ -2426,7 +2426,7 @@
           order='180000.0'
           insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
           <argument order='0.0'>
-            fdm_equip.q
+            fdm_equip_ref.q
           </argument>
         </component>
       </agent>
@@ -2871,7 +2871,7 @@
           order='180000.0'
           insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
           <argument order='0.0'>
-            fdm_equip.q
+            fdm_equip_ref.q
           </argument>
         </component>
       </agent>
@@ -3131,7 +3131,7 @@
           order='180000.0'
           insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
           <argument order='0.0'>
-            fdm_equip.q
+            fdm_equip_ref.q
           </argument>
         </component>
       </agent>
@@ -3391,7 +3391,7 @@
           order='180000.0'
           insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
           <argument order='0.0'>
-            fdm_equip.q
+            fdm_equip_ref.q
           </argument>
         </component>
       </agent>
@@ -3774,7 +3774,7 @@
           order='180000.0'
           insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
           <argument order='0.0'>
-            fdm_equip.q
+            fdm_equip_ref.q
           </argument>
         </component>
       </agent>
@@ -4028,7 +4028,7 @@
           order='180000.0'
           insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
           <argument order='0.0'>
-            fdm_equip.q
+            fdm_equip_ref.q
           </argument>
         </component>
       </agent>
@@ -4288,7 +4288,7 @@
           order='180000.0'
           insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
           <argument order='0.0'>
-            fdm_equip.q
+            fdm_equip_ref.q
           </argument>
         </component>
       </agent>
@@ -4548,7 +4548,7 @@
           order='180000.0'
           insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
           <argument order='0.0'>
-            fdm_equip.q
+            fdm_equip_ref.q
           </argument>
         </component>
       </agent>
@@ -4808,7 +4808,7 @@
           order='180000.0'
           insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
           <argument order='0.0'>
-            fdm_equip.q
+            fdm_equip_ref.q
           </argument>
         </component>
       </agent>
@@ -5068,7 +5068,7 @@
           order='180000.0'
           insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
           <argument order='0.0'>
-            fdm_equip.q
+            fdm_equip_ref.q
           </argument>
         </component>
       </agent>
@@ -5328,7 +5328,7 @@
           order='180000.0'
           insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
           <argument order='0.0'>
-            fdm_equip.q
+            fdm_equip_ref.q
           </argument>
         </component>
       </agent>
@@ -5588,7 +5588,7 @@
           order='180000.0'
           insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
           <argument order='0.0'>
-            fdm_equip.q
+            fdm_equip_ref.q
           </argument>
         </component>
       </agent>
@@ -6156,7 +6156,7 @@
           order='180000.0'
           insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
           <argument order='0.0'>
-            fdm_equip.q
+            fdm_equip_ref.q
           </argument>
         </component>
       </agent>
@@ -6416,7 +6416,7 @@
           order='180000.0'
           insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
           <argument order='0.0'>
-            fdm_equip.q
+            fdm_equip_ref.q
           </argument>
         </component>
       </agent>
@@ -6870,7 +6870,7 @@
           order='180000.0'
           insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
           <argument order='0.0'>
-            fdm_equip.q
+            fdm_equip_ref.q
           </argument>
         </component>
       </agent>
@@ -7130,7 +7130,7 @@
           order='180000.0'
           insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
           <argument order='0.0'>
-            fdm_equip.q
+            fdm_equip_ref.q
           </argument>
         </component>
       </agent>
@@ -7513,7 +7513,7 @@
           order='180000.0'
           insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
           <argument order='0.0'>
-            fdm_equip.q
+            fdm_equip_ref.q
           </argument>
         </component>
       </agent>
@@ -7964,7 +7964,7 @@
           order='180000.0'
           insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
           <argument order='0.0'>
-            fdm_equip.q
+            fdm_equip_ref.q
           </argument>
         </component>
       </agent>
@@ -8236,7 +8236,7 @@
           order='180000.0'
           insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
           <argument order='0.0'>
-            fdm_equip.q
+            fdm_equip_ref.q
           </argument>
         </component>
       </agent>
@@ -8496,7 +8496,7 @@
           order='180000.0'
           insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
           <argument order='0.0'>
-            fdm_equip.q
+            fdm_equip_ref.q
           </argument>
         </component>
       </agent>
@@ -8933,7 +8933,7 @@
           order='180000.0'
           insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
           <argument order='0.0'>
-            fdm_equip.q
+            fdm_equip_ref.q
           </argument>
         </component>
       </agent>
@@ -9916,7 +9916,7 @@
           order='180000.0'
           insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
           <argument order='0.0'>
-            fdm_equip.q
+            fdm_equip_ref.q
           </argument>
         </component>
       </agent>
@@ -10299,7 +10299,7 @@
           order='180000.0'
           insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
           <argument order='0.0'>
-            fdm_equip.q
+            fdm_equip_ref.q
           </argument>
         </component>
       </agent>
