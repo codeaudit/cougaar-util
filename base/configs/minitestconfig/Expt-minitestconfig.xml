@@ -1,0 +1,500 @@
+<?xml version='1.0'?>
+<society name='Expt-minitestconfig'
+  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+  xsi:noNamespaceSchemaLocation='http://www.cougaar.org/2003/society.xsd'>
+  <host name='localhost'>
+    <node name='MiniNode'>
+      <vm_parameter>
+        -Dorg.cougaar.node.name=MiniNode
+      </vm_parameter>
+      <prog_parameter>
+        org.cougaar.core.node.Node
+      </prog_parameter>
+      <class>
+        org.cougaar.bootstrap.Bootstrapper
+      </class>
+      <vm_parameter>
+        -Dorg.cougaar.core.agent.startTime=08/10/2005
+      </vm_parameter>
+      <vm_parameter>
+        -Dorg.cougaar.core.persistence.clear=true
+      </vm_parameter>
+      <vm_parameter>
+        -Dorg.cougaar.core.persistence.enable=false
+      </vm_parameter>
+      <vm_parameter>
+        -Dorg.cougaar.name.server=localhost:8888:5555
+      </vm_parameter>
+      <vm_parameter>
+        -Dorg.cougaar.planning.ldm.lps.ComplainingLP.level=0
+      </vm_parameter>
+      <vm_parameter>
+        -Duser.timezone=GMT
+      </vm_parameter>
+      <agent name='1BDE' class='org.cougaar.core.agent.SimpleAgent'>
+         <facet superior_org_id='3ID' />
+         <facet subordinate_org_id='3-69-ARBN' />
+        <component name='1BDE|org.cougaar.mlm.plugin.organization.OrgDataPlugin' class='org.cougaar.mlm.plugin.organization.OrgDataPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        </component>
+        <component name='1BDE|org.cougaar.mlm.plugin.organization.OrgReportPlugin' class='org.cougaar.mlm.plugin.organization.OrgReportPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        </component>
+        <component name='1BDE|org.cougaar.mlm.plugin.organization.GLSAllocatorPlugin' class='org.cougaar.mlm.plugin.organization.GLSAllocatorPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        </component>
+        <component name='1BDE|org.cougaar.mlm.plugin.organization.GLSExpanderPlugin' class='org.cougaar.mlm.plugin.organization.GLSExpanderPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        </component>
+        <component name='1BDE|org.cougaar.mlm.plugin.strategictransport.TaskStrategicTransportAllocatorPlugin' class='org.cougaar.mlm.plugin.strategictransport.TaskStrategicTransportAllocatorPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        </component>
+        <component name='1BDE|org.cougaar.core.servlet.SimpleServletComponent' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.planning.servlet.PlanViewServlet
+          </argument>
+          <argument>
+            /tasks
+          </argument>
+        </component>
+        <component name='1BDE|org.cougaar.glm.servlet.GLMCompletionServlet' class='org.cougaar.glm.servlet.GLMCompletionServlet' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            /completion
+          </argument>
+        </component>
+        <component name='1BDE|org.cougaar.core.servlet.SimpleServletComponent|org.cougaar.planning.servlet.HierarchyServlet' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.planning.servlet.HierarchyServlet
+          </argument>
+          <argument>
+            /hierarchy
+          </argument>
+        </component>
+        <component name='1BDE|org.cougaar.core.servlet.SimpleServletComponent|org.cougaar.mlm.ui.servlet.DataGathererServlet' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.mlm.ui.servlet.DataGathererServlet
+          </argument>
+          <argument>
+            /datagatherer
+          </argument>
+        </component>
+        <component name='1BDE|org.cougaar.mlm.servlet.InventoryServletComponent' class='org.cougaar.mlm.servlet.InventoryServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.mlm.servlet.InventoryServlet
+          </argument>
+          <argument>
+            /inventory
+          </argument>
+        </component>
+        <component name='1BDE|org.cougaar.planning.servlet.LoaderServletComponent' class='org.cougaar.planning.servlet.LoaderServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            /load
+          </argument>
+        </component>
+        <component name='1BDE|org.cougaar.core.servlet.SimpleServletComponent|org.cougaar.tools.csmart.ui.servlet.AgentInfoServlet' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.tools.csmart.ui.servlet.AgentInfoServlet
+          </argument>
+          <argument>
+            /CSMART_AgentInfoServlet
+          </argument>
+        </component>
+        <component name='1BDE|org.cougaar.core.servlet.SimpleServletComponent|org.cougaar.tools.csmart.ui.servlet.CommunityProviderServlet' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.tools.csmart.ui.servlet.CommunityProviderServlet
+          </argument>
+          <argument>
+            /CSMART_CommunityProviderServlet
+          </argument>
+        </component>
+        <component name='1BDE|org.cougaar.core.servlet.SimpleServletComponent|org.cougaar.tools.csmart.ui.servlet.MetricsServlet' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.tools.csmart.ui.servlet.MetricsServlet
+          </argument>
+          <argument>
+            /CSMART_MetricsServlet
+          </argument>
+        </component>
+        <component name='1BDE|org.cougaar.core.servlet.SimpleServletComponent|org.cougaar.tools.csmart.ui.servlet.SearchServlet' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.tools.csmart.ui.servlet.SearchServlet
+          </argument>
+          <argument>
+            /CSMART_SearchServlet
+          </argument>
+        </component>
+        <component name='1BDE|org.cougaar.core.servlet.SimpleServletComponent|org.cougaar.tools.csmart.ui.servlet.PlanServlet' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.tools.csmart.ui.servlet.PlanServlet
+          </argument>
+          <argument>
+            /CSMART_PlanServlet
+          </argument>
+        </component>
+        <component name='1BDE|org.cougaar.mlm.plugin.ldm.GetOplanPlugin' class='org.cougaar.mlm.plugin.ldm.GetOplanPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        </component>
+        <component name='1BDE|org.cougaar.mlm.plugin.generic.PropagationPlugin' class='org.cougaar.mlm.plugin.generic.PropagationPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            forward.xml
+          </argument>
+        </component>
+        <component name='1BDE|org.cougaar.core.wp.WhitePagesServlet' class='org.cougaar.core.wp.WhitePagesServlet' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            /wp
+          </argument>
+        </component>
+      </agent>
+      <agent name='3-69-ARBN' class='org.cougaar.core.agent.SimpleAgent'>
+         <facet superior_org_id='1BDE' />
+        <component name='3-69-ARBN|org.cougaar.mlm.plugin.ldm.LDMXMLComponentPlugin' class='org.cougaar.mlm.plugin.ldm.LDMXMLComponentPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            3-69-ARBN.ldm.xml
+          </argument>
+        </component>
+        <component name='3-69-ARBN|org.cougaar.mlm.plugin.organization.OrgDataPlugin' class='org.cougaar.mlm.plugin.organization.OrgDataPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        </component>
+        <component name='3-69-ARBN|org.cougaar.mlm.plugin.organization.OrgReportPlugin' class='org.cougaar.mlm.plugin.organization.OrgReportPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        </component>
+        <component name='3-69-ARBN|org.cougaar.mlm.plugin.organization.GLSAllocatorPlugin' class='org.cougaar.mlm.plugin.organization.GLSAllocatorPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        </component>
+        <component name='3-69-ARBN|org.cougaar.mlm.plugin.organization.GLSExpanderPlugin' class='org.cougaar.mlm.plugin.organization.GLSExpanderPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            StrategicTransportation
+          </argument>
+        </component>
+        <component name='3-69-ARBN|org.cougaar.mlm.plugin.sample.StrategicTransportProjectionExpanderPlugin' class='org.cougaar.mlm.plugin.sample.StrategicTransportProjectionExpanderPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        </component>
+        <component name='3-69-ARBN|org.cougaar.mlm.plugin.strategictransport.TaskStrategicTransportAllocatorPlugin' class='org.cougaar.mlm.plugin.strategictransport.TaskStrategicTransportAllocatorPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        </component>
+        <component name='3-69-ARBN|org.cougaar.core.servlet.SimpleServletComponent' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.planning.servlet.PlanViewServlet
+          </argument>
+          <argument>
+            /tasks
+          </argument>
+        </component>
+        <component name='3-69-ARBN|org.cougaar.glm.servlet.GLMCompletionServlet' class='org.cougaar.glm.servlet.GLMCompletionServlet' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            /completion
+          </argument>
+        </component>
+        <component name='3-69-ARBN|org.cougaar.core.servlet.SimpleServletComponent|org.cougaar.planning.servlet.HierarchyServlet' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.planning.servlet.HierarchyServlet
+          </argument>
+          <argument>
+            /hierarchy
+          </argument>
+        </component>
+        <component name='3-69-ARBN|org.cougaar.core.servlet.SimpleServletComponent|org.cougaar.mlm.ui.servlet.DataGathererServlet' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.mlm.ui.servlet.DataGathererServlet
+          </argument>
+          <argument>
+            /datagatherer
+          </argument>
+        </component>
+        <component name='3-69-ARBN|org.cougaar.mlm.servlet.InventoryServletComponent' class='org.cougaar.mlm.servlet.InventoryServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.mlm.servlet.InventoryServlet
+          </argument>
+          <argument>
+            /inventory
+          </argument>
+        </component>
+        <component name='3-69-ARBN|org.cougaar.planning.servlet.LoaderServletComponent' class='org.cougaar.planning.servlet.LoaderServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            /load
+          </argument>
+        </component>
+        <component name='3-69-ARBN|org.cougaar.core.servlet.SimpleServletComponent|org.cougaar.tools.csmart.ui.servlet.AgentInfoServlet' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.tools.csmart.ui.servlet.AgentInfoServlet
+          </argument>
+          <argument>
+            /CSMART_AgentInfoServlet
+          </argument>
+        </component>
+        <component name='3-69-ARBN|org.cougaar.core.servlet.SimpleServletComponent|org.cougaar.tools.csmart.ui.servlet.CommunityProviderServlet' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.tools.csmart.ui.servlet.CommunityProviderServlet
+          </argument>
+          <argument>
+            /CSMART_CommunityProviderServlet
+          </argument>
+        </component>
+        <component name='3-69-ARBN|org.cougaar.core.servlet.SimpleServletComponent|org.cougaar.tools.csmart.ui.servlet.MetricsServlet' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.tools.csmart.ui.servlet.MetricsServlet
+          </argument>
+          <argument>
+            /CSMART_MetricsServlet
+          </argument>
+        </component>
+        <component name='3-69-ARBN|org.cougaar.core.servlet.SimpleServletComponent|org.cougaar.tools.csmart.ui.servlet.SearchServlet' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.tools.csmart.ui.servlet.SearchServlet
+          </argument>
+          <argument>
+            /CSMART_SearchServlet
+          </argument>
+        </component>
+        <component name='3-69-ARBN|org.cougaar.core.servlet.SimpleServletComponent|org.cougaar.tools.csmart.ui.servlet.PlanServlet' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.tools.csmart.ui.servlet.PlanServlet
+          </argument>
+          <argument>
+            /CSMART_PlanServlet
+          </argument>
+        </component>
+        <component name='3-69-ARBN|org.cougaar.mlm.plugin.ldm.GetOplanPlugin' class='org.cougaar.mlm.plugin.ldm.GetOplanPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        </component>
+        <component name='3-69-ARBN|org.cougaar.mlm.plugin.generic.PropagationPlugin' class='org.cougaar.mlm.plugin.generic.PropagationPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            forward.xml
+          </argument>
+        </component>
+        <component name='3-69-ARBN|org.cougaar.mlm.plugin.sample.AllocationAssessorPlugin' class='org.cougaar.mlm.plugin.sample.AllocationAssessorPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        </component>
+        <component name='3-69-ARBN|org.cougaar.core.wp.WhitePagesServlet' class='org.cougaar.core.wp.WhitePagesServlet' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            /wp
+          </argument>
+        </component>
+      </agent>
+      <agent name='3ID' class='org.cougaar.core.agent.SimpleAgent'>
+         <facet subordinate_org_id='1BDE' />
+        <component name='3ID|org.cougaar.mlm.plugin.organization.OrgDataPlugin' class='org.cougaar.mlm.plugin.organization.OrgDataPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        </component>
+        <component name='3ID|org.cougaar.mlm.plugin.organization.OrgReportPlugin' class='org.cougaar.mlm.plugin.organization.OrgReportPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        </component>
+        <component name='3ID|org.cougaar.mlm.plugin.organization.GLSGUIInitPlugin' class='org.cougaar.mlm.plugin.organization.GLSGUIInitPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        </component>
+        <component name='3ID|org.cougaar.mlm.plugin.organization.GLSRescindPlugin' class='org.cougaar.mlm.plugin.organization.GLSRescindPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        </component>
+        <component name='3ID|org.cougaar.mlm.plugin.organization.GLSAllocatorPlugin' class='org.cougaar.mlm.plugin.organization.GLSAllocatorPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        </component>
+        <component name='3ID|org.cougaar.mlm.plugin.organization.GLSExpanderPlugin' class='org.cougaar.mlm.plugin.organization.GLSExpanderPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            StrategicTransportation
+          </argument>
+        </component>
+        <component name='3ID|org.cougaar.mlm.plugin.strategictransport.TaskStrategicTransportAllocatorPlugin' class='org.cougaar.mlm.plugin.strategictransport.TaskStrategicTransportAllocatorPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        </component>
+        <component name='3ID|org.cougaar.core.servlet.SimpleServletComponent' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.planning.servlet.PlanViewServlet
+          </argument>
+          <argument>
+            /tasks
+          </argument>
+        </component>
+        <component name='3ID|org.cougaar.glm.servlet.GLMCompletionServlet' class='org.cougaar.glm.servlet.GLMCompletionServlet' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            /completion
+          </argument>
+        </component>
+        <component name='3ID|org.cougaar.core.servlet.SimpleServletComponent|org.cougaar.planning.servlet.HierarchyServlet' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.planning.servlet.HierarchyServlet
+          </argument>
+          <argument>
+            /hierarchy
+          </argument>
+        </component>
+        <component name='3ID|org.cougaar.core.servlet.SimpleServletComponent|org.cougaar.mlm.ui.servlet.DataGathererServlet' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.mlm.ui.servlet.DataGathererServlet
+          </argument>
+          <argument>
+            /datagatherer
+          </argument>
+        </component>
+        <component name='3ID|org.cougaar.mlm.servlet.InventoryServletComponent' class='org.cougaar.mlm.servlet.InventoryServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.mlm.servlet.InventoryServlet
+          </argument>
+          <argument>
+            /inventory
+          </argument>
+        </component>
+        <component name='3ID|org.cougaar.planning.servlet.LoaderServletComponent' class='org.cougaar.planning.servlet.LoaderServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            /load
+          </argument>
+        </component>
+        <component name='3ID|org.cougaar.core.servlet.SimpleServletComponent|org.cougaar.tools.csmart.ui.servlet.AgentInfoServlet' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.tools.csmart.ui.servlet.AgentInfoServlet
+          </argument>
+          <argument>
+            /CSMART_AgentInfoServlet
+          </argument>
+        </component>
+        <component name='3ID|org.cougaar.core.servlet.SimpleServletComponent|org.cougaar.tools.csmart.ui.servlet.CommunityProviderServlet' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.tools.csmart.ui.servlet.CommunityProviderServlet
+          </argument>
+          <argument>
+            /CSMART_CommunityProviderServlet
+          </argument>
+        </component>
+        <component name='3ID|org.cougaar.core.servlet.SimpleServletComponent|org.cougaar.tools.csmart.ui.servlet.MetricsServlet' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.tools.csmart.ui.servlet.MetricsServlet
+          </argument>
+          <argument>
+            /CSMART_MetricsServlet
+          </argument>
+        </component>
+        <component name='3ID|org.cougaar.core.servlet.SimpleServletComponent|org.cougaar.tools.csmart.ui.servlet.SearchServlet' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.tools.csmart.ui.servlet.SearchServlet
+          </argument>
+          <argument>
+            /CSMART_SearchServlet
+          </argument>
+        </component>
+        <component name='3ID|org.cougaar.core.servlet.SimpleServletComponent|org.cougaar.tools.csmart.ui.servlet.PlanServlet' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.tools.csmart.ui.servlet.PlanServlet
+          </argument>
+          <argument>
+            /CSMART_PlanServlet
+          </argument>
+        </component>
+        <component name='3ID|org.cougaar.mlm.plugin.generic.PropagationPlugin' class='org.cougaar.mlm.plugin.generic.PropagationPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            forward.xml
+          </argument>
+        </component>
+        <component name='3ID|org.cougaar.mlm.plugin.ldm.OPlanPlugin' class='org.cougaar.mlm.plugin.ldm.OPlanPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            oplan.xml
+          </argument>
+        </component>
+        <component name='3ID|org.cougaar.core.wp.WhitePagesServlet' class='org.cougaar.core.wp.WhitePagesServlet' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            /wp
+          </argument>
+        </component>
+      </agent>
+      <agent name='MCCGlobalMode' class='org.cougaar.core.agent.SimpleAgent'>
+        <component name='MCCGlobalMode|org.cougaar.mlm.plugin.ldm.LDMXMLComponentPlugin' class='org.cougaar.mlm.plugin.ldm.LDMXMLComponentPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            MCCGlobalMode.ldm.xml
+          </argument>
+        </component>
+        <component name='MCCGlobalMode|org.cougaar.mlm.plugin.organization.OrgDataPlugin' class='org.cougaar.mlm.plugin.organization.OrgDataPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        </component>
+        <component name='MCCGlobalMode|org.cougaar.mlm.plugin.organization.OrgReportPlugin' class='org.cougaar.mlm.plugin.organization.OrgReportPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        </component>
+        <component name='MCCGlobalMode|org.cougaar.mlm.plugin.sample.PolicyPlugin' class='org.cougaar.mlm.plugin.sample.PolicyPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        </component>
+        <component name='MCCGlobalMode|org.cougaar.mlm.plugin.ldm.XMLPolicyPlugin' class='org.cougaar.mlm.plugin.ldm.XMLPolicyPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            policy.ldm.xml
+          </argument>
+        </component>
+        <component name='MCCGlobalMode|org.cougaar.mlm.plugin.sample.MCCTriggerCreatorPlugin' class='org.cougaar.mlm.plugin.sample.MCCTriggerCreatorPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        </component>
+        <component name='MCCGlobalMode|org.cougaar.planning.ldm.trigger.TriggerManagerPlugin' class='org.cougaar.planning.ldm.trigger.TriggerManagerPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        </component>
+        <component name='MCCGlobalMode|org.cougaar.mlm.plugin.sample.MCCPredictorPlugin' class='org.cougaar.mlm.plugin.sample.MCCPredictorPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        </component>
+        <component name='MCCGlobalMode|org.cougaar.mlm.plugin.sample.MCCAggregatorPlugin' class='org.cougaar.mlm.plugin.sample.MCCAggregatorPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        </component>
+        <component name='MCCGlobalMode|org.cougaar.mlm.plugin.sample.MCCAllocatorPlugin' class='org.cougaar.mlm.plugin.sample.MCCAllocatorPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        </component>
+        <component name='MCCGlobalMode|org.cougaar.core.servlet.SimpleServletComponent' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.planning.servlet.PlanViewServlet
+          </argument>
+          <argument>
+            /tasks
+          </argument>
+        </component>
+        <component name='MCCGlobalMode|org.cougaar.glm.servlet.GLMCompletionServlet' class='org.cougaar.glm.servlet.GLMCompletionServlet' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            /completion
+          </argument>
+        </component>
+        <component name='MCCGlobalMode|org.cougaar.core.servlet.SimpleServletComponent|org.cougaar.planning.servlet.HierarchyServlet' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.planning.servlet.HierarchyServlet
+          </argument>
+          <argument>
+            /hierarchy
+          </argument>
+        </component>
+        <component name='MCCGlobalMode|org.cougaar.core.servlet.SimpleServletComponent|org.cougaar.mlm.ui.servlet.DataGathererServlet' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.mlm.ui.servlet.DataGathererServlet
+          </argument>
+          <argument>
+            /datagatherer
+          </argument>
+        </component>
+        <component name='MCCGlobalMode|org.cougaar.mlm.servlet.InventoryServletComponent' class='org.cougaar.mlm.servlet.InventoryServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.mlm.servlet.InventoryServlet
+          </argument>
+          <argument>
+            /inventory
+          </argument>
+        </component>
+        <component name='MCCGlobalMode|org.cougaar.planning.servlet.LoaderServletComponent' class='org.cougaar.planning.servlet.LoaderServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            /load
+          </argument>
+        </component>
+        <component name='MCCGlobalMode|org.cougaar.core.servlet.SimpleServletComponent|org.cougaar.tools.csmart.ui.servlet.AgentInfoServlet' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.tools.csmart.ui.servlet.AgentInfoServlet
+          </argument>
+          <argument>
+            /CSMART_AgentInfoServlet
+          </argument>
+        </component>
+        <component name='MCCGlobalMode|org.cougaar.core.servlet.SimpleServletComponent|org.cougaar.tools.csmart.ui.servlet.CommunityProviderServlet' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.tools.csmart.ui.servlet.CommunityProviderServlet
+          </argument>
+          <argument>
+            /CSMART_CommunityProviderServlet
+          </argument>
+        </component>
+        <component name='MCCGlobalMode|org.cougaar.core.servlet.SimpleServletComponent|org.cougaar.tools.csmart.ui.servlet.MetricsServlet' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.tools.csmart.ui.servlet.MetricsServlet
+          </argument>
+          <argument>
+            /CSMART_MetricsServlet
+          </argument>
+        </component>
+        <component name='MCCGlobalMode|org.cougaar.core.servlet.SimpleServletComponent|org.cougaar.tools.csmart.ui.servlet.SearchServlet' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.tools.csmart.ui.servlet.SearchServlet
+          </argument>
+          <argument>
+            /CSMART_SearchServlet
+          </argument>
+        </component>
+        <component name='MCCGlobalMode|org.cougaar.core.servlet.SimpleServletComponent|org.cougaar.tools.csmart.ui.servlet.PlanServlet' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            org.cougaar.tools.csmart.ui.servlet.PlanServlet
+          </argument>
+          <argument>
+            /CSMART_PlanServlet
+          </argument>
+        </component>
+        <component name='MCCGlobalMode|org.cougaar.mlm.plugin.generic.PropagationPlugin' class='org.cougaar.mlm.plugin.generic.PropagationPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            forward.xml
+          </argument>
+        </component>
+        <component name='MCCGlobalMode|org.cougaar.core.wp.WhitePagesServlet' class='org.cougaar.core.wp.WhitePagesServlet' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+          <argument>
+            /wp
+          </argument>
+        </component>
+      </agent>
+    </node>
+  </host>
+</society>
