@@ -37,7 +37,7 @@
         </Integer>
     </RuleParam>
     <RuleParam name="TurnOffProjections">
-        <Boolean value="false">
+        <Boolean value="true">
         </Boolean>
     </RuleParam>
     <RuleParam name="FillToCapacity">
