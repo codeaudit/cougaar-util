@@ -1,0 +1,66 @@
+<html>
+</head><title>Notes on the app-server</title></head>
+<body>
+
+<h2>Notes on the app-server</h2>
+
+<p>
+
+The "App-Server" is an application server (daemon) that allows 
+remote clients to:
+<ol>
+  <li>launch and kill processes, plus listen for the output
+      of those processes</li>
+  <li>access the file system to read and write files</li>
+  <li>list running processes on the system ("ps")</li>
+</ol>
+
+<p>
+
+As of Cougaar 9.0 there is little security built into the
+server, so <i><b>use at your own risk</b></i>.  If the 
+machines are behind a firewall then you're probably okay...
+
+<p>
+
+The <code>AppServer</code> is the "main" program to launch the 
+server.  The default port address is 8484.  ".props" filenames
+that are specified as arguments are loaded by the server and
+used to set default process properties.
+
+<p>
+
+The <code>RemoteHostRegistry</code> allows a remote client to lookup 
+an app-server on a specified (host:port) address.
+
+<p>
+
+There are several example app-server clients:
+<p>
+<ul>
+<li>
+The "org.cougaar.tools.server.examples" package, with source under
+"server/examples/*", contains two example consoles:<ul>
+  <li>"MinConsole", which is a command-line test rig</li>
+  <li>"GuiConsole", which is simple Swing-based UI</li>
+</ol>
+</li><p>
+
+<li>
+The "CSMARTConsole", which is integrated into CSMART.
+</li><p>
+
+<li>
+The "Manager", which is in the "manager" module.
+</li><p>
+</ul>
+
+<p>
+
+<i>FIXME:</i><br>
+The interfaces have a lot of "throws Exception" in them, which
+is messy.  With a little work most of these methods could probably 
+become something more specific, such as "throws IOException".
+
+</body>
+</html>

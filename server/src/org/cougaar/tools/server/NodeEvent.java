@@ -23,7 +23,10 @@ package org.cougaar.tools.server;
 
 /**
  * An event that occured in the Node and sent to the client via
- * <code>NodeEventListener</code>.
+ * OutputListener.
+ * <p>
+ * Soon to be <b>deprecated</b> -- see NodeEventTranslator.  Not
+ * deprecated yet to keep the number of developer warnings minimal.
  */
 public final class NodeEvent implements java.io.Serializable, Cloneable {
 
@@ -41,10 +44,7 @@ public final class NodeEvent implements java.io.Serializable, Cloneable {
   public static final int HEARTBEAT      = 2;
 
   /** The Node has been created */
-  public static final int NODE_CREATED   = 3;
-
-  /** A Cluster has been added in the Node */
-  public static final int CLUSTER_ADDED  = 4;
+  public static final int PROCESS_CREATED   = 3;
 
   /**
    * A rough indicator how busy the host is.
@@ -56,21 +56,20 @@ public final class NodeEvent implements java.io.Serializable, Cloneable {
    * This will remain a vague indicator until JNI/JVM measures are
    * more accurate!
    */
-  public static final int IDLE_UPDATE    = 5;
+  public static final int IDLE_UPDATE    = 4;
 
   /** The Node has been destroyed */
-  public static final int NODE_DESTROYED = 6;
+  public static final int PROCESS_DESTROYED = 5;
 
-  public static final int MAX_TYPE = NODE_DESTROYED;
+  public static final int MAX_TYPE = PROCESS_DESTROYED;
 
   public static final String[] PREFIX = {
     "STANDARD_OUT",
     "STANDARD_ERR",
     "HEARTBEAT",
-    "NODE_CREATED",
-    "CLUSTER_ADDED",
+    "PROCESS_CREATED",
     "IDLE_UPDATE",
-    "NODE_DESTROYED",
+    "PROCESS_DESTROYED",
   };
 
   private final int type;
@@ -79,7 +78,7 @@ public final class NodeEvent implements java.io.Serializable, Cloneable {
   public NodeEvent(
       int type) {
     this.type = type;
-    this.msg = new String();
+    this.msg = "";
     if ((type < 0) || 
         (type > MAX_TYPE)) {
       throw new IllegalArgumentException(
@@ -91,12 +90,7 @@ public final class NodeEvent implements java.io.Serializable, Cloneable {
       int type,
       String msg) {
     this.type = type;
-    if (msg != null) {
-      this.msg = msg;
-    } else {
-      this.msg = new String();
-    }
-      
+    this.msg = ((msg != null) ? msg : "");
     if ((type < 0) || 
         (type > MAX_TYPE)) {
       throw new IllegalArgumentException(
@@ -128,7 +122,7 @@ public final class NodeEvent implements java.io.Serializable, Cloneable {
   public String toString() {
     String pf = PREFIX[type];
     return 
-      (((msg != null) && (!msg.equals("")))  ?
+      ((!(msg.equals("")))  ?
        (pf+": \""+msg+"\"") :
        (pf));
   }

@@ -21,34 +21,35 @@
  
 package org.cougaar.tools.server;
 
-import java.util.Properties;
+import java.util.*;
 
+/**
+ * Immutable description for a remote process.
+ */
 public final class ProcessDescription 
-implements java.io.Serializable, Cloneable 
+implements java.io.Serializable
 {
 
   private final String name;
   private final String group;
-  private final Properties javaProps;
-  private final String[] commandLineArgs;
+  private final Map javaProps;
+  private final List commandLineArgs;
 
   public ProcessDescription(
       String name,
       String group,
-      Properties javaProps,
-      String[] commandLineArgs) {
-    this.name = name;
-    this.group = group;
-    this.javaProps = javaProps;
-    this.commandLineArgs = commandLineArgs;
-    // null-check
-    if (name == null) {
-      throw new NullPointerException("Missing name");
-    }
+      Map javaProps,
+      List commandLineArgs) {
+    this.name = prepareName(name);
+    this.group = prepareGroup(group);
+    this.javaProps = prepareProps(javaProps);
+    this.commandLineArgs = prepareArgs(commandLineArgs);
   }
 
   /**
    * Get the "name" identifier for this process.
+   * <p>
+   * All processes must have globally-unique names.
    */
   public String getName() {
     return name;
@@ -65,7 +66,8 @@ implements java.io.Serializable, Cloneable
   }
 
   /**
-   * Get the java properties.
+   * Get the java properties, which is an unmodifiable map
+   * of (String, String) pairs.
    * <p>
    * All properties fall into three groups: <ul>
    *   <li>"<b>env.*</b>" process environment properties 
@@ -75,13 +77,27 @@ implements java.io.Serializable, Cloneable
    *   <li>"<b>*</b>" for all other "-D" system properties 
    *       (e.g. "foo=bar")</li>
    * </ul><br>
+   * If the value is <tt>null</tt> then this property is
+   * to be <i>removed</i> from the default list of properties
+   * (if one is specified on the server).
+   * <p>
    * Double-prefixes ("env.env.*" and "java.java.*") are 
    * stripped and converted to "-D" properties.  For example,
    * "java.java.duck=quack" is converted to "-Djava.duck=quack".
    * <p>
    * Some properties of note:<ul>
+   *   <li>"java.jar=" specify an java executable jar, this
+   *       property defaults to empty (no executable jar)</li>
    *   <li>"java.class.name=" to set the classname, which
-   *       is required</li>
+   *       is required if the "java.jar=.." is not specified.
+   *       If both the classname and jar are specified then
+   *       the classname is ignored.</li>
+   *   <li>"java.class.path=" specify the java classpath -- note 
+   *       that this *doesn't* adopt the server's classpath!  
+   *       If the "java.jar=.." is specified then this property
+   *       is ignored.  If both this property and "java.jar=.."
+   *       are not specified then this property defaults to the 
+   *       system-default classpath</li>
    *   <li>"java.jvm.program=" to set the java executable
    *       (defaults to "${java.home}/bin/java")</li>
    *   <li>"java.jvm.mode=" to set the JVM mode 
@@ -89,50 +105,48 @@ implements java.io.Serializable, Cloneable
    *       defaults to "hotspot"</li>
    *   <li>"java.jvm.green=" to add "-green" for green threads,
    *       defaults to false.
-   *   <li>"java.class.path=" (note that this *doesn't* adopt
-   *       the server's classpath!); defaults to the system-default
-   *       classpath</li>
    *   <li>"java.Xbootclasspath[/p|/a]=" to set the bootclasspath.
    *       "java.Xbootclasspath/p=" is used to prefix the default
-   *       bootclasspath, or "java.Xbootclasspath/a=" to append.</li>
-   *   <li>"java.X*" for other "-X*" properties, such as 
-   *       "java.Xmx300m=" for "-Xmx300m"</li>
+   *       bootclasspath, or "java.Xbootclasspath/a=" to append</li>
+   *   <li>"java.heap.min=" to specify the minimum heap size,
+   *       such as "100m" for 100 megabytes; defaults to a
+   *       system-specify value</li>
+   *   <li>"java.heap.max=" to specify the maximum heap size,
+   *       such as "300m" for 300 megabytes; defaults to a
+   *       system-specify value</li>
+   *   <li>"java.stack.size=" to specify the Java thread stack size,
+   *       such as "10m" for 10 megabytes; defaults to a 
+   *       system-specify value</li>
+   *   <li>"java.*" for all other "-*" properties, such as 
+   *       "java.Xnoclassgc=" for "-Xnoclassgc"</li>
    * </ul>
    */
-  public Properties getJavaProperties() {
-    // clone?
+  public Map getJavaProperties() {
     return javaProps;
   }
 
   /**
-   * Get the command-line arguments (in addition to the optional 
-   * java-properties), or <tt>null</tt> if there are no additional
-   * command-line arguments.
+   * Get the command-line arguments, which is an unmodifiable
+   * list of non-null Strings.
+   * <p>
+   * These arguments are in addition to the optional 
+   * java-properties.
    */
-  public String[] getCommandLineArguments() {
-    // clone?
+  public List getCommandLineArguments() {
     return commandLineArgs;
-  }
-
-  public Object clone() {
-    try {
-      return super.clone();
-    } catch (CloneNotSupportedException e) {
-      // never
-      throw new InternalError();
-    }
   }
 
   public String toString() { 
     return 
       "Process \""+name+
-      "\" of group "+
-      ((group != null) ? ("\""+group+"\"") : "(none)");
+      "\" of group \""+group+"\"";
   }
 
   public int hashCode() {
+    // could cache
     return name.hashCode();
   }
+
   public boolean equals(Object o) {
     if (o == this) {
       return true;
@@ -144,38 +158,93 @@ implements java.io.Serializable, Cloneable
     if (!(name.equals(pd.name))) {
       return false;
     }
-    if ((group != null) ?
-        (!(group.equals(pd.group))) :
-        (pd.group != null)) {
+    if (!(group.equals(pd.group))) {
       return false;
     }
-    if ((javaProps != null) ?
-        (!(javaProps.equals(pd.javaProps))) :
-        (pd.javaProps != null)) {
+    if (!(javaProps.equals(pd.javaProps))) {
       return false;
     }
-    if (commandLineArgs != null) {
-      if (pd.commandLineArgs == null) {
-        return false;
-      }
-      int len = commandLineArgs.length;
-      if (pd.commandLineArgs.length != len) {
-        return false;
-      }
-      for (int i = 0; i < len; i++) {
-        String ai = commandLineArgs[i];
-        String bi = pd.commandLineArgs[i];
-        if ((ai != null) ?
-            (!(ai.equals(bi))) :
-            (bi != null)) {
-          return false;
-        }
-      }
-    } else if (pd.commandLineArgs != null) {
+    if (!(commandLineArgs.equals(pd.commandLineArgs))) {
       return false;
     }
     return true;
   }
 
-  private static final long serialVersionUID = 1209381608235681283L;
+  private static String prepareName(String s) {
+    if (s == null) {
+      throw new IllegalArgumentException(
+          "Name must be non-null");
+    }
+    return s;
+  }
+
+  private static String prepareGroup(String s) {
+    if (s == null) {
+      return "<none>";
+    }
+    return s;
+  }
+
+  /**
+   * Does three things:
+   * <ol>
+   *   <li>Use a zero-size map if passed null</li>
+   *   <li>Flatten "java.util.Properies" to a "java.util.HashMap",
+   *       since Properties has bad "get(..)" and "size()" 
+   *       implementations</li>
+   *   <li>Wrap the map into an unmodifiable map</li>
+   * </ol>.
+   */
+  private static Map prepareProps(Map m) {
+    if (m == null) {
+      return Collections.EMPTY_MAP;
+    }
+    // flatten properties
+    Map nm = m;
+    if (m instanceof Properties) {
+      Properties props = (Properties) m;
+      nm = new HashMap();
+      for (Enumeration en = props.propertyNames();
+          en.hasMoreElements();
+          ) {
+        String name = (String) en.nextElement();
+        String value = props.getProperty(name);
+        nm.put(name, value);
+      }
+    } else {
+      // verify (String, String) pairs
+    }
+    // force immutable
+    Map ret = Collections.unmodifiableMap(nm);
+    return ret;
+  }
+
+  /**
+   * Does three things:
+   * <ol>
+   *   <li>Use a zero-size list if passed null</li>
+   *   <li>Make sure the list only contains non-null Strings</li>
+   *   <li>Wrap the list into an unmodifiable list</li>
+   * </ol>.
+   */
+  private static List prepareArgs(List l) {
+    if (l == null) {
+      return Collections.EMPTY_LIST;
+    }
+    // check for strings
+    int n = l.size();
+    for (int i = 0; i < n; i++) {
+      Object oi = l.get(i);
+      if (!(oi instanceof String)) {
+        throw new IllegalArgumentException(
+            "Command line argument ["+i+
+            "] is not a String: "+oi);
+      }
+    }
+    // force immutable
+    List ret = Collections.unmodifiableList(l);
+    return ret;
+  }
+
+  private static final long serialVersionUID = 2938472839235681283L;
 }
