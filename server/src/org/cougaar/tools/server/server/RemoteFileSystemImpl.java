@@ -163,33 +163,7 @@ class RemoteFileSystemImpl implements RemoteFileSystem {
    */
   public InputStream read(
       String filename) {
-    // check the path  (should merge this code with the "list(..)" code)
-    if (!(filename.startsWith("./"))) {
-      throw new IllegalArgumentException(
-          "Filename must start with \"./\", not \""+filename+"\"");
-    } else if (filename.indexOf("..") > 0) {
-      throw new IllegalArgumentException(
-          "Filename can not contain \"..\": \""+filename+"\"");
-    } else if (filename.indexOf("\\") > 0) {
-      throw new IllegalArgumentException(
-          "Filename must use the \"/\" path separator, not \"\\\": \""+
-          filename+"\"");
-    } else if (filename.endsWith("/")) {
-      throw new IllegalArgumentException(
-          "Filename can not end in \"/\": \""+filename+"\"");
-    }
-    // other checks?  Security manager?
-
-    // fix the filename path to use the system path-separator and be 
-    //   relative to the "tempPath"
-    String sysFilename = filename;
-    if (File.separatorChar != '/') {
-      sysFilename = sysFilename.replace('/', File.separatorChar);
-    }
-    sysFilename = tempPath + sysFilename.substring(2);
-
-    // open the file
-    File f = new File(sysFilename);
+    File f = getSysFile(filename);
     
     // make sure that the file is not a directory, etc
     if (!(f.exists())) {
@@ -237,33 +211,7 @@ class RemoteFileSystemImpl implements RemoteFileSystem {
   private OutputStream _write(
       String filename,
       boolean append) {
-    // check the path  (should merge this code with the "list(..)" code)
-    if (!(filename.startsWith("./"))) {
-      throw new IllegalArgumentException(
-          "Filename must start with \"./\", not \""+filename+"\"");
-    } else if (filename.indexOf("..") > 0) {
-      throw new IllegalArgumentException(
-          "Filename can not contain \"..\": \""+filename+"\"");
-    } else if (filename.indexOf("\\") > 0) {
-      throw new IllegalArgumentException(
-          "Filename must use the \"/\" path separator, not \"\\\": \""+
-          filename+"\"");
-    } else if (filename.endsWith("/")) {
-      throw new IllegalArgumentException(
-          "Filename can not end in \"/\": \""+filename+"\"");
-    }
-    // other checks?  Security manager?
-
-    // fix the filename path to use the system path-separator and be 
-    //   relative to the "tempPath"
-    String sysFilename = filename;
-    if (File.separatorChar != '/') {
-      sysFilename = sysFilename.replace('/', File.separatorChar);
-    }
-    sysFilename = tempPath + sysFilename.substring(2);
-
-    // open the file
-    File f = new File(sysFilename);
+    File f = getSysFile(filename);
     
     // make sure that the file is not a directory, etc
     if (f.exists()) {
@@ -294,6 +242,36 @@ class RemoteFileSystemImpl implements RemoteFileSystem {
     }
 
     return fout;
+  }
+
+  // Error check the filename, then get a file handle for the system
+  private File getSysFile(String filename) {
+    // check the path  (should merge this code with the "list(..)" code)
+    if (!(filename.startsWith("./"))) {
+      throw new IllegalArgumentException(
+          "Filename must start with \"./\", not \""+filename+"\"");
+    } else if (filename.indexOf("..") > 0) {
+      throw new IllegalArgumentException(
+          "Filename can not contain \"..\": \""+filename+"\"");
+    } else if (filename.indexOf("\\") > 0) {
+      throw new IllegalArgumentException(
+          "Filename must use the \"/\" path separator, not \"\\\": \""+
+          filename+"\"");
+    } else if (filename.endsWith("/")) {
+      throw new IllegalArgumentException(
+          "Filename can not end in \"/\": \""+filename+"\"");
+    }
+    // other checks?  Security manager?
+
+    // fix the filename path to use the system path-separator and be 
+    //   relative to the "tempPath"
+    String sysFilename = filename;
+    if (File.separatorChar != '/') {
+      sysFilename = sysFilename.replace('/', File.separatorChar);
+    }
+    sysFilename = tempPath + sysFilename.substring(2);
+    // open the file
+    return new File(sysFilename);
   }
 
   // add delete/write/etc support here
