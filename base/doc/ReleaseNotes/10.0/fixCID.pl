@@ -1,14 +1,32 @@
 #!/usr/bin/perl
 # -*- Perl -*-
 
-# updatecr reads a list of files from the standard input, updating
-# any copyright notices it finds which conform to a standard format:
+# fixCID fixes cougaar 9.* code which references CougaarIdentifier and NodeIdentifier
+# This script does *not* take care of the following cases:
+# - if your code does a wildcard import like "import org.cougaar.core.agent.*;", you
+# may need to add "import org.cougaar.core.mts.MessageAddress" as well. You can
+# try setting $fixingWildcards = 1 below, but you will probably have lots of redundant
+# bulk imports left over needing manual fixing.
+# - Multicast references - instead of MessageAddress.COMMUNITY for instance, the key
+# is MessageAddress.MULTICAST_COMMUNITY.  We don't do this here because it will make
+# too many mistakes that a human wouldn't.
+# - Unusual MessageAddress constructors, including those with MessageAttributes.  There
+# are too many cases (and very few uses) to cover safely without the script needing to
+# know the argument types.  Most of the cases will be covered automatically by the
+# conversion of constructor->factory, but the rest should result in straightforward
+# to fix compile errors.
+
+# usage example:
+# find . -name "*.java" | perl fixCID.pl
+#
 
 $fixingWildcards=0;		# set to true to try catching bulk imports
 
 $total=0;
 $fixed=0;
 $repls = 0;
+
+print "Fixing MessageAddress family for Cougaar 10.0\n";
 
 while (<>) {
   chop;
@@ -39,6 +57,8 @@ sub process {
     $found++ if (s/org\.cougaar\.core\.node\.NodeIdentifier/org\.cougaar\.core\.mts\.MessageAddress/g);
     $found++ if (s/new NodeIdentifier/MessageAddress.getMessageAddress/g);
     $found++ if (s/NodeIdentifier/MessageAddress/g);
+
+    $found++ if (s/new AttributeBasedAddress/AttributeBasedAddress.getAttributeBasedAddress/g);
 
     if ($fixingWildcards) {
       if (/import org\.cougaar\.core\.agent\.\*/) {

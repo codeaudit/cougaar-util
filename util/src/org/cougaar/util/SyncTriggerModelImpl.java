@@ -235,7 +235,7 @@ public final class SyncTriggerModelImpl implements TriggerModel {
       if (die instanceof RuntimeException) {
         throw (RuntimeException) die;
       } else {
-        throw new RuntimeException(die.getMessage());
+        throw new RuntimeException("SyncTriggerModelImpl rethrowing "+die.getMessage(), die);
       }
     }
     boolean enQ = false;

@@ -123,6 +123,6 @@ public class DelegatingServiceBroker
   }
 
   public void releaseService(Object requestor, Class serviceClass, Object service) {
-    releaseService(requestor, serviceClass, service);
+    delegate.releaseService(requestor, serviceClass, service);
   }
 }
