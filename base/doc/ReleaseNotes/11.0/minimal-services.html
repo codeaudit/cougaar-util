@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>Minimal Thread and Message Services</title>
+</head>
+
+<body>
+<h1>Introduction</h1>
+
+<p>Minimal service implementations can be useful as a way to expose
+resource utilization issues in large services like the MTS and Thread
+Service.  As part of 11.0, we developed very simple implementations of
+these services which can be activated at runtime with -D flags.  The
+two are described very briefly below.
+
+<h2>Minimal MTS</h2>
+
+<p>The minimal implementation is designed to work in a single-node
+society.  This version uses a single implementation instance for the
+service, which does direct calls on the recipient Agent to deliver
+messages.
+
+<p> To use this service, set the following <code>vm_parameter</code>
+
+<pre>
+-Dorg.cougaar.mts.singlenode=true
+</pre>
+
+
+<h2>Minimal Thread Services</h2>
+
+<p>The minimal implementation uses a very simple thread pool, with no
+Schedulers or Controllers.  The ThreadListenerService and
+ThreadControlService will not exist at all in this case.
+
+<p> To use this service, set the following <code>vm_parameter</code>
+
+<pre>
+-Dorg.cougaar.thread.trivial=true
+</pre>
+
+
+</body> </html>
