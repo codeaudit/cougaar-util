@@ -13,27 +13,12 @@
 </OPERATOR>
 </OPERATOR>
 <LITERAL value="0.0" type="constant" datatype="number" />
-<LITERAL value="1.0E9" type="constant" datatype="number" />
+<LITERAL value="1.0E3" type="constant" datatype="number" />
 </OPERATOR>
 <OPERATOR operation="-" >
 <OPERATOR operation="get" >
-<OPERATOR operation="find" >
-<OPERATOR operation="get" >
 <LITERAL value="task" type="variable" datatype="task" />
-<LITERAL value="preferences" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="list:PreferenceImpl" />
-</OPERATOR>
-<LITERAL value="pref" type="constant" datatype="string" />
-<OPERATOR operation="=" >
-<OPERATOR operation="get" >
-<LITERAL value="pref" type="variable" datatype="PreferenceImpl" />
-<LITERAL value="aspectType" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="number" />
-</OPERATOR>
-<LITERAL value="1.0" type="constant" datatype="number" />
-</OPERATOR>
-</OPERATOR>
-<LITERAL value="scoringFunction_1.best.value_0" type="constant" datatype="string" />
+<LITERAL value="arrival" type="constant" datatype="string" />
 <LITERAL value="" type="variable" datatype="datetime" />
 </OPERATOR>
 <OPERATOR operation="taskendtime" >
@@ -62,28 +47,13 @@
 </OPERATOR>
 <LITERAL value="1.0" type="constant" datatype="number" />
 </OPERATOR>
-<LITERAL value="1.0E7" type="constant" datatype="number" />
+<LITERAL value="1.0E2" type="constant" datatype="number" />
 <LITERAL value="0.0" type="constant" datatype="number" />
 </OPERATOR>
 <OPERATOR operation="-" >
 <OPERATOR operation="get" >
-<OPERATOR operation="find" >
-<OPERATOR operation="get" >
 <LITERAL value="task" type="variable" datatype="task" />
-<LITERAL value="preferences" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="list:PreferenceImpl" />
-</OPERATOR>
-<LITERAL value="pref" type="constant" datatype="string" />
-<OPERATOR operation="=" >
-<OPERATOR operation="get" >
-<LITERAL value="pref" type="variable" datatype="PreferenceImpl" />
-<LITERAL value="aspectType" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="number" />
-</OPERATOR>
-<LITERAL value="1.0" type="constant" datatype="number" />
-</OPERATOR>
-</OPERATOR>
-<LITERAL value="scoringFunction_1.best.value_0" type="constant" datatype="string" />
+<LITERAL value="arrival" type="constant" datatype="string" />
 <LITERAL value="" type="variable" datatype="datetime" />
 </OPERATOR>
 <OPERATOR operation="taskendtime" >
@@ -95,253 +65,57 @@
 <BESTTIME>
 <OPERATOR operation="-" >
 <OPERATOR operation="get" >
-<OPERATOR operation="find" >
-<OPERATOR operation="get" >
 <LITERAL value="task" type="variable" datatype="task" />
-<LITERAL value="preferences" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="list:PreferenceImpl" />
-</OPERATOR>
-<LITERAL value="preference" type="constant" datatype="string" />
-<OPERATOR operation="=" >
-<OPERATOR operation="get" >
-<LITERAL value="preference" type="variable" datatype="PreferenceImpl" />
-<LITERAL value="aspectType" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="number" />
-</OPERATOR>
-<LITERAL value="1.0" type="constant" datatype="number" />
-</OPERATOR>
-</OPERATOR>
-<LITERAL value="scoringFunction_1.best.value_0" type="constant" datatype="string" />
+<LITERAL value="arrival" type="constant" datatype="string" />
 <LITERAL value="" type="variable" datatype="datetime" />
 </OPERATOR>
 <LITERAL value="duration" type="variable" datatype="number" />
 </OPERATOR>
 </BESTTIME>
 <TASKDURATION>
-<OPERATOR operation="+" >
-<LITERAL value="600.0" type="constant" datatype="number" />
 <OPERATOR operation="/" >
-<OPERATOR operation="matentry" >
-<LITERAL value="distances" type="variable" datatype="matrix" />
-<OPERATOR operation="position" >
-<OPERATOR operation="get" >
-<LITERAL value="locations" type="variable" datatype="locations" />
-<LITERAL value="locations" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="list:string" />
-</OPERATOR>
-<OPERATOR operation="get" >
-<OPERATOR operation="find" >
+<OPERATOR operation="dist" >
 <OPERATOR operation="get" >
 <LITERAL value="task" type="variable" datatype="task" />
-<LITERAL value="prepositionalPhrases" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="list:PrepositionalPhraseImpl" />
+<LITERAL value="from.latlong" type="constant" datatype="string" />
+<LITERAL value="" type="variable" datatype="latlong" />
 </OPERATOR>
-<LITERAL value="prep" type="constant" datatype="string" />
-<OPERATOR operation="=" >
-<OPERATOR operation="get" >
-<LITERAL value="prep" type="variable" datatype="PrepositionalPhraseImpl" />
-<LITERAL value="preposition" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="string" />
-</OPERATOR>
-<LITERAL value="From" type="constant" datatype="string" />
-</OPERATOR>
-</OPERATOR>
-<LITERAL value="indirectObject_0.geolocCode" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="string" />
-</OPERATOR>
-</OPERATOR>
-<OPERATOR operation="position" >
-<OPERATOR operation="get" >
-<LITERAL value="locations" type="variable" datatype="locations" />
-<LITERAL value="locations" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="list:string" />
-</OPERATOR>
-<OPERATOR operation="get" >
-<OPERATOR operation="find" >
 <OPERATOR operation="get" >
 <LITERAL value="task" type="variable" datatype="task" />
-<LITERAL value="prepositionalPhrases" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="list:PrepositionalPhraseImpl" />
-</OPERATOR>
-<LITERAL value="prep" type="constant" datatype="string" />
-<OPERATOR operation="=" >
-<OPERATOR operation="get" >
-<LITERAL value="prep" type="variable" datatype="PrepositionalPhraseImpl" />
-<LITERAL value="preposition" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="string" />
-</OPERATOR>
-<LITERAL value="To" type="constant" datatype="string" />
-</OPERATOR>
-</OPERATOR>
-<LITERAL value="indirectObject_0.geolocCode" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="string" />
-</OPERATOR>
+<LITERAL value="to.latlong" type="constant" datatype="string" />
+<LITERAL value="" type="variable" datatype="latlong" />
 </OPERATOR>
 </OPERATOR>
 <OPERATOR operation="/" >
 <OPERATOR operation="get" >
-<OPERATOR operation="globget" >
 <LITERAL value="resource" type="variable" datatype="resource" />
-<LITERAL value="GroundSelfPropulsionPG" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="GroundSelfPropulsionPGImpl" />
-</OPERATOR>
-<LITERAL value="cruise_speed.milesPerHour" type="constant" datatype="string" />
+<LITERAL value="speed" type="constant" datatype="string" />
 <LITERAL value="" type="variable" datatype="number" />
 </OPERATOR>
 <LITERAL value="3600.0" type="constant" datatype="number" />
-</OPERATOR>
 </OPERATOR>
 </OPERATOR>
 </TASKDURATION>
 <SETUPDURATION>
-<OPERATOR operation="/" >
-<OPERATOR operation="matentry" >
-<LITERAL value="distances" type="variable" datatype="matrix" />
-<OPERATOR operation="get" >
-<LITERAL value="locations" type="variable" datatype="locations" />
-<LITERAL value="depotIndex" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="number" />
-</OPERATOR>
-<OPERATOR operation="position" >
-<OPERATOR operation="get" >
-<LITERAL value="locations" type="variable" datatype="locations" />
-<LITERAL value="locations" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="list:string" />
-</OPERATOR>
-<OPERATOR operation="get" >
-<OPERATOR operation="find" >
-<OPERATOR operation="get" >
-<LITERAL value="task" type="variable" datatype="task" />
-<LITERAL value="prepositionalPhrases" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="list:PrepositionalPhraseImpl" />
-</OPERATOR>
-<LITERAL value="prep" type="constant" datatype="string" />
-<OPERATOR operation="=" >
-<OPERATOR operation="get" >
-<LITERAL value="prep" type="variable" datatype="PrepositionalPhraseImpl" />
-<LITERAL value="preposition" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="string" />
-</OPERATOR>
-<LITERAL value="From" type="constant" datatype="string" />
-</OPERATOR>
-</OPERATOR>
-<LITERAL value="indirectObject_0.geolocCode" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="string" />
-</OPERATOR>
-</OPERATOR>
-</OPERATOR>
-<OPERATOR operation="/" >
-<OPERATOR operation="get" >
-<OPERATOR operation="globget" >
-<LITERAL value="resource" type="variable" datatype="resource" />
-<LITERAL value="GroundSelfPropulsionPG" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="GroundSelfPropulsionPGImpl" />
-</OPERATOR>
-<LITERAL value="cruise_speed.milesPerHour" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="number" />
-</OPERATOR>
 <LITERAL value="3600.0" type="constant" datatype="number" />
-</OPERATOR>
-</OPERATOR>
 </SETUPDURATION>
 <WRAPUPDURATION>
-<OPERATOR operation="/" >
-<OPERATOR operation="matentry" >
-<LITERAL value="distances" type="variable" datatype="matrix" />
-<OPERATOR operation="position" >
-<OPERATOR operation="get" >
-<LITERAL value="locations" type="variable" datatype="locations" />
-<LITERAL value="locations" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="list:string" />
-</OPERATOR>
-<OPERATOR operation="get" >
-<OPERATOR operation="find" >
-<OPERATOR operation="get" >
-<LITERAL value="task" type="variable" datatype="task" />
-<LITERAL value="prepositionalPhrases" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="list:PrepositionalPhraseImpl" />
-</OPERATOR>
-<LITERAL value="prep" type="constant" datatype="string" />
-<OPERATOR operation="=" >
-<OPERATOR operation="get" >
-<LITERAL value="prep" type="variable" datatype="PrepositionalPhraseImpl" />
-<LITERAL value="preposition" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="string" />
-</OPERATOR>
-<LITERAL value="To" type="constant" datatype="string" />
-</OPERATOR>
-</OPERATOR>
-<LITERAL value="indirectObject_0.geolocCode" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="string" />
-</OPERATOR>
-</OPERATOR>
-<OPERATOR operation="get" >
-<LITERAL value="locations" type="variable" datatype="locations" />
-<LITERAL value="depotIndex" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="number" />
-</OPERATOR>
-</OPERATOR>
-<OPERATOR operation="/" >
-<OPERATOR operation="get" >
-<OPERATOR operation="globget" >
-<LITERAL value="resource" type="variable" datatype="resource" />
-<LITERAL value="GroundSelfPropulsionPG" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="GroundSelfPropulsionPGImpl" />
-</OPERATOR>
-<LITERAL value="cruise_speed.milesPerHour" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="number" />
-</OPERATOR>
 <LITERAL value="3600.0" type="constant" datatype="number" />
-</OPERATOR>
-</OPERATOR>
 </WRAPUPDURATION>
 <TASKUNAVAIL>
 <OPERATOR operation="list" >
 <OPERATOR operation="interval" >
 <LITERAL value="start_time" type="variable" datatype="datetime" />
-<OPERATOR operation="-" >
-<OPERATOR operation="get" >
-<OPERATOR operation="find" >
 <OPERATOR operation="get" >
 <LITERAL value="task" type="variable" datatype="task" />
-<LITERAL value="preferences" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="list:PreferenceImpl" />
-</OPERATOR>
-<LITERAL value="pref" type="constant" datatype="string" />
-<OPERATOR operation="=" >
-<OPERATOR operation="get" >
-<LITERAL value="pref" type="variable" datatype="PreferenceImpl" />
-<LITERAL value="aspectType" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="number" />
-</OPERATOR>
-<LITERAL value="0.0" type="constant" datatype="number" />
-</OPERATOR>
-</OPERATOR>
-<LITERAL value="scoringFunction_0.best.value_0" type="constant" datatype="string" />
+<LITERAL value="departure" type="constant" datatype="string" />
 <LITERAL value="" type="variable" datatype="datetime" />
-</OPERATOR>
-<LITERAL value="duration" type="variable" datatype="number" />
 </OPERATOR>
 </OPERATOR>
 <OPERATOR operation="interval" >
 <OPERATOR operation="get" >
-<OPERATOR operation="find" >
-<OPERATOR operation="get" >
 <LITERAL value="task" type="variable" datatype="task" />
-<LITERAL value="preferences" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="list:PreferenceImpl" />
-</OPERATOR>
-<LITERAL value="pref" type="constant" datatype="string" />
-<OPERATOR operation="=" >
-<OPERATOR operation="get" >
-<LITERAL value="pref" type="variable" datatype="PreferenceImpl" />
-<LITERAL value="aspectType" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="number" />
-</OPERATOR>
-<LITERAL value="1.0" type="constant" datatype="number" />
-</OPERATOR>
-</OPERATOR>
-<LITERAL value="scoringFunction_1.best.value_0" type="constant" datatype="string" />
+<LITERAL value="arrival" type="constant" datatype="string" />
 <LITERAL value="" type="variable" datatype="datetime" />
 </OPERATOR>
 <LITERAL value="end_time" type="variable" datatype="datetime" />
@@ -349,162 +123,94 @@
 </OPERATOR>
 </TASKUNAVAIL>
 <RESOURCEUNAVAIL>
+<OPERATOR operation="append" >
 <OPERATOR operation="get" >
 <LITERAL value="resource" type="variable" datatype="resource" />
-<LITERAL value="roleSchedule.scheduleElements" type="constant" datatype="string" />
+<LITERAL value="roleSchedule" type="constant" datatype="string" />
 <LITERAL value="" type="variable" datatype="list:interval" />
+</OPERATOR>
+<OPERATOR operation="list" >
+<OPERATOR operation="interval" >
+<LITERAL value="start_time" type="variable" datatype="datetime" />
+<OPERATOR operation="get" >
+<OPERATOR operation="entry" >
+<OPERATOR operation="get" >
+<LITERAL value="resource" type="variable" datatype="resource" />
+<LITERAL value="roleSchedule" type="constant" datatype="string" />
+<LITERAL value="" type="variable" datatype="list:interval" />
+</OPERATOR>
+<LITERAL value="0.0" type="constant" datatype="number" />
+</OPERATOR>
+<LITERAL value="start" type="constant" datatype="string" />
+<LITERAL value="" type="variable" datatype="datetime" />
+</OPERATOR>
+</OPERATOR>
+<OPERATOR operation="interval" >
+<OPERATOR operation="get" >
+<OPERATOR operation="entry" >
+<OPERATOR operation="get" >
+<LITERAL value="resource" type="variable" datatype="resource" />
+<LITERAL value="roleSchedule" type="constant" datatype="string" />
+<LITERAL value="" type="variable" datatype="list:interval" />
+</OPERATOR>
+<LITERAL value="0.0" type="constant" datatype="number" />
+</OPERATOR>
+<LITERAL value="end" type="constant" datatype="string" />
+<LITERAL value="" type="variable" datatype="datetime" />
+</OPERATOR>
+<LITERAL value="end_time" type="variable" datatype="datetime" />
+</OPERATOR>
+</OPERATOR>
 </OPERATOR>
 </RESOURCEUNAVAIL>
 <CAPACITYCONTRIB>
 <OPERATOR operation="*" >
 <OPERATOR operation="get" >
-<OPERATOR operation="globget" >
 <LITERAL value="task" type="variable" datatype="task" />
-<LITERAL value="directObject.Asset.PackagePGImpl" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="PackagePGImpl" />
-</OPERATOR>
-<LITERAL value="pack_mass.shortTons" type="constant" datatype="string" />
+<LITERAL value="quantity" type="constant" datatype="string" />
 <LITERAL value="" type="variable" datatype="number" />
 </OPERATOR>
 <OPERATOR operation="get" >
 <LITERAL value="task" type="variable" datatype="task" />
-<LITERAL value="directObject.Quantity" type="constant" datatype="string" />
+<LITERAL value="weight" type="constant" datatype="string" />
 <LITERAL value="" type="variable" datatype="number" />
 </OPERATOR>
 </OPERATOR>
 </CAPACITYCONTRIB>
 <CAPACITYTHRESH>
 <OPERATOR operation="get" >
-<OPERATOR operation="globget" >
 <LITERAL value="resource" type="variable" datatype="resource" />
-<LITERAL value="ContainPG" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="ContainPGImpl" />
-</OPERATOR>
-<LITERAL value="maximum_weight.shortTons" type="constant" datatype="string" />
+<LITERAL value="weightCapacity" type="constant" datatype="string" />
 <LITERAL value="" type="variable" datatype="number" />
 </OPERATOR>
 </CAPACITYTHRESH>
 <GROUPABLE>
-<OPERATOR operation="=" >
-<OPERATOR operation="get" >
-<OPERATOR operation="find" >
+<OPERATOR operation="&gt;" >
+<OPERATOR operation="-" >
 <OPERATOR operation="get" >
 <LITERAL value="task1" type="variable" datatype="task" />
-<LITERAL value="prepositionalPhrases" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="list:PrepositionalPhraseImpl" />
+<LITERAL value="arrival" type="constant" datatype="string" />
+<LITERAL value="" type="variable" datatype="datetime" />
 </OPERATOR>
-<LITERAL value="prep" type="constant" datatype="string" />
-<OPERATOR operation="=" >
-<OPERATOR operation="get" >
-<LITERAL value="prep" type="variable" datatype="PrepositionalPhraseImpl" />
-<LITERAL value="preposition" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="string" />
+<LITERAL value="1310400.0" type="constant" datatype="number" />
 </OPERATOR>
-<LITERAL value="To" type="constant" datatype="string" />
-</OPERATOR>
-</OPERATOR>
-<LITERAL value="indirectObject_0.geolocCode" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="string" />
-</OPERATOR>
-<OPERATOR operation="get" >
-<OPERATOR operation="find" >
 <OPERATOR operation="get" >
 <LITERAL value="task2" type="variable" datatype="task" />
-<LITERAL value="prepositionalPhrases" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="list:PrepositionalPhraseImpl" />
-</OPERATOR>
-<LITERAL value="prep" type="constant" datatype="string" />
-<OPERATOR operation="=" >
-<OPERATOR operation="get" >
-<LITERAL value="prep" type="variable" datatype="PrepositionalPhraseImpl" />
-<LITERAL value="preposition" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="string" />
-</OPERATOR>
-<LITERAL value="To" type="constant" datatype="string" />
-</OPERATOR>
-</OPERATOR>
-<LITERAL value="indirectObject_0.geolocCode" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="string" />
+<LITERAL value="departure" type="constant" datatype="string" />
+<LITERAL value="" type="variable" datatype="datetime" />
 </OPERATOR>
 </OPERATOR>
 </GROUPABLE>
-<TASKTEXT>
-<OPERATOR operation="get" >
-<LITERAL value="task" type="variable" datatype="task" />
-<LITERAL value="directObject.itemIdentificationPG.item_identification" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="string" />
-</OPERATOR>
-</TASKTEXT>
 <GROUPEDTEXT>
-<OPERATOR operation="get" >
-<OPERATOR operation="find" >
 <OPERATOR operation="get" >
 <OPERATOR operation="entry" >
 <LITERAL value="tasks" type="variable" datatype="list:task" />
 <LITERAL value="1.0" type="constant" datatype="number" />
 </OPERATOR>
-<LITERAL value="prepositionalPhrases" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="list:PrepositionalPhraseImpl" />
-</OPERATOR>
-<LITERAL value="prep" type="constant" datatype="string" />
-<OPERATOR operation="=" >
-<OPERATOR operation="get" >
-<LITERAL value="prep" type="variable" datatype="PrepositionalPhraseImpl" />
-<LITERAL value="preposition" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="string" />
-</OPERATOR>
-<LITERAL value="To" type="constant" datatype="string" />
-</OPERATOR>
-</OPERATOR>
-<LITERAL value="indirectObject_1.name" type="constant" datatype="string" />
+<LITERAL value="name" type="constant" datatype="string" />
 <LITERAL value="" type="variable" datatype="string" />
 </OPERATOR>
 </GROUPEDTEXT>
 <COLORTESTS>
-<COLORTEST color="cyan" obj_type="grouped" title="0-100" >
-<OPERATOR operation="&lt;" >
-<OPERATOR operation="sumover" >
-<LITERAL value="tasks" type="variable" datatype="list:task" />
-<LITERAL value="task" type="constant" datatype="string" />
-<OPERATOR operation="get" >
-<LITERAL value="task" type="variable" datatype="task" />
-<LITERAL value="directObject.Quantity" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="number" />
-</OPERATOR>
-</OPERATOR>
-<LITERAL value="100.0" type="constant" datatype="number" />
-</OPERATOR>
-</COLORTEST>
-<COLORTEST color="lightblue" obj_type="grouped" title="100-200" >
-<OPERATOR operation="&lt;" >
-<OPERATOR operation="sumover" >
-<LITERAL value="tasks" type="variable" datatype="list:task" />
-<LITERAL value="task" type="constant" datatype="string" />
-<OPERATOR operation="get" >
-<LITERAL value="task" type="variable" datatype="task" />
-<LITERAL value="directObject.Quantity" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="number" />
-</OPERATOR>
-</OPERATOR>
-<LITERAL value="200.0" type="constant" datatype="number" />
-</OPERATOR>
-</COLORTEST>
-<COLORTEST color="cornflowerblue" obj_type="grouped" title="200-300" >
-<OPERATOR operation="&lt;" >
-<OPERATOR operation="sumover" >
-<LITERAL value="tasks" type="variable" datatype="list:task" />
-<LITERAL value="task" type="constant" datatype="string" />
-<OPERATOR operation="get" >
-<LITERAL value="task" type="variable" datatype="task" />
-<LITERAL value="directObject.Quantity" type="constant" datatype="string" />
-<LITERAL value="" type="variable" datatype="number" />
-</OPERATOR>
-</OPERATOR>
-<LITERAL value="300.0" type="constant" datatype="number" />
-</OPERATOR>
-</COLORTEST>
-<COLORTEST color="blue" obj_type="grouped" title="> 300 boxes" >
-<LITERAL value="true" type="constant" datatype="boolean" />
-</COLORTEST>
 </COLORTESTS>
 </SPECS>
