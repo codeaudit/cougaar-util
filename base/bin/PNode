@@ -96,7 +96,7 @@ if ( ! $?JDK_INSTALL_PATH ) then
   exit;
 endif
 
-set javaargs="$osargs $devp -Dorg.cougaar.core.persistence.enable=true -Xbootclasspath:$COUGAAR_INSTALL_PATH/lib/javaiopatch.jar:$JDK_INSTALL_PATH/jre/lib/rt.jar:$JDK_INSTALL_PATH/jre/lib/jsse.jar $MYPROPERTIES $MYMEMORY -classpath $LIBPATHS"
+set javaargs="$osargs $devp -Dorg.cougaar.core.persistence.enable=true -Xbootclasspath/p:$COUGAAR_INSTALL_PATH/lib/javaiopatch.jar $MYPROPERTIES $MYMEMORY -classpath $LIBPATHS"
 
 
 if ($?COUGAAR_DEV_PATH) then
