@@ -1,3 +1,6 @@
+# Used by glm/src/org/cougaar/mlm/plugin/ldm/OrgActivityQueryHandler
+# Note that the word select must be lowercase cause of bad plugin
+
 Database=${org.cougaar.configuration.database}
 Username=${org.cougaar.configuration.user}
 Password=${org.cougaar.configuration.password}
@@ -13,7 +16,7 @@ AlpLocQuery = select alploc_code, location_name, latitude, longitude from V6_CFW
 # get GeoLoc info
 %GeoLocQueryHandler
 GeoLocQuery = \
-SELECT DISTINCT \
+select DISTINCT \
     GEOLOC_CODE, \
     LOCATION_NAME, \
     INSTALLATION_TYPE_CODE, \
@@ -30,7 +33,7 @@ WHERE ATTRIBUTE_NAME = 'LOCATION' \
 # get Oplan info
 %OplanQueryHandler
 OplanInfoQuery = \
-SELECT OPERATION_NAME, \
+select OPERATION_NAME, \
    PRIORITY, \
    C0_DATE \
 FROM V4_ASB_OPLAN OPLAN, \
@@ -43,7 +46,7 @@ WHERE OPLAN_ID = '093FF' \
 %OrgActivityQueryHandler
 
 OrgActivityQuery = \
-SELECT ATTRIBUTE_NAME AS RELATION_NAME, \
+select ATTRIBUTE_NAME AS RELATION_NAME, \
         COMPONENT_ALIB_ID AS FORCE, \
 	'FORCE_TYPE' AS FORCE_TYPE, \
 	ATTRIBUTE_VALUE AS RELATES_TO, \
@@ -54,10 +57,10 @@ SELECT ATTRIBUTE_NAME AS RELATION_NAME, \
   FROM V4_ASB_OPLAN_AGENT_ATTR \
    WHERE OPLAN_ID = '093FF' \
    AND ASSEMBLY_ID IN \
-   (SELECT DISTINCT ASSEMBLY_ID FROM V4_EXPT_TRIAL_ASSEMBLY WHERE TRIAL_ID=':exptid') AND ATTRIBUTE_NAME IN ('ACTIVITY_TYPE','OPTEMPO','LOCATION')
+   (select DISTINCT ASSEMBLY_ID FROM V4_EXPT_TRIAL_ASSEMBLY WHERE TRIAL_ID=':exptid') AND ATTRIBUTE_NAME IN ('ACTIVITY_TYPE','OPTEMPO','LOCATION')
 
 OrgActivityQuery.mysql = \
-SELECT DISTINCT ATTRIBUTE_NAME AS RELATION_NAME, \
+select DISTINCT ATTRIBUTE_NAME AS RELATION_NAME, \
     COMPONENT_ALIB_ID AS FORCE, \
     'FORCE_TYPE' AS FORCE_TYPE, \
     ATTRIBUTE_VALUE AS RELATES_TO, \
