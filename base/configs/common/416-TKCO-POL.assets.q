@@ -5,12 +5,6 @@ Password = ${org.cougaar.database.password}
 # M1062 - STLR PETRO 7500G
 pacing = '2330012757475'
 
-# First, get the personnel and generate an aggregate asset
-# %SQLAggregateAssetCreator
-# query = select 'Personnel' AS NSN, personnel AS QTY_OH, 'MilitaryPersonnel' AS NOMENCLATURE \
-# 	from ue_summary_mtmc \
-#     	where uic = :uic
-
 # Next, get the MOS levels and generate an aggregate asset
 %SQLAggregateAssetCreator
 query = select CAPABILITY AS MOS_LEVEL, PERSONNEL AS MOS_QTY, 'Dummy Nomenclature' AS \

@@ -5,12 +5,6 @@ Password = ${org.cougaar.database.password}
 # M915 Truck Tractor 6x4
 pacing = '2320010284395'
 
-# First, get the personnel and generate an aggregate asset
-# %SQLAggregateAssetCreator
-# query = select 'Personnel' NSN, personnel QTY_OH, 'MilitaryPersonnel' NOMENCLATURE \
-# 	from ue_summary_mtmc \
-#     	where uic = :uic
-
 # Next, get the MOS levels and generate an aggregate asset
 %SQLAggregateAssetCreator
 query = select CAPABILITY AS MOS_LEVEL, PERSONNEL AS MOS_QTY, 'Dummy Nomenclature' AS \

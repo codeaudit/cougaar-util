@@ -4,12 +4,6 @@ Password = ${org.cougaar.database.password}
 
 pacing = '2350010871095'
 
-# First, get the personnel and generate an aggregate asset
-# %SQLAggregateAssetCreator
-# query = select 'Personnel' NSN, personnel QTY_OH, 'MilitaryPersonnel' NOMENCLATURE \
-# 	from ue_summary_mtmc \
-#      	where uic = :uic
-
 # Next, get the MOS levels and generate an aggregate asset
 %SQLAggregateAssetCreator
 query = select CAPABILITY AS MOS_LEVEL, PERSONNEL AS MOS_QTY, 'Dummy Nomenclature' \
@@ -129,5 +123,11 @@ where  UIC4 = substring(:uic, 1, 4) and \
           '2350014059886', \
           '3990013077676') \
 	group by NSN, NOMENCLATURE
+
+
+
+
+
+
 
 

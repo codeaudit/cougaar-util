@@ -1,11 +1,6 @@
 Database = ${org.cougaar.database}
 Username = ${org.cougaar.database.user}
 Password = ${org.cougaar.database.password}
-# First, get the personnel and generate an aggregate asset
-# %SQLAggregateAssetCreator
-# query = select 'Personnel' NSN, personnel QTY_OH, 'MilitaryPersonnel' NOMENCLATURE \
-# 	from ue_summary_mtmc \
-#     	where uic = :uic
 
 # Next, get the MOS levels and generate an aggregate asset
 %SQLAggregateAssetCreator
@@ -26,6 +21,9 @@ query = select NSN, QUANTITY, substr(MODEL_DESC,1,12)||'-'||substr(LIN_DESC,1,21
 	order by NSN	
 
 query.mysql = select NSN, QUANTITY, concat(substring(model_desc,1,12),'-',substring(LIN_DESC,1,21)) as nomenclature from fdm_vehicle where UIC = :uic AND substring(NSN,1,1) != '0' order by nsn;
+
+
+
 
 
 
