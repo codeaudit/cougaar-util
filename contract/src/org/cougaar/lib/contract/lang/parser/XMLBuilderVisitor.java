@@ -15,8 +15,10 @@ import java.util.*;
 
 import org.cougaar.lib.contract.lang.*;
 
-import com.ibm.xml.parser.*;
-import org.w3c.dom.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.Element;
+import org.apache.xerces.dom.DocumentImpl;
 
 public class XMLBuilderVisitor 
     implements TreeVisitor {
@@ -31,7 +33,7 @@ public class XMLBuilderVisitor
 
   public XMLBuilderVisitor(Document doc) {
     if (doc == null) {
-      doc = new TXDocument();
+      doc = new DocumentImpl();
     }
     this.doc = doc;
     currNode = doc;
