@@ -21,7 +21,6 @@
 
 package org.cougaar.util;
 
-import java.util.*;
 
 /**
  * An abstraction of an object which starts at a known point

@@ -20,10 +20,6 @@
  */
 package org.cougaar.core.component;
 
-import java.beans.*;
-import java.beans.beancontext.*;
-import java.util.*;
-import java.net.URL;
 
 /** An idea for the future:
  * A BinderFactory which encapsulates all BinderFactories known

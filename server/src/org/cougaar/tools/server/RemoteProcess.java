@@ -21,8 +21,6 @@
  
 package org.cougaar.tools.server;
 
-import java.util.List;
-
 import org.cougaar.tools.server.system.ProcessStatus;
 
 /**

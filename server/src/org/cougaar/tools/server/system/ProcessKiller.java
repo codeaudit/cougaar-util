@@ -21,8 +21,8 @@
 package org.cougaar.tools.server.system;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Forcefully kill a running process  (kill -9).

@@ -21,14 +21,9 @@
 
 package org.cougaar.bootstrap;
 
-import java.io.*;
-import java.net.*;
-import java.lang.reflect.*;
-import java.util.*;
-import java.util.zip.*;
-import java.util.jar.*;
-import java.security.*;
-import java.security.cert.*;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /** A Classloader which uses slightly different rules for class loading:
  * Prefer classes loaded via this loader rather than

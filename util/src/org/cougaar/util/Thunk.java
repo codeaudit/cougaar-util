@@ -21,7 +21,8 @@
 
 package org.cougaar.util;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /** 
  * A Thunk is small piece of code to be executed repeatedly, often

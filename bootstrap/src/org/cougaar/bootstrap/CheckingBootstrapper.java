@@ -21,15 +21,18 @@
 
 package org.cougaar.bootstrap;
 
-import java.io.*;
-import java.net.*;
-import java.lang.reflect.*;
-import java.util.*;
-import java.util.zip.*;
-import java.util.jar.*;
-import java.security.*;
-import java.security.cert.*;
-import java.util.regex.*;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 /**
  * A Bootstrapper which performs a variety of tests on the

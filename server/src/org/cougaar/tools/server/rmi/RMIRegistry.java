@@ -21,12 +21,11 @@
  
 package org.cougaar.tools.server.rmi;
 
-import java.rmi.*;
-import java.rmi.registry.*;
-import java.rmi.server.*;
-import java.util.*;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 
-import org.cougaar.tools.server.*;
+import org.cougaar.tools.server.RemoteHost;
+import org.cougaar.tools.server.RemoteHostRegistry;
 
 /**
  * RMI-specific implementation of a RemoteHost registry.

@@ -20,10 +20,13 @@
  */
 package org.cougaar.core.component;
 
-import java.net.URL;
 import java.io.Serializable;
-import java.util.*;
-import org.cougaar.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * A utility class for manipulating sets of ComponentDescription

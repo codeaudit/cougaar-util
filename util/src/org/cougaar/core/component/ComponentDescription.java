@@ -20,10 +20,9 @@
  */
 package org.cougaar.core.component;
 
-import java.net.URL;
 import java.io.Serializable;
-import java.util.*;
-import org.cougaar.util.*;
+import java.net.URL;
+import java.util.Comparator;
 
 /**
  * An immutable description of a loadable component (for example, 

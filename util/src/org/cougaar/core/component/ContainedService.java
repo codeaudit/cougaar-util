@@ -20,8 +20,6 @@
  */
 package org.cougaar.core.component;
 
-import java.util.*;
-import org.cougaar.util.*;
 
 /** A service which may be made available to a contained component
  * which allows access to various controls and information about

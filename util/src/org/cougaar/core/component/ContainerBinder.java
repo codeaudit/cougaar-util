@@ -20,12 +20,6 @@
  */
 package org.cougaar.core.component;
 
-import java.beans.*;
-import java.beans.beancontext.*;
-import java.util.*;
-import java.net.URL;
-
-import org.cougaar.util.GenericStateModel;
 
 /**
  * Binder for a child that is a Container.

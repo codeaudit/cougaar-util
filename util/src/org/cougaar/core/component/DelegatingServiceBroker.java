@@ -20,7 +20,8 @@
  */
 package org.cougaar.core.component;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /** A Simple ServiceBroker which just delegates all
  * queries to another, useful for making restricted extentions.

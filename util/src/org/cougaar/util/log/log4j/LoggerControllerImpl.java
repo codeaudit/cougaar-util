@@ -22,20 +22,19 @@
 package org.cougaar.util.log.log4j;
 
 import java.io.OutputStream;
-
 import java.util.Enumeration;
-import java.util.Vector;
 import java.util.HashSet;
+import java.util.Vector;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.LogManager;
 import org.apache.log4j.Appender;
 import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.WriterAppender;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.Level;
-
-import org.cougaar.util.log.*;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.apache.log4j.WriterAppender;
+import org.cougaar.util.log.LogTarget;
+import org.cougaar.util.log.LoggerController;
 
 /**
  * Package-private log4j implementation of a logger-controller.

@@ -20,7 +20,6 @@
  */
 package org.cougaar.core.component;
 
-import java.util.*;
 
 /** Base class ComponentModel RuntimeException.
  * This exception and it's extending classes is used by the component model 

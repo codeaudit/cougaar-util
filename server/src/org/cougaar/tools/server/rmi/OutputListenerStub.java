@@ -21,9 +21,6 @@
 
 package org.cougaar.tools.server.rmi;
 
-import java.rmi.*;
-import java.rmi.server.*;
-
 import org.cougaar.tools.server.OutputBundle;
 import org.cougaar.tools.server.OutputListener;
 

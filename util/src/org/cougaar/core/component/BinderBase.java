@@ -20,8 +20,6 @@
  */
 package org.cougaar.core.component;
 
-import java.util.*;
-import java.lang.reflect.*;
 
 /** BinderBase contains logic for the parent link (ContainerAPI) but not the 
  * child link.  BinderSupport extends the api for standard Binders and BinderWrapper

@@ -21,10 +21,10 @@
 
 package org.cougaar.tools.server.server;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
 
-import org.cougaar.tools.server.*;
+import org.cougaar.tools.server.RemoteHost;
+import org.cougaar.tools.server.RemoteHostRegistry;
 
 /** 
  * A Server for remote clients to run Processes.

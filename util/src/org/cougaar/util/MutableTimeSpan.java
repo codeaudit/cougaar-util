@@ -21,7 +21,6 @@
 
 package org.cougaar.util;
 
-import java.util.*;
 
 /**
  * Implementation of NewTimeSpan interface

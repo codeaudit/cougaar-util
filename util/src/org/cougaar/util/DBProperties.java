@@ -26,20 +26,18 @@
  */
 package org.cougaar.util;
 
-import java.net.URL;
 import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.HashMap;
-import java.util.Properties;
 
-import org.cougaar.util.log.*;
+import org.cougaar.util.log.Logger;
+import org.cougaar.util.log.Logging;
 
 
 /**

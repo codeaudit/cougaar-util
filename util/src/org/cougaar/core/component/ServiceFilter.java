@@ -20,7 +20,6 @@
  */
 package org.cougaar.core.component;
 
-import java.util.*;
 
 /**
  * A BinderFactoryWrapper which wraps components using a Binder which 

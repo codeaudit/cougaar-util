@@ -32,7 +32,9 @@
 
 package org.cougaar.util;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 
 public final class Mappings {
 

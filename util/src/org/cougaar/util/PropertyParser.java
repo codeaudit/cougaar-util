@@ -20,7 +20,7 @@
  */
 package org.cougaar.util;
 
-import java.util.*;
+import java.util.Properties;
 
 /**
  * Utility for parsing Properties values of various types with defaults

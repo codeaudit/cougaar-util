@@ -22,7 +22,10 @@
 package org.cougaar.util;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A PropertyTree is an <code>ArrayMap</code> that limits it's keys to

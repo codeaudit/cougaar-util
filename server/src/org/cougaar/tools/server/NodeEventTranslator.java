@@ -21,8 +21,10 @@
  
 package org.cougaar.tools.server;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is a <i>temporary</i> translator class for 

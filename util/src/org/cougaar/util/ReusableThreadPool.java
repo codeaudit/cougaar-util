@@ -21,7 +21,6 @@
 
 package org.cougaar.util;
 
-import java.util.Properties;
 
 /**
  * Provide a pool of reusable threads to reduce the overhead of 

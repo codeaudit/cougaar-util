@@ -20,7 +20,8 @@
  */
 package org.cougaar.core.component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /** A service broker which implements not just a local SB, but also 
  * a pass-through to another (presumably higher-level) SB.

@@ -20,9 +20,13 @@
  */
 package org.cougaar.util;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Configuration is a holder of a collection of static configuration utility methods,

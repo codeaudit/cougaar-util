@@ -25,14 +25,14 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.apache.log4j.Appender;
-import org.apache.log4j.Priority;
-import org.apache.log4j.Level;
 import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.WriterAppender;
 import org.apache.log4j.FileAppender;
+import org.apache.log4j.Level;
+import org.apache.log4j.Priority;
 import org.apache.log4j.SimpleLayout;
-
-import org.cougaar.util.log.*;
+import org.apache.log4j.WriterAppender;
+import org.cougaar.util.log.LogTarget;
+import org.cougaar.util.log.Logger;
 
 /**
  * Package-private utility class for log4j utils.

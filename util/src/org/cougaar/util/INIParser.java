@@ -21,22 +21,13 @@
 
 package org.cougaar.util;
 
-import java.io.InputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.PrintWriter;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.File;
-import java.util.Hashtable;
-import java.util.Vector;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Enumeration;
-
-import org.cougaar.util.StringUtility;
+import java.util.Vector;
 
 /** Utility for reading MSWindows-style .ini files.
  **/

@@ -20,7 +20,8 @@
  */
 package org.cougaar.util;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.SortedSet;
 
 /**
  * Wraps a SortedSet disabling all mutator methods.

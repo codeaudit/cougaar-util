@@ -21,7 +21,8 @@
 
 package org.cougaar.util.log;
 
-import java.util.*;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 /** 
  * Static access to simple logging facilities.

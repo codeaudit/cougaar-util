@@ -21,7 +21,10 @@
 
 package org.cougaar.util;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.Iterator;
 
 /** 
  * Translations holds a set of static methods for translating between

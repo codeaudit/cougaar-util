@@ -21,14 +21,18 @@
 
 package org.cougaar.bootstrap;
 
-import java.io.*;
-import java.net.*;
-import java.lang.reflect.*;
-import java.util.*;
-import java.util.zip.*;
-import java.util.jar.*;
-import java.security.*;
-import java.security.cert.*;
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * A bootstrapping launcher, in particular, for a node.

@@ -20,7 +20,6 @@
  */
 package org.cougaar.core.component;
 
-import java.util.*;
 
 /** ServiceRevokedEvent indicates that a service has been 
  * revoked in a service context.

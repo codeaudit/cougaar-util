@@ -21,7 +21,13 @@
 
 package org.cougaar.util;
 
-import java.util.*;
+import java.util.AbstractCollection;
+import java.util.AbstractSet;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * An implementation of <code>Map</code> that maintains the elements in 

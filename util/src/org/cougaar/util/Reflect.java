@@ -21,10 +21,9 @@
 
 package org.cougaar.util;
 
-import java.util.HashMap;
-import java.util.WeakHashMap;
-import java.lang.reflect.Method;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.util.WeakHashMap;
 
 /**
  * Some utilities for java reflection that are more efficient and/or slightly

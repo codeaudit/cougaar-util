@@ -24,7 +24,6 @@ package org.cougaar.tools.server.rmi;
 import java.rmi.RemoteException;
 
 import org.cougaar.tools.server.OutputListener;
-import org.cougaar.tools.server.OutputPolicy;
 import org.cougaar.tools.server.RemoteListenableConfig;
 
 /**

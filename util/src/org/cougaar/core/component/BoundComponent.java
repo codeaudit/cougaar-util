@@ -20,7 +20,6 @@
  */
 package org.cougaar.core.component;
 
-import java.util.*;
 
 /** A pair of Binder and Component, useful for keeping 
  * state in Containers.

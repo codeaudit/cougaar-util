@@ -21,7 +21,8 @@
 
 package org.cougaar.util;
 
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Iterator;
 
 /** Holding class for providing singleton collection-like
  * objects.

@@ -21,10 +21,11 @@
 
 package org.cougaar.util;
 
-import org.cougaar.util.log.*;
-
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
+
+import org.cougaar.util.log.Logger;
+import org.cougaar.util.log.Logging;
 
 /** A little state machine framework to allow proper sequencing of a set
  * of logical tasks/states.

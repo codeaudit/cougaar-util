@@ -26,7 +26,6 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
 
-import org.cougaar.tools.server.OutputListener;
 import org.cougaar.tools.server.OutputPolicy;
 
 /**

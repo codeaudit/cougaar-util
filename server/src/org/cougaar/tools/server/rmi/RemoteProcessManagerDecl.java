@@ -21,11 +21,11 @@
 
 package org.cougaar.tools.server.rmi;
 
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.util.List;
-import java.rmi.*;
 
 import org.cougaar.tools.server.ProcessDescription;
-import org.cougaar.tools.server.RemoteListenableConfig;
 
 /** 
  * @see org.cougaar.tools.server.RemoteProcessManager

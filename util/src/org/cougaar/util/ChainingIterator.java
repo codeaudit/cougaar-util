@@ -21,7 +21,8 @@
 
 package org.cougaar.util;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /** An Iterator implementation which successively iterates over
  * a list of iterators.

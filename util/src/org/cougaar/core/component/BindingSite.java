@@ -20,7 +20,6 @@
  */
 package org.cougaar.core.component;
 
-import java.util.*;
 
 /** A BindingSite class names and specifies a specific parent Component
  * (Container) to child Component relationship API, e.g. the API of a 

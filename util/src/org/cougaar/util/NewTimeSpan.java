@@ -21,7 +21,6 @@
 
 package org.cougaar.util;
 
-import java.util.*;
 
 /**
  * Adds ability to set start and end time of a TimeSpan

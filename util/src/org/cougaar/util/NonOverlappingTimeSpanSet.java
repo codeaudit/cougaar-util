@@ -22,12 +22,11 @@
 package org.cougaar.util;
 
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-
-import java.lang.reflect.Method;
-import java.lang.reflect.InvocationTargetException;
 
 
 /**

@@ -20,7 +20,8 @@
  */
 package org.cougaar.util;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * Wraps a Set disabling all mutator methods.

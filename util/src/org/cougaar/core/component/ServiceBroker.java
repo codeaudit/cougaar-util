@@ -20,7 +20,7 @@
  */
 package org.cougaar.core.component;
 
-import java.util.*;
+import java.util.Iterator;
 
 /** Cougaar component Service Broker.
  * Note that this was previously called Services in deference to

@@ -20,7 +20,6 @@
  */
 package org.cougaar.core.component;
 
-import java.util.*;
 
 /** RuntimeException thrown by ComponentFactory
  * This was a checked exception until Cougaar 9.2.

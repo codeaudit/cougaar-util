@@ -21,8 +21,7 @@
 
 package org.cougaar.util;
 
-import java.util.*;
-import java.io.Serializable;
+import java.util.Collection;
 
 /**
  * A synchronized version of TimeSpanSet

@@ -21,7 +21,6 @@
  
 package org.cougaar.tools.server;
 
-import java.util.List;
 
 /**
  * Direct method-invocation API for a client to listen for output

@@ -21,7 +21,6 @@
 
 package org.cougaar.util;
 
-import org.cougaar.util.Trigger;
 
 /**
  * An interface for a Trigger that's also a GenericStateModel.

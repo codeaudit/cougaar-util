@@ -21,9 +21,8 @@
  
 package org.cougaar.tools.server.rmi;
 
-import java.io.OutputStream;
 import java.io.IOException;
-import java.rmi.RemoteException;
+import java.io.OutputStream;
 
 /**
  * @see java.io.OutputStream

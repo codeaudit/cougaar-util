@@ -20,7 +20,6 @@
  */
 package org.cougaar.core.component;
 
-import java.util.*;
 import org.cougaar.util.GenericStateModel;
 
 /** A Component is the base class of the Component and

@@ -20,7 +20,9 @@
  */
 package org.cougaar.tools.server.system.linux;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import org.cougaar.tools.server.system.JavaThreadDumper;
 

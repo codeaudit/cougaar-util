@@ -21,8 +21,9 @@
 
 package org.cougaar.util.log;
 
-import java.util.*;
-import org.cougaar.util.*;
+import java.util.Enumeration;
+import java.util.Map;
+import java.util.Properties;
 
 /** 
  * No-op LoggerFactory to connect to NullLogger instances.

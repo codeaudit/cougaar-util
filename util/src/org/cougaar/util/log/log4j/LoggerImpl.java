@@ -24,11 +24,13 @@ package org.cougaar.util.log.log4j;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
+
 import org.apache.log4j.Category;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.cougaar.util.log.*;
+import org.cougaar.util.log.LoggerAdapter;
+import org.cougaar.util.log.Logging;
 
 /**
  * Package-private log4j implementation of logger.

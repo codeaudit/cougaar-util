@@ -21,8 +21,8 @@
 package org.cougaar.tools.server.system;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Sent a "\-BREAK" to a process, which will make a JVM

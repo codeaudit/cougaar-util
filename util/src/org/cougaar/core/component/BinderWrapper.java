@@ -20,8 +20,6 @@
  */
 package org.cougaar.core.component;
 
-import java.util.*;
-import java.lang.reflect.*;
 
 /** A base class for a BinderWrapper: A binder which is interposed between a container 
  * and another binder.

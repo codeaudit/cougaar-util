@@ -21,10 +21,10 @@
 
 package org.cougaar.util;
 
-import java.util.Iterator;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.Collection;
+import java.util.Enumeration;
+import java.util.Iterator;
 
 /** An Enumeration which is backed by an Iterator over a copy of an
  * original collection.  Optimized for zero-element cases, and

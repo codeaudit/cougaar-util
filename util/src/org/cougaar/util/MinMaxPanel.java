@@ -21,16 +21,16 @@
 
 package org.cougaar.util;
 
-import javax.swing.JPanel;
-import javax.swing.JCheckBox;
-import javax.swing.JProgressBar;
-import javax.swing.JPanel;
-import javax.swing.BorderFactory;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import java.awt.Dimension;
-import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.JCheckBox;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 
 public abstract class MinMaxPanel extends JPanel {
   private JCheckBox enable = new JCheckBox();

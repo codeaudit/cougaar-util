@@ -64,9 +64,10 @@ package org.cougaar.util;
  * @version 1.7 04/23/99
  * @author Philip Milne */
 
-import javax.swing.table.*; 
-import javax.swing.event.TableModelListener; 
-import javax.swing.event.TableModelEvent; 
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableModel;
 
 public class TableMap extends AbstractTableModel implements TableModelListener
 {

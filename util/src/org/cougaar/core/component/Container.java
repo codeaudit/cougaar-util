@@ -20,7 +20,7 @@
  */
 package org.cougaar.core.component;
 
-import java.util.*;
+import java.util.Collection;
 
 /** 
  * A Component which contains other components.

@@ -20,8 +20,7 @@
  */
 package org.cougaar.core.component;
 
-import java.util.*;
-import java.lang.reflect.*;
+import java.util.ArrayList;
 
 /** A Wrapper Binder contructed by ServiceFilter which 
  * watches service requests and has convenient overridable points

@@ -21,11 +21,12 @@
 
 package org.cougaar.util;
 
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+
+import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
-import javax.swing.text.AttributeSet;
-import java.util.StringTokenizer;
-import java.util.ArrayList;
 
 public class NumericListDocument extends PlainDocument {
   /**

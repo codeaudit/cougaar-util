@@ -21,9 +21,9 @@
 
 package org.cougaar.util;
 
-import java.util.Iterator;
-import java.util.Enumeration;
 import java.util.Collection;
+import java.util.Enumeration;
+import java.util.Iterator;
 
 /** An Enumeration which is backed by an Iterator.
  * Useful for exposing a pre-collections interface to a collections-based

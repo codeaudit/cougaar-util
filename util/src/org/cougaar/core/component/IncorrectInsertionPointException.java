@@ -20,7 +20,6 @@
  */
 package org.cougaar.core.component;
 
-import java.util.*;
 
 /**
  * Marker class for a Container "add(..)" attempt to the wrong

@@ -21,8 +21,14 @@
 
 package org.cougaar.util;
 
-import java.beans.*;
-import java.util.*;
+import java.beans.BeanDescriptor;
+import java.beans.BeanInfo;
+import java.beans.EventSetDescriptor;
+import java.beans.IntrospectionException;
+import java.beans.MethodDescriptor;
+import java.beans.PropertyDescriptor;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /** A useful base class which allows an object to be it's own BeanInfo
  * class.  The defaults just implement the BeanInfo interface with 

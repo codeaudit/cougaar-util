@@ -21,20 +21,22 @@
 
 package org.cougaar.util.log.log4j;
 
-import java.io.InputStream;
-import java.io.IOException;
 import java.io.File;
-import java.net.URL;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.util.*;
+import java.net.URL;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Properties;
 
-import org.apache.log4j.xml.DOMConfigurator;
 import org.apache.log4j.PropertyConfigurator;
-
-import org.cougaar.util.log.*;
-import org.cougaar.util.Configuration;
-
+import org.apache.log4j.xml.DOMConfigurator;
 import org.cougaar.bootstrap.SystemProperties;
+import org.cougaar.util.Configuration;
+import org.cougaar.util.log.Logger;
+import org.cougaar.util.log.LoggerController;
+import org.cougaar.util.log.LoggerFactory;
 
 /** 
  * Log4j implementation of LoggerFactory, which is used to

@@ -20,8 +20,6 @@
  */
 package org.cougaar.core.component;
 
-import java.util.*;
-import java.lang.reflect.*;
 
 /** A Shell implementation of a Binder which does introspection-based
  * initialization and hooks for startup of the child component.

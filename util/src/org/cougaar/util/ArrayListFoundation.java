@@ -36,7 +36,10 @@
 
 package org.cougaar.util;
 
-import java.util.*;
+import java.util.AbstractList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * A copy of java.util.ArrayList, modified so that previously

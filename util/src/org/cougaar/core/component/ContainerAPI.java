@@ -20,7 +20,6 @@
  */
 package org.cougaar.core.component;
 
-import java.util.*;
 
 /** ContainerAPI is the interface used by Binder and/or BinderFactory to
  * invoke Binder-privileged methods on the parent Container.  Note that

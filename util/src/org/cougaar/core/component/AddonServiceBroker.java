@@ -20,7 +20,8 @@
  */
 package org.cougaar.core.component;
 
-import java.util.*;
+import java.util.Iterator;
+
 import org.cougaar.util.ChainingIterator;
 
 /** A Simple ServiceBroker which does a simple delegation

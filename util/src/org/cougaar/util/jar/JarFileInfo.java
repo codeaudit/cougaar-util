@@ -27,8 +27,8 @@
 package org.cougaar.util.jar;
 
 import java.net.JarURLConnection;
-import java.util.jar.JarFile;
 import java.net.URL;
+import java.util.jar.JarFile;
 
 public class JarFileInfo {
   /** The URL of the Jar file

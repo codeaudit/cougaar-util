@@ -24,7 +24,6 @@ package org.cougaar.util;
 import java.io.Serializable;
 import java.util.AbstractSet;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.Map;

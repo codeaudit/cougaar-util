@@ -21,7 +21,7 @@
  
 package org.cougaar.tools.server.rmi;
 
-import java.rmi.*;
+import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 import org.cougaar.tools.server.OutputBundle;

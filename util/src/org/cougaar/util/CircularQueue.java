@@ -20,7 +20,10 @@
  */
 
 package org.cougaar.util;
-import java.util.*;
+import java.util.AbstractCollection;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Implements a traditional circular queue, except that it will enlarge 

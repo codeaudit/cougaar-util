@@ -20,7 +20,9 @@
  */
 package org.cougaar.core.component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /** Simple implementation of Cougaar component services layer.  
  * No propagation, nothing fancy.

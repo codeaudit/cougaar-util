@@ -21,7 +21,9 @@
 
 package org.cougaar.util;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 /** 
  * Collectors is a class of static methods for applying a Thunk

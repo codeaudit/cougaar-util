@@ -20,7 +20,7 @@
  */
 package org.cougaar.core.component;
 
-import java.util.*;
+import java.util.Comparator;
 
 /**
  * A BinderFactory provides Binder instances

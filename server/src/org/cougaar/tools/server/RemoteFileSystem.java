@@ -21,9 +21,8 @@
 
 package org.cougaar.tools.server;
 
-import java.util.*;
-import java.io.*;
-import java.net.*;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /** 
  */

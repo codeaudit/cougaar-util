@@ -20,7 +20,10 @@
  */
 package org.cougaar.tools.server.system;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * Simple utilities for spawning a <code>Process</code> and

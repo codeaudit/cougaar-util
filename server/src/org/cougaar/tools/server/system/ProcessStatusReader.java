@@ -20,9 +20,9 @@
  */
 package org.cougaar.tools.server.system;
 
-import java.io.InputStream;
-import java.io.IOException;
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Interface for an Operating System specific utility

@@ -20,7 +20,6 @@
  */
 package org.cougaar.core.component;
 
-import java.util.*;
 
 /** Service event is a base class for all Service Events **/
 public abstract class ServiceEvent extends ComponentModelEvent {

@@ -21,8 +21,8 @@
 package org.cougaar.util;
 
 import java.util.Iterator;
-import java.util.TreeMap;
 import java.util.SortedMap;
+import java.util.TreeMap;
 
 public class Random extends java.util.Random {
   // Memoize for repeated use with the same mean rate (xm)

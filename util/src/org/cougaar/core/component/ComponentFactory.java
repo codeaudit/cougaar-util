@@ -20,10 +20,10 @@
  */
 package org.cougaar.core.component;
 
-import java.util.*;
 import java.lang.reflect.Method;
-import java.net.URLClassLoader;
 import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.HashMap;
 
 /** A base class useful for creating components
  * and instilling the "breath of life" (initial services)

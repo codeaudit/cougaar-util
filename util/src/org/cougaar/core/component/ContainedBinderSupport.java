@@ -20,8 +20,6 @@
  */
 package org.cougaar.core.component;
 
-import java.util.*;
-import java.lang.reflect.*;
 
 /** A Binder implementation which proxies the ServiceBroker with an
  * AddonServiceBroker offering a ContainedService instance.

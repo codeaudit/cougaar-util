@@ -26,23 +26,26 @@
 
 package org.cougaar.util.jar;
 
-import java.io.IOException;
-import java.io.FileNotFoundException;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
-import java.security.GeneralSecurityException;
-import java.net.URL;
-import java.net.URI;
-import java.net.URLConnection;
 import java.net.JarURLConnection;
-import java.util.*;
+import java.net.URI;
+import java.net.URL;
+import java.security.GeneralSecurityException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import org.cougaar.util.log.Logging;
-import org.cougaar.util.log.Logger;
 import org.cougaar.util.ConfigFinder;
 import org.cougaar.util.Configuration;
 

@@ -20,7 +20,6 @@
  */
 package org.cougaar.core.component;
 
-import java.util.*;
 import org.cougaar.util.GenericStateModelAdapter;
 
 /** ComponentSupport is a shell of a ComponentImplementation

@@ -20,11 +20,11 @@
  */
 package org.cougaar.core.component;
 
-import org.cougaar.util.GenericStateModelAdapter;
-
-import java.util.Properties;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
+
+import org.cougaar.util.GenericStateModelAdapter;
 
 /**
  * Simple Component base class that provides named paramater support.

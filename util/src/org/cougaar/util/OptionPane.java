@@ -22,6 +22,7 @@ package org.cougaar.util;
 
 import java.awt.Component;
 import java.awt.Dimension;
+
 import javax.swing.Icon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;

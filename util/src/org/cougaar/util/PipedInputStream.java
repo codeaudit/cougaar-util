@@ -21,8 +21,8 @@
 
 package org.cougaar.util;
 
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * An efficient replacement for java.io.PipedInputStream.

@@ -21,11 +21,9 @@
 
 package org.cougaar.util;
 
-import java.util.Calendar;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
-import java.text.SimpleDateFormat;
 
 /**
  * Short form date formatter, using "month/day/year" (e.g. 10/20/1999).

@@ -21,7 +21,10 @@
 
 package org.cougaar.util;
 
-import java.io.*;
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 
 /** A string wrapper which serializes the enclosed string more
  * efficiently... maybe.

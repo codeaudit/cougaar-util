@@ -21,7 +21,11 @@
 
 package org.cougaar.util;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 /** 
  * Filters is a class of static methods for filtering (subsetting) Collections.

@@ -20,7 +20,7 @@
  */
 package org.cougaar.core.component;
 
-import java.util.*;
+import java.util.EventObject;
 
 /** Service event is a base class for all Service, Binder and Component 
  * Model Events, analogous.

@@ -20,10 +20,16 @@
  */
 package org.cougaar.core.component;
 
-import java.util.*;
-import org.cougaar.util.log.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+
 import org.cougaar.util.GenericStateModel;
 import org.cougaar.util.GenericStateModelAdapter;
+import org.cougaar.util.log.Logger;
+import org.cougaar.util.log.Logging;
 
 /** A basic implementation of a Container.
  **/

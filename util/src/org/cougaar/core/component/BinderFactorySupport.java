@@ -20,8 +20,7 @@
  */
 package org.cougaar.core.component;
 
-import java.util.*;
-import java.lang.reflect.*;
+import java.lang.reflect.Constructor;
 
 /**
  * Implement the basics of a BinderFactory.  A full implementation

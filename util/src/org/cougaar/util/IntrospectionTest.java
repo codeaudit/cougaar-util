@@ -21,7 +21,9 @@
  
 package org.cougaar.util;
 
-import java.beans.*;
+import java.beans.BeanInfo;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 
 /** Class for testing Bean introspection in general and 
  * Asset/PG introspection in particular.  Essentially

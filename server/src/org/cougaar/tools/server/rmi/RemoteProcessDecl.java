@@ -24,9 +24,7 @@ package org.cougaar.tools.server.rmi;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-import org.cougaar.tools.server.RemoteProcess;
 import org.cougaar.tools.server.ProcessDescription;
-
 import org.cougaar.tools.server.system.ProcessStatus;
 
 /**

@@ -20,7 +20,6 @@
  */
 package org.cougaar.core.component;
 
-import java.util.*;
 
 /** ServiceAvailableEvent indicates that a new service is available
  * to clients of a ServiceBroker.

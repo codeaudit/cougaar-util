@@ -21,11 +21,8 @@
 
 package org.cougaar.tools.server.rmi;
 
-import java.util.*;
-import java.io.*;
-import java.net.*;
-import java.rmi.*;
-import java.rmi.server.*;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import org.cougaar.tools.server.RemoteFileSystem;
 

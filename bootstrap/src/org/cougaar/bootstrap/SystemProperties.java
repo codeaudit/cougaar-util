@@ -22,11 +22,8 @@
 
 package org.cougaar.bootstrap;
 
-import java.util.Properties;
-import java.lang.SecurityManager;
 import java.util.Enumeration;
-import java.security.PrivilegedAction;
-import java.security.AccessController;
+import java.util.Properties;
 
 /** This utility class allows to retrieve system properties without
     requiring write access (which would be a security vulnerability).
