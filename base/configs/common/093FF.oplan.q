@@ -13,65 +13,65 @@ AlpLocQuery = select alploc_code, location_name, latitude, longitude from V6_CFW
 # get GeoLoc info
 %GeoLocQueryHandler
 GeoLocQuery = \
-select distinct \
-    geoloc_code, \
-    location_name, \
-    installation_type_code, \
-    civil_aviation_code, \
-    latitude, \
-    longitude, \
-    country_state_code, \
-    country_state_long_name \
-from geoloc, \
-     v4_asb_oplan_agent_attr \
-where attribute_name = 'LOCATION' \
-    and geoloc_code=attribute_value
+SELECT DISTINCT \
+    GEOLOC_CODE, \
+    LOCATION_NAME, \
+    INSTALLATION_TYPE_CODE, \
+    CIVIL_AVIATION_CODE, \
+    LATITUDE, \
+    LONGITUDE, \
+    COUNTRY_STATE_CODE, \
+    COUNTRY_STATE_LONG_NAME \
+FROM GEOLOC, \
+     V4_ASB_OPLAN_AGENT_ATTR \
+WHERE ATTRIBUTE_NAME = 'LOCATION' \
+    AND GEOLOC_CODE=ATTRIBUTE_VALUE
 
 # get Oplan info
 %OplanQueryHandler
 OplanInfoQuery = \
-select operation_name, \
-   priority, \
-   c0_date \
-from v4_asb_oplan oplan, \
-   v4_expt_trial_assembly eta \
-where oplan_id = '093FF' \
- and eta.trial_id=':exptid' \
- and eta.assembly_id=oplan.assembly_id
+SELECT OPERATION_NAME, \
+   PRIORITY, \
+   C0_DATE \
+FROM V4_ASB_OPLAN OPLAN, \
+   V4_EXPT_TRIAL_ASSEMBLY ETA \
+WHERE OPLAN_ID = '093FF' \
+ AND ETA.TRIAL_ID=':exptid' \
+ AND ETA.ASSEMBLY_ID=OPLAN.ASSEMBLY_ID
 
-#get OrgActivities
+#Get Orgactivities
 %OrgActivityQueryHandler
 
 OrgActivityQuery = \
-select attribute_name as relation_name, \
-        component_alib_id as force, \
-	'FORCE_TYPE' as force_type, \
-	attribute_value as relates_to, \
-	'RELATES_TO_TYPE' as relates_to_type, \
-	start_cday as start_day, \
-	end_cday as end_day, \
-	to_date('10-MAY-2001') as last_modified \
-  from v4_asb_oplan_agent_attr \
-   where oplan_id = '093FF' \
-   and assembly_id in \
-   (select distinct assembly_id from v4_expt_trial_assembly where trial_id=':exptid') and attribute_name in ('ACTIVITY_TYPE','OPTEMPO','LOCATION')
+SELECT ATTRIBUTE_NAME AS RELATION_NAME, \
+        COMPONENT_ALIB_ID AS FORCE, \
+	'FORCE_TYPE' AS FORCE_TYPE, \
+	ATTRIBUTE_VALUE AS RELATES_TO, \
+	'RELATES_TO_TYPE' AS RELATES_TO_TYPE, \
+	START_CDAY AS START_DAY, \
+	END_CDAY AS END_DAY, \
+	TO_DATE('10-MAY-2001') AS LAST_MODIFIED \
+  FROM V4_ASB_OPLAN_AGENT_ATTR \
+   WHERE OPLAN_ID = '093FF' \
+   AND ASSEMBLY_ID IN \
+   (SELECT DISTINCT ASSEMBLY_ID FROM V4_EXPT_TRIAL_ASSEMBLY WHERE TRIAL_ID=':exptid') AND ATTRIBUTE_NAME IN ('ACTIVITY_TYPE','OPTEMPO','LOCATION')
 
 OrgActivityQuery.mysql = \
-select distinct attribute_name as relation_name, \
-    component_alib_id as force, \
-    'FORCE_TYPE' as force_type, \
-    attribute_value as relates_to, \
-    'RELATES_TO_TYPE' as relates_to_type, \
-    start_cday as start_day, \
-    end_cday as end_day, \
-    op.c0_date as last_modified \
- from v4_asb_oplan_agent_attr attr, \
-      v4_expt_trial_assembly eta, \
-      v4_asb_oplan op \		     
- where \
-  attr.oplan_id = '093FF' \
-  and op.oplan_id = '093FF' \
-  and eta.trial_id=':exptid' \
-  and eta.assembly_id=attr.assembly_id \
-  and attribute_name in ('ACTIVITY_TYPE','OPTEMPO','LOCATION')
+SELECT DISTINCT ATTRIBUTE_NAME AS RELATION_NAME, \
+    COMPONENT_ALIB_ID AS FORCE, \
+    'FORCE_TYPE' AS FORCE_TYPE, \
+    ATTRIBUTE_VALUE AS RELATES_TO, \
+    'RELATES_TO_TYPE' AS RELATES_TO_TYPE, \
+    START_CDAY AS START_DAY, \
+    END_CDAY AS END_DAY, \
+    OP.C0_DATE AS LAST_MODIFIED \
+ FROM V4_ASB_OPLAN_AGENT_ATTR ATTR, \
+      V4_EXPT_TRIAL_ASSEMBLY ETA, \
+      V4_ASB_OPLAN OP \		     
+ WHERE \
+  ATTR.OPLAN_ID = '093FF' \
+  AND OP.OPLAN_ID = '093FF' \
+  AND ETA.TRIAL_ID=':exptid' \
+  AND ETA.ASSEMBLY_ID=ATTR.ASSEMBLY_ID \
+  AND ATTRIBUTE_NAME IN ('ACTIVITY_TYPE','OPTEMPO','LOCATION')
 
