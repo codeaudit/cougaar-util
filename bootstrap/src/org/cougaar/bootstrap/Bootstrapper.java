@@ -381,7 +381,7 @@ public class Bootstrapper
       URL u = new URL(p);
       return u;
     } catch (MalformedURLException ex) {
-      return new URL("file:"+p);
+      return new File(p).toURL();
     }
   }
 
