@@ -115,26 +115,8 @@ public final class ComponentDescription implements Serializable {
                               Object certificate,
                               Object lease,
                               Object policy) {
-    this.name = name;
-    this.insertionPoint = insertionPoint;
-    this.classname = classname;
-    this.codebase = codebase;
-    this.parameter = parameter;
-    this.certificate = certificate;
-    this.lease = lease;
-    this.policy = policy;
-    this.priority = PRIORITY_STANDARD;
-
-    // clone the object parameters to ensure immutability?
-
-    // validate -- also see "readObject(..)"
-    if (name == null) {
-      throw new IllegalArgumentException("Null name");
-    } else if (insertionPoint == null) {
-      throw new IllegalArgumentException("Null insertionPoint");
-    } else if (classname == null) {
-      throw new IllegalArgumentException("Null classname");
-    }
+    this(name, insertionPoint, classname, codebase, parameter, certificate, lease,
+        policy, PRIORITY_STANDARD);
   }
 
   /**
