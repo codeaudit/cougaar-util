@@ -6,8 +6,9 @@ insertAlibComponent=\
  INSERT INTO V4_ALIB_COMPONENT \
     (COMPONENT_ALIB_ID, COMPONENT_NAME, \
      COMPONENT_LIB_ID, \
-     COMPONENT_TYPE) \
- VALUES (:component_alib_id:, :component_name:, :component_lib_id:, :component_category:)
+     COMPONENT_TYPE, \
+     CLONE_SET_ID) \
+ VALUES (:component_alib_id:, :component_name:, :component_lib_id:, :component_category:, 0)
 
 checkAlibComponent=\
  SELECT COMPONENT_ALIB_ID \
