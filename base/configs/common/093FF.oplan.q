@@ -11,7 +11,7 @@ location = LOCATION
 
 # get AlpLoc info
 %AlpLocQueryHandler
-AlpLocQuery = select alploc_code, location_name, latitude, longitude from cfw_alploc
+AlpLocQuery = select alploc_code, location_name, latitude, longitude from alploc
 
 # get GeoLoc info
 %GeoLocQueryHandler

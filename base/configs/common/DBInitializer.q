@@ -7,9 +7,9 @@ database=${org.cougaar.configuration.database}
 username=${org.cougaar.configuration.user}
 password=${org.cougaar.configuration.password}
 
-queryGeolocLocation.database=${org.cougaar.database}
-queryGeolocLocation.username=${org.cougaar.database.user}
-queryGeolocLocation.password=${org.cougaar.database.password}
+#queryGeolocLocation.database=${org.cougaar.database}
+#queryGeolocLocation.username=${org.cougaar.database.user}
+#queryGeolocLocation.password=${org.cougaar.database.password}
 
 queryExperiment = \
  SELECT ASSEMBLY_ID \
