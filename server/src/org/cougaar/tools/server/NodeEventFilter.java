@@ -55,7 +55,7 @@ implements java.io.Serializable, Cloneable
     this.enabled = 
       (allEnabled ? 
        makeAllEnabled() :
-       new boolean[NodeEvent.MAX_TYPE]);
+       new boolean[NodeEvent.MAX_TYPE+1]);
   }
 
   public NodeEventFilter(
@@ -140,7 +140,7 @@ implements java.io.Serializable, Cloneable
       "NodeEventFilter {"+
       "\n  bufferSize: "+getBufferSize()+
       "\n  enabled: ";
-    for (int i = 0; i < NodeEvent.MAX_TYPE; i++) {
+    for (int i = 0; i <= NodeEvent.MAX_TYPE; i++) {
       if (isEnabled(i)) {
         s += "\n    "+NodeEvent.PREFIX[i];
       }
@@ -151,9 +151,8 @@ implements java.io.Serializable, Cloneable
 
   // utility for Constructor's use only!
   private static final boolean[] makeAllEnabled() {
-    int i = NodeEvent.MAX_TYPE;
-    boolean[] b = new boolean[i];
-    while (--i >= 0) {
+    boolean[] b = new boolean[NodeEvent.MAX_TYPE + 1];
+    for (int i = 0; i <= NodeEvent.MAX_TYPE; i++) {
       b[i] = true;
     }
     return b;
@@ -161,14 +160,13 @@ implements java.io.Serializable, Cloneable
 
   // utility for Constructor's use only!
   private static final boolean[] copyEnabled(boolean[] b) {
-    int i = NodeEvent.MAX_TYPE;
     if ((b == null) ||
-        (b.length != i)) {
+        (b.length <= NodeEvent.MAX_TYPE)) {
       throw new IllegalArgumentException(
           "Expecting an array of boolean["+NodeEvent.MAX_TYPE+"]");
     }
-    boolean[] dup = new boolean[i];
-    while (--i >= 0) {
+    boolean[] dup = new boolean[NodeEvent.MAX_TYPE + 1];
+    for (int i = 0; i <= NodeEvent.MAX_TYPE; i++) {
       dup[i] = b[i];
     }
     return dup;
