@@ -1,0 +1,7 @@
+2002-04-25  Ray Tomlinson  <RTomlinson@bbn.com>
+
+	* DBConnectionPool.java:
+	Bug #1115
+	Document the similarity of DBConnectionPool to DriverManager.
+	Remind users of the issues in managing ResultSets and Statements.
+
