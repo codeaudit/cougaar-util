@@ -54,7 +54,7 @@
 # Also see the Server documentation ("server/doc/README") for 
 # further details.
 #NODE_PROPS_FILE="server.props"
-if [ $# == 0 ]; then
+if [ $# = 0 ]; then
     NODE_PROPS_FILE="server.props"
     echo Using default properties file: server.props
 else 
