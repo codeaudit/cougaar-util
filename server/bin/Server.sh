@@ -80,10 +80,15 @@ SERVERCONFIG=""
 # This is only useful to altering the Server's codebase,
 # *not* the Node's codebase.  The ".props" file must be
 # modified to alter the Node's configuration.
-LIBPATHS="$COUGAAR_INSTALL_PATH/lib/server.jar:$COUGAAR_INSTALL_PATH/lib/csmart.jar"
+
+os=`uname`
+SEP=";"
+if [ $os = "Linux" -o $os = "SunOS" ]; then SEP=":"; fi
+
+LIBPATHS="$COUGAAR_INSTALL_PATH/lib/server.jar${SEP}$COUGAAR_INSTALL_PATH/lib/csmart.jar"
 
 if [ "$COUGAAR_DEV_PATH" != "" ]; then
-    LIBPATHS="$COUGAAR_DEV_PATH:$LIBPATHS"
+    LIBPATHS="$COUGAAR_DEV_PATH${SEP}$LIBPATHS"
 fi
 
 if [ "$OS" = "Linux" ]; then
