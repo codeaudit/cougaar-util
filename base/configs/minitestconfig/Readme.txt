@@ -14,7 +14,7 @@ based largely on deprecated base classes and development patterns.
 
 To run minitestconfig, use the Cougaar scripts, as in:
 
-     $COUGAAR_INSTALL_PATH/bin/Cougaar MiniNode.xml MiniNode
+     $COUGAAR_INSTALL_PATH/bin/cougaar MiniNode.xml MiniNode
 
 This runs the single node named "MiniNode" which is definied in
 MiniNode.xml. You can split the agents across multiple Nodes by
