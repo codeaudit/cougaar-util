@@ -24,6 +24,24 @@
 # Launch a Cougaar node
 #
 
+scriptname=`basename $0`
+
+if [ -z "$COUGAAR_INSTALL_PATH" ]; then
+    if [ "$CIP" ]; then
+	COUGAAR_INSTALL_PATH="$CIP";
+    else
+	s=`echo "$0" | sed -e 's,/bin/.*,,'`
+	if [ x$s != x ] ; then
+	    COUGAAR_INSTALL_PATH=$s
+	else
+	    echo "Error: Could not find COUGAAR_INSTALL_PATH!";
+	    exit;
+	fi
+    fi
+fi
+
+export COUGAAR_INSTALL_PATH
+
 if [ -z $1 ]; then
   cat <<EOF
 Usage: $0 [-v] XML_NAME [NODE_NAME]
