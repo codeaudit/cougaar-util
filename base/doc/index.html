@@ -82,14 +82,15 @@ by the Bootstrapper for consistency.  This is not the default because of
 the extra time it takes.  To enable, set <em>-Dorg.cougaar.bootstrap.class=org.cougaar.bootstrap.CheckingBootstrapper</em>
  Note that since this is implemented as a separate bootstrapper, it (for
 instance) cannot be used with NAI's secure bootstrapper package.</li>
-        <li>The org.cougaar.core.persist.NonPersistable interface has been
-removed. This interface existed (in various packages) since an early implementation
-of persistence (over four years ago). It managed to survive through succeeding
-development despite that fact that it did nothing. Because it was attracting
-the attention of developers and being used (and failing to do what was expected),
-we decided to to remove it. This uncovered additional, non-functioning, uses.
-Use the org.cougaar.core.persist.NotPersistable interface to mark classes
-whose instances should <i>not</i> be saved in persistence snapshots. </li>
+        <li>The <tt>org.cougaar.core.persist.NonPersistable</tt> interface
+has been removed. This interface existed (in various packages) since an early
+implementation of persistence (over four years ago). It managed to survive
+through succeeding development despite that fact that it did nothing. Because
+it was attracting the attention of developers and being used (and failing
+to do what was expected), we decided to to remove it. This uncovered additional,
+non-functioning, uses. Use the <tt>org.cougaar.core.persist.NotPersistable</tt>
+ interface to mark classes whose instances should <i>not</i> be saved in
+persistence snapshots. </li>
  
       </ul>
   <!-- COUGAAR 9.4.0 COUGAAR 9.4.0 COUGAAR 9.4.0 COUGAAR 9.4.0 COUGAAR 9.4.0 -->
