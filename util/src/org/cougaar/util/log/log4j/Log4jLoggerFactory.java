@@ -47,12 +47,12 @@ public class Log4jLoggerFactory extends LoggerFactory {
 
   public LoggerController createLoggerController(
       Object requestor) {
-    return createLoggerController(requestor.getClass().toString());
+    return createLoggerController(requestor.getClass().getName());
   }
 
   public LoggerController createLoggerController(
       Class requestorClass) {
-    return createLoggerController(requestorClass.toString());
+    return createLoggerController(requestorClass.getName());
   }
 
   public LoggerController createLoggerController(
