@@ -76,6 +76,7 @@ The examples below assume:
   <li>Agent "foo" has an internally registered (user-developed)
       servlet with path "/hello".  See the example section below
       for a sample "HelloServlet" implementation.</li>
+  <li>Agent "foo" doesn't have a "/bad" servlet</li>
   <li>There's no agent named "junk" in the society.</li>
   <li>Suppose that there's a second cougaar node on host "x.com"
       and HTTP port 9876.</li>
@@ -128,6 +129,43 @@ Here are the built-in servlets:
        Generate a help page for agent "foo", with a link to the
        "/$foo/list" servlet described below.
        </li><p>
+   <li><a name="unknownAgent"><a href="http://localhost:8800/$junk"
+       >http://localhost:8800/$junk</a><br>
+       Attempt to access the unknown "junk" agent, which will 
+       generate an error page.  The page will include help.
+       <p>
+       The HTTP response code is 404 (page not found).  An HTTP 
+       header, named "Cougaar-error", is provided to distinguish 
+       between a request for an unknown agent (this case):<pre>
+         Cougaar-error: agent
+       </pre>and a request for an unknown path in a known 
+       agent (discussed later in this document):<pre>
+         Cougaar-error: path
+       </pre>
+       <p>
+       Both error indicators can be accessed from a standard 
+       URLConnection client:
+       <pre>
+          URLConnection urlConn = ...; // your URL connection
+          // check for an IOException (unknown host:port)
+          // send optional output data
+          int responseCode = 
+            ((HttpURLConnection) urlConn).getResponseCode()
+          if (responseCode != HttpURLConnection.HTTP_OK) {
+            String cougaarError = 
+              urlConn.getHeaderField("Cougaar-error");
+            if ("agent".equals(cougaarError)) {
+              // no such agent
+            } else if ("path".equals(cougaarError)) {
+              // agent exists, but no such path
+            } else {
+              // unknown error
+            }
+            return; // or throw an exception
+          }
+          // read the response
+       </pre>
+       </li><p>
    <li><a href="http://localhost:8800/$foo/list"
        >http://localhost:8800/$foo/list</a><br>
       List all the servlet paths registered on agent "foo".
@@ -163,6 +201,14 @@ Here are the built-in servlets:
        >http://localhost:8800/$foo/hello</a><br>
        Invoke agent "foo"'s "/hello" servlet.  This is how all
        user-developed servlets are invoked.
+       </li><p>
+   <li><a href="http://localhost:8800/$foo/bad"
+       >http://localhost:8800/$foo/bad</a><br>
+       Attempt to access the unknown "/bad" servlet path on
+       agent "foo", which will generate an error page.  The
+       response code will be 404 (page not found), and the 
+       "Cougaar-error" HTTP header will be "path".  See
+       the above notes on <a href="#unknownAgent">"/$junk"</a>.
        </li><p>
    <li><a href="http://x.com:9876/$foo/hello"
        >http://x.com:9876/$foo/hello</a><br>
