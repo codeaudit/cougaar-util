@@ -15,5 +15,5 @@ import java.io.IOException;
 import java.io.Serializable;
 
 public interface ConfigurationWriter extends Serializable {
-    void writeConfigFiles(File configDir);
+    void writeConfigFiles(File configDir) throws IOException;
 }
