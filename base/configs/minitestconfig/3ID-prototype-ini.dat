@@ -1,6 +1,4 @@
-[Prototype]     CombatOrganization
-        
-[UniqueId]      "UTC/CombatOrg"
+[Prototype]     Organization
 
 [UIC]           "UIC/3ID"
 

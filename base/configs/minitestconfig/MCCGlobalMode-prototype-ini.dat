@@ -1,7 +1,5 @@
-[Prototype]     SupportOrganization
+[Prototype]     Organization
         
-[UniqueId]      "UTC/SupportOrg"
-
 [UIC]           "UIC/MCCGlobalMode"
 
 [Relationship]

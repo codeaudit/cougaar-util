@@ -1,7 +1,5 @@
-[Prototype]     CombatOrganization
+[Prototype]     Organization
         
-[UniqueId]      "UTC/CombatOrg"
-
 [UIC]           "UIC/1BDE"
 
 [Relationship]
