@@ -237,12 +237,12 @@ queryMaxAssemblyId=\
 
 insertAssemblyId=\
  INSERT INTO v4_asb_assembly (ASSEMBLY_ID, ASSEMBLY_TYPE, DESCRIPTION) \
- VALUES (':assembly_id:', ':assembly_type:', ':assembly_desc:')
+ VALUES (:assembly_id:, ':assembly_type:', ':assembly_desc:')
 
 # Used in PopulateDb.java when just added a CSA assembly
 updateAssemblyDesc=\
  UPDATE v4_asb_assembly SET DESCRIPTION = ':soc_desc:' \
-   WHERE ASSEMBLY_ID = ':assembly_id:'
+   WHERE ASSEMBLY_ID = :assembly_id:
 
 # Used in PopulateDb to create new assembly with name of old
 queryAssemblyDesc=\
@@ -251,7 +251,7 @@ queryAssemblyDesc=\
 # Add new RUNTIME assembly
 insertTrialAssembly=\
  INSERT INTO v4_expt_trial_assembly (EXPT_ID, TRIAL_ID, ASSEMBLY_ID, DESCRIPTION) \
- VALUES (':expt_id:', ':trial_id:', ':assembly_id:', ':assembly_type: assembly')
+ VALUES (':expt_id:', ':trial_id:', :assembly_id:, ':assembly_type: assembly')
 
 # Delete runtime assembly from trial
 cleanTrialAssembly=\
