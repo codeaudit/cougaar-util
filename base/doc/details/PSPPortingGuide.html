@@ -1,0 +1,268 @@
+<html>
+<head>
+<title>Guide to Porting PSPs to Servlets</title>
+</head>
+<body bgcolor="white">
+<p>
+<center><h1>Guide to Porting PSPs to Servlets</h1></center>
+<p>
+This is a quick guide to porting PSPs to Servlets.  
+<ul>
+<p>
+<li>
+Developers should first read the
+<a href="Servlet.html">Servlet Guide</a>
+before reading this document.
+</li><p>
+<li>
+Only port the PSPs that will be needed in the future.  There's
+no need to port a PSP that will never be used...
+</li><p>
+<li>
+The new servlet server is enabled by default in Cougaar 9.0.
+To access it, point your browser to 
+<a href="http://localhost:8800">http://localhost:8800</a>.
+Note that the port address has been changed to a default "8800", 
+instead of the old PSP port "5555".
+</li><p>
+<li>
+See the 
+<a href="PortedPSPs.html"
+>Table of old-PSPs -&gt; equivalent-ported-Servlets</a>,
+which maps old PSP paths (e.g. "/alpine/demo/TASKS.PSP") to
+their new servlet paths (e.g. "/tasks").  A servlet can have
+the same path as it's old PSP, but now is a good time to
+select a better path.
+</li><p>
+<li>
+The PSP server and PSPs are no longer loaded by default in the
+Cougaar societies (".ini"s and CSMART database).  If you need
+to add the "PlanServerPlugin" back into the agents, such as to
+make sure that the old PSP and your newly-ported servlet have
+the same behavior, then you must add the PlanServerPlugin back
+into all the agent ".ini"s (or use an equivalent CSMART recipe).
+</li><p>
+<li>
+Developers should examine the example servlets that are provided 
+in:<pre>
+  core/examples/org/cougaar/core/examples/servlet/*
+</pre>
+</li>
+<li>
+All PSP classes (org.cougaar.lib.planserver.*) have been deprecated
+and will be removed in a future release (likely 9.2).  See
+<a href=
+"https://www.alpine.bbn.com/bugzilla/show_bug.cgi?id=1017"
+>bug 1017</a>
+.
+<p>
+Resist the urge to write a "servlet-to-PSP-adapter" that attempts to 
+keep the old PSP APIs alive.  Cougaar is switching to servlets in part 
+because the servlet API is easier to learn and has additional 
+capabilities that PSPs lack, such as HTTPS, sessions, cookies, 
+HTML-headers, etc.
+</li><p>
+<li>
+Servlets don't use the old "default.psps.xml" file; all servlets are loaded
+like plugins, with ".ini" lines or equivalent CSMART recipies.
+</li><p>
+<li>
+See the "GET v.s.POST v.s. PUT" notes listed in the
+<a href="Servlet.html#httpMethod">Servlet Guide</a>. <br>
+Specifically:
+<p>
+<ol>
+<li>
+All PSPs
+that generate HTML FORMs must be modified to use "GET" instead of
+"POST".  
+</li><p>
+<li>
+All Java-based clients that upload binary data to their
+PSP must be modified to use "PUT" instead of the default "POST".
+The servlet must then have a "doPut(..)" method.
+</li><p>
+</ol>
+If a servet doesn't do the GET/POST/PUT correctly then redirects
+between agents running on multiple nodes will not work!
+</li><p>
+<li>
+The old PSP-server's URL parameter separator, the 
+question-mark (?), is now the HTTP-standard ampersand (&amp;).<br>
+So instead of:<br>
+&nbsp;&nbsp;<tt>  url?arg1=val1?arg2=val2?arg3=val3</tt> <br>
+URLs must now be:<br>
+&nbsp;&nbsp;<tt>  url?arg1=val1&amp;arg2=val2&amp;arg3=val3</tt> <br>
+See
+<a href=
+"https://www.alpine.bbn.com/bugzilla/show_bug.cgi?id=20"
+>bug 20</a>.  In both the client code and the ported PSP this URL
+parameter-passing must be modified to match.  Typically this can
+easily be done by skimming the code for uses of "?".
+</li><p>
+<li>
+The old PSP code advocated the use of static methods when handing
+the request.  A better design-pattern is illustrated by the
+"ColorServlet" example that's in:<pre>
+  core/examples/org/cougaar/core/examples/servlet/ColorServlet.java
+</pre>
+where a "worker" instance is created per
+request to handle that request.  This allows the worker to 
+have private variables for the request (e.g. based upon the 
+URL-parameters) but still be thread-safe, since multiple requests
+can occur simultaneously.  See the "ColorServlet" for details.
+</li><p>
+<li>
+The following PSP methods are not part of the Servlet API and will 
+not be called, so remove them from your PSP:
+<ol>
+  <li>a constructor that accepts "(String pkg, String id)"</li>
+  <li>boolean test(HttpInput query_parameters, PlanServiceContext sc);</li>
+  <li>boolean returnsXML();</li>
+  <li>boolean returnsHTML();</li>
+  <li>String getDTD();</li>
+  <li>void subscriptionChanged(Subscription subscription);</li>
+  <li>void execute(
+      PrintStream out,
+      HttpInput query_parameters,
+      PlanServiceContext psc,
+      PlanServiceUtilities psu);</li>
+</ol>
+<p>
+Servlets should extend HttpServlet and implement the <pre>
+  void doGet(HttpServletRequest request, HttpServletResponse response)
+</pre>
+method.  If the Servlet expects data to be uploaded as part of 
+the request, it should also have a similar "doPut(..)" method.
+See the notes in the <a href="Servlet.html#examples">Servlet Guide</a>
+for implementation options (SimpleServletComponent, BaseServletComponent,
+or use of the raw ServletService).
+</li><p>
+<li>
+The PSP "execute(..)" defined four methods parameters; here are
+their servlet equivalents:
+<ol>
+<p>
+  <li>
+  The PrintStream ("out") of the "execute(..)" is now the 
+  "response.getWriter()".  Servlets that respond with binary data 
+  should use "response.getOutputStream()".  Note that a servlet
+  can only call "response.getWriter()" <i>or</i> 
+  "response.getOutputStream()", and it can only be called 
+  <i>once</i> per servlet invocation.
+  </li><p>
+  <li>
+  HttpInput ("query_parameters") has been replaced my methods in 
+  HttpServletRequest.  In particular:
+  <ol>
+    <li>
+    URL-parameters are now available from "request.getParameterNames()"
+    and "request.getParameterValues(String name)".  Also see
+    "request.getQueryString()", which can be passed to 
+    "Map HttpUtils.parseQueryString(String queryString)" to get
+    a Map of (name, value) pairs.
+    </li>
+    <li>
+    "query_parameters.getBody()" -&gt; "request.getInputStream()"<br>
+    Also see "request.getContentLength()".
+    </li>
+    <li>
+    "query_parameters.isRequest(..)" -&gt; "request.getMethod().equals(..)"<br>
+    Typically this isn't needed, since a "doGet(..)" call <i>means</i> that
+    the method is "GET", and a "doPut(..)" call means "PUT", etc.
+    </li>
+  </ol>
+  </li><p>
+  <li>
+  PlanServiceContext ("psc") has been split between some "request"
+  methods and some Component-level service methods.
+  <p>
+  <ol>
+    <li>
+    "psc.getLocalPort()" -&gt; "request.getServerPort()"
+    </li>
+    <li>
+    "psc.getLocalAddress()" -&gt; "request.getServerName()"<br>
+    (or "InetAddress.getLocalHost()")
+    </li>
+    <li>
+    "psc.getAllNames()" -&gt; currently use naming-service directly; see
+    "SimpleServletSupportImpl".
+    </li>
+    <li>
+    "psc.getAllURLsAndNames" -&gt; deprecated;<br>
+    users should let the nodes redirect requests between local 
+    and remote hosts.
+    </li>
+    <li>
+    "psc.getServerPluginSupport()" returns a "ServerPluginSupport" 
+    API, which is described below.
+    </li>
+  </ol>
+  <p>
+  ServerPluginSupport ("sps") has been moved into either the generic
+  SimpleServletSupport API (for servlets loaded by the 
+  SimpleServletComponent) or direct use of Cougaar services (for
+  servlets that extend BaseServletComponent, or Components that
+  use the ServletService directly).
+  <p>
+  <ol>
+    <li>
+    "sps.getClusterIDAsString()" -&gt; For SimpleServletComponents, see
+    SimpleServletSupport's "getAgentName()".  For other Components,
+    see SimpleServletComponent's "setBindingSite()" method for
+    details.  Also see
+    <a href=
+    "https://www.alpine.bbn.com/bugzilla/show_bug.cgi?id=1089"
+    >bug 1089</a>
+    </li>
+    <li>
+    "sps.getFactoryForPSP()" -&gt; get the factory directly; see
+    the example "AddTaskServletComponent".
+    </li>
+    <li>
+    "sps.queryForSubscriber(..)" -&gt; For SimpleServletComponents,
+    see SimpleServletSupport's "queryBlackboard(..)".  For other
+    Components, see SimpleServletSupportImpl's implementation of
+    "queryBlackboard(..)".  Note the use of a blackboard 
+    transaction and the "try { .. } finally { .. }" code.
+    </li>
+    <li>
+    "sps.publish[Add | Change | Remove]()" -&gt; For 
+    SimpleServletComponents, you should switch to use of the
+    more powerful BaseServletComponent API.  For other Components,
+    obtain and manipulate the blackboard directly, but be sure
+    to do this within a blackboard transaction (just like the 
+    query).
+    </li>
+    <li>
+    "sps.getDirectDelegate()" -&gt; For Components, just do the
+    operation directly by using the services.
+    </li>
+    <li>
+    "sps.subscribe(..)" -&gt; Virtually all servlets should do a 
+    blackboard "query" instead, since subscriptions are relatively
+    expensive.  If you <i>must</i> use a subscription, see the 
+    agg-agent's stoplight chart servlets as an example -- note that 
+    a servlet with a subscription is significantly more complicated, 
+    since it requires special threading considerations.  Contact
+    "cougaar-developers@cougaar.org" for guidance.
+    </li>
+  </ol>
+  </li><p>
+  <li>
+  PlanServiceUtilities ("psu") has been removed with no replacement.
+  It only contained a crippled "PSP-blackboard" that nobody used.
+  </li>
+</ol>
+</li><p>
+<li>
+Lastly, other than the changes listed above, the existing browser/user 
+API is the same for both PSPs and servlets.  You can pass the same 
+URL parameters and/or data-structures as before, and the internal logic 
+can remain exactly the same.
+</li><p>
+</ul>
+<p>
+
+</body></html>
