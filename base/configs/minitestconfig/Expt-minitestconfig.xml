@@ -65,14 +65,6 @@
             /hierarchy
           </argument>
         </component>
-        <component name='1BDE|org.cougaar.core.servlet.SimpleServletComponent|org.cougaar.mlm.ui.servlet.DataGathererServlet' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
-          <argument>
-            org.cougaar.mlm.ui.servlet.DataGathererServlet
-          </argument>
-          <argument>
-            /datagatherer
-          </argument>
-        </component>
         <component name='1BDE|org.cougaar.mlm.servlet.InventoryServletComponent' class='org.cougaar.mlm.servlet.InventoryServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
           <argument>
             org.cougaar.mlm.servlet.InventoryServlet
@@ -182,14 +174,6 @@
             /hierarchy
           </argument>
         </component>
-        <component name='3-69-ARBN|org.cougaar.core.servlet.SimpleServletComponent|org.cougaar.mlm.ui.servlet.DataGathererServlet' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
-          <argument>
-            org.cougaar.mlm.ui.servlet.DataGathererServlet
-          </argument>
-          <argument>
-            /datagatherer
-          </argument>
-        </component>
         <component name='3-69-ARBN|org.cougaar.mlm.servlet.InventoryServletComponent' class='org.cougaar.mlm.servlet.InventoryServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
           <argument>
             org.cougaar.mlm.servlet.InventoryServlet
@@ -296,14 +280,6 @@
           </argument>
           <argument>
             /hierarchy
-          </argument>
-        </component>
-        <component name='3ID|org.cougaar.core.servlet.SimpleServletComponent|org.cougaar.mlm.ui.servlet.DataGathererServlet' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
-          <argument>
-            org.cougaar.mlm.ui.servlet.DataGathererServlet
-          </argument>
-          <argument>
-            /datagatherer
           </argument>
         </component>
         <component name='3ID|org.cougaar.mlm.servlet.InventoryServletComponent' class='org.cougaar.mlm.servlet.InventoryServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
@@ -421,14 +397,6 @@
           </argument>
           <argument>
             /hierarchy
-          </argument>
-        </component>
-        <component name='MCCGlobalMode|org.cougaar.core.servlet.SimpleServletComponent|org.cougaar.mlm.ui.servlet.DataGathererServlet' class='org.cougaar.core.servlet.SimpleServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
-          <argument>
-            org.cougaar.mlm.ui.servlet.DataGathererServlet
-          </argument>
-          <argument>
-            /datagatherer
           </argument>
         </component>
         <component name='MCCGlobalMode|org.cougaar.mlm.servlet.InventoryServletComponent' class='org.cougaar.mlm.servlet.InventoryServletComponent' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
