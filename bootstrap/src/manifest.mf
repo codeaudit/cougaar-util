@@ -1,1 +1,3 @@
 Main-Class: org.cougaar.bootstrap.Bootstrapper
+Bootstrappable: false
+

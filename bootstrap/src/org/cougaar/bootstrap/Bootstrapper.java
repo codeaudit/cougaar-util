@@ -93,115 +93,198 @@ import java.security.cert.*;
  * @property org.cougaar.system.path Classpath-like setting searched immediately before discovered sys jars.
  * @property org.cougaar.bootstrapper.exclusions Allow explicitly excluding package prefixes from 
  * the Bootstrap Classloader's concern.
+ * @property org.cougaar.bootstrap.class Bootstrapper class to use to bootstrap the
+ * system.  Defaults to org.cougaar.bootstrap.Bootstrapper.
+ * @property org.cougaar.bootstrap.excludeJars Allows exclusion of specific jar files from 
+ * consideration by bootstrapper.  Defaults to "javaiopatch.jar:bootstrap.jar".
+ * @property org.cougaar.bootstrap.application The name of the application class
+ * to bootstrap.  If not specified, will use the first argument instead.  Only applies
+ * when Bootstrap is being invoked as an application.
  **/
 public class Bootstrapper
 {
-  private static int loudness = 0;
+  protected final static int loudness;
   static {
     String s = System.getProperty("org.cougaar.bootstrap.Bootstrapper.loud");
     if ("true".equals(s)) {
       loudness = 1;
     } else if ("shout".equals(s)) {
       loudness = 2;
-    } else if ("false".equals(s)) {
+    } else {
       loudness = 0;
+    }
+  }
+  public final static int getLoudness() {return loudness;}
+
+  protected final static List excludedJars = new ArrayList();
+  static {
+    excludedJars.add("javaiopatch.jar");
+    excludedJars.add("bootstrap.jar");
+    
+    String s = System.getProperty("org.cougaar.bootstrap.excludeJars");
+    if (s != null) {
+      String files[] = s.split(":");
+      for (int i=0; i<files.length; i++) {
+        excludedJars.add(files[i]);
+      }
     }
   }
 
   private static boolean isBootstrapped = false;
-
-  public static void main(String[] args) {
-    String[] launchArgs = new String[args.length - 1];
-    System.arraycopy(args, 1, launchArgs, 0, launchArgs.length);
-    launch(args[0], launchArgs);
+  protected final static boolean isBootstrapped() {
+    return isBootstrapped;
   }
-
-  /**
-   * Reads the properties from specified url
-   **/
-   public static void readProperties(String propertiesURL){
-       if (propertiesURL != null) {
-	Properties props = System.getProperties();
-	try {    // open url, load into props
-	  URL url = new URL(propertiesURL);
-	  InputStream stream = url.openStream();
-	  props.load(stream);
-	  stream.close();
-	} catch (MalformedURLException me) {
-	  System.err.println(me);
-	} catch (IOException ioe) {
-	  System.err.println(ioe);
-	}
-      }
-      //System.out.println("done");
-    }
-
-  /**
-   * Search the likely spots for jar files and classpaths,
-   * create a new classloader, and then invoke the named class
-   * using the new classloader.
-   *
-   * We will attempt first to invoke classname.launch(String[]) and
-   * then classname.main(String []).
-   **/
-  public static void launch(String classname, String[] args){
+  protected synchronized final static void setIsBootstrapped() { 
     if (isBootstrapped) {
-      throw new IllegalArgumentException("Circular Bootstrap!");
+      throw new Error("Circular Bootstrap!");
     }
     isBootstrapped = true;
+  }
 
+  /** Launch an application inside the context of a bootstrapper instance.
+   * Gets the application class to use from the org.cougaar.bootstrap.application
+   * system property or from the first argument and then calls launch(String, String[]).
+   * @property org.cougaar.bootstrap.application The name of the application class
+   * to bootstrap.  If not specified, will use the first argument instead.  Only applies
+   * when Bootstrap is being invoked as an application.
+   **/
+  public static void main(String[] args) {
+    String m = System.getProperty("org.cougaar.bootstrap.application");
+    if (m != null) {
+      launch(m,args);
+    } else {
+      String[] launchArgs = new String[args.length - 1];
+      System.arraycopy(args, 1, launchArgs, 0, launchArgs.length);
+      launch(args[0], launchArgs);
+    }
+  }
+
+  /** Make a note that the application is being bootstrapped,
+   * construct a Bootstrapper instance, and pass control to the instance.
+   * @see #launchApplication(String, String[])
+   **/
+  public static void launch(String classname, String[] args){
+    setIsBootstrapped();
     readProperties(System.getProperty("org.cougaar.properties.url"));
 
-    ArrayList l = new ArrayList();
-    String base = System.getProperty("org.cougaar.install.path");
-
-    accumulateClasspath(l, System.getProperty("org.cougaar.class.path"));
-    // no longer accumulate classpath
-    //accumulateClasspath(l, System.getProperty("java.class.path"));
-    // we'll defer to system's classpath if we don't find it anywhere
-    accumulateJars(l, new File(base,"lib"));
-    accumulateJars(l, new File(base,"plugins"));
-
-    String sysp = System.getProperty("org.cougaar.system.path");
-    if (sysp!=null) {
-      accumulateJars(l, new File(sysp));
-    }
-
-    accumulateJars(l,new File(base,"sys"));
-    URL urls[] = (URL[]) l.toArray(new URL[l.size()]);
-
+    getBootstrapper().launchApplication(classname, args);
+  }
+  
+  /** Construct a bootstrapper instance **/
+  private final static Bootstrapper getBootstrapper() {
+    String s = System.getProperty("org.cougaar.bootstrap.class", "org.cougaar.bootstrap.Bootstrapper");
     try {
-      BootstrapClassLoader cl = new BootstrapClassLoader(urls);
-      Thread.currentThread().setContextClassLoader(cl);
+      Class c = Class.forName(s);
+      return (Bootstrapper) c.newInstance();
+    } catch (Exception e) {
+      throw new Error("Cannot instantiate bootstrapper "+s, e);
+    }
+  }
 
-      Class realnode = cl.loadClass(classname);
+
+  protected String applicationClassname;
+  protected String[] applicationArguments;
+  protected ClassLoader applicationClassLoader;
+
+  /** Primary instance entry point for bootstrapper.  
+   * Essentially finds the right list of URLs to use,
+   * creates a Classloader, and then calls launchMain.
+   **/
+  protected void launchApplication(String classname, String[] args) {
+    applicationClassname = classname;
+    applicationArguments = args;
+
+    applicationClassLoader = prepareVM(classname, args);
+    Thread.currentThread().setContextClassLoader(applicationClassLoader);
+
+    launchMain(applicationClassLoader, classname, args);
+  }
+
+  /** Called to prepare the VM environment for running the application.
+   * @return A ClassLoader instance to be used to load the application.
+   **/
+  protected ClassLoader prepareVM(String classname, String[] args) {
+    List l = computeURLs();
+    return createClassLoader(l);
+  }
+
+  /** construct the right classloader, given a list of URLs **/
+  protected ClassLoader createClassLoader(List l) {
+    URL urls[] = (URL[]) l.toArray(new URL[l.size()]);
+    return new BootstrapClassLoader(urls);
+  }
+
+  /** Find the primary application entry point for the application class and call it.
+   * The default implementation will look for static void launch(String[]) and then 
+   * static void main(String[]).
+   * This method contains all the reflection code for invoking the application.
+   **/
+
+  protected void launchMain(ClassLoader cl, String classname, String[] args) {
+    try {
+      Class appClass = cl.loadClass(classname);
+
+      Method main;
+
       Class argl[] = new Class[1];
       argl[0] = String[].class;
-      Method main;
       try {
-        // try "launch" first
-        main = realnode.getMethod("launch", argl);
+        main = appClass.getMethod("launch", argl);
       } catch (NoSuchMethodException nsm) {
-        // if this one errors, we just let the exception throw up.
-        main = realnode.getMethod("main", argl);
+        main = appClass.getMethod("main", argl);
       }
 
       Object[] argv = new Object[1];
       argv[0] = args;
       main.invoke(null,argv);
     } catch (Exception e) {
-      System.err.println("Failed to launch "+classname+": ");
-      e.printStackTrace();
+      throw new Error("Failed to launch "+classname, e);
     }
+
   }
 
-  static void accumulateJars(List l, File f) {
+  /** Entry point for computing the list of URLs to pass to our classloader.
+   **/
+  protected List computeURLs() {
+    return filterURLs(findURLs());
+  }
+
+  /** Find jars, etc in the documented places.
+   * Shouldn't actually load or check the jars for correctness at this point.
+   **/
+  protected List findURLs() {
+    List l = new ArrayList();
+
+    String base = System.getProperty("org.cougaar.install.path");
+    l.addAll(findJarsInClasspath(System.getProperty("org.cougaar.class.path")));
+
+    // no longer accumulate classpath
+    //findJarsInClasspath(System.getProperty("java.class.path"));
+
+    // we'll defer to system's classpath if we don't find it anywhere
+    l.addAll(findJarsInDirectory(new File(base,"lib")));
+    l.addAll(findJarsInDirectory(new File(base,"plugins")));
+
+    String sysp = System.getProperty("org.cougaar.system.path");
+    if (sysp!=null) {
+      l.addAll(findJarsInDirectory(new File(sysp)));
+    }
+
+    l.addAll(findJarsInDirectory(new File(base,"sys")));
+    return l;
+  }
+
+
+  /** Gather jar files found in the directory specified by the argument **/
+  protected List findJarsInDirectory(File f) {
+    List l = new ArrayList();
     File[] files = f.listFiles(new FilenameFilter() {
         public boolean accept(File dir, String name) {
           return isJar(name);
         }
       });
-    if (files == null) return;
+
+    if (files == null) return l;
 
     for (int i=0; i<files.length; i++) {
       try {
@@ -210,26 +293,31 @@ public class Bootstrapper
         e.printStackTrace();
       }
     }
+    return l;
   }
 
-  static void accumulateClasspath(List l, String path) {
-    if (path == null) return;
-    List files = explodePath(path);
-    for (int i=0; i<files.size(); i++) {
+  /** gather jar files listed in the classpath-like specification **/
+  protected List findJarsInClasspath(String path) {
+    List l = new ArrayList();
+    if (path == null) return l;
+    String files[] = path.split(File.pathSeparator);
+    for (int i=0; i<files.length; i++) {
       try {
-        String n = (String) files.get(i);
+        String n = files[i];
         if (!isJar(n) && !n.endsWith("/")) {
           n = n+"/";
-          n = canonical(n); // Convert n to a canonical path, if possible
+          n = canonicalPath(n); // Convert n to a canonical path, if possible
         }
         l.add(newURL(n));
       } catch (Exception e) {
         e.printStackTrace();
       }
     }
+    return l;
   }
 
-  static String canonical(String filename) {
+  /** convert a directory name to a canonical path **/
+  protected final String canonicalPath(String filename) {
     String ret = filename;
     if (!filename.startsWith("file:")) {
       File f = new File (filename);
@@ -239,15 +327,16 @@ public class Bootstrapper
         // file must not exist...
       }
     }
-//    System.out.println(filename+" CHANGED  to "+ret);
     return ret;
   }
 
-  static final boolean isJar(String n) {
+  /** @return true iff the argument appears to name a jar file **/
+  protected boolean isJar(String n) {
     return (n.endsWith(".jar") ||n.endsWith(".zip") ||n.endsWith(".plugin"));
   }
 
-  static URL newURL(String p) throws MalformedURLException {
+  /** Convert the argument into a URL **/
+  protected URL newURL(String p) throws MalformedURLException {
     try {
       URL u = new URL(p);
       return u;
@@ -256,123 +345,54 @@ public class Bootstrapper
     }
   }
 
-  static final List explodePath(String s) {
-    return explode(s, File.pathSeparatorChar);
-  }
-  static final List explode(String s, char sep) {
-    ArrayList v = new ArrayList();
-    int j = 0;                  //  non-white
-    int k = 0;                  // char after last white
-    int l = s.length();
-    int i = 0;
-    while (i < l) {
-      if (sep==s.charAt(i)) {
-        // is white - what do we do?
-        if (i == k) {           // skipping contiguous white
-          k++;
-        } else {                // last char wasn't white - word boundary!
-          v.add(s.substring(k,i));
-          k=i+1;
-        }
-      } else {                  // nonwhite
-        // let it advance
-      }
-      i++;
-    }
-    if (k != i) {               // leftover non-white chars
-      v.add(s.substring(k,i));
-    }
-    return v;
-  }
-
-  /** Use slightly different rules for class loading:
-   * Prefer classes loaded via this loader rather than
-   * the parent.
+  /** Filter a set of URLs with whatever checks are required.  
+   * @return a list of URLs suitable for passing to the classloader.
    **/
-
-  static class BootstrapClassLoader extends XURLClassLoader {
-    private static final List exclusions = new ArrayList();
-    static {
-      exclusions.add("java.");  // avoids javaiopatch.jar
-      // let base do it instead
-      //exclusions.add("javax.");
-      //exclusions.add("com.sun.");
-      //exclusions.add("sun.");
-      //exclusions.add("net.jini.");
-      String s = System.getProperty("org.cougaar.bootstrapper.exclusions");
-      if (s != null) {
-        List extras = explode(s, ':');
-        if (extras != null) {
-          exclusions.addAll(extras);
-        }
+  protected List filterURLs(List l) {
+    List o = new ArrayList();
+    for (Iterator it = l.iterator(); it.hasNext(); ) {
+      URL u = (URL) it.next();
+      if (checkURL(u)) {
+        o.add(u);
+      } else {
       }
     }
-
-    private boolean excludedP(String classname) {
-      int l = exclusions.size();
-      for (int i = 0; i<l; i++) {
-        String s = (String)exclusions.get(i);
-        if (classname.startsWith(s))
-          return true;
-      }
-      return false;
-    }
-
-    public BootstrapClassLoader(URL urls[]) {
-      super(urls);
-      if (loudness>0) {
-        synchronized(System.err) {
-          System.err.println();
-          System.err.println("Bootstrapper URLs: ");
-          for (int i=0; i<urls.length; i++) {
-            System.err.println("\t"+urls[i]);
-          }
-          System.err.println();
-        }
-      }
-    }
-    protected synchronized Class loadClass(String name, boolean resolve)
-      throws ClassNotFoundException
-    {
-      // First, check if the class has already been loaded
-      Class c = findLoadedClass(name);
-      if (c == null) {
-        // make sure not to use this classloader to load
-        // java.*.  We patch java.io. to support persistence, so it
-        // may be in our jar files, yet those classes must absolutely
-        // be loaded by the same loader as the rest of core java.
-        if (!excludedP(name)) {
-          try {
-            c = findClass(name);
-          } catch (ClassNotFoundException e) {
-            // If still not found, then call findClass in order
-            // to find the class.
-          }
-        }
-        if (c == null) {
-          ClassLoader parent = getParent();
-          if (parent == null) parent = getSystemClassLoader();
-          c = parent.loadClass(name);
-        }
-        if (loudness>1 && c != null) {
-          java.security.ProtectionDomain pd = c.getProtectionDomain();
-          if (pd != null) {
-            java.security.CodeSource cs = pd.getCodeSource();
-            if (cs != null) {
-              System.err.println("BCL: "+c+" loaded from "+cs.getLocation());
-            }
-          }
-        }
-      }
-      if (resolve) {
-        resolveClass(c);
-      }
-      return c;
-    }
+    return o;
   }
 
-}
+  /** Check to see if a specific URL should be included in the bootstrap
+   * classloader's URLlist.  The default implementation checks each url
+   * against the list of excluded jars.
+   **/
+  protected boolean checkURL(URL url) {
+    String u = url.toString();
+    int l = excludedJars.size();
+    for (int i = 0; i<l; i++) {
+      String tail = (String) excludedJars.get(i);
+      if (u.endsWith(tail)) return false;
+    }
+    return true;
+  }
 
+  /**
+   * Reads the properties from specified url
+   **/
+  public static void readProperties(String propertiesURL){
+    if (propertiesURL != null) {
+      Properties props = System.getProperties();
+      try {    // open url, load into props
+        URL url = new URL(propertiesURL);
+        InputStream stream = url.openStream();
+        props.load(stream);
+        stream.close();
+      } catch (MalformedURLException me) {
+        System.err.println(me);
+      } catch (IOException ioe) {
+        System.err.println(ioe);
+      }
+    }
+  }
+}
 
 
 
