@@ -74,7 +74,8 @@ class LoggerImpl extends LoggerAdapter
   public String toString() {
     return 
       "logger \""+cat.getName()+"\" at "+
-      (isDebugEnabled() ? "debug" :
+      (isDetailEnabled() ? "detail" :
+       isDebugEnabled() ? "debug" :
        isInfoEnabled() ? "info" :
        isWarnEnabled() ? "warn" :
        isErrorEnabled() ? "error" :
