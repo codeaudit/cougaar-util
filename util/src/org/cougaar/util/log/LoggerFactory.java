@@ -51,7 +51,7 @@ public abstract class LoggerFactory {
         singleton = new NullLoggerFactory();
       }
     }
-    return new org.cougaar.util.log.log4j.Log4jLoggerFactory();
+    return singleton;
   }
 
   /** Implementations may override to provide 
