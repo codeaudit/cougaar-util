@@ -8,6 +8,38 @@
 <body>
 <h2>Engineering Assessment</h2>
 
+<p>
+<h2> Null Metrics Service </h2>
 
+For engineering assessment, it is possible to configure the metric service to add or remove functionality. 
+The assessment idea is to remove as much functionality as possible to obtain a base line. The functionality 
+is then added back piece by piece and the system is re-evalutate to determine the overhead.
+</p>
+<p>
+The first level of testing is to remove the metrics service sensors and clients. To remove the clients of the 
+service, the metrics rules should not be loaded into the society XML. Past measurements show that the metric 
+service clients and less than 10% load on a Node.
+</p>
+<p>
+Another level of base-lining is to remove the metric-service implementation itself. The Metric Service is really 
+a wrapper around the QuO Resource Status Service. If the RSS class is not found, the wrapper will act as a blackhole. 
+The <code>MetricsService</code> will accept subscriptions, queries, but the wrapper will always return a NO-VALUE Metric. 
+Also, <code>MetricsUpdaterService</code> can input with key-value pairs, but the wrapper will just drop them.<br>
+The empty implementation of <code>MetricsService</code> returns a 0-credibility metric with the provenance set to "undefined"
+(this constant <code>MetricImpl.UndefinedMetric</code>) for all <code>getValue</code> calls and does nothing for all 
+<code>subscribeToValue</code> and <code>unsubscribeToValue</code> calls.   
+The empty implementation of <code>MetricsUpdateService</code> does nothing for the <code>updateValue</code> call. 
+<br>
+Of course none of the Metrics clients will work, and should not be configured in the society XML.
+</p>
+<p>
+In 11.0 you can disable the QuO-RSS implementation, getting empty implementations of the MetricsService and the 
+MetricsUpdateService, if qos.jar isn't accessible. Simply remove the quoSumo.jar from the Class path <code>$CIP/sys/qouSumo.jar</code>.
+<br>
+In subsequent releases you get empty implementations of the MetricsService and the MetricsUpdateService by loading 
+the component <code>org.cougaar.core.qos.metrics.MetricsServiceProvider</code>. Full Component-loading isn't functional in 11.0,
+so provided is a workaround to do this with a -D flag: <br><br>
+<code>-Dorg.cougaar.metrics.trivial=true</code>.
+</p>
 
 </body> </html>
