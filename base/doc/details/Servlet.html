@@ -94,19 +94,24 @@ Here are the built-in servlets:
       List agent names.  This servlet supports any combination of
       these URL-parameters:
       <ul>
-        <li>"?local" -- list local agent names (default)</li>
-        <li>"?all"   -- list all agent names (instead of "?local")</li>
-        <li>"?html"  -- generate a pretty html page (default) </li>
-        <li>"?text"  -- generate plain text, one name per line
-                        (instead of "?html")</li>
+        <li>"?scope=local" -- list local agent names (default)</li>
+        <li>"?scope=all"   -- list all agent names 
+            (instead of "?scope=local")</li>
+        <li>"?format=html"  -- generate a pretty html page (default) </li>
+        <li>"?format=text"  -- generate plain text, one name per line
+            (instead of "?format=html")</li>
+        <li>"?sorted=true"  -- list the names in alphabetical order
+             (default) </li>
+        <li>"?sorted=false" -- don't bother to sort the names
+            (instead of "?sorted=true")</li>
       </ul>
       For example,
-      <a href="http://localhost:8800/agents?all&amp;text"
-      >http://localhost:8800/agents?all&amp;text</a>
+      <a href="http://localhost:8800/agents?scope=all&amp;format=text"
+      >http://localhost:8800/agents?scope=all&amp;format=text</a>
       will generate a plain-text listing of all agent names in the
-      society.
+      society in alphabetical order.
       <p>
-      More precisely, the "?all" option will list all
+      More precisely, the "?scope=all" option will list all
       <i>web-registered</i> agents in the society, so if some agents
       in a society have HTTP/HTTPS disabled (via the "-D" properties
       described in the
@@ -125,8 +130,25 @@ Here are the built-in servlets:
        </li><p>
    <li><a href="http://localhost:8800/$foo/list"
        >http://localhost:8800/$foo/list</a><br>
-       List all the servlet paths registered on agent "foo".  In
-       our example this should list:<ol>
+      List all the servlet paths registered on agent "foo".
+      <p>
+      This servlet supports any combination of these URL-parameters:
+      <ul>
+        <li>"?format=html"  -- generate a pretty html page (default) </li>
+        <li>"?format=text"  -- generate plain text, one path per line
+            (instead of "?format=html")</li>
+        <li>"?sorted=true"  -- list the paths in alphabetical order
+             (default) </li>
+        <li>"?sorted=false" -- don't bother to sort the paths
+            (instead of "?sorted=true")</li>
+      </ul>
+      For example,
+      <a href="http://localhost:8800/$foo/list?format=text"
+      >http://localhost:8800/$foo/list?format=text</a>
+      will generate a plain-text listing of all the servlet paths
+      in agent "foo", sorted into alphabetical order.
+      <p>
+       In our example this should list:<ol>
          <li>/$foo/agents</li>
          <li>/$foo/hello</li>
          <li>/$foo/list</li>
