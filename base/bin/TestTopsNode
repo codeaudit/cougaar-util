@@ -56,7 +56,7 @@ set MYDOMAINS=""
 set TOPS_DEMO_PATH=$COUGAAR_INSTALL_PATH/tops/configs/demo-config
 set TOPS_TEST_PATH=$COUGAAR_INSTALL_PATH/tops/configs/test-config
 
-set MYPROPERTIES="$MYDOMAINS -Dorg.cougaar.system.path=$COUGAAR3RDPARTY -Dorg.cougaar.install.path=$COUGAAR_INSTALL_PATH -Dorg.cougaar.config.path=$TOPS_TEST_PATH/data;$TOPS_TEST_PATH/data/CLUSTERINPUT;$TOPS_TEST_PATH/data/PROTOTYPES; -Duser.timezone=GMT -Dorg.cougaar.core.cluster.startTime=08/10/2005 -Dorg.cougaar.domain.planning.ldm.lps.ComplainingLP.level=0 -Dorg.cougaar.core.cluster.SharedPlugInManager.watching=false"
+set MYPROPERTIES="$MYDOMAINS -Dorg.cougaar.system.path=$COUGAAR3RDPARTY -Dorg.cougaar.install.path=$COUGAAR_INSTALL_PATH -Dorg.cougaar.config.path=$TOPS_TEST_PATH/data;$TOPS_TEST_PATH/data/CLUSTERINPUT;$TOPS_TEST_PATH/data/PROTOTYPES; -Duser.timezone=GMT -Dorg.cougaar.core.cluster.startTime=08/10/2005"
 set MYMEMORY=""
 
 set node = $argv[1]

@@ -52,7 +52,7 @@ endif
 # But you may still use properties if you wish.
 #set MYDOMAINS="-Dorg.cougaar.domain.alp=org.cougaar.domain.glm.GLMDomain"
 set MYDOMAINS=""
-set MYPROPERTIES="$MYDOMAINS -Dorg.cougaar.system.path=$COUGAAR3RDPARTY -Dorg.cougaar.install.path=$COUGAAR_INSTALL_PATH -Duser.timezone=GMT -Dorg.cougaar.core.cluster.startTime=08/10/2005 -Dorg.cougaar.domain.planning.ldm.lps.ComplainingLP.level=0 -Dorg.cougaar.core.cluster.SharedPlugInManager.watching=false"
+set MYPROPERTIES="$MYDOMAINS -Dorg.cougaar.system.path=$COUGAAR3RDPARTY -Dorg.cougaar.install.path=$COUGAAR_INSTALL_PATH -Duser.timezone=GMT -Dorg.cougaar.core.cluster.startTime=08/10/2005 -Dorg.cougaar.domain.planning.ldm.lps.ComplainingLP.level=0"
 set MYMEMORY=""
 
 set node = $argv[1]
