@@ -68,6 +68,14 @@ if ( ! -f $NODE_PROPS_FILE ) then
     exit 1
 endif
 
+if (! $?COUGAAR_WORKSPACE) then
+    echo "Defaulting COUGAAR_WORKSPACE to CIP/workspace"
+    setenv COUGAAR_WORKSPACE ${COUGAAR_INSTALL_PATH}/workspace
+    if ( ! -f $COUGAAR_WORKSPACE ) then
+      mkdir $COUGAAR_WORKSPACE
+    endif
+endif
+
 #
 # The remaining settings should not require modifications
 # unless you are debugging or have a custom COUGAAR installation.
@@ -81,7 +89,7 @@ endif
 # documentation ("server/doc/README") for details.
 #
 #set SERVERCONFIG = "-Dorg.cougaar.tools.server.verbose=true"
-set SERVERCONFIG = ""
+set SERVERCONFIG = "-Dorg.cougaar.tools.server.temp.path=$COUGAAR_WORKSPACE"
 
 # Only the "server.jar" should be in the classpath:
 set LIBPATHS = \

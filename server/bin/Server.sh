@@ -68,6 +68,13 @@ if [ ! -f $NODE_PROPS_FILE ]; then
     exit 1
 fi
 
+if [! -f $COUGAAR_WORKSPACE]; then
+    echo "Defaulting COUGAAR_WORKSPACE to CIP/workspace"
+    COUGAAR_WORKSPACE=$COUGAAR_INSTALL_PATH/workspace
+    if [ ! -f $COUGAAR_WORKSPACE ]; then
+      mkdir $COUGAAR_WORKSPACE
+    endif
+endif
 
 #
 # The remaining settings should not require modifications
@@ -82,7 +89,7 @@ fi
 # documentation ("server/doc/README") for details.
 #
 #SERVERCONFIG="-Dorg.cougaar.tools.server.verbose=true"
-SERVERCONFIG=""
+SERVERCONFIG="-Dorg.cougaar.tools.server.temp.path=$COUGAAR_WORKSPACE"
 
 # Only the "server.jar" should be in the classpath:
 LIBPATHS="${COUGAAR_INSTALL_PATH}/lib/server.jar"
@@ -93,7 +100,7 @@ if [ "$OS" = "Linux" ]; then
     limit coredumpsize 0   #down from 1g
 fi
 
-JAVA_ARGS="-classpath $LIBPATHS"
+JAVA_ARGS="-classpath $LIBPATHS" 
 
 if [ "$COUGAAR_DEV_PATH" != "" ]; then
     echo \

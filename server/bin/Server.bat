@@ -69,6 +69,11 @@ ECHO ERROR : properties file [%NODE_PROPS_FILE%] does not exist
 GOTO END
 :PROPS_EXISTS
 
+IF EXIST %COUGAAR_INSTALL_PATH%\workspace GOTO SETWORKSPACE
+mkdir %COUGAAR_INSTALL_PATH%\workspace
+:SETWORKSPACE
+SET COUGAAR_WORKSPACE=%COUGAAR_INSTALL_PATH\workspace
+
 REM
 REM The remaining settings should not require modifications
 REM unless you are debugging or have a custom COUGAAR installation.
@@ -83,7 +88,7 @@ REM documentation ("server\doc\README") for details.
 REM
 REM #SET SERVERCONFIG = "-Dorg.cougaar.tools.server.verbose=true"
 
-SET SERVERCONFIG=
+SET SERVERCONFIG="-Dorg.cougaar.tools.server.temp.path=%COUGAAR_WORKSPACE%"
 
 REM Only the "server.jar" should be in the classpath:
 SET LIBPATHS=^
