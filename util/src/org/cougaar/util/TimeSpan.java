@@ -26,6 +26,7 @@
 
 package org.cougaar.util;
 
+import java.io.Serializable;
 
 /**
  * An abstraction of an object which starts at a known point
@@ -35,7 +36,7 @@ package org.cougaar.util;
  * start point, open with respect to the end point and start must
  * be strictly less than end.
  *
- * An iterval where start==end is illegal, as it would indicate a 
+ * An interval where start==end is illegal, as it would indicate a 
  * negative 1 millisecond duration.  A point in time must be represented
  * with end = start+EPSILON.
  *
@@ -50,7 +51,10 @@ package org.cougaar.util;
  * though there is nothing which actually requires these semantics.
  *
  * Note that while the interface is not required to be serializable,
- * most implementations will actually be so.
+ * most implementations (including the static inner classes here)
+ * will actually be so.
+ *
+ * @see TimeSpans for a collection of factory methods.
  **/
 public interface TimeSpan 
 {
@@ -78,4 +82,40 @@ public interface TimeSpan
    * @return MAX_VALUE IFF unbounded.
    **/
   long getEndTime();
+
+  /** A representation of a point in time, generally
+   * the smallest time span which contains the specified
+   * time.  Strictly speaking, this ought to be represeted
+   * differently than a span.
+   * @see TimeSpans#getTimePoint(long)
+   **/
+  class Point implements TimeSpan, Serializable {
+    private long t;
+    public Point(long t) {
+      if (t<MIN_VALUE || t>=MAX_VALUE) {
+        throw new IllegalArgumentException("Bad TimeSpan.Point("+t+")");
+      }
+      this.t = t;
+    }
+    public long getStartTime() { return t; }
+    public long getEndTime() { return t+EPSILON; }
+  }
+
+  /** A simple implementation of a two-point specified time span.
+   * @see TimeSpans#getTimeSpan(long, long)
+   **/
+  class Span implements TimeSpan, Serializable {
+    private long t0, t1;
+    public Span(long t0, long t1) { 
+      if (t0>=t1 || t0<MIN_VALUE || t1>MAX_VALUE) {
+        throw new IllegalArgumentException("Bad TimeSpan.Span("+t0+","+t1+")");
+      }
+      this.t0 = t0; this.t1=t1; 
+    }
+    public long getStartTime() { return t0; }
+    public long getEndTime() { return t1; }
+  }
+
+  /** a TimeSpan representing all representable time **/
+  TimeSpan FOREVER = new Span(MIN_VALUE,MAX_VALUE);
 }
