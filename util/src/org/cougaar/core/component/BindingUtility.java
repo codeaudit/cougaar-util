@@ -99,7 +99,7 @@ public abstract class BindingUtility {
                       fm.invoke(fc, args);
                     } catch (Throwable e) {
                       // ugly, but we don't want to pass it through.
-                      e.printStackTrace()
+                      e.printStackTrace();
                     }
                   }
                 };
