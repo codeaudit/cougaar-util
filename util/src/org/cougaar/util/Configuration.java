@@ -41,7 +41,7 @@ public final class Configuration {
   public static final String USER_DIR_PROP = "user.dir";
 
   public static final String defaultConfigPath = 
-    "$CWD;$HOME/.alp;$INSTALL/configs/$CONFIG;$INSTALL/configs/common";
+    "$CWD;$INSTALL/configs/$CONFIG;$INSTALL/configs/common";
 
   // these are initialized at the end
   private static Map defaultProperties;
