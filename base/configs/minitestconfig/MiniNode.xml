@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- This file is the configuration file for a simple 4 agent society. -->
-<!-- To run, use bin/XSLNode.bat MiniNode.xml MiniNode -->
+<!-- To run, use bin/Cougaar[.bat] MiniNode.xml MiniNode -->
 <!-- The current configuration places all 4 agents on a single node (MiniNode). -->
 <!-- If you would like to break the agents up across different nodes, or hosts, -->
 <!-- create a new <node name=name_here> section within the host element.  -->
@@ -16,7 +16,7 @@
     <node name="MiniNode">
       <class>org.cougaar.bootstrap.Bootstrapper</class>
       <prog_parameter>org.cougaar.core.node.Node</prog_parameter>
-      <!-- vm_parameters, for use by $COUGAAR_INSTALL_PATH/bin/XSLNode -->
+      <!-- vm_parameters, for use by $COUGAAR_INSTALL_PATH/bin/Cougaar -->
       <!-- Make sure these MiniNode references match: -->
       <vm_parameter>-Dorg.cougaar.node.name=MiniNode</vm_parameter>
       <vm_parameter>-Dorg.cougaar.society.file="MiniNode.xml"</vm_parameter>
