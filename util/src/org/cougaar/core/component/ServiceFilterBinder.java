@@ -55,8 +55,11 @@ public abstract class ServiceFilterBinder
 
   /** define to choose the class of the BinderProxy.  
    * Should usually be an extension of ServiceFilterBinderProxy.
+   * The default creates and returns an instance of ServiceFilterContainerProxy.
    **/
-  protected abstract ContainerAPI createContainerProxy();
+  protected ContainerAPI createContainerProxy() {
+    return new ServiceFilterContainerProxy();
+  }
 
   /** Defines a pass-through insulation layer to ensure that the plugin cannot 
    * downcast the BindingSite to the Binder and gain control via introspection
