@@ -85,7 +85,10 @@
         <component class="org.cougaar.core.wp.WhitePagesServlet">
           <argument>/wp</argument>
         </component>
-        <component class="org.cougaar.mlm.plugin.organization.OrgDataParamPlugin">
+	<!-- Note Minitest uses the Simple OrgData because it has no OpCon or AdCon -->
+	<!-- Most users can use AssetDataPlugin. Otherse will use this SimpleOrgData. -->
+	<!-- You probably don't need OrgDataPlugin. -->
+        <component class="org.cougaar.mlm.plugin.organization.SimpleOrgDataParamPlugin">
           <argument>Prototype:Organization</argument>
           <argument>ClusterPG:MessageAddress:MessageAddress:1BDE</argument>
           <argument>ItemIdentificationPG:ItemIdentification:String:1BDE</argument>
@@ -160,7 +163,7 @@
         <component class="org.cougaar.core.wp.WhitePagesServlet">
           <argument>/wp</argument>
         </component>
-        <component class="org.cougaar.mlm.plugin.organization.OrgDataParamPlugin">
+        <component class="org.cougaar.mlm.plugin.organization.SimpleOrgDataParamPlugin">
           <argument>Prototype:Organization</argument>
           <argument>ClusterPG:MessageAddress:MessageAddress:3-69-ARBN</argument>
           <argument>ItemIdentificationPG:ItemIdentification:String:3-69-ARBN</argument>
@@ -241,7 +244,7 @@
         <component class="org.cougaar.core.wp.WhitePagesServlet">
           <argument>/wp</argument>
         </component>
-        <component class="org.cougaar.mlm.plugin.organization.OrgDataParamPlugin">
+        <component class="org.cougaar.mlm.plugin.organization.SimpleOrgDataParamPlugin">
           <argument>Prototype:Organization</argument>
           <argument>ClusterPG:MessageAddress:MessageAddress:3ID</argument>
           <argument>ItemIdentificationPG:ItemIdentification:String:3ID</argument>
@@ -322,7 +325,7 @@
         <component class="org.cougaar.core.wp.WhitePagesServlet">
           <argument>/wp</argument>
         </component>
-        <component class="org.cougaar.mlm.plugin.organization.OrgDataParamPlugin">
+        <component class="org.cougaar.mlm.plugin.organization.SimpleOrgDataParamPlugin">
           <argument>Prototype:Organization</argument>
           <argument>ClusterPG:MessageAddress:MessageAddress:MCCGlobalMode</argument>
           <argument>ItemIdentificationPG:ItemIdentification:String:MCCGlobalMode</argument>
