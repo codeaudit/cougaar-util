@@ -186,7 +186,6 @@ queryExptsWithRecipe = \
 
 # Get all experiments that have the given Society
 # where Society is specified by name
-
 queryExptsWithSociety = \
 	SELECT C.NAME \
 	FROM V4_EXPT_TRIAL_ASSEMBLY A, V4_ASB_ASSEMBLY B, V4_EXPT_EXPERIMENT C \
@@ -195,7 +194,6 @@ queryExptsWithSociety = \
 	AND B.DESCRIPTION = ':societyName'
 
 # get the property groups for a plugin
-
 queryPGId = \
 	SELECT DISTINCT PG_ATTRIBUTE_LIB_ID \
 	FROM V4_ASB_AGENT_PG_ATTR \
