@@ -66,12 +66,19 @@ import org.cougaar.bootstrap.SystemProperties;
  *    logger configuration.  These properties override any 
  *    properties defined in the (optional) 
  *    "org.cougaar.core.logging.config.filename=STRING" 
- *    property.
+ *    property.  Example <pre>
+ *  -Dorg.cougaar.core.logging.log4j.logger.org.cougaar.util.ConfigFinder=DEBUG
+ *  <pre>
+ * @property log4j.logger.*
+ *   Log4j standard syntax for system-property configuration.  Equivalent to org.cougaar.core.logging.*
+ * properties.
+ *
  */
 public class Log4jLoggerFactory 
   extends LoggerFactory 
 {
   public static final String PREFIX = "org.cougaar.core.logging.";
+  public static final String LOG4JPREFIX = "log4j.logger.";
   public static final String FILE_NAME_PROPERTY = PREFIX + "config.filename";
   public static final String LOG4JCONF = "log4j.configuration";
 
@@ -157,7 +164,10 @@ public class Log4jLoggerFactory
   }
 
   private void configureFromSystemProperties() {
-    Properties props = SystemProperties.getSystemPropertiesWithPrefix(PREFIX);
+    Properties props = new Properties();
+    props.putAll(SystemProperties.getSystemPropertiesWithPrefix(PREFIX));
+    props.putAll(SystemProperties.getSystemPropertiesWithPrefix(LOG4JPREFIX));
+
     Properties cp = new Properties();
 
     for (Iterator it = props.keySet().iterator(); it.hasNext(); ) {
@@ -173,6 +183,7 @@ public class Log4jLoggerFactory
     PropertyConfigurator.configure(cp);
     org.apache.log4j.Logger.getLogger(Log4jLoggerFactory.class).info("Configured logging from "+cp.size()+" System Properties");
   }
+
 
   // ugh. bashing of static structure... sigh.
   public void configure(Properties props) {
