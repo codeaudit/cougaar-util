@@ -85,6 +85,8 @@ updateLibComponent=\
 
 # Is this component already in the RUNTIME 
 # configuration hierarchy for this Trial? Uses assembly_match
+# Note the assumption that Alib IDs are unique for a parent
+# Ideally it should be checking type, class, and parameters instead
 checkComponentHierarchy=\
  SELECT COMPONENT_ALIB_ID \
    FROM v4_asb_component_hierarchy \
