@@ -81,6 +81,7 @@ public class Console {
     JScrollPane configscroll;
 
     private JButton runButton;
+    private JButton flushNodeEventsButton;
     private JButton listClustersButton;
     private JButton stopButton;
 
@@ -121,6 +122,7 @@ public class Console {
 
       runButton = new JButton("Run");
       listClustersButton = new JButton("List-Clusters");
+      flushNodeEventsButton = new JButton("Flush-Output");
       stopButton = new JButton("Stop");
 
 
@@ -179,7 +181,15 @@ public class Console {
             }
           });
 
-      // handle list-clusters button
+      // handle the "Flush-Output" button
+      flushNodeEventsButton.addActionListener(
+          new ActionListener() {    
+            public void actionPerformed(ActionEvent e) {
+              flushNodeEvents(selectedNodeName);
+            }
+          });
+
+      // handle "List-Clusters" button
       listClustersButton.addActionListener(
           new ActionListener() {    
             public void actionPerformed(ActionEvent e) {
@@ -190,10 +200,10 @@ public class Console {
       // handle stop button
       stopButton.addActionListener(
           new ActionListener() {    
-          // createNode() which spawns remote nodes
-          public void actionPerformed(ActionEvent e) {
-          stopNode(selectedNodeName);
-          }
+            // createNode() which spawns remote nodes
+            public void actionPerformed(ActionEvent e) {
+              stopNode(selectedNodeName);
+            }
           });
 
       // label for NodePanel name
@@ -202,7 +212,7 @@ public class Console {
       titleLabel.setForeground(Color.black);
 
       // gui aesthetics & setup
-      setLayout(new BorderLayout( 5, 10 ));
+      setLayout(new BorderLayout( 5, 10));
       Border blackline = BorderFactory.createLineBorder(Color.black);
 
       // typePanel corresponds to configList and hostList in gui
@@ -237,6 +247,7 @@ public class Console {
       buttons.add(buttons1, BorderLayout.NORTH);
       buttons.add(buttons2, BorderLayout.SOUTH);    
       buttons2.add(runButton);
+      buttons2.add(flushNodeEventsButton);
       buttons2.add(listClustersButton);
       buttons2.add(stopButton);
     }  
@@ -285,34 +296,13 @@ public class Console {
       }
 
       // add a tab and panel to the main window
-      Writer toOut;
-      Writer toErr;
-      Writer toListen;
+      DefaultStyledDocument doc;
       try {
         // create an output pane
-        DefaultStyledDocument doc = new DefaultStyledDocument();
+        doc = new DefaultStyledDocument();
         JTextPane pane = new JTextPane(doc);
         JScrollPane stdoutPane = new JScrollPane(pane);
         nodePane.add(name, stdoutPane);
-        SimpleAttributeSet outAttr = new SimpleAttributeSet();
-        StyleConstants.setForeground(outAttr, Color.black);
-        SimpleAttributeSet errAttr = new SimpleAttributeSet();
-        StyleConstants.setForeground(errAttr, Color.red);
-        SimpleAttributeSet listenAttr = new SimpleAttributeSet();
-        StyleConstants.setForeground(listenAttr, Color.blue);
-
-        // create output streams to the GUI
-        toOut = new DocumentWriter(doc, outAttr);
-        toErr = new DocumentWriter(doc, errAttr);
-        toListen = new DocumentWriter(doc, listenAttr);
-
-        // wrap and capture to a log
-        Writer fileWriter = 
-          new BufferedWriter(
-              new FileWriter(
-                getLogFileName(name)));
-        toOut = new CompoundWriter(fileWriter, toOut);
-        toErr = new CompoundWriter(fileWriter, toErr);
       } catch (Exception e) {
         return;
       }
@@ -334,6 +324,23 @@ public class Console {
             "org.cougaar.tools.server.name", 
             DEFAULT_SERVER_NAME);
 
+      NodeEventListener nel;
+      try {
+        nel = 
+          new MyListener(
+              getLogFileName(name), 
+              doc);
+      } catch (Exception e) {
+        System.err.println(
+            "Unable to create output for \""+name+"\"");
+        e.printStackTrace();
+        // remove panel!
+        return;
+      }
+
+      NodeEventFilter nef = 
+        new NodeEventFilter(20);
+
       NodeServesClient newNode;
       try {
         newNode = 
@@ -344,17 +351,34 @@ public class Console {
               name,
               c_props,
               args,
-              new MyListener(toListen),
-              toOut,
-              toErr);
+              nel,
+              nef);
       } catch (Exception e) {
         System.err.println(
             "Unable to create node \""+name+"\" on host \""+hostname+"\"");
         e.printStackTrace();
+        // remove panel!
         return;
       }
 
       myNodes.put(name, newNode);
+    }
+
+    private void flushNodeEvents(String name) {
+      NodeServesClient nsc = (NodeServesClient)myNodes.get(name);
+      if (nsc == null) {
+        System.err.println(
+            "Unknown node name: "+name);
+        return;
+      }
+
+      try {
+        nsc.flushNodeEvents();
+      } catch (Exception e) {
+        System.err.println(
+            "Unable to flush events");
+        e.printStackTrace();
+      }
     }
 
     private void listClusters(String name) {
@@ -403,6 +427,10 @@ public class Console {
       }
 
       try {
+        // should flush first!
+        nsc.flushNodeEvents();
+
+        // now destroy
         nsc.destroy();
       } catch (Exception e) {
         System.err.println(
@@ -439,61 +467,193 @@ public class Console {
     /**
      * Listener for "pushed" Node activities.
      */
-    protected class MyListener implements NodeActionListener {
+    protected class MyListener implements NodeEventListener {
 
-      private Writer w;
+      private Writer toFile;
 
-      private MyListener(Writer w) {
-        this.w = w;
+      private StyledDocument toText;
+      private SimpleAttributeSet[] atts;
+
+      private MyListener(
+          String toFileName,
+          StyledDocument toText) throws IOException {
+
+        // wrap and capture to a log
+        this.toFile = 
+          new BufferedWriter(
+              new FileWriter(
+                toFileName));
+
+        // save the GUI output
+        this.toText = toText;
+
+        // create our attributes
+        atts = new SimpleAttributeSet[4];
+        atts[0] = new SimpleAttributeSet();
+        StyleConstants.setForeground(atts[0], Color.black);
+        atts[1] = new SimpleAttributeSet();
+        StyleConstants.setForeground(atts[1], Color.red);
+        atts[2] = new SimpleAttributeSet();
+        StyleConstants.setForeground(atts[2], Color.green);
+        atts[3] = new SimpleAttributeSet();
+        StyleConstants.setForeground(atts[3], Color.blue);
       }
 
-      /**
-       * Simple "marker" for future UI work -- can easily replace with 
-       * code that updates the GUI.
-       */
-      private void debug(String s) {
-        try {
-          w.write(s);
-        } catch (Exception e) {
-        }
-      }
-
-      public void handleNodeCreated(
-          NodeServesClient nsc) {
-        // could add this to a list of active nodes
-        String nodeName;
-        try {
-          nodeName = nsc.getName();
-        } catch (Exception e) {
-          nodeName = "???";
-        }
-        debug("Created node: "+nodeName+"\n");
-      }
-
-      public void handleNodeDestroyed(
-          NodeServesClient nsc) {
-        // could remove this node from the list of active nodes
-        String nodeName;
-        try {
-          nodeName = nsc.getName();
-        } catch (Exception e) {
-          nodeName = "???";
-        }
-        // frame probably already removed, but attempt to write anyways
-        debug("Destroyed node: "+nodeName+"\n");
-      }
-
-      public void handleClusterAdd(
+      public void handle(
           NodeServesClient nsc,
-          ClusterIdentifier clusterId) {
-        // could remove this node from the list of active nodes
+          NodeEvent ne) {
+
+        // get node's name
+        /*
         String nodeName;
         try {
           nodeName = nsc.getName();
         } catch (Exception e) {
           nodeName = "???";
         }
-        debug("Cluster added (node: "+nodeName+") clusterId: "+clusterId+"\n");
+        */
+
+        final String toUI;
+        int attIndex;
+        switch (ne.getType()) {
+          case NodeEvent.STANDARD_OUT:
+            attIndex = 0;
+            toUI = ne.getMessage();
+            break;
+          case NodeEvent.STANDARD_ERR:
+            attIndex = 1;
+            toUI = ne.getMessage();
+            break;
+          default:
+            attIndex = 2;
+            toUI = ne.toString();
+            break;
+        }
+        final SimpleAttributeSet att = atts[attIndex];
+        
+        try {
+          toFile.write(toUI);
+        } catch (Exception e) {
+        }
+
+        // 
+        // bug here if "toText" is destroyed
+        //
+
+        try {
+          // must use swing "invokeLater" to be thread-safe
+          SwingUtilities.invokeLater(
+              new Runnable() {
+                public void run() {
+                  try {
+                    toText.insertString(
+                      toText.getLength(), 
+                      toUI, 
+                      att);
+                  } catch (Exception e) {
+                  }
+                }
+              });
+        } catch (RuntimeException e) {
+        }
+      }
+
+      public void handleAll(
+          final NodeServesClient nsc,
+          final java.util.List l) {
+
+        final int n = l.size();
+        if (n <= 0) {
+          return;
+        }
+
+        // get node's name
+        /*
+        String nodeName;
+        try {
+          nodeName = nsc.getName();
+        } catch (Exception e) {
+          nodeName = "???";
+        }
+        */
+
+        try {
+          int i = 0;
+          do {
+            NodeEvent ne = (NodeEvent)l.get(i);
+            toFile.write(getString(ne));
+          } while (++i < n);
+        } catch (Exception e) {
+          // file dead?
+        }
+
+        // 
+        // bug here if "toText" is destroyed
+        //
+
+        try {
+          // must use swing "invokeLater" to be thread-safe
+          SwingUtilities.invokeLater(
+              new Runnable() {
+                public void run() {
+                  NodeEvent n0 = (NodeEvent)l.get(0);
+                  int prevType = n0.getType();
+                  String prevSi = getString(n0);
+                  for (int i = 1; i < n; i++) {
+                    NodeEvent ni = (NodeEvent)l.get(i);
+                    int type = ni.getType();
+                    String si = getString(ni);
+                    if (type == prevType) {
+                      prevSi += si;
+                    } else {
+                      try {
+                        toText.insertString(
+                            toText.getLength(), 
+                            prevSi, 
+                            getStyle(prevType));
+                      } catch (Exception e) {
+                        break;
+                      }
+                      prevSi = si;
+                      prevType = type;
+                    }
+                  }
+                  try {
+                    toText.insertString(
+                        toText.getLength(), 
+                        prevSi, 
+                        getStyle(prevType));
+                  } catch (Exception e) {
+                  }
+                }
+              });
+        } catch (RuntimeException e) {
+        }
+      }
+
+      private final String getString(final NodeEvent ne) {
+        switch (ne.getType()) {
+          case NodeEvent.STANDARD_OUT:
+          case NodeEvent.STANDARD_ERR:
+            return ne.getMessage();
+          case NodeEvent.HEARTBEAT:
+            return "@";
+          default:
+            return ne.toString();
+        }
+      }
+
+      private final SimpleAttributeSet getStyle(final int type) {
+        switch (type) {
+          case NodeEvent.STANDARD_OUT:
+            return atts[0];
+          case NodeEvent.STANDARD_ERR:
+            return atts[1];
+          case NodeEvent.HEARTBEAT:
+            return atts[2];
+          default:
+            return atts[3];
+        }
       }
     }
 
@@ -596,80 +756,4 @@ public class Console {
     }
   }
 
-  //
-  // Supporting classes
-  //
-
-  static class DocumentWriter extends Writer {
-    private StyledDocument text;
-    private SimpleAttributeSet att;
-
-    DocumentWriter(StyledDocument text, SimpleAttributeSet att) {
-      this.text = text;
-      this.att = att;
-    }
-
-
-    private void ensureOpen() throws IOException {
-      if (text == null) {
-        throw new IOException("Writer closed");
-      }
-    }
-
-    public synchronized void write(
-        char[] buf, int off, int len) throws IOException {
-      ensureOpen();
-      final String insertion = new String(buf, off, len);
-      try {
-        // must use swing "invokeLater" to be thread-safe
-        SwingUtilities.invokeLater(
-            new Runnable() {
-              public void run() {
-                try {
-                  text.insertString(text.getLength(), insertion, att);
-                } catch (Exception e) {
-                }
-              }
-            });
-      } catch (RuntimeException e) {
-        throw new IOException(e.getMessage());
-      }
-    }
-
-    public synchronized void flush() throws IOException {
-      ensureOpen();
-    }
-
-    public synchronized void close() throws IOException {
-      ensureOpen();
-      text = null;
-    }
-  }
-
-
-  static class CompoundWriter extends Writer {
-    private Writer w1,w2;
-
-    public CompoundWriter(Writer w1, Writer w2) {
-      this.w1 = w1;
-      this.w2 = w2;
-    }
-
-    public void write(char[] buf, int off, int len) throws IOException {
-      w1.write(buf,off,len);
-      w1.flush();
-      w2.write(buf,off,len);
-      w2.flush();
-    }
-
-    public void flush() throws IOException {
-      w1.flush();
-      w2.flush();
-    }
-
-    public synchronized void close() throws IOException {
-      w1.close();
-      w2.close();
-    }
-  }
 }

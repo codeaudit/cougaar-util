@@ -19,22 +19,47 @@ import java.util.List;
  * Client support from a Node -- this is the communication path from the
  * client <u>to</u> the Node.
  * <p>
- * @see NodeActionListener
+ * @see NodeEventListener
  */
 public interface NodeServesClient {
   
   /**
-   * Get the current <code>NodeActionListener</code>, as set by
-   * <tt>setNodeActionListener(..)</tt>.
+   * Get the current <code>NodeEventListener</code>, as set by
+   * <tt>setNodeEventListener(..)</tt>.
    */
-  public NodeActionListener getNodeActionListener() throws Exception;
+  public NodeEventListener getNodeEventListener() throws Exception;
 
   /**
-   * Client can set the <code>NodeActionListener</code> to listen for
+   * The client can set the <code>NodeEventListener</code> to listen for
    * "pushed" events on the Node.
    */
-  public void setNodeActionListener(NodeActionListener nal) throws Exception;
+  public void setNodeEventListener(NodeEventListener nal) throws Exception;
 
+
+  /**
+   * Get the current <code>NodeEventFilter</code>, as set by
+   * <tt>setNodeEventFilter(..)</tt>.
+   */
+  public NodeEventFilter getNodeEventFilter(
+      ) throws Exception;
+
+  /**
+   * The client can set the <code>NodeEventFilter</code> to
+   * configure the Node to send or not send specific <code>NodeEvent</code>s
+   * and the Node event-buffering policy.
+   */
+  public void setNodeEventFilter(
+      NodeEventFilter nef) throws Exception;
+
+
+  /**
+   * Make the Node send any buffered <code>NodeEvent</code>s to the
+   * <code>NodeEventListener</code>.
+   * <p>
+   * Also see the <code>NodeEventFilter</code>, which defines the 
+   * NodeEvent buffering policy.
+   */
+  public void flushNodeEvents() throws Exception;
 
   /**
    * Get the name of the node.

@@ -16,30 +16,33 @@ import java.rmi.server.UnicastRemoteObject;
 import org.cougaar.core.cluster.ClusterIdentifier;
 import org.cougaar.core.society.ExternalNodeController;
 
+import org.cougaar.tools.server.NodeEvent;
+import org.cougaar.tools.server.NodeEventListener;
+
 /**
- * Delegates to the <code>ClientNodeActionListener</code>.
+ * Delegates to the <code>ClientNodeEventListener</code>.
  * <p>
  * Node creation and destruction are signaled by the 
  * <code>ServerNodeController</code>, since it watches the system
  * process itself.
  */
-public class ServerNodeActionListenerImpl 
+public class ServerNodeEventListenerImpl 
 extends UnicastRemoteObject 
-implements ServerNodeActionListener {
+implements ServerNodeEventListener {
 
-  private ServerNodeController snc;
-  private ClientNodeActionListener cnal;
+  private ServerNodeEventBuffer sneb;
 
-  public ServerNodeActionListenerImpl(
-      ServerNodeController snc,
-      ClientNodeActionListener cnal) throws RemoteException {
-    this.snc = snc;
-    this.cnal = cnal;
+  public ServerNodeEventListenerImpl(
+      ServerNodeEventBuffer sneb) throws RemoteException {
+    this.sneb = sneb;
   }
 
   public void handleClusterAdd(
       ExternalNodeController enc,
       ClusterIdentifier cid) throws RemoteException {
-    cnal.handleClusterAdd(snc, cid);
+    sneb.addNodeEvent(
+        new NodeEvent(
+          NodeEvent.CLUSTER_ADDED,
+          cid.toString()));
   }
 }

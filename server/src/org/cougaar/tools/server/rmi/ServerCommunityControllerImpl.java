@@ -66,9 +66,8 @@ class ServerCommunityControllerImpl
       String nodeId, 
       Properties props, 
       String[] args,
-      ClientNodeActionListener cListener,
-      ClientOutputStream cOut,
-      ClientOutputStream cErr) throws IOException {
+      ClientNodeEventListener cnel,
+      NodeEventFilter nef) throws IOException {
 
     // p is a merge of server-set properties and passed-in props
     Properties p = new Properties(commonProperties);
@@ -175,9 +174,8 @@ class ServerCommunityControllerImpl
           cmdLine, 
           rmiHost,
           rmiPort,
-          cListener,
-          cOut, 
-          cErr);
+          cnel,
+          nef);
     activeNodes.add(snc);
     return snc;
   }

@@ -10,28 +10,28 @@
  
 package org.cougaar.tools.server.rmi;
 
+import java.io.IOException;
 import java.rmi.*;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
 
-import org.cougaar.core.cluster.ClusterIdentifier;
-
-import org.cougaar.tools.server.NodeActionListener;
+import org.cougaar.tools.server.NodeEvent;
+import org.cougaar.tools.server.NodeEventListener;
 import org.cougaar.tools.server.NodeServesClient;
 
 /**
- * Delegates to the <code>NodeActionListener</code>.
+ * Delegates to the <code>NodeEventListener</code>.
  */
-public class ClientNodeActionListenerImpl 
+public class ClientNodeEventListenerImpl 
 extends UnicastRemoteObject 
-implements ClientNodeActionListener {
+implements ClientNodeEventListener {
 
-  private NodeActionListener nal;
-  private ServerNodeController snc;
+  private NodeEventListener nel;
   private ClientNodeController cnc;
 
-  public ClientNodeActionListenerImpl(
-      NodeActionListener nal) throws RemoteException {
-    this.nal = nal;
+  public ClientNodeEventListenerImpl(
+      NodeEventListener nel) throws RemoteException {
+    this.nel = nel;
   }
 
   // for ClientCommunityController use only:
@@ -44,19 +44,16 @@ implements ClientNodeActionListener {
     return cnc;
   }
 
-  public void handleNodeCreated(
-      ServerNodeController snc) {
-    nal.handleNodeCreated(cnc);
+  public void handle(
+      //ServerNodeController snc,
+      NodeEvent ne) {
+    nel.handle(cnc, ne);
   }
 
-  public void handleNodeDestroyed(
-      ServerNodeController snc) {
-    nal.handleNodeDestroyed(cnc);
+  public void handleAll(
+      //ServerNodeController snc,
+      List l) {
+    nel.handleAll(cnc, l);
   }
 
-  public void handleClusterAdd(
-      ServerNodeController snc, 
-      ClusterIdentifier cid) {
-    nal.handleClusterAdd(cnc, cid);
-  }
 }

@@ -15,7 +15,8 @@ import java.util.*;
 import java.rmi.*;
 import java.rmi.registry.*;
 
-import org.cougaar.tools.server.NodeActionListener;
+import org.cougaar.tools.server.NodeEventListener;
+import org.cougaar.tools.server.NodeEventFilter;
 import org.cougaar.tools.server.NodeServesClient;
 import org.cougaar.tools.server.CommunityServesClient;
 
@@ -36,9 +37,8 @@ implements CommunityServesClient {
       String nodeName,
       Properties nodeProperties,
       String[] commandLineArgs,
-      NodeActionListener toNodeListener,
-      Writer toOut,
-      Writer toErr) throws Exception {
+      NodeEventListener nel,
+      NodeEventFilter nef) throws Exception {
 
     // locate registry at <hostname, port>
     Registry reg = LocateRegistry.getRegistry(hostName, hostPort);
@@ -47,19 +47,9 @@ implements CommunityServesClient {
     ServerCommunityController scc = 
       (ServerCommunityController)reg.lookup(regName);
 
-    // capture input/output streams
-    ClientOutputStream cOut = 
-      ((toOut != null) ? 
-       new ClientWriterImpl(toOut) : 
-       null);
-    ClientOutputStream cErr =
-      ((toErr != null) ? 
-       new ClientWriterImpl(toErr) : 
-       null);
-
-    ClientNodeActionListenerImpl cListenerImpl =
-      ((toNodeListener != null) ? 
-       new ClientNodeActionListenerImpl(toNodeListener) :
+    ClientNodeEventListenerImpl cnel =
+      ((nel != null) ? 
+       (new ClientNodeEventListenerImpl(nel)) :
        null);
 
     // get reference to remote process on app server
@@ -68,14 +58,13 @@ implements CommunityServesClient {
           nodeName, 
           nodeProperties, 
           commandLineArgs, 
-          cListenerImpl,
-          cOut, 
-          cErr);
+          cnel,
+          nef);
 
     // wrap for client
     //
     // Note: what if snc wants to send a listen event _before_ it
-    //   returns from "scc.createNode"?  The cListenerImpl would
+    //   returns from "scc.createNode"?  The cnel would
     //   have a null cnc, which would be a bug.  For now I think
     //   this shouldn't happen...
     //
@@ -83,9 +72,10 @@ implements CommunityServesClient {
       new ClientNodeController(
           nodeName,
           snc,
-          toNodeListener,
-          cListenerImpl);
-    cListenerImpl.setClientNodeController(cnc);
+          nel,
+          cnel,
+          nef);
+    cnel.setClientNodeController(cnc);
 
     return cnc;
   }

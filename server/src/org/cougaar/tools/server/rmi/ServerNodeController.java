@@ -14,7 +14,8 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
 
-import org.cougaar.tools.server.NodeActionListener;
+import org.cougaar.tools.server.NodeEventListener;
+import org.cougaar.tools.server.NodeEventFilter;
 import org.cougaar.tools.server.NodeServesClient;
 
 /**
@@ -27,11 +28,17 @@ import org.cougaar.tools.server.NodeServesClient;
 public interface ServerNodeController 
 extends Remote {
 
-  public ClientNodeActionListener getClientNodeActionListener() 
+  public ClientNodeEventListener getClientNodeEventListener() 
     throws RemoteException;
-  public void setClientNodeActionListener(
-      ClientNodeActionListener cnal) throws RemoteException;
+  public void setClientNodeEventListener(
+      ClientNodeEventListener cnel) throws RemoteException;
 
+  public NodeEventFilter getNodeEventFilter() 
+    throws RemoteException;
+  public void setNodeEventFilter(
+      NodeEventFilter nef) throws RemoteException;
+
+  public void flushNodeEvents() throws RemoteException;
   public String getName() throws RemoteException;
   public String[] getCommandLine() throws RemoteException;
   public boolean isAlive() throws RemoteException;

@@ -15,7 +15,8 @@ import java.util.*;
 import java.rmi.*;
 import java.rmi.registry.*;
 
-import org.cougaar.tools.server.NodeActionListener;
+import org.cougaar.tools.server.NodeEventListener;
+import org.cougaar.tools.server.NodeEventFilter;
 import org.cougaar.tools.server.NodeServesClient;
 
 /**
@@ -26,33 +27,50 @@ implements NodeServesClient {
   private String nodeName;
 
   private ServerNodeController snc;
-  private NodeActionListener nal;
-  private ClientNodeActionListener cnal;
+
+  private NodeEventListener nel;
+  private NodeEventFilter nef;
+
+  private ClientNodeEventListener cnel;
 
   public ClientNodeController(
       String nodeName,
       ServerNodeController snc,
-      NodeActionListener nal,
-      ClientNodeActionListener cnal) {
+      NodeEventListener nel,
+      ClientNodeEventListener cnel,
+      NodeEventFilter nef) {
     this.nodeName = nodeName;
     this.snc = snc;
-    this.nal = nal;
-    this.cnal = cnal;
+    this.nel = nel;
+    this.cnel = cnel;
+    this.nef = nef;
   }
 
-  public NodeActionListener getNodeActionListener() {
-    return nal;
+  public NodeEventListener getNodeEventListener() {
+    return nel;
   }
 
-  public void setNodeActionListener(NodeActionListener nal) throws Exception {
-    if (nal != this.nal) {
-      ClientNodeActionListener newCnal = 
-        ((nal != null) ? 
-         (new ClientNodeActionListenerImpl(nal)) :
+  public void setNodeEventListener(NodeEventListener nel) throws Exception {
+    if (nel != this.nel) {
+      ClientNodeEventListener newCnel = 
+        ((nel != null) ? 
+         (new ClientNodeEventListenerImpl(nel)) :
          null);
-      snc.setClientNodeActionListener(newCnal);
-      this.nal = nal;
-      this.cnal = newCnal;
+      snc.setClientNodeEventListener(newCnel);
+      this.nel = nel;
+      this.cnel = newCnel;
+    }
+  }
+
+  public NodeEventFilter getNodeEventFilter() {
+    return nef;
+  }
+
+  public void setNodeEventFilter(
+      NodeEventFilter nef) throws Exception {
+    if (nef != this.nef) {
+      snc.setNodeEventFilter(nef);
+      this.nef = nef;
     }
   }
 
@@ -60,6 +78,9 @@ implements NodeServesClient {
   // delegate the rest
   //
 
+  public void flushNodeEvents() throws Exception {
+    snc.flushNodeEvents();
+  }
   public String getName() { //throws Exception
     //return snc.getName();
     return nodeName;  // this is faster, and name shouldn't change!

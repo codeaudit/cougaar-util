@@ -33,7 +33,7 @@ public interface CommunityServesClient {
    * Parameters are:
    *   - "where" information  (hostName, hostPort, regName)
    *   - "what" information   (nodeName, properties, args)
-   *   - "callback" hooks     (listener, stdOut, stdErr)
+   *   - "callback" hooks     (listener, listenFilter)
    * </pre>
    */
   public NodeServesClient createNode(
@@ -43,9 +43,8 @@ public interface CommunityServesClient {
       String nodeName,
       Properties nodeProperties,
       String[] commandLineArgs,
-      NodeActionListener toNodeListener,
-      Writer toOut,
-      Writer toErr) throws Exception;
+      NodeEventListener nel,
+      NodeEventFilter nef) throws Exception;
 
   //
   // could add lookup features here

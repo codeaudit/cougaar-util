@@ -12,6 +12,9 @@ package org.cougaar.tools.server.rmi;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.Writer;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -20,6 +23,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.cougaar.core.cluster.ClusterIdentifier;
+
+import org.cougaar.tools.server.NodeEvent;
+import org.cougaar.tools.server.NodeEventListener;
+import org.cougaar.tools.server.NodeEventFilter;
 
 // RMI hook to actual Node
 import org.cougaar.core.society.ExternalNodeController;
@@ -37,7 +44,8 @@ implements ServerNodeController {
 
   private String nodeName;
   private String[] cmdLine;
-  private ClientNodeActionListener cListener;
+  private ClientNodeEventListener cnel;
+  private NodeEventFilter nef;
 
   // one of the above "STATE_" values.
   //   should sync on this state!  maybe adopt a StateModel design...
@@ -52,29 +60,52 @@ implements ServerNodeController {
   private ExternalNodeController extNode;
 
   // server's implementation of ExternalNodeActionListener
-  private ServerNodeActionListener sListener;
+  private ServerNodeEventListener snel;
 
-  // various watcher threads
+  private ServerNodeEventBuffer sneb;
+
+  // various watcher Runnables
+  private HeartbeatWatcher hbWatcher;
+  private IdleWatcher idleWatcher;
   private NodeRegistrationWatcher nrWatcher; 
   private OutputWatcher stdOutWatcher;
   private OutputWatcher stdErrWatcher;
   private ProcessCompletionWatcher pcWatcher;
+
+  // Threads to run the watchers
+  private Thread hbWatcherThread;
+  private Thread idleWatcherThread;
+  private Thread nrWatcherThread;
+  private Thread stdOutWatcherThread;
+  private Thread stdErrWatcherThread;
+  private Thread pcWatcherThread;
 
   public ServerNodeControllerImpl(
       String nodeName,
       String[] cmdLine,
       String rmiHost,
       int rmiPort,
-      ClientNodeActionListener cListener,
-      ClientOutputStream cOut,
-      ClientOutputStream cErr) throws IOException {
+      ClientNodeEventListener cnel,
+      NodeEventFilter nef) throws IOException {
+
+    // check arguments
+    if (cnel == null) {
+      throw new IllegalArgumentException(
+          "Listener must be non-null");
+    } else if (nef == null) {
+      throw new IllegalArgumentException(
+          "Listening preferences must be non-null");
+    }
 
     // configure
     this.state = STATE_WAITING_FOR_REGISTRATION;
     this.exitVal = Integer.MIN_VALUE;
     this.nodeName = nodeName;
     this.cmdLine = cmdLine;
-    this.cListener = cListener;
+    this.cnel = cnel;
+    this.nef = nef;
+
+    this.sneb = new ServerNodeEventBuffer(cnel, nef);
 
     if (VERBOSE) {
       System.err.println("Creating node: ");
@@ -86,39 +117,99 @@ implements ServerNodeController {
     // spawn the node
     sysProc = Runtime.getRuntime().exec(cmdLine);
 
-    // create "watcher" threads
+    // create all the "watcher" Runnables
+
+    hbWatcher = 
+      new HeartbeatWatcher(
+          20000);
+
+    idleWatcher = 
+      new IdleWatcher(
+          5000);
+
     stdOutWatcher = 
       new OutputWatcher(
-          sysProc.getInputStream(), cOut, nodeName+"-stdout");
+          sysProc.getInputStream(), 
+          NodeEvent.STANDARD_OUT,
+          -1);
+
     stdErrWatcher = 
       new OutputWatcher(
-          sysProc.getErrorStream(), cErr, nodeName+"-stderr");
+          sysProc.getErrorStream(), 
+          NodeEvent.STANDARD_ERR,
+          -1);
+
     nrWatcher = 
       new NodeRegistrationWatcher(
-          rmiHost, rmiPort, nodeName, 4000, nodeName+"-register");
+          rmiHost, rmiPort, nodeName, 20000);
+
     pcWatcher = 
-      new ProcessCompletionWatcher(nodeName+"-proc");
+      new ProcessCompletionWatcher();
+
+    // start all the watchers
+
+    hbWatcherThread = 
+      new Thread(hbWatcher, nodeName+"-heartbeat");
+    hbWatcherThread.start();
+
+    idleWatcherThread = 
+      new Thread(idleWatcher, nodeName+"-idle");
+    idleWatcherThread.setPriority(Thread.MIN_PRIORITY);
+    idleWatcherThread.start();
+
+    nrWatcherThread =
+      new Thread(nrWatcher, nodeName+"-register");
+    nrWatcherThread.start();
+
+    stdOutWatcherThread = 
+      new Thread(stdOutWatcher, nodeName+"-stdOut");
+    stdOutWatcherThread.start();
+
+    stdErrWatcherThread = 
+      new Thread(stdErrWatcher, nodeName+"-stdErr");
+    stdErrWatcherThread.start();
+
+    pcWatcherThread = 
+      new Thread(pcWatcher, nodeName+"-proc");
+    pcWatcherThread.start();
   }
 
   //
   // Client listener support
   //
 
-  public ClientNodeActionListener getClientNodeActionListener() {
-    return cListener;
+  public ClientNodeEventListener getClientNodeEventListener() {
+    return cnel;
   }
 
-  public void setClientNodeActionListener(
-      ClientNodeActionListener cListener) {
-    assertIsRegistered();
+  public void setClientNodeEventListener(
+      ClientNodeEventListener cnel) {
+    assertIsAlive();
     try {
-      ServerNodeActionListener nsListener =
-        ((cListener != null) ? 
-         (new ServerNodeActionListenerImpl(this, cListener)) :
-         null);
-      extNode.setExternalNodeActionListener(nsListener);
-      this.cListener = cListener;
-      this.sListener = nsListener;
+      sneb.setClientNodeEventListener(cnel);
+      this.cnel = cnel;
+    } catch (Exception e) {
+      if (VERBOSE) {
+        System.err.println("Lost node control: Killing "+nodeName);
+      }
+      //e.printStackTrace();
+      destroy();
+      throw new IllegalStateException(
+          "Lost node control");
+    }
+  }
+
+  public NodeEventFilter getNodeEventFilter() {
+    return nef;
+  }
+
+  public void setNodeEventFilter(
+      NodeEventFilter nef) {
+    assertIsAlive();
+    try {
+      //extNode.setNodeEventFilter(nef);
+      sneb.setNodeEventFilter(nef);
+      this.nef = nef;
     } catch (Exception e) {
       if (VERBOSE) {
         System.err.println("Lost node control: Killing "+nodeName);
@@ -164,7 +255,7 @@ implements ServerNodeController {
   public boolean waitForRegistration(long millis) {
     if (state == STATE_WAITING_FOR_REGISTRATION) {
       try {
-        nrWatcher.join(millis);
+        nrWatcherThread.join(millis);
       } catch (InterruptedException e) {
       }
       return (state == STATE_REGISTERED);
@@ -190,7 +281,7 @@ implements ServerNodeController {
   public int waitForCompletion(long millis) {
     if (state != STATE_DEAD) {
       try {
-        pcWatcher.join(millis);
+        pcWatcherThread.join(millis);
       } catch (InterruptedException e) {
       }
       if (state != STATE_DEAD) {
@@ -218,6 +309,25 @@ implements ServerNodeController {
     }
   }
 
+  public void flushNodeEvents() throws RemoteException {
+    sneb.flushNodeEvents();
+  }
+
+  private void bufferEvent(
+      int type) throws Exception {
+    bufferEvent(type, null);
+  }
+
+  private void bufferEvent(
+      int type, String s) throws Exception {
+    bufferEvent(new NodeEvent(type, s));
+  }
+  
+  private void bufferEvent(
+      NodeEvent ne) throws Exception {
+    sneb.addNodeEvent(ne);
+  }
+
   public void destroy() {
     if (state != STATE_DEAD) {
       state = STATE_DEAD;
@@ -226,12 +336,10 @@ implements ServerNodeController {
         sysProc.destroy();
         sysProc = null;
       }
-      if (cListener != null) {
-        try {
-          cListener.handleNodeDestroyed(this);
-        } catch (Exception e) {
-        }
-        cListener = null;
+      try {
+        bufferEvent(NodeEvent.NODE_DESTROYED);
+        flushNodeEvents();
+      } catch (Exception e) {
       }
       //
       // clean up Threads!
@@ -274,7 +382,7 @@ implements ServerNodeController {
       case STATE_WAITING_FOR_REGISTRATION:
         // waiting for node to register
         //
-        // could "nrWatcher.join()", but for now make the client 
+        // could "nrWatcherThread.join()", but for now make the client 
         //   use "waitForRegistration()"
         throw new IllegalStateException(
             "Waiting for node to register");
@@ -324,14 +432,109 @@ implements ServerNodeController {
   //
 
   //
-  // These are inner-class "watcher" Threads
+  // These are inner-class output wrappers
   //
+
+  //
+  // These are inner-class "watcher" Runnables
+  //
+
+  /**
+   * Make sure that the client is still alive.
+   */
+  class HeartbeatWatcher implements Runnable {
+
+    public static final long MIN_INTERVAL_MILLIS = 10000;
+    private long intervalMillis;
+
+    public HeartbeatWatcher(
+        long intervalMillis) {
+      this.intervalMillis = intervalMillis;
+      if (intervalMillis < MIN_INTERVAL_MILLIS) {
+        this.intervalMillis = MIN_INTERVAL_MILLIS;
+      }
+    }
+
+    public void run() {
+      try {
+        while (ServerNodeControllerImpl.this.isAlive()) {
+          // beat
+          bufferEvent(NodeEvent.HEARTBEAT);
+          try {
+            Thread.sleep(intervalMillis);
+          } catch (Exception e) {
+          }
+        }
+      } catch (Exception e) {
+        if (VERBOSE) {
+          System.err.println("Client died (heartbeat): Killing "+nodeName);
+          e.printStackTrace();
+        }
+        ServerNodeControllerImpl.this.destroy();
+      }
+    }
+  }
+
+  /**
+   * Check for machine idleness.
+   */
+  class IdleWatcher implements Runnable {
+
+    public static final long MIN_INTERVAL_MILLIS = 10000;
+    private long intervalMillis;
+
+    public IdleWatcher(
+        long intervalMillis) {
+      this.intervalMillis = intervalMillis;
+      if (intervalMillis < MIN_INTERVAL_MILLIS) {
+        this.intervalMillis = MIN_INTERVAL_MILLIS;
+      }
+    }
+
+    public void run() {
+      try {
+        long prevTime = System.currentTimeMillis();
+        while (true) {
+          // sleep
+          try {
+            Thread.sleep(intervalMillis);
+          } catch (Exception e) {
+          }
+          // wake
+          if (!(ServerNodeControllerImpl.this.isAlive())) {
+            break;
+          }
+          // measure how long we've slept (1 +/- epsilon)
+          long nowTime = System.currentTimeMillis();
+          long diffTime = ((nowTime - prevTime) - intervalMillis);
+          if (diffTime < 0) {
+            diffTime = 0;
+          }
+          double percent = (((double)diffTime) / intervalMillis);
+          // tell the client
+          bufferEvent(
+              NodeEvent.IDLE_UPDATE, 
+              Double.toString(percent));
+          prevTime = nowTime;
+        }
+      } catch (Exception e) {
+        if (VERBOSE) {
+          System.err.println("Client died (idle): Killing "+nodeName);
+          e.printStackTrace();
+        }
+        ServerNodeControllerImpl.this.destroy();
+      }
+    }
+  }
 
   /**
    * Waits for node to register, which provides "this" with the
    * <code>ExternalNodeController</code>.
+   * <p>
+   * Could convert this from a poll to a Node-push by having the
+   * Node call a method in a ServerDaemon-registed object.
    */
-  class NodeRegistrationWatcher extends Thread {
+  class NodeRegistrationWatcher implements Runnable {
 
     public static final long MIN_PAUSE_MILLIS = 2000;
 
@@ -344,9 +547,7 @@ implements ServerNodeController {
         String rmiName,
         int rmiPort,
         String regName,
-        long pauseMillis,
-        String threadName) {
-      super(threadName);
+        long pauseMillis) {
 
       // configure
       this.rmiName = rmiName;
@@ -356,8 +557,6 @@ implements ServerNodeController {
         ((pauseMillis > MIN_PAUSE_MILLIS) ?
          (pauseMillis) :
          (MIN_PAUSE_MILLIS));
-
-      start();
     }
 
     public void run() {
@@ -382,6 +581,9 @@ implements ServerNodeController {
           try {
             enc = (ExternalNodeController)reg.lookup(regName);
             if (enc != null) {
+              if (VERBOSE) {
+                System.err.println("lookup succeeded");
+              }
               break;
             }
           } catch (Exception e) {
@@ -403,32 +605,23 @@ implements ServerNodeController {
           // give up after some MAX retries?
         }
 
-        // register the "cListener" with the Node for
+        // register the "cnel" with the Node for
         //   intra-node listening (e.g. "added cluster")
         //
         // note that we will miss some activity, due to the RMI 
         //   sleep/lookup above!  Alternative is to indicate that
         //   there will be a listener at startup and then queue within
         //   the Node until the listener is set...
-        ServerNodeActionListener snal;
-        if (cListener != null) {
-          snal = 
-            new ServerNodeActionListenerImpl(
-                ServerNodeControllerImpl.this, 
-                cListener);
-          enc.setExternalNodeActionListener(snal);
-        } else {
-          snal = null;
-        }
+        ServerNodeEventListener snel =
+          new ServerNodeEventListenerImpl(sneb);
+        enc.setExternalNodeActionListener(snel);
 
         // node has been created and is running
         ServerNodeControllerImpl.this.extNode = enc;
-        ServerNodeControllerImpl.this.sListener = snal;
+        ServerNodeControllerImpl.this.snel = snel;
         ServerNodeControllerImpl.this.state = STATE_REGISTERED;
 
-        if (cListener != null) {
-          cListener.handleNodeCreated(ServerNodeControllerImpl.this);
-        }
+        bufferEvent(NodeEvent.NODE_CREATED);
       } catch (Exception e) {
         if (VERBOSE) {
           System.err.println("Client died (registration): Killing "+nodeName);
@@ -440,36 +633,49 @@ implements ServerNodeController {
   }
 
   /**
-   * Periodically push local stdout to the remote stream.
+   * <code>Writer</code> that buffers the output and sends output events.
    * <p>
-   * Should replace this with a pull model, with a keep-alive to verify
-   * client existence.  Additionally could set upper-bounds on buffered
-   * data to keep log size minimal iff the client prefers...
+   * <pre>
+   * Can enhance to optionally buffer and only send to client when:
+   *   - client forces "flush"  (i.e. client grabs output)
+   *   - some maximum buffer size exceeded (i.e. client lets the
+   *       server decide, but client can alter it's listen-prefs
+   *       to make this occur often/rarely).  Alternately the 
+   *       client should be able to specify a "spill" option
+   *       to discard the output instead of sending it.
+   *   - client toggles some "no-buffer" option (i.e. every "write"
+   *       get's sent without buffering)
+   *   - some maximum time exceeded (probably a bad idea to 
+   *       introduce yet another Thread here!)
+   * Could also use a file as a buffer.
+   * </pre>
    */
-  class OutputWatcher extends Thread {
-    private ClientOutputStream out;
-    private InputStream in;
+
+  class OutputWatcher implements Runnable {
+    private Reader in;
+    private int typeWrite;
+    private int typeClose;
 
     public OutputWatcher(
         InputStream in, 
-        ClientOutputStream out, 
-        String threadName) {
-      super(threadName);
-      this.in = in;
-      this.out = out;
-      start();
+        int typeWrite,
+        int typeClose) {
+      // don't buffer this input stream for now, otherwise we can't
+      //   see line-by-line output (?)
+      this.in = new InputStreamReader(in);
+      this.typeWrite = typeWrite;
+      this.typeClose = typeClose;
     }
 
     public void run() {
-      ClientOutputStream.ByteArray buffer = 
-        new ClientOutputStream.ByteArray(1024);
       try {
+        char[] cbuf = new char[1024];
         while (true) {
-          buffer.nBytes = in.read(buffer.buffer);
-          if (buffer.nBytes <= 0) {
+          int len = in.read(cbuf);
+          if (len <= 0) {
             return;  // End of file or error
           }
-          out.write(buffer);
+          bufferEvent(typeWrite, new String(cbuf, 0, len));
         }
       } catch (Exception e) {
         if (VERBOSE) {
@@ -479,7 +685,7 @@ implements ServerNodeController {
         ServerNodeControllerImpl.this.destroy();
       } finally {
         try {
-          out.close();
+          bufferEvent(typeClose);
         } catch (Exception ioe) {
           //ioe.printStackTrace();
         }
@@ -490,19 +696,14 @@ implements ServerNodeController {
   /**
    * Waits for node process to complete.
    */
-  class ProcessCompletionWatcher extends Thread {
-
-    public ProcessCompletionWatcher(String threadName) {
-      super(threadName);
-      start();
-    }
+  class ProcessCompletionWatcher implements Runnable {
 
     public void run() {
       try {
         exitVal = sysProc.waitFor();
         // send any remaining output
-        stdOutWatcher.join();
-        stdErrWatcher.join();
+        stdOutWatcherThread.join();
+        stdErrWatcherThread.join();
         ServerNodeControllerImpl.this.destroy();
       } catch (InterruptedException ie) {
       }

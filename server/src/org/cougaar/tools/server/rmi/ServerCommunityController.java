@@ -16,6 +16,8 @@ import java.net.*;
 import java.rmi.*;
 import java.rmi.registry.*;
 
+import org.cougaar.tools.server.NodeEventFilter;
+
 /** 
  * Server-side API to create and control Nodes on a single machine.
  **/
@@ -26,10 +28,9 @@ extends Remote {
   ServerNodeController createNode(
       String nodeName, 
       Properties props, 
-      String args[], 
-      ClientNodeActionListener cListener,
-      ClientOutputStream cOut, 
-      ClientOutputStream cErr)
+      String[] args,
+      ClientNodeEventListener cListener,
+      NodeEventFilter nef)
     throws IOException, RemoteException;
 
   /** Kill the named Node **/

@@ -23,6 +23,6 @@ import org.cougaar.core.society.ExternalNodeActionListener;
  * though the actual implementation (non-RMI-stub) code resides on 
  * the server.  This marker interface fixes that naming.
  */
-public interface ServerNodeActionListener 
+public interface ServerNodeEventListener 
 extends ExternalNodeActionListener {
 }
