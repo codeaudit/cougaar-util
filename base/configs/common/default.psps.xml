@@ -17,6 +17,22 @@ Additional PSPs loaded by PSP Launcher
 
 <object type="java.util.Vector">
 
+  <!-- KAoS
+  -->
+  <element type="org.cougaar.lib.planserver.NamedPSP">
+    <Classname>SAFE.PolicyManager.PSP_EditBlackboardObject</Classname>
+    <PSPName>EditBlackboardObject.PSP</PSPName>
+  </element>
+  <element type="org.cougaar.lib.planserver.NamedPSP">
+    <Classname>SAFE.PolicyManager.PSP_PolicyAdministrator</Classname>
+    <PSPName>PolicyAdministrator.PSP</PSPName>
+  </element>
+  <element type="org.cougaar.lib.planserver.NamedPSP">
+    <Classname>SAFE.PolicyManager.PSP_RemoteShutdown</Classname>
+    <PSPName>RemoteShutdown.PSP</PSPName>
+  </element>
+
+
   <!-- Core PSPs  
        Keep the old "alpine/demo" paths, even though these are now core.
   -->
