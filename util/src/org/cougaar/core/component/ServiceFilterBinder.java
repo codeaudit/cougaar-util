@@ -211,7 +211,7 @@ public abstract class ServiceFilterBinder
       if (sp != null) releaseServiceProxy(sp, t.getService(), t.getServiceClass());
 
       // really release the service
-      super.releaseService(t.getRequestedClient(), t.getServiceClass(), t.getReturnedService());
+      super.releaseService(t.getRequestedClient(), t.getServiceClass(), t.getService());
 
       // release our client proxy
       Object cp = t.getClientProxy();
