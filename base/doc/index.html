@@ -75,9 +75,16 @@ changed include: BlackboardService (and therefore PluginAdapter) and the
 ThreadService.
 
 <ul>
-<li>Change to use JDK Hotspot Server VM by default (-server flag). On
-some systems this requires modifying the System path such that
-JDK/bin/java is found before any JRE version of java.</li>
+<li>The AggAgent should be run in a node using  the 
+JDK Hotspot Server VM (-server flag). On
+some windows systems this requires modifying the System path such that
+JDK/bin/java is found before any JRE version of java.
+Use of the server VM appears to avoid one known bug VM bug
+(see <a href="https://www.alpine.bbn.com/bugzilla/show_bug.cgi?id=1252">
+bugzilla bug 1252</a>) but may slow down general execution speed
+and exposes another VM bug (see <a href="https://www.alpine.bbn.com/bugzilla/show_bug.cgi?id=1322">
+bugzilla bug 1322</a>).
+</li>
 <li>javaiopatch Jar file is now always required, to support Agent
 Mobility. Node startup scripts have been updated to match. Users may
 need to update their AppServer properties files to match. See the
