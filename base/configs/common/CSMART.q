@@ -375,3 +375,8 @@ queryGetPluginClasses = \
   SELECT COMPONENT_CLASS \
     FROM v4_lib_component \
    WHERE COMPONENT_TYPE = 'plugin'
+
+queryGetBinderClasses = \
+  SELECT COMPONENT_CLASS \
+    FROM v4_lib_component \
+   WHERE COMPONENT_TYPE = 'agent binder'
