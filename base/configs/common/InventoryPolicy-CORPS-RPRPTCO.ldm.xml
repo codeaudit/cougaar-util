@@ -6,7 +6,7 @@
 
 <Policies>
 
- <Policy name="ConsumableInventoryPolicy" type="org.cougaar.domain.glm.plugins.inventory.InventoryPolicy">
+ <Policy name="ConsumableInventoryPolicy" type="org.cougaar.glm.plugins.inventory.InventoryPolicy">
     <RuleParam name="ResourceType">
       	<String value ="Consumable">
 	</String>
