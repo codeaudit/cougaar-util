@@ -26,7 +26,7 @@
 #
 # COUGAAR bootstrapping classpath will be:
 #  $COUGAAR_DEV_PATH	if defined
-#  $COUGAAR_INSTALL_PATH/lib/core.jar
+#  $COUGAAR_INSTALL_PATH/lib/bootstrap.jar
 #
 # once running, jar files will be searched for in (in order):
 #  -Dalp.class.path 	like classpath
@@ -42,7 +42,7 @@ if (! $?COUGAAR3RDPARTY) then
     setenv COUGAAR3RDPARTY /opt/cougaar-jars
 endif
 
-set LIBPATHS=$COUGAAR_INSTALL_PATH/lib/core.jar
+set LIBPATHS=$COUGAAR_INSTALL_PATH/lib/bootstrap.jar
 set devp = ""
 if ($?COUGAAR_DEV_PATH) then
     set devp "-Dorg.cougaar.class.path=${COUGAAR_DEV_PATH}"

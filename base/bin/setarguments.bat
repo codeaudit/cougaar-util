@@ -24,7 +24,7 @@ rem Domains are now usually defined by the config file LDMDomains.ini
 rem But you may still use properties if you wish.
 rem set MYDOMAINS=-Dorg.cougaar.domain.alp=org.cougaar.glm.GLMDomain
 set MYDOMAINS=
-set MYCLASSES=org.cougaar.core.node.Node
+set MYCLASSES=org.cougaar.bootstrap.Bootstrapper org.cougaar.core.node.Node
 
 set MYPROPERTIES=-Dorg.cougaar.system.path=%COUGAAR3RDPARTY% -Dorg.cougaar.install.path=%COUGAAR_INSTALL_PATH% -Duser.timezone=GMT -Dorg.cougaar.core.agent.startTime=08/10/2005 -Dorg.cougaar.class.path=%COUGAAR_DEV_PATH%
 

@@ -24,7 +24,7 @@ if (! $?COUGAAR3RDPARTY) then
     setenv COUGAAR3RDPARTY /opt/cougaar-jars
 endif
 
-set LIBPATHS=$COUGAAR_INSTALL_PATH/lib/core.jar
+set LIBPATHS=$COUGAAR_INSTALL_PATH/lib/bootstrap.jar
 if ($?COUGAAR_DEV_PATH) then
     set LIBPATHS = "${COUGAAR_DEV_PATH}:$LIBPATHS"
 endif
@@ -43,7 +43,7 @@ endif
 
 set javaargs="$osargs $MYPROPERTIES $MYMEMORY -classpath $LIBPATHS"
 
-set bt="org.cougaar.core.node.Bootstrapper"
+set bt="org.cougaar.bootstrap.Bootstrapper"
 set cl="org.cougaar.mlm.ui.planviewer.inventory.InventoryChartUI"
 
 if ($?COUGAAR_DEV_PATH) then

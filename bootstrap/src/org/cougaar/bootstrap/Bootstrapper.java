@@ -78,12 +78,12 @@ import java.security.cert.*;
  * core classes which exist in a different namespace than Bootstrapper-loaded
  * classes.  This problem will cause all sorts of loading problems.
  * <p>
- * The System property <em>org.cougaar.core.node.bootstrapper.loud</em>
+ * The System property <em>org.cougaar.bootstrap.Bootstrapper.loud</em>
  * controls debugging output of the bootstrapping classloader.  When set to
  * "true" will output the list of jar/zip files used to load classes (in order).
  * When set to "shout" will additionally print the location of the jar/zip file
  * used to load each and every class.
- * @property org.cougaar.core.node.bootstrapper.loud=false Set to "true" to 
+ * @property org.cougaar.bootstrap.Bootstrapper.loud=false Set to "true" to 
  * information about classloader path and order.  Set to "loud" to get information
  * about where each loaded class comes from.
  * @property org.cougaar.properties.url=URL Set to specify where an additional
@@ -98,7 +98,7 @@ public class Bootstrapper
 {
   private static int loudness = 0;
   static {
-    String s = System.getProperty("org.cougaar.core.node.bootstrapper.loud");
+    String s = System.getProperty("org.cougaar.bootstrap.Bootstrapper.loud");
     if ("true".equals(s)) {
       loudness = 1;
     } else if ("shout".equals(s)) {

@@ -37,8 +37,8 @@ java.Xbootclasspath/p=D\:\\opt\\cougaar\\lib\\javaiopatch.jar
 
 # Set the classpath for starting the Node, which uses ";" separators.
 #
-# Typically only core.jar needs to be in here.
-java.class.path=D\:\\opt\\cougaar\\lib\\core.jar
+# Typically only bootstrap.jar needs to be in here.
+java.class.path=D\:\\opt\\cougaar\\lib\\bootstrap.jar
 
 # Set the config path, which uses ";" separators.
 #

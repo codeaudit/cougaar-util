@@ -34,7 +34,7 @@ os=`uname`
 SEP=";"
 if [ $os = "Linux" -o $os = "SunOS" ]; then SEP=":"; fi
 
-LIBPATHS=$COUGAAR_INSTALL_PATH/lib/core.jar
+LIBPATHS=$COUGAAR_INSTALL_PATH/lib/bootstrap.jar
 DEVP=""
 if [ "$COUGAAR_DEV_PATH" != "" ]; then
     DEVP="-Dorg.cougaar.class.path=${COUGAAR_DEV_PATH}"

@@ -28,7 +28,7 @@
 # set MYDOMAINS=-Dorg.cougaar.domain.alp=org.cougaar.glm.GLMDomain
 
 MYDOMAINS=""
-BOOTSTRAPPER=org.cougaar.core.node.Bootstrapper
+BOOTSTRAPPER=org.cougaar.bootstrap.Bootstrapper
 MYCLASSES=org.cougaar.core.node.Node
 OS=`uname`
 # No green threads in jdk 1.3.1

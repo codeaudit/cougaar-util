@@ -30,7 +30,7 @@
 setenv COUGAAR_DEV_PATH $COUGAAR_INSTALL_PATH/lib/sra.jar
 
 ## All listed are requisite
-setenv CLASSPATH ${COUGAAR_INSTALL_PATH}/lib/core.jar:${COUGAAR_INSTALL_PATH}/lib/glm.jar:${COUGAAR_INSTALL_PATH}/lib/planserver.jar:${COUGAAR_INSTALL_PATH}/lib/jcchart400K.jar:${COUGAAR_INSTALL_PATH}/lib/xerces.jar:${COUGAAR_DEV_PATH}
+setenv CLASSPATH ${COUGAAR_INSTALL_PATH}/lib/bootstrap.jar:${COUGAAR_INSTALL_PATH}/lib/util.jar:${COUGAAR_INSTALL_PATH}/lib/core.jar:${COUGAAR_INSTALL_PATH}/lib/glm.jar:${COUGAAR_INSTALL_PATH}/lib/planserver.jar:${COUGAAR_INSTALL_PATH}/lib/jcchart400K.jar:${COUGAAR_INSTALL_PATH}/lib/xerces.jar:${COUGAAR_DEV_PATH}
 
 set MYCLASSES="org.cougaar.css.ui.ClusterDisplay"
 

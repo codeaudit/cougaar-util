@@ -1,3 +1,23 @@
+* 9.2
+Cougaar now requires JDK 1.4.
+
+Bootstrapper has been moved: it is now in the bootstrap module
+(bootstrap.jar) and is in the package org.cougaar.bootstrap.  All
+known scripts have been updated.
+
+Node is now represented by a NodeAgent, which is a genuine agent in
+all respects.  NodeAgent has special privileges required to control
+the node.
+
+org.cougaar.util and org.cougaar.core.component have moved to the util
+module (util.jar).  No package changes.
+
+Exceptions thrown by the component model are now generally runtime
+exceptions rather than checked ones.  The actual exception
+implementations now use the new exception class abilities offered by
+jdk 1.4.
+
+* 9.0
 
 * 8.6.1
 New plugin scheduler allows running plugins (and other clients) from a

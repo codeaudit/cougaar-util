@@ -41,7 +41,7 @@ if "%1"=="admin" set MYARGUMENTS= -n Administrator -c -r -p 8000
 if "%1"=="admin" set MYMEMORY= -Djava.compiler=NONE -Xms16m 
 if "%1"=="EmptyNode" set MYMEMORY= -Xms16m 
 
-set LIBPATHS=%COUGAAR_INSTALL_PATH%\lib\core.jar
+set LIBPATHS=%COUGAAR_INSTALL_PATH%\lib\bootstrap.jar
 set LIBPATHS=%LIBPATHS%;%COUGAAR_INSTALL_PATH%\lib\glm.jar
 set LIBPATHS=%LIBPATHS%;%COUGAAR_INSTALL_PATH%\lib\planserver.jar
 set LIBPATHS=%LIBPATHS%;%COUGAAR_INSTALL_PATH%\lib\toolkit.jar
@@ -50,7 +50,8 @@ set LIBPATHS=%LIBPATHS%;%COUGAAR_INSTALL_PATH%\lib\blackjack.jar
 set LIBPATHS=%LIBPATHS%;%COUGAAR_INSTALL_PATH%\lib\j2ee.jar
 set LIBPATHS=%LIBPATHS%;%COUGAAR_INSTALL_PATH%\lib\vgj.jar
 set LIBPATHS=%LIBPATHS%;%COUGAAR_INSTALL_PATH%\lib\jcchart451K.jar
-set LIBPATHS=%LIBPATHS%;%COUGAAR_INSTALL_PATH%\lib\omcore.jar
+set LIBPATHS=%LIBPATHS%;%COUGAAR_INSTALL_PATH%\lib\util.jar
+set LIBPATHS=%LIBPATHS%;%COUGAAR_INSTALL_PATH%\lib\core.jar
 
 set LIBPATHS=%LIBPATHS%;%COUGAAR_INSTALL_PATH%\lib\openmap.jar
 set LIBPATHS=%LIBPATHS%;%COUGAAR_INSTALL_PATH%\lib\scalability.jar
