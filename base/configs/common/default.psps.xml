@@ -21,6 +21,11 @@ Additional PSPs loaded by PSP Launcher
        Keep the old "alpine/demo" paths, even though these are now core.
   -->
   <element type="org.cougaar.lib.planserver.NamedPSP">
+    <Classname>org.cougaar.domain.mlm.ui.psp.naming.PSP_YPDemo</Classname>
+    <PSPName>ul/demo/YPDEMO.PSP</PSPName>
+  </element>
+
+  <element type="org.cougaar.lib.planserver.NamedPSP">
     <Classname>org.cougaar.lib.planserver.psp.PSP_EditPSPBlackBoard</Classname>
     <PSPName>alpine/demo/EBB.PSP</PSPName>
   </element>
