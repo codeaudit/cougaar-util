@@ -394,7 +394,7 @@ public class DBConnectionPool {
 	  }
         } catch (SQLException sqle) {
           // Since the entry that contains this Connection still exists, we
-          // should explicitly kill this entry after the pool is des
+          // should explicitly kill this entry after the pool is destroyed
           destroyPool();
           DBConnectionPoolEntry entry = DBConnectionPoolEntry.this;
           entry.destroy();
@@ -2180,6 +2180,7 @@ public class DBConnectionPool {
       if (!entry.inUse)
         entry.destroy();
     }
+    notifyAll();
   }
 
   /** Encapsulate logic to decide if a given exception is likely to be 
@@ -2284,6 +2285,7 @@ public class DBConnectionPool {
   private synchronized void delete(DBConnectionPoolEntry entry) {
     entries.remove(entry);
     entry.destroy();
+    notifyAll();
   }
 
   private synchronized void release(DBConnectionPoolEntry entry) {
