@@ -40,6 +40,7 @@ import org.cougaar.util.log.*;
 public final class Configuration {
   public static final String INSTALL_PATH_PROP = "org.cougaar.install.path";
   public static final String CONFIG_PATH_PROP = "org.cougaar.config.path";
+  public static final String WORKSPACE_PROP = "org.cougaar.workspace";
   public static final String CONFIG_PROP = "org.cougaar.config";
   public static final String USER_HOME_PROP = "user.home";
   public static final String USER_DIR_PROP = "user.dir";
@@ -51,6 +52,7 @@ public final class Configuration {
   private static Map defaultProperties;
   private static URL installUrl;
   private static URL configUrl;
+  private static URL workspaceUrl;
   private static String configPath;
 
   /** Configuration is uninstantiable **/
@@ -67,18 +69,20 @@ public final class Configuration {
   /** @return the current config directory (or common, if undefined) **/
   public static URL getConfigURL() { return configUrl; }
 
+  /** @return the workspace location **/
+  public static URL getWorkspaceURL() { return workspaceUrl; }
+
   /** @return the (static) default properties **/
   public static Map getDefaultProperties() { return defaultProperties; }
 
-
-  /** return the index of the first non-alphanumeric character 
+  /** return the index of the first non-alphanumeric, non-underbar character 
    * at or after i.
    **/
   private static int indexOfNonAlpha(String s, int i) {
     int l = s.length();
     for (int j = i; j<l; j++) {
       char c = s.charAt(j);
-      if (!Character.isLetterOrDigit(c)) return j;
+      if (!Character.isLetterOrDigit(c) && c!='_') return j;
     }
     return -1;
   }
@@ -140,6 +144,13 @@ public final class Configuration {
     return filenameToURL(rs);
   }
 
+  /** resolve Configuration variables (default ones only) in the argument
+   * string. For example, convert "$INSTALL/foo.txt" to "/opt/cougaar/030330/foo.txt"
+   **/
+  public final static String resolveValue(String el) {
+    return substituteProperties(el, defaultProperties);
+  }
+
   static {
     Map m = new HashMap();
 
@@ -147,8 +158,16 @@ public final class Configuration {
     try { ipf = ipf.getCanonicalFile(); } catch (IOException ioe) {}
     String ipath = ipf.toString();
     m.put("INSTALL", ipath);
+    m.put("CIP", ipath);        // alias for INSTALL
+    m.put("COUGAAR_INSTALL_PATH", ipath); // for completeness
     try {
       installUrl = urlify(ipath);
+    } catch (MalformedURLException e) { e.printStackTrace(); }
+
+    String ws = System.getProperty(WORKSPACE_PROP, ipath+"/workspace");
+    m.put("WORKSPACE",ws);
+    try {
+      workspaceUrl = urlify(ws);
     } catch (MalformedURLException e) { e.printStackTrace(); }
 
     m.put("HOME", System.getProperty(USER_HOME_PROP));
