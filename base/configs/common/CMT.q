@@ -204,7 +204,7 @@ SELECT DISTINCT ':assembly_id'  AS ASSEMBLY_ID, \
   LEFT JOIN V4_ASB_AGENT AA ON \
   (AA.COMPONENT_ALIB_ID=GO.ORG_ID AND AA.ASSEMBLY_ID= ':assembly_id') \
  WHERE GO.CFW_GROUP_ID= ':cfw_group_id' \
-  AA.COMPONENT_ALIB_ID IS NULL \
+  AND AA.COMPONENT_ALIB_ID IS NULL \
   AND AC.COMPONENT_ALIB_ID=GO.ORG_ID
 
 addBaseASBAgentsInsert = \
@@ -263,7 +263,7 @@ CREATE TEMPORARY TABLE TMP_V4_ALIB_COMPONENT_:short_assembly_id AS \
 	  (VAC.COMPONENT_ALIB_ID=CONCAT(AA.COMPONENT_ALIB_ID,'|',PL.PLUGIN_CLASS)) \
    WHERE \
      AA.ASSEMBLY_ID=  ':assembly_id' \
-	 AND VAC.COMPONENT_ALIB_ID IS NULL \
+     AND VAC.COMPONENT_ALIB_ID IS NULL \
      AND AA.COMPONENT_LIB_ID=OT.ORG_ID \
      AND OT.CFW_ID IN :cfw_instances \
      AND PG.CFW_ID IN :cfw_instances \
@@ -273,14 +273,14 @@ CREATE TEMPORARY TABLE TMP_V4_ALIB_COMPONENT_:short_assembly_id AS \
      AND PTH.THREAD_ID IN :threads
 
 addNewPluginAlibComponentsInsert = \
-INSERT INTOV4_ALIB_COMPONENT \
+INSERT INTO V4_ALIB_COMPONENT \
  (COMPONENT_ALIB_ID, COMPONENT_NAME , COMPONENT_LIB_ID, COMPONENT_TYPE , CLONE_SET_ID) \
  SELECT \
   COMPONENT_ALIB_ID, COMPONENT_NAME , COMPONENT_LIB_ID, COMPONENT_TYPE , CLONE_SET_ID \
  FROM TMP_V4_ALIB_COMPONENT_:short_assembly_id
   
 addNewPluginAlibComponentsDrop = \
-DROP TABLE V4_ALIB_COMPONENT_:short_assembly_id
+DROP TABLE TMP_V4_ALIB_COMPONENT_:short_assembly_id
 
 addPluginASBComponentHierarchyQueries = addPluginASBComponentHierarchy
 
@@ -300,7 +300,7 @@ addPluginASBComponentHierarchy = \
      V6_CFW_PLUGIN_GROUP_MEMBER PL, \
      V6_LIB_PLUGIN_THREAD PTH \
     WHERE \
-       AA.ASSEMBLY_ID= ':assembly_id' \
+      AA.ASSEMBLY_ID= ':assembly_id' \
       AND AA.COMPONENT_LIB_ID=OT.ORG_ID \
       AND OPG.CFW_ID IN :cfw_instances \
       AND OT.CFW_ID IN :cfw_instances \
@@ -314,15 +314,15 @@ addPluginASBComponentHierarchy = \
        (SELECT COMPONENT_ALIB_ID \
          FROM  V4_ASB_COMPONENT_HIERARCHY ACH \
          WHERE \
-		 	  ACH.ASSEMBLY_ID=':assembly_id' \
-			  AND ACH.COMPONENT_ALIB_ID=(AA.COMPONENT_ALIB_ID || '|' ||  PL.PLUGIN_CLASS) \
-			  AND ACH.PARENT_COMPONENT_ALIB_ID=AA.COMPONENT_ALIB_ID)
+	 ACH.ASSEMBLY_ID=':assembly_id' \
+	 AND ACH.COMPONENT_ALIB_ID=(AA.COMPONENT_ALIB_ID || '|' ||  PL.PLUGIN_CLASS) \
+	 AND ACH.PARENT_COMPONENT_ALIB_ID=AA.COMPONENT_ALIB_ID)
 
 
 addPluginASBComponentHierarchyQueries.mysql = addPluginASBComponentHierarchyCreateTable addPluginASBComponentHierarchyInsert addPluginASBComponentHierarchyDrop
 
 addPluginASBComponentHierarchyCreateTable = \
-CREATE TEMPORARY TABLE TMP_V4_ASB_COMPONENT_HIERARCHY:assembly_id AS \
+CREATE TEMPORARY TABLE TMP_V4_ASB_COMPONENT_HIERARCHY:short_assembly_id AS \
   SELECT DISTINCT \
     ':assembly_id' AS ASSEMBLY_ID, \
     CONCAT(AA.COMPONENT_ALIB_ID,'|',PL.PLUGIN_CLASS) AS COMPONENT_ALIB_ID, \
@@ -341,7 +341,7 @@ CREATE TEMPORARY TABLE TMP_V4_ASB_COMPONENT_HIERARCHY:assembly_id AS \
 		AND ACH.PARENT_COMPONENT_ALIB_ID=AA.COMPONENT_ALIB_ID) \
     WHERE \
       AA.ASSEMBLY_ID= ':assembly_id' \
-	  AND ACH.ASSEMBLY_ID IS NULL \
+      AND ACH.ASSEMBLY_ID IS NULL \
       AND AA.COMPONENT_LIB_ID=OT.ORG_ID \
       AND OPG.CFW_ID IN :cfw_instances \
       AND OT.CFW_ID IN :cfw_instances \
@@ -356,10 +356,10 @@ addPluginASBComponentHierarchyInsert = \
 INSERT INTO  V4_ASB_COMPONENT_HIERARCHY \
   (ASSEMBLY_ID, COMPONENT_ALIB_ID, PARENT_COMPONENT_ALIB_ID, INSERTION_ORDER) \
  SELECT ASSEMBLY_ID, COMPONENT_ALIB_ID, PARENT_COMPONENT_ALIB_ID, INSERTION_ORDER \
-  FROM TMP_V4_ASB_COMPONENT_HIERARCHY:assembly_id
+  FROM TMP_V4_ASB_COMPONENT_HIERARCHY:short_assembly_id
 
 addPluginASBComponentHierarchyDrop = \
-DROP TABLE TMP_V4_ASB_COMPONENT_HIERARCHY:assembly_id
+DROP TABLE TMP_V4_ASB_COMPONENT_HIERARCHY:short_assembly_id
 
 addAgentNameComponentArgQueries = addAgentNameComponentArg
 
@@ -387,7 +387,7 @@ addAgentNameComponentArg = \
 addAgentNameComponentArgQueries.mysql = addAgentNameComponentArgCreateTable addAgentNameComponentArgInsert addAgentNameComponentArgDrop
 
 addAgentNameComponentArgCreateTable = \
-CREATE TEMPORARY TABLE TMP_V4_ASB_COMPONENT_ARG:assembly_id AS \
+CREATE TEMPORARY TABLE TMP_V4_ASB_COMPONENT_ARG:short_assembly_id AS \
   SELECT DISTINCT \
    ':assembly_id'  AS ASSEMBLY_ID, \
    AA.COMPONENT_ALIB_ID AS COMPONENT_ALIB_ID, \
@@ -407,10 +407,10 @@ addAgentNameComponentArgInsert = \
  INSERT INTO  V4_ASB_COMPONENT_ARG \
   (ASSEMBLY_ID, COMPONENT_ALIB_ID, ARGUMENT, ARGUMENT_ORDER) \
  SELECT ASSEMBLY_ID, COMPONENT_ALIB_ID, ARGUMENT, ARGUMENT_ORDER \
-  FROM TMP_V4_ASB_COMPONENT_ARG:assembly_id
+  FROM TMP_V4_ASB_COMPONENT_ARG:short_assembly_id
 
 addAgentNameComponentArgDrop = \
-DROP TABLE TMP_V4_ASB_COMPONENT_ARG:assembly_id
+DROP TABLE TMP_V4_ASB_COMPONENT_ARG:short_assembly_id
 
 addASBAgentPGAttrQueries = addASBAgentPGAttr
 
@@ -445,7 +445,7 @@ addASBAgentPGAttr = \
 
 addASBAgentPGAttrQueries.mysql = addASBAgentPGAttrCreateTable addASBAgentPGAttrInsert addASBAgentPGAttrDrop
 addASBAgentPGAttrCreateTable = \
-CREATE TEMPORARY TABLE V4_ASB_AGENT_PG_ATTR_:short_assembly_id AS \
+CREATE TEMPORARY TABLE TMP_V4_ASB_AGENT_PG_ATTR_:short_assembly_id AS \
   SELECT DISTINCT \
      ':assembly_id'  AS ASSEMBLY_ID, \
      AA.COMPONENT_ALIB_ID AS COMPONENT_ALIB_ID, \
@@ -475,10 +475,10 @@ INSERT INTO V4_ASB_AGENT_PG_ATTR \
   (ASSEMBLY_ID, COMPONENT_ALIB_ID, PG_ATTRIBUTE_LIB_ID, ATTRIBUTE_VALUE, ATTRIBUTE_ORDER, START_DATE, END_DATE) \
  SELECT \
   ASSEMBLY_ID, COMPONENT_ALIB_ID, PG_ATTRIBUTE_LIB_ID, ATTRIBUTE_VALUE, ATTRIBUTE_ORDER, START_DATE, END_DATE \
- FROM V4_ASB_AGENT_PG_ATTR_:short_assembly_id
+ FROM TMP_V4_ASB_AGENT_PG_ATTR_:short_assembly_id
    
 addASBAgentPGAttrDrop = \
-DROP TABLE V4_ASB_AGENT_PG_ATTR_:short_assembly_id
+DROP TABLE TMP_V4_ASB_AGENT_PG_ATTR_:short_assembly_id
 
 addASBAgentRelationToBaseQueries = addASBAgentRelationToBase
 
@@ -522,7 +522,7 @@ INSERT INTO  V4_ASB_AGENT_RELATION \
 addASBAgentRelationToBaseQueries.mysql = addASBAgentRelationToBaseCreateTable addASBAgentRelationToBaseInsert addASBAgentRelationToBaseDrop
 
 addASBAgentRelationToBaseCreateTable = \
-CREATE TEMPORARY TABLE V4_ASB_AGENT_RELATION_:short_assembly_id AS \
+CREATE TEMPORARY TABLE TMP_V4_ASB_AGENT_RELATION_:short_assembly_id AS \
 SELECT DISTINCT \
    ':assembly_id'  AS ASSEMBLY_ID, \
    ORGREL.ROLE AS ROLE, \
@@ -558,10 +558,10 @@ addASBAgentRelationToBaseInsert = \
 INSERT INTO V4_ASB_AGENT_RELATION \
  SELECT \
   ASSEMBLY_ID, ROLE, SUPPORTING_COMPONENT_ALIB_ID, SUPPORTED_COMPONENT_ALIB_ID, START_DATE, END_DATE \
- FROM V4_ASB_AGENT_RELATION_:short_assembly_id
+ FROM TMP_V4_ASB_AGENT_RELATION_:short_assembly_id
    
 addASBAgentRelationToBaseDrop = \
-DROP TABLE V4_ASB_AGENT_RELATION_:short_assembly_id
+DROP TABLE TMP_V4_ASB_AGENT_RELATION_:short_assembly_id
 
 addASBAgentRelationToClonesetQueries = addASBAgentRelationToCloneset
 addASBAgentRelationToClonesetQueries.mysql = addASBAgentRelationToClonesetCreateTable addASBAgentRelationToClonesetInsert addASBAgentRelationToClonesetDrop
@@ -604,7 +604,7 @@ addASBAgentRelationToCloneset = \
        AND AR.START_DATE=ORGREL.START_DATE)
 
 addASBAgentRelationToClonesetCreateTable = \
-CREATE TEMPORARY TABLE V4_ASB_AGENT_RELATION_:short_assembly_id AS \
+CREATE TEMPORARY TABLE TMP_V4_ASB_AGENT_RELATION_:short_assembly_id AS \
   SELECT DISTINCT \
    ':assembly_id'  AS ASSEMBLY_ID, \
    ORGREL.ROLE AS ROLE, \
@@ -641,10 +641,10 @@ addASBAgentRelationToClonesetInsert = \
 INSERT INTO V4_ASB_AGENT_RELATION \
  SELECT \
   ASSEMBLY_ID, ROLE, SUPPORTING_COMPONENT_ALIB_ID, SUPPORTED_COMPONENT_ALIB_ID, START_DATE, END_DATE \
- FROM V4_ASB_AGENT_RELATION_:short_assembly_id
+ FROM TMP_V4_ASB_AGENT_RELATION_:short_assembly_id
    
 addASBAgentRelationToClonesetDrop = \
-DROP TABLE V4_ASB_AGENT_RELATION_:short_assembly_id
+DROP TABLE TMP_V4_ASB_AGENT_RELATION_:short_assembly_id
 
 addASBAgentHierarchyRelationToBaseQueries = addASBAgentHierarchyRelationToBase
 
@@ -683,7 +683,7 @@ addASBAgentHierarchyRelationToBase = \
 addASBAgentHierarchyRelationToBaseQueries.mysql = addASBAgentHierarchyRelationToBaseCreateTable addASBAgentHierarchyRelationToBaseInsert addASBAgentHierarchyRelationToBaseDrop
 
 addASBAgentHierarchyRelationToBaseCreateTable = \
-CREATE TEMPORARY TABLE V4_ASB_AGENT_RELATION_:short_assembly_id AS \
+CREATE TEMPORARY TABLE TMP_V4_ASB_AGENT_RELATION_:short_assembly_id AS \
 SELECT DISTINCT \
   ':assembly_id'  AS ASSEMBLY_ID, \
   'Subordinate' AS ROLE, \
@@ -713,10 +713,10 @@ addASBAgentHierarchyRelationToBaseInsert = \
 INSERT INTO V4_ASB_AGENT_RELATION \
  SELECT \
   ASSEMBLY_ID, ROLE, SUPPORTING_COMPONENT_ALIB_ID, SUPPORTED_COMPONENT_ALIB_ID, START_DATE, END_DATE \
- FROM V4_ASB_AGENT_RELATION_:short_assembly_id
+ FROM TMP_V4_ASB_AGENT_RELATION_:short_assembly_id
    
 addASBAgentHierarchyRelationToBaseDrop = \
-DROP TABLE V4_ASB_AGENT_RELATION_:short_assembly_id
+DROP TABLE TMP_V4_ASB_AGENT_RELATION_:short_assembly_id
 
 addASBAgentHierarchyRelationToClonesetQueries = addASBAgentHierarchyRelationToCloneset
 
@@ -754,7 +754,7 @@ addASBAgentHierarchyRelationToCloneset = \
 addASBAgentHierarchyRelationToClonesetQueries.mysql = addASBAgentHierarchyRelationToClonesetCreateTable addASBAgentHierarchyRelationToClonesetInsert addASBAgentHierarchyRelationToClonesetDrop
 
 addASBAgentHierarchyRelationToClonesetCreateTable = \
-CREATE TEMPORARY TABLE V4_ASB_AGENT_RELATION_:short_assembly_id AS \
+CREATE TEMPORARY TABLE TMP_V4_ASB_AGENT_RELATION_:short_assembly_id AS \
 SELECT DISTINCT \
    ':assembly_id'  AS ASSEMBLY_ID, \
    'Subordinate' AS ROLE, \
@@ -784,10 +784,10 @@ addASBAgentHierarchyRelationToClonesetInsert = \
 INSERT INTO V4_ASB_AGENT_RELATION \
  SELECT \
   ASSEMBLY_ID, ROLE, SUPPORTING_COMPONENT_ALIB_ID, SUPPORTED_COMPONENT_ALIB_ID, START_DATE, END_DATE \
- FROM V4_ASB_AGENT_RELATION_:short_assembly_id
+ FROM TMP_V4_ASB_AGENT_RELATION_:short_assembly_id
    
 addASBAgentHierarchyRelationToClonesetDrop = \
-DROP TABLE V4_ASB_AGENT_RELATION_:short_assembly_id
+DROP TABLE TMP_V4_ASB_AGENT_RELATION_:short_assembly_id
 
 addPluginAgentASBComponentArgQueries = addPluginAgentASBComponentArg
 
@@ -829,7 +829,7 @@ addPluginAgentASBComponentArg = \
 addPluginAgentASBComponentArgQueries.mysql = addPluginAgentASBComponentArgCreateTable addPluginAgentASBComponentArgInsert addPluginAgentASBComponentArgDrop
 
 addPluginAgentASBComponentArgCreateTable = \
-CREATE TEMPORARY TABLE V4_ASB_COMPONENT_ARG_:short_assembly_id AS \
+CREATE TEMPORARY TABLE TMP_V4_ASB_COMPONENT_ARG_:short_assembly_id AS \
   SELECT DISTINCT \
    ':assembly_id'  AS ASSEMBLY_ID, \
    CH.COMPONENT_ALIB_ID AS COMPONENT_ALIB_ID, \
@@ -863,10 +863,10 @@ addPluginAgentASBComponentArgInsert = \
 INSERT INTO V4_ASB_COMPONENT_ARG \
  SELECT \
   ASSEMBLY_ID, COMPONENT_ALIB_ID, ARGUMENT, ARGUMENT_ORDER \
- FROM V4_ASB_COMPONENT_ARG_:short_assembly_id 
+ FROM TMP_V4_ASB_COMPONENT_ARG_:short_assembly_id 
    
 addPluginAgentASBComponentArgDrop = \
-DROP TABLE V4_ASB_COMPONENT_ARG_:short_assembly_id 
+DROP TABLE TMP_V4_ASB_COMPONENT_ARG_:short_assembly_id 
 
 addPluginOrgtypeASBComponentArgQueries = addPluginOrgtypeASBComponentArg
 
@@ -911,7 +911,7 @@ addPluginOrgtypeASBComponentArg = \
 addPluginOrgtypeASBComponentArgQueries.mysql = addPluginOrgtypeASBComponentArgCreateTable addPluginOrgtypeASBComponentArgInsert addPluginOrgtypeASBComponentArgDrop
 
 addPluginOrgtypeASBComponentArgCreateTable = \
-CREATE TEMPORARY TABLE V4_ASB_COMPONENT_ARG_:short_assembly_id AS \
+CREATE TEMPORARY TABLE TMP_V4_ASB_COMPONENT_ARG_:short_assembly_id AS \
 SELECT DISTINCT \
    ':assembly_id'  AS ASSEMBLY_ID, \
    CH.COMPONENT_ALIB_ID AS COMPONENT_ALIB_ID, \
@@ -948,10 +948,10 @@ addPluginOrgtypeASBComponentArgInsert = \
 INSERT INTO V4_ASB_COMPONENT_ARG \
  SELECT \
   ASSEMBLY_ID, COMPONENT_ALIB_ID, ARGUMENT, ARGUMENT_ORDER \
- FROM V4_ASB_COMPONENT_ARG_:short_assembly_id 
+ FROM TMP_V4_ASB_COMPONENT_ARG_:short_assembly_id 
    
 addPluginOrgtypeASBComponentArgDrop = \
-DROP TABLE V4_ASB_COMPONENT_ARG_:short_assembly_id 
+DROP TABLE TMP_V4_ASB_COMPONENT_ARG_:short_assembly_id 
 
 addPluginAllASBComponentArgQueries = addPluginAllASBComponentArg
 
@@ -992,7 +992,7 @@ addPluginAllASBComponentArg = \
 addPluginAllASBComponentArgQueries.mysql = addPluginAllASBComponentArgCreateTable addPluginAllASBComponentArgInsert addPluginAllASBComponentArgDrop
 
 addPluginAllASBComponentArgCreateTable = \
-CREATE TEMPORARY TABLE V4_ASB_COMPONENT_ARG_:short_assembly_id AS \
+CREATE TEMPORARY TABLE TMP_V4_ASB_COMPONENT_ARG_:short_assembly_id AS \
 SELECT DISTINCT \
    ':assembly_id'  AS ASSEMBLY_ID, \
    CH.COMPONENT_ALIB_ID AS COMPONENT_ALIB_ID, \
@@ -1026,10 +1026,10 @@ addPluginAllASBComponentArgInsert = \
 INSERT INTO V4_ASB_COMPONENT_ARG \
  SELECT \
   ASSEMBLY_ID, COMPONENT_ALIB_ID, ARGUMENT, ARGUMENT_ORDER \
- FROM V4_ASB_COMPONENT_ARG_:short_assembly_id 
+ FROM TMP_V4_ASB_COMPONENT_ARG_:short_assembly_id 
    
 addPluginAllASBComponentArgDrop = \
-DROP TABLE V4_ASB_COMPONENT_ARG_:short_assembly_id 
+DROP TABLE TMP_V4_ASB_COMPONENT_ARG_:short_assembly_id 
 
 addASBOplansQueries = addASBOplans
 
@@ -1057,7 +1057,7 @@ addASBOplans = \
 
 addASBOplansQueries.mysql = addASBOplansCreateTable addASBOplansInsert addASBOplansDrop
 addASBOplansCreateTable = \
-CREATE TEMPORARY TABLE V4_ASB_OPLAN_:short_assembly_id AS \
+CREATE TEMPORARY TABLE TMP_V4_ASB_OPLAN_:short_assembly_id AS \
    SELECT DISTINCT \
     ':assembly_id'  AS ASSEMBLY_ID, \
     OP.OPLAN_ID AS OPLAN_ID, \
@@ -1066,22 +1066,22 @@ CREATE TEMPORARY TABLE V4_ASB_OPLAN_:short_assembly_id AS \
     OP.C0_DATE AS C0_DATE \
    FROM \
     V6_CFW_OPLAN OP \
-	LEFT JOIN V4_ASB_OPLAN OPL ON \
-	 (OPL.ASSEMBLY_ID=':assembly_id' \
-	 AND OPLAN_ID IN :oplan_ids) \
+    LEFT JOIN V4_ASB_OPLAN OPL ON \
+      (OPL.ASSEMBLY_ID=':assembly_id' \
+       AND OP.OPLAN_ID=OPL.OPLAN_ID) \
    WHERE \
     OP.CFW_ID IN :cfw_instances \
-	AND OPL.ASSEMBLY_ID IS NULL \
+    AND OPL.ASSEMBLY_ID IS NULL \
     AND OP.OPLAN_ID IN :oplan_ids
 
 addASBOplansInsert = \
 INSERT INTO V4_ASB_OPLAN \
  SELECT \
   ASSEMBLY_ID, OPLAN_ID, OPERATION_NAME , PRIORITY, C0_DATE \
- FROM V4_ASB_OPLAN_:short_assembly_id
+ FROM TMP_V4_ASB_OPLAN_:short_assembly_id
    
 addASBOplansDrop = \
-DROP TABLE V4_ASB_OPLAN_:short_assembly_id
+DROP TABLE TMP_V4_ASB_OPLAN_:short_assembly_id
 
 addASBOplanAgentAttrQueries = addASBOplanAgentAttr
 
@@ -1123,7 +1123,7 @@ addASBOplanAgentAttr = \
 
 addASBOplanAgentAttrQueries.mysql = addASBOplanAgentAttrCreateTable addASBOplanAgentAttrInsert addASBOplanAgentAttrDrop
 addASBOplanAgentAttrCreateTable = \
-CREATE TEMPORARY TABLE V4_ASB_OPLAN_AGENT_ATTR_:short_assembly_id AS \
+CREATE TEMPORARY TABLE TMP_V4_ASB_OPLAN_AGENT_ATTR_:short_assembly_id AS \
   SELECT DISTINCT \
    ':assembly_id'  AS ASSEMBLY_ID, \
    OOA.OPLAN_ID AS OPLAN_ID, \
@@ -1138,7 +1138,7 @@ CREATE TEMPORARY TABLE V4_ASB_OPLAN_AGENT_ATTR_:short_assembly_id AS \
    V6_CFW_OPLAN_OG_ATTR OOA, \
    V6_CFW_ORG_GROUP_ORG_MEMBER OGOM \
    LEFT JOIN V4_ASB_OPLAN_AGENT_ATTR AR ON \
-	 (AR.ASSEMBLY_ID=':assembly_id' \
+    (AR.ASSEMBLY_ID=':assembly_id' \
       AND AR.OPLAN_ID=OOA.OPLAN_ID \
       AND AR.COMPONENT_ALIB_ID=AA.COMPONENT_ALIB_ID \
       AND AR.COMPONENT_ID=AA.COMPONENT_ALIB_ID \
@@ -1158,10 +1158,10 @@ addASBOplanAgentAttrInsert = \
 INSERT INTO V4_ASB_OPLAN_AGENT_ATTR \
  SELECT \
   ASSEMBLY_ID, OPLAN_ID, COMPONENT_ALIB_ID, COMPONENT_ID, START_CDAY, ATTRIBUTE_NAME , END_CDAY, ATTRIBUTE_VALUE \
- FROM V4_ASB_OPLAN_AGENT_ATTR_:short_assembly_id 
+ FROM TMP_V4_ASB_OPLAN_AGENT_ATTR_:short_assembly_id 
 
 addASBOplanAgentAttrDrop = \
-DROP TABLE V4_ASB_OPLAN_AGENT_ATTR_:short_assembly_id 
+DROP TABLE TMP_V4_ASB_OPLAN_AGENT_ATTR_:short_assembly_id 
 
 
 getExperimentNames = \

@@ -91,17 +91,18 @@ query = select ('MOS/' || billet.unfrmd_srvc_occptn_cd) AS MOS_LEVEL, sum(to_str
 	and billet.unit_identifier = liborg.uic \
 	group by billet.unfrmd_srvc_occptn_cd, unfrmd_srvc_occptn_tx
 
-query.mysql = select concat('MOS/',billet.unfrmd_srvc_occptn_cd) AS MOS_LEVEL, sum(to_strength) AS MOS_QTY, unfrmd_srvc_occptn_tx  \
-	from \ 
-	fdm_unit_billet billet, \
-	left join fdm_unfrmd_srvc_occptn occ on \
-	(billet.unfrmd_srvc_occptn_cd=occ.unfrmd_srvc_occptn_cd \
-     and occ.rank_subcategory_code='E') \
-	v6_lib_organization liborg \
-	where \
-	liborg.org_id=:agent \
-	and billet.unit_identifier = liborg.uic \
-	group by billet.unfrmd_srvc_occptn_cd, unfrmd_srvc_occptn_tx
+query.mysql = \
+select concat('MOS/',billet.unfrmd_srvc_occptn_cd) AS MOS_LEVEL, sum(to_strength) AS MOS_QTY, unfrmd_srvc_occptn_tx  \
+  from \ 
+   fdm_unit_billet billet, \
+   v6_lib_organization liborg \
+   left join fdm_unfrmd_srvc_occptn occ on \
+     (billet.unfrmd_srvc_occptn_cd=occ.unfrmd_srvc_occptn_cd \
+       and occ.rank_subcategory_code='E') \
+  where \
+   liborg.org_id=:agent \
+   and billet.unit_identifier = liborg.uic \
+   group by billet.unfrmd_srvc_occptn_cd, unfrmd_srvc_occptn_tx
 
 
 # Then, get the containers and generate an aggregate asset
@@ -115,20 +116,11 @@ query = select '8115001682275' AS NSN, decode(container_20_ft_qty,NULL,30,contai
 	and ues.uic(+) = liborg.uic
 
 
-query.mysql = select '8115001682275' AS NSN, ifnull(container_20_ft_qty,30) AS QTY_OH, 'Container' AS \
-	NOMENCLATURE \
-	from 
-	v6_lib_organization liborg, \
-	left join ue_summary_mtmc ues on \
-	(ues.uic = liborg.uic)
-    where \
+query.mysql = select distinct '8115001682275' as nsn, \
+        30 as qty_oh, \
+	'container' as 	nomenclature \
+	from \
+	v6_lib_organization liborg \
+	where \
 	liborg.org_id=:agent
-
-
-
-
-
-
-
-
 
