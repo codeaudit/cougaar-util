@@ -1,3 +1,10 @@
+2002-07-01  Michael Thome  <mthome@bbn.com>
+
+	* Added CheckingBootstrapper
+	A new bootstrapper which examines the jarfiles as they're loaded
+	to see if they look funny - e.g. version/tag mismatches, etc.
+	Enable with -Dorg.cougaar.bootstrap.class=org.cougaar.bootstrap.CheckingBootstrapper
+
 2002-06-10  Michael Thome  <mthome@bbn.com>
 
 	* Bootstrapper

@@ -83,6 +83,14 @@ Build 9.4.1 is an incremental patch release of Cougaar 9.4.1 intended
 to address known issues in 9.4.0 and add required functionality for the
 Ultra*Log Fall 2002 integration.
 <ul>
+<li>
+A new optional bootstrapper class may be used to check the jars found
+by the Bootstrapper for consistency.  This is not the default because
+of the extra time it takes.  To enable, set
+<em>-Dorg.cougaar.bootstrap.class=org.cougaar.bootstrap.CheckingBootstrapper</em>
+Note that since this is implemented as a separate bootstrapper, it
+(for instance) cannot be used with NAI's secure bootstrapper package.
+</li>
 </ul>
 
 <!-- COUGAAR 9.4.0 COUGAAR 9.4.0 COUGAAR 9.4.0 COUGAAR 9.4.0 COUGAAR 9.4.0 -->
