@@ -221,6 +221,8 @@ public final class ConfigFinder {
     URL u = Configuration.urlify(s);
     if (u != null) {
       appendPathElement(u);
+    } else {
+      getLogger().warn("Ignoring unparsable path element \""+el+"\"");
     }
   }
 
