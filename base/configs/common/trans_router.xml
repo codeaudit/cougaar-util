@@ -1,9 +1,0 @@
-<commands>
-  <command>
-    <task verb="Transport" />
-    <allocate>
-      <relation type="Supporting" />
-      <role name="StrategicTransportationProvider" />
-    </allocate>
-  </command>
-</commands>
