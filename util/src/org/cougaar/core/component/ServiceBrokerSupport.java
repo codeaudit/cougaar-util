@@ -154,10 +154,12 @@ public class ServiceBrokerSupport
     if (serviceClass == null) throw new IllegalArgumentException("null serviceClass");
 
     Object service;
+    ServiceProvider sp;
     synchronized (servicesLock) {
-      ServiceProvider sp = (ServiceProvider) services.get(serviceClass);
+      sp = (ServiceProvider) services.get(serviceClass);
       if (sp == null) return null; // bail
-
+    }
+    synchronized (sp) {
       service = sp.getService(this, requestor, serviceClass);
       if (service != null) {
         if (! serviceClass.isAssignableFrom(service.getClass())) {
@@ -165,28 +167,30 @@ public class ServiceBrokerSupport
                                        " returned a Service ("+service+
                                        ") which is not an instance of "+serviceClass);
         }
-        // if we're going to succeed and they passed a revoked listener...
-        if (srl != null) {
-          addServiceListener(new ServiceRevokedListener() {
-              public void serviceRevoked(ServiceRevokedEvent re) {
-                if (serviceClass.equals(re.getService()))
-                  srl.serviceRevoked(re);
-              }
-            });
-        }
       }
-      
-      return service;
+      // if we're going to succeed and they passed a revoked listener...
+      if (srl != null) {
+        addServiceListener(new ServiceRevokedListener() {
+            public void serviceRevoked(ServiceRevokedEvent re) {
+              if (serviceClass.equals(re.getService()))
+                srl.serviceRevoked(re);
+            }
+          });
+      }
     }
+    return service;
   }
 
   public void releaseService(Object requestor, Class serviceClass, Object service) {
     if (requestor == null) throw new IllegalArgumentException("null requestor");
     if (serviceClass == null) throw new IllegalArgumentException("null serviceClass");
 
+    ServiceProvider sp;
     synchronized (servicesLock) {
-      ServiceProvider sp = (ServiceProvider) services.get(serviceClass);
-      if (sp != null) {
+      sp = (ServiceProvider) services.get(serviceClass);
+    }
+    if (sp != null) {
+      synchronized (sp) {
         sp.releaseService(this, requestor, serviceClass, service);
       }
     }
