@@ -124,7 +124,10 @@ ocleanTrialAssembly=\
 cleanTrialAssembly=\
  DELETE FROM V4_EXPT_TRIAL_ASSEMBLY \
   WHERE EXPT_ID = ':expt_id:' \
-    AND TRIAL_ID LIKE ':csm_id_pattern:'
+    AND TRIAL_ID NOT IN \
+(SELECT TRIAL_ID \
+   FROM V4_ASB_ASSEMBLY \
+  WHERE ASSEMBLY_TYPE IN (':cmt_type:', ':hna_type:'))
 
 copyCMTAssemblies=\
  INSERT INTO V4_EXPT_TRIAL_ASSEMBLY (EXPT_ID, TRIAL_ID, ASSEMBLY_ID, DESCRIPTION) \
