@@ -117,7 +117,7 @@ public class Bootstrapper
   /** return the loudness value of the bootstrapper.
    * 0 is quiet (normal), 1 is verbose, 2 is insanely verbose.
    **/
-  final static int getLoudness() {return loudness;}
+  public final static int getLoudness() {return loudness;}
 
   /** The list of jar files to be ignored by bootstrapper.
    * Always includes javaiopatch and boostrap itself.
