@@ -504,17 +504,17 @@ implements ServerNodeController {
           if (!(ServerNodeControllerImpl.this.isAlive())) {
             break;
           }
-          // measure how long we've slept (1 +/- epsilon)
+          // measure how long we've slept (+/- epsilon)
           long nowTime = System.currentTimeMillis();
           long diffTime = ((nowTime - prevTime) - intervalMillis);
           if (diffTime < 0) {
             diffTime = 0;
           }
           double percent = (((double)diffTime) / intervalMillis);
-          // tell the client
+          // tell the client "<percent>:<nowMillis>"
           bufferEvent(
               NodeEvent.IDLE_UPDATE, 
-              Double.toString(percent));
+              (percent+":"+nowTime));
           prevTime = nowTime;
         }
       } catch (Exception e) {
