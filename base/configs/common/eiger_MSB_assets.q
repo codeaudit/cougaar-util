@@ -7,7 +7,7 @@ pacing =  '2320011077155', '2320013189902', '2330013038832'
 # Next, get the MOS levels and generate an aggregate asset
 %SQLAggregateAssetCreator
 query = select CAPABILITY AS MOS_LEVEL, PERSONNEL AS MOS_QTY, 'Dummy Nomenclature' \
-	AS "Dummy Nomenclautre" from ORG_MOS \
+	AS "Dummy Nomenclature" from ORG_MOS \
 	where UIC = :uic
 
 # Then, get the containers and generate an aggregate asset
