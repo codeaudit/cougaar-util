@@ -101,31 +101,149 @@ performance optimizations, and multiple bug fixes.
 <ul>
 <li>uiframework module was obsolete, and has been dropped from
 standard distributions.</li>
-<li> Component viewer </li>
-<li>Added new example / regression application: the new pizza module.</li>
-<li>Dropped GLMDebug</li>
-<li>Convert SD from DAML to OWL</li>
-<li>Added HTTP MTS transport (contributed by CSI).</li>
-<li>Re-factored Corba and RMI transports to use new RPC protocol abstraction</li>
-<li>Various metrics improvements</li>
-<li>Various webserver fixes to ServletConfig</li>
-<li>Dropped obsolete XMLPrototypeProvider, LDMXMLPlugin, XMLAssetCreator</li>
-<li>Note that &lt; and &gt; symbols in plugin arguments may be mis-interpreted by XSLNode unless escaped</li>
-<li>Some SD refactor / cleanup to allow other SD implementations, data directories</li>
-<li>Bug 3720: Refactored DemoControlService to avoid MTS multicast, provide beter feedback, etc.</li>
+<li>Added a runtime Component tree viewer. This includes a new
+ViewService in the ComponentModel. To view the results, add the
+optional servlet in org.cougaar.core.util.ComponentViewServlet with
+the argument "/components".</li>
+<li>Added a new example / regression application: the new pizza
+module. This application replaces minitest as the standard regression
+test application, and provides a good example of how to use
+communities, YP, ServiceDiscovery, etc. See the module's documentation.</li>
+<li>Converted ServiceDiscovery from DAML to OWL.</li>
 <li>By default, the logging service prepends log messages with the Agent name. Disable with -Dorg.cougaar.core.logging.addAgentPrefix=false (bug 3829)</li>
 <li>Added a simple component parameter parser for parameters of the form name=value. See org.cougaar.util.Arguments</li>
+<li>Added an HTTP MTS transport (contributed by CSI).</li>
+<li>Bug 3669: Added ability to get non-local Agent's parent
+communities</li>
+<li>Community servlet can now show any community in society, not just
+local.</li>
+<li>Community requests now support timeouts</li>
+<li>Re-factored Corba and RMI MTS transports to use new RPC protocol abstraction</li>
+<li>Various metrics improvements</li>
+<li>Dropped the GLMDebug in favor of LoggingSrevice.</li>
+<li>Various webserver fixes to ServletConfig</li>
+<li>Dropped obsolete XMLPrototypeProvider, LDMXMLPlugin, XMLAssetCreator</li>
+<li>Dropped obsolete AE configuration</li>
+<li>Dropped unused HysteresisSubscription and SortedSubscription.</li>
+<li>Dropped unused servicediscovery servlets</li>
+<li>Deprecate Freeze plugins in favor of FreezeServlet.</li>
+<li>Drop agent and long deprecated MetricsSnapshot</li>
+<li>Note that &lt; and &gt; symbols in plugin arguments may be mis-interpreted by XSLNode unless escaped</li>
+<li>Added AssetDataParamPlugin, allowing creation of Entity objects
+solely from XML parameters.</li>
+<li>Some SD refactor / cleanup to allow other SD implementations, data directories</li>
+<li>Bug 3720: Refactored DemoControlService to avoid MTS multicast, provide beter feedback, etc.</li>
 <li>Lots of javadoc and code cleanup.</li>
 <li>Reimplemented MessageStatusService for efficiency</li>
+<li>Reduced use of cached hashcodes (bug 3705)</li>
+<li>Do getPrimary on MessageAddresses before doing .equals to avoid
+comparing attributes.</li>
+<li>Tutorials' TakeVacationServlet is now part of the exercices.</li>
+<li>Persistence SequenceNumbers now public for extensions of
+persistence</li>
+<li>Assets now use getPrimaryClass and isAssignableFrom to ensure
+correct .equals and PG locating (bug 3810)</li>
 </ul>
 
 
   <!-- COUGAAR 11.2.2 COUGAAR 11.2.2 COUGAAR 11.2.2 COUGAAR 11.2.2 COUGAAR 11.2.2 -->
 <p>
-<b>Build 11.2.2</b> is a minor release, including performance optimizations, and multiple bug fixes. It represents the end of the B11_2 branch.
+<b>Build 11.2.2</b> is a minor release, including performance
+optimizations, and multiple bug fixes. It represents the final state
+of the B11_2 branch and the prototype for the Ultralog program.
 <p>
 <ul>
-<li></li>
+<li>Bug 3240: Remove old -D flags for MTS aspects, protocols, and link
+selection</li>
+<li>Do not publish Compositions</li>
+<li>AspectValue subclass fields are now final.</li>
+<li>Added org.cougaar.util.ToStringMemo to help in caching toStrings
+(bug 3692)</li>
+<li>Bug 3695: Added version of
+RelationshipSchedul.getMatchingRelationships that takes a single
+time.</li>
+<li>Bug 3667: Added system properties to WP SelectManager to allow
+favoring a local WP</li>
+<li>Added org.cougaar.util.TimeSpans for factories, canonical
+implementations</li>
+<li>Turned off Blackboard pedantic mode by default (bug 3674) </li>
+<li>Bug 3680: Preserve backpointers in Tasks and Expansions.</li>
+<li>Bug 3685: OplanReaderPlugin's MyStages serializable</li>
+<li>Bug 3678: Aggregations made to match bug
+3663's API change</li>
+<li>Bug 3688: Ensure myAgentAddr is initialized in OrgDataPlugin</li>
+<li>Refactored Asset serialization (bug 3693)</li>
+<li>Bug 3696: Fix Subscriber support for multiple watchers</li>
+<!-- FIXME: Are all the above in 11.2.0? -->
+<li>Remove DataGathererServlet from MiniTest</li>
+<li>Bug 3632: Allow per-agent XML file</li>
+<li>Bug 3713: If can't find an agent's configuration in the node or
+per-agent XML file, use DefaultAgent.xml (primarily for rehydrating an
+agent on a remote node)</li>
+<li>Added system properties to change the defult agent and node
+template files.
+Default behavior is:
+   -Dorg.cougaar.society.xsl.param.defaultAgent=SimpleAgent.xsl
+   -Dorg.cougaar.society.xsl.param.defaultNode=NodeAgent.xsl</li>
+<!-- FIXME: Is the above on B11_2? -->
+<li>Added new Agent suicide service, to allow Cougaar to kill off an
+Agent that is dying or dead (in particular, if it is about to run out
+of memory). See org.cougaar.core.node.SuicideServiceComponent. Bug 3691</li>
+<li>Bug 3722: Avoid publishAdd a Task with a null verb</li>
+<li>Bug 3562: Added support for setServiceBroker in
+BindingUtility. Use this instead of setBindingSite.</li>
+<li>Bug 3725: The node-level servlet server now advertises the
+RootServletService</li>
+<li>YPServer drops unused database connections. Default to 10
+minutes. Set via -Dorg.cougaar.yp.UnusedDBConnectionInterval</li>
+<li>Moved TrafficMatrix and AgentFlowAspect out of core.</li>
+<li>Bug 3757: Do not make local changes when incoming Task is past its
+commitment date (logged at INFO).</li>
+<li>Bug 3760: The /agentQuiescentState servlet now shows which
+quiescence clients are blocking quiescence. Also logged at
+detail.</li>
+<li>Added Node-level incarnation service for coordinated agent
+incarnation tracking between Agents, WP, and MTS. To help tracking
+dead or duplicate agents.</li>
+<li>Bug 3602: Added new WP bootstrap mechanism.</li>
+<li>Added org.cougaar.core.persist.RehydrateTest for printing the
+contents of a blackboard persistence snapshot. Bug 3381.</li>
+<li>RescindLP is much more aggressive in removing orphaned
+objects. Whenever a Task is added or changed or a PE is added or
+removed, we check the links among Tasks and PEs to ensure they are
+"consistent" -- references point to Objects that exist for example.</li>
+<li>Refactored RescindLP. Added new /consistency servlet
+(org.cougaar.planning.servlet.ConsistencyCheckServlet) to show
+inconsistent tasks.</li>
+<li>Dropped org.cougaar.mts.std.MulticastMessageAddress</li>
+<li>Bug 3798: Added Agent incarnation # to Agent Lifecycle
+events.</li>
+<li>Added StateDumpService in org.cougaar.core.node, for use when an
+agent is about to suicide, to do a post-mortem. Implementation is in
+mts/org.cougaar.mts.std.StateDumpServiceComponent</li>
+<li>Added MTS DetectBigMessageAspect</li>
+<li>ClusterOPlan.updateOPlanTimes made accessible from
+subclasses.</li>
+<li>Turn down some RescindLP WARNs</li>
+<li>Bug 3629: Implemented Thread Continuation, improving context
+switching times.</li>
+<li>Bug 3635: name YP databases with a system time, allowing 2 agents
+with the same name on the same host to avoid dying due to YP database
+name </li>
+<li>Bug 3699: Clean up initializing AssetInitializer service,
+particularly when not using a database.</li>
+<li>Bug 3698 fixed in service discovery</li>
+<li>Various changes and additions to metrics service</li>
+<li>Various small changes to support minimal agent configurations (no
+Blackboard?)</li>
+<li>Avoid calling postRehydration on inActive objects in
+PersistenceServiceComponent (bug 3588)</li>
+<li>Allow host addresses to change at runtime (bug 3575)</li>
+<li>Optimize Blackboard handling of MessageAddresses with attributes
+(bug 3796) </li>
+<li>Simplified CommunityCache toString, moved that content to toXML
+method.</li>
+<li>Core thread Scheduler now reports uncaught exceptions.</li>
 </ul>
 
   <!-- COUGAAR 11.2 COUGAAR 11.2 COUGAAR 11.2 COUGAAR 11.2 COUGAAR 11.2 -->
