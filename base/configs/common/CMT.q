@@ -1301,10 +1301,10 @@ setULThreadSelected = \
      TRIAL_ID = ':trial_id'
 
 setULThreadNotSelected = \
- DELETE FROM V4_EXPT_TRIAL_THREAD TT \
+ DELETE FROM V4_EXPT_TRIAL_THREAD \
    WHERE \
-    TT.TRIAL_ID=':trial_id' \
-    AND TT.THREAD_ID=':thread_id'
+    TRIAL_ID=':trial_id' \
+    AND THREAD_ID=':thread_id'
 
 getGroupId = \
  SELECT OG.ORG_GROUP_ID FROM \
@@ -1329,9 +1329,9 @@ SELECT * \
 
 setGroupNotSelected = \
  DELETE FROM \
-   V4_EXPT_TRIAL_ORG_MULT OM \
-  WHERE OM.TRIAL_ID=':trial_id' \
-  AND OM.ORG_GROUP_ID =':group_id'
+   V4_EXPT_TRIAL_ORG_MULT \
+  WHERE TRIAL_ID=':trial_id' \
+  AND ORG_GROUP_ID =':group_id'
 
 setGroupSelected = \   
  INSERT INTO V4_EXPT_TRIAL_ORG_MULT \
