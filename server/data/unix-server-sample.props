@@ -69,7 +69,6 @@ java.Xmx300m
 user.timezone=GMT
 org.cougaar.core.agent.startTime=08/10/2005
 org.cougaar.planning.ldm.lps.ComplainingLP.level=0
-org.cougaar.message.transport.aspects=org.cougaar.core.mts.StatisticsAspect
 
 # Set the classname to the Bootstrapper. You must supply a command-line
 # argument for the class to run, usually org.cougaar.core.node.Node
