@@ -146,7 +146,9 @@ public final class ConfigFinder {
     if ("true".equals(System.getProperty("org.cougaar.core.util.ConfigFinder.verbose", "false")))
       setVerbose(true);
 
-    properties = props;
+    properties = new HashMap();
+    if (props != null) properties.putAll(props);
+
     if (s == null) {
       s = Configuration.getConfigPath();
     } else {
