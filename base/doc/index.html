@@ -99,7 +99,10 @@ example, the errata page for Cougaar 11.0 is <a href="http://cougaar.org/errata/
 <b>Build 12.0</b> is a major release....
 <p>
 <ul>
-<li></li>
+<li>RFE 3923: Changed PlanningDomain, some fields, to protected access
+so it can be easily extended. IE, just over-ride loadLPs, specify this
+domain as "planning", and specify org.cougaar.core.load.planning=false
+in all nodes. Then you can change the set of LPs running in the PlanningDomain.</li>
 </ul>
 
 
