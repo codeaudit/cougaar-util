@@ -108,6 +108,13 @@ implements ServerNodeController {
     } else if (nef == null) {
       throw new IllegalArgumentException(
           "Listening preferences must be non-null");
+    } else if ((cmdLine == null) ||
+               (cmdLine.length == 0)) {
+      throw new IllegalArgumentException(
+          "Command line is empty");
+    } else if (envVars == null) {
+      throw new IllegalArgumentException(
+          "Must specify enviroment variables, or \"String[0]\"");
     }
 
     // configure
@@ -115,6 +122,7 @@ implements ServerNodeController {
     this.exitVal = Integer.MIN_VALUE;
     this.nodeName = nodeName;
     this.cmdLine = cmdLine;
+    this.envVars = envVars;
     this.cnel = cnel;
     this.nef = nef;
 
@@ -125,18 +133,16 @@ implements ServerNodeController {
       for (int i = 0; i < cmdLine.length; i++) {
         System.err.println("  "+cmdLine[i]);
       }
-      if (envVars.length > 0) {
-        System.err.println("with environment:");
-        for (int i = 0; i < envVars.length; i++) {
-          System.err.println("  "+envVars[i]);
-        }
+      System.err.println("with environment:");
+      for (int i = 0; i < envVars.length; i++) {
+        System.err.println("  "+envVars[i]);
       }
     }
 
     // FIXME add envVars
 
     // spawn the node
-    sysProc = Runtime.getRuntime().exec(cmdLine);
+    sysProc = Runtime.getRuntime().exec(cmdLine, envVars);
 
     // create all the "watcher" Runnables
 

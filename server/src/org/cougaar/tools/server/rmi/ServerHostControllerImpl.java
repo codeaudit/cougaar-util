@@ -320,16 +320,19 @@ class ServerHostControllerImpl
 
     // debugging...
     if (verbose) {
-      System.out.print("\nCommand line: ");
+      System.out.println("\nCreate Node Controller:");
+      System.out.println("Node name: "+nodeId);
+      System.out.println("Command line["+cmdLine.length+"]:");
       for (int i = 0; i < cmdLine.length; i++) {
-        System.out.print(cmdLine[i]);
-        System.out.print(" ");
+        System.err.println("  "+cmdLine[i]);
       }
-      System.out.println("\nEnvironment:");
+      System.err.println("Environment["+envVars.length+"]:");
       for (int i = 0; i < envVars.length; i++) {
-        System.out.print(envVars[i]);
-        System.out.print(" ");
+        System.err.println("  "+envVars[i]);
       }
+      System.out.println("RMI Host: "+rmiHost);
+      System.out.println("RMI Port: "+rmiPort);
+      System.out.println();
     } 
 
     ServerNodeController snc = 
