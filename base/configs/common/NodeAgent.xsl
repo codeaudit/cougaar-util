@@ -249,6 +249,13 @@ XSL Template for NodeAgent, which reuses most of SimpleAgent.
       priority="HIGH"
       insertionpoint="Node.AgentManager.Agent.Component"/>
 
+    <!-- incarnation tracker -->
+    <component 
+      name="org.cougaar.core.node.Incarnation()"
+      class="org.cougaar.core.node.Incarnation"
+      priority="HIGH"
+      insertionpoint="Node.AgentManager.Agent.Component"/>
+
     <!-- mts -->
     <xsl:choose>
       <xsl:when test="$mts = 'singlenode'">
