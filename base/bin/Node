@@ -43,8 +43,9 @@ if (! $?COUGAAR3RDPARTY) then
 endif
 
 set LIBPATHS=$COUGAAR_INSTALL_PATH/lib/core.jar
+set devp = ""
 if ($?COUGAAR_DEV_PATH) then
-    set LIBPATHS = "${COUGAAR_DEV_PATH}:$LIBPATHS"
+    set devp "-Dorg.cougaar.class.path=${COUGAAR_DEV_PATH}"
 endif
 
 # domains are now usually defined by the config file LDMDomains.ini.
@@ -90,7 +91,7 @@ if ("$os" == "Linux") then
 endif
 
 #set javaargs="$osargs $MYPROPERTIES $MYMEMORY -classpath $LIBPATHS -Dorg.cougaar.message.isLogging=true -Djava.rmi.server.logCalls=true -Dsun.rmi.server.exceptionTrace=true -Dsun.rmi.transport.tcp.readTimeout=150000 "
-set javaargs="$osargs $MYPROPERTIES $MYMEMORY -classpath $LIBPATHS"
+set javaargs="$osargs $devp $MYPROPERTIES $MYMEMORY -classpath $LIBPATHS"
 #set javaargs="$osargs $MYPROPERTIES $MYMEMORY -classpath $LIBPATHS -Dorg.cougaar.nameserver.verbosity=20"
 
 if ($?COUGAAR_DEV_PATH) then

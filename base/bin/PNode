@@ -43,8 +43,9 @@ if (! $?COUGAAR3RDPARTY) then
 endif
 
 set LIBPATHS=$COUGAAR_INSTALL_PATH/lib/core.jar
+set devp = ""
 if ($?COUGAAR_DEV_PATH) then
-    set LIBPATHS = "${COUGAAR_DEV_PATH}:$LIBPATHS"
+    set devp "-Dorg.cougaar.class.path=${COUGAAR_DEV_PATH}"
 endif
 
 # domains are now usually defined by the config file LDMDomains.ini.
@@ -95,7 +96,7 @@ if ( ! $?JDK_INSTALL_PATH ) then
   exit;
 endif
 
-set javaargs="$osargs -Dorg.cougaar.core.cluster.persistence.enable=true -Xbootclasspath:$COUGAAR_INSTALL_PATH/lib/javaiopatch.jar:$JDK_INSTALL_PATH/jre/lib/rt.jar $MYPROPERTIES $MYMEMORY -classpath $LIBPATHS"
+set javaargs="$osargs $devp -Dorg.cougaar.core.cluster.persistence.enable=true -Xbootclasspath:$COUGAAR_INSTALL_PATH/lib/javaiopatch.jar:$JDK_INSTALL_PATH/jre/lib/rt.jar $MYPROPERTIES $MYMEMORY -classpath $LIBPATHS"
 
 
 if ($?COUGAAR_DEV_PATH) then

@@ -25,4 +25,4 @@ source $COUGAAR_INSTALL_PATH/bin/setarguments.sh
 
 MYCLASSES="org.cougaar.lib.uiframework.ui.inventory.InventoryChartUI"
 
-exec java $MYPROPERTIES -classpath $LIBPATHS $BOOTSTRAPPER $MYCLASSES $*
+exec java $MYPROPERTIES -classpath $LIBPATHS $BOOTSTRAPPER $DEVP $MYCLASSES $*

@@ -35,9 +35,11 @@ SEP=";"
 if [ $os = "Linux" -o $os = "SunOS" ]; then SEP=":"; fi
 
 LIBPATHS=$COUGAAR_INSTALL_PATH/lib/core.jar
+DEVP=""
 if [ "$COUGAAR_DEV_PATH" != "" ]; then
-    LIBPATHS="${COUGAAR_DEV_PATH}${SEP}${LIBPATHS}"
+    DEVP="-Dorg.cougaar.class.path=${COUGAAR_DEV_PATH}"
 fi
+export DEVP
 BOOTPATH=$COUGAAR_INSTALL_PATH/lib/javaiopatch.jar
 if [ "$COUGAAR3RDPARTY" = "" ]; then
      COUGAAR3RDPARTY=/opt/cougaar-jars
