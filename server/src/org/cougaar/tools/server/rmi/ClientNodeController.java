@@ -29,6 +29,7 @@ import java.rmi.registry.*;
 import org.cougaar.tools.server.NodeEventListener;
 import org.cougaar.tools.server.NodeEventFilter;
 import org.cougaar.tools.server.NodeServesClient;
+import org.cougaar.tools.server.ProcessDescription;
 
 import org.cougaar.tools.server.system.ProcessStatus;
 
@@ -37,7 +38,7 @@ import org.cougaar.tools.server.system.ProcessStatus;
 public class ClientNodeController 
 implements NodeServesClient {
 
-  private String nodeName;
+  private ProcessDescription desc;
 
   private ServerNodeController snc;
 
@@ -47,12 +48,12 @@ implements NodeServesClient {
   private ClientNodeEventListener cnel;
 
   public ClientNodeController(
-      String nodeName,
+      ProcessDescription desc,
       ServerNodeController snc,
       NodeEventListener nel,
       ClientNodeEventListener cnel,
       NodeEventFilter nef) {
-    this.nodeName = nodeName;
+    this.desc = desc;
     this.snc = snc;
     this.nel = nel;
     this.cnel = cnel;
@@ -94,12 +95,9 @@ implements NodeServesClient {
   public void flushNodeEvents() throws Exception {
     snc.flushNodeEvents();
   }
-  public String getName() { //throws Exception
-    //return snc.getName();
-    return nodeName;  // this is faster, and name shouldn't change!
-  }
-  public String[] getCommandLine() throws Exception {
-    return snc.getCommandLine();
+  public ProcessDescription getProcessDescription() { //throws Exception
+    //return snc.getProcessDescription();
+    return desc;  // this is faster, and desc shouldn't change!
   }
   public boolean isAlive() { //throws Exception
     try {
@@ -114,33 +112,22 @@ implements NodeServesClient {
   public ProcessStatus[] listProcesses(boolean showAll) throws Exception {
     return snc.listProcesses(showAll);
   }
-  public boolean isRegistered() { //throws Exception 
+  public int exitValue() throws Exception {
+    return snc.exitValue();
+  }
+  public int waitFor() throws Exception {
+    return snc.waitFor();
+  }
+  public int waitFor(long millis) throws Exception {
+    return snc.waitFor(millis);
+  }
+  public int destroy() throws Exception {
+    int ret;
     try {
-      return snc.isRegistered();
-    } catch (Exception e) {
-      return false;
-    }
-  }
-  public int getExitValue() throws Exception {
-    return snc.getExitValue();
-  }
-  public boolean waitForRegistration() throws Exception {
-    return snc.waitForRegistration();
-  }
-  public boolean waitForRegistration(long millis) throws Exception {
-    return snc.waitForRegistration(millis);
-  }
-  public int waitForCompletion() throws Exception {
-    return snc.waitForCompletion();
-  }
-  public int waitForCompletion(long millis) throws Exception {
-    return snc.waitForCompletion(millis);
-  }
-  public void destroy() throws Exception {
-    try {
-      snc.destroy();
+      ret = snc.destroy();
     } finally {
       snc = null;
     }
+    return ret;
   }
 }

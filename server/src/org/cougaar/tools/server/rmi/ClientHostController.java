@@ -26,11 +26,12 @@ import java.util.*;
 import java.rmi.*;
 import java.rmi.registry.*;
 
+import org.cougaar.tools.server.ConfigurationWriter;
+import org.cougaar.tools.server.HostServesClient;
 import org.cougaar.tools.server.NodeEventListener;
 import org.cougaar.tools.server.NodeEventFilter;
 import org.cougaar.tools.server.NodeServesClient;
-import org.cougaar.tools.server.HostServesClient;
-import org.cougaar.tools.server.ConfigurationWriter;
+import org.cougaar.tools.server.ProcessDescription;
 
 /**
  * This implementation of <code>HostServesClient</code> that communicates
@@ -48,15 +49,28 @@ implements HostServesClient {
     this.shc = shc;
   }
 
+  public long ping() throws Exception {
+    return shc.ping();
+  }
+
   public NodeServesClient createNode(
-      String nodeName,
-      Properties nodeProperties,
+      String procName,
+      Properties javaProps,
       String[] commandLineArgs,
       NodeEventListener nel,
       NodeEventFilter nef,
-      ConfigurationWriter cw)
-    throws Exception
-  {
+      ConfigurationWriter cw) throws Exception {
+    ProcessDescription desc = 
+      new ProcessDescription(
+          procName, null, javaProps, commandLineArgs);
+    return createNode(desc, nel, nef, cw);
+  }
+
+  public NodeServesClient createNode(
+      ProcessDescription desc,
+      NodeEventListener nel,
+      NodeEventFilter nef,
+      ConfigurationWriter cw) throws Exception {
     ClientNodeEventListenerImpl cnel =
       ((nel != null) ? 
        (new ClientNodeEventListenerImpl(nel)) :
@@ -67,9 +81,7 @@ implements HostServesClient {
     try {
       snc = (ServerNodeController)
         shc.createNode(
-          nodeName, 
-          nodeProperties, 
-          commandLineArgs, 
+          desc, 
           cnel,
           nef,
           cw);
@@ -90,7 +102,7 @@ implements HostServesClient {
     //
     ClientNodeController cnc = 
       new ClientNodeController(
-          nodeName,
+          desc,
           snc,
           nel,
           cnel,
@@ -98,6 +110,25 @@ implements HostServesClient {
     cnel.setClientNodeController(cnc);
 
     return cnc;
+  }
+
+  public int killNode(
+      String procName) throws Exception {
+    return shc.killNode(procName);
+  }
+
+  public ProcessDescription getProcessDescription(
+      String procName) throws Exception {
+    return shc.getProcessDescription(procName);
+  }
+
+  public List listProcessDescriptions(
+      String procGroup) throws Exception {
+    return shc.listProcessDescriptions(procGroup);
+  }
+
+  public List listProcessDescriptions() throws Exception {
+    return shc.listProcessDescriptions();
   }
 
   public String[] list(

@@ -36,6 +36,7 @@ import java.util.List;
 import org.cougaar.tools.server.NodeEvent;
 import org.cougaar.tools.server.NodeEventListener;
 import org.cougaar.tools.server.NodeEventFilter;
+import org.cougaar.tools.server.ProcessDescription;
 
 import org.cougaar.tools.server.system.*;
 
@@ -48,23 +49,17 @@ implements ServerNodeController {
   // may want to make this a parameter
   private static final boolean USE_PROCESS_LAUNCHER = true;
 
-  private static final int STATE_WAITING_FOR_REGISTRATION = 0;
-  private static final int STATE_REGISTERED               = 1;
-  private static final int STATE_DEAD                     = 2;
-
   // max milliseconds for destroy
   private static final long MAX_DESTROY_TIMEOUT = 5*1000;
 
-  private String nodeName;
-  private String[] cmdLine;
-  private String[] envVars;
+  private final ProcessDescription desc;
+  private final String[] cmdLine;
+  private final String[] envVars;
+  private final ServerNodeDestroyedCallback sndc;
   private ClientNodeEventListener cnel;
   private NodeEventFilter nef;
 
-  // one of the above "STATE_" values.
-  //   should sync on this state!  maybe adopt a StateModel design...
-  private int state;
-
+  private boolean isAlive;
   private int exitVal;
 
   // factory for "dumpThreads()" and other system utilities
@@ -93,21 +88,17 @@ implements ServerNodeController {
   private Thread pcWatcherThread;
 
   public ServerNodeControllerImpl(
-      String nodeName,
+      ProcessDescription desc,
       String[] cmdLine,
       String[] envVars,
-      String rmiHost,
-      int rmiPort,
+      ServerNodeDestroyedCallback sndc,
       ClientNodeEventListener cnel,
       NodeEventFilter nef) throws Exception {
 
     // check arguments
-    if (cnel == null) {
+    if (desc == null) {
       throw new IllegalArgumentException(
-          "Listener must be non-null");
-    } else if (nef == null) {
-      throw new IllegalArgumentException(
-          "Listening preferences must be non-null");
+          "Process description is null");
     } else if ((cmdLine == null) ||
                (cmdLine.length == 0)) {
       throw new IllegalArgumentException(
@@ -115,17 +106,29 @@ implements ServerNodeController {
     } else if (envVars == null) {
       throw new IllegalArgumentException(
           "Must specify enviroment variables, or \"String[0]\"");
+    } else if (sndc == null) {
+      throw new IllegalArgumentException(
+          "Process-destroy callback is null");
+    } else if (cnel == null) {
+      throw new IllegalArgumentException(
+          "Listener must be non-null");
+    } else if (nef == null) {
+      throw new IllegalArgumentException(
+          "Listening preferences must be non-null");
     }
 
-    // configure
-    this.state = STATE_WAITING_FOR_REGISTRATION;
-    this.exitVal = Integer.MIN_VALUE;
-    this.nodeName = nodeName;
+    // save arguments
+    this.desc = desc;
     this.cmdLine = cmdLine;
     this.envVars = envVars;
+    this.sndc = sndc;
     this.cnel = cnel;
     this.nef = nef;
     this.sneb = new ServerNodeEventBuffer(cnel, nef);
+
+    // configure
+    this.isAlive = true;
+    this.exitVal = Integer.MIN_VALUE;
 
     // get the system factory
     this.saf = SystemAccessFactory.getInstance();
@@ -205,6 +208,8 @@ implements ServerNodeController {
 
     // start all the watchers
 
+    String nodeName = desc.getName();
+
     hbWatcherThread = 
       new Thread(hbWatcher, nodeName+"-heartbeat");
     hbWatcherThread.start();
@@ -237,13 +242,16 @@ implements ServerNodeController {
 
   public void setClientNodeEventListener(
       ClientNodeEventListener cnel) {
-    assertIsAlive();
+    if (!(isAlive)) {
+      throw new IllegalStateException(
+          "Node has been destroyed");
+    }
     try {
       sneb.setClientNodeEventListener(cnel);
       this.cnel = cnel;
     } catch (Exception e) {
       if (VERBOSE) {
-        System.err.println("Lost node control: Killing "+nodeName);
+        System.err.println("Lost node control: Killing "+desc);
       }
       //e.printStackTrace();
       destroy();
@@ -258,13 +266,16 @@ implements ServerNodeController {
 
   public void setNodeEventFilter(
       NodeEventFilter nef) {
-    assertIsAlive();
+    if (!(isAlive)) {
+      throw new IllegalStateException(
+          "Node has been destroyed");
+    }
     try {
       sneb.setNodeEventFilter(nef);
       this.nef = nef;
     } catch (Exception e) {
       if (VERBOSE) {
-        System.err.println("Lost node control: Killing "+nodeName);
+        System.err.println("Lost node control: Killing "+desc);
       }
       //e.printStackTrace();
       destroy();
@@ -277,16 +288,8 @@ implements ServerNodeController {
   // Get the node-creation information
   //
 
-  public String getName() {
-    return nodeName; 
-  }
-
-  public String[] getCommandLine() {
-    return cmdLine; 
-  }
-
-  public String[] getEnvironmentVariables() {
-    return envVars;
+  public ProcessDescription getProcessDescription() {
+    return desc; 
   }
 
   //
@@ -376,56 +379,28 @@ implements ServerNodeController {
     }
   }
 
-  //
-  // Test the state of the node
-  //
-
   public boolean isAlive() {
-    return (state != STATE_DEAD);
+    return isAlive;
   }
 
-  public boolean isRegistered() {
-    return (state == STATE_REGISTERED);
-  }
-
-  public boolean waitForRegistration() {
-    while (!(waitForRegistration(0))) {
-      // loop until registered, or exception thrown
-    }
-    return true;
-  }
-
-  public boolean waitForRegistration(long millis) {
-    if (state == STATE_WAITING_FOR_REGISTRATION) {
-      // <would "regWatcherThread.join(millis)" here>
-      throw new UnsupportedOperationException(
-          "Node registration is currently disabled");
-    } else if (state == STATE_REGISTERED) {
-      return true;
-    } else {
-      throw new IllegalStateException(
-          "Node has been destroyed");
-    }
-  }
-
-  public int waitForCompletion() {
+  public int waitFor() {
     while (true) {
       // loop until dead
-      int i = waitForCompletion(0);
+      int i = waitFor(0);
       if ((i != Integer.MIN_VALUE) ||
-          (state == STATE_DEAD)) {
+          (!(isAlive))) {
         return i;
       }
     }
   }
 
-  public int waitForCompletion(long millis) {
-    if (state != STATE_DEAD) {
+  public int waitFor(long millis) {
+    if (isAlive) {
       try {
         pcWatcherThread.join(millis);
       } catch (InterruptedException e) {
       }
-      if (state != STATE_DEAD) {
+      if (isAlive) {
         return Integer.MIN_VALUE;
       }
     }
@@ -435,20 +410,6 @@ implements ServerNodeController {
   //
   // These require (isAlive())
   //
-
-  private void assertIsAlive() {
-    switch (state) {
-      case STATE_WAITING_FOR_REGISTRATION:
-      case STATE_REGISTERED:
-        // assume it's okay;
-        return;
-      default:
-      case STATE_DEAD:
-        // process dead
-        throw new IllegalStateException(
-            "Node has been destroyed");
-    }
-  }
 
   public void flushNodeEvents() throws RemoteException {
     sneb.flushNodeEvents();
@@ -469,76 +430,77 @@ implements ServerNodeController {
     sneb.addNodeEvent(ne);
   }
 
-  public void destroy() {
-    if (state != STATE_DEAD) {
-      state = STATE_DEAD;
-      if (sysProc != null) {
-        try {
-          if (USE_PROCESS_LAUNCHER) {
-            // launch destroy in separate thread, kill after timeout
-            //
-            // sometimes "Process.destroy()" fails, either due
-            //   to the JVM or shell scripts.  The "kill" is
-            //   a last-ditch effort after a timeout...
-            Runnable r = new Runnable() {
-              public void run() {
-                // wait for destroy
-                sysProc.destroy();
-                try {
-                  sysProc.waitFor();
-                } catch (InterruptedException e) {
-                }
-              }
-            };
-            Thread t = new Thread(r);
-            t.start();
-            t.join(MAX_DESTROY_TIMEOUT);
-            if (t.isAlive()) {
-              t.interrupt();
-              // tired of waiting -- kill
-              if (VERBOSE) {
-                System.err.println(
-                    "Using \"kill\" to destroy the Node");
-              }
-              killProcess();
-            }
-          } else {
-            // wait for destroy
-            sysProc.destroy();
-            try {
-              sysProc.waitFor();
-            } catch (InterruptedException e) {
-            }
-          }
-        } catch (Exception e) {
-          // ignore
-          System.err.println(
-              "Unable to destroy process: "+e.getMessage());
-        }
-      }
+  public int destroy() {
+    if (!(isAlive)) {
+      return Integer.MIN_VALUE;
+    }
+    isAlive = false;
+    if (sysProc != null) {
       try {
-        bufferEvent(NodeEvent.NODE_DESTROYED);
-        flushNodeEvents();
+        if (USE_PROCESS_LAUNCHER) {
+          // launch destroy in separate thread, kill after timeout
+          //
+          // sometimes "Process.destroy()" fails, either due
+          //   to the JVM or shell scripts.  The "kill" is
+          //   a last-ditch effort after a timeout...
+          Runnable r = new Runnable() {
+            public void run() {
+              // wait for destroy
+              sysProc.destroy();
+              try {
+                sysProc.waitFor();
+              } catch (InterruptedException e) {
+              }
+            }
+          };
+          Thread t = new Thread(r);
+          t.start();
+          t.join(MAX_DESTROY_TIMEOUT);
+          if (t.isAlive()) {
+            t.interrupt();
+            // tired of waiting -- kill
+            if (VERBOSE) {
+              System.err.println(
+                  "Using \"kill\" to destroy the Node");
+            }
+            killProcess();
+          }
+        } else {
+          // wait for destroy
+          sysProc.destroy();
+          try {
+            sysProc.waitFor();
+          } catch (InterruptedException e) {
+          }
+        }
       } catch (Exception e) {
-      }
-      //
-      // clean up Threads!
-      //
-      if (VERBOSE) {
-        System.err.println("Node finished "+nodeName);
+        // ignore
+        System.err.println(
+            "Unable to destroy process: "+e.getMessage());
       }
     }
+    try {
+      bufferEvent(NodeEvent.NODE_DESTROYED);
+      flushNodeEvents();
+    } catch (Exception e) {
+    }
+    //
+    // clean up Threads!
+    //
+    if (VERBOSE) {
+      System.err.println("Node finished "+desc);
+    }
+    sndc.nodeDestroyed(exitVal);
+    return exitVal;
   }
 
-  public int getExitValue() {
-    if (state != STATE_DEAD) {
-      // process is still running
-      throw new IllegalStateException(
-          "Node still alive");
+  public int exitValue() {
+    if (isAlive) {
+      return Integer.MIN_VALUE;
+    } else {
+      // pcWatcher set this
+      return exitVal;  
     }
-
-    // pcWatcher set this
-    return exitVal;  
 
     // Old code, maybe useful someday:
     //try {
@@ -552,34 +514,6 @@ implements ServerNodeController {
   //
   // That's about it for Process-level information...
   //
-
-  //
-  // These require (isRegistered()) and communicate with a 
-  //   running node.
-  //
-
-  private void assertIsRegistered() {
-    switch (state) {
-      case STATE_WAITING_FOR_REGISTRATION:
-        // waiting for node to register
-        //
-        // make the client use "waitForRegistration()"
-        throw new IllegalStateException(
-            "Waiting for node to register");
-      case STATE_REGISTERED:
-        // assume it's okay;
-        return;
-      default:
-      case STATE_DEAD:
-        // process dead
-        throw new IllegalStateException(
-            "Node has been destroyed");
-    }
-  }
-
-  // A remote-method capability will be added for interaction 
-  //   with a running Node.  For now the Node will not register
-  //   back to the server.
 
   //
   // These are inner-class output wrappers
@@ -617,7 +551,7 @@ implements ServerNodeController {
         }
       } catch (Exception e) {
         if (VERBOSE) {
-          System.err.println("Client died (heartbeat): Killing "+nodeName);
+          System.err.println("Client died (heartbeat): Killing "+desc);
           e.printStackTrace();
         }
         ServerNodeControllerImpl.this.destroy();
@@ -669,7 +603,7 @@ implements ServerNodeController {
         }
       } catch (Exception e) {
         if (VERBOSE) {
-          System.err.println("Client died (idle): Killing "+nodeName);
+          System.err.println("Client died (idle): Killing "+desc);
           e.printStackTrace();
         }
         ServerNodeControllerImpl.this.destroy();
@@ -729,7 +663,7 @@ implements ServerNodeController {
         }
       } catch (Exception e) {
         if (VERBOSE) {
-          System.err.println("Client died (output): Killing "+nodeName);
+          System.err.println("Client died (output): Killing "+desc);
           e.printStackTrace();
         }
         ServerNodeControllerImpl.this.destroy();

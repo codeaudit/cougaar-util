@@ -127,4 +127,6 @@ public final class NodeEvent implements java.io.Serializable, Cloneable {
        (pf+": \""+msg+"\"") :
        (pf));
   }
+
+  private static final long serialVersionUID = 8909182368192098122L;
 }

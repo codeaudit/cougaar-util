@@ -27,58 +27,42 @@ import java.net.*;
 import java.rmi.*;
 import java.rmi.registry.*;
 
-import org.cougaar.tools.server.NodeEventFilter;
 import org.cougaar.tools.server.ConfigurationWriter;
+import org.cougaar.tools.server.NodeEventFilter;
+import org.cougaar.tools.server.ProcessDescription;
 
 /** 
  * Server-side API to create and control Nodes on a single machine.
- **/
+ * <p>
+ * @see org.cougaar.tools.server.HostServesClient
+ */
 public interface ServerHostController 
 extends Remote {
 
-  /** 
-   * Launch a new Node.
-   */
+  long ping() throws RemoteException;
+
   ServerNodeController createNode(
-      String nodeName, 
-      Properties props, 
-      String[] args,
+      ProcessDescription desc,
       ClientNodeEventListener cListener,
       NodeEventFilter nef,
       ConfigurationWriter cw)
     throws Exception, RemoteException;
 
-  /** 
-   * Kill the named Node.
-   */
-  boolean destroyNode(String nodeName) throws RemoteException;
-  
-  /** 
-   * @return the controllers of all known Nodes on this host
-   */
-  Collection getNodes() throws RemoteException;
+  int killNode(
+      String procName) throws RemoteException;
 
-  /** 
-   * @return the number of active Nodes on this host 
-   */
-  int getNodeCount() throws RemoteException;
+  ProcessDescription getProcessDescription(
+      String procName) throws RemoteException;
 
-  /** 
-   * Kill all running Nodes.  
-   * <p>
-   * This should not generally be used. 
-   */
-  void reset() throws RemoteException;
+  List listProcessDescriptions(
+      String groupName) throws RemoteException;
 
-  /**
-   * List files on a host.
-   */
+  List listProcessDescriptions(
+      ) throws RemoteException;
+
   String[] list(
       String path) throws RemoteException;
 
-  /**
-   * Open a file for reading.
-   */
   ServerInputStream open(
       String filename) throws RemoteException;
 

@@ -50,8 +50,7 @@ public interface NodeServesClient {
    * Get the current <code>NodeEventFilter</code>, as set by
    * <tt>setNodeEventFilter(..)</tt>.
    */
-  NodeEventFilter getNodeEventFilter(
-      ) throws Exception;
+  NodeEventFilter getNodeEventFilter() throws Exception;
 
   /**
    * The client can set the <code>NodeEventFilter</code> to
@@ -72,15 +71,9 @@ public interface NodeServesClient {
   void flushNodeEvents() throws Exception;
 
   /**
-   * Get the name of the node.
+   * Get the <code>ProcessDescription</code>.
    */
-  String getName() throws Exception;
-
-  /**
-   * Get the command-line arguments used to create the node.
-   */
-  String[] getCommandLine() throws Exception;
-
+  ProcessDescription getProcessDescription() throws Exception;
 
   /**
    * Is the node alive -- note that <tt>isRegistered()</tt> implies
@@ -91,19 +84,26 @@ public interface NodeServesClient {
   boolean isAlive() throws Exception;
 
   /**
-   * @return true if the node has registered back with the server,
-   *   allowing further details
+   * @return the exit value of the dead node process, or 
+   *    <tt>Integer.MIN_VALUE</tt> if "isAlive()"
    */
-  boolean isRegistered() throws Exception;
-
-  //
-  // These require (!(isAlive())).
-  //
+  int exitValue() throws Exception;
 
   /**
-   * @return the exit value of the dead node process.
+   * Wait for the node to exit, then return the exit value.
    */
-  int getExitValue() throws Exception;
+  int waitFor() throws Exception;
+
+  /**
+   * Wait at most <tt>millis</tt> for the node to exit, then return 
+   * the exit value.
+   */
+  int waitFor(long millis) throws Exception;
+
+  /**
+   * Destroy this node if it <tt>isAlive()</tt>.
+   */
+  int destroy() throws Exception;
 
   //
   // These require (isAlive()).
@@ -134,47 +134,5 @@ public interface NodeServesClient {
    * @see ProcessStatus
    */
   ProcessStatus[] listProcesses(boolean showAll) throws Exception;
-
-  /**
-   * Wait for the node to register.
-   *
-   * @return true if end result is <tt>isRegistered()</tt>
-   */
-  boolean waitForRegistration() throws Exception;
-
-  /**
-   * Wait at most <tt>millis</tt> milliseconds for the node to register.
-   *
-   * @return true if end result is <tt>isRegistered()</tt>
-   */
-  boolean waitForRegistration(long millis) throws Exception;
-
-  /**
-   * Wait for the node to exit, then return the exit code.
-   */
-  int waitForCompletion() throws Exception;
-
-  /**
-   * Wait at most <tt>millis</tt> for the node to exit, then return 
-   * the exit code.
-   * <p>
-   * If the node is still alive then <tt>Integer.MIN_VALUE</tt> is 
-   * returned -- the client can verify with <tt>isAlive()</tt>.
-   */
-  int waitForCompletion(long millis) throws Exception;
-
-  /**
-   * Destroy this node if it <tt>isAlive()</tt>.
-   */
-  void destroy() throws Exception;
-
-
-  //
-  // These require (isRegistered()).
-  //
-
-  // A remote-method capability will be added for interaction 
-  //   with a running Node.  For now the Node will not register
-  //   back to the server.
 
 }

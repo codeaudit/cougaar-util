@@ -28,6 +28,7 @@ import java.util.List;
 import org.cougaar.tools.server.NodeEventListener;
 import org.cougaar.tools.server.NodeEventFilter;
 import org.cougaar.tools.server.NodeServesClient;
+import org.cougaar.tools.server.ProcessDescription;
 
 import org.cougaar.tools.server.system.ProcessStatus;
 
@@ -52,18 +53,14 @@ extends Remote {
       NodeEventFilter nef) throws RemoteException;
 
   void flushNodeEvents() throws RemoteException;
-  String getName() throws RemoteException;
-  String[] getCommandLine() throws RemoteException;
+  ProcessDescription getProcessDescription() throws RemoteException;
   boolean isAlive() throws RemoteException;
   void dumpThreads() throws Exception, RemoteException;
   ProcessStatus[] listProcesses(
       boolean showAll) throws Exception, RemoteException;
-  boolean isRegistered() throws RemoteException;
-  boolean waitForRegistration() throws RemoteException;
-  boolean waitForRegistration(long millis) throws RemoteException;
-  int waitForCompletion() throws RemoteException;
-  int waitForCompletion(long millis) throws RemoteException;
-  int getExitValue() throws RemoteException;
-  void destroy() throws RemoteException;
+  int waitFor() throws RemoteException;
+  int waitFor(long millis) throws RemoteException;
+  int exitValue() throws RemoteException;
+  int destroy() throws RemoteException;
 
 }

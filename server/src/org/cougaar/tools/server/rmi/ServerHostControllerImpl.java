@@ -38,56 +38,367 @@ class ServerHostControllerImpl
   implements ServerHostController 
 {
 
-  private static char pathSeparator = File.separatorChar;
-  private static String dotPath = "."+pathSeparator;
+  private static String dotPath = "."+File.separatorChar;
 
   private final boolean verbose;
-  private final String rmiHost;
-  private final int rmiPort;
   private final String tempPath;
 
   private static final String DEFAULT_CLASSNAME = 
     "org.cougaar.core.society.Node";
 
-  // list of currently running nodes
-  private final Map nodes = new HashMap();
-    
-  private final Properties defaultProps; 
+  private final Properties defaultJavaProps; 
 
+  /**
+   * Map of (String, ProcessEntry), where "ProcessEntry" is an inner-class
+   * defined at the end of this class.
+   */
+  private final Map procs = new HashMap();
+    
   public ServerHostControllerImpl(
       boolean verbose,
-      String rmiHost,
-      int rmiPort,
       String tempPath,
       boolean loadDefaultProps,
       String[] args) throws RemoteException {
 
     this.verbose = verbose;
-    this.rmiHost = rmiHost;
-    this.rmiPort = rmiPort;
 
-    if ((rmiHost == null) ||
-        ((rmiHost = rmiHost.trim()).length() == 0) ||
-        (rmiPort <= 0)) {
-      throw new IllegalArgumentException(
-          "Illegal host:port configuration: "+
-          rmiHost+":"+rmiPort+")");
-    }
-
-    this.defaultProps = new Properties();
+    this.defaultJavaProps = new Properties();
     loadApplicationProperties(
-      defaultProps,
+      defaultJavaProps,
       loadDefaultProps,
       args);
     if (verbose) {
-      System.out.println("Default properties["+defaultProps.size()+"]:");
-      for (Iterator iter = defaultProps.entrySet().iterator();
+      System.out.println(
+          "Default properties["+defaultJavaProps.size()+"]:");
+      for (Iterator iter = defaultJavaProps.entrySet().iterator();
            iter.hasNext();
            ) {
         System.out.println("  "+iter.next());
       }
     }
 
+    this.tempPath = calculateTempPath(tempPath);
+  }
+
+  /**
+   * A simple "ping" to see if the host is reachable; returns 
+   * the current time (in milliseconds) on the remote host.
+   */
+  public long ping() {
+    return System.currentTimeMillis();
+  }
+
+  /** 
+   * Starts a COUGAAR configuration by combining client supplied and 
+   * local info and invoking a new JVM.
+   */
+  public ServerNodeController createNode(
+      ProcessDescription desc,
+      ClientNodeEventListener cnel,
+      NodeEventFilter nef,
+      ConfigurationWriter cw)
+    throws Exception
+  {
+    // null-check
+    if (desc == null) {
+      throw new NullPointerException("Description is null");
+    } else if (cnel == null) {
+      throw new NullPointerException("NodeEvent listener is null");
+    } else if (nef == null) {
+      throw new NullPointerException("NodeEvent filter is null");
+    }
+
+    final String procName = desc.getName();
+
+    // register the process name
+    final ProcessEntry pe;
+    synchronized (procs) {
+      ProcessEntry origPE = (ProcessEntry) procs.get(procName);
+      if (origPE != null) {
+        throw new RuntimeException(
+            "Process name \""+procName+"\" is already in"+
+            " use by another (running) process");
+      }
+      pe = new ProcessEntry(desc);
+      pe.state = ProcessEntry.LOADING;
+      procs.put(procName, pe);
+    }
+
+    ServerNodeController snc;
+    synchronized (pe) {
+      try {
+        // write config files
+        if (cw != null) {
+          if (verbose) {
+            System.out.println("Writing configuration files");
+          }
+          cw.writeConfigFiles(new File(tempPath));
+        }
+
+        if (verbose) {
+          System.out.println("Parsing the process description: "+desc);
+        }
+
+        // assemble the command-line and environment-variables
+        String[][] tmp = parseProcessDescription(desc);
+        String[] cmdLine = tmp[0];
+        String[] envVars = tmp[1];
+
+        // debugging...
+        if (verbose) {
+          System.out.println("\nCreate Node Controller:");
+          System.out.println("Process: "+desc);
+          System.out.println("Command line["+cmdLine.length+"]:");
+          for (int i = 0; i < cmdLine.length; i++) {
+            System.err.println("  "+cmdLine[i]);
+          }
+          System.err.println("Environment["+envVars.length+"]:");
+          for (int i = 0; i < envVars.length; i++) {
+            System.err.println("  "+envVars[i]);
+          }
+          System.out.println();
+        } 
+
+        // create a callback for destroy-watching
+        ServerNodeDestroyedCallback sndc = 
+          new ServerNodeDestroyedCallback() {
+            public void nodeDestroyed(int exitVal) {
+              ServerHostControllerImpl.this.nodeDestroyed(pe, exitVal);
+            }
+          };
+
+        // spawn the process
+        snc = 
+          new ServerNodeControllerImpl(
+              desc,
+              cmdLine, 
+              envVars,
+              sndc,
+              cnel,
+              nef);
+      } catch (Exception e) {
+        if (verbose) {
+          System.out.println("Unable to create Node:");
+          e.printStackTrace();
+        }
+        killNode(procName);
+        throw e;
+      }
+
+      // update the proc-entry to "running"
+      pe.snc = snc;
+      pe.state = ProcessEntry.RUNNING;
+    }
+
+    return snc;
+  }
+
+  /**
+   * Kill the process with the given ProcessDescription 
+   * ".getName()".
+   */
+  public int killNode(
+      String procName) {
+    // null-check
+    if (procName == null) {
+      return Integer.MIN_VALUE;
+    }
+
+    // lookup node controller
+    ProcessEntry pe;
+    synchronized (procs) {
+      pe = (ProcessEntry) procs.get(procName);
+      if (pe == null) {
+        return Integer.MIN_VALUE;
+      } 
+    }
+    
+    synchronized (pe) {
+      // if loading, wait until running/killing/dead
+      while (pe.state == ProcessEntry.LOADING) {
+        try {
+          pe.wait();
+        } catch (InterruptedException ie) {
+        }
+      }
+      // kill
+      switch (pe.state) {
+        case ProcessEntry.LOADING:
+          throw new InternalError();
+        case ProcessEntry.RUNNING:
+          pe.state = ProcessEntry.KILLING;
+          try {
+            pe.exitValue = pe.snc.destroy();
+          } catch (Exception e) {
+            // never
+          }
+          pe.state = ProcessEntry.DEAD;
+          pe.notifyAll();
+          break;
+        case ProcessEntry.KILLING:
+          do {
+            try {
+              pe.wait();
+            } catch (InterruptedException ie) {
+            }
+          } while (pe.state != ProcessEntry.DEAD);
+          return pe.exitValue;
+        case ProcessEntry.DEAD:
+          return Integer.MIN_VALUE;
+      }
+    }
+
+    // dead, now remove from listings
+    synchronized (procs) {
+      procs.remove(procName);
+    }
+
+    return pe.exitValue;
+  }
+
+
+  private void nodeDestroyed(ProcessEntry pe, int exitVal) {
+    // null-check
+    if (pe == null) {
+      throw new InternalError();
+    }
+    
+    boolean remove = false;
+    synchronized (pe) {
+      if (pe.state != ProcessEntry.DEAD) {
+        pe.exitValue = exitVal;
+        pe.state = ProcessEntry.DEAD;
+        remove = true;
+      }
+    }
+    if (remove) {
+      synchronized (procs) {
+        procs.remove(pe.desc.getName());
+      }
+    }
+  }
+
+  /**
+   * Get the ProcessDescription (for a running Process).
+   * 
+   * @return null if the process is not known, or is not
+   *    running.
+   */
+  public ProcessDescription getProcessDescription(
+      String procName) {
+    // null-check
+    if (procName == null) {
+      return null;
+    }
+    // lookup description
+    ProcessEntry pe;
+    synchronized (procs) {
+      pe = (ProcessEntry) procs.get(procName);
+      if (pe == null) {
+        return null;
+      }
+    }
+    // check if it's running
+    synchronized (pe) {
+      if (pe.state != ProcessEntry.RUNNING) {
+        return null;
+      }
+      return pe.desc;
+    }
+  }
+  
+  /**
+   * Get the Process Controller (for a running Process).
+   * 
+   * @return null if the process is not known, or is not
+   *    running.
+   */
+  public ServerNodeController getProcessController(
+      String procName) {
+    // null-check
+    if (procName == null) {
+      return null;
+    }
+    // lookup
+    ProcessEntry pe;
+    synchronized (procs) {
+      pe = (ProcessEntry) procs.get(procName);
+      if (pe == null) {
+        return null;
+      }
+    }
+    // check if it's running
+    synchronized (pe) {
+      if (pe.state != ProcessEntry.RUNNING) {
+        return null;
+      }
+      return pe.snc;
+    }
+  }
+
+  /**
+   * Get a List of all ProcessDescriptions (for running
+   * Processes) where the <tt>ProcessDescription.getGroup()</tt>
+   * equals the given <tt>procGroup</tt> String.
+   */
+  public List listProcessDescriptions(
+      String procGroup) {
+    List l = new ArrayList();
+
+    // lookup descriptions
+    synchronized (procs) {
+      Iterator iter = procs.values().iterator();
+      while (iter.hasNext()) {
+        ProcessEntry pe = (ProcessEntry) iter.next();
+        synchronized (pe) {
+          if (pe.state != ProcessEntry.RUNNING) {
+            continue;
+          }
+        }
+        ProcessDescription desc = pe.desc;
+        String descGroup = desc.getGroup();
+        if ((procGroup != null) ? 
+            (procGroup.equals(descGroup)) :
+            (descGroup == null)) {
+          l.add(desc);
+        }
+      }
+    }
+
+    return l;
+  }
+
+  /**
+   * Get a List of all ProcessDescriptions (for running
+   * Processes).
+   */
+  public List listProcessDescriptions() {
+    List l = new ArrayList();
+
+    // lookup descriptions
+    synchronized (procs) {
+      Iterator iter = procs.values().iterator();
+      while (iter.hasNext()) {
+        ProcessEntry pe = (ProcessEntry) iter.next();
+        synchronized (pe) {
+          if (pe.state != ProcessEntry.RUNNING) {
+            continue;
+          }
+        }
+        ProcessDescription desc = pe.desc;
+        l.add(desc);
+      }
+    }
+
+    return l;
+  }
+
+  //
+  // "setTempPath(..)", "list(..)" and "open(..)" should all be 
+  // moved to a separate "FileSystem" API.
+  //
+
+  private static String calculateTempPath(String tempPath) {
     // tempPath uses the system-style path separator
     //
     // fix a relative ".[/\\]" path to an absolute path
@@ -109,387 +420,10 @@ class ServerHostControllerImpl
       }
     }
     // path must end in "[/\\]"
-    if (tPath.charAt(tPath.length()-1) != pathSeparator) {
-      tPath = tPath + pathSeparator;
+    if (tPath.charAt(tPath.length()-1) != File.separatorChar) {
+      tPath = tPath + File.separatorChar;
     }
-    this.tempPath = tPath;
-  }
-
-  private static void validateProperty(String name, String value) {
-    // SECURITY -- scan for illegal characters
-    //
-    // for now just test the value as an example
-    for (int n = value.length() - 1; n >= 0; n--) {
-      char ch = value.charAt(n);
-      // add tests here!
-      if ((ch == ' ') ||
-          (ch == '\n')) {
-        throw new IllegalArgumentException(
-            "Property name \""+name+
-            "\" contains illegal character "+((int)ch)+
-            " in value: \""+value+"\"");
-      }
-    }
-  }
-
-  /** 
-   * Starts a COUGAAR configuration by combining client supplied and 
-   * local info and invoking a new JVM.
-   */
-  public ServerNodeController createNode(
-      String nodeId, 
-      Properties props, 
-      String[] args,
-      ClientNodeEventListener cnel,
-      NodeEventFilter nef,
-      ConfigurationWriter cw)
-    throws Exception
-  {
-    // write config files
-    if (cw != null) {
-      if (verbose) {
-        System.out.println("Writing configuration files");
-      }
-      try {
-        cw.writeConfigFiles(new File(tempPath));
-      } catch (IOException ioe) {
-        if (verbose) {
-          System.out.println("Unable to write config files:");
-          ioe.printStackTrace();
-        }
-        throw ioe;
-      } catch (RuntimeException re) {
-        if (verbose) {
-          System.out.println("Unable to write config files:");
-          re.printStackTrace();
-        }
-        throw re;
-      }
-    }
-
-    // assemble the command-line and environment-variables
-    String[] cmdLine;
-    String[] envVars;
-    try {
-      // p is a merge of server-set properties and passed-in props
-      Properties allProps = new Properties();
-      if (defaultProps != null) {
-        allProps.putAll(defaultProps);
-      }
-      if (props != null) {
-        allProps.putAll(props);
-      }
-
-      // split all properties into three groups:
-      //   "env.*"  process environment properties (e.g. "env.DISPLAY=..")
-      //   "java.*" java options (e.g. "java.class.path=..")
-      //   "*"      all other "-D" system properties (e.g. "foo=bar")
-
-      Properties envProps = new Properties();
-      Properties javaProps = new Properties();
-      Properties sysProps = new Properties();
-
-      for (Iterator iter = allProps.entrySet().iterator();
-           iter.hasNext();
-           ) {
-        // all Properties are non-null (String, String) pairs
-        Map.Entry me = (Map.Entry) iter.next();
-        String name = (String)me.getKey();
-        String value = (String)me.getValue();
-
-        // trim and null-check
-        name = name.trim();
-        value = value.trim();
-
-        validateProperty(name, value);
-
-        if (name.startsWith("env.")) {
-          name = name.substring(4);
-          if (!(name.startsWith("env."))) {
-            envProps.put(name, value);
-            continue;
-          }
-        } else if (name.startsWith("java.")) {
-          name = name.substring(5);
-          if (!(name.startsWith("java."))) {
-            javaProps.put(name, value);
-            continue;
-          }
-        }
-        sysProps.put(name, value);
-      }
-
-      ArrayList cmdList = new ArrayList();
-
-      // select "java" executable
-      String jvmProgram = 
-        (String) javaProps.remove("jvm.program");
-      if (jvmProgram != null) {
-        // SECURITY -- guard against "jvm.program=rm"!!!
-        // use name as-is
-      } else {
-        String javaHome = System.getProperty("java.home");
-        if (javaHome != null) {
-          // defaults to "{java.home}/bin/java"
-          jvmProgram = 
-            javaHome+
-            File.separator+
-            "bin"+
-            File.separator+
-            "java";
-        } else {
-          jvmProgram = "java";
-        }
-      }
-
-      cmdList.add(jvmProgram);
-
-      // check for JVM mode ("classic", "hotspot", "client", or "server")
-      String jvmMode = 
-        (String) javaProps.remove("jvm.mode");
-      if (jvmMode != null) {
-        if ((jvmMode.equals("classic")) ||
-            (jvmMode.equals("hotspot")) ||
-            (jvmMode.equals("client")) ||
-            (jvmMode.equals("server"))) {
-          cmdList.add("-"+jvmMode);
-        } else {
-          throw new IllegalArgumentException(
-              "Illegal \"jvm.mode="+jvmMode+"\"");
-        }
-      }
-
-      // check for green threads
-      String jvmGreen = 
-        (String) javaProps.remove("jvm.green");
-      if (jvmGreen != null) {
-        if (jvmGreen.equals("true")) {
-          cmdList.add("-green");
-        }
-      }
-
-      // check for a classpath
-      String classpath = 
-        (String) javaProps.remove("class.path");
-      if (classpath != null) {
-        if (classpath.length() == 0) {
-          throw new IllegalArgumentException(
-              "Classpath must be non-empty");
-        }
-        // SECURITY -- examine path
-        cmdList.add("-classpath");
-        cmdList.add(classpath);
-      }
-
-      // check for "Xbootclasspath"s
-      for (Iterator iter = javaProps.entrySet().iterator();
-           iter.hasNext();
-           ) {
-        Map.Entry me = (Map.Entry) iter.next();
-        String name = (String)me.getKey();
-        if (name.startsWith("Xbootclasspath")) {
-          iter.remove();
-          // expecting name to be one of:
-          //   Xbootclasspath
-          //   Xbootclasspath/a
-          //   Xbootclasspath/p
-          String nameTail = 
-            name.substring("Xbootclasspath".length());
-          if (nameTail.equals("") ||
-              nameTail.equals("/a") ||
-              nameTail.equals("/p")) {
-            // valid
-          } else {
-            throw new IllegalArgumentException(
-                "Expecting \"Xbootclasspath[|/a|/p]\", not \""+
-                name+"\"");
-          }
-          String value = (String)me.getValue();
-          if (value.length() == 0) {
-            throw new IllegalArgumentException(
-                "\""+name+"\" must be non-empty");
-          }
-          // SECURITY -- examine path
-          cmdList.add("-"+name+":"+value);
-        }
-      }
-
-      // take classname for later use
-      String classname = 
-        (String) javaProps.remove("class.name");
-      if (classname != null) {
-        if (classname.length() == 0) {
-          throw new IllegalArgumentException(
-              "Classname must be non-empty");
-        }
-        // SECURITY -- examine class name
-      } else {
-        classname = DEFAULT_CLASSNAME;
-      }
-
-      // add all remaining java properties
-      for (Iterator iter = javaProps.entrySet().iterator();
-           iter.hasNext();
-           ) {
-        Map.Entry me = (Map.Entry) iter.next();
-        String name = (String)me.getKey();
-        String value = (String)me.getValue();
-
-        // SECURITY -- maybe block some pairs
-        if (value.length() > 0) {
-          cmdList.add("-"+name+"="+value);
-        } else {
-          cmdList.add("-"+name);
-        }
-      }
-
-      // add all the system properties
-      for (Iterator iter = sysProps.entrySet().iterator();
-           iter.hasNext();
-           ) {
-        Map.Entry me = (Map.Entry) iter.next();
-        String name = (String)me.getKey();
-        String value = (String)me.getValue();
-
-        // SECURITY -- these are probably okay...
-        if (value.length() > 0) {
-          cmdList.add("-D"+name+"="+value);
-        } else {
-          cmdList.add("-D"+name);
-        }
-      }
-
-      // add the class name
-      cmdList.add(classname);
-
-      // add any additional command-line arguments
-      if (args != null) {
-        for (int i = 0; i < args.length; i++) {
-          String argi = args[i];
-          if (argi == null) {
-            throw new IllegalArgumentException(
-                "Command line contained a null entry["+
-                i+" / "+args.length+"]");
-          }
-
-          // SECURITY -- these are probably okay...
-          cmdList.add(argi);
-        }
-      }
-
-      // flatten the command line to a String[]
-      cmdLine = (String[])cmdList.toArray(new String[cmdList.size()]);
-
-      // flatten the envProps to a String[]
-      int nEnvProps = envProps.size();
-      envVars = new String[nEnvProps];
-      if (nEnvProps > 0) {
-        Iterator iter = envProps.entrySet().iterator();
-        for (int i = 0; i < nEnvProps; i++) {
-          Map.Entry me = (Map.Entry) iter.next();
-          String name = (String)me.getKey();
-          String value = (String)me.getValue();
-
-          // SECURITY -- should scan these closely, possibly OS specific
-          if (value.length() > 0) {
-            envVars[i] = (name+"="+value);
-          } else {
-            envVars[i] = (name);
-          }
-        }
-      }
-
-      // cmdLine and envVars now ready
-    } catch (RuntimeException re) {
-      if (verbose) {
-        System.out.println(
-            "Unable to assemble command-line and environment variables:");
-        re.printStackTrace();
-      }
-      throw re;
-    }
-
-    // debugging...
-    if (verbose) {
-      System.out.println("\nCreate Node Controller:");
-      System.out.println("Node name: "+nodeId);
-      System.out.println("Command line["+cmdLine.length+"]:");
-      for (int i = 0; i < cmdLine.length; i++) {
-        System.err.println("  "+cmdLine[i]);
-      }
-      System.err.println("Environment["+envVars.length+"]:");
-      for (int i = 0; i < envVars.length; i++) {
-        System.err.println("  "+envVars[i]);
-      }
-      System.out.println("RMI Host: "+rmiHost);
-      System.out.println("RMI Port: "+rmiPort);
-      System.out.println();
-    } 
-
-    // spawn the node
-    ServerNodeController snc;
-    try {
-      snc = 
-        new ServerNodeControllerImpl(
-            nodeId,
-            cmdLine, 
-            envVars,
-            rmiHost,
-            rmiPort,
-            cnel,
-            nef);
-    } catch (Exception e) {
-      if (verbose) {
-        System.out.println("Unable to create Node:");
-        e.printStackTrace();
-      }
-      throw e;
-    }
-
-    nodes.put(nodeId, snc);
-
-    return snc;
-  }
-
-  /** returns the number of active nodes on this appserver **/
-  public int getNodeCount()
-  {
-    int nActive = 0;
-    Iterator it = nodes.keySet().iterator();
-    while (it.hasNext()) {
-      ServerNodeController snc = (ServerNodeController)it.next();
-      try {
-        if (snc.isAlive()) {
-          nActive++;
-        }
-      } catch (Exception e) {
-      }
-    }
-
-    return nActive;
-  }
-
-  /** Not used. Use ServerNodeController.destroy() instead **/
-  public boolean destroyNode(String nid) {
-    Object node;
-    synchronized (nodes) {
-      node = nodes.remove(nid);
-    }
-    if (node != null) {
-      // kill it
-    }
-
-    return (node != null);
-  }
-
-  /** list the Nodes **/
-  public Collection getNodes() {
-    synchronized (nodes) {
-      return new ArrayList(nodes.keySet());
-    }
-  }
-
-  public void reset() {
+    return tPath;
   }
 
   /**
@@ -516,8 +450,8 @@ class ServerHostControllerImpl
     // fix the path to use the system path-separator and be relative to 
     //   the "tempPath"
     String sysPath = path;
-    if (pathSeparator != '/') {
-      sysPath = sysPath.replace('/', pathSeparator);
+    if (File.separatorChar != '/') {
+      sysPath = sysPath.replace('/', File.separatorChar);
     }
     sysPath = tempPath + sysPath.substring(2);
 
@@ -600,8 +534,8 @@ class ServerHostControllerImpl
     // fix the filename path to use the system path-separator and be 
     //   relative to the "tempPath"
     String sysFilename = filename;
-    if (pathSeparator != '/') {
-      sysFilename = sysFilename.replace('/', pathSeparator);
+    if (File.separatorChar != '/') {
+      sysFilename = sysFilename.replace('/', File.separatorChar);
     }
     sysFilename = tempPath + sysFilename.substring(2);
 
@@ -644,6 +578,282 @@ class ServerHostControllerImpl
     
     // return the wrapped stream!
     return sin;
+  }
+
+  //
+  // private utility methods
+  //
+
+  /**
+   * Parse and expand the given ProcessDescription to create
+   * a full command-line and environment-variables.
+   * <p>
+   * @return a String[2], where String[0] is a String[] of 
+   *    command-line arguments and String[1] is a String[] of
+   *    environment variables.
+   */
+  private String[][] parseProcessDescription(ProcessDescription desc) {
+    String[] cmdLine;
+    String[] envVars;
+
+    ArrayList cmdList = new ArrayList();
+    ArrayList envList = new ArrayList();
+
+    Properties descProps = desc.getJavaProperties();
+    if ((defaultJavaProps != null) ||
+        (descProps != null)) {
+      // merge the default and passed-in props
+      Properties allProps = new Properties();
+      if (defaultJavaProps != null) {
+        allProps.putAll(defaultJavaProps);
+      }
+      if (descProps != null) {
+        allProps.putAll(descProps);
+      }
+
+      // split all properties into three groups:
+      //   "env.*"  process environment properties (e.g. "env.DISPLAY=..")
+      //   "java.*" java options (e.g. "java.class.path=..")
+      //   "*"      all other "-D" system properties (e.g. "foo=bar")
+
+      Properties envProps = new Properties();
+      Properties javaProps = new Properties();
+      Properties sysProps = new Properties();
+
+      for (Iterator iter = allProps.entrySet().iterator();
+          iter.hasNext();
+          ) {
+        // all Properties are non-null (String, String) pairs
+        Map.Entry me = (Map.Entry) iter.next();
+        String name = (String)me.getKey();
+        String value = (String)me.getValue();
+
+        // trim and null-check
+        name = name.trim();
+        value = value.trim();
+
+        // SECURITY -- scan for illegal characters
+        //
+        // for now just test the value as an example
+        for (int n = value.length() - 1; n >= 0; n--) {
+          char ch = value.charAt(n);
+          // add tests here!
+          if ((ch == ' ') ||
+              (ch == '\n')) {
+            throw new IllegalArgumentException(
+                "Property name \""+name+
+                "\" contains illegal character "+((int)ch)+
+                " in value: \""+value+"\"");
+          }
+        }
+
+        if (name.startsWith("env.")) {
+          name = name.substring(4);
+          if (!(name.startsWith("env."))) {
+            envProps.put(name, value);
+            continue;
+          }
+        } else if (name.startsWith("java.")) {
+          name = name.substring(5);
+          if (!(name.startsWith("java."))) {
+            javaProps.put(name, value);
+            continue;
+          }
+        }
+        sysProps.put(name, value);
+      }
+
+      if ((!(javaProps.isEmpty())) ||
+          (!(sysProps.isEmpty()))) {
+        // select "java" executable
+        String jvmProgram = 
+          (String) javaProps.remove("jvm.program");
+        if (jvmProgram != null) {
+          // SECURITY -- guard against "jvm.program=rm"!!!
+          // use name as-is
+        } else {
+          String javaHome = System.getProperty("java.home");
+          if (javaHome != null) {
+            // defaults to "{java.home}/bin/java"
+            jvmProgram = 
+              javaHome+
+              File.separator+
+              "bin"+
+              File.separator+
+              "java";
+          } else {
+            jvmProgram = "java";
+          }
+        }
+
+        cmdList.add(jvmProgram);
+
+        // check for JVM mode ("classic", "hotspot", "client", or "server")
+        String jvmMode = 
+          (String) javaProps.remove("jvm.mode");
+        if (jvmMode != null) {
+          if ((jvmMode.equals("classic")) ||
+              (jvmMode.equals("hotspot")) ||
+              (jvmMode.equals("client")) ||
+              (jvmMode.equals("server"))) {
+            cmdList.add("-"+jvmMode);
+          } else {
+            throw new IllegalArgumentException(
+                "Illegal \"jvm.mode="+jvmMode+"\"");
+          }
+        }
+
+        // check for green threads
+        String jvmGreen = 
+          (String) javaProps.remove("jvm.green");
+        if (jvmGreen != null) {
+          if (jvmGreen.equals("true")) {
+            cmdList.add("-green");
+          }
+        }
+
+        // check for a classpath
+        String classpath = 
+          (String) javaProps.remove("class.path");
+        if (classpath != null) {
+          if (classpath.length() == 0) {
+            throw new IllegalArgumentException(
+                "Classpath must be non-empty");
+          }
+          // SECURITY -- examine path
+          cmdList.add("-classpath");
+          cmdList.add(classpath);
+        }
+
+        // check for "Xbootclasspath"s
+        for (Iterator iter = javaProps.entrySet().iterator();
+            iter.hasNext();
+            ) {
+          Map.Entry me = (Map.Entry) iter.next();
+          String name = (String)me.getKey();
+          if (name.startsWith("Xbootclasspath")) {
+            iter.remove();
+            // expecting name to be one of:
+            //   Xbootclasspath
+            //   Xbootclasspath/a
+            //   Xbootclasspath/p
+            String nameTail = 
+              name.substring("Xbootclasspath".length());
+            if (nameTail.equals("") ||
+                nameTail.equals("/a") ||
+                nameTail.equals("/p")) {
+              // valid
+            } else {
+              throw new IllegalArgumentException(
+                  "Expecting \"Xbootclasspath[|/a|/p]\", not \""+
+                  name+"\"");
+            }
+            String value = (String)me.getValue();
+            if (value.length() == 0) {
+              throw new IllegalArgumentException(
+                  "\""+name+"\" must be non-empty");
+            }
+            // SECURITY -- examine path
+            cmdList.add("-"+name+":"+value);
+          }
+        }
+
+        // take classname for later use
+        String classname = 
+          (String) javaProps.remove("class.name");
+        if (classname != null) {
+          if (classname.length() == 0) {
+            throw new IllegalArgumentException(
+                "Classname must be non-empty");
+          }
+          // SECURITY -- examine class name
+        } else {
+          classname = DEFAULT_CLASSNAME;
+        }
+
+        // add all remaining java properties
+        for (Iterator iter = javaProps.entrySet().iterator();
+            iter.hasNext();
+            ) {
+          Map.Entry me = (Map.Entry) iter.next();
+          String name = (String)me.getKey();
+          String value = (String)me.getValue();
+
+          // SECURITY -- maybe block some pairs
+          if (value.length() > 0) {
+            cmdList.add("-"+name+"="+value);
+          } else {
+            cmdList.add("-"+name);
+          }
+        }
+
+        // add all the system properties
+        for (Iterator iter = sysProps.entrySet().iterator();
+            iter.hasNext();
+            ) {
+          Map.Entry me = (Map.Entry) iter.next();
+          String name = (String)me.getKey();
+          String value = (String)me.getValue();
+
+          // SECURITY -- these are probably okay...
+          if (value.length() > 0) {
+            cmdList.add("-D"+name+"="+value);
+          } else {
+            cmdList.add("-D"+name);
+          }
+        }
+
+        // add the class name
+        cmdList.add(classname);
+      }
+
+      if (!(envProps.isEmpty())) {
+        // flatten the envProps to a String[]
+        int nEnvProps = envProps.size();
+        if (nEnvProps > 0) {
+          Iterator iter = envProps.entrySet().iterator();
+          for (int i = 0; i < nEnvProps; i++) {
+            Map.Entry me = (Map.Entry) iter.next();
+            String name = (String)me.getKey();
+            String value = (String)me.getValue();
+
+            // SECURITY -- should scan these closely, possibly OS specific
+            if (value.length() > 0) {
+              envList.add(name+"="+value);
+            } else {
+              envList.add(name);
+            }
+          }
+        }
+      }
+    }
+
+    // add any additional command-line arguments
+    String[] args = desc.getCommandLineArguments();
+    if (args != null) {
+      for (int i = 0; i < args.length; i++) {
+        String argi = args[i];
+        if (argi == null) {
+          throw new IllegalArgumentException(
+              "Command line contained a null entry["+
+              i+" / "+args.length+"]");
+        }
+
+        // SECURITY -- these are probably okay...
+        cmdList.add(argi);
+      }
+    }
+
+    // flatten the command line to a String[]
+    cmdLine = (String[]) cmdList.toArray(new String[cmdList.size()]);
+
+    // flatten the envs to a String[]
+    envVars = (String[]) envList.toArray(new String[envList.size()]);
+
+    return 
+      new String[][] {
+        cmdLine,
+        envVars};
   }
 
   /**
@@ -751,5 +961,38 @@ class ServerHostControllerImpl
       }
     }
     return true;
+  }
+
+  private static final class ProcessEntry {
+
+    public static final int LOADING = 0;
+    public static final int RUNNING = 1;
+    public static final int KILLING = 2;
+    public static final int DEAD = 3;
+
+    private final ProcessDescription desc;
+
+    private ServerNodeController snc;
+
+    private int state;
+
+    private int exitValue;
+
+    public ProcessEntry(ProcessDescription desc) {
+      this.desc = desc;
+      this.state = LOADING;
+    }
+
+    private static String getState(int state) {
+      switch (state) {
+        case LOADING: return "loading";
+        case RUNNING: return "running";
+        default:
+        case DEAD: return "dead";
+      }
+    }
+    public String toString() {
+      return desc+", state="+getState(state);
+    }
   }
 }

@@ -22,6 +22,7 @@
 package org.cougaar.tools.server;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -31,16 +32,42 @@ import java.util.Properties;
 public interface HostServesClient {
 
   /**
-   * Create a new Node.
-   * <pre>
-   * Parameters are:
-   *   - "what" information   (nodeName, properties, args)
-   *   - "callback" hooks     (listener, listenFilter)
-   *   - "init" hooks         (cw)   // should get it's own method!
-   * </pre>
+   * A simple "ping" to see if the host is reachable; returns 
+   * the current time (in milliseconds) on the remote host.
    * <p>
-   * Soon we'll likely move the "cw" parameter to a new 
-   * "writeConfiguration(ConfigurationWriter cw, String path)" method.
+   * Of course, there's no guarantee that the caller and host
+   * clocks are synchronized.
+   */
+  long ping() throws Exception;
+
+  /**
+   * Create a new process with the given description.
+   * <p>
+   * The "NodeEventListener" is a callback for the
+   * caller to handle "NodeEvent"s, such as standard-out.
+   * The "NodeEventFilter" configures the filtering and
+   * buffering policy for sending the NodeEvents.
+   * <p>
+   * The "ConfigurationWriter" can be used to write
+   * files just before creating the process.  This will
+   * be removed in a future implementation -- consider it
+   * deprecated.
+   *
+   * @throws IllegalArgumentException if the description's
+   *    ".getName()" is already in use by another running 
+   *    process.
+   * @throws Exception if unable to create or start the 
+   *    process.
+   */
+  NodeServesClient createNode(
+      ProcessDescription desc,
+      NodeEventListener nel,
+      NodeEventFilter nef,
+      ConfigurationWriter cw) throws Exception;
+
+  /**
+   * Soon to be <u>deprecated</u>; 
+   * use "createNode(ProcessDescription, ..)" instead.
    */
   NodeServesClient createNode(
       String nodeName,
@@ -49,6 +76,42 @@ public interface HostServesClient {
       NodeEventListener nel,
       NodeEventFilter nef,
       ConfigurationWriter cw) throws Exception;
+
+  /**
+   * Kill the process with the given ProcessDescription 
+   * ".getName()".
+   *
+   * @returns the exit value of the process, or
+   *    <tt>Integer.MIN_VALUE</tt> if no such process
+   *    exists.
+   *
+   * @see #getProcessDescription
+   */
+  int killNode(
+      String procName) throws Exception;
+
+  /**
+   * Get the ProcessDescriptions (for a running Process).
+   * 
+   * @return null if the process is not known, or is not
+   *    running.
+   */
+  ProcessDescription getProcessDescription(
+      String procName) throws Exception;
+
+  /**
+   * Get a List of all ProcessDescriptions (for running
+   * Processes) where the <tt>ProcessDescription.getGroup()</tt>
+   * equals the given <tt>procGroup</tt> String.
+   */
+  List listProcessDescriptions(
+      String procGroup) throws Exception;
+
+  /**
+   * Get a List of all ProcessDescriptions (for running
+   * Processes).
+   */
+  List listProcessDescriptions() throws Exception;
 
   /**
    * Get a list of filenames in the given path.
@@ -79,7 +142,4 @@ public interface HostServesClient {
   InputStream open(
       String filename) throws Exception;
 
-  //
-  // could add lookup of Nodes on this specific host:port here
-  //
 }

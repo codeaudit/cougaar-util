@@ -110,8 +110,6 @@ public class ServerDaemon {
     server =
       new ServerHostControllerImpl(
           serverConfig.isVerbose(),
-          serverConfig.getRMIHost(),
-          serverConfig.getRMIPort(),
           serverConfig.getTempPath(),
           serverConfig.getLoadDefaultProps(),
           args);
