@@ -1,7 +1,7 @@
 This directory contains XML file specifications for Ultra*Log 1AD
 societies.
 
-As of Cougaar 10.2, there is _minimal_ support for running Cougaar
+As of Cougaar 10.2, there is some support for running Cougaar
 societies from XML files. To do so, supply your society configuration
 as XML, following the schema in core/configs/common/society.xsd
 Then start your Node using one of the supplied XMLNode scripts in
@@ -35,11 +35,6 @@ communities.xml
 	This defines the 1AD logistics communities used by this
 	configuration.
 
-edit.rb
-	A Ruby script that shows how to edit these XML society files
-	using the Ruby csmart scripting model. They can also be edited
-	by hand, of course.
-
 1ad-configs.zip
 	ZIP file containing baseline 1AD military logistics society
 	configurations -- the following 6 files:
@@ -65,17 +60,17 @@ SMALL-1AD-TRANS-1359.xml
 	functionality, including all four threads of supply. 
 
 FULL-1AD-TRANS-STUB-1359.xml
-	This defines a society consisting of three nodes named
-	"FULL_1AD_a", "FULL_1AD_b", and "FULL_1AD_c" to run the 
+	This defines a society consisting of one node named
+	"FULL_1AD" to run the 
 	full 1AD society with the TRANSCOM-STUB
 	functionality, including all four threads of supply. 
-	Note that all three nodes are configured to start on "localhost"
+	Note that the node is configured to start on "localhost"
 
 FULL-1AD-TRANS-1359.xml
-	This defines a society consisting of three nodes named
-	"FULL_1AD_a", "FULL_1AD_b", and "FULL_1AD_c" to run the 
+	This defines a society consisting of a node named
+	"FULL_1AD" to run the 
 	full 1AD society with the full TRANSCOM
 	functionality, including all four threads of supply. 
-	Note that all three nodes are configured to start on "localhost"
+	Note that the node is configured to start on "localhost"
 
 
