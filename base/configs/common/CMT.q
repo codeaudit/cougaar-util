@@ -1,3 +1,9 @@
+# CMT.q
+# Queries to take the society rules & type definitions in the CFW
+# portion of the CSMART configuration database, and produce runnable
+# experiments - in particular, the CMT assembly of those experiments.
+# See org.cougaar.tools.csmart.core.db.CMT
+
 database=${org.cougaar.configuration.database}
 username=${org.cougaar.configuration.user}
 password=${org.cougaar.configuration.password}
