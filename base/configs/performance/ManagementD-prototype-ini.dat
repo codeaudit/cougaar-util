@@ -1,0 +1,21 @@
+[Prototype]     Organization
+        
+[UIC]		"ManagementD"
+
+[Relationship]
+        
+[TypeIdentificationPG]                      
+TypeIdentification		String	"UTC/RTOrg"
+Nomenclature			String	"Project Management"
+AlternateTypeIdentification	String	"Alice's Department"
+
+[OrganizationPG]
+Roles	Collection<Role>  "ProjectManagement"
+
+
+
+
+
+
+
+

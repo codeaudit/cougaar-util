@@ -1,0 +1,17 @@
+[Prototype]     Organization
+        
+[UIC]		"DevelopmentA"
+
+[Relationship]
+Supporting	"ManagementA"		"SoftwareDevelopment"
+        
+[TypeIdentificationPG]                      
+TypeIdentification		String	"UTC/RTOrg"
+Nomenclature			String	"Software Development"
+AlternateTypeIdentification	String	"Bob's Deptarment"
+
+[OrganizationPG]
+Roles	Collection<Role>  "SoftwareDevelopment"
+
+
+
