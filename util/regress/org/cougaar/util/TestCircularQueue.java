@@ -56,5 +56,34 @@ public class TestCircularQueue extends TestCase {
     assertEquals(q.next(), new Integer(4));
     assertEquals(q.next(), null);
   }
+  public void test_fillList() {
+    CircularQueue q = new CircularQueue(2);
+    q.add(new Integer(1));
+    q.add(new Integer(2));
+    ArrayList l = new ArrayList();
+    l.addAll(q);
+    assertTrue(l.size()==2);
+    assertEquals(new Integer(1),l.get(0));
+    assertEquals(new Integer(2), l.get(1));
+  }    
+  public void test_toArray1() {
+    CircularQueue q = new CircularQueue(2);
+    q.add(new Integer(1));
+    q.add(new Integer(2));
+    Object[] l = q.toArray();
+    assertTrue(l.length==2);
+    assertEquals(new Integer(1), l[0]);
+    assertEquals(new Integer(2), l[1]);
+  }    
+  public void test_toArray2() {
+    CircularQueue q = new CircularQueue(2);
+    q.add(new Integer(1));
+    q.add(new Integer(2));
+    Integer[] l = (Integer[]) q.toArray(new Integer[2]);
+    assertTrue(l.length==2);
+    assertEquals(new Integer(1), l[0]);
+    assertEquals(new Integer(2), l[1]);
+  }    
+
 }
 
