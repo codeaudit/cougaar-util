@@ -1,0 +1,66 @@
+#!/bin/bash
+ 
+# <copyright>
+#  Copyright 2001-2004 BBNT Solutions, LLC
+#  under sponsorship of the Defense Advanced Research Projects Agency (DARPA).
+# 
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the Cougaar Open Source License as published by
+#  DARPA on the Cougaar Open Source Website (www.cougaar.org).
+# 
+#  THE COUGAAR SOFTWARE AND ANY DERIVATIVE SUPPLIED BY LICENSOR IS
+#  PROVIDED 'AS IS' WITHOUT WARRANTIES OF ANY KIND, WHETHER EXPRESS OR
+#  IMPLIED, INCLUDING (BUT NOT LIMITED TO) ALL IMPLIED WARRANTIES OF
+#  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, AND WITHOUT
+#  ANY WARRANTIES AS TO NON-INFRINGEMENT.  IN NO EVENT SHALL COPYRIGHT
+#  HOLDER BE LIABLE FOR ANY DIRECT, SPECIAL, INDIRECT OR CONSEQUENTIAL
+#  DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE OF DATA OR PROFITS,
+#  TORTIOUS CONDUCT, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+#  PERFORMANCE OF THE COUGAAR SOFTWARE.
+# </copyright>
+
+
+#
+# Launch a Cougaar node
+#
+
+if [ -z $1 ]; then
+  cat <<EOF
+Usage: $0 [-v] XML_NAME [NODE_NAME]
+
+  -v         Verbose output
+  XML_NAME   XML society configuration file
+  NODE_NAME  Node name, defaults to first node in file
+EOF
+  exit 1
+fi
+
+verbose=
+if [ $1 = -v ]; then
+  verbose=1
+  shift 1
+fi
+
+xml=$1
+node=
+if [ ! -z "$2" ]; then
+  node="-param node $2"
+fi
+
+if [ -z $CIP ]; then
+  CIP=$COUGAAR_INSTALL_PATH
+fi
+xsl=$CIP/bin/linux_node.xsl
+
+cmd=`java org.apache.xalan.xslt.Process -in $xml -xsl $xsl $node`
+if [ -z "$cmd" ]; then
+  echo "Unable to find node $2 in file $1"
+  exit 1
+fi
+
+# prefix/append overrides?
+
+if [ $verbose ]; then
+  echo "java $cmd"
+fi
+exec /bin/sh -c "java $cmd"
