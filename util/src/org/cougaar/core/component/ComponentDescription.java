@@ -22,6 +22,8 @@ package org.cougaar.core.component;
 
 import java.net.URL;
 import java.io.Serializable;
+import java.util.*;
+import org.cougaar.util.*;
 
 /**
  * An immutable description of a loadable component (for example, 
@@ -41,6 +43,24 @@ import java.io.Serializable;
  **/
 public final class ComponentDescription implements Serializable {
 
+  /** Higher priority than internal components.  Containers are
+   * less likely to accomodate this level than the others
+   **/
+  public final static int PRIORITY_HIGH = 1;
+  /** Same priority as internal subcomponents.  E.g. loaded
+   * before binders.
+   **/
+  public final static int PRIORITY_INTERNAL = 2;
+  /** Binders are typically loaded before subcomponents **/
+  public final static int PRIORITY_BINDER = 3;
+  /** Standard subcomponent (including plugin) priority **/
+  public final static int PRIORITY_COMPONENT = 4;
+  /** Load after standard subcomponents **/
+  public final static int PRIORITY_LOW = 5;
+
+  /** Default priority for ComponentDescription objects **/
+  public final static int PRIORITY_STANDARD = PRIORITY_COMPONENT;
+
   private final String name;
   private final String insertionPoint;
   private final String classname;
@@ -49,6 +69,7 @@ public final class ComponentDescription implements Serializable {
   private final Object certificate;
   private final Object lease;
   private final Object policy;
+  private final int priority;
 
   /**
    * A ComponentDescription must have a non-null name, 
@@ -73,6 +94,50 @@ public final class ComponentDescription implements Serializable {
     this.certificate = certificate;
     this.lease = lease;
     this.policy = policy;
+    this.priority = PRIORITY_STANDARD;
+
+    // clone the object parameters to ensure immutability?
+
+    // validate -- also see "readObject(..)"
+    if (name == null) {
+      throw new IllegalArgumentException("Null name");
+    } else if (insertionPoint == null) {
+      throw new IllegalArgumentException("Null insertionPoint");
+    } else if (classname == null) {
+      throw new IllegalArgumentException("Null classname");
+    }
+  }
+
+  /**
+   * A ComponentDescription must have a non-null name, 
+   * insertionPoint, and classname.
+   *
+   * @throws IllegalArgumentException if name is null,
+   * insertionPoint is null, classname is null, or 
+   * priority is illegal.
+   */
+  public ComponentDescription(String name,
+                              String insertionPoint,
+                              String classname,
+                              URL codebase,
+                              Object parameter,
+                              Object certificate,
+                              Object lease,
+                              Object policy,
+                              int priority) {
+    this.name = name;
+    this.insertionPoint = insertionPoint;
+    this.classname = classname;
+    this.codebase = codebase;
+    this.parameter = parameter;
+    this.certificate = certificate;
+    this.lease = lease;
+    this.policy = policy;
+    if (priority<PRIORITY_HIGH || priority>PRIORITY_LOW) {
+      throw new IllegalArgumentException("Invalid priority specification");
+    } else {
+      this.priority = priority;
+    }
 
     // clone the object parameters to ensure immutability?
 
@@ -163,6 +228,24 @@ public final class ComponentDescription implements Serializable {
    **/
   public Object getPolicy() { return policy; }
 
+  /** Load Priority of the component in it's Container relative to
+   * other child components loaded at the same time at the same Containment point.
+   * Two components loaded at the same point and time with the same priority
+   * will be loaded in the order they are specified in.
+   * <p>
+   * However, it is up to the Container how to interpret priority.  Priority is,
+   * in general, only a recommendation, although the standard Containers
+   * implement the recommended interpretation.
+   * <p>
+   * In particular, Containers may decline to load high-priority subcomponents
+   * as early as they might like.
+   * <p>
+   * Note that code should always use the priority constants, rather than 
+   * int values, as the actual values and implementations are subject to change
+   * without notice.
+   **/
+  public int getPriority() { return priority; }
+
   /**
    * Equality tests <i>all</i> publicly visibile fields.
    * <p>
@@ -185,7 +268,8 @@ public final class ComponentDescription implements Serializable {
         eq(parameter, cd.parameter) &&
         eq(certificate, cd.certificate) &&
         eq(lease, cd.lease) &&
-        eq(policy, cd.policy)) {
+        eq(policy, cd.policy) &&
+        priority == priority) {
       return true;
     }
     return false;
@@ -222,4 +306,12 @@ public final class ComponentDescription implements Serializable {
   }
 
   private static final long serialVersionUID = 1673609926074089996L;
+
+  /** A comparator which may be used for sorting ComponentDescriptions by priority **/
+  public final static Comparator PRIORITY_Comparator = new Comparator() {
+      public final int compare(Object a, Object b) {
+        return (((ComponentDescription)b).priority-((ComponentDescription)a).priority);
+      }
+    };
+
 }
