@@ -166,9 +166,25 @@ ChangeReport.  See the CDG for details.
 The <a href="details/Servlet.html">Servlet server</a> has been upgraded to Tomcat 4.0.
 </li>
 <li>
-Metrics service. Zinky at noon.
+Metrics Service supports integrating multiple raw sensors into a coherent
+view of the Cougaar society which can be accessed by any component in the
+nodes' containment hierarchy. Note that the definitions for the paths (reader access) and
+keys (writer access) will evolve in future releases.
+<ul>
+<li> The MetricsService allows to read integrated metric values in real time.</li>
+<li> The MetricsUpdateService allows to publish raw metrics into the service.</li>
+</ul>
+An example is given in the MetricsTestAspect in the MTS package.
+For further details, see the CDG.</li>
 <li>
-Thread service. Zinky at noon.
+A reusable Thread Service is now available at all levels of the Cougaar containment hierarchy.
+In the future, this thread service will be integrated into the alarms and plugin dispatcher
+which should be transparent. Component should not "new" threads and timers, but should use the thread service. 
+For more details, see the CDG.
+</li>
+<li> The Message Transport has added several features which allow aspects to be combined with fewer conflicts.
+Some of these features include return codes, using attribute-based message instead of envelopes, and
+complete componentization of aspects and link protocols.
 </li>
 <li> Persistence supports writing snapshots to multiple media using
 media-specific plugins. This allows persistence data to be stored 
@@ -200,10 +216,11 @@ href="../csmart/doc/InstallAndTest.html">the CSMART Install
 instructions</a>.</li>
 <li>Finally, there are a few known issues in this release. These
 include occasional JVM errors that make use of the DataGrabber
-impossible, noticable performance problems in CSMART, and bugs in
+difficult in large (Full-1AD) societies, noticable performance problems in CSMART, and bugs in
 CSMART Agent recipes and Society Monitor. All of these will be
 addressed in a patch release of Cougaar shortly. As always, see the
-<a href="http://www.cougaar.org/bugs">Cougaar Bugzilla site</a> for details on bugs.</li>
+<a href="http://www.cougaar.org/bugs">Cougaar Bugzilla site</a> for
+details and status on bugs.</li>
 </ul>
 
 
@@ -750,12 +767,11 @@ General Development&nbsp;</h3>
 
 <h3>
 <a NAME="jvm"></a>Java Virtual Machine Requirements&nbsp;</h3>
-Cougaar is compiled and tested using the 1.4 release of JDK. 
-We recommend that users use this release. 
+Cougaar requires the 1.4 release of <a href="http://java.sun.com/j2se/1.4">JDK</a>. 
 
 Cougaar uses the JSSE Java extension, which now comes with the 
 default JDK 1.4 installation. 
-For detail, see:
+For details, see:
 <ul>
 <li>
 <a href="http://java.sun.com/products/jsse/">Java Secure Socket Extension
