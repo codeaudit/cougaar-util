@@ -43,6 +43,15 @@ import java.util.Properties;
  * This utility extends <code>java.util.Properties</code> by doing parameter
  * substitutions after loading a .q file. q files are cached, such that they
  * are only parsed once per VM.
+ *
+ * .q files understood by this class are different from those
+ * understood by QueryLDMPlugin and LDMSQLPlugin because the files are
+ * not divided into query handler sections. Instead query handlers are
+ * specified (when necessary) by the following convention: a property
+ * named after the generic query type (e.g. locationQuery) and
+ * suffixed with .handler is defined with a comma-separated list of
+ * handler class names. Each handler class knows the name of the query
+ * property that it uses.
  **/
 public class DBProperties extends java.util.Properties {
   private String default_dbtype;
