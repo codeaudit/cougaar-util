@@ -287,8 +287,13 @@ XSL Template for NodeAgent, which reuses most of SimpleAgent.
 
     <!-- alarms -->
     <component
-      name="org.cougaar.core.node.TimeComponent()"
-      class="org.cougaar.core.node.TimeComponent"
+      name="org.cougaar.core.node.RealTimeComponent()"
+      class="org.cougaar.core.node.RealTimeComponent"
+      priority="HIGH"
+      insertionpoint="Node.AgentManager.Agent.Component"/>
+    <component
+      name="org.cougaar.core.node.NaturalTimeComponent()"
+      class="org.cougaar.core.node.NaturalTimeComponent"
       priority="HIGH"
       insertionpoint="Node.AgentManager.Agent.Component"/>
 
