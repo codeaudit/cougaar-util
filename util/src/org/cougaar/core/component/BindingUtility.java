@@ -32,6 +32,7 @@ import org.cougaar.util.log.Logging;
  **/
 
 public abstract class BindingUtility {
+
   private final static Logger logger = Logging.getLogger(BindingUtility.class);
 
   public static boolean activate(Object child, BindingSite bindingSite, ServiceBroker serviceBroker) {

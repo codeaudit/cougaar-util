@@ -316,7 +316,7 @@ implements Container, StateObject
       return attachBinderFactory((BinderFactory)o);
     } else if (o instanceof Component) {
       // unusual case -- prefer to load from cd
-      return loadComponent(o, null);
+      return addComponent(o, null);
     } else {
       // not a clue.
       throw new IllegalArgumentException(
@@ -367,7 +367,7 @@ implements Container, StateObject
         // FIXME should add within lock to prevent duplicates
       }
       // insert here
-      return loadComponent(cd, cstate);
+      return addComponent(cd, cstate);
     }
 
     // more dots: try inserting in subcomponents
@@ -512,11 +512,10 @@ implements Container, StateObject
     return allAdded;
   }
 
+  // unsupported Collection ops
   public void clear() {
     throw new UnsupportedOperationException();
   }
-
-  // unsupported Collection ops
   public Object[] toArray() {
     throw new UnsupportedOperationException();
   }
@@ -533,48 +532,69 @@ implements Container, StateObject
     throw new UnsupportedOperationException();
   }
 
-  /** load a component into our set.  We are sure that this is
+  /**
+   * Add a component into our set.  We are sure that this is
    * the requested level, but might not be certain how much we trust
    * it as of yet.  In particular, we may need to treat different classes
    * of Components differently.
-   *<P>
-   * The component (and the binder tree) should be loaded and started
-   * when this loadComponent complete successfully.
+   * <p>
+   * The component (and the binder tree) will be transitioned to
+   * our container's current model state (e.g. ACTIVE).
    *
    * @return true on success.
-   * @throws ComponentLoadFailure When the component Cannot be loaded.
+   * @throws ComponentLoadFailure when the component can not be loaded.
    **/
-  protected boolean loadComponent(Object c, Object cstate) {
-    Binder b = bindComponent(c); // cannot return null any more
-    BoundComponent bc = new BoundComponent(b,c);
+  protected boolean addComponent(Object c, Object cstate) {
+    Binder b = bindComponent(c);
+    if (b == null) {
+      throw new ComponentLoadFailure("No binder found", c);
+    }
+    BindingUtility.setBindingSite(b, getChildContainerProxy(c));
+    BindingUtility.setServices(b, getChildServiceBroker(c));
+    if (cstate != null) {
+      b.setState(cstate);
+    }
+    BoundComponent bc = new BoundComponent(b, c);
     synchronized (boundComponents) {
       boundComponents.add(bc);
     }
-    if (cstate != null) {
-      // provide the state during load
-      b.setState(cstate);
+    // transition state to match our container's state
+    int myState = getModelState();
+    boolean suspend = (myState == GenericStateModel.IDLE);
+    boolean start = (suspend || myState == GenericStateModel.ACTIVE);
+    boolean load = (start || myState == GenericStateModel.LOADED);
+    boolean init = (load || myState != GenericStateModel.UNINITIALIZED);
+    if (init) {
+      b.initialize();
+      if (load) {
+        b.load();
+        if (start) {
+          b.start();
+          if (suspend) {
+            b.suspend();
+          }
+        }
+      }
     }
-    b.load();
-    b.start();
     return true;
   }
 
-  /**  These BinderFactories
-   * are used to generate the primary containment
-   * binders for the child components.  If the child
-   * component is the first BinderFactory, then we'll
-   * call bindBinderFactory after failing to find a binder.
-   * <p>
-   * A Component is initialized (but not loaded) s a side-effect of binding 
-   **/
+  /**
+   * Find a BinderFactory willing to bind this component, then
+   * wrap it with BinderFactoryWrappers.
+   */
   protected Binder bindComponent(Object c) {
     synchronized (binderFactories) {
       ArrayList wrappers = null;
+
+      // find a binder factory that will bind this component
       Binder b = null;
       for (Iterator i = binderFactories.iterator(); i.hasNext(); ) {
         BinderFactory bf = (BinderFactory) i.next();
         if (bf instanceof BinderFactoryWrapper) {
-          if (wrappers==null) wrappers=new ArrayList(1);
+          if (wrappers == null) {
+            wrappers = new ArrayList(1);
+          }
           wrappers.add(bf);
         } else {
           b = bf.getBinder(c);
@@ -584,28 +604,20 @@ implements Container, StateObject
         }
       }
 
-      // now apply any wrappers.
+      // now apply any wrappers, iterating from "last to innermost"
       if (wrappers != null) {
         int l = wrappers.size();
-        for (int i=l-1; i>=0; i--) { // last ones innermost
+        for (int i = l - 1; i >= 0; i--) {
           BinderFactoryWrapper bf = (BinderFactoryWrapper) wrappers.get(i);
           Binder w = bf.getBinder((b==null)?c:b);
-          if (w!= null) {
+          if (w != null) {
             b = w;
           }
         }
       }
 
-      if (b != null) {
-        BindingUtility.setBindingSite(b, getChildContainerProxy(c));
-        BindingUtility.setServices(b, getChildServiceBroker(c));
-        BindingUtility.initialize(b);
-        // done
-        return b;
-      } else {
-        throw new ComponentLoadFailure("No binder found", c);
-      }
-    }    
+      return b;
+    }
   }
 
   /** Called when a componentDescription insertion point ends in .Binder or .BinderFactory 
@@ -733,6 +745,17 @@ implements Container, StateObject
     }
   }
 
+  public void initialize() {
+    super.initialize();
+    // not expecting any child components this early
+    for (Iterator childBinders = binderIterator();
+        childBinders.hasNext();
+        ) {
+      Binder b = (Binder)childBinders.next();
+      b.initialize();
+    }
+  }
+
   /** 
    * Called by super.load() to transit the state, sets the value of
    * getExternalComponentDescriptions() 
@@ -756,6 +779,16 @@ implements Container, StateObject
     loadBinderPriorityComponents();
     loadComponentPriorityComponents();
     loadLowPriorityComponents();
+  }
+
+  public void start() {
+    super.start();
+    for (Iterator childBinders = binderIterator();
+        childBinders.hasNext();
+        ) {
+      Binder b = (Binder)childBinders.next();
+      b.start();
+    }
   }
 
   public void suspend() {

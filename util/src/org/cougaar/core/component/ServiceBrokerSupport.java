@@ -156,7 +156,26 @@ public class ServiceBrokerSupport
   /** get an instance of the requested service from a service provider associated
    * with this context.
    **/
-  public Object getService(Object requestor, final Class serviceClass, final ServiceRevokedListener srl) {
+  public Object getService(
+      Object requestor,
+      Class serviceClass,
+      ServiceRevokedListener srl) {
+    Object service = 
+      getServiceAllowNull(requestor, serviceClass, srl);
+    if (service instanceof NullService) {
+      service = null; // blocked
+    }
+    return service;
+  }
+
+  /**
+   * get the service and allow a NullService result, which the
+   * usual "getService(..)" replaces with null.
+   */ 
+  protected Object getServiceAllowNull(
+      Object requestor,
+      final Class serviceClass,
+      final ServiceRevokedListener srl) {
     if (requestor == null) throw new IllegalArgumentException("null requestor");
     if (serviceClass == null) throw new IllegalArgumentException("null serviceClass");
 
@@ -168,7 +187,7 @@ public class ServiceBrokerSupport
     }
     synchronized (sp) {
       service = sp.getService(this, requestor, serviceClass);
-      if (service != null) {
+      if (service != null && !(service instanceof NullService)) {
         if (! serviceClass.isAssignableFrom(service.getClass())) {
           throw new ClassCastException("ServiceProvider "+sp+
                                        " returned a Service ("+service+

@@ -104,7 +104,7 @@ public abstract class GenericStateModelAdapter
    *   Be careful and complain if we are in an inappropriate starting state.
    *   @exception org.cougaar.util.StateModelException If Cannot transition to new state.   
    **/
-  private synchronized void transitState(String op, int expectedState, int endState) throws StateModelException {
+  protected synchronized void transitState(String op, int expectedState, int endState) throws StateModelException {
     if (runState != expectedState) {
       throw new StateModelException(""+this+"."+op+" called in inappropriate state ("+runState+")");
     } else {

@@ -156,13 +156,15 @@ public abstract class BinderSupport
   public void setState(Object state) {
     if (state == null) {
       return;
+    }
+    if (child == null) {
+      child = constructChild();
+    }
+    if (child instanceof StateObject) {
+      ((StateObject)child).setState(state);
     } else {
-      if (child instanceof StateObject) {
-        ((StateObject)child).setState(state);
-      } else {
-        throw new RuntimeException("BinderSupport: No \"setState(..)\" from "+
-                                   getContainer()+" for "+child);
-      }
+      throw new RuntimeException("BinderSupport: No \"setState(..)\" from "+
+                                 getContainer()+" for "+child);
     }
   }
 }

@@ -74,6 +74,9 @@ public class AddonServiceBroker
   public final Object getService(Object requestor, final Class serviceClass, final ServiceRevokedListener srl) {
     Object s = getLocalService(requestor, serviceClass, srl);
     if (s != null) {
+      if (s instanceof NullService) {
+        s = null;
+      }
       return s;
     } else {
       return delegate.getService(requestor, serviceClass, srl);

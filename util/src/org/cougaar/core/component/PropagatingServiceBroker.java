@@ -143,12 +143,15 @@ public class PropagatingServiceBroker
    * with this context.
    **/
   public Object getService(Object requestor, final Class serviceClass, final ServiceRevokedListener srl) {
-    Object service = super.getService(requestor, serviceClass, srl);
+    Object service = getServiceAllowNull(requestor, serviceClass, srl);
     if (service != null) {
-      return service;
+      if (service instanceof NullService) {
+        service = null; // blocked
+      }
     } else {
-      return delegate.getService(requestor, serviceClass, srl);
+      service = delegate.getService(requestor, serviceClass, srl);
     }
+    return service;
   }
 
   public void releaseService(Object requestor, Class serviceClass, Object service) {
