@@ -4,7 +4,7 @@
    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
    <meta name="GENERATOR" content="Mozilla/4.77 [en] (WinNT; U) [Netscape]">
    <meta name="Template" content="C:\Program Files\Microsoft Office\Office\html.dot">
-   <title>Release Notes</title>
+   <title>Cougaar Database Release Notes</title>
 </head>
 <body link="#0000FF" vlink="#800080">
 &nbsp;
@@ -13,14 +13,14 @@
 <br></tbody></caption>
 
 <tr>
-<td ALIGN=CENTER WIDTH="200"><a href="HTTPS://www.alpine.bbn.com/"><img SRC="alpine-logo-small.gif" BORDER=0 height=83 width=95></a></td>
+<td ALIGN=CENTER WIDTH="200"><a href="HTTPS://www.alpine.bbn.com/"><img SRC="../alpine-logo-small.gif" BORDER=0 height=83 width=95></a></td>
 
 <td ALIGN=CENTER WIDTH="200">
 <h2>
-<b><font size=+2>COUGAAR 8.6.0</font></b></h2>
+<b><font size=+2>COUGAAR 9.2.0</font></b></h2>
 </td>
 
-<td ALIGN=CENTER WIDTH="200"><a href="http://www.cougaar.org"><img SRC="cougaar-smalllogo.jpg" BORDER=0 ></a></td>
+<td ALIGN=CENTER WIDTH="200"><a href="http://www.cougaar.org"><img SRC="../cougaar-smalllogo.jpg" BORDER=0 ></a></td>
 </tr>
 </table>
 
@@ -105,7 +105,7 @@ The LDMPlugins now support connecting to any database via a JDBC database
 driver.&nbsp; All data needed to support running of the SMALL-135 configuration
 have been ported to both MySQL and PostgreSQL.&nbsp; These database exports
 are available on the COUGAAR web site.&nbsp; Below is a highlight of the
-changes and capabilities in the 8.6.0 Cougaar Release.
+changes made in 8.6 and capabilities in the current Cougaar Release.
 <ul>
 <li>
 18 Oracle tables were ported to MySQL and PostgreSQL</li>
@@ -268,22 +268,23 @@ set-variable	=	lower_case_table_names=1
 <li>
 You will find a MySQL JDBC driver, version 2.0.3 ( mm-mysql-2.jar) in the
 sys directory in the cougaar-support.zip.&nbsp; This one has been tested
-with the 8.6.0 release.&nbsp; You can find the latest drivers at 
+with the current release.&nbsp; You can find the latest drivers at 
 <a href="http://sourceforge.net/projects/mmmysql">http://sourceforge.net/projects/mmmysql</a>&nbsp;</li>
 
 <li>
 Download and import the mysql data files found in the dbms/data/mysql
-directory in the cougaar.zip: mysqldump.8.6.txt for the main data,
-army_spares.ZIP (after unzipping), and spares_index.txt. You will
+directory in the cougaar.zip: mysqldump.9.2.txt for the main data,
+army_spares.ZIP (after unzipping), and spares_index.txt. Other files
+in this area are not required. You will
 likely also need to load the CSMART configuration database, which
 contains additionally the FDM data. See <a
 href="../../csmart/doc/InstallAndTest.html">csmart/doc/InstallAndTest.html</a>.</li>
 
 <li>
-To load: mysql -u {USER} –p{PASSWORD} {DATABASE} &lt; [mysqldump.8.6.txt or other file]</li>
+To load: mysql -u {USER} –p{PASSWORD} {DATABASE} &lt; [mysqldump.9.2.txt or other file]</li>
 
 <li>
-Or simply download the Cougaar 8.6.0 installer from the Cougaar web site
+Or simply download the Cougaar installer from the Cougaar web site
 www.cougaar.org. The installer installs the MySQL server and populates
 the database.</li>
 </ul>
@@ -320,11 +321,11 @@ to use the bbn-postgresql7.1.3.jar in the sys directory.&nbsp;
 If needed, download and install the latest version of PostgreSQL from http://www.postgresql.org</li>
 
 <li>
-Download and import the pg_dump-8.6.txt found in the dbms/data/postgresql
+Download and import the pg_dump.txt found in the dbms/data/postgresql
 directory in the cougaar.zip</li>
 
 <li>
-To load the data, use the command:&nbsp; psql dbname &lt; mysqldump.8.6.txt&nbsp;</li>
+To load the data, use the command:&nbsp; psql dbname &lt; pg_dump.txt&nbsp;</li>
 
 <li>
 Add appropriate command options for host, username and password as needed</li>
