@@ -51,8 +51,6 @@ import sun.net.www.ParseUtil;
  * The classes that are loaded are by default granted permission only to
  * access the URLs specified when the XURLClassLoader was created.
  *
- * @author  David Connelly
- * @version 1.74, 12/03/01
  * @since   1.2
  */
 public class XURLClassLoader extends SecureClassLoader {

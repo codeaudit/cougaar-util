@@ -30,7 +30,6 @@ package org.cougaar.util;
  *  This is the interface that defines state transitions for
  *  clusters, components and plugins.
  *
- * @author  ALPINE <alpine-software@bbn.com>
  *
  */
 
