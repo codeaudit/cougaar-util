@@ -128,11 +128,11 @@ to provide the identical capability.&nbsp;</li>
 The basic course tutorial exercises which use servlets have had their build
 scripts, run scripts, and configuration files have been updated to work
 effectively with the servlets.</li>
-</ul>
 
 <li>
 Bug 850 indicated a problem with using the batch file to run the HanoiNode
 tutorial. This has been fixed in version 9.0.</li>
+</ul>
 
 <li>
 Node Manager</li>
@@ -149,6 +149,19 @@ and SQLOplanPlugIn. Now when starting one of the logistics domain societies,
 users must also run GLSClient.[sh|bat] to initiate processing (assuming
 that the three latter plugins have been replaced in the configuration by
 GLSInitServlet).</li>
+
+<li>
+CSMART cleanup: See <a href="../csmart/doc/release-notes.txt">CSMART
+release notes</a> for details. Notable highlights include:<ul>
+<li>Upgraded required Grappa to most recent version 1.2, which
+includes the BBN modifications. See <a href="../sys/index.html">required jar file documentation</a></li>
+<li>Upgraded Ant build script to require Ant1.4.1</li>
+<li>Repackaging and code cleanup</li>
+<li>Use core logging service</li>
+<li>Remove PSP support, using Servlets throughout instead, including
+new GLSInitServlet</li>
+<li>New Servlet Insertion Recipe</li>
+</ul></li>
 </ul>
 Build 8.8.0 is a point release along COUGAAR 8.0 and represents 8.6.0 with
 assorted bugs fixed and some minor new features, specifically to support
@@ -186,6 +199,13 @@ to support and incorporate Ultra*Log integration work previously done in
 <ul>
 <li>
 Bugs fixed.</li>
+<li>CSMART enhancements (See: <a href="../csmart/doc/release-notes.txt">CSMART
+release notes</a> for details)<ul>
+<li>Added support for assessment societies defined in MySQL
+database</li>
+<li>New concept: Recipe - for adding components to a society</li>
+<li>Multiple improvements to ability to configure and control societies from CSMART</li>
+</ul></li>
 </ul>
 Build 8.6.1 is a point release along COUGAAR 8.0 and represents 8.6.0 with
 assorted bugs fixed and some minor new features, specifically to support
