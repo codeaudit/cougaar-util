@@ -22,7 +22,7 @@
 package org.cougaar.lib.contract.lang;
 
 /**
- * An <code>org.cougaar.core.util.Operator</code> parse failure.
+ * An <code>org.cougaar.lib.contract.Operator</code> parse failure.
  */
 public class ParseException extends Exception {
 

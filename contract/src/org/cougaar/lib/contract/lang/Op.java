@@ -21,12 +21,12 @@
 
 package org.cougaar.lib.contract.lang;
 
-import org.cougaar.core.util.Operator;
+import org.cougaar.lib.contract.Operator;
 
 /**
- * An <code>org.cougaar.core.util.Operator</code> with additional methods for parsing.
+ * An <code>org.cougaar.lib.contract.Operator</code> with additional methods for parsing.
  * <p>
- * @see org.cougaar.core.util.Operator
+ * @see org.cougaar.lib.contract.Operator
  */
 public interface Op extends Operator {
 

@@ -30,7 +30,7 @@ import org.cougaar.lib.contract.lang.*;
  * Class reflection utilities.
  * <p>
  * Add cache here.  
- * @see org.cougaar.core.util.StringObjectFactory
+ * @see org.cougaar.lib.contract.StringObjectFactory
  **/
 public final class ClassCache {
 
@@ -95,7 +95,6 @@ public final class ClassCache {
 
   /**
    * Find <code>Class</code> "name".
-   * @see org.cougaar.core.util.StringObjectFactory
    **/
   public static final Class lookup(final String name) {
     // try the given name

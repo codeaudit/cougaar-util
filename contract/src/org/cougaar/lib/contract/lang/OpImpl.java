@@ -21,7 +21,7 @@
 
 package org.cougaar.lib.contract.lang;
 
-import org.cougaar.core.util.Operator;
+import org.cougaar.lib.contract.Operator;
 
 import org.cougaar.lib.contract.lang.compare.*;
 
@@ -41,7 +41,7 @@ public abstract class OpImpl implements Op {
   public OpImpl() {}
 
   /**
-   * Parser additions to <code>org.cougaar.core.util.Operator</code>
+   * Parser additions to <code>org.cougaar.lib.contract.Operator</code>
    */
   public abstract int getID();
 

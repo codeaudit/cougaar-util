@@ -24,17 +24,17 @@ package org.cougaar.lib.contract.lang;
 import java.io.*;
 import java.util.*;
 
-import org.cougaar.core.util.Operator;
-import org.cougaar.core.util.OperatorFactory;
+import org.cougaar.lib.contract.Operator;
+import org.cougaar.lib.contract.OperatorFactory;
 
 import org.cougaar.lib.contract.lang.cache.ClassCache;
 import org.cougaar.lib.contract.lang.parser.*;
 
 /**
- * Implementation of <code>org.cougaar.core.util.OperatorFactory</code> -- used to hide
+ * Implementation of <code>org.cougaar.lib.contract.OperatorFactory</code> -- used to hide
  * package dependency and some internals.
  * <p>
- * @see org.cougaar.core.util.OperatorFactory
+ * @see org.cougaar.lib.contract.OperatorFactory
  */
 public class OperatorFactoryImpl extends OperatorFactory {
 

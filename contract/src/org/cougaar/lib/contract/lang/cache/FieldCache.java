@@ -30,7 +30,6 @@ import org.cougaar.lib.contract.lang.*;
  * Field lookup cache.
  * <p>
  * Currently no cache -- add MRU cache here.
- * @see org.cougaar.core.util.StringObjectFactory
  **/
 public final class FieldCache {
 
