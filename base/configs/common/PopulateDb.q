@@ -105,7 +105,7 @@ queryLibPGAttribute=\
 queryMaxExptId=\
  SELECT MAX(EXPT_ID) \
    FROM V4_EXPT_EXPERIMENT \
-  WHERE EXPT_ID LIKE ':expt_id_pattern:'
+  WHERE EXPT_ID LIKE ':max_id_pattern:'
 
 insertExptId=\
  INSERT INTO V4_EXPT_EXPERIMENT (EXPT_ID, DESCRIPTION, NAME) \
@@ -114,7 +114,7 @@ insertExptId=\
 queryMaxTrialId=\
  SELECT MAX(TRIAL_ID) \
    FROM V4_EXPT_TRIAL \
-  WHERE TRIAL_ID LIKE ':trial_id_pattern:'
+  WHERE TRIAL_ID LIKE ':max_id_pattern:'
 
 insertTrialId=\
  INSERT INTO V4_EXPT_TRIAL (TRIAL_ID, EXPT_ID, DESCRIPTION, NAME) \
