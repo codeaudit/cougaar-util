@@ -616,9 +616,16 @@ insertAsbAgent=\
 
 ########
 # Sample recipe queries follow
-# _ALL_ queries that you use in your recipes _must_ be included in this file.
+# ALL queries that you use in your recipes must be included in
+# this file or a file called recipeQueries.q which you create
+# and place on your ConfigPath (typically in this directory)
+
 # Typical usage therefore is to create a new query by editing this file,
 # copying one of the provided sample queries.
+# Note that the available substitutions include:
+# :assembly_match: (ie "in ('CSMI-0001','ASB2','ASB3')")
+# :expt_id: (ie EXPT-0001)
+# :trial_id: (ie EXPT-0001.TRIAL)
 
 # First, sample target component queries: where to insert the component
 # First, those that look for agents
@@ -650,7 +657,11 @@ recipeQuery2BDE_Sub_AgentsByName=\
 
 # Find the subordinates of 3BDE. By changing the agent name and the role,
 # you can do different relationships. Note that this must be a direct relationship - 
-# this is not transitive.
+# this is not transitive. Also note that if you have recipes that add
+# relevant agent OrgAssets or change relationships, you must change your CSMART
+# startup scripts to supply the -D argument
+# org.cougaar.tools.csmart.allowComplexRecipeQueries. See the startup
+# scripts for details.
 recipeQuerySubordinatesOf3_BDE_2ID_HHC=\
  SELECT SPTG.COMPONENT_ALIB_ID \
    FROM alib_component SPTG, alib_component SPTD, asb_agent_relation R \
