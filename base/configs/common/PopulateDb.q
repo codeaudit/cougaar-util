@@ -382,14 +382,14 @@ recipeQueryNodesWithSpecificAgents =\
 # but rather, hard code the values.
 # We are retrieving the component name, type, and class
 recipeQueryExampleBinderSpecification=\
- SELECT 'org.cougaar.core.examples.PluginServiceFilter', 'binder', 'org.cougaar.core.examples.PluginServiceFilter' \
+ SELECT 'org.cougaar.core.examples.PluginServiceFilter', 'agent binder', 'org.cougaar.core.examples.PluginServiceFilter' \
    FROM DUAL
 
 # Here we load the MIC TechSpecBinder. Be sure that techspecs.jar (built
 # against your version of Cougaar and including the appropriate
 # default_techspecs.xml is in CIP/sys on all machines)
 recipeQueryMICBinder=\
- SELECT 'com.mobile_intelligence.contracts.TechSpecBinderFactory', 'binder', 'com.mobile_intelligence.contracts.TechSpecBinderFactory' \
+ SELECT 'com.mobile_intelligence.contracts.TechSpecBinderFactory', 'agent binder', 'com.mobile_intelligence.contracts.TechSpecBinderFactory' \
    FROM DUAL
 
 #####
@@ -404,17 +404,17 @@ recipeQueryMICBinder=\
 # the config path, as in:
 # org.cougaar.config.path="C\:\\Cougaar\\configs\\mic\;"
 recipeQueryMICBinderParams2BDEPropFileCaptureMode=\
- SELECT 'file=2bde.properties', 'CAPTURE' FROM DUAL WHERE DUMMY IS NULL
+ SELECT 'file=2bde.properties', 'CAPTURE' FROM DUAL WHERE DUMMY = 'X'
 
 recipeQueryMICBinderParamsOnePropFileMonitorMode=\
- SELECT 'file=2bde.properties', 'MONITOR' FROM DUAL WHERE DUMMY IS NULL
+ SELECT 'file=2bde.properties', 'MONITOR' FROM DUAL WHERE DUMMY = 'X'
 
 # Here is a query that gives no arguments to the component.
 recipeQueryExampleBinderArgs=\
- SELECT NULL, NULL FROM DUAL WHERE DUMMY IS NULL;
+ SELECT NULL, NULL FROM DUAL WHERE DUMMY IS NULL
 
 recipeQuerySelectNothing=\
- SELECT * FROM DUAL WHERE DUMMY IS NULL;
+ SELECT * FROM DUAL WHERE DUMMY IS NULL
 
 recipeQueryNCAAgent=\
  SELECT component_alib_id from v4_alib_component where component_name='NCA'
