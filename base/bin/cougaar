@@ -31,7 +31,7 @@ if [ -z "$COUGAAR_INSTALL_PATH" ]; then
   if [ "$CIP" ]; then
     export COUGAAR_INSTALL_PATH="$CIP"
   else
-    s=`echo "$0" | sed -e 's,/bin/Cougaar,,'`
+    s=`echo "$0" | sed -e 's,/bin/cougaar,,'`
     if [ x$s != x ]; then
       export COUGAAR_INSTALL_PATH=$s
     else
