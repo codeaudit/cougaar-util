@@ -70,34 +70,28 @@ public class TimeSpanSet
     if (! (o instanceof TimeSpan)) 
       throw new IllegalArgumentException();
     TimeSpan timeSpan = (TimeSpan)o;
-    if (true) {
-      int i = Collections.binarySearch(this, timeSpan, bsComparator);
-      if (i >= 0) return false; // This timespan is already in set
-      i = -(i + 1);             // The insertion point
-      for (int j = i; --j >= 0; ) {
-        if (bsComparator.compare(timeSpan, elementData[j]) != 0) break;
-        if (timeSpan.equals(elementData[j])) return false;
-      }
-      for (int j = i, e = size(); j < e; j++) {
-        if (bsComparator.compare(timeSpan, elementData[j]) != 0) break;
-        if (timeSpan.equals(elementData[j])) return false;
-      }
-      super.add(i, timeSpan);
-      return true;
-    } else {
-      int i = search(timeSpan);
-      long startTime = timeSpan.getStartTime();
-      long endTime = timeSpan.getEndTime();
 
-      // Make sure that it's not really equal to any existing members of the set
-      while ((i<size) &&
-             (compare(startTime, endTime, (TimeSpan)elementData[i])== 0)){
-        if (timeSpan.equals(elementData[i++])) return false;
-      }
+    int i = Collections.binarySearch(this, timeSpan, bsComparator);
+    if (i >= 0) 
+      return false; // This timespan is already in set
+    i = -(i + 1);             // The insertion point
 
-      super.add(i, timeSpan);
-      return true;
+    for (int j = i; --j >= 0; ) {
+      if (bsComparator.compare(timeSpan, elementData[j]) != 0) 
+	break;
+      if (timeSpan.equals(elementData[j])) 
+	return false;
     }
+
+    for (int j = i, e = size(); j < e; j++) {
+      if (bsComparator.compare(timeSpan, elementData[j]) != 0) 
+	break;
+      if (timeSpan.equals(elementData[j])) 
+	return false;
+    }
+
+    super.add(i, timeSpan);
+    return true;
   }
 
   public void add(int i, Object o) {
