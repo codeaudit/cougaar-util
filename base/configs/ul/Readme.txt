@@ -34,8 +34,43 @@ communities.xml
 	This defines the 1AD logistics communities used by this
 	configuration.
 
+edit.rb
+	A Ruby script that shows how to edit these XML society files
+	using the Ruby csmart scripting model. They can also be edited
+	by hand, of course.
+
 TINY-1AD-TRANS-STUB-1359.xml
 	This defines a society consisting of a single node named
 	"1AD_TINY" to run the Tiny 1AD society with the TRANSCOM-STUB
 	functionality, including all four threads of supply. 
+
+TINY-1AD-TRANS-1359.xml
+	This defines a society consisting of a single node named
+	"1AD_TINY" to run the Tiny 1AD society with the full TRANSCOM
+	functionality, including all four threads of supply. 
+
+SMALL-1AD-TRANS-STUB-1359.xml
+	This defines a society consisting of a single node named
+	"SMALL_1AD" to run the Small 1AD society with the TRANSCOM-STUB
+	functionality, including all four threads of supply. 
+
+SMALL-1AD-TRANS-1359.xml
+	This defines a society consisting of a single node named
+	"SMALL_1AD" to run the Small 1AD society with the full TRANSCOM
+	functionality, including all four threads of supply. 
+
+FULL-1AD-TRANS-STUB-1359.xml
+	This defines a society consisting of three nodes named
+	"FULL_1AD_a", "FULL_1AD_b", and "FULL_1AD_c" to run the 
+	full 1AD society with the TRANSCOM-STUB
+	functionality, including all four threads of supply. 
+	Note that all three nodes are configured to start on "localhost"
+
+FULL-1AD-TRANS-1359.xml
+	This defines a society consisting of three nodes named
+	"FULL_1AD_a", "FULL_1AD_b", and "FULL_1AD_c" to run the 
+	full 1AD society with the full TRANSCOM
+	functionality, including all four threads of supply. 
+	Note that all three nodes are configured to start on "localhost"
+
 
