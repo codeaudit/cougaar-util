@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # <copyright>
 #  
@@ -122,6 +122,9 @@ bootargs="-Xbootclasspath/p:${COUGAAR_INSTALL_PATH}/lib/javaiopatch.jar"
 # name of the node class
 nodeclass="org.cougaar.core.node.Node"
 
+#JAZ temp fix since preargs do not work
+preargs="${COUGAAR_JAVA_ARGS}"
+
 allargs="${bootargs}
 ${vmargs}
 ${eargs}
@@ -144,5 +147,5 @@ $xmlargs"
 fi
 IFS=$'\n'
 
-exec /bin/sh $COUGAAR_INSTALL_PATH/bin/boost $allargs $nodeclass $postargs
+exec /bin/bash $COUGAAR_INSTALL_PATH/bin/boost $allargs $nodeclass $postargs
 
