@@ -97,6 +97,10 @@ Service discovery uses the community service to traverse the hierarchy of
 YPServers to find the providers which most closely match the client's 
 specification.
 </li>
+<li>Modified GLS task generation. A separate GLS task is created for each 
+oplan stage. Each task has the set of oplan stages which were valid at the 
+time it was created
+</li>
 <li>RFE 3162: ServiceDiscovery ClientPlugin forces a persist after FindProviders
 is complete - killing an agent before that point when using
 ServiceDiscovery is not supported.</li>
