@@ -1,3 +1,52 @@
+2003-04-24  Ray Tomlinson  <RTomlinson@bbn.com>
+
+	* CSVUtility.java:
+	Bug #2835 -- CSVUtility.parse does not replace StringUtility.parseCSV
+	Added variant of parse method accepting a separator character
+	argument. Refactored other methods in terms of the new methods.
+
+2003-04-09  Ray Tomlinson  <RTomlinson@bbn.com>
+
+	* log/log4j/LoggerImpl.java:
+	Println dots newline to same stream as printDots. Duhh...
+
+2003-04-07  Ray Tomlinson  <RTomlinson@bbn.com>
+
+	* log/log4j/LoggerImpl.java:
+	Bug #2743 -- Dots and other characters printed to System.err/out
+	interfere with logging 
+	The actual implementation of printDots is here. If the underlying
+	Category (Logger) has any Appender that is a ConsoleAppender or if
+	additivity is true and any ancestor Category has a
+	ConsoleAppender, enable dot checking. If dot checking is on,
+	before printing any log output, check if any dot printing has
+	happened since the last log output. If it has, print an eol before
+	performing the logging output. When printLog is called if there
+	are no preceding dots, print a timestamp first before printing the
+	dots. Count the number of characters printed this way.
+
+	* log/NullLogger.java:
+	Bug #2743 -- Dots and other characters printed to System.err/out
+	interfere with logging 
+	Add printDot method (does nothing).
+
+	* log/Logging.java:
+	Bug #2743 -- Dots and other characters printed to System.err/out
+	interfere with logging
+	Add convenience method for calling printDot without a Logger or
+	LoggingService.
+
+	* log/LoggerProxy.java: 
+	Bug #2743 -- Dots and other characters printed to System.err/out
+	interfere with logging
+	Pass through printDot to underlying Logger.
+
+	* log/Logger.java:
+	Bug #2743 -- Dots and other characters printed to System.err/out
+	interfere with logging
+	Add printDot method to allow applications to print dots and
+	similar output without messing up the logging output.
+
 2003-03-17  Ray Tomlinson  <RTomlinson@bbn.com>
 
 	* log/log4j/Log4jLoggerFactory.java:
