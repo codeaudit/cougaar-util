@@ -1,3 +1,18 @@
+2002-08-13  Ray Tomlinson  <RTomlinson@bbn.com>
+
+	* org/cougaar/core/component/ServiceBrokerSupport.java:
+	Bug #2014 -- SchedulerServiceProvider causes deadlock
+	Actually caused by using the service broker for getting a service
+	from within a ServiceListener. Getting a service requires locking
+	the service provider and if the service provider is locked by a
+	thread that is trying to add a service listener for the same
+	service provider, deadlock ensues.
+	This is a quick fix to copy out the listeners List so the listener
+	lock does not need to be held while listeners are invoked. It is
+	conceivable that adding the listener does not require locking the
+	service provider, but that will take more study. This is
+	guaranteed to fix the problem at the expense of an array.
+
 2002-06-10  Ray Tomlinson  <RTomlinson@bbn.com>
 
 	* org/cougaar/core/component/AddonServiceBroker.java:

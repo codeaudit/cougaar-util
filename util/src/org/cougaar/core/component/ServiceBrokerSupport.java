@@ -53,11 +53,16 @@ public class ServiceBrokerSupport
   
   /** Apply each listener appropriately to the event **/
   protected void applyListeners(ServiceEvent se) {
+    // Copy out the listeners while synchronized. but don't call the
+    // listeners while synchronized. Avoids a deadlock when the
+    // service broker is used within the listener.
+    ServiceListener[] listenerArray;
     synchronized (listeners) {
-      int n = listeners.size();
-      for (int i = 0; i<n; i++) {
-        applyListener((ServiceListener) listeners.get(i), se);
-      }
+      listenerArray = new ServiceListener[listeners.size()];
+      listenerArray = (ServiceListener[]) listeners.toArray(listenerArray);
+    }
+    for (int i = 0; i < listenerArray.length; i++) {
+      applyListener(listenerArray[i], se);
     }
   }
 
