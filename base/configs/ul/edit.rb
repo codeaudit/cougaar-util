@@ -40,7 +40,7 @@ society.each_host do |host|
 		node.remove_parameter("-Dorg.cougaar.experiment.id")
 		node.remove_parameter("-Dorg.cougaar.control.port")
 		node.remove_parameter("-Dorg.cougaar.tools.server.swallowOutputConnectionException")
-		node.override_parameter("-Dorg.cougaar.node.InitializationComponent","XML")
+		node.override_parameter("-Dorg.cougaar.core.node.InitializationComponent","XML")
 		node.override_parameter("-Dorg.cougaar.society.file","#{file}")
 		node.each_agent do |agent|
 			agent.remove_component("org.cougaar.core.topology.TopologyReaderServlet")
