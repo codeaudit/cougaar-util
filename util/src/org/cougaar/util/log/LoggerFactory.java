@@ -94,8 +94,22 @@ public abstract class LoggerFactory {
    * If requestor is a Class, will use the class name.  If it is a String, it will
    * use it directly.  Anything else will use the name of the class that the 
    * object is an instance of.
+   * <p>
+   * The default implementation now just invokes Logging.getLogger(Object) which will
+   * invoke newLogger IFF needed.
    **/
-  public abstract Logger createLogger(Object requestor);
+  public Logger createLogger(Object requestor) {
+    return Logging.getLogger(requestor);
+  }
+
+  /** called by the default implementation of createLogger to do the dirty work.
+   * merely invokes the protected method instantiateLogger.
+   **/
+  final Logger newLogger(Object requestor) {
+    return instantiateLogger(requestor);
+  }
+
+  protected abstract Logger instantiateLogger(Object requestor);
 
   public abstract LoggerController createLoggerController(String requestor);
 }

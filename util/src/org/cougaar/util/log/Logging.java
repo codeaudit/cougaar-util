@@ -60,7 +60,8 @@ public final class Logging
       String key = getKey(name);
       Logger l = (Logger) loggerCache.get(key);
       if (l == null) {
-        l = LoggerFactory.getInstance().createLogger(name);
+        // used to use createLogger, but that has been ruined by misuse
+        l = LoggerFactory.getInstance().newLogger(name);
         // store the key as a new string instance to 
         // make sure it is collectable.
         loggerCache.put(new String(key), l);

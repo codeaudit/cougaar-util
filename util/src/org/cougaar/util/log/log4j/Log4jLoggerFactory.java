@@ -369,7 +369,17 @@ public class Log4jLoggerFactory
     PropertyConfigurator.configure(p);
   }
 
+  /*
+    // rely on the base class now
   public Logger createLogger(Object requestor) {
+    return new LoggerImpl(requestor);
+  }
+  */
+
+  /** called by the default implementation of createLogger to do the dirty work.
+   * Should always create a new instance.
+   **/
+  protected Logger instantiateLogger(Object requestor) {
     return new LoggerImpl(requestor);
   }
 
