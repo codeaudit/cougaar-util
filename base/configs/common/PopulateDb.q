@@ -97,8 +97,9 @@ insertComponentHierarchy=\
  INSERT INTO v4_asb_component_hierarchy \
     (ASSEMBLY_ID, COMPONENT_ALIB_ID, \
      PARENT_COMPONENT_ALIB_ID, \
+     PRIORITY, \
      INSERTION_ORDER) \
- VALUES (:assembly_id:, :component_alib_id:, :parent_component_alib_id:, :insertion_order:)
+ VALUES (:assembly_id:, :component_alib_id:, :parent_component_alib_id:, :priority:, :insertion_order:)
 
 # Used in populate
 queryComponentArgs=\
