@@ -44,7 +44,7 @@ class ServerHostControllerImpl
   private final String tempPath;
 
   private static final String DEFAULT_CLASSNAME = 
-    "org.cougaar.core.society.Node";
+    "org.cougaar.core.node.Node";
 
   private final Properties defaultJavaProps; 
 

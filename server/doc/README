@@ -135,7 +135,7 @@ The Node properties follow this format:
     "java.class.path=PATH" for "-classpath PATH".  This must
         be specified and is not inherited from the AppServer.
     "java.class.name=NAME" for the classname, which defaults to 
-        "org.cougaar.core.society.Node")
+        "org.cougaar.core.node.Node")
     "java.X*" for the "-X*" parameters (for example,
         "java.Xms100m" translates to "-Xms100m").
     "java.java.*" to preserve a "-Djava.*" property (for example,
