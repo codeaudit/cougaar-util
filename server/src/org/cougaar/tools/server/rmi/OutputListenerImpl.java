@@ -49,7 +49,7 @@ implements OutputListenerDecl, java.rmi.server.Unreferenced {
   }
 
   public void unreferenced() {
-    long ut = System.currentTimeMillis();
+    //    long ut = System.currentTimeMillis();
     //System.out.println("\n\nUnreferenced <+("+(ut-ct)+") "+ut+"> "+ol);
   }
 
