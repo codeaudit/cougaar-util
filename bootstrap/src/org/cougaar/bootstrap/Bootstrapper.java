@@ -49,7 +49,7 @@ import java.util.Properties;
  * Cougaar <b>Node</b>).
  * <p> 
  * The Bootstrapper simplifies the
- * <code>$COUGAAR_INSTALL_PATH/bin/Cougaar</code>
+ * <code>$COUGAAR_INSTALL_PATH/bin/cougaar</code>
  * script and similar run scripts, which use the bootstrapper's jar
  * for their Java classpath, instead of listing many individual jar
  * files.  For example, instead of:<pre>
@@ -178,7 +178,7 @@ import java.util.Properties;
  *
  * @property org.cougaar.install.path
  *   The directory where this Cougaar instance is installed, usually
- *   supplied by the $COUGAAR_INSTALL_PATH/bin/Cougaar from the
+ *   supplied by the $COUGAAR_INSTALL_PATH/bin/cougaar from the
  *   $COUGAAR_INSTALL_PATH environment variable. <b>REQUIRED</b>
  *
  * @property org.cougaar.class.path
