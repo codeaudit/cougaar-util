@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- This file is the configuration file for a simple 4 agent society. -->
+<!-- To run, use bin/XSLNode.bat MiniNode.xml MiniNode -->
 <!-- The current configuration places all 4 agents on a single node (MiniNode). -->
 <!-- If you would like to break the agents up across different nodes, or hosts, -->
 <!-- create a new <node name=name_here> section within the host element.  -->
@@ -53,10 +54,6 @@
         <component class="org.cougaar.core.servlet.SimpleServletComponent">
           <argument>org.cougaar.planning.servlet.HierarchyServlet</argument>
           <argument>/hierarchy</argument>
-        </component>
-        <component class="org.cougaar.core.servlet.SimpleServletComponent">
-          <argument>org.cougaar.mlm.ui.servlet.DataGathererServlet</argument>
-          <argument>/datagatherer</argument>
         </component>
         <component class="org.cougaar.mlm.servlet.InventoryServletComponent">
           <argument>org.cougaar.mlm.servlet.InventoryServlet</argument>
@@ -132,10 +129,6 @@
         <component class="org.cougaar.core.servlet.SimpleServletComponent">
           <argument>org.cougaar.planning.servlet.HierarchyServlet</argument>
           <argument>/hierarchy</argument>
-        </component>
-        <component class="org.cougaar.core.servlet.SimpleServletComponent">
-          <argument>org.cougaar.mlm.ui.servlet.DataGathererServlet</argument>
-          <argument>/datagatherer</argument>
         </component>
         <component class="org.cougaar.mlm.servlet.InventoryServletComponent">
           <argument>org.cougaar.mlm.servlet.InventoryServlet</argument>
@@ -218,10 +211,6 @@
           <argument>org.cougaar.planning.servlet.HierarchyServlet</argument>
           <argument>/hierarchy</argument>
         </component>
-        <component class="org.cougaar.core.servlet.SimpleServletComponent">
-          <argument>org.cougaar.mlm.ui.servlet.DataGathererServlet</argument>
-          <argument>/datagatherer</argument>
-        </component>
         <component class="org.cougaar.mlm.servlet.InventoryServletComponent">
           <argument>org.cougaar.mlm.servlet.InventoryServlet</argument>
           <argument>/inventory</argument>
@@ -302,10 +291,6 @@
         <component class="org.cougaar.core.servlet.SimpleServletComponent">
           <argument>org.cougaar.planning.servlet.HierarchyServlet</argument>
           <argument>/hierarchy</argument>
-        </component>
-        <component class="org.cougaar.core.servlet.SimpleServletComponent">
-          <argument>org.cougaar.mlm.ui.servlet.DataGathererServlet</argument>
-          <argument>/datagatherer</argument>
         </component>
         <component class="org.cougaar.mlm.servlet.InventoryServletComponent">
           <argument>org.cougaar.mlm.servlet.InventoryServlet</argument>
