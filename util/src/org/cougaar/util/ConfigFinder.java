@@ -96,13 +96,20 @@ import org.xml.sax.SAXException;
  * progress while finding each config file.
  * @property org.cougaar.config The configuration being run, for example minitestconfig or small-135.
  * Setting this property means that CIP/configs/<value of this property> will be searched before configs/common 
+ * @property org.cougaar.util.ConfigFinder.ClassName The class to use instead of ConfigFinder, presumably an
+ * extension.
  **/
 public class ConfigFinder {
   private List configPath;
-  private final  Map properties; // initialized by all constructors
+  private final Map properties; // initialized by all constructors
 
+  /** Cache of the String to URL mappings found.
+   * @note that access should be synchronized on the cache itself.
+   **/
+  protected final HashMap urlCache = new HashMap(89);
+
+  // logger support
   private Logger logger = null; // use getLogger to access
-
   protected final synchronized Logger getLogger() {
     if (logger == null) {
       logger = Logging.getLogger(ConfigFinder.class);
@@ -110,34 +117,32 @@ public class ConfigFinder {
     return logger;
   }
 
+  /** 
+   * Alias for ConfigFinder(null, null, null)
+   **/
   public ConfigFinder() {
-    this(Configuration.getConfigPath(), Configuration.getDefaultProperties());
+    this(null, null, null);
   }
 
-  public ConfigFinder(String s) {
-    this(s, Configuration.getDefaultProperties());
+  /** 
+   * Alias for ConfigFinder(null, path, null)
+   **/
+  public ConfigFinder(String configpath) {
+    this(null, configpath, null);
   }
 
   /**
-   * Construct a ConfigFinder that will first search within
-   * the specified module, and then in the directories on the 
-   * given search path, using the default Property substitutions.<br>
-   *
-   * When searching the given module, we search the following 4
-   * directories (if defined) before any other directories:
-   * <ul>
-   * <li>$INSTALL/$module/configs/$CONFIG</li>
-   * <li>$INSTALL/$module/configs</li>
-   * <li>$INSTALL/$module/data/$CONFIG</li>
-   * <li>$INSTALL/$module/data</li>
-   * </ul>
+   * Alias for ConfigFinder(module, configpath, null)
    **/
-  public ConfigFinder(String module, String path) {
-    this(module, path, Configuration.getDefaultProperties());
+  public ConfigFinder(String module, String configpath) {
+    this(module, configpath, null);
   }
 
-  public ConfigFinder(String s, Map props) {
-    this(null, s, props);
+  /** 
+   * Alias for ConfigFinder(null, configpath, props)
+   **/
+  public ConfigFinder(String configpath, Map props) {
+    this(null, configpath, props);
   }
 
   /**
@@ -153,8 +158,17 @@ public class ConfigFinder {
    * <li>$INSTALL/$module/data/$CONFIG</li>
    * <li>$INSTALL/$module/data</li>
    * </ul>
+   *
+   * @param module name of the module to use for module-specific configs.  If null, 
+   * no module-specific paths are added.
+   * @param configpath configuration path string.  If null, defaults to Configuration.getConfigPath();
+   * @param props properties to use for configpath variable substitutions.
    **/
-  public ConfigFinder(String module, String s, Map props) {
+  public ConfigFinder(String module, String configpath, Map props) {
+    String s = configpath;
+    if (s == null) s = Configuration.getConfigPath();
+    if (props == null) props = Configuration.getDefaultProperties();
+
     if (getLogger().isDebugEnabled()) {
       getLogger().debug("ConfigFinder class: " + this.getClass().getName());
     }
@@ -172,6 +186,7 @@ public class ConfigFinder {
 
     ArrayList v = new ArrayList();
 
+    // add module paths
     if (module != null) {
       properties.put("MOD", module);
       properties.put("MODULE", module);
@@ -183,8 +198,8 @@ public class ConfigFinder {
       v.add("$INSTALL/$MOD/data");
     }
 
-    
-    {
+    // split the specified path up
+    if (s != null) {
       String[] els = s.trim().split("\\s*;\\s*");
       for (int i = 0; i<els.length; i++) {
         v.add(els[i]);
@@ -226,16 +241,10 @@ public class ConfigFinder {
    **/
   public List getConfigPath() { return configPath; }
 
-  /** @return the current Cougaar Install Path 
-   * @deprecated Use Configuration.getInstallURL();
-   **/
-  public URL getInstallURL() { return Configuration.getInstallURL(); }
 
-  /** @return the current config directory (or common, if undefined) 
-   * @deprecated Use Configuration.getConfigURL();
+  /** Do variable expansion/substitution on the argument.
+   * Essentially calls Configuration.substituteProperties(s, myproperties);
    **/
-  public URL getConfigURL() { return Configuration.getConfigURL(); }
-
   protected final String substituteProperties(String s) {
     return Configuration.substituteProperties(s, properties);
   }
@@ -245,6 +254,13 @@ public class ConfigFinder {
    * elements of org.cougaar.config.path that are not file: urls.
    **/
   public File locateFile(String aFilename) {
+    synchronized (urlCache) {
+      URL u = (URL) urlCache.get(aFilename);
+      if (u != null) {
+        return new File(u.getFile());
+      }
+    }
+
     for (int i = 0 ; i < configPath.size() ; i++) {
       URL url = (URL) configPath.get(i);
       if (url.getProtocol().equals("file")) {
@@ -253,6 +269,9 @@ public class ConfigFinder {
           File result = new File(fileURL.getFile());
           if (result.exists()) {
             traceLog(aFilename, url);
+            synchronized (urlCache) {
+              urlCache.put(aFilename, fileURL);
+            }
             return result;
           }
         } catch (MalformedURLException mue) {
@@ -271,7 +290,7 @@ public class ConfigFinder {
    * or somesuch.
    * @returns null if unresolvable.
    **/
-  public URL resolveName(String logicalName) throws MalformedURLException{
+  public URL resolveName(String logicalName) throws MalformedURLException {
     return Configuration.urlify(Configuration.substituteProperties(logicalName,properties));
   }
 
@@ -281,13 +300,23 @@ public class ConfigFinder {
    * @throws IOException if the resource cannot be found.
    **/
   public InputStream open(String aURL) throws IOException {
-    for (int i = 0 ; i < configPath.size() ; i++) {
+    synchronized (urlCache) {
+      URL u = (URL) urlCache.get(aURL);
+      if (u != null) {
+        return u.openStream();
+      }
+    }
+
+    for (int i = 0, l=configPath.size(); i < l; i++) {
       URL base = (URL) configPath.get(i);
       try {
         URL url = new URL(base, aURL);
         InputStream is = url.openStream();
         if (is == null) continue; // Don't return null
         traceLog(aURL, base);
+        synchronized (urlCache) {
+          urlCache.put(aURL, url);
+        }
         return is;
       } 
       catch (MalformedURLException mue) {
@@ -321,6 +350,12 @@ public class ConfigFinder {
    * under consideration, so this is <em>not</em> an inexpensive operation.
    **/
   public URL find(String aURL) throws IOException {
+    synchronized (urlCache) {
+      URL u = (URL) urlCache.get(aURL);
+      if (u != null) {
+        return u;
+      }
+    }
     for (int i = 0 ; i < configPath.size() ; i++) {
       URL base = (URL) configPath.get(i);
       try {
@@ -329,6 +364,9 @@ public class ConfigFinder {
         if (is == null) continue; // Don't return null
         is.close();
         traceLog(aURL, base);
+        synchronized (urlCache) {
+          urlCache.put(aURL, url);
+        }
         return url;
       }
       catch (MalformedURLException mue) {
@@ -348,6 +386,7 @@ public class ConfigFinder {
     return null;
   }
 
+  /** Read and parse an XML file somewhere in the configpath **/
   public Document parseXMLConfigFile(String xmlfile) throws IOException {
     InputStream istream = null;
       istream = open(xmlfile);
@@ -360,6 +399,10 @@ public class ConfigFinder {
   private final ConfigResolver _configResolver = new ConfigResolver();
   protected ConfigResolver getConfigResolver() { return _configResolver; }
 
+  /** parse an XML stream in the context of the current configuration environment.
+   * This means that embedded references to relative XML objects must be resolved
+   * via the configfinder rather than the stream itself.
+   **/
   protected Document parseXMLConfigFile(InputStream isstream, String xmlfile)
     throws IOException {
     DOMParser parser = new DOMParser();
@@ -378,12 +421,6 @@ public class ConfigFinder {
     return parser.getDocument();
   }
 
-
-  // hash of the default module config finders
-  private static Map moduleConfigFinders;
-
-  // Singleton pattern
-  private static ConfigFinder defaultConfigFinder = null;
 
   private static Class getConfigFinderClass() {
     String configFinderClassName = 
@@ -418,6 +455,8 @@ public class ConfigFinder {
     }
   }
 
+  // Singleton pattern
+  private static ConfigFinder defaultConfigFinder = null;
   private synchronized static ConfigFinder getDefaultConfigFinder() {
     if (defaultConfigFinder == null) {
       try {
@@ -439,6 +478,9 @@ public class ConfigFinder {
     return getDefaultConfigFinder();
   }
 
+  // hash of the default module config finders
+  private static Map moduleConfigFinders = new HashMap(11);
+
   /**
    * Return a new ConfigFinder that uses the system properties
    * for most configuration details, adding the four module-specific
@@ -455,11 +497,7 @@ public class ConfigFinder {
 	config_path.charAt(config_path.length()-1) == '"')	
       config_path = config_path.substring(1, config_path.length()-1);
     
-    // Build static hash on $module of these
-    if (moduleConfigFinders == null)
-      moduleConfigFinders = new HashMap();
-
-    ConfigFinder mcf = (ConfigFinder)moduleConfigFinders.get(module);
+    ConfigFinder mcf = (ConfigFinder) moduleConfigFinders.get(module);
     if (mcf == null) {
       mcf = getConfigFinderInstance(module, config_path);
       moduleConfigFinders.put(module, mcf);
@@ -467,7 +505,9 @@ public class ConfigFinder {
     return mcf;
   }
 
-  class ConfigResolver implements EntityResolver {
+  /** Support class for parsing of XML files
+   **/
+  protected class ConfigResolver implements EntityResolver {
     public InputSource resolveEntity (String publicId, String systemId) {
       URL url = null;
 
@@ -491,14 +531,14 @@ public class ConfigFinder {
         is = new InputSource(istream);
       } catch(IOException e) {
         getLogger().error("Error getting input source for file \""+filename+"\"", e);
-       }
+      }
       
       if(is == null) {
         getLogger().error("Null InputSource for file \""+filename+"\"");
       }
 
       return is;
-   } 
+    } 
   }
 
   /** Hack for logging nice messages when tracing is enabled.

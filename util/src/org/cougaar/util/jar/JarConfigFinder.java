@@ -80,12 +80,6 @@ import org.cougaar.util.Configuration;
 public class JarConfigFinder
   extends ConfigFinder
 {
-  /** A hashtable containing mappings between file names and their URLs.
-   * This table caches the information once it has been found, either
-   * in JAR files or regular files.
-   */
-  protected Map _file2URLs = new Hashtable();
-
   /** A list of URLs pointing to JAR files containing resource files.
    * Files requested by a client are searched in those jar files.
    */
@@ -252,18 +246,20 @@ public class JarConfigFinder
   protected URL resolveUrl(String aFileName) {
     URL theURL = null;
 
-    if (getLogger().isDebugEnabled()) {
-      getLogger().debug("Looking up " + aFileName + " in local cache ("
-			+ _file2URLs.size() + " elements)");
+    synchronized (urlCache) {
+      if (getLogger().isDebugEnabled()) {
+        getLogger().debug("Looking up " + aFileName + " in local cache ("
+                          + urlCache.size() + " elements)");
+      }
+      // First, search in the cache
+      theURL = (URL) urlCache.get(aFileName);
     }
-    // First, search in the cache
-    theURL = (URL) _file2URLs.get(aFileName);
+
     if (theURL != null) {
       if (getLogger().isDebugEnabled()) {
-	getLogger().debug("Found " + aFileName + " in local cache");
+        getLogger().debug("Found " + aFileName + " in local cache");
       }
-    }
-    else {
+    } else {
       // Second, search the file in the list of JAR files
       if (getLogger().isDebugEnabled()) {
 	getLogger().debug("Looking up " + aFileName + " in Jar file list ("
@@ -604,10 +600,12 @@ public class JarConfigFinder
   }
 
   private void addFileEntryToCache(String aFileName, URL aURL) {
-    if (!_file2URLs.containsKey(aFileName)) {
-      // getLogger().debug("Adding mapping: " + aFileName + "<=>"
-      // + aURL.toString());
-      _file2URLs.put(aFileName, aURL);
+    synchronized (urlCache) {
+      if (!urlCache.containsKey(aFileName)) {
+        // getLogger().debug("Adding mapping: " + aFileName + "<=>"
+        // + aURL.toString());
+        urlCache.put(aFileName, aURL);
+      }
     }
   }
 
