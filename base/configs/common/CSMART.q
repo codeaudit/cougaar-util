@@ -7,14 +7,14 @@ password=${org.cougaar.configuration.password}
 
 queryAssemblyID = \
  SELECT ASSEMBLY_ID, DESCRIPTION \
-   FROM V4_ASB_ASSEMBLY \
+   FROM v4_asb_assembly \
   WHERE ASSEMBLY_TYPE = ':assembly_type'
 
 # Get list of Agents in this Society
 queryAgentNames = \
 SELECT DISTINCT A.COMPONENT_NAME \
-   FROM V4_ALIB_COMPONENT A, \
-        V4_ASB_COMPONENT_HIERARCHY AGENTS \
+   FROM v4_alib_component A, \
+        v4_asb_component_hierarchy AGENTS \
   WHERE AGENTS.ASSEMBLY_ID :assemblyMatch \
     AND A.COMPONENT_TYPE = 'agent' \
     AND (A.COMPONENT_ALIB_ID=AGENTS.COMPONENT_ALIB_ID \
@@ -22,39 +22,39 @@ SELECT DISTINCT A.COMPONENT_NAME \
 
 #queryAgentData = \
 # SELECT DISTINCT ALIB.COMPONENT_LIB_ID, ALIB.COMPONENT_TYPE \
-#   FROM  V4_ALIB_COMPONENT ALIB, V4_ASB_COMPONENT_HIERARCHY HIER \
+#   FROM  v4_alib_component ALIB, v4_asb_component_hierarchy HIER \
 #  WHERE HIER.ASSEMBLY_ID :assemblyMatch \
 #   AND ALIB.COMPONENT_TYPE='agent'
 
 queryNodes = \
  SELECT DISTINCT ALIB.COMPONENT_NAME \
-   FROM V4_ALIB_COMPONENT ALIB \
+   FROM v4_alib_component ALIB \
   WHERE ALIB.COMPONENT_TYPE='node'
 
 queryComponentArgs = \
  SELECT ARGUMENT \
-   FROM V4_ASB_COMPONENT_ARG \
+   FROM v4_asb_component_arg \
    WHERE COMPONENT_ALIB_ID=':comp_alib_id' \
    AND ASSEMBLY_ID :assemblyMatch \
 ORDER BY ARGUMENT_ORDER, ARGUMENT
 
 queryExptsWithSociety = \
  SELECT C.NAME \
-   FROM V4_EXPT_TRIAL_ASSEMBLY A, V4_ASB_ASSEMBLY B, V4_EXPT_EXPERIMENT C \
+   FROM v4_expt_trial_assembly A, v4_asb_assembly B, v4_expt_experiment C \
   WHERE A.ASSEMBLY_ID = B.ASSEMBLY_ID \
    AND C.EXPT_ID = A.EXPT_ID \
    AND B.DESCRIPTION = ':societyName:'
 
 queryHosts = \
  SELECT H.COMPONENT_ALIB_ID \
-   FROM V4_ASB_COMPONENT_HIERARCHY H, V4_ALIB_COMPONENT C \
+   FROM v4_asb_component_hierarchy H, v4_alib_component C \
   WHERE H.COMPONENT_ALIB_ID = C.COMPONENT_ALIB_ID \
     AND C.COMPONENT_TYPE = 'host' \
     AND H.ASSEMBLY_ID :assemblyMatch
 
 queryHostNodes = \
   SELECT HC.COMPONENT_NAME AS HOST_NAME, NC.COMPONENT_NAME AS NODE_NAME \
-    FROM V4_ALIB_COMPONENT HC, V4_ASB_COMPONENT_HIERARCHY H, V4_ALIB_COMPONENT NC \
+    FROM v4_alib_component HC, v4_asb_component_hierarchy H, v4_alib_component NC \
    WHERE HC.COMPONENT_ALIB_ID = H.PARENT_COMPONENT_ALIB_ID \
    AND NC.COMPONENT_ALIB_ID = H.COMPONENT_ALIB_ID \
    AND H.ASSEMBLY_ID :assemblyMatch \
@@ -62,22 +62,22 @@ queryHostNodes = \
 
 queryLibRecipes = \
   SELECT MOD_RECIPE_LIB_ID, NAME \
-    FROM V4_LIB_MOD_RECIPE \
+    FROM v4_lib_mod_recipe \
 ORDER BY NAME
 
 queryRecipeByName = \
   SELECT NAME \
-    FROM V4_LIB_MOD_RECIPE \
+    FROM v4_lib_mod_recipe \
    WHERE NAME = ':recipe_name:'
 
 queryRecipe = \
   SELECT MOD_RECIPE_LIB_ID, NAME, JAVA_CLASS \
-    FROM V4_LIB_MOD_RECIPE \
+    FROM v4_lib_mod_recipe \
    WHERE MOD_RECIPE_LIB_ID = ':recipe_id'
 
 queryRecipes = \
   SELECT LMR.MOD_RECIPE_LIB_ID, LMR.NAME, LMR.JAVA_CLASS \
-    FROM V4_EXPT_TRIAL_MOD_RECIPE ETMR, V4_LIB_MOD_RECIPE LMR \
+    FROM v4_expt_trial_mod_recipe ETMR, v4_lib_mod_recipe LMR \
    WHERE ETMR.MOD_RECIPE_LIB_ID = LMR.MOD_RECIPE_LIB_ID \
      AND ETMR.TRIAL_ID = ':trial_id' \
      AND ETMR.EXPT_ID = ':expt_id' \
@@ -85,7 +85,7 @@ ORDER BY ETMR.RECIPE_ORDER
 
 queryRecipeProperties = \
   SELECT ARG_NAME, ARG_VALUE \
-    FROM V4_LIB_MOD_RECIPE_ARG \
+    FROM v4_lib_mod_recipe_arg \
    WHERE MOD_RECIPE_LIB_ID = ':recipe_id' \
 ORDER BY ARG_ORDER
 
@@ -94,33 +94,33 @@ ORDER BY ARG_ORDER
 # experiment from the DB
 queryExperiment = \
  SELECT ASSEMBLY_ID \
-   FROM V4_EXPT_TRIAL_CONFIG_ASSEMBLY \
+   FROM v4_expt_trial_config_assembly \
   WHERE EXPT_ID = ':expt_id' \
     AND TRIAL_ID = ':trial_id'
 
 queryExptDescriptions = \
  SELECT DISTINCT A.EXPT_ID, A.DESCRIPTION \
-   FROM V4_EXPT_EXPERIMENT A, V4_EXPT_TRIAL B \
+   FROM v4_expt_experiment A, v4_expt_trial B \
   WHERE A.EXPT_ID = B.EXPT_ID
 
 queryTrials = \
  SELECT TRIAL_ID, DESCRIPTION \
-   FROM V4_EXPT_TRIAL \
+   FROM v4_expt_trial \
   WHERE EXPT_ID = ':expt_id'
 
 querySocietyName = \
  SELECT DESCRIPTION \
-   FROM V4_ASB_ASSEMBLY \
+   FROM v4_asb_assembly \
   WHERE ASSEMBLY_ID = ':assembly_id:'
 
 querySocietyByName = \
  SELECT DESCRIPTION \
-   FROM V4_ASB_ASSEMBLY \
+   FROM v4_asb_assembly \
   WHERE DESCRIPTION = ':society_name:'
 
 queryPluginNames = \
  SELECT DISTINCT LC.COMPONENT_CLASS, AC.COMPONENT_ALIB_ID, AC.COMPONENT_LIB_ID, AC.COMPONENT_NAME, AC.COMPONENT_TYPE \
-   FROM V4_ASB_COMPONENT_HIERARCHY HIER, V4_ALIB_COMPONENT AC, V4_ALIB_COMPONENT APC, V4_LIB_COMPONENT LC \
+   FROM v4_asb_component_hierarchy HIER, v4_alib_component AC, v4_alib_component APC, v4_lib_component LC \
    WHERE APC.COMPONENT_NAME =':agent_name' \
    AND HIER.COMPONENT_ALIB_ID = AC.COMPONENT_ALIB_ID \
    AND HIER.ASSEMBLY_ID :assemblyMatch \
@@ -131,10 +131,10 @@ queryPluginNames = \
 queryComponents = \
  SELECT A.COMPONENT_NAME, C.COMPONENT_CLASS, \
         A.COMPONENT_ALIB_ID, H.INSERTION_ORDER AS INSERTION_ORDER \
-   FROM V4_ALIB_COMPONENT A, \
-        V4_ALIB_COMPONENT P, \
-        V4_ASB_COMPONENT_HIERARCHY H, \
-        V4_LIB_COMPONENT C \
+   FROM v4_alib_component A, \
+        v4_alib_component P, \
+        v4_asb_component_hierarchy H, \
+        v4_lib_component C \
   WHERE H.ASSEMBLY_ID :assemblyMatch \
     AND A.COMPONENT_ALIB_ID = H.COMPONENT_ALIB_ID \
     AND P.COMPONENT_ALIB_ID = H.PARENT_COMPONENT_ALIB_ID \
@@ -145,18 +145,18 @@ ORDER BY INSERTION_ORDER
 
 queryAgentRelationships = \
   SELECT SUPPORTED_COMPONENT_ALIB_ID, ROLE, START_DATE, END_DATE \
-    FROM V4_ASB_AGENT_RELATION \
+    FROM v4_asb_agent_relation \
    WHERE SUPPORTING_COMPONENT_ALIB_ID=':agent_name' \
      AND ASSEMBLY_ID :assemblyMatch
    
 queryAgentAssetClass = \
   SELECT AGENT_ORG_CLASS \
-    FROM V4_LIB_AGENT_ORG \
+    FROM v4_lib_agent_org \
    WHERE AGENT_LIB_NAME = ':agent_name'
 
 queryAllAgentNames = \
   SELECT DISTINCT C.COMPONENT_NAME \
-    FROM V4_ALIB_COMPONENT C \
+    FROM v4_alib_component C \
     WHERE C.COMPONENT_TYPE = 'agent' \
     ORDER BY C.COMPONENT_NAME
 
@@ -164,7 +164,7 @@ queryAllAgentNames = \
 # where Society is specified by name (assembly description)
 queryExptsWithSociety = \
   SELECT DISTINCT E.NAME \
-    FROM V4_EXPT_EXPERIMENT E, V4_EXPT_TRIAL T, V4_ASB_ASSEMBLY A, V4_EXPT_TRIAL_CONFIG_ASSEMBLY C, V4_EXPT_TRIAL_ASSEMBLY R \
+    FROM v4_expt_experiment E, v4_expt_trial T, v4_asb_assembly A, v4_expt_trial_config_assembly C, v4_expt_trial_assembly R \
 	WHERE E.EXPT_ID = T.EXPT_ID \
         AND ((T.TRIAL_ID = R.TRIAL_ID \
 	AND R.ASSEMBLY_ID = A.ASSEMBLY_ID) \
@@ -177,7 +177,7 @@ queryExptsWithSociety = \
 # where Recipe is specified by name
 queryExptsWithRecipe = \
   SELECT DISTINCT E.NAME \
-    FROM V4_EXPT_EXPERIMENT E, V4_EXPT_TRIAL_MOD_RECIPE R, V4_EXPT_TRIAL T, V4_LIB_MOD_RECIPE M \
+    FROM v4_expt_experiment E, v4_expt_trial_mod_recipe R, v4_expt_trial T, v4_lib_mod_recipe M \
 	WHERE E.EXPT_ID = T.EXPT_ID \
         AND T.TRIAL_ID = R.TRIAL_ID \
 	AND M.MOD_RECIPE_LIB_ID = R.MOD_RECIPE_LIB_ID \
@@ -188,7 +188,7 @@ queryExptsWithRecipe = \
 # where Society is specified by name
 queryExptsWithSociety = \
 	SELECT C.NAME \
-	FROM V4_EXPT_TRIAL_ASSEMBLY A, V4_ASB_ASSEMBLY B, V4_EXPT_EXPERIMENT C \
+	FROM v4_expt_trial_assembly A, v4_asb_assembly B, v4_expt_experiment C \
 	WHERE A.ASSEMBLY_ID = B.ASSEMBLY_ID \
 	AND C.EXPT_ID = A.EXPT_ID \
 	AND B.DESCRIPTION = ':societyName'
@@ -196,18 +196,18 @@ queryExptsWithSociety = \
 # get the property groups for a plugin
 queryPGId = \
 	SELECT DISTINCT PG_ATTRIBUTE_LIB_ID \
-	FROM V4_ASB_AGENT_PG_ATTR \
+	FROM v4_asb_agent_pg_attr \
 	WHERE COMPONENT_ALIB_ID = ':agent_name' \
 	AND ASSEMBLY_ID :assemblyMatch
 
 queryPGAttrs = \
 	SELECT PG_NAME, ATTRIBUTE_NAME, ATTRIBUTE_TYPE, AGGREGATE_TYPE \
-	FROM V4_LIB_PG_ATTRIBUTE \
+	FROM v4_lib_pg_attribute \
 	WHERE PG_ATTRIBUTE_LIB_ID = ':pgAttrLibId'
 
 queryPGValues = \
 	SELECT ATTRIBUTE_VALUE, START_DATE, END_DATE \
-	FROM V4_ASB_AGENT_PG_ATTR \
+	FROM v4_asb_agent_pg_attr \
 	WHERE PG_ATTRIBUTE_LIB_ID = ':pgAttrLibId' \
 	AND COMPONENT_ALIB_ID = ':agent_name' \
 	AND ASSEMBLY_ID :assemblyMatch \
@@ -215,13 +215,13 @@ queryPGValues = \
 
 queryCMTAssembly = \
 	SELECT '1' \
-	FROM V4_EXPT_TRIAL A, V4_EXPT_TRIAL_CONFIG_ASSEMBLY B \
+	FROM v4_expt_trial A, v4_expt_trial_config_assembly B \
 	WHERE A.EXPT_ID = ':expt_id:' \
 	AND A.TRIAL_ID = B.TRIAL_ID \
 	AND ASSEMBLY_ID LIKE 'CMT%'
 
 queryAgentAssetData = \
         SELECT '1' \
-        FROM V4_ASB_AGENT \
+        FROM v4_asb_agent \
         WHERE ASSEMBLY_ID = ':assembly_id' \
         AND COMPONENT_ALIB_ID = ':agent:'

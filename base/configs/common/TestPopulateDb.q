@@ -4,71 +4,71 @@ password=${org.cougaar.configuration.password}
 
 queryMaxExpt=\
  SELECT MAX(EXPT_ID) \
-   FROM V4_EXPT_EXPERIMENT \
+   FROM v4_expt_experiment \
   WHERE EXPT_ID LIKE 'REGRESSION_%'
 
 insertExpt=\
- INSERT INTO V4_EXPT_EXPERIMENT (EXPT_ID, DESCRIPTION) \
+ INSERT INTO v4_expt_experiment (EXPT_ID, DESCRIPTION) \
  VALUES (':expt_id', ':description')
 
 queryMaxTrial=\
  SELECT MAX(TRIAL_ID) \
-   FROM V4_EXPT_TRIAL \
+   FROM v4_expt_trial \
   WHERE TRIAL_ID like 'REGRESSION_%'
 
 insertTrial=\
- INSERT INTO V4_EXPT_TRIAL (TRIAL_ID, EXPT_ID, DESCRIPTION) \
+ INSERT INTO v4_expt_trial (TRIAL_ID, EXPT_ID, DESCRIPTION) \
  VALUES (':trial_id', ':expt_id', ':description')
 
 queryMaxAssembly=\
  SELECT MAX(ASSEMBLY_ID) \
-   FROM V4_ASB_ASSEMBLY \
+   FROM v4_asb_assembly \
   WHERE ASSEMBLY_TYPE = 'REGRESSION_TEST'
 
 insertAssembly=\
- INSERT INTO V4_ASB_ASSEMBLY (ASSEMBLY_ID, ASSEMBLY_TYPE, DESCRIPTION) \
+ INSERT INTO v4_asb_assembly (ASSEMBLY_ID, ASSEMBLY_TYPE, DESCRIPTION) \
  VALUES (':assembly_id', 'REGRESSION_TEST', ':description')
 
 insertTrialAssembly=\
- INSERT INTO V4_EXPT_TRIAL_ASSEMBLY (EXPT_ID, TRIAL_ID, ASSEMBLY_ID, DESCRIPTION) \
+ INSERT INTO v4_expt_trial_assembly (EXPT_ID, TRIAL_ID, ASSEMBLY_ID, DESCRIPTION) \
  VALUES (':expt_id', ':trial_id', ':assembly_id', ':description')
 
 insertLibComponent=\
- INSERT INTO V4_LIB_COMPONENT \
+ INSERT INTO v4_lib_component \
    (COMPONENT_LIB_ID, COMPONENT_TYPE, COMPONENT_CLASS, INSERTION_POINT, DESCRIPTION) \
  VALUES \
    (':component_lib_id', ':component_type', ':component_class', ':insertion_point', ':description')
 
 queryLibComponent=\
  SELECT COMPONENT_LIB_ID, COMPONENT_TYPE, COMPONENT_CLASS, INSERTION_POINT, DESCRIPTION \
-   FROM V4_LIB_COMPONENT \
+   FROM v4_lib_component \
   WHERE COMPONENT_LIB_ID = ':component_lib_id'
 
 deleteLibComponent=\
- DELETE FROM V4_LIB_COMPONENT \
+ DELETE FROM v4_lib_component \
   WHERE COMPONENT_LIB_ID = ':component_lib_id'
 
 deleteAlibComponent=\
- DELETE FROM V4_ALIB_COMPONENT \
+ DELETE FROM v4_alib_component \
   WHERE COMPONENT_LIB_ID = ':component_lib_id'
 
 queryTableWithTrialId=\
  SELECT TABLE_NAME FROM USER_TAB_COLUMNS \
   WHERE COLUMN_NAME = 'TRIAL_ID' \
-    AND TABLE_NAME LIKE 'V4_%' \
-    AND TABLE_NAME <> 'V4_EXPT_TRIAL'
+    AND TABLE_NAME LIKE 'v4_%' \
+    AND TABLE_NAME <> 'v4_expt_trial'
 
 queryTableWithAssemblyId=\
  SELECT TABLE_NAME FROM USER_TAB_COLUMNS \
   WHERE COLUMN_NAME = 'ASSEMBLY_ID' \
-    AND TABLE_NAME LIKE 'V4_%' \
-    AND TABLE_NAME <> 'V4_ASB_ASSEMBLY'
+    AND TABLE_NAME LIKE 'v4_%' \
+    AND TABLE_NAME <> 'v4_asb_assembly'
 
 queryTableWithExptId=\
  SELECT TABLE_NAME FROM USER_TAB_COLUMNS \
   WHERE COLUMN_NAME = 'EXPT_ID' \
-    AND TABLE_NAME LIKE 'V4_%' \
-    AND TABLE_NAME <> 'V4_EXPT_EXPERIMENT'
+    AND TABLE_NAME LIKE 'v4_%' \
+    AND TABLE_NAME <> 'v4_expt_experiment'
 
 deleteFromTableWithAssemblyId=\
  DELETE FROM :table \
@@ -84,22 +84,22 @@ deleteFromTableWithExptId=\
 
 queryAllTableColumns=\
  SELECT TABLE_NAME, COLUMN_NAME FROM USER_TAB_COLUMNS \
-  WHERE TABLE_NAME LIKE 'V4_%' \
+  WHERE TABLE_NAME LIKE 'v4_%' \
   ORDER BY TABLE_NAME
 
 deleteFromTableInitial=DELETE FROM :table WHERE :column like '%:clean_type%'
 deleteFromTableMore=\ OR :column like ':clean_type%'
 
 deleteAssembly=\
- DELETE FROM V4_EXPT_TRIAL_ASSEMBLY \
+ DELETE FROM v4_expt_trial_assembly \
   WHERE ASSEMBLY_ID = ':assembly_id'
 
 deleteTrial=\
- DELETE FROM V4_EXPT_TRIAL \
+ DELETE FROM v4_expt_trial \
   WHERE TRIAL_ID = ':trial_id'
 
 deleteExpt=\
-  DELETE FROM V4_EXPT_EXPERIMENT \
+  DELETE FROM v4_expt_experiment \
    WHERE EXPT_ID = ':expt_id'
 
 deleteAllFromTableWithAssemblyId=\
@@ -115,13 +115,13 @@ deleteAllFromTableWithExptId=\
   WHERE EXPT_ID like ':clean_type_%'
 
 deleteAllAssembly=\
- DELETE FROM V4_EXPT_TRIAL_ASSEMBLY \
+ DELETE FROM v4_expt_trial_assembly \
   WHERE ASSEMBLY_ID like ':clean_type_%'
 
 deleteAllTrial=\
- DELETE FROM V4_EXPT_TRIAL \
+ DELETE FROM v4_expt_trial \
   WHERE TRIAL_ID like ':clean_type_%'
 
 deleteAllExpt=\
-  DELETE FROM V4_EXPT_EXPERIMENT \
+  DELETE FROM v4_expt_experiment \
    WHERE EXPT_ID like ':clean_type_%'

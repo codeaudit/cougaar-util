@@ -18,22 +18,22 @@ classVData=select nomenclature, weight, ccc from ammo_characteristics where DODI
 ui=select ui from header where NSN = :nsn
 # MEI
 #
-meiQuery=select NOMENCLATURE from AGGREGATED_MEI_NOMENCLATURE where MEI = :nsn and SERVICE = :service
+meiQuery=select NOMENCLATURE from aggregated_mei_nomenclature where MEI = :nsn and SERVICE = :service
 # Marine
  
 # ==>BulkPOL (Fuels)
-BulkPOLMarineNSN=select T.NSN, FUEL_NSN, OPTEMPO, GALLONS_PER_DAY from MARINE_GROUND_FUELS_DCR_BY_OP M, TAMCN_NSN_MAP T where M.TAMCN = T.TAMCN and NSN = :nsn order by GALLONS_PER_DAY
-BulkPOLMarineTAMCN=select TAMCN, FUEL_NSN, OPTEMPO, GALLONS_PER_DAY from MARINE_GROUND_FUELS_DCR_BY_OP where TAMCN = :nsn order by GALLONS_PER_DAY
-BulkPOLMarineMDS=select T.NSN, FUEL_NSN, OPTEMPO, GALLONS_PER_DAY from MARINE_AIR_FUELS_DCR_BY_OP M, TAMCN_NSN_MAP T  where M.MDS = T.TAMCN and NSN = :nsn order by GALLONS_PER_DAY
+BulkPOLMarineNSN=select T.NSN, FUEL_NSN, OPTEMPO, GALLONS_PER_DAY from marine_ground_fuels_dcr_by_op M, TAMCN_NSN_MAP T where M.TAMCN = T.TAMCN and NSN = :nsn order by GALLONS_PER_DAY
+BulkPOLMarineTAMCN=select TAMCN, FUEL_NSN, OPTEMPO, GALLONS_PER_DAY from marine_ground_fuels_dcr_by_op where TAMCN = :nsn order by GALLONS_PER_DAY
+BulkPOLMarineMDS=select T.NSN, FUEL_NSN, OPTEMPO, GALLONS_PER_DAY from marine_air_fuels_dcr_by_op M, TAMCN_NSN_MAP T  where M.MDS = T.TAMCN and NSN = :nsn order by GALLONS_PER_DAY
 
-PackagedPOLMarineNSN=select MEI_NSN, PACKAGED_NSN, OPTEMPO, DCR from MARINE_PACKAGED_DCR_BY_OPTEMPO where MEI_NSN = :nsn order by DCR desc
-PackagedPOLMarineMDS=select MEI_NSN, PACKAGED_NSN, OPTEMPO, DCR from MARINE_PACKAGED_DCR_BY_OPTEMPO where MEI_NSN = :nsn order by DCR desc
+PackagedPOLMarineNSN=select MEI_NSN, PACKAGED_NSN, OPTEMPO, DCR from marine_packaged_dcr_by_optempo where MEI_NSN = :nsn order by DCR desc
+PackagedPOLMarineMDS=select MEI_NSN, PACKAGED_NSN, OPTEMPO, DCR from marine_packaged_dcr_by_optempo where MEI_NSN = :nsn order by DCR desc
 
 # ==>Ammunition
 AmmunitionMarineNSN=select MEI_NSN, DODIC, OPTEMPO, TONS_PER_DAY from alp_mei_dodic_2_view where MEI_NSN = :nsn order by TONS_PER_DAY
 AmmunitionMarineMDS=select MEI_NSN, DODIC, OPTEMPO, TONS_PER_DAY from alp_mei_dodic_2_view where MEI_NSN = :nsn order by TONS_PER_DAY
 
 # ==>Consumable (Critical Spare Parts)
-ConsumableMarineTAMCN=select TAMCN, PART_NSN, OPTEMPO, DCR from MCGRD_SPARES_DCR_BY_OPTEMPO where TAMCN = :nsn order by DCR
-ConsumableMarineNSN=select MEI_NSN, PART_NSN, OPTEMPO, DCR from MCGRD_SPARES_DCR_BY_OPTEMPO where MEI_NSN = :nsn order by DCR
-ConsumableMarineMDS=select MDS,NSN, OPTEMPO, DEMANDS_PER_DAY from USMCAIR_SPARES_DCR_BY_OPTEMPO where MDS = :nsn order by DEMANDS_PER_DAY
+ConsumableMarineTAMCN=select TAMCN, PART_NSN, OPTEMPO, DCR from mcgrd_spares_dcr_by_optempo where TAMCN = :nsn order by DCR
+ConsumableMarineNSN=select MEI_NSN, PART_NSN, OPTEMPO, DCR from mcgrd_spares_dcr_by_optempo where MEI_NSN = :nsn order by DCR
+ConsumableMarineMDS=select MDS,NSN, OPTEMPO, DEMANDS_PER_DAY from usmcair_spares_dcr_by_optempo where MDS = :nsn order by DEMANDS_PER_DAY

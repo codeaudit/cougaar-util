@@ -24,10 +24,10 @@ query= select \
     FTED.TID_EQ_TY_CD AS TID_EQ_TY_CD, \
     TID_FTPRNT_AR AS FOOTPRINT \
 FROM \
-    FDM_UNIT_EQUIPMENT FUE, \
-    FDM_TRANSPORTABLE_ITEM FTE, \
-    FDM_TRANSPORTABLE_ITEM_DETAIL FTED, \
-    V6_LIB_ORGANIZATION LIBORG \
+    fdm_unit_equipment FUE, \
+    fdm_transportable_item FTE, \
+    fdm_transportable_item_detail FTED, \
+    v6_lib_organization LIBORG \
 WHERE \
 LIBORG.ORG_ID=:agent \
 AND FUE.UNIT_IDENTIFIER = LIBORG.UIC \
@@ -62,10 +62,10 @@ query.mysql= select \
     FTED.TID_EQ_TY_CD AS TID_EQ_TY_CD, \
     TID_FTPRNT_AR AS FOOTPRINT \
 FROM \
-    FDM_UNIT_EQUIPMENT FUE, \
-    FDM_TRANSPORTABLE_ITEM FTE, \
-    FDM_TRANSPORTABLE_ITEM_DETAIL FTED, \
-    V6_LIB_ORGANIZATION LIBORG \
+    fdm_unit_equipment FUE, \
+    fdm_transportable_item FTE, \
+    fdm_transportable_item_detail FTED, \
+    v6_lib_organization LIBORG \
 WHERE \
 LIBORG.ORG_ID=:agent \
 AND FUE.UNIT_IDENTIFIER = LIBORG.UIC \
@@ -93,9 +93,9 @@ ORDER BY \
 
 query = select 'MOS/11B' AS MOS_LEVEL, NVL(SUM(TO_STRENGTH),0) AS MOS_QTY, 'MOS/11B/INFANTRYMAN'  \
 	FROM \
-	FDM_UNIT_BILLET BILLET, \
-	FDM_UNFRMD_SRVC_OCCPTN OCC, \
-	V6_LIB_ORGANIZATION LIBORG \
+	fdm_unit_billet BILLET, \
+	fdm_unfrmd_srvc_occptn OCC, \
+	v6_lib_organization LIBORG \
 	WHERE \
 	LIBORG.ORG_ID=:agent \
 	AND BILLET.UNFRMD_SRVC_OCCPTN_CD=OCC.UNFRMD_SRVC_OCCPTN_CD \
@@ -120,9 +120,9 @@ query = select 'MOS/11B' AS MOS_LEVEL, NVL(SUM(TO_STRENGTH),0) AS MOS_QTY, 'MOS/
 query.mysql = \
 select 'MOS/11B' AS MOS_LEVEL, IFNULL(SUM(TO_STRENGTH),0) AS MOS_QTY,  'MOS/11B/INFANTRYMAN'  \
   FROM \
-   FDM_UNIT_BILLET BILLET, \
-   V6_LIB_ORGANIZATION LIBORG \
-   LEFT JOIN FDM_UNFRMD_SRVC_OCCPTN OCC ON \
+   fdm_unit_billet BILLET, \
+   v6_lib_organization LIBORG \
+   LEFT JOIN fdm_unfrmd_srvc_occptn OCC ON \
      (BILLET.UNFRMD_SRVC_OCCPTN_CD=OCC.UNFRMD_SRVC_OCCPTN_CD \
        AND OCC.RANK_SUBCATEGORY_CODE='E') \
   WHERE \
@@ -133,8 +133,8 @@ select 'MOS/11B' AS MOS_LEVEL, IFNULL(SUM(TO_STRENGTH),0) AS MOS_QTY,  'MOS/11B/
 %SQLAggregateAssetCreator
 query = select '8115001682275' AS NSN, DECODE(CONTAINER_20_FT_QTY,NULL,30,CONTAINER_20_FT_QTY) AS QTY_OH, 'CONTAINER' AS \
 	NOMENCLATURE \
-	FROM UE_SUMMARY_MTMC UES, \
-	V6_LIB_ORGANIZATION LIBORG \
+	FROM ue_summary_mtmc UES, \
+	v6_lib_organization LIBORG \
 	WHERE \
 	LIBORG.ORG_ID=:agent \
 	AND UES.UIC(+) = LIBORG.UIC
@@ -144,7 +144,7 @@ query.mysql = select DISTINCT '8115001682275' AS NSN, \
         30 AS QTY_OH, \
 	'CONTAINER' AS 	NOMENCLATURE \
 	FROM \
-	V6_LIB_ORGANIZATION LIBORG \
+	v6_lib_organization LIBORG \
 	WHERE \
 	LIBORG.ORG_ID=:agent
 

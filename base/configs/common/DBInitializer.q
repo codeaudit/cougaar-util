@@ -13,12 +13,12 @@ queryGeolocLocation.password=${org.cougaar.database.password}
 
 queryExperiment = \
  SELECT ASSEMBLY_ID \
-   FROM V4_EXPT_TRIAL_ASSEMBLY \
+   FROM v4_expt_trial_assembly \
   WHERE TRIAL_ID = ':trial_id:'
 
 queryAgentPrototype = \
  SELECT LAO.AGENT_ORG_CLASS \
-   FROM V4_ALIB_COMPONENT AC, V4_LIB_AGENT_ORG LAO, V4_ASB_AGENT AA \
+   FROM v4_alib_component AC, v4_lib_agent_org LAO, v4_asb_agent AA \
   WHERE AA.ASSEMBLY_ID :assemblyMatch: \
     AND AC.COMPONENT_LIB_ID = LAO.COMPONENT_LIB_ID \
     AND AA.COMPONENT_ALIB_ID = AC.COMPONENT_ALIB_ID \
@@ -27,10 +27,10 @@ queryAgentPrototype = \
 queryComponents = \
  SELECT A.COMPONENT_NAME COMPONENT_NAME, C.COMPONENT_CLASS COMPONENT_CLASS, \
         A.COMPONENT_ALIB_ID COMPONENT_ID, C.INSERTION_POINT, H.INSERTION_ORDER INSERTION_ORDER \
-   FROM V4_ALIB_COMPONENT A, \
-        V4_ALIB_COMPONENT P, \
-        V4_ASB_COMPONENT_HIERARCHY H, \
-        V4_LIB_COMPONENT C \
+   FROM v4_alib_component A, \
+        v4_alib_component P, \
+        v4_asb_component_hierarchy H, \
+        v4_lib_component C \
   WHERE H.ASSEMBLY_ID :assemblyMatch: \
     AND A.COMPONENT_ALIB_ID = H.COMPONENT_ALIB_ID \
     AND P.COMPONENT_ALIB_ID = H.PARENT_COMPONENT_ALIB_ID \
@@ -44,10 +44,10 @@ ORDER BY INSERTION_ORDER
 queryComponents.mysql = \
     SELECT A.COMPONENT_NAME COMPONENT_NAME, C.COMPONENT_CLASS COMPONENT_CLASS, \
            A.COMPONENT_ALIB_ID COMPONENT_ID, C.INSERTION_POINT, H.INSERTION_ORDER INSERTION_ORDER \
-      FROM V4_ALIB_COMPONENT P, \
-	   V4_ASB_COMPONENT_HIERARCHY H, \
-	   V4_ALIB_COMPONENT A, \
-	   V4_LIB_COMPONENT C \
+      FROM v4_alib_component P, \
+	   v4_asb_component_hierarchy H, \
+	   v4_alib_component A, \
+	   v4_lib_component C \
      WHERE H.ASSEMBLY_ID :assemblyMatch: \
        AND A.COMPONENT_ALIB_ID = H.COMPONENT_ALIB_ID \
        AND P.COMPONENT_ALIB_ID = H.PARENT_COMPONENT_ALIB_ID \
@@ -59,16 +59,16 @@ queryComponents.mysql = \
 
 queryComponentParams = \
  SELECT ARGUMENT \
-   FROM V4_ASB_COMPONENT_ARG \
+   FROM v4_asb_component_arg \
   WHERE ASSEMBLY_ID :assemblyMatch: \
     AND COMPONENT_ALIB_ID = ':component_id:' \
   ORDER BY ARGUMENT_ORDER, ARGUMENT
 
 queryAgentPGNames = \
  SELECT distinct A.PG_NAME \
-   FROM V4_ASB_AGENT H, \
-        V4_ASB_AGENT_PG_ATTR B, \
-        V4_LIB_PG_ATTRIBUTE A \
+   FROM v4_asb_agent H, \
+        v4_asb_agent_pg_attr B, \
+        v4_lib_pg_attribute A \
   WHERE H.COMPONENT_ALIB_ID = B.COMPONENT_ALIB_ID \
     AND A.PG_ATTRIBUTE_LIB_ID = B.PG_ATTRIBUTE_LIB_ID \
     AND H.ASSEMBLY_ID :assemblyMatch: \
@@ -78,12 +78,12 @@ queryAgentPGNames = \
 queryLibProperties = \
  SELECT ATTRIBUTE_NAME, ATTRIBUTE_TYPE, AGGREGATE_TYPE, \
         PG_ATTRIBUTE_LIB_ID \
-   FROM V4_LIB_PG_ATTRIBUTE \
+   FROM v4_lib_pg_attribute \
   WHERE PG_NAME = ':pg_name:'
 
 queryAgentProperties = \
  SELECT A.ATTRIBUTE_VALUE \
-   FROM V4_ASB_AGENT_PG_ATTR A, V4_ALIB_COMPONENT B, V4_ASB_AGENT H \
+   FROM v4_asb_agent_pg_attr A, v4_alib_component B, v4_asb_agent H \
   WHERE A.ASSEMBLY_ID :assemblyMatch: \
     AND H.ASSEMBLY_ID :assemblyMatch: \
     AND A.COMPONENT_ALIB_ID = H.COMPONENT_ALIB_ID \
@@ -96,11 +96,11 @@ queryAgentRelation.oracle = \
         ASB_PG.ATTRIBUTE_VALUE TYPE_IDENTIFICATION, SPTD.COMPONENT_NAME SUPPORTED, \
         TO_CHAR(ASB_REL.start_date, 'MM/DD/YYYY HH:MI AM'), \
         TO_CHAR(ASB_REL.end_date, 'MM/DD/YYYY HH:MI AM') \
-   FROM V4_ASB_AGENT_RELATION ASB_REL, \
-        V4_LIB_PG_ATTRIBUTE LIB_PG, \
-        V4_ASB_AGENT_PG_ATTR ASB_PG, \
-        V4_ALIB_COMPONENT SPTD, \
-        V4_ALIB_COMPONENT SPTG \
+   FROM v4_asb_agent_relation ASB_REL, \
+        v4_lib_pg_attribute LIB_PG, \
+        v4_asb_agent_pg_attr ASB_PG, \
+        v4_alib_component SPTD, \
+        v4_alib_component SPTG \
   WHERE LIB_PG.PG_ATTRIBUTE_LIB_ID = ASB_PG.PG_ATTRIBUTE_LIB_ID \
     AND ASB_PG.COMPONENT_ALIB_ID = ASB_REL.SUPPORTED_COMPONENT_ALIB_ID \
     AND ASB_REL.SUPPORTING_COMPONENT_ALIB_ID = SPTG.COMPONENT_ALIB_ID \
@@ -116,11 +116,11 @@ queryAgentRelation.mysql = \
         ASB_PG.ATTRIBUTE_VALUE TYPE_IDENTIFICATION, SPTD.COMPONENT_NAME SUPPORTED, \
         date_format(ASB_REL.start_date, '%m/%e/%Y %l:%i %p'), \
         date_format(ASB_REL.end_date, '%m/%e/%Y %l:%i %p') \
-   FROM V4_ASB_AGENT_RELATION ASB_REL, \
-        V4_LIB_PG_ATTRIBUTE LIB_PG, \
-        V4_ASB_AGENT_PG_ATTR ASB_PG, \
-        V4_ALIB_COMPONENT SPTD, \
-        V4_ALIB_COMPONENT SPTG \
+   FROM v4_asb_agent_relation ASB_REL, \
+        v4_lib_pg_attribute LIB_PG, \
+        v4_asb_agent_pg_attr ASB_PG, \
+        v4_alib_component SPTD, \
+        v4_alib_component SPTG \
   WHERE LIB_PG.PG_ATTRIBUTE_LIB_ID = ASB_PG.PG_ATTRIBUTE_LIB_ID \
     AND ASB_PG.COMPONENT_ALIB_ID = ASB_REL.SUPPORTED_COMPONENT_ALIB_ID \
     AND ASB_REL.SUPPORTING_COMPONENT_ALIB_ID = SPTG.COMPONENT_ALIB_ID \
@@ -145,7 +145,7 @@ queryGeolocLocation = \
       ||', Name='                 || REPLACE(LOCATION_NAME, ' ', '_') \
       ||', Latitude=Latitude '    || LATITUDE || 'degrees' \
       ||', Longitude=Longitude '  || LONGITUDE || 'degrees' \
-   FROM GEOLOC \
+   FROM geoloc \
   WHERE GEOLOC_CODE = SUBSTR(':key:', 12) 
 
 ## Except the default org.cougaar.database does not have
@@ -161,7 +161,7 @@ queryGeolocLocation = \
 #      ||', Name='                 || REPLACE(LOCATION_NAME, ' ', '_') \
 #      ||', Latitude=Latitude '    || LATITUDE || 'degrees' \
 #      ||', Longitude=Longitude '  || LONGITUDE || 'degrees' \
-#   FROM ALPLOC \
+#   FROM alploc \
 #  WHERE ALPLOC_CODE = SUBSTR(':key:', 12)
 
 # FIXME: This needs to be unioned with the ALPLOC table, like above, 
@@ -174,5 +174,5 @@ queryGeolocLocation.mysql = \
       ,', Name='                 , REPLACE(LOCATION_NAME, ' ', '_') \
       ,', Latitude=Latitude '    , LATITUDE , 'degrees' \
       ,', Longitude=Longitude '  , LONGITUDE , 'degrees') \
-   FROM GEOLOC \
+   FROM geoloc \
   WHERE GEOLOC_CODE = SUBSTRING(':key:', 12)

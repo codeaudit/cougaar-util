@@ -16,4 +16,4 @@ classIXData=select nomenclature, ui, price, cube, weight from header where NSN =
 classIIIPackagedData=select nomenclature, ui, price, cube, weight from header where NSN = :nsn 
 classVData=select nomenclature, weight, ccc from ammo_characteristics where DODIC = :nsn
 ui=select ui from header where NSN = :nsn
-packagedPOLQuery=select PACKAGED_NSN from ARMY_PACKAGED_DCR_BY_OPTEMPO where PACKAGED_NSN = :nsn
+packagedPOLQuery=select PACKAGED_NSN from army_packaged_dcr_by_optempo where PACKAGED_NSN = :nsn
