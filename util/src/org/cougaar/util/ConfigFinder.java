@@ -416,10 +416,13 @@ public class ConfigFinder {
     return parseXMLConfigFile(istream, xmlfile);
   }
 
+  private final ConfigResolver _configResolver = new ConfigResolver();
+  protected ConfigResolver getConfigResolver() { return _configResolver; }
+
   protected Document parseXMLConfigFile(InputStream isstream, String xmlfile)
     throws IOException {
     DOMParser parser = new DOMParser();
-    parser.setEntityResolver(new ConfigResolver());
+    parser.setEntityResolver(getConfigResolver());
     InputSource is = null;
     try {
       is = new InputSource(isstream);
@@ -522,7 +525,6 @@ public class ConfigFinder {
     }
     return mcf;
   }
-
 
   class ConfigResolver implements EntityResolver {
     public InputSource resolveEntity (String publicId, String systemId) {
