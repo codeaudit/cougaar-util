@@ -397,9 +397,9 @@ public abstract class ContainerSupport
   public boolean addAll(Collection c) {
     boolean allAdded = true;
     for (Iterator it = c.iterator(); it.hasNext(); ) {
-      if (!add(it.next())) {
-        allAdded = false;
-      }
+      Object o = it.next();
+      boolean succ = add(o);
+      allAdded = allAdded && (!succ);
     }
     return allAdded;
   }
