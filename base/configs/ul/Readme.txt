@@ -1,5 +1,40 @@
-This directory contains XML file specification(s) for UltraLog 1AD
+This directory contains XML file specification(s) for Ultra*Log 1AD
 societies.
+
+As of Cougaar 10.2, there is _minimal_ support for running Cougaar
+societies from XML files. To do so, supply your society configuration
+as XML, following the schema in core/configs/common/society.xsd
+Then start your Node using one of the supplied XMLNode scripts in
+/bin: in particular, specify the argument
+-Dorg.cougaar.core.node.InitializationComponent=XML
+which indicates the component intialization and community
+initialization should come from XML
+It also indicates that the OrgAsset (or Entity Asset) definitions
+should come from the new "refconfig" database (a definition for which
+supporting the 1AD societies comes in the csmart module).
+
+Also, you must specify the name of the XML file from which to get the
+society definition using the system property:
+org.cougaar.society.file=<file name to be found using ConfigFinder>
+
+To run this sample 1AD society, you must
+1) Create a new database to be the "org.cougaar.refconfig" database
+2) Add an entry for it in your cougaar.rc file
+3) Load the file csmart/data/database/refconfigdb.zip (after
+unzipping) into that database
+4) You will also need to either:
+	a) edit configs/common/fdm_equip.q to point to the org.cougaar.refconfig
+	database, or
+	b) Also create the CSMART configuration database, as the
+	org.cougaar.configuration.database, as normal
+
+5) Then run XMLNode from this directory, giving it the 2 arguments:
+   TINY-1AD-TRANS-STUB-1359.xml 1AD_TINY
+indicating you want to use this XML file, and run the Node with that
+   name.
+
+6) You will then likely need to run the GLSInit.[bat/sh] client to
+   publish the Oplan, etc.
 
 communities.xml
 	This defines the 1AD logistics communities used by this
@@ -8,15 +43,5 @@ communities.xml
 TINY-1AD-TRANS-STUB-1359.xml
 	This defines a society consisting of a single node named
 	"1AD_TINY" to run the Tiny 1AD society with the TRANSCOM-STUB
-	functionality, including all four threads of supply. This
-	configuration depends on the "refconfig" database, whose
-	definition is supplied by the similarly-named zip file in
-	csmart/data/database. If using this configuration, be sure to
-	create such a database, adding that entry to your cougaar.rc
-	file, and run the node using the XMLNode scripts.
-	You will also need to either:
-	a) edit configs/common/fdm_equip.q to point to the refconfig
-	database, or
-	b) Also create the CSMART configuration database, as the
-	org.cougaar.configuration.database, as normal
+	functionality, including all four threads of supply. 
 
