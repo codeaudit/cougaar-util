@@ -146,5 +146,21 @@ implements HostServesClient {
     return new ClientInputStream(sin);
   }
 
+  public OutputStream write(
+      String filename) throws Exception {
+    return this.write(filename, false);
+  }
+
+  public OutputStream write(
+      String filename,
+      boolean append) throws Exception {
+
+    // open the file
+    ServerOutputStream sout = shc.write(filename, append);
+
+    // wrap to hide the RMI calls
+    return new ClientOutputStream(sout);
+  }
+
   // can add more here...
 }

@@ -66,4 +66,11 @@ extends Remote {
   ServerInputStream open(
       String filename) throws RemoteException;
 
+  ServerOutputStream write(
+      String filename) throws RemoteException;
+
+  ServerOutputStream write(
+      String filename,
+      boolean append) throws RemoteException;
+
 }

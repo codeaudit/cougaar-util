@@ -22,6 +22,7 @@
 package org.cougaar.tools.server;
 
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Properties;
 
@@ -141,5 +142,24 @@ public interface HostServesClient {
    */
   InputStream open(
       String filename) throws Exception;
+
+  /**
+   * Equivalent to
+   *  <tt>write(filename, false)</tt>.
+   */
+  OutputStream write(
+      String filename) throws Exception;
+
+  /**
+   * Open a file for writing.
+   * <p>
+   * Note this method expects UNIX-style "/" directory separators.
+   * 
+   * @param filename a file name that must start with "./"
+   * @param append overwrites if false, appends to end of file if true
+   */
+  OutputStream write(
+      String filename,
+      boolean append) throws Exception;
 
 }

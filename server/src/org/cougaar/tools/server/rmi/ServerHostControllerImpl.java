@@ -578,6 +578,82 @@ class ServerHostControllerImpl
     return sin;
   }
 
+  public ServerOutputStream write(
+      String filename) {
+    return this.write(filename, false);
+  }
+
+  /**
+   * Open a file for writing.
+   */
+  public ServerOutputStream write(
+      String filename,
+      boolean append) {
+    // check the path  (should merge this code with the "list(..)" code)
+    if (!(filename.startsWith("./"))) {
+      throw new IllegalArgumentException(
+          "Filename must start with \"./\", not \""+filename+"\"");
+    } else if (filename.indexOf("..") > 0) {
+      throw new IllegalArgumentException(
+          "Filename can not contain \"..\": \""+filename+"\"");
+    } else if (filename.indexOf("\\") > 0) {
+      throw new IllegalArgumentException(
+          "Filename must use the \"/\" path separator, not \"\\\": \""+
+          filename+"\"");
+    } else if (filename.endsWith("/")) {
+      throw new IllegalArgumentException(
+          "Filename can not end in \"/\": \""+filename+"\"");
+    }
+    // other checks?  Security manager?
+
+    // fix the filename path to use the system path-separator and be 
+    //   relative to the "tempPath"
+    String sysFilename = filename;
+    if (File.separatorChar != '/') {
+      sysFilename = sysFilename.replace('/', File.separatorChar);
+    }
+    sysFilename = tempPath + sysFilename.substring(2);
+
+    // open the file
+    File f = new File(sysFilename);
+
+    // make sure that the file is not a directory, etc
+    if (f.exists()) {
+      if (!(f.isFile())) {
+        throw new IllegalArgumentException(
+            "File is "+
+            (f.isDirectory() ?  "a directory" : "not a regular file")+
+            ": \""+filename+"\"");
+      } else if (!(f.canWrite())) {
+        throw new IllegalArgumentException(
+            "Unable to write file: \""+filename+"\"");
+      }
+    }
+
+    // get an output stream for the file
+    FileOutputStream fout;
+    try {
+      fout = new FileOutputStream(f);
+    } catch (FileNotFoundException fnfe) {
+      // shouldn't happen -- I already checked "f.exists()"
+      throw new IllegalArgumentException(
+          "Unable to write to file: \""+filename+"\": "+fnfe);
+    }
+
+    // wrap the file's output stream in a ServerOutputStream
+    ServerOutputStream sout;
+    try {
+      sout = new ServerOutputStreamImpl(fout);
+    } catch (Exception e) {
+      // shouldn't fail...
+      throw new IllegalArgumentException(
+          "Unable to wrap file stream for \""+filename+"\": "+e);
+    }
+
+    // return the wrapped stream!
+    return sout;
+  }
+
   //
   // private utility methods
   //
