@@ -40,7 +40,7 @@ order by \
     fue.unit_identifier, \
     fue.unit_equipment_qty asc
 
-%SQLAggregateAssetCreator
+%SQLMOSAggregateAssetCreator
 query = select ('MOS/' || billet.unfrmd_srvc_occptn_cd) AS MOS_LEVEL, sum(to_strength) AS MOS_QTY, unfrmd_srvc_occptn_tx  \
 	from \ 
 	fdm_unit_billet billet, \
