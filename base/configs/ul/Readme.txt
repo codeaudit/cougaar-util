@@ -22,18 +22,12 @@ To run this sample 1AD society, you must
 2) Add an entry for it in your cougaar.rc file
 3) Load the file csmart/data/database/refconfigdb.zip (after
 unzipping) into that database
-4) You will also need to either:
-	a) edit configs/common/fdm_equip.q to point to the org.cougaar.refconfig
-	database, or
-	b) Also create the CSMART configuration database, as the
-	org.cougaar.configuration.database, as normal
-
-5) Then run XMLNode from this directory, giving it the 2 arguments:
+4) Then run XMLNode from this directory, giving it the 2 arguments:
    TINY-1AD-TRANS-STUB-1359.xml 1AD_TINY
 indicating you want to use this XML file, and run the Node with that
    name.
 
-6) You will then likely need to run the GLSInit.[bat/sh] client to
+5) You will then likely need to run the GLSInit.[bat/sh] client to
    publish the Oplan, etc.
 
 communities.xml
