@@ -35,22 +35,6 @@ public class SystemProperties {
 
   private static boolean debug = false;
 
-  /* Make a copy of all system properties. This gives read access to
-     system properties while preventing arbitrary code to write these
-     properties. This is in fact a private method because allowing read-access
-     to system properties creates a security threat. */
-  private static Properties getSystemProperties() {
-    Properties props;
-    // Make a copy of the properties.
-    props = new Properties(System.getProperties());
-
-    //System.out.println("system class path:" + System.getProperty("java.class.path"));
-    props.setProperty("java.class.path", "foo");
-    //System.out.println("props class path:" + props.getProperty("java.class.path"));
-    //System.out.println("system class path after:" + System.getProperty("java.class.path"));
-    return props;
-  }
-
   /** Returns standard properies that can be read by anyone.
   */
   public static Properties getStandardSystemProperties() {

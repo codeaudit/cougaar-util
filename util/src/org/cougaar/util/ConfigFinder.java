@@ -461,19 +461,6 @@ public class ConfigFinder {
     return theClass;
   }
 
-  private static ConfigFinder getConfigFinderInstance(String path) {
-    Class cls = getConfigFinderClass();
-    Class paramCls[] = new Class[] { String.class };
-    Object paramVal[] = new Object[] { path };
-
-    try {
-      return (ConfigFinder) cls.getConstructor(paramCls).newInstance(paramVal);
-    }
-    catch (Exception e) {
-      throw new RuntimeException("Unable to instantiate ConfigFinder", e);
-    }
-  }
-
   private static ConfigFinder getConfigFinderInstance(String module, String path) {
     Class cls = getConfigFinderClass();
     Class paramCls[] = new Class[] {String.class, String.class};
