@@ -114,8 +114,16 @@ public class Bootstrapper
       loudness = 0;
     }
   }
-  public final static int getLoudness() {return loudness;}
+  /** return the loudness value of the bootstrapper.
+   * 0 is quiet (normal), 1 is verbose, 2 is insanely verbose.
+   **/
+  final static int getLoudness() {return loudness;}
 
+  /** The list of jar files to be ignored by bootstrapper.
+   * Always includes javaiopatch and boostrap itself.
+   * @todo Replace this with something which examines the
+   * jars for dont-bootstrap-me flags.
+   **/
   protected final static List excludedJars = new ArrayList();
   static {
     excludedJars.add("javaiopatch.jar");
@@ -131,9 +139,13 @@ public class Bootstrapper
   }
 
   private static boolean isBootstrapped = false;
-  protected final static boolean isBootstrapped() {
+  /** @return true iff a bootstrapper has run in the current VM **/
+  public final static boolean isBootstrapped() {
     return isBootstrapped;
   }
+  /** If no bootstrapper has run in the current vm, sets a flag and 
+   * returns, otherwise throws an error.
+   **/
   protected synchronized final static void setIsBootstrapped() { 
     if (isBootstrapped) {
       throw new Error("Circular Bootstrap!");
@@ -219,7 +231,6 @@ public class Bootstrapper
    * static void main(String[]).
    * This method contains all the reflection code for invoking the application.
    **/
-
   protected void launchMain(ClassLoader cl, String classname, String[] args) {
     try {
       Class appClass = cl.loadClass(classname);
