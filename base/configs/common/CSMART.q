@@ -227,6 +227,18 @@ queryAgentAssetData = \
         WHERE ASSEMBLY_ID = ':assembly_id' \
         AND COMPONENT_ALIB_ID = ':agent:'
 
+# Used to build convenience drop-down lists
+queryGetPluginClasses = \
+  SELECT DISTINCT COMPONENT_CLASS \
+    FROM v4_lib_component \
+   WHERE COMPONENT_TYPE = 'plugin'
+
+# Used to build convenience drop-down lists
+queryGetBinderClasses = \
+  SELECT DISTINCT COMPONENT_CLASS \
+    FROM v4_lib_component \
+   WHERE COMPONENT_TYPE = 'agent binder'
+
 ##############################################
 # Community editing queries follow
 # See DatabaseTableModel and CommunityDBUtils in octc.ui.community
@@ -371,12 +383,3 @@ queryDeleteEntityAttribute = \
      AND ATTRIBUTE_VALUE = ':attribute_value' \
      AND ASSEMBLY_ID :assembly_match:
 
-queryGetPluginClasses = \
-  SELECT COMPONENT_CLASS \
-    FROM v4_lib_component \
-   WHERE COMPONENT_TYPE = 'plugin'
-
-queryGetBinderClasses = \
-  SELECT COMPONENT_CLASS \
-    FROM v4_lib_component \
-   WHERE COMPONENT_TYPE = 'agent binder'
