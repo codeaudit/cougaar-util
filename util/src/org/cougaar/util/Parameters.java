@@ -74,7 +74,7 @@ public class Parameters {
       //e.printStackTrace();
     }
     if (!found) {
-      System.err.println("Warning: Found no source for Parameters - Expected to find .cougaarrc or ConfigPath/cougaar.rc");
+      System.err.println("Warning: Found no source for (Database) Parameters - looked for ~/.cougaarrc or [ConfigPath]/cougaar.rc");
     }
   }
 
