@@ -93,16 +93,40 @@ The errata directory is organized by cougaar release number.  For
 example, the errata page for Cougaar 11.0 is <a href="http://cougaar.org/errata/cougaar1100/errata.html">http://cougaar.org/errata/cougaar1100/errata.html</a>.
 
 
-  <!-- COUGAAR 11.2 COUGAAR 11.2 COUGAAR 11.2 COUGAAR 11.2 COUGAAR 11.2 -->
+  <!-- COUGAAR 11.4 COUGAAR 11.4 COUGAAR 11.4 COUGAAR 11.4 COUGAAR 11.4 -->
 <p>
-<b>Build 11.2</b> is a minor release, including a backwards-compatible
-core refactor, performance optimizations, and multiple bug fixes.
+<b>Build 11.4</b> is a minor release, including 
+performance optimizations, and multiple bug fixes.
 <p>
 <ul>
 <li>uiframework module was obsolete, and has been dropped from
 standard distributions.</li>
+<li> Component viewer </li>
+<li>Added new example / regression application: the new pizza module.</li>
+<li>Dropped GLMDebug</li>
+<li>Convert SD from DAML to OWL</li>
+<li>Added HTTP MTS transport (contributed by CSI).</li>
+<li>Re-factored Corba and RMI transports to use new RPC protocol abstraction</li>
+<li>Various metrics improvements</li>
+<li>Various webserver fixes to ServletConfig</li>
+<li>Dropped obsolete XMLPrototypeProvider, LDMXMLPlugin, XMLAssetCreator</li>
+<li>Note that &lt; and &gt; symbols in plugin arguments may be mis-interpreted by XSLNode unless escaped</li>
+<li>Some SD refactor / cleanup to allow other SD implementations, data directories</li>
+<li>Bug 3720: Refactored DemoControlService to avoid MTS multicast, provide beter feedback, etc.</li>
+<li>By default, the logging service prepends log messages with the Agent name. Disable with -Dorg.cougaar.core.logging.addAgentPrefix=false (bug 3829)</li>
+<li>Added a simple component parameter parser for parameters of the form name=value. See org.cougaar.util.Arguments</li>
+<li>Lots of javadoc and code cleanup.</li>
+<li>Reimplemented MessageStatusService for efficiency</li>
 </ul>
 
+
+  <!-- COUGAAR 11.2.2 COUGAAR 11.2.2 COUGAAR 11.2.2 COUGAAR 11.2.2 COUGAAR 11.2.2 -->
+<p>
+<b>Build 11.2.2</b> is a minor release, including performance optimizations, and multiple bug fixes. It represents the end of the B11_2 branch.
+<p>
+<ul>
+<li></li>
+</ul>
 
   <!-- COUGAAR 11.2 COUGAAR 11.2 COUGAAR 11.2 COUGAAR 11.2 COUGAAR 11.2 -->
 <p>
