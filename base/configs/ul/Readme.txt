@@ -25,7 +25,8 @@ unzipping) into that database
 4) Then run XMLNode from this directory, giving it the 2 arguments:
    TINY-1AD-TRANS-STUB-1359.xml 1AD_TINY
    indicating you want to use this XML file, and run the Node with that
-   name.
+   name (after extracting that file, or another society definition,
+   from the ZIP file).
 
 5) You will then likely need to run the GLSInit.[bat/sh] client to
    publish the Oplan, etc.
@@ -38,6 +39,10 @@ edit.rb
 	A Ruby script that shows how to edit these XML society files
 	using the Ruby csmart scripting model. They can also be edited
 	by hand, of course.
+
+1ad-configs.zip
+	ZIP file containing baseline 1AD military logistics society
+	configurations -- the following 6 files:
 
 TINY-1AD-TRANS-STUB-1359.xml
 	This defines a society consisting of a single node named
