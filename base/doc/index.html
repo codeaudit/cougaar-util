@@ -78,6 +78,15 @@ persistence snapshots. </li>
 <li>A new version (6.0) of JCChart is included.  The file name is now just
 jcchart.jar instead of jcchart451K.jar.  There were no code changes
 required to support the new version, which fixes a number of bugs.</li>
+
+<li>Several database changes have been made.  Domain data has been expanded for 
+several organizations.  Extranneous v4_/v6_ prefixes have been removed.  It is
+necessary to reload all components of the database, including mysqldump.txt and 
+Domain-MySQL.ZIP as well as re-run the load scripts that load the .csv files.  
+See csmart/doc/InstallAndTest.html.  For any previous exports of the database, 
+it is necessary to run the v4_v6_conversion.[bat/sh] script on them before 
+importing.
+</li>
 </ul>
 
   <!-- COUGAAR 9.4.0 COUGAAR 9.4.0 COUGAAR 9.4.0 COUGAAR 9.4.0 COUGAAR 9.4.0 --> 
