@@ -118,44 +118,4 @@ class WaitQueue {
       return (!trigger);
     }
   }
-
-  /*
-  public static void main(String [] arg) {
-    ArrayList keys = new ArrayList();
-    final WaitQueue wq = new WaitQueue();
-
-    for (int i = 0; i<10; i++) {
-      final Object k = wq.getKey();
-      final Object r = new Integer(i);
-      new Thread(new Runnable() {
-          public void run() {
-            try {
-              Thread.sleep(30*1000);
-            } catch(Exception e) {
-              e.printStackTrace();
-            }
-            wq.trigger(k, r);
-          }
-        }
-                 ).start();
-      keys.add(k);
-      
-      try {
-        Thread.sleep(500);
-      } catch(Exception e) {
-        e.printStackTrace();
-      }
-
-    }
-    
-    for (int i=0;i<10; i++) {
-      try {
-        Object v = wq.waitFor(keys.get(i));
-        System.out.println("result "+i+" = "+v);
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    }
-  }
-  */
 }

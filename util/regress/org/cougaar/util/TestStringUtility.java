@@ -1,7 +1,7 @@
 /*
  * <copyright>
  *  
- *  Copyright 2002-2004 BBNT Solutions, LLC
+ *  Copyright 1997-2004 BBNT Solutions, LLC
  *  under sponsorship of the Defense Advanced Research Projects
  *  Agency (DARPA).
  * 
@@ -25,27 +25,18 @@
  */
 
 package org.cougaar.util;
+import java.util.*;
 
 import junit.framework.TestCase;
 import junit.framework.*;
 
-public class UtilTest extends TestCase {
-  public void test1() {
-    assertEquals(1, 1);
-  }
+public class TestStringUtility extends TestCase {
+  public void test_misc() {
+    assertEquals("X: a", StringUtility.prefixLines("X: ", "a"));
+    assertEquals("X: a\nX: b", StringUtility.prefixLines("X: ", "a\nb"));
 
-  public static Test suite() {
-    TestSuite suite= new TestSuite("Cougaar Utility Class Tests");
-    suite.addTest(new TestSuite(TestCircularQueue.class));
-    suite.addTest(new TestSuite(TestDBProperties.class));
-    suite.addTest(new TestSuite(TestNonOverlappingTimeSpanSet.class));
-    suite.addTest(new TestSuite(TestPropertyTree.class));
-    suite.addTest(new TestSuite(TestShortDateFormat.class));
-    suite.addTest(new TestSuite(TestStackMachine.class));
-    suite.addTest(new TestSuite(TestStateMachine.class));
-    suite.addTest(new TestSuite(TestStringUtility.class));
-    suite.addTest(new TestSuite(TestTimeSpanSet.class));
-    suite.addTest(new TestSuite(TestWaitQueue.class));
-    return suite;
+    assertEquals("[]", StringUtility.arrayToString(new Object[] {}));
+    assertEquals("[a]", StringUtility.arrayToString(new Object[] {"a"}));
+    assertEquals("[a,b]", StringUtility.arrayToString(new Object[] {"a", "b"}));
   }
 }

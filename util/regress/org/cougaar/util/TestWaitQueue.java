@@ -1,7 +1,7 @@
 /*
  * <copyright>
  *  
- *  Copyright 2002-2004 BBNT Solutions, LLC
+ *  Copyright 2003-2004 BBNT Solutions, LLC
  *  under sponsorship of the Defense Advanced Research Projects
  *  Agency (DARPA).
  * 
@@ -25,27 +25,49 @@
  */
 
 package org.cougaar.util;
+import java.util.*;
 
 import junit.framework.TestCase;
 import junit.framework.*;
 
-public class UtilTest extends TestCase {
-  public void test1() {
-    assertEquals(1, 1);
-  }
+public class TestWaitQueue extends TestCase {
+  private long sleep_millis = 500; /*half a second*/
 
-  public static Test suite() {
-    TestSuite suite= new TestSuite("Cougaar Utility Class Tests");
-    suite.addTest(new TestSuite(TestCircularQueue.class));
-    suite.addTest(new TestSuite(TestDBProperties.class));
-    suite.addTest(new TestSuite(TestNonOverlappingTimeSpanSet.class));
-    suite.addTest(new TestSuite(TestPropertyTree.class));
-    suite.addTest(new TestSuite(TestShortDateFormat.class));
-    suite.addTest(new TestSuite(TestStackMachine.class));
-    suite.addTest(new TestSuite(TestStateMachine.class));
-    suite.addTest(new TestSuite(TestStringUtility.class));
-    suite.addTest(new TestSuite(TestTimeSpanSet.class));
-    suite.addTest(new TestSuite(TestWaitQueue.class));
-    return suite;
+  public void test_wq() {
+    ArrayList keys = new ArrayList();
+    final WaitQueue wq = new WaitQueue();
+
+    for (int i = 0; i<10; i++) {
+      final Object k = wq.getKey();
+      final Object r = new Integer(i);
+      new Thread(new Runnable() {
+          public void run() {
+            try {
+              Thread.sleep(500); /*half a second*/
+            } catch(Exception e) {
+              e.printStackTrace();
+            }
+            wq.trigger(k, r);
+          }
+        }
+                 ).start();
+      keys.add(k);
+      
+      try {
+        Thread.sleep(100);      /*tenth of a second*/
+      } catch(Exception e) {
+        e.printStackTrace();
+      }
+
+    }
+    
+    for (int i=0;i<10; i++) {
+      try {
+        Object v = wq.waitFor(keys.get(i));
+        assertTrue("result "+i, (new Integer(i)).equals(v));
+      } catch (InterruptedException ie) {
+        fail();
+      }
+    }
   }
 }
