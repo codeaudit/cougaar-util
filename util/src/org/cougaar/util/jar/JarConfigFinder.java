@@ -305,7 +305,9 @@ public class JarConfigFinder
 	theURL = locateFileInPathElement(base, aFileName);
 	// plan to remove the path, so that we don't look it
 	// up again the next time we search.
-	getLogger().debug("Removing " + base + " from path");
+        if (getLogger().isDebugEnabled()) { 
+          getLogger().debug("Removing " + base + " from path");
+        }
         if (pathsToRemove == null) {
           pathsToRemove = new ArrayList();
         }
