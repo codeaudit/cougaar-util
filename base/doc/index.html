@@ -72,7 +72,7 @@ that were detected/posted after this Cougaar version was released.
 and deprecations.
 <p>
 <ul>
-<li>ComponentDevelopers should not try to put runtime data or
+<li>ComponentDevelopers should try not to put runtime data or
 configuration files in configs/common. Instead, these files should be
 stored in the local module for that Component. Additionally,
 configuration files should be kept separate from data files. To
@@ -109,6 +109,11 @@ otherwise from the (XML) file. Again, an alternate may be provided at
 BINDER priority. Note that CSMART now provides this -D argument in all
 Nodes by default, indicating that Nodes should completely initialize
 from the CSMART database.</li>
+<li>Began minimal support for initializing Cougaar societies from XML
+files. Configurations should follow the schema in
+core/configs/common/society.xsd. Start Nodes from XML using
+bin/XMLNode.[bat/sh]. For instructions on running a sample 1AD
+society, see configs/ul/Readme.txt.</li>
 </ul>
 
   <!-- COUGAAR 10.0 COUGAAR 10.0 COUGAAR 10.0 COUGAAR 10.0 COUGAAR 10.0 -->
