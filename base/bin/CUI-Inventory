@@ -20,9 +20,19 @@
 # </copyright>
 
 
-source $COUGAAR_INSTALL_PATH/bin/setlibpath.sh
-source $COUGAAR_INSTALL_PATH/bin/setarguments.sh
+if [ -z "$COUGAAR_INSTALL_PATH" ]; then
+    if [ "$CIP" ]; then
+	export COUGAAR_INSTALL_PATH="$CIP";
+    else
+	s=`echo "$0" | sed -e 's,/bin/.*,,'`
+	if [ x$s != x ] ; then
+	    echo "Warning: Defaulting COUGAAR_INSTALL_PATH to '$s'!";
+	    export COUGAAR_INSTALL_PATH=$s
+	else
+	    echo "Error: Could not find COUGAAR_INSTALL_PATH!";
+	    exit;
+	fi
+    fi
+fi
 
-MYCLASSES="org.cougaar.mlm.ui.glsinit.GLSClient"
-
-exec java $MYPROPERTIES -classpath $LIBPATHS $BOOTSTRAPPER $DEVP $MYCLASSES $*
+exec /bin/sh $COUGAAR_INSTALL_PATH/bin/boost org.cougaar.lib.uiframework.ui.inventory.InventoryChartUI $*
