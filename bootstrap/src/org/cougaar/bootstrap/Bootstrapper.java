@@ -35,95 +35,198 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 /**
- * A bootstrapping launcher, in particular, for a node.
- * <p>
- * Figures out right classpath, creates a new classloader and
- * then invokes the usual static main method on the specified class
- * (using the new classloader).
- * <p>
- * Main job is to search for jar files, building up a collection
- * of paths to give to a special NodeClassLoader so that we don't
- * have to maintain many different script files.
- * <p>
- * <pre/>
- * The following locations specified by system properties are examined, in order:
- *  org.cougaar.class.path	(interpreted like a classpath)
- *  org.cougaar.install.path/lib/*.{jar,zip,plugin}
- *  org.cougaar.install.path/plugins/*.{jar,zip,plugin}
- *  org.cougaar.system.path/*.{jar,zip,plugin}
- *  org.cougaar.install.path/sys/*.{jar,zip,plugin}
+ * A <b>main(String[] args)</b> class that searches for classes and
+ * jar files in a path, creates an {@link XURLClassLoader} that uses
+ * the found jars, and launches an application class (typically a
+ * Cougaar <b>Node</b>).
+ * <p> 
+ * The Bootstrapper simplifies the
+ * <code>$COUGAAR_INSTALL_PATH/bin/Cougaar</code>
+ * script and similar run scripts, which use the bootstrapper's jar
+ * for their Java classpath, instead of listing many individual jar
+ * files.  For example, instead of:<pre>
+ *   java 
+ *     -classpath /tmp/classes:/jars/lib/a.jar:/jars/lib/b.jar:/jars/lib/c.jar
+ *     MyClass
  * </pre>
- * The system property org.cougaar.class.path is typically filled in from the environment variable
- * COUGAAR_DEV_PATH, and org.cougaar.install.path is typically from COUGAAR_INSTALL_PATH. <p>
- * Most scripts do not supply a value for org.cougaar.system.path. 
- * org.cougaar.class.path is used primarily by developers as a mechanism to override the infrastructure
- * and application jars with development code.  Most packaged cougaar applications do not use these
- * optional system properties.
+ * one can write:<pre>
+ *   java 
+ *     -classpath bootstrap.jar 
+ *     -Dorg.cougaar.class.path=/tmp/classes
+ *     -Dorg.cougaar.install.path=/jars
+ *     org.cougaar.bootstrap.Bootstrapper
+ *     MyClass
+ * </pre>
  * <p>
- * As an added bonus, Bootstrapper may be run as an application
- * which takes the fully-qualified class name of the class to run
- * as the first argument.  All other arguments are passed
- * along as a String array as the single argument to the class.
- * The class must provide a public static launch(String[]) or
- * main(String[]) method (searched for in that order).
+ * Note that the "-classpath" should <b>only</b> specify the
+ * Bootstrapper's jar.  See the "Important Notes" below for further
+ * details.
  * <p>
- * The Boostrapper's classloader will not load any classes which
- * start with "java.". This
- * list may be extended by supplying a -Dorg.cougaar.core.society.bootstrapper.exclusions=foo.:bar.
- * System property.  The value of the property should be a list of
- * package prefixes separated by colon (":") characters.
+ * The application classname can be specified by either the:<pre>
+ *   -Dorg.cougaar.bootstrap.application=<i>CLASSNAME</i>
+ * </pre> 
+ * system property or as the first command-line argument to this
+ * Bootstrapper class's {@link #main} method.  The class must
+ * provide a <code>public static launch(String[])</code> or
+ * <code>main(String[])</code> method (searched for in that order).
+ * If additional command-line arguments are specified, they are
+ * passed along to the application class's method. 
  * <p>
- * A common problem is the attempt to use "patch" jar files to repair a few
- * classes of some much larger archive.  There are two problems with this
- * use pattern: (1) the order that Bootstrapper will find jar files in a
- * directory is undefined - there is no guarantee that the patch will take
- * precedence over the original.  Also, (2) classloaders will refuse to
- * load classes of a given package from multiple jar files - if the patch jar
- * does not contain the whole package, the classloader will likely be
- * unable to load the rest of the classes.  Both problems tend to
- * crop up when you can least afford this confusion.
+ * The default jar search path is specified by the:<pre>
+ *   -Dorg.cougaar.jar.path=<i>{@link #DEFAULT_JAR_PATH}</i>
+ * </pre>
+ * system property.  In standard configurations this path is
+ * expanded to (approximately) the following jars:<pre>
+ *   $COUGAAR_INSTALL_PATH/lib/*.jar
+ *   $COUGAAR_INSTALL_PATH/sys/*.jar
+ * </pre>
  * <p>
- * <em>Important Note:</em>Do not put Cougaar classes on your classpath.  If
- * the SystemClassloader loads a cougaar class, it will refer to SystemClassloader-loaded
- * core classes which exist in a different namespace than Bootstrapper-loaded
- * classes.  This problem will cause all sorts of loading problems.
+ * The exact list of jars is controlled by "-Dorg.cougaar.jar.path",
+ * which is a ":" separated string (";" on Windows) that defaults to
+ * the {@link #DEFAULT_JAR_PATH} value of:<pre>
+ *   -Dorg.cougaar.jar.path=classpath($CLASSPATH):$INSTALL/lib:$INSTALL/plugins:$SYS:$INSTALL/sys
+ * </pre> 
+ * where:<pre>
+ *   $CLASSPATH is -Dorg.cougaar.class.path (typically not set)
+ *   $INSTALL is -Dorg.cougaar.install.path (<b>required</b>)
+ *   $SYS is -Dorg.cougaar.system.path  (typically not set)
+ * </pre>
+ * The "classpath(..)" path wrapper is used to list jars and
+ * directories containing classes, similar to Java's CLASSPATH.
+ * For example:<pre>
+ *   -Dorg.cougaar.class.path=/tmp/classes:/tmp/foo.jar
+ * </pre>
+ * The default path wrapper, "directory(..)", is used to find jars
+ * in a directory by listing "*.jar", "*.zip", and "*.plugin".
+ * For example:<pre>
+ *   -Dorg.cougaar.system.path=/jars 
+ * </pre> 
+ * where "/jars" contains jar files, for example:<pre>
+ *   /jars/a.jar 
+ *   /jars/b.jar 
+ *   /jars/c.jar 
+ * </pre>
+ * If the "-Dorg.cougaar.jar.path" value ends in ":" (";" on
+ * Windows), thenthe {@link #DEFAULT_JAR_PATH} is appended to the
+ * end of the specified value; this can be used to easily prefix
+ * the jar path.
+ * <p> 
+ * Note that the above "$" strings must be escaped to avoid Unix
+ * shell expansion, for example:<pre>
+ *   -Dorg.cougaar.jar.path=\\\$INSTALL/lib:\\\$INSTALL/sys 
+ * </pre>
+ * In practice the "$" strings are rarely used, since explicit paths
+ * are often specified, for example:<pre>
+ *   -Dorg.cougaar.jar.path=/tmp/lib:classpath(/tmp/classes):/tmp/sys
+ * </pre>
  * <p>
- * The System property <em>org.cougaar.bootstrap.Bootstrapper.loud</em>
- * controls debugging output of the bootstrapping classloader.  When set to
- * "true" will output the list of jar/zip files used to load classes (in order).
- * When set to "shout" will additionally print the location of the jar/zip file
- * used to load each and every class.
- * @property org.cougaar.bootstrap.Bootstrapper.loud=false Set to "true" to 
- * information about classloader path and order.  Set to "loud" to get information
- * about where each loaded class comes from.
- * @property org.cougaar.properties.url=URL Set to specify where an additional
- * set of System Properties should be loaded from.
- * @property org.cougaar.install.path The directory where this Cougaar instance is installed, usually
- * supplied by a script from the COUGAAR_INSTALL_PATH environment variable. <em>REQUIRED</em>
- * @property org.cougaar.class.path Classpath-like setting searched immediately before discovered lib jars.
- * Usually supplied by a script from the COUGAAR_DEV_PATH environment variable.  <em>optional</em>
- * @property org.cougaar.system.path Classpath-like setting searched immediately before discovered sys jars.
- * Not supplied by most scripts.  <em>optional</em>
- * @property org.cougaar.bootstrapper.exclusions Allow explicitly excluding package prefixes from 
- * the Bootstrap Classloader's concern.
- * @property org.cougaar.bootstrap.class Bootstrapper class to use to bootstrap the
- * system.  Defaults to org.cougaar.bootstrap.Bootstrapper.
- * @property org.cougaar.bootstrap.excludeJars Allows exclusion of specific jar files from 
- * consideration by bootstrapper.  Defaults to "javaiopatch.jar:bootstrap.jar".
- * @property org.cougaar.bootstrap.application The name of the application class
- * to bootstrap.  If not specified, will use the first argument instead.  Only applies
- * when Bootstrap is being invoked as an application.
- **/
+ * The $CLASSPATH "-Dorg.cougaar.class.path" is primarily a developer
+ * mechanism to override the infrastructure and application jars with
+ * development code.  Most packaged Cougaar applications do not use
+ * these optional system properties, and instead create jar files for
+ * $INSTALL/lib.
+ * <p>
+ * A couple jars are typically excluded by the jar finder, and
+ * instead are loaded by the Java system ClassLoader:<pre> 
+ *   bootstrap.jar   <i>(contains this Bootstrapper class)</i>
+ *   javaiopatch.jar <i>(contains the persistence I/O overrides)</i>
+ * </pre> 
+ * These excluded jars are set by:<pre> 
+ *   -Dorg.cougaar.bootstrap.excludeJars=javaiopatch.jar:bootstrap.jar
+ * </pre>
+ * <p> 
+ * <b>Important Notes:</b>
+ * If you use the Bootstrapper, do not put Cougaar classes on your
+ * Java classpath -- only specify:<pre>
+ *   java -classpath bootstrapper.jar ..
+ * </pre>
+ * If the Java SystemClassloader loads a Cougaar class, it will refer
+ * to SystemClassloader-loaded core classes which exist in a different
+ * namespace than Bootstrapper-loaded classes.  This problem will
+ * cause all sorts of loading errors.
+ * <p> 
+ * A common problem is the attempt to use "patch" jar files to repair
+ * a few classes of some much larger archive.  There are two problems
+ * with this use pattern:<ol>
+ * <li>The order that Bootstrapper will find jar files in a directory
+ *   is undefined - there is no guarantee that the patch will take
+ *   precedence over the original.</li>
+ * <li>Classloaders will refuse to load classes of a given package
+ *   from multiple jar files - if the patch jar does not contain the
+ *   whole package, the classloader will likely be unable to load the
+ *   rest of the classes.</li>
+ * </ol>
+ * Both problems tend to crop up when you can least afford this confusion.
+ * <p>
+ *
+ * @property org.cougaar.bootstrap.Bootstrapper.loud=false
+ *   Set to "true" to information about classloader path and order.
+ *   Set to "shout" to get information about where each loaded class
+ *   comes from.
+ *
+ * @property org.cougaar.jar.path
+ *   Bootstrapper jar and class path, which defaults to the
+ *   {@link #DEFAULT_JAR_PATH} documented in the Bootstrapper class.
+ *
+ * @property org.cougaar.install.path
+ *   The directory where this Cougaar instance is installed, usually
+ *   supplied by the $COUGAAR_INSTALL_PATH/bin/Cougaar from the
+ *   $COUGAAR_INSTALL_PATH environment variable. <b>REQUIRED</b>
+ *
+ * @property org.cougaar.class.path
+ *   Optional classpath-like setting searched immediately before
+ *   discovered $COUGAAR_INSTALL_PATH/lib jars, to load non-jarred
+ *   classes.
+ *
+ * @property org.cougaar.system.path
+ *   Optional directory searched immediately before discovered 
+ *   $COUGAAR_INSTALL_PATH/sys jars, typically not used in practice.
+ *
+ * @property org.cougaar.bootstrap.class
+ *   Bootstrapper class to use to bootstrap the system.  Defaults to
+ *   the bootstrapper (org.cougaar.bootstrap.Bootstrapper).
+ *
+ * @property org.cougaar.bootstrap.excludeJars
+ *   Allows exclusion of specific jar files from consideration by
+ *   bootstrapper.  Defaults to "javaiopatch.jar:bootstrap.jar".
+ *
+ * @property org.cougaar.bootstrap.application
+ *   The name of the application class to bootstrap.  If not
+ *   specified, will use the Bootstrapper's first command-line argument.
+ *   This property only applies when the Bootstrap is invoked as an
+ *   application.
+ *
+ * @property org.cougaar.properties.url=URL
+ *   <i>Deprecated:</i> Set to specify where an additional set of
+ *   System Properties should be loaded from.
+ */
 public class Bootstrapper
 {
+  /**
+   * The default value for the "org.cougaar.jar.path" system
+   * property.
+   * <p>
+   * See the above class-level javadoc for details. 
+   */
+  public static final String DEFAULT_JAR_PATH =
+    "classpath($CLASSPATH)"+File.pathSeparator+
+    "$INSTALL/lib"+File.pathSeparator+
+    "$INSTALL/plugins"+File.pathSeparator+
+    "$SYS"+File.pathSeparator+
+    "$INSTALL/sys";
+
   protected final static int loudness;
   static {
-    String s = System.getProperty("org.cougaar.bootstrap.Bootstrapper.loud");
+    String s =
+      System.getProperty("org.cougaar.bootstrap.Bootstrapper.loud");
     if ("true".equals(s)) {
       loudness = 1;
     } else if ("shout".equals(s)) {
@@ -137,20 +240,21 @@ public class Bootstrapper
    **/
   public final static int getLoudness() {return loudness;}
 
-  /** The list of jar files to be ignored by bootstrapper.
-   * Always includes javaiopatch and boostrap itself.
+  /**
+   * The list of jar files to be ignored by bootstrapper, which
+   * typically includes javaiopatch and boostrap itself.
    * @todo Replace this with something which examines the
    * jars for dont-bootstrap-me flags.
    **/
   protected final static List excludedJars = new ArrayList();
   static {
-    excludedJars.add("javaiopatch.jar");
-    excludedJars.add("bootstrap.jar");
-    
     String s = System.getProperty("org.cougaar.bootstrap.excludeJars");
-    if (s != null) {
+    if (s == null) {
+      s = "javaiopatch.jar:bootstrap.jar";
+    }
+    if (s.length() > 0) {
       String files[] = s.split(":");
-      for (int i=0; i<files.length; i++) {
+      for (int i=0; i < files.length; i++) {
         excludedJars.add(files[i]);
       }
     }
@@ -303,26 +407,112 @@ public class Bootstrapper
    **/
   protected List findURLs() {
     List l = new ArrayList();
-
-    String base = System.getProperty("org.cougaar.install.path");
-    l.addAll(findJarsInClasspath(System.getProperty("org.cougaar.class.path")));
-
-    // no longer accumulate classpath
-    //findJarsInClasspath(System.getProperty("java.class.path"));
-
-    // we'll defer to system's classpath if we don't find it anywhere
-    l.addAll(findJarsInDirectory(new File(base,"lib")));
-    l.addAll(findJarsInDirectory(new File(base,"plugins")));
-
-    String sysp = System.getProperty("org.cougaar.system.path");
-    if (sysp!=null) {
-      l.addAll(findJarsInDirectory(new File(sysp)));
+    List paths = findURLPaths();
+    for (int i = 0, n = paths.size(); i < n; i++) {
+      String s = (String) paths.get(i);
+      l.addAll(findJarsIn(s));
     }
-
-    l.addAll(findJarsInDirectory(new File(base,"sys")));
     return l;
   }
+  
+  protected List findURLPaths() {
+    // based on org/cougaar/util/Configuration.java:
 
+    // symbolic names
+    Map props = new HashMap();
+    props.put(
+        "CLASSPATH",
+        System.getProperty("org.cougaar.class.path", ""));
+    String base = System.getProperty("org.cougaar.install.path", "");
+    props.put("INSTALL", base);
+    props.put("CIP", base);        // alias for INSTALL
+    props.put("COUGAAR_INSTALL_PATH", base); // for completeness
+    props.put("HOME", System.getProperty("user.home"));
+    props.put("CWD", System.getProperty("user.dir"));
+    props.put("SYS", System.getProperty("org.cougaar.system.path", ""));
+
+    // jar path
+    String jar_path = System.getProperty("org.cougaar.jar.path");
+    if (jar_path != null && 
+	jar_path.charAt(0) == '"' &&
+	jar_path.charAt(jar_path.length()-1) == '"') {
+      jar_path = jar_path.substring(1, jar_path.length()-1);
+    }
+    if (jar_path == null) {
+      jar_path = DEFAULT_JAR_PATH;
+    } else {
+      jar_path = jar_path.replace('\\', '/'); // Make sure its a URL and not a file path
+      if (jar_path.endsWith(File.pathSeparator)) {
+        jar_path += DEFAULT_JAR_PATH;
+      }
+    }
+
+    // resolve symbols
+    String s = substituteProperties(jar_path, props);
+
+    // tokenize
+    List l = new ArrayList();
+    for (int i = 0; ; ) {
+      int j;
+      int k;
+      if (s.startsWith("classpath(", i) ||
+          s.startsWith("directory(", i)) {
+        j = s.indexOf(')', i);
+        k = j+1;
+      } else {
+        j = s.indexOf(File.pathSeparatorChar, i);
+        k = j;
+      }
+      if (j < 0) {
+        if (i < s.length()) {
+          l.add(s.substring(i));
+        }
+        break;
+      }
+      l.add(s.substring(i, k));
+      i = j+1;
+    }
+
+    return l;
+  }
+  private static int indexOfNonAlpha(String s, int i) {
+    int l = s.length();
+    for (int j = i; j<l; j++) {
+      char c = s.charAt(j);
+      if (!Character.isLetterOrDigit(c) && c!='_') return j;
+    }
+    return -1;
+  }
+  private static String substituteProperties(String s, Map props) {
+    int i = s.indexOf('$');
+    if (i >= 0) {
+      int j = indexOfNonAlpha(s,i+1);
+      String s0 = s.substring(0,i);
+      String s2 = (j<0)?"":s.substring(j);
+      String k = s.substring(i+1,(j<0)?s.length():j);
+      Object o = props.get(k);
+      if (o == null) {
+        throw new IllegalArgumentException("No such path property \""+k+"\"");
+      }
+      return substituteProperties(s0+o.toString()+s2, props);
+    }
+    return s;
+  }
+
+  protected List findJarsIn(String s) {
+    boolean isClasspath = s.startsWith("classpath(");
+    if (isClasspath || s.startsWith("directory(")) {
+      int end = s.length() - (s.endsWith(")") ? 1 : 0);
+      s = s.substring(s.indexOf('(')+1, end);
+    }
+    if (s == null || s.length() == 0) {
+      return Collections.EMPTY_LIST;
+    }
+    if (isClasspath) {
+      return findJarsInClasspath(s);
+    }
+    return findJarsInDirectory(new File(s));
+  }
 
   /** Gather jar files found in the directory specified by the argument **/
   protected List findJarsInDirectory(File f) {
@@ -353,8 +543,8 @@ public class Bootstrapper
     for (int i=0; i<files.length; i++) {
       try {
         String n = files[i];
-        if (!isJar(n) && !n.endsWith("/")) {
-          n = n+"/";
+        if (!isJar(n) && !n.endsWith(File.separator)) {
+          n = n+File.separator;
           n = canonicalPath(n); // Convert n to a canonical path, if possible
         }
         l.add(newURL(n));
