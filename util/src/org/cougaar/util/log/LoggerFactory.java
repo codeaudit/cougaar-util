@@ -70,12 +70,14 @@ public abstract class LoggerFactory {
    * The default implementation does nothing.
    **/
   public void configure(Properties props) {
+    (new Throwable()).printStackTrace();
   }
   /** Implementations may override to provide 
    * additional configuration information to the underlying logging facility.
    * The default implementation does nothing.
    **/
   public void configure(Map m) {
+    (new Throwable()).printStackTrace();
   }
 
   /** Create a logger as named by the parameter.

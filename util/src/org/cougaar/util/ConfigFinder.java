@@ -30,7 +30,8 @@ import org.xml.sax.SAXException;
 import org.xml.sax.EntityResolver;
 import org.w3c.dom.Document;
 
-import org.apache.log4j.*;
+//import org.apache.log4j.*;
+import org.cougaar.util.log.*;
 
 /**
  * ConfigFinder provides utilitites to search for a named file in
@@ -82,26 +83,27 @@ import org.apache.log4j.*;
  * @property org.cougaar.config The configuration being run, for example minitestconfig or small-135. Setting this property means that CIP/configs/<value of this property> will be searched before configs/common
  **/
 public final class ConfigFinder {
-  /** this is the default string used if org.cougaar.config.path is not defined.
-   * it is also appended to the end if org.cougaar.config.path ends with a ';'.
-   **/
-  public static final String defaultConfigPath = 
-    "$CWD;$HOME/.alp;$INSTALL/configs/$CONFIG;$INSTALL/configs/common";
-
   private List configPath = new ArrayList();
   private Map properties = null;
 
   private boolean verbose = false;
   public void setVerbose(boolean b) { verbose = b; }
 
-  private static final Category logger = Category.getInstance(ConfigFinder.class);
+  private Logger logger = null;
+
+  protected final synchronized Logger getLogger() {
+    if (logger == null) {
+      logger = Logging.getLogger(ConfigFinder.class);
+    }
+    return logger;
+  }
 
   public ConfigFinder() {
-    this(defaultConfigPath, defaultProperties);
+    this(Configuration.getConfigPath(), Configuration.getDefaultProperties());
   }
 
   public ConfigFinder(String s) {
-    this(s, defaultProperties);
+    this(s, Configuration.getDefaultProperties());
   }
 
   /**
@@ -119,7 +121,7 @@ public final class ConfigFinder {
    * </ul>
    **/
   public ConfigFinder(String module, String path) {
-    this(module, path, defaultProperties);
+    this(module, path, Configuration.getDefaultProperties());
   }
 
   public ConfigFinder(String s, Map props) {
@@ -146,13 +148,12 @@ public final class ConfigFinder {
 
     properties = props;
     if (s == null) {
-      s = defaultConfigPath;
+      s = Configuration.getConfigPath();
     } else {
       s = s.replace('\\', '/'); // Make sure its a URL and not a file path
+      // append the default if we end with a ';'
+      if (s.endsWith(";")) s += Configuration.getConfigPath();
     }
-
-    // append the default if we end with a ';'
-    if (s.endsWith(";")) s += defaultConfigPath;
 
     Vector mv = null;
     if (module != null) {
@@ -186,69 +187,35 @@ public final class ConfigFinder {
   /** get the config path as an unmodifiable List of URL instances
    * which describes, in order, the set of base locations searched by
    * this instance of the ConfigFinder.
+   * Contrast with Configuration.getConfigPath() which returns the
+   * vm's default path.
    **/
   public List getConfigPath() { return configPath; }
 
-  /** @return the current Cougaar Install Path **/
-  public URL getInstallURL() { return installUrl; }
-  /** @return the current config directory (or common, if undefined) **/
-  public URL getConfigURL() { return configUrl; }
+  /** @return the current Cougaar Install Path 
+   * @deprecated Use Configuration.getInstallURL();
+   **/
+  public URL getInstallURL() { return Configuration.getInstallURL(); }
+  /** @return the current config directory (or common, if undefined) 
+   * @deprecated Use Configuration.getConfigURL();
+   **/
+  public URL getConfigURL() { return Configuration.getConfigURL(); }
 
   private void appendPathElement(URL url) {
-    if (logger.isInfoEnabled()) {
-      logger.info("Adding Path Element "+url);
+    if (getLogger().isInfoEnabled()) {
+      getLogger().info("Adding Path Element "+url);
     }
     configPath.add(url);
   }
 
-  /** return the index of the first non-alphanumeric character 
-   * at or after i.
-   **/
-  private int indexOfNonAlpha(String s, int i) {
-    int l = s.length();
-    for (int j = i; j<l; j++) {
-      char c = s.charAt(j);
-      if (!Character.isLetterOrDigit(c)) return j;
-    }
-    return -1;
-  }
-
   private String substituteProperties(String s) {
-    int i = s.indexOf('$');
-    if (i >= 0) {
-      int j = indexOfNonAlpha(s,i+1);
-      String s0 = s.substring(0,i);
-      String s2 = (j<0)?"":s.substring(j);
-      String k = s.substring(i+1,(j<0)?s.length():j);
-      Object o = properties.get(k);
-      if (o == null) {
-        throw new IllegalArgumentException("No such path property \""+k+"\"");
-      }
-      return substituteProperties(s0+o.toString()+s2);
-    }
-    return s;
+    return Configuration.substituteProperties(s, properties);
   }
 
-  private static URL urlify(String s) {
-    s = s.replace('\\', '/').replace('\\', '/'); // These should be URL-like
-    try {
-      if (!s.endsWith("/")) s += "/";
-      return new URL(s);
-    } catch (MalformedURLException mue) {}
-
-    try {
-      File f = new File(s);
-      return (new File(s)).getCanonicalFile().toURL();
-    } catch (Exception e) {
-      logger.warn("Failed to interpret path element \""+s+"\"");        
-      return null;
-    }
-  }
-    
   private void appendPathElement(String el) {
     String s = el;
-    s = substituteProperties(el);
-    URL u = urlify(s);
+    s = Configuration.substituteProperties(el,properties);
+    URL u = Configuration.urlify(s);
     if (u != null) {
       appendPathElement(u);
     }
@@ -266,12 +233,12 @@ public final class ConfigFinder {
           URL fileURL = new URL(url, aFilename);
           File result = new File(fileURL.getFile());
           if (result.exists()) {
-            if (logger.isInfoEnabled()) {
-              logger.info("Found "+aFilename+" as " +fileURL);
+            if (getLogger().isInfoEnabled()) {
+              getLogger().info("Found "+aFilename+" as " +fileURL);
             }
 	    // If the URL contains configs/common....
 // 	    if (url.toString().indexOf("configs/common") != -1 || url.toString().indexOf("configs\\common") != -1) {
-// 	      logger.warn("configs/common file: " + aFilename, new Throwable());
+// 	      getLogger().warn("configs/common file: " + aFilename, new Throwable());
 // 	    }
             return result;
           }
@@ -280,8 +247,8 @@ public final class ConfigFinder {
         }
       }
     }
-    if (logger.isInfoEnabled()) {
-      logger.info("Couldn't find "+aFilename);
+    if (getLogger().isInfoEnabled()) {
+      getLogger().info("Couldn't find "+aFilename);
     }
     return null;
   }
@@ -298,24 +265,24 @@ public final class ConfigFinder {
         URL url = new URL(base, aURL);
         InputStream is = url.openStream();
         if (is == null) continue; // Don't return null
-        if (logger.isInfoEnabled()) {
-          logger.info("Found "+aURL+" as "+url);
+        if (getLogger().isInfoEnabled()) {
+          getLogger().info("Found "+aURL+" as "+url);
         }
 	// If the URL contains configs/common....
 // 	if (url.toString().indexOf("configs/common") != -1 || url.toString().indexOf("configs\\common") != -1) {
-// 	  logger.warn("configs/common file: " + aURL, new Throwable());
+// 	  getLogger().warn("configs/common file: " + aURL, new Throwable());
 // 	}
         return is;
       } 
       catch (MalformedURLException mue) {
-        if (logger.isDebugEnabled()) {
-          logger.debug("Exception while looking for "+aURL+" at "+base, mue);
+        if (getLogger().isDebugEnabled()) {
+          getLogger().debug("Exception while looking for "+aURL+" at "+base, mue);
         }
         continue;
       }
       catch (IOException ioe) {
-        if (logger.isDebugEnabled()) {
-          logger.debug("Exception while looking for "+aURL+" at "+base, ioe);
+        if (getLogger().isDebugEnabled()) {
+          getLogger().debug("Exception while looking for "+aURL+" at "+base, ioe);
         }
         continue;
       }
@@ -329,17 +296,17 @@ public final class ConfigFinder {
         return openZip(aURL, file.toString());
       }
     } catch (IOException ioe) {
-      if (logger.isDebugEnabled()) {
-        logger.debug("Exception while looking for "+aURL+" in zip "+sb, ioe);
+      if (getLogger().isDebugEnabled()) {
+        getLogger().debug("Exception while looking for "+aURL+" in zip "+sb, ioe);
       }
     } catch (NullPointerException npe) {
-      if (logger.isDebugEnabled()) {
-        logger.debug("Exception while looking for "+aURL+" in zip "+sb, npe);
+      if (getLogger().isDebugEnabled()) {
+        getLogger().debug("Exception while looking for "+aURL+" in zip "+sb, npe);
       }
     }
 
-    if (logger.isInfoEnabled()) {
-      logger.info("Couldn't find "+aURL);
+    if (getLogger().isInfoEnabled()) {
+      getLogger().info("Couldn't find "+aURL);
     }
 
     throw new FileNotFoundException(aURL);
@@ -358,12 +325,12 @@ public final class ConfigFinder {
         InputStream is = url.openStream();
         if (is == null) continue; // Don't return null
         is.close();
-        if (logger.isInfoEnabled()) {
-          logger.info("Found "+aURL+" as "+url);
+        if (getLogger().isInfoEnabled()) {
+          getLogger().info("Found "+aURL+" as "+url);
         }
 	// If the URL contains configs/common....
 // 	if (url.toString().indexOf("configs/common") != -1 || url.toString().indexOf("configs\\common") != -1) {
-// 	  logger.warn("configs/common file: " + aURL, new Throwable());
+// 	  getLogger().warn("configs/common file: " + aURL, new Throwable());
 // 	}
         return url;
       }
@@ -374,10 +341,10 @@ public final class ConfigFinder {
         continue;
       }
     }
-    //if (logger.isInfoEnabled()) 
+    //if (getLogger().isInfoEnabled()) 
     {
       // it isn't really an error, but I think we'd like to see these.
-      logger.warn("Failed to find "+aURL);
+      getLogger().warn("Failed to find "+aURL);
     }
     return null;
   }
@@ -433,7 +400,7 @@ public final class ConfigFinder {
       }
       parser.parse(is);
     } catch (SAXException e) {
-      logger.error("Exception parsing XML file \""+xmlfile+"\"", e);
+      getLogger().error("Exception parsing XML file \""+xmlfile+"\"", e);
     }    
 
     return parser.getDocument();
@@ -443,41 +410,7 @@ public final class ConfigFinder {
   private static Map moduleConfigFinders;
 
   // Singleton pattern
-  private static ConfigFinder defaultConfigFinder;
-  private static Map defaultProperties;
-  private static URL installUrl;
-  private static URL configUrl;
-  static {
-    Map m = new HashMap();
-    defaultProperties = m;
-
-    File ipf = new File(System.getProperty("org.cougaar.install.path", "."));
-    try { ipf = ipf.getCanonicalFile(); } catch (IOException ioe) {}
-    String ipath = ipf.toString();
-    m.put("INSTALL", ipath);
-    installUrl = urlify(ipath);
-
-    m.put("HOME", System.getProperty("user.home"));
-    m.put("CWD", System.getProperty("user.dir"));
-
-    File csf = new File(ipath, "configs");
-    try { csf = csf.getCanonicalFile(); } catch (IOException ioe) {}
-    String cspath = csf.toString();
-    m.put("CONFIGS", cspath);
-    configUrl = urlify(cspath);
-
-    String cs = System.getProperty("org.cougaar.config", "common");
-    if (cs != null)
-      m.put("CONFIG", cs);
-
-    String config_path = System.getProperty("org.cougaar.config.path");
-    if (config_path != null && 
-	config_path.charAt(0) == '"' &&
-	config_path.charAt(config_path.length()-1) == '"')	
-	config_path = config_path.substring(1, config_path.length()-1);
-	
-    defaultConfigFinder = new ConfigFinder(config_path);
-  }
+  private static final ConfigFinder defaultConfigFinder = new ConfigFinder(Configuration.getConfigPath());
 
   /**
    * Return the default static instance of the ConfigFinder,
@@ -497,11 +430,7 @@ public final class ConfigFinder {
       return defaultConfigFinder;
     }
     
-    String config_path = System.getProperty("org.cougaar.config.path");
-    if (config_path != null && 
-	config_path.charAt(0) == '"' &&
-	config_path.charAt(config_path.length()-1) == '"')	
-      config_path = config_path.substring(1, config_path.length()-1);
+    String config_path = Configuration.getConfigPath();
     
     // Build static hash on $module of these
     if (moduleConfigFinders == null)
@@ -517,8 +446,6 @@ public final class ConfigFinder {
 
   class ConfigResolver implements EntityResolver {
     public InputSource resolveEntity (String publicId, String systemId) {
-
-      
       URL url = null;
 
       try {
@@ -540,11 +467,11 @@ public final class ConfigFinder {
         }
         is = new InputSource(istream);
       } catch(IOException e) {
-        logger.error("Error getting input source for file \""+filename+"\"", e);
+        getLogger().error("Error getting input source for file \""+filename+"\"", e);
        }
       
       if(is == null) {
-        logger.error("Null InputSource for file \""+filename+"\"");
+        getLogger().error("Null InputSource for file \""+filename+"\"");
       }
 
       return is;

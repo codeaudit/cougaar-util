@@ -22,6 +22,11 @@
 package org.cougaar.util.log.log4j;
 
 import java.util.*;
+import java.net.URL;
+import org.apache.log4j.xml.DOMConfigurator;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.PropertyConfigurator;
+
 
 import org.cougaar.util.log.*;
 import org.cougaar.util.*;
@@ -38,23 +43,23 @@ import org.cougaar.bootstrap.SystemProperties;
  * Typically the "requestor" classname is used to identify 
  * loggers.  A special "name" is "root", which is used
  * to specify the root (no-parent) logger.
- * @property org.cougaar.util.log.LoggerFactory.config Specifies a URL where a LoggerFactory configuration
+ * The properties may specify a name which it interpreted as a URL
+ * according to the definition of org.cougaar.util.ConfigFinder.canonicalizeElement
+ * In particular, it may be a URL or filename with embedded ConfigFinder directives.
+ * In addition, if there are no path separators in config specified, it will 
+ * interpret it as a filename in COUGAAR_INSTALL_PATH/configs/common.
+ * The config files may be either in log4j XML format (ending with .xml) or
+ * log4j properties format (ending in .props or .properties).
+ * @property org.cougaar.util.log.config Specifies a URL where a LoggerFactory configuration
  * file may be found.  The Log4jLoggerFactory inteprets this as a file of log4j properties, overridable
  * by org.cougaar.logging.* properties.
  * @property org.cougaar.core.logging.config.filename
- *    Alias for the property "org.cougaar.util.log.LoggerFactory.config"
- *    Load logging properties from the named file, which is
- *    found using the ConfigFinder.  Currently uses log4j-style
- *    properties; see
- *    <a href="http://jakarta.apache.org/log4j/docs/manual.html"
- *    >the log4j manual</a> for valid file contents.
- * @property org.cougaar.core.logging.*
- *    Non-"config.filename" properties are stripped of their 
- *    "org.cougaar.core.logging." prefix and passed to the
- *    logger configuration.  These properties override any 
- *    properties defined in the (optional) 
- *    "org.cougaar.core.logging.config.filename=STRING" 
- *    property.
+ * Alias for the property "org.cougaar.util.log.LoggerFactory.config"
+ * Load logging properties from the named file, which is
+ * found using the ConfigFinder.  Currently uses log4j-style
+ * properties; see
+ * <a href="http://jakarta.apache.org/log4j/docs/manual.html">the log4j manual</a>
+ * for valid file contents.
  */
 public class Log4jLoggerFactory 
   extends LoggerFactory 
@@ -62,57 +67,79 @@ public class Log4jLoggerFactory
   public static final String PREFIX = "org.cougaar.core.logging.";
   public static final String FILE_NAME_PROPERTY = PREFIX + "config.filename";
 
-  public Log4jLoggerFactory() {
-    Map m = new HashMap();
-    configure(m);
-    // take filename property, load from file
-    String filename = System.getProperty(LF_CONFIG_PROP);
-    if (filename == null) filename = System.getProperty(FILE_NAME_PROPERTY);
-    if (filename != null) {
-      ConfigFinder configFinder = ConfigFinder.getInstance();
-      try {
-        InputStream in = configFinder.open(filename);
-        Properties tmpP = new Properties();
-        tmpP.load(in);
-        m.putAll(tmpP);
-      } catch (IOException ioe) {
-        System.err.println("Error loading properties from Log4jLoggerFactory config file \""+filename+"\":");
-        ioe.printStackTrace();
-      }
-    }
-
-    // override with other properties
-    Properties props = SystemProperties.getSystemPropertiesWithPrefix(PREFIX);
-    for (Iterator it = props.keySet().iterator(); it.hasNext(); ) {
-      String name = (String) it.next();
-      if (name.equals(FILE_NAME_PROPERTY)) {
-        continue;
-      }
-
-      // assert (name.startsWith(PREFIX))
-      String value = props.getProperty(name);
-      name = name.substring(PREFIX.length());
-      m.put(name, value);
-    }
-    configure(m);
-  }
-
   /**
-   * Configure the factory, which sets the initial
-   * logging configuration (levels, destinations, etc).
+   * Default configuration only prints WARN or higher
+   * statements.
    * <p>
-   * This must be called prior to other "create*" methods.
+   * A client with name "x.y.z" that calls:<pre>
+   *   log.warn("test message");
+   * </pre>
+   * will generate a standard-output message similar to:</pre>
+   *   2002-03-08 22:26:08,980 WARN [z] - test message
+   * </pre>.
    * <p>
-   * Currently only "log4j" properties are used.  See
-   * <a href="http://jakarta.apache.org/log4j/docs/manual.html">
-   * the log4j manual</a> for details.
+   * See the log4j docs for further details.
    */
-  public void configure(Properties props) {
-    Initializer.configure(props);
+  private static final String[][] DEFAULT_PROPS = {
+    {"log4j.rootCategory",                            "WARN,A1" },
+    {"log4j.appender.A1",                             "org.apache.log4j.ConsoleAppender" },
+    {"log4j.appender.A1.layout",                      "org.apache.log4j.PatternLayout" },
+    {"log4j.appender.A1.layout.ConversionPattern",    "%d{ISO8601} %-5p [%c{1}] - %m%n" },
+  };
+
+  private static final Properties DEFAULT_PROPERTIES;
+
+  static {
+      Properties p = new Properties();
+      for (int i = 0, n = DEFAULT_PROPS.length; i < n; i++) {
+        p.put(DEFAULT_PROPS[i][0], DEFAULT_PROPS[i][1]);
+      }
+      DEFAULT_PROPERTIES = p;
   }
 
-  public void configure(Map m) {
-    Initializer.configure(m);
+
+  public Log4jLoggerFactory() {
+    Throwable err = null;    // post the error after the fact if we need to
+
+    String name;
+    name = System.getProperty(LF_CONFIG_PROP);
+    if (name == null) name = System.getProperty(FILE_NAME_PROPERTY);
+    if (name == null) name = System.getProperty("log4j.configuration");
+
+    try {
+      if (name != null) {
+        if (name.indexOf("/")==-1) {
+          name = "$INSTALL/configs/common/"+name;
+        }
+        URL cu = Configuration.canonicalizeElement(name);
+        if (cu != null) {
+          String s = cu.getFile();
+          if (s.endsWith(".xml")) {
+            DOMConfigurator.configure(cu);
+          } else {
+            PropertyConfigurator.configure(cu);
+          }
+          org.apache.log4j.Logger.getLogger(Log4jLoggerFactory.class).info("Configured logging from "+cu);
+          return;
+        } else {
+          err = new RuntimeException("Could not resolve "+name+" to a URL.");
+        }
+      } 
+    } catch (Exception e) {
+      err = e;
+    }
+
+    // if all else fails, we'll fall through to:
+    try {
+      PropertyConfigurator.configure(DEFAULT_PROPERTIES);
+    } catch (Exception e) {
+      BasicConfigurator.configure();
+      org.apache.log4j.Logger.getLogger(Log4jLoggerFactory.class).error("Failed default log4j initialization", e);
+    }      
+
+    if (err != null) {
+      org.apache.log4j.Logger.getLogger(Log4jLoggerFactory.class).error("Failed standard log4j initialization", err);
+    }
   }
 
   public Logger createLogger(Object requestor) {
@@ -120,6 +147,7 @@ public class Log4jLoggerFactory
   }
 
   public LoggerController createLoggerController(String requestor) {
+    (new Throwable()).printStackTrace();
     return new LoggerControllerImpl(requestor);
   }
 }
