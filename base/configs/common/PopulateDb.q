@@ -171,6 +171,16 @@ checkAttribute=\
          START_DATE = :start_date: AND \
          ASSEMBLY_ID :assembly_match:
  
+# CMT assemblies use attribute_orders of zero
+# So need to do some special casing in some situations
+queryAttributeValueZeroOrder=\
+ SELECT ATTRIBUTE_VALUE FROM V4_ASB_AGENT_PG_ATTR  \
+   WHERE COMPONENT_ALIB_ID = :component_alib_id: AND  \
+         PG_ATTRIBUTE_LIB_ID = :pg_attribute_lib_id: AND  \
+         ATTRIBUTE_ORDER = '0' AND \
+         START_DATE = :start_date: AND \
+         ASSEMBLY_ID :assembly_match:
+
 queryLibPGAttribute=\
  SELECT PG_NAME, ATTRIBUTE_NAME, PG_ATTRIBUTE_LIB_ID, ATTRIBUTE_TYPE, AGGREGATE_TYPE \
    FROM V4_LIB_PG_ATTRIBUTE \
