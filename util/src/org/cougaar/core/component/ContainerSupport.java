@@ -34,6 +34,11 @@ import java.beans.beancontext.*; /*make @see reference work*/
 
 import org.cougaar.util.GenericStateModel;
 import org.cougaar.util.GenericStateModelAdapter;
+import org.cougaar.util.DoubleBufferedList;
+import org.cougaar.util.Mappings;
+import org.cougaar.util.Mapping;
+import org.cougaar.util.Filters;
+import org.cougaar.util.UnaryPredicate;
 import org.cougaar.util.log.Logger;
 import org.cougaar.util.log.Logging;
 
@@ -60,7 +65,7 @@ implements Container, StateObject
   /** The actual set of child BoundComponent loaded. 
    * @see org.cougaar.core.component.BoundComponent
    **/
-  protected final ArrayList boundComponents = new ArrayList(11);
+  private final List boundComponents = new DoubleBufferedList();
 
   /** a Sorted Collection of child BinderFactory components.
    * Note that we cannot use TreeSet because of the Collection API's
@@ -178,16 +183,15 @@ implements Container, StateObject
 
   
   public int size() {
-    synchronized(boundComponents) {
-      return boundComponents.size();
-    }
+    return boundComponents.size();
   }
 
   public boolean isEmpty() {
-    return (size() == 0);
+    return boundComponents.isEmpty();
   }
 
   public boolean contains(Object o) {
+    // note that we don't sync on boundComponents here
     if (o instanceof ComponentDescription) {
       ComponentDescription cd = (ComponentDescription) o;
       String ip = cd.getInsertionPoint();
@@ -196,75 +200,81 @@ implements Container, StateObject
       }
       final boolean isDirectChild = 
         (0 >= ip.indexOf('.', containmentPrefix.length()));
-      synchronized (boundComponents) {
-        for (int i = 0, n = boundComponents.size(); i < n; i++) {
-          Object oi = boundComponents.get(i);
-          if (!(oi instanceof BoundComponent)) {
-            continue;
+      
+      for (Iterator it = boundComponents.iterator(); it.hasNext(); ) {
+        Object oi = it.next();
+        if (!(oi instanceof BoundComponent)) {
+          continue;
+        }
+        BoundComponent bc = (BoundComponent) oi;
+        Object bcc = bc.getComponent();
+        if (!(bcc instanceof ComponentDescription)) {
+          continue;
+        }
+        ComponentDescription bccd = (ComponentDescription) bcc;
+        if (isDirectChild) {
+          // at this level in hierarchy
+          if (cd.equals(bccd)) {
+            return true;
           }
-          BoundComponent bc = (BoundComponent) oi;
-          Object bcc = bc.getComponent();
-          if (!(bcc instanceof ComponentDescription)) {
-            continue;
-          }
-          ComponentDescription bccd = (ComponentDescription) bcc;
-          if (isDirectChild) {
-            // at this level in hierarchy
-            if (cd.equals(bccd)) {
-              return true;
-            }
-          } else {
-            // child container
-            Binder bcb = bc.getBinder();
-            if ((bcb instanceof ContainerBinder) &&
-                (ip.startsWith(bccd.getInsertionPoint())) &&
-                (((ContainerBinder) bcb).contains(cd))) {
-              return true;
-            }
+        } else {
+          // child container
+          Binder bcb = bc.getBinder();
+          if ((bcb instanceof ContainerBinder) &&
+              (ip.startsWith(bccd.getInsertionPoint())) &&
+              (((ContainerBinder) bcb).contains(cd))) {
+            return true;
           }
         }
       }
     } else if (o instanceof Component) {
       // FIXME no good way to find the insertion point!
-      synchronized(boundComponents) {
-        int l = boundComponents.size();
-        for (int i=0; i<l; i++) {
-          BoundComponent bc = (BoundComponent) boundComponents.get(i);
-          if (bc.getComponent().equals(o)) return true;
-        }
+      for (Iterator it = boundComponents.iterator(); it.hasNext(); ) {
+        BoundComponent bc = (BoundComponent) it.next();
+        if (bc.getComponent().equals(o)) return true;
       }
     }
     return false;
   }
 
+  /** map BoundComponent to Component (usually ComponentDescription) **/
+  private static final Mapping map_bc2c = new Mapping() {
+      public final Object map(Object o) { return ((BoundComponent)o).getComponent(); }};
+
+  /** return an iterator of the boundComponents by component **/
   public Iterator iterator() {
-    synchronized(boundComponents) {
-      int l = boundComponents.size();
-      ArrayList tmp = new ArrayList(l);
-      for (int i=0; i<l; i++) {
-        BoundComponent bc = (BoundComponent) boundComponents.get(i);
-        tmp.add(bc.getComponent());
-      }
-      return tmp.iterator();
-    }
+    return componentIterator();
   }
 
-  /** Get a List of all child components */
-  protected List listComponents() {
-    synchronized (boundComponents) {
-      int n = boundComponents.size();
-      List result = new ArrayList(n);
-      for (int i = 0; i < n; i++) {
-        BoundComponent bc = (BoundComponent) boundComponents.get(i);
-        Object comp = bc.getComponent();
-        if (comp instanceof ComponentDescription) {
-          ComponentDescription cd = (ComponentDescription) comp;
-          result.add(cd);
-        }
-      }
-      return result;
-    }
+  public Iterator componentIterator() {
+    return Mappings.map(map_bc2c, boundComponents.iterator());
   }
+
+  protected final Iterator bcIterator() {
+    return boundComponents.iterator();
+  }
+
+  public boolean containsComponent(ComponentDescription cd) {
+    for (Iterator it = iterator(); it.hasNext(); ) {
+      if (cd.equals(it.next())) { return true; }
+    }
+    return false;
+  }
+
+  private static final UnaryPredicate pred_isComponentDescription = new UnaryPredicate() {
+      public final boolean execute(Object o) { return o instanceof ComponentDescription; }};
+
+  /** Get a List of all child components by description.
+   * @note this creates a new list each call unless it is empty.
+   * it is better to use the iterator.
+   */
+  protected List listComponents() {
+    return (List) Filters.filter(iterator(), pred_isComponentDescription);
+  }
+
+  /** Map BoundComponent to Binder **/
+  private static final Mapping map_bc2b = new Mapping() {
+      public final Object map(Object o) { return ((BoundComponent)o).getBinder(); }};
 
   /**
    * Get an Iterator of all child Binders.
@@ -272,23 +282,22 @@ implements Container, StateObject
    * @see #listBinders
    */
   protected Iterator binderIterator() {
-    return listBinders().iterator();
+    return Mappings.map(map_bc2b, boundComponents.iterator());
   }
 
   /**
    * Get a List of all child Binders.
-   * <p>
-   * Need a "ContainerSupport.lock()" to make this safe...
+   * @note this creates a new list each call unless it is empty.
+   * it is better to use the binderIterator.
    */
   protected List listBinders() {
-    synchronized(boundComponents) {
-      int l = boundComponents.size();
-      ArrayList tmp = new ArrayList(l);
-      for (int i=0; i<l; i++) {
-        BoundComponent bc = (BoundComponent) boundComponents.get(i);
-        tmp.add(bc.getBinder());
-      }
-      return tmp;
+    Iterator it = binderIterator();
+    if (! it.hasNext()) {
+      return Collections.EMPTY_LIST;
+    } else {
+      List l = new ArrayList();
+      while (it.hasNext()) { l.add(it.next()); }
+      return l;
     }
   }
 
@@ -325,8 +334,8 @@ implements Container, StateObject
     } else {
       // not a clue.
       throw new IllegalArgumentException(
-          "Unsupported container element type: "+
-          ((o != null) ? o.getClass().getName() : "null"));
+                                         "Unsupported container element type: "+
+                                         ((o != null) ? o.getClass().getName() : "null"));
     }
 
     // load from a component description
@@ -334,13 +343,13 @@ implements Container, StateObject
     if (ip == null) {
       // description or insertion point not specified
       throw new IllegalArgumentException(
-          "ComponentDescription must specify an insertion point");
+                                         "ComponentDescription must specify an insertion point");
     }
     if (!(ip.startsWith(containmentPrefix))) {
       // wrong insertion point
       throw new IncorrectInsertionPointException(
-          "Insertion point "+ip+" doesn't match container's "+
-          containmentPrefix, cd);
+                                                 "Insertion point "+ip+" doesn't match container's "+
+                                                 containmentPrefix, cd);
     }
 
     // match! - now do we load it here or below - look for any more 
@@ -353,64 +362,41 @@ implements Container, StateObject
 
     boolean isDirectChild = (0 >= tail.indexOf('.'));
 
-    if (isDirectChild) {
-      // no more dots
-      // check to see if the component is already loaded
-      synchronized (boundComponents) {
-        for (int i = 0, n = boundComponents.size(); i < n; i++) {
-          Object oi = boundComponents.get(i);
-          if (!(oi instanceof BoundComponent)) {
-            continue;
-          }
-          BoundComponent bc = (BoundComponent) oi;
-          Object bcc = bc.getComponent();
-	  if (cd.equals(bcc)) {
-	    // already loaded
-	    return false;
-	  }
-        }
-        // FIXME should add within lock to prevent duplicates
-      }
-      // insert here
+    if (isDirectChild) {      // no more dots
+      // already loaded?
+      if (containsComponent(cd)) return false;
+
       return addComponent(cd, cstate);
-    }
-
-    // more dots: try inserting in subcomponents
-    synchronized (boundComponents) {
-      for (int i = 0, n = boundComponents.size(); i < n; i++) {
-        Object oi = boundComponents.get(i);
-        if (!(oi instanceof BoundComponent)) {
-          continue;
-        }
-        BoundComponent bc = (BoundComponent) oi;
+    } else {                  // more dots: try inserting in subcomponents
+      for (Iterator it = boundComponents.iterator(); it.hasNext(); ) {
+        BoundComponent bc = (BoundComponent) it.next();
+           
         Binder b = bc.getBinder();
-        if (!(b instanceof ContainerBinder)) {
-          continue;
-        }
-        Object bcc = bc.getComponent();
-        if (bcc instanceof ComponentDescription) {
-          ComponentDescription bccd = (ComponentDescription) bcc;
-          if (!(ip.startsWith(bccd.getInsertionPoint()))) {
-            continue;
+        if (b instanceof ContainerBinder) {
+          Object bcc = bc.getComponent();
+          if (bcc instanceof ComponentDescription) {
+            ComponentDescription bccd = (ComponentDescription) bcc;
+            if (!(ip.startsWith(bccd.getInsertionPoint()))) {
+              continue;
+            }
+          } else {
+            // non-desc child, but okay
           }
-        } else {
-          // non-desc child, but okay
-        }
-        try {
-          boolean ret = ((ContainerBinder)b).add(o);
-          // child already contains or added it
-          return ret;
-        } catch (IncorrectInsertionPointException ipE) {
-          // wrong insertion point
+ 
+          try {
+            boolean ret = ((ContainerBinder)b).add(o);
+            // child already contains or added it
+            return ret;
+          } catch (IncorrectInsertionPointException ipE) {
+            // wrong insertion point
+          }
         }
       }
     }
-
     // not at this level, and no child accepted it
-    throw new ComponentLoadFailure(
-        "Component not loaded by this container ("+
-        containmentPrefix+") or its children",
-        cd);
+    throw new ComponentLoadFailure("Component not loaded by this container ("+
+                                   containmentPrefix+") or its children",
+                                   cd);
   }
 
   public boolean remove(Object o) {
@@ -437,18 +423,12 @@ implements Container, StateObject
     boolean isDirectChild = (0 >= tail.indexOf('.'));
 
     // find the child and remove it
-    Binder removedBinder;
+    Binder removedBinder = null;
     synchronized (boundComponents) {
-      for (int i = 0, n = boundComponents.size(); ; i++) {
-        if (i >= n) {
-          // not found
-          return false;
-        }
-        Object oi = boundComponents.get(i);
-        if (!(oi instanceof BoundComponent)) {
-          continue;
-        }
-        BoundComponent bc = (BoundComponent) oi;
+      Object found = null;
+      for (Iterator it = boundComponents.iterator(); it.hasNext(); ) {
+        BoundComponent bc = (BoundComponent) it.next();
+
         Object bcc = bc.getComponent();
         if (!(bcc instanceof ComponentDescription)) {
           continue;
@@ -458,24 +438,27 @@ implements Container, StateObject
           // at this level in hierarchy
           if (cd.equals(bccd)) {
             removedBinder = bc.getBinder();
-            boundComponents.remove(i);
+            boundComponents.remove(bc); // cannot use it.remove() here
             break;
           }
         } else {
           // child container
           String bctail = 
-            bccd.getInsertionPoint().substring(
-                containmentPrefix.length());
+            bccd.getInsertionPoint().substring(containmentPrefix.length());
+
           if (tail.startsWith(bctail)) {
             Binder bcb = bc.getBinder();
             if ((bcb instanceof ContainerBinder) &&
                 (((ContainerBinder) bcb).remove(cd))) {
+              // bail out completely - need not remove anything locally
               return true;
             }
           }
         }
       }
     }
+
+    if (removedBinder == null) { return false; } // wasn't there to remove
 
     // unload the removed direct child
     try {
@@ -560,9 +543,8 @@ implements Container, StateObject
       b.setState(cstate);
     }
     BoundComponent bc = new BoundComponent(b, c);
-    synchronized (boundComponents) {
-      boundComponents.add(bc);
-    }
+    boundComponents.add(bc);
+
     // transition state to match our container's state
     int myState = getModelState();
     boolean suspend = (myState == GenericStateModel.IDLE);
@@ -700,11 +682,10 @@ implements Container, StateObject
 
   protected ComponentDescriptions captureState() {
     synchronized (boundComponents) {
-      int n = boundComponents.size();
-      List l = new ArrayList(n + binderFactoryDescriptions.size());
+      List l = new ArrayList(boundComponents.size() + binderFactoryDescriptions.size());
       l.addAll(binderFactoryDescriptions);
-      for (int i = 0; i < n; i++) {
-        BoundComponent bc = (BoundComponent) boundComponents.get(i);
+      for (Iterator it = bcIterator(); it.hasNext(); ) {
+        BoundComponent bc = (BoundComponent) it.next();
         Object comp = bc.getComponent();
         if (comp instanceof ComponentDescription) {
           ComponentDescription cd = (ComponentDescription)comp;
@@ -837,10 +818,7 @@ implements Container, StateObject
       Binder b = (Binder) childBinders.get(i);
       b.unload();
     }
-    synchronized (boundComponents) {
-      // unsafe?
-      boundComponents.clear();
-    }
+    boundComponents.clear();
 
     if (childServiceBroker != null) {
       destroyChildServiceBroker(childServiceBroker);
