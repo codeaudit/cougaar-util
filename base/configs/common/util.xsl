@@ -62,7 +62,7 @@ This stylesheet is imported by agent templates, such as
       </xsl:variable>
       <xsl:if test="starts-with($ip, $insertionpoint)">
         <xsl:variable name="ext">
-          <xsl:value-of select="substring-after(@ip, $insertionpoint)"/>
+          <xsl:value-of select="substring-after($ip, $insertionpoint)"/>
         </xsl:variable>
         <xsl:if test="not(contains($ext, '.'))">
           <xsl:element name="{name(.)}" namespace="{namespace-uri()}">
