@@ -146,17 +146,23 @@ queryGeolocLocation = \
       ||', Latitude=Latitude '    || LATITUDE || 'degrees' \
       ||', Longitude=Longitude '  || LONGITUDE || 'degrees' \
    FROM GEOLOC \
-  WHERE GEOLOC_CODE = SUBSTR(':key:', 12) \
-      UNION \
- SELECT 'GeolocLocation', ':key:' \
-      ||', InstallationTypeCode=' \
-      ||', CountryStateCode='     \
-      ||', CountryStateName='     \
-      ||', Name='                 || REPLACE(LOCATION_NAME, ' ', '_') \
-      ||', Latitude=Latitude '    || LATITUDE || 'degrees' \
-      ||', Longitude=Longitude '  || LONGITUDE || 'degrees' \
-   FROM ALPLOC \
-  WHERE ALPLOC_CODE = SUBSTR(':key:', 12)
+  WHERE GEOLOC_CODE = SUBSTR(':key:', 12) 
+
+## Except the default org.cougaar.database does not have
+# an ALPLOC table. Now, if you have installed everything
+# from our one dump, you get the data. But for now
+# you dont, so we dont do the union, and you better
+# have a real GEOLOC
+#      UNION \
+# SELECT 'GeolocLocation', ':key:' \
+#      ||', InstallationTypeCode=' \
+#      ||', CountryStateCode='     \
+#      ||', CountryStateName='     \
+#      ||', Name='                 || REPLACE(LOCATION_NAME, ' ', '_') \
+#      ||', Latitude=Latitude '    || LATITUDE || 'degrees' \
+#      ||', Longitude=Longitude '  || LONGITUDE || 'degrees' \
+#   FROM ALPLOC \
+#  WHERE ALPLOC_CODE = SUBSTR(':key:', 12)
 
 # FIXME: This needs to be unioned with the ALPLOC table, like above, 
 # but MySQL won't support that until v4 is out of alpha
