@@ -87,7 +87,7 @@ public final class MethodCache {
             List l = new ArrayList(2);
             l.add(ret);
             l.add(m);
-            ret = m;
+            ret = l;
           } else {
             // one of many possible Methods
             ((List)ret).add(m);

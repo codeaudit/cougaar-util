@@ -172,7 +172,7 @@ public abstract class OperatorFactory {
    * A testing utility!.
    * <p>
    * Try with a ".txt" file, for example:<pre><code>
-   *   (and (isString) (equals "foo"))
+   *   (and (is:String) (equals "foo"))
    * </pre></code>
    */
   public static void main(String[] args) {
@@ -186,7 +186,7 @@ public abstract class OperatorFactory {
        Operator.VERBOSE_FLAG);
     if (args.length != 1) {
       // simple test
-      objIn = "(and (isString) (equals \"TEST\"))";
+      objIn = "(and (is:String) (equals \"TEST\"))";
     } else {
       // read from the input file
       String filename = args[0];

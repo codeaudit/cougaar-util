@@ -186,9 +186,13 @@ public final class MethodOp
     int minNParams = 0;
     int maxNParams = 0;
     for (int i = 0; i < nPossMeths; i++) {
-      Class[] pi = ((Method)(possMeths.get(i))).getParameterTypes();
+      Method mi = (Method) possMeths.get(i);
+      Class[] pi = mi.getParameterTypes();
       int pin = pi.length;
-      if (pin < minNParams) {
+      if (i == 0) {
+        minNParams = pin;
+        maxNParams = pin;
+      } else if (pin < minNParams) {
         minNParams = pin;
       } else if (pin > maxNParams) {
         maxNParams = pin;
@@ -285,12 +289,12 @@ public final class MethodOp
       Class[] pi = mi.getParameterTypes();
       if (pi.length == nargs) {
         int ri = 0;
-        for (int j = 0; j < nargs; j++) {
+        for (int j = 0; ; j++) {
           if (j >= nargs) {
             if (ri == 0) {
               // exact match.  it doesn't matter if this matched
               // an interface or implementation.
-              return (Method)possMeths.get(i);
+              return mi;
             }
             if (singleAssignableIdx == -1) {
               singleAssignableIdx = i; // unset --> set
