@@ -2,6 +2,10 @@ database=${org.cougaar.configuration.database}
 username=${org.cougaar.configuration.user}
 password=${org.cougaar.configuration.password}
 
+queryTrialAssemblies=\
+ SELECT ASSEMBLY_ID FROM V4_EXPT_TRIAL_ASSEMBLY \
+  WHERE TRIAL_ID = ':trial_id:'
+
 insertAlibComponent=\
  INSERT INTO V4_ALIB_COMPONENT \
     (COMPONENT_ALIB_ID, COMPONENT_NAME, \
@@ -241,3 +245,19 @@ insertTrialRecipe=\
 cleanTrialRecipe=\
  DELETE FROM V4_EXPT_TRIAL_MOD_RECIPE \
   WHERE TRIAL_ID = ':trial_id:'
+
+querySubordinatesOf3_BDE_2ID_HHC=\
+ SELECT SPTG.COMPONENT_ALIB_ID \
+   FROM V4_ALIB_COMPONENT SPTG, V4_ALIB_COMPONENT SPTD, V4_ASB_AGENT_RELATION R \
+  WHERE R.SUPPORTED_COMPONENT_ALIB_ID = SPTD.COMPONENT_ALIB_ID \
+    AND R.SUPPORTING_COMPONENT_ALIB_ID = SPTG.COMPONENT_ALIB_ID \
+    AND R.ROLE = 'Subordinate' \
+    AND R.ASSEMBLY_ID :assembly_match: \
+    AND SPTD.COMPONENT_NAME = '3-BDE-2ID-HHC'
+
+queryExampleBinderSpecification=\
+ SELECT 'org.cougaar.core.examples.PluginServiceFilter', 'binder', 'org.cougaar.core.examples.PluginServiceFilter' \
+   FROM DUAL
+
+queryExampleBinderArgs=\
+ SELECT NULL, NULL FROM DUAL WHERE DUMMY IS NULL;
