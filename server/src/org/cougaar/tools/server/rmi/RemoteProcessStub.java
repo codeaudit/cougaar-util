@@ -49,6 +49,7 @@ implements RemoteProcess {
       RemoteProcessDecl rpd,
       ProcessDescription pd) {
     this.rpd = rpd;
+    this.pd = pd;
     // assert pd == rpd.getProcessDescription();
   }
 
