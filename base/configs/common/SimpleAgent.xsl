@@ -41,7 +41,7 @@ a custom "MyAgent.xsl":
     version="1.0">
   
     <xsl:import href="SimpleAgent.xsl"/>
-    <xsl:output method="xsl" indent="yes"/>
+    <xsl:output method="xml" indent="yes"/>
   
     <xsl:template match="agent[@template = 'MyAgent.xsl']">
       <agent name="{@name}" template="">
@@ -87,7 +87,7 @@ In the "mySociety.xml" file the agent would specify the template:
 
   <xsl:strip-space elements="*"/>
 
-  <xsl:output method="xsl" indent="yes"/>
+  <xsl:output method="xml" indent="yes"/>
 
   <!-- default template to preserve all tags -->
   <xsl:template match="@*|node()|processing-instruction()|comment()">

@@ -54,7 +54,7 @@ which is saved in the Cougaar release as:
   <xsl:param name="defaultAgent">SimpleAgent.xsl</xsl:param>
   <xsl:param name="defaultNode">NodeAgent.xsl</xsl:param>
 
-  <xsl:output method="xsl" indent="yes"/>
+  <xsl:output method="xml" indent="yes"/>
 
   <xsl:key name="templates" match="agent|node" use="@template"/>
 

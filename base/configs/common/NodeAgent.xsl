@@ -38,11 +38,14 @@ XSL Template for NodeAgent, which reuses most of SimpleAgent.
   optional xsl parameters, passed by:
     -Dorg.cougaar.society.xsl.param.$name=$value
   -->
-  <xsl:param name="servlets">true</xsl:param>
   <xsl:param name="metrics">full</xsl:param>
   <xsl:param name="mts">full</xsl:param>
+  <!--
+  these xsl parameters are already defined in SimpleAgent.xsl:
+  <xsl:param name="servlets">true</xsl:param>
   <xsl:param name="planning">true</xsl:param>
   <xsl:param name="communities">true</xsl:param>
+  -->
 
   <!--
   backwards compatibility for the wp server, passed by:
@@ -56,7 +59,7 @@ XSL Template for NodeAgent, which reuses most of SimpleAgent.
   -->
   <xsl:param name="defaultNode">NodeAgent.xsl</xsl:param>
 
-  <xsl:output method="xsl" indent="yes"/>
+  <xsl:output method="xml" indent="yes"/>
 
   <!-- match 'node' elements -->
   <xsl:template match="node[(@template = 'NodeAgent.xsl') or ($defaultNode = 'NodeAgent.xsl' and not(@template) and not(@type))]">
