@@ -1,5 +1,5 @@
-# Sample site-specific properties file for ALPServer
+# Sample site-specific properties file for NodeServer
 #
 java.class.path=/home/mthome/lib/classes\:/home/mthome/alp.install/lib/core.jar
-alp.install.path=/home/mthome/alp.install
-alp.server.verbose=true
+org.cougaar.install.path=/home/mthome/alp.install
+org.cougaar.server.verbose=true

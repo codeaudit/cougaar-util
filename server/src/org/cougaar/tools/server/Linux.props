@@ -1,4 +1,4 @@
-# Linux-specific ALP property file
+# Linux-specific COUGAAR property file
 
 # use green threads under linux
 org.cougaar.tools.server.vm.green=true

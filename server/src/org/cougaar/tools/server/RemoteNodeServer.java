@@ -11,7 +11,7 @@
 package org.cougaar.tools.server;
 
 /** 
- * Remote ALPServer API
+ * Remote NodeServer API
  **/
 
 import java.util.*;
@@ -20,7 +20,7 @@ import java.net.*;
 import java.rmi.*;
 import java.rmi.registry.*;
 
-public interface RemoteALPServer extends Remote {
+public interface RemoteNodeServer extends Remote {
   /** Launch a new Node **/
   RemoteProcess createNode(String nodeName, Properties props, String args[], 
                            RemoteOutputStream out, RemoteOutputStream err)

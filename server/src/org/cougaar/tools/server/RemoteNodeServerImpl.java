@@ -11,7 +11,7 @@
 package org.cougaar.tools.server;
 
 /** 
- * Remote ALPServer API
+ * Remote NodeServer API
  **/
 
 import java.util.*;
@@ -22,9 +22,9 @@ import java.rmi.server.*;
 import org.cougaar.tools.server.*;
 
 
-class RemoteALPServerImpl 
+class RemoteNodeServerImpl 
   extends UnicastRemoteObject
-  implements RemoteALPServer 
+  implements RemoteNodeServer 
 {
   private int counter = 0;
   private boolean verbose;
@@ -44,15 +44,15 @@ class RemoteALPServerImpl
 
   private RemoteProcess newProcess;
 
-  public RemoteALPServerImpl(Properties props) throws RemoteException {
+  public RemoteNodeServerImpl(Properties props) throws RemoteException {
     properties = props;
     verbose = "true".equals(properties.getProperty("org.cougaar.tools.server.verbose", 
-						   ALPServer.DEFAULT_VERBOSITY));
+						   NodeServer.DEFAULT_VERBOSITY));
     alpInstallPath = new File(properties.getProperty("org.cougaar.install.path"));
     configsPath = new File(alpInstallPath, "configs");
   }
 
-  /** starts a ALP configuration by combining client supplied and local info 
+  /** starts a COUGAAR configuration by combining client supplied and local info 
    * and invoking the JVM
    **/
   public RemoteProcess createNode(String nodeId, Properties props, String args[],
@@ -85,7 +85,7 @@ class RemoteALPServerImpl
     }
 
     String ip = p.getProperty("org.cougaar.install.path");
-    com.add("-Dalp.install.path="+ip);
+    com.add("-Dorg.cougaar.install.path="+ip);
 
     String vmargs = p.getProperty("org.cougaar.vm.arguments");
     if (vmargs != null) {
@@ -110,7 +110,7 @@ class RemoteALPServerImpl
     
     String ns = p.getProperty("org.cougaar.name.server");
     if (ns == null) {
-      System.err.println("\nalp.name.server must be specified: Using alpreg.ini.");
+      System.err.println("\norg.cougaar.name.server must be specified: Using alpreg.ini.");
     } else {
       com.add("-ns");
       com.add(ns);

@@ -12,9 +12,9 @@ org.cougaar.tools.server.port=8484
 # (do not change)
 org.cougaar.tools.server.name=NodeServer
 
-# The class of RemoteALPServer to instantiate 
+# The class of RemoteNodeServer to instantiate 
 # (do not change)
-org.cougaar.tools.server.class=org.cougaar.tools.server.RemoteALPServerImpl
+org.cougaar.tools.server.class=org.cougaar.tools.server.RemoteNodeServerImpl
 
 # when true, the server will report on various activities
 org.cougaar.tools.server.verbose=false
@@ -38,7 +38,7 @@ org.cougaar.tools.server.vm.green=false
 java.class.path=.../core.jar
 
 # where cougaar is installed - no default
-# This should be set to the value of $ALP_INSTALL_PATH
+# This should be set to the value of $COUGAAR_INSTALL_PATH
 org.cougaar.install.path=
 
 # may specify additional -D arguments

@@ -3,9 +3,9 @@
 
 package org.cougaar.tools.server;
 
-public final class RemoteALPServerImpl_Stub
+public final class RemoteNodeServerImpl_Stub
     extends java.rmi.server.RemoteStub
-    implements org.cougaar.tools.server.RemoteALPServer, java.rmi.Remote
+    implements org.cougaar.tools.server.RemoteNodeServer, java.rmi.Remote
 {
     private static final long serialVersionUID = 2;
     
@@ -17,11 +17,11 @@ public final class RemoteALPServerImpl_Stub
     
     static {
 	try {
-	    $method_createNode_0 = org.cougaar.tools.server.RemoteALPServer.class.getMethod("createNode", new java.lang.Class[] {java.lang.String.class, java.util.Properties.class, java.lang.String[].class, org.cougaar.tools.server.RemoteOutputStream.class, org.cougaar.tools.server.RemoteOutputStream.class});
-	    $method_destroyNode_1 = org.cougaar.tools.server.RemoteALPServer.class.getMethod("destroyNode", new java.lang.Class[] {java.lang.String.class});
-	    $method_getNodeCount_2 = org.cougaar.tools.server.RemoteALPServer.class.getMethod("getNodeCount", new java.lang.Class[] {});
-	    $method_getNodes_3 = org.cougaar.tools.server.RemoteALPServer.class.getMethod("getNodes", new java.lang.Class[] {});
-	    $method_reset_4 = org.cougaar.tools.server.RemoteALPServer.class.getMethod("reset", new java.lang.Class[] {});
+	    $method_createNode_0 = org.cougaar.tools.server.RemoteNodeServer.class.getMethod("createNode", new java.lang.Class[] {java.lang.String.class, java.util.Properties.class, java.lang.String[].class, org.cougaar.tools.server.RemoteOutputStream.class, org.cougaar.tools.server.RemoteOutputStream.class});
+	    $method_destroyNode_1 = org.cougaar.tools.server.RemoteNodeServer.class.getMethod("destroyNode", new java.lang.Class[] {java.lang.String.class});
+	    $method_getNodeCount_2 = org.cougaar.tools.server.RemoteNodeServer.class.getMethod("getNodeCount", new java.lang.Class[] {});
+	    $method_getNodes_3 = org.cougaar.tools.server.RemoteNodeServer.class.getMethod("getNodes", new java.lang.Class[] {});
+	    $method_reset_4 = org.cougaar.tools.server.RemoteNodeServer.class.getMethod("reset", new java.lang.Class[] {});
 	} catch (java.lang.NoSuchMethodException e) {
 	    throw new java.lang.NoSuchMethodError(
 		"stub class initialization failed");
@@ -29,7 +29,7 @@ public final class RemoteALPServerImpl_Stub
     }
     
     // constructors
-    public RemoteALPServerImpl_Stub(java.rmi.server.RemoteRef ref) {
+    public RemoteNodeServerImpl_Stub(java.rmi.server.RemoteRef ref) {
 	super(ref);
     }
     

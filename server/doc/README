@@ -1,8 +1,8 @@
-This is the ALP (node) server module.
+This is the COUGAAR (node) server module.
 
 To run the server:
 
-	java org.cougaar.tools.server.ALPServer [<site.props> ..]
+	java org.cougaar.tools.server.NodeServer [<site.props> ..]
 or
 	java -jar server.jar [<site.props> ...]
 or (if your system allows jar file execution):
@@ -58,7 +58,7 @@ Examples:
 (The data files mentioned below are all in server/data/)
 
 Starting a server instance:
-	java org.cougaar.tools.server.ALPServer draught.props
+	java org.cougaar.tools.server.NodeServer draught.props
 
 Starting the gui:
 	java org.cougaar.tools.server.Console sample.hosts minitestconfig sample.props

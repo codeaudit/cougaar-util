@@ -11,10 +11,10 @@
 package org.cougaar.tools.server;
 
 /** 
- * A Server for creating and destroying ALP nodes.
+ * A Server for creating and destroying COUGAAR nodes.
  * syntax is: 
- * java -classpath <whatever> org.cougaar.tools.server.ALPServer
- * Common.props contains system properties needed for ALPServer initialization
+ * java -classpath <whatever> org.cougaar.tools.server.NodeServer
+ * Common.props contains system properties needed for NodeServer initialization
  **/
 
 import java.lang.reflect.*;
@@ -26,19 +26,19 @@ import java.rmi.registry.*;
 import java.rmi.server.*;
 import org.cougaar.tools.server.*;
 
-public class ALPServer {
+public class NodeServer {
   public static final String DEFAULT_VERBOSITY = "false";
   public static final String DEFAULT_PORT = "8484";
   public static final String DEFAULT_NAME = "NodeServer";
-  public static final String DEFAULT_CLASS = "org.cougaar.tools.server.RemoteALPServerImpl";
+  public static final String DEFAULT_CLASS = "org.cougaar.tools.server.RemoteNodeServerImpl";
 
   private Registry registry = null;
-  private RemoteALPServer server = null;
+  private RemoteNodeServer server = null;
 
   private Properties properties;
   private boolean verbose = false;
 
-  private ALPServer(Properties props) {
+  private NodeServer(Properties props) {
     properties = props;
   }
 
@@ -57,7 +57,7 @@ public class ALPServer {
       registry = createRegistry();
       if (verbose) System.err.println(registry.toString());
       
-      // create and register a ALPServerImpl
+      // create and register a NodeServerImpl
       if (verbose) System.err.print("Creating Server: ");
       server = createServer();
       String regname = properties.getProperty("org.cougaar.tools.server.name", DEFAULT_NAME);
@@ -77,7 +77,7 @@ public class ALPServer {
     return LocateRegistry.createRegistry(Integer.parseInt(ps));
   }
 
-  private RemoteALPServer createServer() throws Exception {
+  private RemoteNodeServer createServer() throws Exception {
     String classname = properties.getProperty("org.cougaar.tools.server.class", DEFAULT_CLASS);
     Class serverClass = Class.forName(classname);
     Class argl[] = new Class[1];
@@ -86,14 +86,14 @@ public class ALPServer {
 
     Object[] argv = new Object[1];
     argv[0] = properties;
-    return (RemoteALPServer) serverNew.newInstance(argv);
+    return (RemoteNodeServer) serverNew.newInstance(argv);
   }
 
   private final static boolean loadProperties(Properties properties, String s) {
     InputStream is = null;
     try {
       // first check for a resource
-      is = ALPServer.class.getResourceAsStream(s); 
+      is = NodeServer.class.getResourceAsStream(s); 
       if (is == null) {
         // then a URL
         try {
@@ -120,7 +120,7 @@ public class ALPServer {
   }
 
 
-  /** Run an ALPServer.
+  /** Run an NodeServer.
    * The environment to be used is specified by System properties
    * overlayed with OS-specific properties overlayed with the
    * optional properties file description passed as an argument.
@@ -133,12 +133,12 @@ public class ALPServer {
    * properties from "Windows.props". 
    *
    * @param arg One optional argument naming a Properties file
-   * to use to describe the ALPServer environment.
+   * to use to describe the NodeServer environment.
    **/
 
   public final static void main(String args[]) {
-    // create a new ALPServer
-    ALPServer alps = new ALPServer(getServerProperties(args));
+    // create a new NodeServer
+    NodeServer alps = new NodeServer(getServerProperties(args));
 
     alps.startServer();
   }

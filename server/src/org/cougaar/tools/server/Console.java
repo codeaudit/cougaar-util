@@ -195,7 +195,7 @@ public class Console {
     {
 	
       RemoteProcess p;      // reference to remote process on app server
-      RemoteALPServer ra;   // reference to remote implementation
+      RemoteNodeServer ra;   // reference to remote implementation
 	
       if (firstHost == null) firstHost=hostname;
 
@@ -240,8 +240,8 @@ public class Console {
         Registry reg = LocateRegistry.getRegistry(hostname, port);
         //System.out.println("got registry");
         String regname = properties.getProperty("org.cougaar.tools.server.name", 
-                                                ALPServer.DEFAULT_NAME);
-        ra = (RemoteALPServer)reg.lookup(regname);
+                                                NodeServer.DEFAULT_NAME);
+        ra = (RemoteNodeServer)reg.lookup(regname);
 
         p = (RemoteProcess)ra.createNode("ALPNode", c_props, args, out, err);
         addNode(name,p);

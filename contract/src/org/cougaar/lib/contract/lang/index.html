@@ -5,7 +5,7 @@
 <body>
 <h1>Contract Language Operator Specification</h1>
 <b><font size=+1>Introduction:</font></b>
-This document introduces the existing ALP filtering predicate, 
+This document introduces the existing COUGAAR filtering predicate, 
 <a href="#upred">UnaryPredicate</a>, and the new language for
 expressing these filters as comparable <a href="#op">Operator</a>s.
 <a href="#examples">Examples</a> are given, followed by a BNF
@@ -45,8 +45,8 @@ A simple use of a <code>UnaryPredicate</code> is to write an
 parameters, fields, or so on.  Another use is to filter a 
 <code>Collection</code> to the subset that match the predicate.
 <p>
-ALP uses UnaryPredicates to define <code>Subscription</code>s, where
-an ALP <code>PlugIn</code> specifies interest in <code>Object</code>s
+COUGAAR uses UnaryPredicates to define <code>Subscription</code>s, where
+an COUGAAR <code>PlugIn</code> specifies interest in <code>Object</code>s
 contained in a shared blackboard (LogPlan).  A PlugIn is then 
 notified whenever an Object matching the Subscription's UnaryPredicate 
 is added-to/modified-in/removed-from the LogPlan.
@@ -339,7 +339,7 @@ Sample statistics for the average Operator size (in terms of the
 number of primitives used) and primitive usage frequence are detailed
 in the tables below.  This sampling was gathered from predicates used
 for a contract-analysis tool to examine the subscribe/publish behavior
-of the ALP PlugIns in ALP's "MiniTestConfig" society.  Details can be
+of the COUGAAR PlugIns in ALP's "MiniTestConfig" society.  Details can be
 found on the <a href="https://www.alpine.bbn.com/">ALPINE web site</a>.
 <p>
 Many of these predicates are similar to the ones defined in the

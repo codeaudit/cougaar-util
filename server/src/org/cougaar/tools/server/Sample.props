@@ -1,4 +1,4 @@
-# Sample site-specific properties file for ALPServer
+# Sample site-specific properties file for NodeServer
 #
 java.class.path=/home/mthome/lib/classes\:/home/mthome/org.cougaar.install/lib/core.jar\:/home/mthome/org.cougaar.install/lib/alpine.jar\:/home/mthome/org.cougaar.install/lib/contrib.jar\:/home/mthome/org.cougaar.install/lib/utility.jar\:/home/mthome/org.cougaar.install/lib/xml4j_2_0_11.jar\:/home/mthome/org.cougaar.install/lib/jcchart400K.jar\:/home/mthome/org.cougaar.install/lib/xygraf.jar\:/home/mthome/org.cougaar.install/lib/ants.jar\:/home/mthome/org.cougaar.install/lib/sra.jar\:/opt/alp-jars/fesi-111.jar\:/opt/alp-jars/classes12.zip\:/opt/alp-jars/jconn2.jar\:/opt/alp-jars/jess44.jar\:/opt/alp-jars/xerces.jar
 org.cougaar.install.path=/home/mthome/org.cougaar.install

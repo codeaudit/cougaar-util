@@ -1,14 +1,14 @@
-# Common ALP property file
+# Common COUGAAR property file
 # These should not depend on architecture.
 
 # The port of the server's RMI Registry
 #org.cougaar.tools.server.port=8484
 
 # The name of the server in the RMI Registry at org.cougaar.tools.server.port
-#org.cougaar.tools.server.name=ALPServer
+#org.cougaar.tools.server.name=NodeServer
 
-# The class of RemoteALPServer to instantiate 
-#org.cougaar.tools.server.class=org.cougaar.tools.server.RemoteALPServerImpl
+# The class of RemoteNodeServer to instantiate 
+#org.cougaar.tools.server.class=org.cougaar.tools.server.RemoteNodeServerImpl
 
 # when true, the server will report on various activities (default false)
 #org.cougaar.tools.server.verbose=true

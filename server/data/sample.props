@@ -1,2 +1,2 @@
-alp.node.arguments=-ns draught -port 9999
-alp.something=foo
+org.cougaar.node.arguments=-ns draught -port 9999
+org.cougaar.something=foo

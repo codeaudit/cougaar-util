@@ -28,7 +28,7 @@ import org.cougaar.lib.contract.lang.parser.*;
 public class OperatorFactoryImpl extends OperatorFactory {
 
   public OperatorFactoryImpl() {
-    // specify standard ALP packages.
+    // specify standard COUGAAR packages.
     //
     // This should probably be moved from a static configuration to a 
     // field of this factory!
