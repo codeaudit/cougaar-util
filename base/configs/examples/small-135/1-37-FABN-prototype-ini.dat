@@ -1,0 +1,31 @@
+[Prototype] MilitaryOrganization
+
+[UniqueId] "UTC/CombatOrg"
+
+[UIC] "UIC/1-37-FABN"
+
+[Relationship]
+Superior "3-BDE-2ID-HHC" ""
+Supporting "1-37-FABN" "Level1HealthCareProvider"
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "1/37 FA Bn"
+AlternateTypeIdentification String "SRC/"
+
+[ClusterPG]
+ClusterIdentifier ClusterIdentifier "1-37-FABN"
+
+[OrganizationPG]
+Roles Collection<Role> "Combat, Level1HealthCareProvider"
+Service Service "Army"
+Agency Agency "FORSCOM"
+
+[MilitaryOrgPG]
+UIC String "WJFJAA"
+Echelon String "5"
+UTC String "1LKKK"
+SRC String ""
+Hierarchy2525 String "1.X.3.1.1.7.1.1"
+IsReserve boolean false
+HomeLocation GeolocLocation "GeolocCode=HGUH, InstallationTypeCode=AIN, CountryStateCode=53, CountryStateName=WASHINGTON, Name=FT_LEWIS, Latitude=Latitude 47.0833degrees, Longitude=Longitude -122.6000degrees"

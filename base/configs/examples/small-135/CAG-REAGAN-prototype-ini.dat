@@ -1,0 +1,38 @@
+[Prototype] MilitaryOrganization
+
+[UniqueId] "UTC/CombatOrg"
+
+[UIC] "UIC/CAG-REAGAN"
+
+[Relationship]
+Superior "CV-REAGAN" ""
+Supporting "HS-2-H60-SQDN" "FuelSupplyProvider"
+Supporting "VAQ-128-EA6B-SQDN" "FuelSupplyProvider"
+Supporting "VAW-212-E2C-SQDN" "FuelSupplyProvider"
+Supporting "VF-256-F14-SQDN" "FuelSupplyProvider"
+Supporting "VFA-258-F18-SQDN" "FuelSupplyProvider"
+Supporting "VFA-260-F18-SQDN" "FuelSupplyProvider"
+Supporting "VMFA-402-F18-SQDN" "FuelSupplyProvider"
+Supporting "VRC-30-C2-SQDN" "FuelSupplyProvider"
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "Carrier Air Group Ronald Reagan"
+AlternateTypeIdentification String "SRC/"
+
+[ClusterPG]
+ClusterIdentifier ClusterIdentifier "CAG-REAGAN"
+
+[OrganizationPG]
+Roles Collection<Role> "FuelSupplyProvider"
+Service Service "Navy"
+Agency Agency "FORSCOM"
+
+[MilitaryOrgPG]
+UIC String "NN1235"
+Echelon String ""
+UTC String ""
+SRC String ""
+Hierarchy2525 String ""
+IsReserve boolean false
+HomeLocation GeolocLocation "GeolocCode=UTAC, InstallationTypeCode=PRT, CountryStateCode=06, CountryStateName=CALIFORNIA, Name=SAN_DIEGO, Latitude=Latitude 32.7500degrees, Longitude=Longitude -117.1667degrees"

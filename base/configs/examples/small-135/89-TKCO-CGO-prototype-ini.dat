@@ -1,0 +1,33 @@
+[Prototype] MilitaryOrganization
+
+[UniqueId] "UTC/CombatOrg"
+
+[UIC] "UIC/89-TKCO-CGO"
+
+[Relationship]
+Superior "10-TCBN-HHC" ""
+Supporting "89-TKCO-CGO" "Level1HealthCareProvider"
+Supporting "10-TCBN-HHC" "MaterielTransportProvider"
+Supporting "553-CSB-HHD" "MaterielTransportProvider"
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "89 MDM Tk Co(CGO)"
+AlternateTypeIdentification String "SRC/55727L100200"
+
+[ClusterPG]
+ClusterIdentifier ClusterIdentifier "89-TKCO-CGO"
+
+[OrganizationPG]
+Roles Collection<Role> "GroundTransportProvider, MaterielTransportProvider, Level1HealthCareProvider"
+Service Service "Army"
+Agency Agency "FORSCOM"
+
+[MilitaryOrgPG]
+UIC String "WCN6AA"
+Echelon String "4"
+UTC String "UL444"
+SRC String "55727L100200"
+Hierarchy2525 String "1.X.3.1.3.4"
+IsReserve boolean false
+HomeLocation GeolocLocation "GeolocCode=HKUZ, InstallationTypeCode=AIN, CountryStateCode=13, CountryStateName=GEORGIA, Name=FT_STEWART, Latitude=Latitude 31.8500degrees, Longitude=Longitude -81.6000degrees"

@@ -1,0 +1,156 @@
+<?xml version="1.0"  encoding="US-ASCII"?>
+
+<!DOCTYPE oplan SYSTEM "oplan.dtd" [
+
+]>
+
+<oplan
+  oplanID = "092TR"
+  operationName = "Typhoon Recovery"
+  priority = "HIGH"
+  cDay = "08/15/2005">
+
+  <organization
+    OrgId = "NAWABSHA-REFUGEE-CAMP">
+    <orgactivity
+      ActivityType = "Employment-CSS"
+      OpTempo = "Medium">
+      <timespan startTime = "C+20" thruTime = "C+50"/>
+      <geoloc name = "TAALoc" code = "RJDC" lat = "26.2194" long = "68.3922"/>
+    </orgactivity>
+  </organization>
+
+  <organization
+    OrgId = "BELA-REFUGEE-CAMP">
+    <orgactivity
+      ActivityType = "Employment-CSS"
+      OpTempo = "Medium">
+      <timespan startTime = "C+20" thruTime = "C+50"/>
+      <geoloc name = "TAALoc" code = "BELA-PAK" lat = "25.9" long = "67.0"/>
+    </orgactivity>
+  </organization>
+
+  <organization
+    OrgId = "SUKKUR-REFUGEE-CAMP">
+    <orgactivity
+      ActivityType = "Employment-CSS"
+      OpTempo = "Medium">
+      <timespan startTime = "C+20" thruTime = "C+50"/>
+      <geoloc name = "TAALoc" code = "WLPQ" lat = "27.7236" long = "68.7903"/>
+    </orgactivity>
+  </organization>
+
+  <organization
+    OrgId = "3-1-BLT">
+    <orgactivity
+      ActivityType = "Employment-CSS"
+      OpTempo = "Medium">
+      <timespan startTime = "C+20" thruTime = "C+50"/>
+      <geoloc name = "TAALoc" code = "LYTM" lat = "24.7833" long = "66.9833"/>
+    </orgactivity>
+    <orgactivity
+      ActivityType = "Deployment"
+      OpTempo = "Low">
+      <timespan startTime = "C+10" thruTime = "C+20"/>
+      <geoloc name = "TAALoc" code = "LYTM" lat = "24.7833" long = "66.9833"/>
+    </orgactivity>
+  </organization>
+
+  <organization
+    OrgId = "KARACHI-REFUGEE-CAMP">
+    <orgactivity
+      ActivityType = "Employment-CSS"
+      OpTempo = "Medium">
+      <timespan startTime = "C+20" thruTime = "C+50"/>
+      <geoloc name = "TAALoc" code = "LYSY" lat = "24.8667" long = "67.0833"/>
+    </orgactivity>
+  </organization>
+
+  <organization
+    OrgId = "11-MEU">
+    <orgactivity
+      ActivityType = "Employment-CSS"
+      OpTempo = "Medium">
+      <timespan startTime = "C+20" thruTime = "C+50"/>
+      <geoloc name = "TAALoc" code = "LYTM" lat = "24.7833" long = "66.9833"/>
+    </orgactivity>
+    <orgactivity
+      ActivityType = "Deployment"
+      OpTempo = "Low">
+      <timespan startTime = "C+10" thruTime = "C+20"/>
+      <geoloc name = "TAALoc" code = "LYTM" lat = "24.7833" long = "66.9833"/>
+    </orgactivity>
+  </organization>
+
+  <organization
+    OrgId = "RED-CROSS-HQ">
+    <orgactivity
+      ActivityType = "Employment-CSS"
+      OpTempo = "Medium">
+      <timespan startTime = "C+20" thruTime = "C+50"/>
+      <geoloc name = "TAALoc" code = "LYSY" lat = "24.8667" long = "67.0833"/>
+    </orgactivity>
+  </organization>
+
+  <organization
+    OrgId = "MSSG-11">
+    <orgactivity
+      ActivityType = "Employment-CSS"
+      OpTempo = "Medium">
+      <timespan startTime = "C+20" thruTime = "C+50"/>
+      <geoloc name = "TAALoc" code = "LYTM" lat = "24.7833" long = "66.9833"/>
+    </orgactivity>
+    <orgactivity
+      ActivityType = "Deployment"
+      OpTempo = "Low">
+      <timespan startTime = "C+10" thruTime = "C+20"/>
+      <geoloc name = "TAALoc" code = "LYTM" lat = "24.7833" long = "66.9833"/>
+    </orgactivity>
+  </organization>
+
+  <organization
+    OrgId = "MIRPURKHAS-REFUGEE-CAMP">
+    <orgactivity
+      ActivityType = "Employment-CSS"
+      OpTempo = "Medium">
+      <timespan startTime = "C+20" thruTime = "C+50"/>
+      <geoloc name = "TAALoc" code = "MJBW" lat = "25.6914" long = "69.075"/>
+    </orgactivity>
+  </organization>
+
+  <organization
+    OrgId = "HYDERABAD-REFUGEE-CAMP">
+    <orgactivity
+      ActivityType = "Employment-CSS"
+      OpTempo = "Medium">
+      <timespan startTime = "C+20" thruTime = "C+50"/>
+      <geoloc name = "TAALoc" code = "LGTU" lat = "25.3222" long = "68.3639"/>
+    </orgactivity>
+  </organization>
+
+  <organization
+    OrgId = "HMM-165">
+    <orgactivity
+      ActivityType = "Employment-CSS"
+      OpTempo = "Medium">
+      <timespan startTime = "C+20" thruTime = "C+50"/>
+      <geoloc name = "TAALoc" code = "LYTM" lat = "24.7833" long = "66.9833"/>
+    </orgactivity>
+    <orgactivity
+      ActivityType = "Deployment"
+      OpTempo = "Low">
+      <timespan startTime = "C+10" thruTime = "C+20"/>
+      <geoloc name = "TAALoc" code = "LYTM" lat = "24.7833" long = "66.9833"/>
+    </orgactivity>
+  </organization>
+
+  <organization
+    OrgId = "KARACHI-SUPPLY-POINT">
+    <orgactivity
+      ActivityType = "Employment-CSS"
+      OpTempo = "Medium">
+      <timespan startTime = "C+20" thruTime = "C+50"/>
+      <geoloc name = "TAALoc" code = "LYTM" lat = "24.7833" long = "66.9833"/>
+    </orgactivity>
+  </organization>
+</oplan>

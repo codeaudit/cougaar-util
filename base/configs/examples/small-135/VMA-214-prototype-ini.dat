@@ -1,0 +1,31 @@
+[Prototype] MilitaryOrganization
+
+[UniqueId] "UTC/CombatOrg"
+
+[UIC] "UIC/VMA-214"
+
+[Relationship]
+Superior "MAG-11" ""
+Supporting "VMA-214" "Level1HealthCareProvider"
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "VMA-214, MAG-13, 3RD MAW"
+AlternateTypeIdentification String "SRC/"
+
+[ClusterPG]
+ClusterIdentifier ClusterIdentifier "VMA-214"
+
+[OrganizationPG]
+Roles Collection<Role> "Combat, Level1HealthCareProvider"
+Service Service "Marine"
+Agency Agency "MARFORCENT"
+
+[MilitaryOrgPG]
+UIC String "M01214"
+Echelon String "5"
+UTC String "3NSAA"
+SRC String ""
+Hierarchy2525 String "1.X.2.1.1.5"
+IsReserve boolean false
+HomeLocation GeolocLocation "GeolocCode=ZRCE, InstallationTypeCode=JAP, CountryStateCode=4, CountryStateName=ARIZONA, Name=YUMA_MCAS/YUMA_IN, Latitude=Latitude 32.6564degrees, Longitude=Longitude -114.6050degrees"

@@ -1,0 +1,31 @@
+[Prototype] MilitaryOrganization
+
+[UniqueId] "UTC/CombatOrg"
+
+[UIC] "UIC/39-FABTRY"
+
+[Relationship]
+Superior "DIVARTY-3ID-HHB" ""
+Supporting "39-FABTRY" "Level1HealthCareProvider"
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "39 FA Btry TgtAcq"
+AlternateTypeIdentification String "SRC/06303L000100"
+
+[ClusterPG]
+ClusterIdentifier ClusterIdentifier "39-FABTRY"
+
+[OrganizationPG]
+Roles Collection<Role> "Combat, Level1HealthCareProvider"
+Service Service "Army"
+Agency Agency "FORSCOM"
+
+[MilitaryOrgPG]
+UIC String "WE93AA"
+Echelon String "4"
+UTC String "1RTTT"
+SRC String "06303L000100"
+Hierarchy2525 String "1.X.3.1.1.7.3"
+IsReserve boolean false
+HomeLocation GeolocLocation "GeolocCode=HKUZ, InstallationTypeCode=AIN, CountryStateCode=13, CountryStateName=GEORGIA, Name=FT_STEWART, Latitude=Latitude 31.8500degrees, Longitude=Longitude -81.6000degrees"

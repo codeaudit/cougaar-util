@@ -1,0 +1,33 @@
+[Prototype] MilitaryOrganization
+
+[UniqueId] "UTC/CombatOrg"
+
+[UIC] "UIC/PAKISTAN-REFUGEES"
+
+[Relationship]
+Superior "CENTCOM-HHC" ""
+Supporting "PAKISTAN-REFUGEES" "Level1HealthCareProvider"
+Supporting "PAKISTAN-REFUGEES" "Level2HealthCareProvider"
+Supporting "PAKISTAN-REFUGEES" "Level3HealthCareProvider"
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "Refugee Camp in Pakistan"
+AlternateTypeIdentification String "SRC/"
+
+[ClusterPG]
+ClusterIdentifier ClusterIdentifier "PAKISTAN-REFUGEES"
+
+[OrganizationPG]
+Roles Collection<Role> "Level1HealthCareProvider, Level2HealthCareProvider, Level3HealthCareProvider"
+Service Service ""
+Agency Agency "REFUGEE"
+
+[MilitaryOrgPG]
+UIC String "REFPAK"
+Echelon String ""
+UTC String ""
+SRC String ""
+Hierarchy2525 String ""
+IsReserve boolean false
+HomeLocation GeolocLocation "GeolocCode=LYSY, InstallationTypeCode=CTY, CountryStateCode=PK, CountryStateName=PAKISTAN, Name=KARACHI, Latitude=Latitude 24.8667degrees, Longitude=Longitude 67.0833degrees"

@@ -1,0 +1,32 @@
+[Prototype] MilitaryOrganization
+
+[UniqueId] "UTC/CombatOrg"
+
+[UIC] "UIC/HOST-NATION-REFINERY"
+
+[Relationship]
+Superior "JTF-HHC" ""
+Supporting "HNS" "FuelSupplyProvider"
+Supporting "HNS" "PackagedPOLSupplyProvider"
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "Host Nation refinery"
+AlternateTypeIdentification String "SRC/"
+
+[ClusterPG]
+ClusterIdentifier ClusterIdentifier "HOST-NATION-REFINERY"
+
+[OrganizationPG]
+Roles Collection<Role> "FuelSupplyProvider, PackagedPOLSupplyProvider"
+Service Service ""
+Agency Agency "DLA"
+
+[MilitaryOrgPG]
+UIC String ""
+Echelon String ""
+UTC String ""
+SRC String ""
+Hierarchy2525 String ""
+IsReserve boolean false
+HomeLocation GeolocLocation "GeolocCode=ZNKY, InstallationTypeCode=JAP, CountryStateCode=ER, CountryStateName=ERITREA, Name=ASMARA, Latitude=Latitude 15.2906degrees, Longitude=Longitude 38.9103degrees"

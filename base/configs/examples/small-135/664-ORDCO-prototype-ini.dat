@@ -1,0 +1,33 @@
+[Prototype] MilitaryOrganization
+
+[UniqueId] "UTC/CombatOrg"
+
+[UIC] "UIC/664-ORDCO"
+
+[Relationship]
+Superior "FORSCOM" ""
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "644 Ordnance Company"
+AlternateTypeIdentification String "SRC/"
+
+[ClusterPG]
+ClusterIdentifier ClusterIdentifier "664-ORDCO"
+
+[OrganizationPG]
+Roles Collection<Role> "Level1HealthCareProvider"
+Service Service "Army"
+Agency Agency "FORSCOM"
+
+[CSSCapabilityPG]
+Capabilities Collection<CSSCapability> "MOS/31U Count=10units Duration=1days, MOS/44B Count=10units Duration=1days, MOS/51M Count=30units Duration=1days, MOS/52C Count=10units Duration=1days, MOS/52D Count=20units Duration=1days, MOS/54B Count=10units Duration=1days, MOS/55B Count=1040units Duration=1days, MOS/62B Count=40units Duration=1days, MOS/62E Count=30units Duration=1days, MOS/62F Count=60units Duration=1days, MOS/63B Count=60units Duration=1days, MOS/63J Count=10units Duration=1days, MOS/63S Count=50units Duration=1days, MOS/71L Count=10units Duration=1days, MOS/75B Count=10units Duration=1days, MOS/77F Count=30units Duration=1days, MOS/88M Count=140units Duration=1days, MOS/88N Count=10units Duration=1days, MOS/91B Count=10units Duration=1days, MOS/91D Count=50units Duration=1days, MOS/91S Count=10units Duration=1days, MOS/92A Count=20units Duration=1days, MOS/92G Count=130units Duration=1days, MOS/92Y Count=30units Duration=1days"
+
+[MilitaryOrgPG]
+UIC String "WB1RAA"
+Echelon String "4"
+UTC String ""
+SRC String ""
+Hierarchy2525 String "1.X.3.1.3.3.7"
+IsReserve boolean false
+HomeLocation GeolocLocation "GeolocCode=HKUZ, InstallationTypeCode=AIN, CountryStateCode=13, CountryStateName=GEORGIA, Name=FT_STEWART, Latitude=Latitude 31.8500degrees, Longitude=Longitude -81.6000degrees"

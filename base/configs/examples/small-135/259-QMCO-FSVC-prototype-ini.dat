@@ -1,0 +1,31 @@
+[Prototype] MilitaryOrganization
+
+[UniqueId] "UTC/CombatOrg"
+
+[UIC] "UIC/259-QMCO-FSVC"
+
+[Relationship]
+Superior "24-CSB-HHD" ""
+Supporting "259-QMCO-FSVC" "Level1HealthCareProvider"
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "259 QM Fld Svc Co"
+AlternateTypeIdentification String "SRC/42414L000300"
+
+[ClusterPG]
+ClusterIdentifier ClusterIdentifier "259-QMCO-FSVC"
+
+[OrganizationPG]
+Roles Collection<Role> "Level1HealthCareProvider"
+Service Service "Army"
+Agency Agency "FORSCOM"
+
+[MilitaryOrgPG]
+UIC String "WEU6AA"
+Echelon String "4"
+UTC String "JJTTT"
+SRC String "42414L000300"
+Hierarchy2525 String "1.X.3.1.3.1.13"
+IsReserve boolean false
+HomeLocation GeolocLocation "GeolocCode=HCTL, InstallationTypeCode=AIN, CountryStateCode=37, CountryStateName=NORTH_CAROLINA, Name=FT_BRAGG, Latitude=Latitude 35.1333degrees, Longitude=Longitude -78.9833degrees"

@@ -1,0 +1,31 @@
+[Prototype] MilitaryOrganization
+
+[UniqueId] "UTC/CombatOrg"
+
+[UIC] "UIC/334-SIGCO"
+
+[Relationship]
+Superior "3-BDE-2ID-HHC" ""
+Supporting "334-SIGCO" "Level1HealthCareProvider"
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "334 Signal Co"
+AlternateTypeIdentification String "SRC/"
+
+[ClusterPG]
+ClusterIdentifier ClusterIdentifier "334-SIGCO"
+
+[OrganizationPG]
+Roles Collection<Role> "Level1HealthCareProvider"
+Service Service "Army"
+Agency Agency "FORSCOM"
+
+[MilitaryOrgPG]
+UIC String "WG02AA"
+Echelon String "4"
+UTC String ""
+SRC String ""
+Hierarchy2525 String "1.X.3.1.2.4"
+IsReserve boolean false
+HomeLocation GeolocLocation "GeolocCode=HGUH, InstallationTypeCode=AIN, CountryStateCode=53, CountryStateName=WASHINGTON, Name=FT_LEWIS, Latitude=Latitude 47.0833degrees, Longitude=Longitude -122.6000degrees"

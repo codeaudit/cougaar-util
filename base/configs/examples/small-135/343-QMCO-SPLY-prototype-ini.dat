@@ -1,0 +1,39 @@
+[Prototype] MilitaryOrganization
+
+[UniqueId] "UTC/CombatOrg"
+
+[UIC] "UIC/343-QMCO-SPLY"
+
+[Relationship]
+Superior "24-CSB-HHD" ""
+Supporting "343-QMCO-SPLY" "Level1HealthCareProvider"
+Supporting "110-QMCO-POLSPLY" "SubsistenceSupplyProvider"
+Supporting "180-TCBN-HHD" "SubsistenceSupplyProvider"
+Supporting "24-CSB-HHD" "SubsistenceSupplyProvider"
+Supporting "259-QMCO-FSVC" "SubsistenceSupplyProvider"
+Supporting "406-TCDET-TPT" "SubsistenceSupplyProvider"
+Supporting "418-TKCO-POL" "SubsistenceSupplyProvider"
+Supporting "632-MAINTCO" "SubsistenceSupplyProvider"
+Supporting "96-TCCO-HET" "SubsistenceSupplyProvider"
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "343 QM Supply Co"
+AlternateTypeIdentification String "SRC/42447L000100"
+
+[ClusterPG]
+ClusterIdentifier ClusterIdentifier "343-QMCO-SPLY"
+
+[OrganizationPG]
+Roles Collection<Role> "SubsistenceSupplyProvider, Level1HealthCareProvider"
+Service Service "Army"
+Agency Agency "FORSCOM"
+
+[MilitaryOrgPG]
+UIC String "WSS7AA"
+Echelon String "4"
+UTC String "JUUTT"
+SRC String "42447L000100"
+Hierarchy2525 String "1.X.3.1.3.3"
+IsReserve boolean false
+HomeLocation GeolocLocation "GeolocCode=HKUZ, InstallationTypeCode=AIN, CountryStateCode=13, CountryStateName=GEORGIA, Name=FT_STEWART, Latitude=Latitude 31.8500degrees, Longitude=Longitude -81.6000degrees"

@@ -1,0 +1,295 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.77 [en] (Windows NT 5.0; U) [Netscape]">
+   <title>small-135 Read Me</title>
+</head>
+<body>
+The directory, configs/small-135, has been included to
+allow some small tests of this release. Its name reflects the scope of
+the tests it is designed to support: Classes 1, 3, 4, and 5 (Subsistence,
+Fuel, Construction Materiel, and Ammunition) as well as Strategic
+Transportation.
+<p>Change for release 9.2: The home location for the Bela Refugees
+camp has been changed from BELA-PAK (at 25.9, 67) to a real Geoloc,
+LYSY (Karachi, at 24.87, 67.08). This permits use of small-135 with CSMART.
+<p>This config directory includes a node file, configs/small-135/SMALL-135-TRANS-NODE.ini,
+which can be run on a single machine. This node includes 26 clusters, which
+fall into the several logical groups.
+<p>Here is a <a href="images/SMALL-135-NODE-descrip.jpg">diagram</a> and
+a listing of these groups and descriptions of their primary functions in
+this community:
+<p>
+<hr WIDTH="100%">
+<br><b>Top-level Command Organizations:</b>
+<blockquote>NCA
+<br>CENTCOM-HHC
+<br>JTF-HHC</blockquote>
+<b>Divisional and Divisional Support Organizations:</b>
+<blockquote>3ID-HHC
+<br>3-DISCOM-HHC
+<br>703-MSB</blockquote>
+<b>Interim Brigade Combat Team (IBCT) Organizations:</b>
+<blockquote>3-BDE-2ID-HHC
+<br>1-23-INFBN
+<br>296-SPTBN</blockquote>
+<b>2nd Brigade Organizations:</b>
+<blockquote>2-BDE-3ID-HHC
+<br>2-7-INFBN
+<br>3-69-ARBN
+<br>3-FSB</blockquote>
+<b>Combat Service Support Group Organizations:</b>
+<blockquote>24-SPTGP-HHC
+<br>24-CSB-HHD
+<br>553-CSB-HHD
+<br>10-TCBN-HHC
+<br>416-TKCO-POL
+<br>89-TKCO-CGO
+<br>180-TCBN-HHC
+<br>418-TKCO-POL
+<br>92-ENGBN-CBTHVY
+<br>110-QMCO-POLSPLY</blockquote>
+<b>CONUS Supply Organizations:</b>
+<blockquote>DLAHQ
+<br>IOC</blockquote>
+<b>Strategic Transportation Provider Organizations:</b>
+<blockquote>TRANSCOM</blockquote>
+
+<hr WIDTH="100%">
+<br><b><font size=+1>Functions of the Organizations in SMALL-135-NODE:</font></b>
+<p><b>Top-level Command Organizations:</b>
+<blockquote>The OPLAN and GetLogSupport tasks originate at NCA, and propagate
+down
+<br>to the other organizations</blockquote>
+<b>Divisional and Divisional Support Organizations:</b>
+<blockquote><b>3ID-HHC</b> distributes the OPLAN and GetLogSupport tasks
+to subordinates.
+<p>Also it is the StrategicTransportationProvider for all of its subordinates.
+In turn, TRANSCOM is the StrategicTransportationProvider for 3ID-HHC. In
+this way, all StrategicTransport tasks go from each deploying organization,
+directly through 3ID-HHC, and then to TRANSCOM.
+<p><b>703-MSB </b>(Main Support Battalion) serves as an inventory manager
+for the lower level Support Battalions (FSBs or Forward Support Battalions.
+3-DISCOM-HHC is the manager for 703-MSB and passes the OPLAN and GetLogSupport
+Task to 703-MSB.</blockquote>
+<b>Interim Brigade Combat Team (IBCT) Organizations</b>
+<blockquote>This is a skeleton of the IBCT organizations.
+<p><b>3-BDE-2ID-HHC</b> is the Headquarters of the IBCT. It passes the
+OPLAN and GetLogSupport Tasks to its subordinates.
+<p><b>1-23-INFBN</b> is the lone combat organization in this IBCT subset.
+It generates demand for Fuel and Ammunition, based on its equipment (major
+end items). In the current test config, this does not work, as this organization
+only has aggregate assets, and by default, this demand is generated only
+for individual assets. This organization does generate demand for Subsistence
+(Food).
+<p><b>296-SPTBN</b> is the support organization for the IBCT. In this limited
+config, it provides Food (and Fuel and Ammo) to the 1-23-INFBN</blockquote>
+<b>2nd Brigade Organizations:</b>
+<blockquote>This is a skeleton of the 2nd BDE of the 3ID.
+<p><b>2-BDE-3ID-HHC</b> is the Headquarters of the 2nd BDE of the 3ID.
+It passes the OPLAN and GetLogSupport Tasks to its subordinates.
+<p><b>2-7-INFBN</b> and <b>3-69-ARBN</b> are the combat organizations.
+They generate demand for Fuel and Ammunition, based on their equipment
+(major end items), and for Subsistence based on their personnel.
+<p><b>3-FSB</b> is the support organization for the 2nd BDE. In this limited
+config, it provides Food (and Fuel and Ammo) to 2-7-INFBN and 3-69-ARBN.</blockquote>
+<b>Combat Service Support Group Organizations:</b>
+<blockquote>This is a skeleton of the 24th Support Group.</blockquote>
+
+<blockquote><b>24-SPTGP-HHC</b> is the Headquarters. It passes the OPLAN
+and GetLogSupport Tasks to its subordinates.
+<p><b>24-CSB-HHD</b> is a Corps Support Battalion, and is the superior
+of the 110-QMCO-POLSPLY Company.
+<p><b>110-QMCO-POLSPLY</b> is the Bulk POL (Fuel) and Packaged POL Supply
+provider for 703-MSB
+<p><b>553-CSB-HHD</b> is a Corps SUpport Battalion, and is a major inventory
+manager for the society. In this subset, it is the SubsistenceSupplyProvider
+for 703-MSB.
+<p><b>10-TCBN-HHC</b> is another major inventory manager for the society.
+In this subset, it is the SubsistenceSupplyProvider for 553-CSB-HHD, and
+the Bulk POL (Fuel) and Packaged POL Supply provider for 110-QMCO-POLSPLY.
+It is also the superior of two transportation companies: 416-TKCO-POL and
+89-TKCO-CGO.
+<p><b>416-TKCO-POL</b> is a theater transportation provider (FuelTransportProvider)
+for 10-TCBN-HHC. It is just a stub in this limited test society, and has
+a universal allocator for all Transport tasks.
+<p><b>89-TKCO-CGO</b> is a theater transportation provider (MaterielTransportProvider)
+for 10-TCBN-HHC. It transports Subsistence and Packaged POL.
+<p><b>180-TCBN-HHC</b> is a Transportation Battalion, and is the superior
+of the 418-TKCO-POL Company.
+<p><b>418-TKCO-POL</b> is a theater transportation provider (FuelTransportProvider)
+for 110-QMCO-POLSPLY. It is just a stub in this limited test society, and
+has a universal allocator for all Transport tasks.
+<p><b>92-ENGBN-CBTHVY</b> is a Combat Heavy Engineering Battalion. It is
+responsible for performing the three construction tasks: Build_Short_Runway,
+Expand_Runway_Apron, and Build_Small_Tent_City. It uses a generic database
+expander Plugin to expand these three tasks into a wide variety of Construction
+Materiel Supply tasks.</blockquote>
+<b>CONUS Supply Organizations:</b>
+<blockquote><b>DLAHQ</b> is a stub representing DLA. It has a universal
+allocator for all Supply tasks. It is the SubsistenceSupplyProvider, FuelSupplyProvider,
+PackagedPOLSupplyProvider for 10-TCBN-HHC.
+<p><b>IOC</b> is a stub representing the Industrial Operations Center.
+It is the AmmunitionSupplyProvider for 3-FSB and 296-STPBN. It sends transport
+tasks for ammunition containers to AmmoTRANSCOM.</blockquote>
+<b>Strategic Transportation Provider Organization:</b>
+<blockquote><b>TRANSCOM</b> is a stub representing USTRANSCOM. It has a
+universal allocator for all Transport tasks (now including ammunition transport).
+It is the StrategicTransportationProvider for 3ID-HHC and for IOC.</blockquote>
+
+<hr WIDTH="100%">
+<br>There is also a node file, SMALL-135-NODE.ini., which is the same as
+SMALL-135-TRANS-NODE.ini., except that it excludes the TRANSCOM cluster.&nbsp;
+This node is designed to run on a single machine, while another node, representing
+TRANSCOM and the rest of the Transportation Community&nbsp; is run on a
+second machine. This second node is defined by the node file: glmtrans/configs/demo-config/config/GLMTransNode.ini.
+This node consists of 7 clusters, which fall into several logical groups
+for StrategicTransportation.
+<p>Here is a <a href="images/GLMTransNode-descrip.jpg">diagram</a> and
+a listing of these groups and descriptions of their primary functions in
+this community:
+<p>
+<hr WIDTH="100%">
+<br><b>Overall Strategic Transportation Organization:</b>
+<blockquote>TRANSCOM</blockquote>
+<b>CONUS Transportation Organizations:</b>
+<blockquote>CONUSGround</blockquote>
+<b>Strategic Air Transportation Organizations:</b>
+<blockquote>GlobalAir
+<br>PlanePacker</blockquote>
+<b>Strategic Sea Transportation Organizations:</b>
+<blockquote>GlobalSea
+<br>ShipPacker</blockquote>
+<b>Theater Transportaton Organizations:</b>
+<blockquote>TheaterGround</blockquote>
+
+<hr WIDTH="100%">
+<br><b><font size=+1>Functions of the Organizations in SmallTopsNode:</font></b>
+<p><b>Overall Strategic Transportation Organization:</b>
+<blockquote><b>TRANSCOM</b> is the SrategicTransportationProvider for Unit
+Equipment (UE), Passengers (PAX) and all commodities, including ammunition.</blockquote>
+<b>CONUS Transportation Organizations:</b>
+<blockquote><b>CONUSGround</b> manages the ground movement of Unit Equipment,
+Passengers and materiel in CONUS.</blockquote>
+<b>Strategic Air Transportation Organizations:</b>
+<blockquote><b>GlobalAir </b>manages the strategic air transportation of
+equipment, passengers, and materiel.
+<p><b>PlanePacker</b> manages the loading of aircraft</blockquote>
+<b>Strategic Sea Transportation Organizations:</b>
+<blockquote><b>GlobalSea</b> manages the strategic sea transportation of
+equipment and materiel.
+<p><b>ShipPacker </b>manages the loading of ships.</blockquote>
+<b>Theater Transportaton Organizations:</b>
+<blockquote><b>TheaterGround</b> manages theater transportation</blockquote>
+<b>Ammunition Transportation Organizations:</b>
+<blockquote>There are no longer any special organizations to handle ammunition</blockquote>
+
+<hr WIDTH="100%">
+<p><b><font size=+1>To run the society on a single machine</font></b>
+<p>This society will&nbsp; have the Demand Community on one machine, and
+will employ stub clusters for the Transportation Community on that same
+machine.
+<ol>
+<li>
+Make sure that COUGAAR_INSTALL_PATH is set properly to the top release
+directory</li>
+
+<li>
+cd to $COUGAAR_INSTALL_PATH/configs/small-135/</li>
+
+<li>
+Type $COUGAAR_INSTALL_PATH/bin/Node SMALL-135-TRANS-NODE</li>
+
+<li>
+In another shell window, type $COUGAAR_INSTALL_PATH/bin/GLSInit.sh</li>
+</ol>
+
+<hr WIDTH="100%">
+<p><b><font size=+1>To run the society on a two machines:</font></b>
+<p>This society will have the Demand Community on one machine, and the
+Transportation Community on the other.
+<p>Start the Demand Community on the first machine:
+<ol>
+<li>
+Make sure that COUGAAR_INSTALL_PATH is set properly to the top release
+directory</li>
+
+<li>
+cd to $COUGAAR_INSTALL_PATH/configs/small-135/</li>
+
+<li>
+Type Node SMALL-135-NODE</li>
+</ol>
+Start the Transportation Community on the second machine:
+<ol>
+<li>
+Make sure that COUGAAR_INSTALL_PATH is set properly to the top release
+directory</li>
+
+<li>
+cd to $COUGAAR_INSTALL_PATH/glmtrans/configs/demo-config/configs</li>
+
+<li>
+Type Node GLMTransNode</li>
+
+<li>
+In another shell window, type $COUGAAR_INSTALL_PATH/bin/GLSInit.sh</li>
+</ol>
+Since the Transportation Community has been greatly simplified, and is
+now much smaller than in previous releases (7 clusters versus 37 clusters),
+it should be possible to run both nodes in a single machine, provided there
+is enough memory (at least about 400 MBytes).
+<p><a href="small-135.installation.readme.html">Click here for a more detailed
+description of system installation, running, and testing the society</a>
+<p>
+<hr WIDTH="100%">
+<p><b><font size=+1>Expected Results</font></b>
+<p>Regardless of the mode in which the system is run, Inventory graphs
+such as the following should be produced. To run the Inventory graph:
+<ol>
+<li>
+cd to $COUGAAR_INSTALL_PATH/bin</li>
+
+<li>
+Type CUI_Inventory</li>
+
+<li>
+Set the Theme to "COUGAAR"</li>
+
+<li>
+Choose the connection "localhost:5555"</li>
+
+<li>
+Choose an Organization</li>
+
+<li>
+Choose a Commodity</li>
+</ol>
+
+<p><br>Class I: Subsistence
+<blockquote><a href="images/inventory-703-MSB-DrinkingWater.gif">Drinking
+Water at 703-MSB</a>
+<br><a href="images/inventory-703-MSB-MRE.gif">MRE at 703-MSB</a>
+<br><a href="images/inventory-703-MSB-Milk.gif">Milk at 703-MSB</a></blockquote>
+Class III: Petroleum, Oil and Lubricants (POL)
+<blockquote><a href="images/inventory-703-MSB-DF2.gif">DF2 Fuel at 703-MSB</a>
+<br><a href="images/inventory-703-MSB-JP8.gif">JP8 Fuel at 703-MSB</a>
+<br><a href="images/inventory-703-MSB-Graphite.gif">Graphite at 703-MSB</a></blockquote>
+Class IV: Construction
+<blockquote><a href="images/inventory-92-ENGBN-CBTHVY-Gravel.gif">Gravel
+at 92-ENGBN-CBTHVY</a>
+<br><a href="images/inventory-92-ENGBN-CBTHVY-PIPE-PVC.gif">PVC Pipe at
+92-ENGBN-CBTHVY</a></blockquote>
+Class V: Ammunition
+<blockquote><a href="images/inventory-3-FSB-C380.gif">C380 Ammunition at
+3-FSB</a></blockquote>
+If the society is run on two machines with the Transportation Society,
+TPFDDs such as the following should be produced.
+<blockquote><a href="images/Stategic-TPFDD-1.jpg">Strategic TPFDD</a>
+<br><a href="images/Theater-TPFDD-1.jpg">Theater TPFDD</a></blockquote>
+
+<p><br>
+<hr WIDTH="100%">
+</body>
+</html>

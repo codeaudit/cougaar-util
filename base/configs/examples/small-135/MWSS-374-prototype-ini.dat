@@ -1,0 +1,43 @@
+[Prototype] MilitaryOrganization
+
+[UniqueId] "UTC/CombatOrg"
+
+[UIC] "UIC/MWSS-374"
+
+[Relationship]
+Superior "MWSG-37" ""
+Supporting "VMA-214" "FuelSupplyProvider"
+Supporting "VMAQ-4" "FuelSupplyProvider"
+Supporting "VMFA-225" "FuelSupplyProvider"
+Supporting "VMFA-232" "FuelSupplyProvider"
+Supporting "VMFA-323" "FuelSupplyProvider"
+Supporting "VMGR-352" "FuelSupplyProvider"
+Supporting "MWSS-374" "Level1HealthCareProvider"
+Supporting "VMA-214" "PackagedPOLSupplyProvider"
+Supporting "VMAQ-4" "PackagedPOLSupplyProvider"
+Supporting "VMFA-225" "PackagedPOLSupplyProvider"
+Supporting "VMFA-232" "PackagedPOLSupplyProvider"
+Supporting "VMFA-323" "PackagedPOLSupplyProvider"
+Supporting "VMGR-352" "PackagedPOLSupplyProvider"
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "MWSS 374, MWSG-37, 3RD MAW (RW)"
+AlternateTypeIdentification String "SRC/"
+
+[ClusterPG]
+ClusterIdentifier ClusterIdentifier "MWSS-374"
+
+[OrganizationPG]
+Roles Collection<Role> "Combat, FuelSupplyProvider, Level1HealthCareProvider, PackagedPOLSupplyProvider"
+Service Service "Marine"
+Agency Agency "MARFORCENT"
+
+[MilitaryOrgPG]
+UIC String "M00374"
+Echelon String "5"
+UTC String "8MLUA"
+SRC String ""
+Hierarchy2525 String "1.X.3.1.3"
+IsReserve boolean false
+HomeLocation GeolocLocation "GeolocCode=CAAP, InstallationTypeCode=MAP, CountryStateCode=6, CountryStateName=CALIFORNIA, Name=CP_PENDLETON_MCAF, Latitude=Latitude 33.2958degrees, Longitude=Longitude -117.3625degrees"

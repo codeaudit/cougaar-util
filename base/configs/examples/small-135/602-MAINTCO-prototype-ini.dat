@@ -1,0 +1,56 @@
+[Prototype] MilitaryOrganization
+
+[UniqueId] "UTC/CombatOrg"
+
+[UIC] "UIC/602-MAINTCO"
+
+[Relationship]
+Superior "553-CSB-HHD" ""
+Supporting "602-MAINTCO" "Level1HealthCareProvider"
+Supporting "10-TCBN-HHC" "SparePartsProvider"
+Supporting "119-TCCO-CGO" "SparePartsProvider"
+Supporting "147-MEDLOGBN" "SparePartsProvider"
+Supporting "157-QMCO-FSVC" "SparePartsProvider"
+Supporting "186-WTRPURDET" "SparePartsProvider"
+Supporting "18-QMPLT" "SparePartsProvider"
+Supporting "202-WTRPURDET" "SparePartsProvider"
+Supporting "21-MED-CSHOSP" "SparePartsProvider"
+Supporting "226-QMCO-SPLY" "SparePartsProvider"
+Supporting "24-ODCO" "SparePartsProvider"
+Supporting "36-MEDEVACBN-GAMBCO" "SparePartsProvider"
+Supporting "396-TCCO-PLS" "SparePartsProvider"
+Supporting "416-TKCO-POL" "SparePartsProvider"
+Supporting "512-QMCO-WTRSPLY" "SparePartsProvider"
+Supporting "553-CSB-HHD" "SparePartsProvider"
+Supporting "571-MEDDET-AMBL" "SparePartsProvider"
+Supporting "61-ASMEDBN-MEDCO" "SparePartsProvider"
+Supporting "89-TKCO-CGO" "SparePartsProvider"
+Supporting "92-ENGBN-CBTHVY" "SparePartsProvider"
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "602 Maint Co Non Div"
+AlternateTypeIdentification String "SRC/43209L000100"
+
+[ClusterPG]
+ClusterIdentifier ClusterIdentifier "602-MAINTCO"
+
+[OrganizationPG]
+Roles Collection<Role> "DSMaintenanceProvider, GSMaintenanceProvider, SparePartsProvider, Level1HealthCareProvider"
+Service Service "Army"
+Agency Agency "FORSCOM"
+
+[CSSCapabilityPG]
+Capabilities Collection<CSSCapability> "MOS/11B Count=50units Duration=1days, MOS/35E Count=250units Duration=1days, MOS/35F Count=40units Duration=1days, MOS/35J Count=120units Duration=1days, MOS/35N Count=60units Duration=1days, MOS/35W Count=20units Duration=1days, MOS/43M Count=10units Duration=1days, MOS/44B Count=50units Duration=1days, MOS/44E Count=40units Duration=1days, MOS/45B Count=60units Duration=1days, MOS/45G Count=20units Duration=1days, MOS/45K Count=70units Duration=1days, MOS/52C Count=70units Duration=1days, MOS/52D Count=180units Duration=1days, MOS/52X Count=20units Duration=1days, MOS/54B Count=20units Duration=1days, MOS/62B Count=110units Duration=1days, MOS/62F Count=10units Duration=1days, MOS/63B Count=80units Duration=1days, MOS/63G Count=50units Duration=1days, MOS/63H Count=190units Duration=1days, MOS/63J Count=50units Duration=1days, MOS/63S Count=20units Duration=1days, MOS/63W Count=400units Duration=1days, MOS/63Z Count=20units Duration=1days, MOS/75B Count=10units Duration=1days, MOS/77F Count=10units Duration=1days, MOS/91B Count=40units Duration=1days, MOS/92A Count=330units Duration=1days, MOS/92B Count=10units Duration=1days, MOS/92G Count=60units Duration=1days, MOS/92Y Count=30units Duration=1days"
+
+[MaintenancePG]
+Level String "GSMaintenance"
+
+[MilitaryOrgPG]
+UIC String "WE7NAA"
+Echelon String "4"
+UTC String "HH6NN"
+SRC String "43209L000100"
+Hierarchy2525 String "1.X.3.1.3.5"
+IsReserve boolean false
+HomeLocation GeolocLocation "GeolocCode=HFTZ, InstallationTypeCode=AIN, CountryStateCode=48, CountryStateName=TEXAS, Name=FT_HOOD, Latitude=Latitude 31.1333degrees, Longitude=Longitude -97.7667degrees"

@@ -1,0 +1,50 @@
+[Prototype] MilitaryOrganization
+
+[UniqueId] "UTC/CombatOrg"
+
+[UIC] "UIC/3ID-HHC"
+
+[Relationship]
+Superior "JTF-HHC" ""
+Supporting "3ID-HHC" "Level1HealthCareProvider"
+Supporting "10-TCBN-HHC" "StrategicTransportationProvider"
+Supporting "110-QMCO-POLSPLY" "StrategicTransportationProvider"
+Supporting "1-23-INFBN" "StrategicTransportationProvider"
+Supporting "180-TCBN-HHD" "StrategicTransportationProvider"
+Supporting "24-CSB-HHD" "StrategicTransportationProvider"
+Supporting "24-SPTGP-HHC" "StrategicTransportationProvider"
+Supporting "2-7-INFBN" "StrategicTransportationProvider"
+Supporting "296-SPTBN" "StrategicTransportationProvider"
+Supporting "2-BDE-3ID-HHC" "StrategicTransportationProvider"
+Supporting "3-69-ARBN" "StrategicTransportationProvider"
+Supporting "3-BDE-2ID-HHC" "StrategicTransportationProvider"
+Supporting "3-DISCOM-HHC" "StrategicTransportationProvider"
+Supporting "3-FSB" "StrategicTransportationProvider"
+Supporting "416-TKCO-POL" "StrategicTransportationProvider"
+Supporting "418-TKCO-POL" "StrategicTransportationProvider"
+Supporting "553-CSB-HHD" "StrategicTransportationProvider"
+Supporting "703-MSB" "StrategicTransportationProvider"
+Supporting "89-TKCO-CGO" "StrategicTransportationProvider"
+Supporting "92-ENGBN-CBTHVY" "StrategicTransportationProvider"
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "HHC, 3ID"
+AlternateTypeIdentification String "SRC/87004A200100"
+
+[ClusterPG]
+ClusterIdentifier ClusterIdentifier "3ID-HHC"
+
+[OrganizationPG]
+Roles Collection<Role> "StrategicTransportationProvider, Superior, Level1HealthCareProvider"
+Service Service "Army"
+Agency Agency "FORSCOM"
+
+[MilitaryOrgPG]
+UIC String "WAQJAA"
+Echelon String "8"
+UTC String "0S4ZZ"
+SRC String "87004A200100"
+Hierarchy2525 String "1.X.3.1.1.5.6"
+IsReserve boolean false
+HomeLocation GeolocLocation "GeolocCode=HKUZ, InstallationTypeCode=AIN, CountryStateCode=13, CountryStateName=GEORGIA, Name=FT_STEWART, Latitude=Latitude 31.8500degrees, Longitude=Longitude -81.6000degrees"

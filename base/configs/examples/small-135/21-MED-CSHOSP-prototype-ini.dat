@@ -1,0 +1,40 @@
+[Prototype] MilitaryOrganization
+
+[UniqueId] "UTC/CombatOrg"
+
+[UIC] "UIC/21-MED-CSHOSP"
+
+[Relationship]
+Superior "24-SPTGP-HHC" ""
+Supporting "21-MED-CSHOSP" "Level1HealthCareProvider"
+Supporting "21-MED-CSHOSP" "Level2HealthCareProvider"
+Supporting "203-FSB" "Level3HealthCareProvider"
+Supporting "21-MED-CSHOSP" "Level3HealthCareProvider"
+Supporting "26-FSB" "Level3HealthCareProvider"
+Supporting "3-FSB" "Level3HealthCareProvider"
+Supporting "603-DASB" "Level3HealthCareProvider"
+Supporting "61-ASMEDBN-MEDCO" "Level3HealthCareProvider"
+Supporting "703-MSB" "Level3HealthCareProvider"
+Supporting "DET-1-MEDBN" "Level3HealthCareProvider"
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "21 MD Combat Support HSP"
+AlternateTypeIdentification String "SRC/08705L000100"
+
+[ClusterPG]
+ClusterIdentifier ClusterIdentifier "21-MED-CSHOSP"
+
+[OrganizationPG]
+Roles Collection<Role> "Superior, Level2HealthCareProvider, Level3HealthCareProvider, Level1HealthCareProvider"
+Service Service "Army"
+Agency Agency "FORSCOM"
+
+[MilitaryOrgPG]
+UIC String "WBH7AA"
+Echelon String "5"
+UTC String "FC5ZZ"
+SRC String "08705L000100"
+Hierarchy2525 String "1.X.3.1.3.2.3"
+IsReserve boolean false
+HomeLocation GeolocLocation "GeolocCode=HFTZ, InstallationTypeCode=AIN, CountryStateCode=48, CountryStateName=TEXAS, Name=FT_HOOD, Latitude=Latitude 31.1333degrees, Longitude=Longitude -97.7667degrees"

@@ -1,0 +1,31 @@
+[Prototype] MilitaryOrganization
+
+[UniqueId] "UTC/CombatOrg"
+
+[UIC] "UIC/3-11-MAR"
+
+[Relationship]
+Superior "7-MAR" ""
+Supporting "3-11-MAR" "Level1HealthCareProvider"
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "3RD BN 11TH MAR (REIN)"
+AlternateTypeIdentification String "SRC/"
+
+[ClusterPG]
+ClusterIdentifier ClusterIdentifier "3-11-MAR"
+
+[OrganizationPG]
+Roles Collection<Role> "Combat, Level1HealthCareProvider"
+Service Service "Marine"
+Agency Agency "MARFORCENT"
+
+[MilitaryOrgPG]
+UIC String "M11330"
+Echelon String "5"
+UTC String "1HEAA"
+SRC String ""
+Hierarchy2525 String "1.X.3.1.1.7.1"
+IsReserve boolean false
+HomeLocation GeolocLocation "GeolocCode=XLFR, InstallationTypeCode=MGI, CountryStateCode=6, CountryStateName=CALIFORNIA, Name=TWENTYNINE_PALMS, Latitude=Latitude 34.1670degrees, Longitude=Longitude -116.0333degrees"

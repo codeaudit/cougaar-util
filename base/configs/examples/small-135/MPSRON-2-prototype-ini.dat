@@ -1,0 +1,31 @@
+[Prototype] MilitaryOrganization
+
+[UniqueId] "UTC/CombatOrg"
+
+[UIC] "UIC/MPSRON-2"
+
+[Relationship]
+Superior "NAVCENT" ""
+Supporting "NAVCENT" "PrepoTransportationProvider"
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "Maritime Prepo Ship 2ND SQN"
+AlternateTypeIdentification String "SRC/"
+
+[ClusterPG]
+ClusterIdentifier ClusterIdentifier "MPSRON-2"
+
+[OrganizationPG]
+Roles Collection<Role> "PackagedPOLSupplyProvider, PrepoTransportationProvider"
+Service Service "Navy"
+Agency Agency "NAVCENT"
+
+[MilitaryOrgPG]
+UIC String "MPSRON-2"
+Echelon String "5"
+UTC String ""
+SRC String ""
+Hierarchy2525 String ""
+IsReserve boolean false
+HomeLocation GeolocLocation "GeolocCode=FGDB, InstallationTypeCode=PRT, CountryStateCode=IO, CountryStateName=DIEGO_GARCIA, Name=DIEGO_GARCIA_EAST, Latitude=Latitude -7.3500degrees, Longitude=Longitude 72.4667degrees"

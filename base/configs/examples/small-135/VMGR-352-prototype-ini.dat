@@ -1,0 +1,31 @@
+[Prototype] MilitaryOrganization
+
+[UniqueId] "UTC/CombatOrg"
+
+[UIC] "UIC/VMGR-352"
+
+[Relationship]
+Superior "MAG-11" ""
+Supporting "VMGR-352" "Level1HealthCareProvider"
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "VMGR-352, MAG-11, 3RD MAW"
+AlternateTypeIdentification String "SRC/"
+
+[ClusterPG]
+ClusterIdentifier ClusterIdentifier "VMGR-352"
+
+[OrganizationPG]
+Roles Collection<Role> "Combat, Level1HealthCareProvider"
+Service Service "Marine"
+Agency Agency "MARFORCENT"
+
+[MilitaryOrgPG]
+UIC String "M01352"
+Echelon String "5"
+UTC String "3MQAA"
+SRC String ""
+Hierarchy2525 String "1.X.2.1.1.6"
+IsReserve boolean false
+HomeLocation GeolocLocation "GeolocCode=QKJA, InstallationTypeCode=MAP, CountryStateCode=6, CountryStateName=CALIFORNIA, Name=MIRAMAR_NAS, Latitude=Latitude 32.8692degrees, Longitude=Longitude -117.1436degrees"

@@ -1,0 +1,30 @@
+[Prototype] MilitaryOrganization
+
+[UniqueId] "UTC/CombatOrg"
+
+[UIC] "UIC/DD-967-ELLIOTT"
+
+[Relationship]
+Superior "CVBG-REAGAN" ""
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "DD-967 Elliott"
+AlternateTypeIdentification String "SRC/"
+
+[ClusterPG]
+ClusterIdentifier ClusterIdentifier "DD-967-ELLIOTT"
+
+[OrganizationPG]
+Roles Collection<Role> ""
+Service Service "Navy"
+Agency Agency "FORSCOM"
+
+[MilitaryOrgPG]
+UIC String "NN5680"
+Echelon String ""
+UTC String ""
+SRC String ""
+Hierarchy2525 String ""
+IsReserve boolean false
+HomeLocation GeolocLocation "GeolocCode=UTAC, InstallationTypeCode=PRT, CountryStateCode=06, CountryStateName=CALIFORNIA, Name=SAN_DIEGO, Latitude=Latitude 32.7500degrees, Longitude=Longitude -117.1667degrees"

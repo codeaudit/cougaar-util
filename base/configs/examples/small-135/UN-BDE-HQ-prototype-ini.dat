@@ -1,0 +1,31 @@
+[Prototype] MilitaryOrganization
+
+[UniqueId] "UTC/CombatOrg"
+
+[UIC] "UIC/UN-BDE-HQ"
+
+[Relationship]
+Superior "UN-HQ" ""
+Supporting "UN-BDE-HQ" "Level1HealthCareProvider"
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "United Nations Brigade Headquarters"
+AlternateTypeIdentification String "SRC/"
+
+[ClusterPG]
+ClusterIdentifier ClusterIdentifier "UN-BDE-HQ"
+
+[OrganizationPG]
+Roles Collection<Role> "Level1HealthCareProvider, Superior"
+Service Service "Army"
+Agency Agency "UNITED NATIONS"
+
+[MilitaryOrgPG]
+UIC String "CUNABA"
+Echelon String "7"
+UTC String ""
+SRC String ""
+Hierarchy2525 String "1.X.3.1.1.5.6"
+IsReserve boolean false
+HomeLocation GeolocLocation "GeolocCode=NPJB, InstallationTypeCode=CTY, CountryStateCode=UK, CountryStateName=UNITED_KINGDOM, Name=LONDON, Latitude=Latitude 51.5167degrees, Longitude=Longitude -.1000degrees"
