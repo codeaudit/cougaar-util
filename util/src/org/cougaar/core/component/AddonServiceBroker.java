@@ -82,7 +82,7 @@ public class AddonServiceBroker
   public final void releaseService(Object requestor, Class serviceClass, Object service) {
     boolean wasReleased = releaseLocalService(requestor, serviceClass, service);
     if (!wasReleased) {
-      releaseService(requestor, serviceClass, service);
+      delegate.releaseService(requestor, serviceClass, service);
     }
   }
 
