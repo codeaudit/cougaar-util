@@ -104,7 +104,7 @@ public class CougaarEvent implements Serializable {
     /**
      * Posts an event from a Cougaar Agent component.  This method posts directly Event output
      * method and bypasses adding anything to the blackboard.  If this event should pass through
-     * the blackboard, consider using postBlackboardEvent instead.
+     * the blackboard, consider using postBlackboardEvent instead. 
      *
      * @param type The type of event
      * @param clusterIdentifier The name of the Agent (Cluster)
@@ -153,18 +153,18 @@ public class CougaarEvent implements Serializable {
 
     /**
      * Handles transforming event string to XML.  This class is only used by the CougaarEvent class
-     * and should not be used directly.
+     * and should not be used directly. 
      */
     public static class CougaarEventGenerator {
 
         /**
-         * Returns an XML string that encodes the supplied parameters
+         * Returns an XML string that encodes the supplied parameters. 
          * @param type The Cougaar event type
          * @param clusterIdentifier The cluster identifier (can be null)
          * @param component The component name (can be null)
          * @param eventText The text of the event
          * @param encoded If true, the eventText is assumed to be pre-encoded)
-         * @return
+         * @return String representation of the Event in XML
          */
         public static String generateEventString(CougaarEventType type, String clusterIdentifier, String component, String eventText, boolean encoded) {
             StringBuffer event = new StringBuffer();
@@ -185,8 +185,8 @@ public class CougaarEvent implements Serializable {
 
         /**
          * Replaces all & with &amp;amp; and < with &lt;lt;
-         * @param text
-         * @return
+         * @param text to encode
+         * @return XML encoding of given string
          */
         public static String encodeXML(String text) {
             text = text.replaceAll("&", "&amp;");
