@@ -121,6 +121,14 @@ implements java.io.Serializable
    *   <li>"java.stack.size=" to specify the Java thread stack size,
    *       such as "10m" for 10 megabytes; defaults to a 
    *       system-specify value</li>
+   *   <li>"java.enable.assertions[=(|true|false|package|classname)]
+   *       to turn on JDK 1.4 assertion checking (-ea)</li>
+   *   <li>"java.disable.assertions[=(|true|false|package|classname)]
+   *       to turn off JDK 1.4 assertion checking (-da)</li>
+   *   <li>"java.enable.system.assertions[=(|true|false])]
+   *       to turn on JDK 1.4 system assertion checking (-esa)</li>
+   *   <li>"java.disable.system.assertions[=(|true|false])]
+   *       to turn off JDK 1.4 system assertion checking (-dsa)</li>
    *   <li>"java.*" for all other "-*" properties, such as 
    *       "java.Xnoclassgc=" for "-Xnoclassgc"</li>
    * </ul>

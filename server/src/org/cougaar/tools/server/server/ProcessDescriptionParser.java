@@ -301,6 +301,68 @@ class ProcessDescriptionParser {
           cmdList.add("-Xss"+stackSize);
         }
 
+        // check for assertions
+        for (Iterator iter = javaProps.entrySet().iterator();
+            iter.hasNext();
+            ) {
+          Map.Entry me = (Map.Entry) iter.next();
+          String name = (String) me.getKey();
+          boolean isEnable = name.startsWith("enable.");
+          if (isEnable || name.startsWith("disable.")) {
+            String value = (String) me.getValue();
+            iter.remove();
+            // expecting name to be one of:
+            //   enable.assertions
+            //   enable.system.assertions
+            //   disable.assertions
+            //   disable.system.assertions
+            String nameTail = 
+              name.substring(
+                  isEnable ? 
+                  "enable.".length() :
+                  "disable.".length());
+            String newCmd = null;
+            if (nameTail.startsWith("assertions")) {
+              if ((value == null) ||
+                  (value.equalsIgnoreCase("true"))) {
+                // SECURITY -- should be okay
+                newCmd = (isEnable ? "-ea" : "-da");
+              } else if (value.equalsIgnoreCase("false")) {
+                // SECURITY -- should be okay
+                newCmd = (isEnable ? "-da" : "-ea");
+              } else {
+                // SECURITY -- examine value
+                newCmd = 
+                    ((isEnable ? "-ea" : "-da") +
+                    ":"+value);
+              }
+            } else if (nameTail.equals("system.assertions")) {
+              if ((value == null) ||
+                  (value.equalsIgnoreCase("true"))) {
+                // SECURITY -- should be okay
+                newCmd = (isEnable ? "-esa" : "-dsa");
+              } else if (value.equalsIgnoreCase("false")) {
+                // SECURITY -- should be okay
+                newCmd = (isEnable ? "-dsa" : "-esa");
+              } else {
+                // invalid value
+              }
+            }
+            if (newCmd != null) {
+              cmdList.add(newCmd);
+            } else {
+              throw new IllegalArgumentException(
+                  "Expecting \"java."+
+                  (isEnable ? "enable" : "disable")+
+                  ".assertions[=(true|false|value)]\" or \"java."+
+                  (isEnable ? "enable" : "disable")+
+                  ".system.assertions[=(true|false)]\", not "+
+                  name+
+                  ((value != null) ? ("="+value) : ""));
+            }
+          }
+        }
+
         // take classname IFF no executable jar
         String classname = 
           (String) javaProps.remove("class.name");
