@@ -100,7 +100,8 @@ queryPluginArgs = \
  SELECT ARGUMENT \
    FROM V4_ASB_COMPONENT_ARG \
    WHERE COMPONENT_ALIB_ID=':comp_alib_id' \
-   AND ASSEMBLY_ID :assemblyMatch
+   AND ASSEMBLY_ID :assemblyMatch \
+   ORDER BY ARGUMENT_ORDER
 
 queryComponents = \
  SELECT A.COMPONENT_NAME, C.COMPONENT_CLASS, \
@@ -127,3 +128,9 @@ queryAgentAssetClass = \
   SELECT AGENT_ORG_CLASS \
     FROM V4_LIB_AGENT_ORG \
    WHERE AGENT_LIB_NAME = ':agent_name'
+
+queryAllAgentNames = \
+  SELECT DISTINCT C.COMPONENT_NAME \
+    FROM V4_ALIB_COMPONENT C \
+    WHERE C.COMPONENT_TYPE = 'agent' \
+    ORDER BY C.COMPONENT_NAME
