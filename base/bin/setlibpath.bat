@@ -22,5 +22,12 @@ REM "</copyright>"
 
 set LIBPATHS=%COUGAAR_INSTALL_PATH%\lib\bootstrap.jar
 
-set COUGAAR3RDPARTY=%COUGAAR_INSTALL_PATH%\sys
+REM Make sure that COUGAAR3RDPARTY is specified
+IF NOT "%COUGAAR3RDPARTY%" == "" GOTO L_3
+
+REM Unable to find "sys" path for 3rd-party jars
+REM This is usually COUGAAR_INSTALL_PATH/sys
+REM ECHO COUGAAR3RDPARTY not set! Defaulting to CIP\sys
+SET COUGAAR3RDPARTY=%COUGAAR_INSTALL_PATH%\sys
+
 
