@@ -16,7 +16,7 @@
 #  (abbrev  =  actual)
 
 #get rid of org.cougaar.domain level
-org.cougaar.	org.cougaar.
+org.cougaar.domain.	org.cougaar.
 
 
 

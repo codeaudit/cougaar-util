@@ -219,7 +219,7 @@ occ.society.SecurityComponent			occ.security.SecurityComponent
 occ.society.StandardSecurityComponent		occ.security.StandardSecurityComponent
 
 #
-# org.cougaar.planning.ldm
+# org.cougaar.domain.planning.ldm
 #
 
 # PrototypeRegistryService
