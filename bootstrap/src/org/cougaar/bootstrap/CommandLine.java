@@ -33,18 +33,18 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
  * This class is used by
- * <tt>$COUGAAR_INSTALL_PATH/bin/Cougaar[.bat]</tt>
+ * <tt>$COUGAAR_INSTALL_PATH/bin/cougaar[.bat]</tt>
  * to read the configuration XML files and print the <b>java</b>
  * command line, which is then used to launch the Cougaar node
  * process.
  * <p>
  * For usage, see the {@link $usage} string, or run:<pre>
- *   $COUGAAR_INSTALL_PATH/bin/Cougaar --help
+ *   $COUGAAR_INSTALL_PATH/bin/cougaar --help
  * </pre>
  * The typical usage is:<pre>
  *   # <i>start node X specified in "mySociety.xml":</i> 
  *   cd <i>your_config_directory</i> 
- *   $COUGAAR_INSTALL_PATH/bin/Cougaar mySociety.xml X
+ *   $COUGAAR_INSTALL_PATH/bin/cougaar mySociety.xml X
  * </pre>
  * <p>
  * This class is intended to replace the old Cougaar scripts:<br>
@@ -69,7 +69,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  *   &lt;/society&gt;
  * </pre> 
  * <i>command line:</i><pre>
- *   $COUGAAR_INSTALL_PATH/bin/Cougaar \
+ *   $COUGAAR_INSTALL_PATH/bin/cougaar \
  *     --system my_system.xml\
  *     --application my_application.xml\
  *     NodeA
@@ -127,7 +127,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public final class CommandLine {
 
   public static final String USAGE =
-    "Usage: Cougaar [default...] [option...] FILE [override...] [NODE]\n"+
+    "Usage: cougaar [default...] [option...] FILE [override...] [NODE]\n"+
     "Start a Cougaar Node and Agents specified in an XML file.\n"+
     "\n"+
     "  -a, --application STRING   application XML FILE name\n"+
@@ -161,13 +161,13 @@ public final class CommandLine {
     "Example usage:\n"+
     "\n"+
     "  # start node X specified in \"mySociety.xml\":\n"+
-    "  Cougaar mySociety.xml X\n"+
+    "  cougaar mySociety.xml X\n"+
     "\n"+
     "  # start the first node listed in the XML:\n"+
-    "  Cougaar mySociety.xml\n"+
+    "  cougaar mySociety.xml\n"+
     "\n"+
     "  # read \"-D\"s from sys.xml, override -D's from mySoc.xml, force -Da=b:\n"+
-    "  Cougaar -s sys.xml -a mySoc.xml -Da=b\n"+
+    "  cougaar -s sys.xml -a mySoc.xml -Da=b\n"+
     "\n"+
     "Report bugs to <bugs@cougaar.org>.";
 
