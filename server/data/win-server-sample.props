@@ -56,7 +56,7 @@ java.class.path=D\:\\opt\\cougaar\\lib\\bootstrap.jar
 #
 # Here we override the default configuration path to include both
 # the "common" directory and "GLMTrans" directory.
-org.cougaar.config.path="D\:\\opt\\cougaar\\configs\\common\;D\:\\opt\\cougaar\\glmtrans\\configs\\demo-config\\config\;"
+org.cougaar.config.path="D\:\\opt\\cougaar\\configs\\common\;D\:\\opt\\cougaar\\configs\\glmtrans\;"
 
 # Use the Server HotSpot Java Virtual Machine
 # Warning: The JRE does not include this VM. You must have the full
