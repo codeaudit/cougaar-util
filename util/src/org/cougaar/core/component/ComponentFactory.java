@@ -1,6 +1,6 @@
 /*
  * <copyright>
- *  Copyright 2000-2001 BBNT Solutions, LLC
+ *  Copyright 2000-2002 BBNT Solutions, LLC
  *  under sponsorship of the Defense Advanced Research Projects Agency (DARPA).
  * 
  *  This program is free software; you can redistribute it and/or modify
@@ -22,8 +22,10 @@ package org.cougaar.core.component;
 
 import java.util.*;
 import java.lang.reflect.Method;
+import java.net.URLClassLoader;
+import java.net.URL;
 
-/** An base class useful for creating components
+/** A base class useful for creating components
  * and instilling the "breath of life" (initial services)
  * on behalf of manager objects.
  **/
@@ -34,10 +36,54 @@ public abstract class ComponentFactory
     throws ComponentFactoryException
   {
     try {
-      return Class.forName(desc.getClassname());
+      ClassLoader cl = getClassLoader(desc);
+      return cl.loadClass(desc.getClassname());
     } catch (Exception e) {
       throw new ComponentFactoryException("Couldn't load component class", desc, e);
     }
+  }
+
+  /** Find the classloader to use for the ComponentDescription object.
+   * The default examines the ComponentDescription's codebase and
+   * will return the current Cougaar ClassLoader when it is null, or
+   * a static URLClassLoader based on the specified URL when non-null.
+   **/
+  protected ClassLoader getClassLoader(ComponentDescription desc) 
+    throws SecurityException
+  {
+    URL cb = desc.getCodebase();
+    if (cb == null) {
+      return this.getClass().getClassLoader();
+    } else {
+      return getClassLoaderCache().get(cb);
+    }
+  }
+
+  /** A map of URL to ClassLoader **/
+  public static class ClassLoaderCache {
+    private final HashMap map = new HashMap(11);
+    public ClassLoader get(URL codebase) throws SecurityException {
+      synchronized (map) {
+        ClassLoader cl = (ClassLoader) map.get(codebase);
+        if (cl == null) {
+          cl = new URLClassLoader(new URL[] {codebase}, this.getClass().getClassLoader());
+          map.put(codebase,cl);
+        }
+        return cl;
+      }
+    }
+    public void clear(URL codebase) {
+      map.remove(codebase);
+    }
+  }
+
+  private static final ClassLoaderCache _classLoaderCache = new ClassLoaderCache();
+  
+  /** Return the classloader cache for this ComponentFactory. 
+   * The default implementation returns a VM static singleton.
+   **/
+  protected ClassLoaderCache getClassLoaderCache() {
+    return _classLoaderCache;
   }
 
   private final static Class[] VO = new Class[]{Object.class};

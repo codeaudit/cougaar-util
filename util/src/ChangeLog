@@ -1,0 +1,8 @@
+2002-05-17  Michael Thome  <mthome@bbn.com>
+
+	* org/cougaar/core/component/ComponentFactory.java
+	Now pays attention to ComponentDescription.getCodebase.
+	Fixes bug 1029.
+	
+	
+
