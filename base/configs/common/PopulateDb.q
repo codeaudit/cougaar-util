@@ -586,6 +586,12 @@ queryRecipeUsed=\
  SELECT TRIAL_ID FROM expt_trial_mod_recipe \
    WHERE MOD_RECIPE_LIB_ID = ':recipe_id:'
 
+queryRecipeAssemblyId=\
+ SELECT ARG_VALUE \
+   FROM lib_mod_recipe_arg \
+  WHERE MOD_RECIPE_LIB_ID = ':recipe_id:' \
+   AND ARG_NAME = 'Assembly Id' 
+
 insertTrialRecipe=\
  INSERT INTO expt_trial_mod_recipe \
     (TRIAL_ID, MOD_RECIPE_LIB_ID, RECIPE_ORDER, EXPT_ID) \
