@@ -1,6 +1,6 @@
-Database=${org.cougaar.refconfig.database}
-Username=${org.cougaar.refconfig.user}
-Password=${org.cougaar.refconfig.password}
+Database=${org.cougaar.configuration.database}
+Username=${org.cougaar.configuration.user}
+Password=${org.cougaar.configuration.password}
 
 %SQLFDMAggregateAssetCreator
 query= select \
