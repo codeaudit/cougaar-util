@@ -42,11 +42,11 @@ public abstract class ContainerSupport
   protected final ArrayList boundComponents = new ArrayList(11);
 
   /** a Sorted Collection of child BinderFactory components.
-   * Note that since BinderFactory.comparator does not conform to
-   * java's bogus ordering protocol, this is not a true set in the 
-   * java collections set, since non-equal members can sort equally.
+   * Note that we cannot use TreeSet because of the Collection API's
+   * braindamaged insistance on conflating identity and order, so
+   * this is a regular arraylist which we keep sorted by hand.
    **/
-  protected final TreeSet binderFactories = new TreeSet(BinderFactory.comparator);
+  protected final ArrayList binderFactories = new ArrayList();
 
   protected ContainerSupport() {
     ServiceBroker sb = specifyChildServiceBroker();
@@ -504,7 +504,6 @@ public abstract class ContainerSupport
           BinderFactoryWrapper bf = (BinderFactoryWrapper) wrappers.get(i);
           Binder w = bf.getBinder((b==null)?c:b);
           if (w!= null) {
-            //System.err.println("Wrapped by: "+w);
             b = w;
           }
         }
@@ -550,6 +549,7 @@ public abstract class ContainerSupport
   protected boolean attachBinderFactory(BinderFactory c) {
     synchronized (binderFactories) {
       binderFactories.add(c);
+      Collections.sort(binderFactories, BinderFactory.comparator);
     }
     return BindingUtility.activate(c, getContainerProxy(), getServiceBroker());
   }
