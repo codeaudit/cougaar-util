@@ -37,9 +37,6 @@
 <a href="#organization">Organization of a Release</a></li>
 
 <li>
-<a href="#utilities">Utilities in a Release</a></li>
-
-<li>
 <a href="#example">MiniTestConfig Example Implementations</a></li>
 
 <li>
@@ -70,10 +67,52 @@ Build 9.0 is a major release of COUGAAR. Essential differences between
 <li>
 Repackaging.&nbsp; See the repackaging diagrams for details.&nbsp; To repackage
 your source code use the <a href="ReleaseNotes/9.0/repackage/README">scripts</a>
-in the repackaging directory (doc/ReleaseNotes/9.0/repackaging).</li>
+in the repackaging directory (doc/ReleaseNotes/9.0/repackage).</li>
 
 <li>
-Servlets</li>
+Servlets:<br>
+The Servlet server is now enabled by default 
+(HTTP port 8800) and replaces the PSP server.  During node 
+initialization you will now see this message:<br>
+&nbsp; &nbsp; <tt> Starting HTTP  server on port: 8800</tt><br>
+All PSP base-classes
+have been deprecated, and all PSPs must be ported to Servlets 
+(see bug 1017).  The existing PSP server will be removed in 
+the 9.2 release and will no longer be supported.<br> 
+Many PSPs and PSP-client-applications have already 
+been ported to use the new servlet server, including:
+<ul>
+  <li>"/tasks" <i>(the ported "/alpine/demo/TASKS.PSP", 
+      which is used to view an agent's blackboard)</i></li>
+  <li>"/completion" <i>(view task allocation-result 
+      statistics)</i></li>
+  <li>"/hierarchy"  <i>(view agent relationships)</i></li>
+  <li>"/load" <i>(merge of "?LOAD" and "PLUGIN_LOADER.PSP")</i>
+      </li>
+  <li>all 6 CSMART PSPs</li>
+  <li>the Inventory PSP</li>
+  <li>both TPFDD/datagrabber PSPs</li>
+  <li>the agg-agent PSPs</li>
+  <li>the tutorial PSPs</li>
+</ul>
+See:
+<ul>
+  <li><a href="details/Servlet.html">doc/details/Servlet.html</a>
+      for an introduction to the servlet server, including example 
+      servlets and PSP-porting instructions.</li>
+  <li><a href="../webserver/doc/install.html"
+       >webserver/doc/install.html</a> for server configuration 
+       options, including optional HTTPS support.</li>
+  <li><a href="details/PortedPSPs.html"
+       >doc/details/PortedPSPs.html</a> for a table of
+       (old-PSP  --&gt;  new-Servlet)</li>
+</ul>
+</li>
+
+<li>
+Enhanced "LoggingService" support for logging within plugins and
+other components.
+</li>
 
 <li>
 Basic Training Course Tutorials.&nbsp;</li>
@@ -97,6 +136,9 @@ tutorial. This has been fixed in version 9.0.</li>
 
 <li>
 Node Manager</li>
+
+<li>
+App-Server enhancements to support the Node Manager</li>
 
 <li>
 MTS Componentization</li>
@@ -326,30 +368,7 @@ on
 Cougaar start time with the following Node argument:
 <br>-Dorg.cougaar.core.cluster.startTime=08/010/2005
 <br>This start time is optimal for the Oplan used with the small-135 society.&nbsp;
-<h2>
-<a NAME="utilities"></a>Utilities in a Release&nbsp;</h2>
-The following PSPs (in the GLM module) and LPS services are tested with
-each release and should aid in PlugIn debugging and understanding society
-behavior:&nbsp;
-<ul>
-<li>
-alpine/demo/TASKS.PSP</li>
 
-<li>
-alpine/demo/PLUGIN_LOADER.PSP</li>
-
-<li>
-alpine/demo/SOCIETY_METRICS.PSP</li>
-
-<li>
-alpine/demo/OPLAN_EDIT.PSP</li>
-
-<li>
-?list?psps</li>
-
-<br>&nbsp;</ul>
-To execute these PSPs, enter the following URL in your browser: http://&lt;hostname>.5555:&lt;service>
-where &lt;service> might be /alpine/demo/TASKS.PSP
 <h2>
 <a NAME="example"></a>Test Harness Example Implementations</h2>
 We only maintain society configurations that we are currently using for
@@ -426,9 +445,6 @@ them:
 (JSSE)</a></li>
 </ul>
 
-<h3>
-User Interface Development&nbsp;</h3>
-Please refer to the UI design doc.&nbsp; For general PSP help, see: <a href="ui/PSPServices.html">PSPServices</a>.
 <h2>
 <a NAME="future"></a>Future Releases</h2>
 There will be further releases as we address system enhancements and deficiencies.
@@ -443,13 +459,7 @@ website.&nbsp;
 <h2>
 <a NAME="bugs"></a>Known bugs and other issues</h2>
 
-<ul>
-<li>
-The NodeServer module (server.jar) does not currently work as an executable
-jar file because of an unresolved dependency on core.jar. Until this is
-fixed, an appserver instance will have to have a specified classpath which
-includes core.jar.</li>
-</ul>
+See the online <a href="http://www.cougaar.org/bugs">bug tracker</a>.
 </td>
 </tr>
 </table>
