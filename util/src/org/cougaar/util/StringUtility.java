@@ -29,10 +29,11 @@ import java.util.Vector;
 public class StringUtility {
 
   /** an empty String instance **/
-  public static String emptyString = "";
+  public static final String emptyString = "";
 
   /** @return an array of strings which represents the comma-separated-
    * values list from the range of characters in buf. 
+   * @deprecated Use {@link CSVUtility#parse(String)} 
    **/
   public static Vector parseCSV(String buf, int start, int end, char comma) {
     Vector tmp = new Vector();
@@ -95,21 +96,37 @@ public class StringUtility {
     return sb.toString();
   }
 
+  static Vector toVector(String[] ss) {
+    Vector r = new Vector(ss.length);
+    for (int i = 0; i< ss.length; i++) {
+      r.add(ss[i]);
+    }
+    return r;
+  }
 
+  /** @deprecated Use {@link CSVUtility#parse(String)} **/
   public static Vector parseCSV(String buf) {
-    return parseCSV(buf, 0, buf.length(), ',');
+    return toVector(CSVUtility.parse(buf));
   }
+  /** @deprecated Use {@link CSVUtility#parse(String)} **/
   public static Vector parseCSV(String buf, int start) {
-    return parseCSV(buf, start, buf.length(), ',');
+    return toVector(CSVUtility.parse(buf.substring(start)));
   }
+  /** @deprecated Use {@link CSVUtility#parse(String)} **/
   public static Vector parseCSV(String buf, int start, int end) {
-    return parseCSV(buf, start, end, ',');
+    return toVector(CSVUtility.parse(buf.substring(start,end)));
   }
 
+  /** @deprecated Use {@link CSVUtility#parse(String)} or {@link String#split(String)} **/
   public static Vector parseCSV(String buf, char comma) {
-    return parseCSV(buf, 0, buf.length(), comma);
+    if (comma == ',') {
+      return parseCSV(buf);
+    } else {
+      return toVector(buf.split("\\s*"+comma+"\\s*"));
+    }
   }
 
+  /** @deprecated Use {@link String#split(String)} **/
   public static Vector explode(String s) {
     Vector v = new Vector();
     int j = 0;                  //  non-white
