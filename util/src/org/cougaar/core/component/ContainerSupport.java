@@ -212,6 +212,9 @@ implements Container, StateObject
       return csb;
     }
     ComponentView cv = getContainerView();
+    if (cv == null) {
+      return csb;
+    }
     final int id = cv.getId();
     final ComponentDescription cd = cv.getComponentDescription();
     return new ViewedServiceBroker(csb, id, cd, null, null);
@@ -237,6 +240,9 @@ implements Container, StateObject
        ((ComponentDescription) child) :
        null);
     ContainerView parentView = getContainerView();
+    if (parentView == null) {
+      return csb;
+    }
     return new ViewedServiceBroker(csb, id, cd, parentView, b);
   }
 
