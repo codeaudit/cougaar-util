@@ -562,6 +562,11 @@ insertLibRecipe=\
     (MOD_RECIPE_LIB_ID, NAME, JAVA_CLASS, DESCRIPTION) \
  VALUES (':recipe_id:', ':recipe_name:', ':java_class:', ':description:')
 
+updateLibRecipe=\
+ UPDATE lib_mod_recipe \
+   SET NAME = ':recipe_name:', JAVA_CLASS=':java_class:' \
+   WHERE MOD_RECIPE_LIB_ID = ':recipe_id:'
+
 insertLibRecipeProp=\
  INSERT INTO lib_mod_recipe_arg \
     (MOD_RECIPE_LIB_ID, ARG_NAME, ARG_VALUE, ARG_ORDER) \
