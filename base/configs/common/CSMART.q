@@ -194,7 +194,7 @@ queryExptsWithSociety = \
 # get the property groups for a plugin
 
 queryPGId = \
-	SELECT PG_ATTRIBUTE_LIB_ID \
+	SELECT DISTINCT PG_ATTRIBUTE_LIB_ID \
 	FROM V4_ASB_AGENT_PG_ATTR \
 	WHERE COMPONENT_ALIB_ID = ':agent_name' \
 	AND ASSEMBLY_ID :assemblyMatch
@@ -209,7 +209,8 @@ queryPGValues = \
 	FROM V4_ASB_AGENT_PG_ATTR \
 	WHERE PG_ATTRIBUTE_LIB_ID = ':pgAttrLibId' \
 	AND COMPONENT_ALIB_ID = ':agent_name' \
-	AND ASSEMBLY_ID :assemblyMatch
+	AND ASSEMBLY_ID :assemblyMatch \
+	ORDER BY ATTRIBUTE_ORDER
 
 queryCMTAssembly = \
 	SELECT '1' \
