@@ -61,6 +61,6 @@ REM pass in "NodeName" to run a specific named Node
 
 @ECHO ON
 
-java.exe %MYPROPERTIES% -Dorg.cougaar.core.node.InitializationComponent=XML -Dorg.cougaar.society.file=%1 %MYMEMORY% -classpath %LIBPATHS% %MYCLASSES% %MYARGUMENTS% -c -n %2 %3
+java.exe %MYPROPERTIES% -Dorg.cougaar.core.node.InitializationComponent=XML -Dorg.cougaar.society.file=%1 -Dorg.cougaar.core.node.validate=true %MYMEMORY% -classpath %LIBPATHS% %MYCLASSES% %MYARGUMENTS% -c -n %2 %3
 
 :L_END

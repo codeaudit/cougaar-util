@@ -89,7 +89,7 @@ if [ "$OS" = "Linux" ]; then
 fi
 
 #set javaargs="$osargs $MYPROPERTIES $MYMEMORY -classpath $LIBPATHS -Dorg.cougaar.core.message.isLogging=true -Djava.rmi.server.logCalls=true -Dsun.rmi.server.exceptionTrace=true -Dsun.rmi.transport.tcp.readTimeout=150000 "
-javaargs="$MYPROPERTIES $MYMEMORY -Dorg.cougaar.core.node.InitializationComponent=XML -Dorg.cougaar.society.file=$societyfile -classpath $LIBPATHS $DEVP $BOOTSTRAPPER $MYCLASSES"
+javaargs="$MYPROPERTIES $MYMEMORY  -Dorg.cougaar.core.node.InitializationComponent=XML -Dorg.cougaar.society.file=$societyfile -Dorg.cougaar.core.node.validate=true -classpath $LIBPATHS $DEVP $BOOTSTRAPPER $MYCLASSES"
 
 if [ "$COUGAAR_DEV_PATH" != "" ]; then
     echo java $javaargs $args
