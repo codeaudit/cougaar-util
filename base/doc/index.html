@@ -124,6 +124,16 @@ setarguments and setlibpath are gone, fully replaced by the boost
 script (now used by the rest of the scripts).  Node now fully
 subsumes the functionality of the now deleted XMLNode and PNode scripts.
 </li>
+<li>The initialization services now create ComponentDescription
+parameters as unmodifiable List objects, rather than as (mutable)
+Vectors.  This means that plugins and other components with a 
+setParameter method will get called with a List rather than a Vector
+(which is, after all, also instanceof List). This closes a security hole
+(cougaar bug 3263) and drops one more use of Vector.  Note that legacy
+plugins (extending PluginAdapter) continue to see a Vector if they
+call getParameters() -- while the returned value is mutable, the 
+security exploit cannot be used in this case.
+</li>
 <li>Most DOS scripts now support directories with a space (" ") in the
 name. This does _not_ currently include the DB load
 scripts. Additionally, the bash / csh scripts are not covered.</li>
