@@ -97,8 +97,9 @@ public abstract class BindingUtility {
                     Object[] args = new Object[] { null };
                     try {
                       fm.invoke(fc, args);
-                    } catch (InvocationTargetException ite) {
-                      throw ite.getCause();
+                    } catch (Throwable e) {
+                      // ugly, but we don't want to pass it through.
+                      e.printStackTrace()
                     }
                   }
                 };
