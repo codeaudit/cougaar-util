@@ -75,8 +75,15 @@ fi
 
 if [ "$OS" = "Linux" ]; then
     # set some system runtime limits
-    limit stacksize 16m    #up from 8m
-    limit coredumpsize 0   #down from 1g
+    if [ "$SHELL" = "/bin/bash" ]; then
+       ulimit -s 16384 #up from 8m
+       ulimit -c 0   #down from 1g
+    fi
+
+    if [ "$SHELL" = "/bin/tcsh" ]; then
+       limit stacksize 16m    # up from 8m
+       limit coredumpsize 0   #down from 1g
+    fi
     #turn this on to enable inprise JIT
     #setenv JAVA_COMPILER javacomp
 fi
@@ -89,4 +96,5 @@ if [ "$COUGAAR_DEV_PATH" != "" ]; then
 fi
 
 # exec instead of eval
+echo exec java $javaargs $args
 exec java $javaargs $args
