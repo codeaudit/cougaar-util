@@ -17,7 +17,7 @@
 <b><font size=+2>Release Notes</font></b></h2>
 
 <h2>
-<b><font size=+2>COUGAAR 9.0</font></b></h2>
+<b><font size=+2>COUGAAR 9.1</font></b></h2>
 </td>
 
 <td ALIGN=CENTER WIDTH="200"><a href="http://www.cougaar.org"><img SRC="cougaar-smalllogo.jpg" BORDER=0 ></a></td>
@@ -61,6 +61,27 @@
 <hr>
 <h2>
 <a NAME="overview"></a>Overview of this Release</h2>
+<p>
+Build 9.1 is an unstable release of COUGAAR. Essential differences
+	    between 9.0 and 9.1 include:
+<ul>
+<li>
+JDK version change.  Cougaar 9.1 (and all future versions) requires
+JDK 1.4 to compile and run. As
+of the time of this writing, JDK 1.4 is not yet available in final
+form so the translation has been done using JDK 1.4 RC builds.
+</li>
+<li>
+JDBC 3.0 drivers are now supported.  org.cougaar.util.DBConnectionPool
+	      supports JDBC 3.0 interfaces.  Only this connection pool
+	      class has been ported.  Older, broken db connection pool
+	      implementations have been dropped.  In particular,
+	      org.cougaar.mlm.plugin.LDMConnection and associated
+	      classes have been removed, along with LDMQueryPlugin
+	      (LDMSQLPlugin is uneffected).
+</li>
+<p>
+<ul>
 Build 9.0 is a major release of COUGAAR. Essential differences between
 8.8 and 9.0 include:
 <ul>
