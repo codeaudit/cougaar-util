@@ -34,7 +34,7 @@ import java.beans.beancontext.*; /*make @see reference work*/
 
 import org.cougaar.util.GenericStateModel;
 import org.cougaar.util.GenericStateModelAdapter;
-import org.cougaar.util.DoubleBufferedList;
+import org.cougaar.util.RarelyModifiedList;
 import org.cougaar.util.Mappings;
 import org.cougaar.util.Mapping;
 import org.cougaar.util.Filters;
@@ -65,7 +65,7 @@ implements Container, StateObject
   /** The actual set of child BoundComponent loaded. 
    * @see org.cougaar.core.component.BoundComponent
    **/
-  private final DoubleBufferedList boundComponents = new DoubleBufferedList();
+  private final RarelyModifiedList boundComponents = new RarelyModifiedList();
 
   /** a Sorted Collection of child BinderFactory components.
    * Note that we cannot use TreeSet because of the Collection API's

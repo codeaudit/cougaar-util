@@ -30,11 +30,11 @@ import java.util.*;
 import junit.framework.TestCase;
 import junit.framework.*;
 
-public class TestDoubleBufferedList extends TestCase {
+public class TestRarelyModifiedList extends TestCase {
 
   public void test_DBL() {
     List x, y;
-    DoubleBufferedList l = new DoubleBufferedList();
+    RarelyModifiedList l = new RarelyModifiedList();
     assertTrue(l.size() == 0);
     
     x = l.getUnmodifiableList();
@@ -58,7 +58,7 @@ public class TestDoubleBufferedList extends TestCase {
     assertEquals("A",l.get(0)); // get(int) works correctly
 
     comod(new ArrayList(), false);
-    comod(new DoubleBufferedList(), true);
+    comod(new RarelyModifiedList(), true);
   }
 
   void comod(List l, boolean expectation) {

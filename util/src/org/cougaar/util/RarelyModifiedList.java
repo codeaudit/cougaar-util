@@ -29,7 +29,8 @@ package org.cougaar.util;
 import java.util.*;
 
 /**
- * A "double buffered" List implementation.
+ * A "double buffered" List implementation, optimized for 
+ * cases where the contents rarely change.
  * This implementation acts superficially like a normal list
  * except that it actually is implemented by always creating
  * a new private copy of the list on each modification.
@@ -47,19 +48,19 @@ import java.util.*;
  * be better served by a different implementation.
  **/
 
-public class DoubleBufferedList 
+public class RarelyModifiedList 
   implements List, java.io.Serializable
 {
   /** current backing list **/
   private List back;
 
-  public DoubleBufferedList() {
+  public RarelyModifiedList() {
     back = Collections.EMPTY_LIST;
   }
-  public DoubleBufferedList(Collection c) {
+  public RarelyModifiedList(Collection c) {
     back = Collections.unmodifiableList(new ArrayList(c));
   }
-  public DoubleBufferedList(int l) {
+  public RarelyModifiedList(int l) {
     // no reason to actually pay attention to this
     back = Collections.EMPTY_LIST;
   }
