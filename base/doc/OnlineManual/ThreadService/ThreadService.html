@@ -9,33 +9,67 @@
 <h2>org.cougaar.core.service.ThreadService</h2>
 
 <dl>
-  
+
+  <dt><code>WILL_BLOCK_LANE</code></dt>
+
+  <dd>This constant refers to the lane that should be used by threads
+  which are known to block on io.  MTS Destination Queue threads
+  currently use this lane. <p> </dd>
+      
+  <dt><code>CPU_INTENSE_LANE</code></dt>
+
+  <dd>This constant refers to the lane that should be used by threads
+  which are known to run unusually long [?].  This lane isn't
+  currently in use.  <p> </dd>
+      
+  <dt><code>WELL_BEHAVED_LANE</code></dt>
+
+  <dd>This constant refers to the lane that should be used by threads
+  which are known to behave properly, ie not to block and not to run
+  unusually long.  The Metric Service threads use this lane. <p>  </dd>
+
+  <dt><code>BEST_EFFORT_LANE </code></dt>
+
+  <dd> This constant refers to the lane which should be used by all
+  other threads.  This is the initial default lane (for any given
+  Thread Service, the default lane can also be changed
+  dynamically). <p> </dd>
+
+
   <dt><a name="creation">
       <code>Schedulable getThread(Object consumer, Runnable
-      runnable, String name)
+      runnable, String name, int lane)
       </code>
       </a>
   </dt>
       
-  <dd> Creates a <code>Schedulable</code> with the given name
-      and running the given <code>Runnable</code> on behalf of
-      the given consumer (and <code>Object</code>). This is
-      the standard method for creating a new
-      <code>Schedulable</code>.
-      <p>
-  </dd>
+  <dd> Creates a <code>Schedulable</code> with the given name and
+      running the given <code>Runnable</code> on behalf of the given
+      consumer (and <code>Object</code>).  The
+      <code>Schedulable</code> will be assigned to the given lane.
+      <p> </dd>
+
+  <dt><code>Schedulable getThread(Object consumer, Runnable
+      runnable, String name)
+      </code>
+  </dt>
+      
+  <dd> Creates a <code>Schedulable</code> with the given name and
+      running the given <code>Runnable</code> on behalf of the given
+      consumer (and <code>Object</code>).  The
+      <code>Schedulable</code> will be assigned to this <code>Thread
+      Service's</code> default lane.  <p> </dd>
 
   <dt>
       <code>Schedulable getThread(Object consumer, Runnable runnable)
       </code>
   </dt>
       
-  <dd>
-      Creates an anonymous <code>Schedulable</code> running the
-      given <code>Runnable</code> on behalf of the given
-      consumer (and <code>Object</code>).
-      <p>
-  </dd>
+  <dd> Creates an anonymous <code>Schedulable</code> running the given
+      <code>Runnable</code> on behalf of the given consumer (and
+      <code>Object</code>).  The <code>Schedulable</code> will be
+      assigned to this <code>Thread Service's</code> default lane.
+      <p> </dd>
 
   <dt>
       <code>void schedule(TimerTask task, long delay)</code>

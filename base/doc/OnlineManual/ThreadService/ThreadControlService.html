@@ -11,13 +11,105 @@
 <dl>
 
   <dt>
+      <code>void setDefaultLane(int lane)</code>
+  </dt>
+      
+  <dd>
+      Sets the default lane for any newly created
+      <code>Schedulables</code>.  This has no effect on extant
+      <code>Schedulables</code>. <p>
+  </dd>
+
+  <dt>
+      <code>void setMaxRunningThreadCount(int count, int lane)</code>
+  </dt>
+      
+  <dd>
+      Sets the maximum number of <code>Schedulables</code>
+      that are allowed to run at any one time (across all
+      levels) for the given lane.<p>
+  </dd>
+
+  <dt>
+      <code>void setQueueComparator(Comparator comparator, int lane)</code>
+  </dt>
+      
+  <dd>
+
+      Sets the <code>Comparator</code> used by the queue at this level
+      for the given lane to order its elements
+      (<code>Schedulables</code>).  The 'smallest' value, as
+      determined by the <code>Comparator</code>, is the first element
+      of the queue. By default the queue is sorted by time (fifo). <p>
+      
+  </dd>
+
+  <dt>
+      <code>void setRightsSelector(RightsSelector selector, int lane)</code>
+  </dt>
+      
+  <dd>
+      
+      By default, the "right" to run is handled in a round-robin
+      fashion.  This can be overridden by providing a different
+      <code>RightsSelector</code>.  The rights-selection
+      mechanism is experimental and lightly tested, and
+      shouldn't be used (yet) except for experimenting.<p>
+      
+  </dd>
+
+  <dt>
+      <a name="disqualification">
+      <code>boolean setQualifier(UnaryPredicate predicate, int lane)</code>
+      </a>
+  </dt>
+      
+  <dd>
+      
+      Sets the qualifier at this level for the given lane.  The
+      qualifier is used to disqualify queued <code>Schedulables</code>
+      temorarily.  Any <code>Schedulable</code> on the queue which
+      doesn't satisfy the predicate is removed and held in another
+      list.  Such a <code>Schedulable</code> will only be returned to
+      the queue (and thus given the opportunity to run eventually) if
+      the qualifier is unset (ie, set to <code>null</code>).
+
+      <p> NB: The qualifier can only be set to a
+      non-<code>null</code> value if it's current
+      <code>null</code> .<p>
+      
+  </dd>
+
+
+  <dt>
+      <a name="childdisqualification">
+      <code>boolean setChildQualifier(UnaryPredicate predicate, int lane)</code>
+      </a>
+  </dt>
+      
+  <dd>
+      
+      Sets the qualifier for child schedulers at this level for the
+      given lane.  The qualifier is used to prevent children from
+      gaining rights they might otherwise have access to.  This is
+      useful to keep one child from using up all its parents rights
+      (for example).
+
+      <p> NB: The qualifier can only be set to a
+      non-<code>null</code> value if it's current
+      <code>null</code> .<p>
+      
+  </dd>
+      
+
+  <dt>
       <code>void setMaxRunningThreadCount(int count)</code>
   </dt>
       
   <dd>
       Sets the maximum number of <code>Schedulables</code>
       that are allowed to run at any one time (across all
-      levels).<p>
+      levels) for the default lane.<p>
   </dd>
 
   <dt>
@@ -27,10 +119,10 @@
   <dd>
 
       Sets the <code>Comparator</code> used by the queue at this level
-      to order its elements (<code>Schedulables</code>).  The
-      'smallest' value, as determined by the <code>Comparator</code>,
-      is the first element of the queue. By default the queue is
-      sorted by time (fifo). <p>
+      for the default lane to order its elements
+      (<code>Schedulables</code>).  The 'smallest' value, as
+      determined by the <code>Comparator</code>, is the first element
+      of the queue. By default the queue is sorted by time (fifo). <p>
       
   </dd>
 
@@ -56,14 +148,13 @@
       
   <dd>
       
-      Sets the qualifier at this level.  The qualifier is used
-      to disqualify queued <code>Schedulables</code> temorarily.
-      Any <code>Schedulable</code> on the queue which doesn't
-      satisfy the predicate is removed and held in another list.
-      Such a <code>Schedulable</code> will only be returned to
-      the queue (and thus given the opportunity to run
-      eventually) if the qualifier is unset (ie, set to
-      <code>null</code>).
+      Sets the qualifier at this level for the default lane.  The
+      qualifier is used to disqualify queued <code>Schedulables</code>
+      temorarily.  Any <code>Schedulable</code> on the queue which
+      doesn't satisfy the predicate is removed and held in another
+      list.  Such a <code>Schedulable</code> will only be returned to
+      the queue (and thus given the opportunity to run eventually) if
+      the qualifier is unset (ie, set to <code>null</code>).
 
       <p> NB: The qualifier can only be set to a
       non-<code>null</code> value if it's current
@@ -80,10 +171,11 @@
       
   <dd>
       
-      Sets the qualifier for child schedulers at this level.  The
-      qualifier is used to prevent children from gaining rights they
-      might otherwise have access to.  This is useful to keep one
-      child from using up all its parents rights (for example).
+      Sets the qualifier for child schedulers at this level for the
+      default lane.  The qualifier is used to prevent children from
+      gaining rights they might otherwise have access to.  This is
+      useful to keep one child from using up all its parents rights
+      (for example).
 
       <p> NB: The qualifier can only be set to a
       non-<code>null</code> value if it's current
@@ -92,26 +184,66 @@
   </dd>
       
 
+      
+  <dt>
+      <code>int getDefaultLane()</code>
+  </dt>
+      
+  <dd>
+      Returns the current default lane. <p>
+  </dd>
+
+  <dt>
+      <code>int runningThreadCount(int lane)</code>
+  </dt>
+      
+  <dd> Returns the number of <code>Schedulables</code> that are
+      currently running at this level for the given lane.<p> </dd>
+
+  <dt>
+      <code>int pendingThreadCount(int lane)</code>
+  </dt>
+      
+  <dd> Returns the number of <code>Schedulables</code> that are
+      currently queued at this level for the given lane.<p> </dd>
+
+  <dt>
+      <code>int activeThreadCount(int lane)</code>
+  </dt>
+      
+  <dd> Returns the number of <code>Schedulables</code> that are
+      currently either running or queued at this level for the given
+      lane.<p> </dd> 
+
+  <dt>
+      <code>int maxRunningThreadCount(int lane)</code>
+  </dt>
+      
+  <dd> Returns the maximum number of <code>Schedulables</code>
+      that are allowed to run at any one time (across all
+      levels) for the given lane.<p> </dd>
+
   <dt>
       <code>int runningThreadCount()</code>
   </dt>
       
   <dd> Returns the number of <code>Schedulables</code> that are
-      currently running at this level.<p> </dd>
+      currently running at this level for the default lane.<p> </dd>
 
   <dt>
       <code>int pendingThreadCount()</code>
   </dt>
       
   <dd> Returns the number of <code>Schedulables</code> that are
-      currently queued at this level,<p> </dd>
+      currently queued at this level for the default lane.<p> </dd>
 
   <dt>
       <code>int activeThreadCount()</code>
   </dt>
       
   <dd> Returns the number of <code>Schedulables</code> that are
-      currently either running or queued at this level.<p> </dd>
+      currently either running or queued at this level for the default
+      lane.<p> </dd> 
 
   <dt>
       <code>int maxRunningThreadCount()</code>
@@ -119,8 +251,8 @@
       
   <dd> Returns the maximum number of <code>Schedulables</code>
       that are allowed to run at any one time (across all
-      levels).<p> </dd>
-
+      levels) for the default lane.<p> </dd>
+      
 </dl>
 
 </body>

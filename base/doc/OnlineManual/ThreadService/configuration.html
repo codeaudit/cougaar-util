@@ -14,23 +14,52 @@
 
 <dl>
 
-  <dt><b>org.cougaar.thread.running.max</b></dt>
+  <dt><b>org.cougaar.thread.trivial</b></dt>
 
-  <dd>Provide an integer as the value of this property to set the
-  absolute maximum number of running threads as well as the current
-  max and the size of the thread pool (default = 30).  A negative
-  value is interpreted to mean that an unlimited number of threads can
-  run.  The current max can be altered dynamically via the
-  <code>ThreadControlService</code> but can never exceed the value
-  given here. <p> </dd>
-
-  <dt><b>org.cougaar.thread.poolsize.initial</b></dt>
-  <dd>Provide a positive integer as the value of this property to set
-  the number of Java native threads that are instantiated initially in the
-  thread pool.
-  </dd>
-
+  <dd>Set this to "true" to use the extremely simple Thread Service
+  implementation (with no Schedulers, control, or listener callbacks).
+  Later this will be handled via Component Descriptions.  <p> </dd>
+      
 </dl>
+
+<h3>Component Parameters</h3>
+
+<dl>
+
+  <dt><b>BestEffortAbsCapacity</b></dt>
+
+  <dd>Set this to an integer to specify the maximum number of threads
+      that can ever run in the <code>BEST_EFFORT_LANE</code>. This
+      only has relevace for the Node-level Thread Service.  The
+      default value is 300. <p>
+  </dd>
+      
+  <dt><b>WillBlockAbsCapacity</b></dt>
+
+  <dd>Set this to an integer to specify the maximum number of threads
+      that can ever run in the <code>WILL_BLOCK_LANE</code>. This
+      only has relevace for the Node-level Thread Service. The
+      default value is 30. <p>
+  </dd>
+      
+  <dt><b>CpuIntenseAbsCapacity</b></dt>
+
+  <dd>Set this to an integer to specify the maximum number of threads
+      that can ever run in the <code>CPU_INTENSE_LANE</code>. This
+      only has relevace for the Node-level Thread Service. The
+      default value is 2. <p>
+  </dd>
+      
+  <dt><b>WellBehavedAbsCapacity</b></dt>
+
+  <dd>Set this to an integer to specify the maximum number of threads
+      that can ever run in the <code>WELL_BEHAVED_LANE</code>. This
+      only has relevace for the Node-level Thread Service. The
+      default value is 2. <p>
+  </dd>
+      
+</dl>
+
 
 <h3> Servlets </h3>
 
@@ -50,6 +79,15 @@
   should be loaded into the NodeAgent.<p>
   </dd>
 
+  <dt><b>org.cougaar.core.thread.ThreadWellBehavedPlugin </b></dt>
+  <dd>
+      Loading this plugin into an Agent causes that Agent to use the
+  WELL_BEHAVED_LANE as its default. The plugin also accepts a
+  parameter "defaultLane" to set some other initial default.  For now
+  the parameter value should be given directly as an integer, not
+  symbolically. <p>
+  </dd>
+      
 </dl>
 
 

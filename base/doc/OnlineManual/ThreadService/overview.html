@@ -17,15 +17,15 @@ controlled.  The central new interface is
 which can be thought of as taking the place of a Java native thread.
 <code>Schedulables</code> are created and returned by the
 
-<a href="ThreadService.html"><code>ThreadService</code></a>
-and started by client code.  Unlike native Java threads,
+<a href="ThreadService.html"><code>ThreadService</code></a> and
+started by client code.  Unlike native Java threads,
 <code>Schedulables</code> don't necessarily run immediately.  The
 Threading Services allow only a certain number of threads to be
 running at once.  If a <code>Schedulable</code> is started when all
 threads slots are in use, it will be queued and will only run when
-enough running threads have become stopped to allow it reach the head
-of the queue.  The maximum number of running <code>Schedulables</code>
-as well as the queue ordering can be controlled by the
+enough running threads have stopped to allow it reach the head of the
+queue.  The maximum number of running <code>Schedulables</code> as
+well as the queue ordering can be controlled by the
 
 <a
 href="ThreadControlService.html"><code>ThreadControlService</code></a>.
@@ -55,6 +55,11 @@ In principle this hierarchy could be extended to a further depth
 but so far we haven't found any good reason to do that in practice.
 </p>
 
+<p> Within a level, scheduling is further subdivided into lanes.
+There are currently four hardwired lanes.  A lane is associated with a
+<code>Schedulable</code> at creation time and remains fixed for the
+lifetime of the <code>Schedulable</code>.
+
 <p>The design of the thread services has important implications for
 the runtime pattern of the <code>Runnables</code> it will be running.
 In particular, it's not generally a good idea for these
@@ -62,7 +67,9 @@ In particular, it's not generally a good idea for these
 with a <code>wait</code> or <code>sleep</code> call should usually be
 unwrapped into a simple 'strip' of code that reschedules itself if it
 needs to run again.  Examples can be seen in <a
-href="usecases.html">Use Cases and Examples</a>.</p>
+href="usecases.html">Use Cases and Examples</a>.  Code which needs to
+block or to use an unusual amount of resources should run in the
+appropriate lane if at all possible. </p>
 
 </body>
 </html>

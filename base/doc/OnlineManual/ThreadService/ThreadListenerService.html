@@ -11,6 +11,33 @@
 <dl>
 
   <dt>
+      <code>void addListener(ThreadListener listener, int lane)</code>
+  </dt>
+      
+  <dd>
+
+      Adds the given listener to the list of those which will receive
+      callback notifications for 'interesting' thread events (queued,
+      dequeued, started, stopped, etc) at this level of the Thread
+      Services, for the given lane.  <p>
+      
+  </dd>
+
+  <dt>
+      <code> void removeListener(ThreadListener listener, int lane)</code>
+  </dt>
+      
+  <dd>
+
+      
+      Removes the given listener from the list of those which
+      will receive callback notifications for 'interesting'
+      thread events (queued, dequeued, started, stopped, etc) at
+      this level of the Thread Services, for the given lane. <p>
+      
+  </dd>
+
+  <dt>
       <code>void addListener(ThreadListener listener)</code>
   </dt>
       
@@ -19,7 +46,7 @@
       Adds the given listener to the list of those which will
       receive callback notifications for 'interesting' thread
       events (queued, dequeued, started, stopped, etc) at this
-      level of the Thread Services.  <p>
+      level of the Thread Services, for the default lane.<p>
       
   </dd>
 
@@ -33,7 +60,7 @@
       Removes the given listener from the list of those which
       will receive callback notifications for 'interesting'
       thread events (queued, dequeued, started, stopped, etc) at
-      this level of the Thread Services. <p>
+      this level of the Thread Services, for the default lane. <p>
       
   </dd>
 
