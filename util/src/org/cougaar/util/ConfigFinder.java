@@ -35,7 +35,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
@@ -68,7 +67,7 @@ import org.xml.sax.SAXException;
  *
  * The default value for org.cougaar.config.path is defined in the static
  * variable defaultConfigPath:
- *   $CWD;$HOME/.alp;$INSTALL/configs/$CONFIG;$INSTALL/configs/common
+ *   $CWD;$INSTALL/configs/$CONFIG;$INSTALL/configs/common
  *
  * If a value is specified for org.cougaar.config.path that ends with a
  * semicolon, the above default is appended to the specified
@@ -99,7 +98,7 @@ import org.xml.sax.SAXException;
  * Setting this property means that CIP/configs/<value of this property> will be searched before configs/common 
  **/
 public class ConfigFinder {
-  private List configPath = new ArrayList(11);
+  private List configPath;
   private final  Map properties; // initialized by all constructors
 
   private Logger logger = null; // use getLogger to access
@@ -160,7 +159,7 @@ public class ConfigFinder {
       getLogger().debug("ConfigFinder class: " + this.getClass().getName());
     }
 
-    properties = new HashMap();
+    properties = new HashMap(89);
     if (props != null) properties.putAll(props);
 
     if (s == null) {
@@ -171,24 +170,19 @@ public class ConfigFinder {
       if (s.endsWith(";")) s += Configuration.getConfigPath();
     }
 
-    Vector mv = null;
+    ArrayList v = new ArrayList();
+
     if (module != null) {
       properties.put("MOD", module);
+      properties.put("MODULE", module);
       // Tack on to the front of the search path CIP/module/configs/$CONFIG
       // CIP/module/configs, CIP/module/data/CONFIG, CIP/module/data
-      mv = new Vector(4);
-      mv.add("$INSTALL/$MOD/configs/$CONFIG");
-      mv.add("$INSTALL/$MOD/configs");
-      mv.add("$INSTALL/$MOD/data/$CONFIG");
-      mv.add("$INSTALL/$MOD/data");
+      v.add("$INSTALL/$MOD/configs/$CONFIG");
+      v.add("$INSTALL/$MOD/configs");
+      v.add("$INSTALL/$MOD/data/$CONFIG");
+      v.add("$INSTALL/$MOD/data");
     }
 
-    Vector v;
-
-    if (mv != null)
-      v = new Vector(mv);
-    else 
-      v = new Vector();
     
     {
       String[] els = s.trim().split("\\s*;\\s*");
@@ -197,12 +191,22 @@ public class ConfigFinder {
       }
     }
 
-    int l = v.size();
-    for (int i = 0; i < l; i++) {
-      appendPathElement((String) v.elementAt(i));
-    }
-
-    configPath = Collections.unmodifiableList(configPath); //  make it unmodifiable
+    // make sure the configPath is only URLs
+    configPath = Collections.unmodifiableList((List) Mappings.mapcan(new Mapping() {
+        public Object map(Object o) {
+          if (o instanceof String) {
+            try {
+              return resolveName((String) o);
+            } catch (MalformedURLException mue) {
+              getLogger().error("Bad ConfigPath element \""+o+"\"", mue);
+            }
+          } else if (o instanceof URL) {
+            return o;
+          }
+          return null;
+        }
+      },
+                                                              v));
     if (getLogger().isInfoEnabled()) {
       StringBuffer sb = new StringBuffer("ConfigPath = ");
       for (Iterator it = configPath.iterator(); it.hasNext();) {
@@ -226,6 +230,7 @@ public class ConfigFinder {
    * @deprecated Use Configuration.getInstallURL();
    **/
   public URL getInstallURL() { return Configuration.getInstallURL(); }
+
   /** @return the current config directory (or common, if undefined) 
    * @deprecated Use Configuration.getConfigURL();
    **/
@@ -233,20 +238,6 @@ public class ConfigFinder {
 
   protected final String substituteProperties(String s) {
     return Configuration.substituteProperties(s, properties);
-  }
-
-  protected final void appendPathElement(URL url) {
-    if (!configPath.contains(url)) {
-      configPath.add(url);
-    }
-  }
-
-  protected final void appendPathElement(String el) {
-    try {
-      appendPathElement(resolveName(el));
-    } catch (MalformedURLException mue) {
-      getLogger().warn("Ignoring unparsable path element \""+el+"\"", mue);
-    }
   }
 
   /**
