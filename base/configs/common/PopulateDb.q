@@ -669,7 +669,8 @@ recipeQueryAllNodes =\
  SELECT C.COMPONENT_ALIB_ID \
    FROM alib_component C, asb_component_hierarchy H \
   WHERE C.COMPONENT_TYPE='node' \
-    AND H.PARENT_COMPONENT_ALIB_ID = C.COMPONENT_ALIB_ID \
+    AND (H.PARENT_COMPONENT_ALIB_ID = C.COMPONENT_ALIB_ID OR \
+         H.COMPONENT_ALIB_ID = C.COMPONENT_ALIB_ID) \
     AND H.ASSEMBLY_ID :assembly_match:
 
 # Then, get a set of Nodes by name
