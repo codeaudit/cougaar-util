@@ -61,6 +61,31 @@ public final class ComponentDescription implements Serializable {
   /** Default priority for ComponentDescription objects **/
   public final static int PRIORITY_STANDARD = PRIORITY_COMPONENT;
 
+  /** return a priority value, given a priority string which is one of HIGH, INTERNAL, BINDER, COMPONENT,
+   * LOW, or STANDARD.
+   **/
+  public final static int parsePriority(String s) {
+    if ("HIGH".equals(s)) return PRIORITY_HIGH;
+    if ("INTERNAL".equals(s)) return PRIORITY_INTERNAL;
+    if ("BINDER".equals(s)) return PRIORITY_BINDER;
+    if ("COMPONENT".equals(s)) return PRIORITY_COMPONENT;
+    if ("LOW".equals(s)) return PRIORITY_LOW;
+    if ("STANDARD".equals(s)) return PRIORITY_STANDARD;
+
+    throw new IllegalArgumentException("Unknown priority string \""+s+"\"");
+  }
+
+  /** return a priority string given a legal priority value **/
+  public final static String priorityToString(int p) {
+    if (p==PRIORITY_HIGH) return "HIGH";
+    if (p==PRIORITY_INTERNAL) return "INTERNAL";
+    if (p==PRIORITY_BINDER) return "BINDER";
+    if (p==PRIORITY_COMPONENT) return "COMPONENT";
+    if (p==PRIORITY_LOW) return "LOW";
+    throw new IllegalArgumentException("Unknown priority value "+p);
+  }
+
+
   private final String name;
   private final String insertionPoint;
   private final String classname;

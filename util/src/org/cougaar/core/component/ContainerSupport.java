@@ -535,4 +535,115 @@ public abstract class ContainerSupport
    **/
   abstract protected ContainerAPI getContainerProxy();
 
+
+  private ComponentDescriptions externalComponentDescriptions = null;
+
+  /** return a ComponentDescriptions object which contains a set of ComponentDescriptions
+   * defined externally to be loaded into this Container. 
+   * This will return the value computed by findExternalComponentDescriptions()
+   * Note that this value is not filled until ContainerSupport.load() has been called.
+   * @see #findExternalComponentDescriptions
+   * @return null if no component descriptions specified.
+   **/
+  protected final ComponentDescriptions getExternalComponentDescriptions() {
+    return externalComponentDescriptions;
+  }
+  
+  /** Extending classes may override this method to define a set of externally-specified
+   * Component to load.  Will be called during load() immediately after super.load().
+   * load will set the value returned by getExternalComponentDescriptions(), so that 
+   * loadInternalSubcomponents, etc can retrieve the values.
+   * @return null if none.
+   **/
+  protected ComponentDescriptions findExternalComponentDescriptions() {
+    return null;
+  }
+
+  /** Calles super.load() to transit the state, sets the value of getExternalComponentDescriptions() 
+   * by calling findExternalComponentDescriptions(), then invokes each of
+   * loadHighPriorityComponents(), loadInternalPriorityComponents(), 
+   * loadBinderPriorityComponents(), loadComponentPriorityComponents(), loadLowPriorityComponents() in order.
+   **/
+  public void load() {
+    super.load();
+    externalComponentDescriptions = findExternalComponentDescriptions();
+    loadHighPriorityComponents();
+    loadInternalPriorityComponents();
+    loadBinderPriorityComponents();
+    loadComponentPriorityComponents();
+    loadLowPriorityComponents();
+  }
+    
+  /** Should check the ComponentDescription to see if it should
+   * be loaded into the Container.  Implementations may use any rules 
+   * they'd like.  The default implementation returns true IFF the
+   * insertion point of the ComponentDescription is a direct child
+   * of the ContainmentPoint.  The basic component model only calls
+   * this method during the default load() methods - e.g. only
+   * to load components specified by getExternalComponentDescriptions().
+   * @return true iff the specified ComponentDescription should be loaded.
+   **/
+  protected boolean isSubComponentLoadable(ComponentDescription cd) {
+    String cpr = containmentPrefix;
+    int cprl = cpr.length();
+    
+    String ip = cd.getInsertionPoint();
+    return (ip.startsWith(cpr) && // starts with the containment point+'.'
+            ip.indexOf(".", cprl+1) == -1 // no more '.'
+            );
+  }
+
+  /** Hook for loading all the high priority subcomponents.  The default implementation
+   * loads all high priority components which match getSubComponentInsertionPoints().
+   **/
+  protected void loadHighPriorityComponents() {
+    loadSubComponentsByPriority(ComponentDescription.PRIORITY_HIGH);
+  }
+
+  /** Hook for loading all the internal priority subcomponents.  The default implementation
+   * loads all internal priority components which match getSubComponentInsertionPoints().
+   **/
+  protected void loadInternalPriorityComponents() {
+    loadSubComponentsByPriority(ComponentDescription.PRIORITY_INTERNAL);
+  }
+
+  /** Hook for loading all the binder priority subcomponents.  The default implementation
+   * loads all binder priority components which match getSubComponentInsertionPoints().
+   **/
+  protected void loadBinderPriorityComponents() {
+    loadSubComponentsByPriority(ComponentDescription.PRIORITY_BINDER);
+  }
+
+  /** Hook for loading all the component priority subcomponents.  The default implementation
+   * loads all component priority components which match getSubComponentInsertionPoints().
+   **/
+  protected void loadComponentPriorityComponents() {
+    loadSubComponentsByPriority(ComponentDescription.PRIORITY_COMPONENT);
+  }
+
+  /** Hook for loading all the low priority subcomponents.  The default implementation
+   * loads all low priority components which match getSubComponentInsertionPoints().
+   **/
+  protected void loadLowPriorityComponents() {
+    loadSubComponentsByPriority(ComponentDescription.PRIORITY_LOW);
+  }
+
+  /** Utility method used buy the Load*PriorityComponents methods.
+   * adds components as specified by getExternalComponentDescriptions
+   * of the specified priority.
+   **/
+  protected void loadSubComponentsByPriority(int priority) {
+    ComponentDescriptions cds = getExternalComponentDescriptions();
+    if (cds == null) return;
+
+    List pcd = cds.selectComponentDescriptions(priority);
+    if (pcd == null) return;
+    
+    for (Iterator it = pcd.iterator(); it.hasNext(); ) {
+      ComponentDescription cd = (ComponentDescription) it.next();
+      if (isSubComponentLoadable(cd)) {
+        add(cd);
+      }
+    }
+  }
 }
