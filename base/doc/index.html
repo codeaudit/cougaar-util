@@ -69,7 +69,9 @@ that were detected/posted after this Cougaar version was released.
   <!-- COUGAAR 10.4 COUGAAR 10.4 COUGAAR 10.4 COUGAAR 10.4 COUGAAR 10.4 -->
 
 <p> <b>Build 10.4</b> is a major release, including multiple new
-  features and some repackaging.
+features and some repackaging.  It incorporates all new
+functionality introduced in the experimental 10.3 release, along with
+the following additional features and fixes.
 <p>
 <ul>
 <li>UltraLog specific configuration information has been removed from 
@@ -90,6 +92,14 @@ that were detected/posted after this Cougaar version was released.
 </li>
 <li>Minitestconfig now includes the WhitePages servlet. It also uses
   the newer GLM completion servlet instead of the older one.
+</li>
+<li>bin/Node is now implemented as a sh script rather than csh.  It is
+much more flexible and avoids needing to modify the script to pass
+extra options in most cases.
+</li>
+<li>Significant cleaning up (mostly removal) of long-unused code and
+files.  If you discover that your favorite package has been removed in
+this release, please write to cougaar-developers@cougaar.org
 </li>
 </ul>
 
