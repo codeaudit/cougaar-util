@@ -23,7 +23,7 @@ package org.cougaar.util;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.util.WeakHashMap;
+import java.util.Map;
 
 /**
  * Some utilities for java reflection that are more efficient and/or slightly
@@ -32,7 +32,7 @@ import java.util.WeakHashMap;
 
 public final class Reflect {
   /** map of class->methods **/
-  private static final WeakHashMap methodsCache = new WeakHashMap(89);
+  private static final Map methodsCache = new LRUCache(256);
 
   /** memoize class.getMethods(); **/
   public static Method[] getMethods(Class cl) {
@@ -63,7 +63,7 @@ public final class Reflect {
   }
          
 
-  private static final WeakHashMap constructorCache = new WeakHashMap(89);
+  private static final Map constructorCache = new LRUCache(256);
 
   /** memoize class.getConstructors(); **/
   public static Constructor[] getConstructors(Class cl) {
