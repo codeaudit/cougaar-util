@@ -1,0 +1,12 @@
+2002-06-10  Michael Thome  <mthome@bbn.com>
+
+	* Bootstrapper
+	Use XURLClassLoader rather than BootstrapClassLoader to avoid a
+	fragile classpath.  This means that application jars, in general,
+	must not appear on the classpath when using bootstrapper, or we
+	risk classloader namespace interaction problems.  Fixes RFE 1434
+	and BUG 1413.
+
+	Also added a system property org.cougaar.bootstrap.classloader.class 
+	to allow specification of the classloader to use without having to
+	write a new bootstrapper implementation.

@@ -220,10 +220,30 @@ public class Bootstrapper
     return createClassLoader(l);
   }
 
-  /** construct the right classloader, given a list of URLs **/
+  /** construct the right classloader, given a list of URLs.
+   * The default method uses the value of the system property
+   * "org.cougaar.bootstrap.classloader.class" as a class to find,
+   * then calls the constructor with a URL[] as the single argument
+   * (e.g. like a URLClassLoader).
+   * <p>
+   * The default is to create an {@link XURLClassLoader}, but another 
+   * good option is a {@link BootstrapClassLoader}.
+   * @property org.cougaar.bootstrap.classloader.class Specifies the classloader
+   * class to use.
+   **/
   protected ClassLoader createClassLoader(List l) {
     URL urls[] = (URL[]) l.toArray(new URL[l.size()]);
-    return new BootstrapClassLoader(urls);
+
+    String clname = System.getProperty("org.cougaar.bootstrap.classloader.class", 
+                                       "org.cougaar.bootstrap.XURLClassLoader");
+    try {
+      Class clclazz = Class.forName(clname);
+      Constructor clconst = clclazz.getConstructor(new Class[] { URL[].class });
+      ClassLoader cl = (ClassLoader) clconst.newInstance(new Object[] { urls });
+      return cl;
+    } catch (Exception e) {
+      throw new Error("Could not bootstrap the classloader", e);
+    }
   }
 
   /** Find the primary application entry point for the application class and call it.
