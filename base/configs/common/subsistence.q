@@ -16,3 +16,8 @@ ClassIMenuList = select NSN, nomenclature, rotation_day from Class1_Item where m
 ClassISupplementList = select supplement_item_nsn,  supplement_item_rate from class1_Supplement_Rate where meal_type = :meal and alternate_name = :nomn
 
 Class1ConsumedList = select nsn from class1_item
+
+ClassIMenuItems = select NSN, alternate_name from class1_menuitem
+
+ClassISpecialItems = select NSN, alternate_name from class1_item where NSN like '%BRK%' or NSN like '%LD%'
+
