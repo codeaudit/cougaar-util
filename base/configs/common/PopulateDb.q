@@ -40,19 +40,18 @@ insertAgentOrg=\
 
 checkRelationship=\
  SELECT '1' FROM V4_ASB_AGENT_RELATION \
-  WHERE ASSEMBLY :assembly_match: \
+  WHERE ASSEMBLY_ID :assembly_match: \
     AND ROLE = :role: \
     AND SUPPORTING_COMPONENT_ALIB_ID = :supporting: \
     AND SUPPORTED_COMPONENT_ALIB_ID = :supported: \
-    AND START_DATE = :start_date: \
-    AND END_DATE = :end_date:
+    AND START_DATE = :start_date:
 
 insertRelationship=\
  INSERT INTO V4_ASB_AGENT_RELATION \
     (ASSEMBLY_ID, ROLE, \
      SUPPORTING_COMPONENT_ALIB_ID, SUPPORTED_COMPONENT_ALIB_ID, \
      START_DATE, END_DATE) \
- VALUES
+ VALUES \
     (:assembly_id:, :role:, :supporting:, :supported:, :start_date:, :end_date:)
 
 insertAttribute=\
