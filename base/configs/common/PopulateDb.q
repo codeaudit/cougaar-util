@@ -246,7 +246,7 @@ cleanTrialRecipe=\
  DELETE FROM V4_EXPT_TRIAL_MOD_RECIPE \
   WHERE TRIAL_ID = ':trial_id:'
 
-querySubordinatesOf3_BDE_2ID_HHC=\
+recipeQuerySubordinatesOf3_BDE_2ID_HHC=\
  SELECT SPTG.COMPONENT_ALIB_ID \
    FROM V4_ALIB_COMPONENT SPTG, V4_ALIB_COMPONENT SPTD, V4_ASB_AGENT_RELATION R \
   WHERE R.SUPPORTED_COMPONENT_ALIB_ID = SPTD.COMPONENT_ALIB_ID \
@@ -255,9 +255,12 @@ querySubordinatesOf3_BDE_2ID_HHC=\
     AND R.ASSEMBLY_ID :assembly_match: \
     AND SPTD.COMPONENT_NAME = '3-BDE-2ID-HHC'
 
-queryExampleBinderSpecification=\
+recipeQueryExampleBinderSpecification=\
  SELECT 'org.cougaar.core.examples.PluginServiceFilter', 'binder', 'org.cougaar.core.examples.PluginServiceFilter' \
    FROM DUAL
 
-queryExampleBinderArgs=\
+recipeQueryExampleBinderArgs=\
  SELECT NULL, NULL FROM DUAL WHERE DUMMY IS NULL;
+
+recipeQuerySelectNothing=\
+ SELECT * FROM DUAL WHERE DUMMY IS NULL;
