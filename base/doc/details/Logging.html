@@ -25,9 +25,9 @@ Currently a component can only obtain a log with its classname as the
 log category name; i.e. log messages written by the component will be
 identified by the component classname.
 <p>
-The LoggingService defines 5 logging levels:
+The LoggingService defines 6 logging levels:
 <pre>
-   DEBUG &lt; INFO &lt; WARN &lt; ERROR &lt; FATAL
+   DEBUG &lt; INFO &lt; WARN &lt; ERROR &lt; SHOUT &lt; FATAL
 </pre>
 and three generic methods:
 <pre>
@@ -65,9 +65,16 @@ A general guide to logging levels is:
   <li>use INFO for user-level "verbose" details that may be 
       of interest but can be ignored</li>
   <li>use WARN for user-level warnings that are important 
-      but ignorable</li>
+      but ignorable.  This is the default level for
+      cougaar logging.</li>
   <li>use ERROR for significant problems (exceptions, etc)
-      that can't be recovered from</li>
+      that can't be recovered from.  Log statements at
+      ERROR or higher are rarely filtered out.</li>
+  <li>use SHOUT for significant information messages that
+      one would otherwise sent to standard-out, such as
+      "Started node".  This level should only be used
+      for occasional non-ignorable information messages.
+      Most developers should consider using INFO instead.</li>
   <li>only use FATAL for violations of major assumptions</li>
 </ul>
 <p>
@@ -120,8 +127,8 @@ The system properties are:
       contents.</li>
 </ul>
 Note that if you use any of the above 
-"-Dorg.cougaar.core.logging.*" properties then you must fully
-specify the logging configuration.
+"-Dorg.cougaar.core.logging.*" properties then you <b>must</b> 
+fully specify the logging configuration.
 <p>
 Here is a minimal log4j property file that matches the Cougaar
 default logging configuration:
@@ -153,6 +160,14 @@ In some cases you may need to specify the category name:
 <pre>
   log4j.category.org.cougaar.core=INFO,A1
 </pre>
+<p>
+One special level is cougaar-specific SHOUT, which must additionally 
+specify the classname of the shout implementation:
+<pre>
+  log4j.category.com.foo.MyPlugin=SHOUT#org.cougaar.util.log.log4j.ShoutPriority
+</pre>
+Typically one only filters at ERROR or FATAL, so a reference to
+SHOUT in a properties file is rarely used.
 <p>
 Additional documentation on log4j configuration is provided in
 <a href="http://jakarta.apache.org/log4j/docs/manual.html"
