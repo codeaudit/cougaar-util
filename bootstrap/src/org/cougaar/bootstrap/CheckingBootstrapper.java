@@ -148,7 +148,7 @@ public class CheckingBootstrapper extends Bootstrapper
       String mname = (String) map.get("NAME");
       String mrtime = (String) map.get("REPOSITORY_TIME");
       String mrtag = (String) map.get("REPOSITORY_TAG");
-      String mcomment = (String) map.get("COMMENT");
+      //      String mcomment = (String) map.get("COMMENT");
       String murl = (String) map.get("URL");
 
       if (mname == null || mrtime == null || mrtag == null || murl == null) {
