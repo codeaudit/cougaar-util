@@ -36,7 +36,10 @@ unusedAssemblies = \
   (SELECT ASSEMBLY_ID FROM expt_trial_assembly) \
    AND \
    AA.ASSEMBLY_ID NOT IN \
-  (SELECT ASSEMBLY_ID FROM expt_trial_config_assembly)
+  (SELECT ASSEMBLY_ID FROM expt_trial_config_assembly) \
+   AND \
+   AA.ASSEMBLY_ID NOT IN \	
+  (SELECT ARG_VALUE FROM lib_mod_recipe_arg)
 
 # FIXME - this double left join may not work, may be slow
 unusedAssemblies.mysql = \
@@ -44,8 +47,12 @@ unusedAssemblies.mysql = \
   asb_assembly AA LEFT JOIN  expt_trial_config_assembly ETA \
   ON (AA.ASSEMBLY_ID=ETA.ASSEMBLY_ID) \
     LEFT JOIN expt_trial_assembly ETAR \
-    ON (AA.ASSEMBLY_ID=ETAR.ASSEMBLY_ID) \
-  WHERE ETA.ASSEMBLY_ID IS NULL AND ETAR.ASSEMBLY_ID IS NULL
+  ON (AA.ASSEMBLY_ID=ETAR.ASSEMBLY_ID) \
+    LEFT JOIN lib_mod_recipe_arg LMRA \
+  ON (AA.ASSEMBLY_ID=LMRA.ARG_VALUE) \
+  WHERE ETA.ASSEMBLY_ID IS NULL \
+   AND ETAR.ASSEMBLY_ID IS NULL \
+   AND LMRA.ARG_VALUE IS NULL
 
 #unusedAssemblies.mysql = \
 # SELECT AA.ASSEMBLY_ID FROM \
