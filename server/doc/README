@@ -1,64 +1,173 @@
-This is the COUGAAR (node) server module.
+This document describes the COUGAAR Application-Server.
 
-To run the server:
-
-	java org.cougaar.tools.server.NodeServer [<site.props> ..]
-or
-	java -jar server.jar [<site.props> ...]
-or (if your system allows jar file execution):
-	server.jar [<site.props> ..]
-
-"<site.props>" is zero or more optional files which should (minimally)
-specify where org.cougaar.install.path and the minimal classpath needed to
-start a node. 
-
-The server accumulates properties by reading properties from the
-following locations (in order):
-	System.Properties	(of the server VM - e.g. -D arguments)
-	Common.props		(usually in the jar file)
-	Windows.props		(iff the OS is a windows varient)
-	<OS>.props 		(where <OS> is the OS of the machine
-				e.g. "Linux".  If the OS name has
-				embedded spaces, they are replaced
-				with '_' characters - e.g. "Windows_NT.props")
-	<site.props>		(any passed arguments)
-
-Later properties have precedence.
+Also included in this directory are sample "*.props" files
+for running Nodes, which are documented below.
 
 
-To run the client (Console):
+The Application-Server ("AppServer") is used to spawn COUGAAR 
+Nodes from a remote Console.  The AppServer is started on a 
+machine as a daemon-process and listens for remote clients.
+Remote clients contact the AppServer (via RMI) and can:
 
-	java org.cougaar.tools.server.Console hosts config props
+  - Start Nodes.
+  
+  - Listen for StdOut/StdErr and other output from the Node,
+      which is buffered for efficiency.
+      
+  - Interact with a running Node.
+  
+  - Kill running Nodes.
+  
+  - Perform simple accesses of the filesystem (list the contents 
+      of a directory, read the contents of a file, etc).
+    
+  - Perform other soon-to-be-added features (trigger a thread-dump
+      of a running Node's JVM, list the running processes, etc).
 
+A remote client may interact with multiple AppServers to launch 
+a distributed application (such as COUGAAR Nodes).
+
+
+Currently there is little security built into the AppServer.  In the
+future RMI-SSL may be used, plus a custom SecurityManager and other
+enhancements, but for now *RUN AT YOUR OWN RISK*!!!
+
+
+There is a simple UI console included with the AppServer:
+  "org.cougaar.tools.server.Console".
+It is intended as an example and testing-tool -- see the CSMART 
+documentation for a full-fledged UI Console that uses the AppServer.  
+This document concentrates on the AppServer configuration details.
+
+
+The AppServer must be started before the remote client and is
+an independent process.  To run the server:
+
+  <java> [<jvmProps>] [<serverProps>] <classname> [<appProps>]
+  
 where:
-	hosts = a file with a list of hosts where the server might be running.
-	config = a file with a list of node names that might be run
-	props = a file with additional properties to send to the
-		client.
-The console props file will add properties to those of the server to
-determine the final set used to start the Node.  Many server control
-properties cannot be overriden from the console side.
 
-See the documentation file Properties.txt for a list of the standard
-properties used and syntax.
+  <java> is your JVM's executable.
 
-The first node to be run will be assigned to run the nameserver for
-the society.  The port(s) to be used are determined by the
-org.cougaar.tools.server.nameserver.ports property in the argument props or
-"8888:5555". The first number is the nameserver port.  The second
-number is the PSP (webserver) port.  There is no need to supply this
-parameter unless multiple people are running nodes on the same machine 
-(server).
+  <jvmProps> include the "-classpath <path>" and other JVM-specific
+    arguments.  This is *only* used for loading the AppServer.
 
-Once running, the user selects a node from column A and a machine from 
-column B and then presses the run button to launch the node.  The
-output from that node will appear in a new tabbed text display.
+  <serverProps> are "-Dorg.cougaar.tools.server.*" system properties,
+    such as "-Dorg.cougaar.tools.server.verbose=true".  This is 
+    *only* used for configuring the AppServer.  See below for details.
 
-Examples:
-(The data files mentioned below are all in server/data/)
+  <classname> is "org.cougaar.tools.server.NodeServer".
+  
+  <appProps> are either ".props" file names, such as the example
+    "unix-server-sample.props", or "-D" properties for the Node,
+    such as "-Dorg.cougaar.install.path=/opt/alp".  See below for 
+    details.
 
-Starting a server instance:
-	java org.cougaar.tools.server.NodeServer draught.props
+This may be done at a system prompt or may be started as part of
+system start-up (Windows ".bat" files, Unix "init.d", etc).
 
-Starting the gui:
-	java org.cougaar.tools.server.Console sample.hosts minitestconfig sample.props
+
+The server properties default to reasonable values, but they can 
+be specified on the command-line.  They are:
+
+ "-Dorg.cougaar.tools.server.verbose=BOOLEAN"
+      Provide verbose AppServer output, defaults to "false".
+
+ "-Dorg.cougaar.tools.server.loadDefaultProps=BOOLEAN"
+      Automatically load "Common.props" and "{OSNAME}.props" 
+      (e.g. "Windows.props"), defaults to "false".
+
+ "-Dorg.cougaar.tools.server.host=STRING"
+      Host for the RMI registry, defaults to "localhost".
+
+ "-Dorg.cougaar.tools.server.port=INTEGER"
+      Port for the RMI registry, defaults to "8484".
+
+ "-Dorg.cougaar.tools.server.name=STRING"
+      Name for the RMI registry entry, defaults to "ServerHook".
+
+ "-Dorg.cougaar.tools.server.temp.path=STRING"
+      Base path for application file list/read, defaults to ".".
+
+
+The application properties are specified in this order:
+
+  1) If "loadDefaultProps" was defined as "true", then 
+     "Common.props" is loaded.
+
+  2) If "loadDefaultProps" is defined as "true", then 
+     "{OSNAME}.props" is loaded.  Under Linux this loads 
+     "Linux.props".  Under WindowsNT this loads "Windows.props"
+     and "Windows_NT.props".
+
+  3) Next the AppServer's command-line arguments are loaded
+     in order.  Arguments that start with "-D" are set as
+     properties, and all other arguments are loaded as ".props"
+     files.
+
+  4) Lastly the remote client can override these properties
+     when starting a Node.  This is typically used to define
+     the Node's name and other per-Node-specific properties.
+
+Together these properties define *all* the properties used to 
+start the Nodes.  The AppServer is intended to be a generic
+application launcher, so all COUGAAR-specific properties must
+be specified.  Note that the system properties and shell
+environment used to start the AppServer are *not* passed to the
+running Nodes.
+
+Property files ("*.props)" must follow the "java.util.Properties"
+syntax.  Some characters must be "escaped" -- for example, on
+Windows machines one must write the path "c:\a\b" as 
+"c\:\\a\\b".  Properties must not include whitespace.
+
+
+The Node properties follow this format:
+
+  "java.*" properties are JVM properties:
+
+    "java.jvm.program=NAME" which defaults to "java"
+    "java.jvm.green=BOOLEAN" for "-green" threading (which 
+        defaults to false)
+    "java.jvm.mode=NAME" (-classic, -hotspot, etc)
+    "java.class.path=PATH" for "-classpath PATH".  This must
+        be specified.
+    "java.class.name=NAME" for the classname, which defaults to 
+        "org.cougaar.core.society.Node")
+    "java.X*" for the "-X*" parameters (for example,
+        "java.Xms100m" translates to "-Xms100m").
+    "java.java.*" to preserve a "-Djava.*" property (for example,
+        "java.java.foo.bar" translates to "-Djava.foo=bar").
+
+  "env.*" properties are system environment properties.  These
+  are typically operating-system specific:
+
+    "env.DISPLAY=HOST:x.y" for setting a XDisplay.  Note that
+        you must do "xhost +serverhost" to allow these XEvents
+        to popup on your remote client's display.  This is true
+        even if both the AppServer and client are on the same
+        machine.
+    "env.SYSTEMROOT=PATH" is an example system environment 
+        variable that may be required by third-party jars.
+    "env.env.*" to preserve a "-Denv.*" property (for example,
+        "env.env.foo.bar" translates to "-Denv.foo=bar").
+
+  All other properties, such as "org.cougaar.node.name=3ID",
+    are passed as "-D" system properties.
+
+The remote client can also pass command-line arguments, but
+for COUGAAR these are not used.
+
+
+If a remote client starts a Node and later becomes disconnected,
+either due to the client shut-down or an I/O failure, the 
+AppServer will automatically destroy the running Node.
+
+
+The stand-alone AppServer jar is currently broken -- for now the
+AppServer depends upon a couple "core.jar" classes.  Once this has
+been fixed one will be able to do:
+        java -jar server.jar [<site.props> ...]
+or (if your system allows jar file execution):
+        server.jar [<site.props> ..]
+
