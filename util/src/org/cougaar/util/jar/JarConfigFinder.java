@@ -130,14 +130,14 @@ extends ConfigFinder
   private boolean _jarFilesOnly;
   
   /**
-   * Alias for JarConfigFinder({@link Configuration#getConfigPath()}, {@link Configuration#getDefaultProperties())
+   * Alias for JarConfigFinder({@link Configuration#getConfigPath()}, {@link Configuration#getDefaultProperties()})
    */
   public JarConfigFinder() {
     this(Configuration.getConfigPath(), Configuration.getDefaultProperties());
   }
   
   /**
-   * Alias for JarConfigFinder(path, Configuration.getDefaultProperties())
+   * Alias for JarConfigFinder(path, {@link Configuration#getDefaultProperties()})
    */
   public JarConfigFinder(String path) {
     this(path, Configuration.getDefaultProperties());

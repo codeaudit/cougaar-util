@@ -87,7 +87,7 @@ public interface TimeSpan
    * the smallest time span which contains the specified
    * time.  Strictly speaking, this ought to be represeted
    * differently than a span.
-   * @see TimeSpans#getTimePoint(long)
+   * @see TimeSpans#getPoint(long)
    **/
   class Point implements TimeSpan, Serializable {
     private long t;
@@ -102,7 +102,7 @@ public interface TimeSpan
   }
 
   /** A simple implementation of a two-point specified time span.
-   * @see TimeSpans#getTimeSpan(long, long)
+   * @see TimeSpans#getSpan(long, long)
    **/
   class Span implements TimeSpan, Serializable {
     private long t0, t1;
