@@ -25,6 +25,7 @@ while ($file = shift) {
       my ($o) = $1;
       if ($repl{$o}) {
 	s/org\.cougaar\.core\.mts\.(\w+)/org.cougaar.mts.std.$o/;
+	$found++;
       }
     }
     print OUT $_;
@@ -205,7 +206,6 @@ WasteCPUAspect
 WatcherAspect
 EOF
   foreach $_ (split(/\n/,$s)) {
-    print STDERR "tracking $_\n";
     $repl{$_} = 1;
   }
 }
