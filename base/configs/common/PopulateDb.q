@@ -304,6 +304,24 @@ cleanASBOplanAAttr=\
  DELETE FROM v4_asb_oplan_agent_attr \
   WHERE ASSEMBLY_ID IN :assemblies_to_clean:
 
+cleanASBComm=\
+ DELETE FROM community_attribute \
+  WHERE ASSEMBLY_ID IN :assemblies_to_clean:
+
+cleanASBCommEntity=\
+ DELETE FROM community_entity_attribute \
+  WHERE ASSEMBLY_ID IN :assemblies_to_clean:
+
+# Get the (single) Comm assembly from runtime
+# for the given experiment / trial
+queryExptCommAsb=\
+ SELECT eta.ASSEMBLY_ID FROM v4_expt_trial_assembly eta, \
+                            v4_asb_assembly aa \
+  WHERE eta.EXPERIMENT_ID = ':expt_id:' \
+    AND eta.TRIAL_ID = ':trial_id:' \
+    AND aa.ASSEMBLY_TYPE = ':comm_type:' \
+    AND aa.ASSEMBLY_ID = eta.ASSEMBLY_ID
+
 # Get list of non CMT assemblies in RUNTIME configuration
 queryAssembliesToClean=\
  SELECT AA.ASSEMBLY_ID \
@@ -425,6 +443,7 @@ copyCMTThreads2=\
 
 copyCMTThreads3=DROP TABLE `tmp_cmtt_:expt_id:`
 
+# OPLAN Copy stuff
 copyOPLANQueryNames.oracle=copyOPLANEntry copyOPLANAttrEntries
 
 copyOPLANEntry=\
@@ -435,7 +454,7 @@ copyOPLANEntry=\
 
 copyOPLANAttrEntries=\
  INSERT INTO v4_asb_oplan_agent_attr (ASSEMBLY_ID, OPLAN_ID, COMPONENT_ALIB_ID, COMPONENT_ID, START_CDAY, ATTRIBUTE_NAME, END_CDAY, ATTRIBUTE_VALUE) \
-   SELECT ':new_assembly_id:', OPLAN_ID, COMPONENT_ALIB_ID, COMPONENT_ID, START_CDAY, ATTRIBUTE_NAME, END_CDAY, ATTRIBUTE_VALUE) \
+   SELECT ':new_assembly_id:', OPLAN_ID, COMPONENT_ALIB_ID, COMPONENT_ID, START_CDAY, ATTRIBUTE_NAME, END_CDAY, ATTRIBUTE_VALUE \
        FROM v4_asb_oplan_agent_attr \
     WHERE ASSEMBLY_ID = ':old_assembly_id:'
 
@@ -466,6 +485,55 @@ copyOPLANAttrEntries2=\
     FROM `tmp_opae_:old_assembly_id:`
 
 copyOPLANAttrEntries3=DROP TABLE `tmp_opae_:old_assembly_id:`
+# End of OPLAN copy stuff
+
+# Copy Community Assembly
+copyCommQueryNames.oracle=copyCommAttr copyCommEntityAttr
+
+copyCommAttr=\
+ INSERT INTO community_attribute (ASSEMBLY_ID, COMMUNITY_ID, \
+                                 ATTRIBUTE_ID, ATTRIBUTE_VALUE) \
+ SELECT ':new_assembly_id:', COMMUNITY_ID, ATTRIBUTE_ID, ATTRIBUTE_VALUE \
+	FROM community_attribute \
+   WHERE ASSEMBLY_ID = ':old_assembly_id:'
+
+copyCommEntityAttr=\
+ INSERT INTO community_entity_attribute (ASSEMBLY_ID, COMMUNITY_ID, \
+                         ENTITY_ID, ATTRIBUTE_ID, ATTRIBUTE_VALUE) \
+   SELECT ':new_assembly_id:', COMMUNITY_ID, ENTITY_ID, ATTRIBUTE_ID, ATTRIBUTE_VALUE \
+       FROM community_entity_attribute \
+    WHERE ASSEMBLY_ID = ':old_assembly_id:'
+
+copyCommQueryNames.mysql=copyCommAttr1 copyCommAttr2 copyCommAttr3 copyCommEntityAttr1 copyCommEntityAttr2 copyCommEntityAttr3
+
+copyCommAttr1=\
+ CREATE TEMPORARY TABLE `tmp_ca_:old_assembly_id:` AS \
+   SELECT COMMUNITY_ID, ATTRIBUTE_ID, ATTRIBUTE_VALUE \
+    FROM community_attribute \
+   WHERE ASSEMBLY_ID = ':old_assembly_id:'
+
+copyCommAttr2=\
+ INSERT INTO community_attribute (ASSEMBLY_ID, COMMUNITY_ID, \
+                          ATTRIBUTE_ID, ATTRIBUTE_VALUE) \
+  SELECT ':new_assembly_id:', COMMUNITY_ID, ATTRIBUTE_ID, ATTRIBUTE_VALUE \
+   FROM `tmp_ca_:old_assembly_id:`
+
+copyCommAttr3=DROP TABLE `tmp_ca_:old_assembly_id:`
+
+copyCommEntityAttr1=\
+ CREATE TEMPORARY TABLE `tmp_cea_:old_assembly_id:` AS \
+   SELECT COMMUNITY_ID, ENTITY_ID, ATTRIBUTE_ID, ATTRIBUTE_VALUE \
+  FROM community_entity_attribute \
+   WHERE ASSEMBLY_ID = ':old_assembly_id:'
+
+copyCommEntityAttr2=\
+ INSERT INTO community_entity_attribute (ASSEMBLY_ID, COMMUNITY_ID, \
+     ENTITY_ID, ATTRIBUTE_ID, ATTRIBUTE_VALUE) \
+   SELECT ':new_assembly_id:', COMMUNITY_ID, ENTITY_ID, ATTRIBUTE_ID, ATTRIBUTE_VALUE \
+    FROM `tmp_cea_:old_assembly_id:`
+
+copyCommEntityAttr3=DROP TABLE `tmp_cea_:old_assembly_id:`
+# End of Community copy stuff
 
 queryLibRecipeByName=\
  SELECT MOD_RECIPE_LIB_ID, JAVA_CLASS \
