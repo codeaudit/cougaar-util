@@ -1,1 +1,1 @@
-Main-Class: alp.server.ALPServer
+Main-Class: org.cougaar.tools.server.ALPServer

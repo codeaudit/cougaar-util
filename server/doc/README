@@ -2,14 +2,14 @@ This is the ALP (node) server module.
 
 To run the server:
 
-	java alp.server.ALPServer [<site.props> ..]
+	java org.cougaar.tools.server.ALPServer [<site.props> ..]
 or
 	java -jar server.jar [<site.props> ...]
 or (if your system allows jar file execution):
 	server.jar [<site.props> ..]
 
 "<site.props>" is zero or more optional files which should (minimally)
-specify where alp.install.path and the minimal classpath needed to
+specify where org.cougaar.install.path and the minimal classpath needed to
 start a node. 
 
 The server accumulates properties by reading properties from the
@@ -28,7 +28,7 @@ Later properties have precedence.
 
 To run the client (Console):
 
-	java alp.server.Console hosts config props
+	java org.cougaar.tools.server.Console hosts config props
 
 where:
 	hosts = a file with a list of hosts where the server might be running.
@@ -44,7 +44,7 @@ properties used and syntax.
 
 The first node to be run will be assigned to run the nameserver for
 the society.  The port(s) to be used are determined by the
-alp.server.nameserver.ports property in the argument props or
+org.cougaar.tools.server.nameserver.ports property in the argument props or
 "8888:5555". The first number is the nameserver port.  The second
 number is the PSP (webserver) port.  There is no need to supply this
 parameter unless multiple people are running nodes on the same machine 
@@ -58,7 +58,7 @@ Examples:
 (The data files mentioned below are all in server/data/)
 
 Starting a server instance:
-	java alp.server.ALPServer draught.props
+	java org.cougaar.tools.server.ALPServer draught.props
 
 Starting the gui:
-	java alp.server.Console sample.hosts minitestconfig sample.props
+	java org.cougaar.tools.server.Console sample.hosts minitestconfig sample.props

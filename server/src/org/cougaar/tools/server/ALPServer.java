@@ -29,7 +29,7 @@ import org.cougaar.tools.server.*;
 public class ALPServer {
   public static final String DEFAULT_VERBOSITY = "false";
   public static final String DEFAULT_PORT = "8484";
-  public static final String DEFAULT_NAME = "ALPServer";
+  public static final String DEFAULT_NAME = "NodeServer";
   public static final String DEFAULT_CLASS = "org.cougaar.tools.server.RemoteALPServerImpl";
 
   private Registry registry = null;
@@ -66,7 +66,7 @@ public class ALPServer {
       if (verbose) System.err.println(server.toString());
       
     } catch (Exception re) {
-      System.err.println("ALPServer failed:");
+      System.err.println("NodeServer failed:");
       re.printStackTrace();
       System.exit(-1);
     }
