@@ -6,6 +6,13 @@ queryTrialAssemblies=\
  SELECT ASSEMBLY_ID FROM V4_EXPT_TRIAL_ASSEMBLY \
   WHERE TRIAL_ID = ':trial_id:'
 
+queryExptAlibComponents=\
+ SELECT H.COMPONENT_ALIB_ID \
+   FROM V4_ASB_COMPONENT_HIERARCHY H \
+        V4_ALIB_COMPONENT C \
+  WHERE H.COMPONENT_ALIB_ID = C.COMPONENT_ALIB_ID \
+    AND H.ASSEMBLY_ID :assembly_match:
+
 insertAlibComponent=\
  INSERT INTO V4_ALIB_COMPONENT \
     (COMPONENT_ALIB_ID, COMPONENT_NAME, \
@@ -14,13 +21,25 @@ insertAlibComponent=\
      CLONE_SET_ID) \
  VALUES (:component_alib_id:, :component_name:, :component_lib_id:, :component_category:, 0)
 
+updateAlibComponent=\
+ UPDATE V4_ALIB_COMPONENT \n\
+    SET COMPONENT_NAME = :component_name:, \n\
+        COMPONENT_LIB_ID = :component_lib_id:, \n\
+        COMPONENT_TYPE = :component_category: \n\
+ WHERE COMPONENT_ALIB_ID = :component_alib_id:
+
 checkAlibComponent=\
- SELECT COMPONENT_ALIB_ID \
+ SELECT (COMPONENT_NAME = :component_name: \
+     AND COMPONENT_LIB_ID = :component_lib_id: \
+     AND COMPONENT_TYPE = :component_category: \
+     AND CLONE_SET_ID = 0) \
    FROM V4_ALIB_COMPONENT \
   WHERE COMPONENT_ALIB_ID = :component_alib_id:
 
 checkLibComponent=\
- SELECT COMPONENT_LIB_ID \
+ SELECT (COMPONENT_TYPE = :component_category: \
+     AND COMPONENT_CLASS = :component_class: \
+     AND INSERTION_POINT = :insertion_point:) \
    FROM V4_LIB_COMPONENT \
   WHERE COMPONENT_LIB_ID = :component_lib_id:
 
@@ -28,6 +47,13 @@ insertLibComponent=\
  INSERT INTO V4_LIB_COMPONENT \
     (COMPONENT_LIB_ID, COMPONENT_TYPE, COMPONENT_CLASS, INSERTION_POINT, DESCRIPTION) \
  VALUES (:component_lib_id:, :component_category:, :component_class:, :insertion_point:, :description:)
+
+updateLibComponent=\
+ UPDATE V4_LIB_COMPONENT \n\
+    SET COMPONENT_TYPE = :component_category:, \n\
+        COMPONENT_CLASS = :component_class:, \n\
+        INSERTION_POINT = :insertion_point: \n\
+ WHERE COMPONENT_LIB_ID = :component_lib_id:
 
 checkComponentHierarchy=\
  SELECT COMPONENT_ALIB_ID \
@@ -51,6 +77,12 @@ insertComponentHierarchy=\
      INSERTION_ORDER) \
  VALUES (:assembly_id:, :component_alib_id:, :parent_component_alib_id:, :insertion_order:)
 
+queryComponentArgs=\
+ SELECT ARGUMENT, ARGUMENT_ORDER \
+   FROM V4_ASB_COMPONENT_ARG \
+  WHERE ASSEMBLY_ID :assembly_match: \
+    AND COMPONENT_ALIB_ID = :component_alib_id:
+ 
 checkComponentArg=\
  SELECT COMPONENT_ALIB_ID \
    FROM V4_ASB_COMPONENT_ARG \
@@ -64,11 +96,16 @@ insertComponentArg=\
     (ASSEMBLY_ID, COMPONENT_ALIB_ID, ARGUMENT, ARGUMENT_ORDER) \
  VALUES (:assembly_id:, :component_alib_id:, :argument_value:, :argument_order:)
 
+checkAgentOrg=\
+ SELECT COMPONENT_LIB_ID \
+   FROM V4_LIB_AGENT_ORG \
+  WHERE COMPONENT_LIB_ID = :component_lib_id:
+
 insertAgentOrg=\
- INSERT INTO V4_ASB_AGENT_ORG \
-    (COMPONENT_LIB_ID, AGENT_ORG_PROTOTYPE) \
+ INSERT INTO V4_LIB_AGENT_ORG \
+    (COMPONENT_LIB_ID, AGENT_LIB_NAME, AGENT_ORG_CLASS) \
  VALUES \
-    (:component_lib_id:, :agentOrgPrototype:)
+    (:component_lib_id:, :agent_lib_name:, :agent_org_class:)
 
 checkRelationship=\
  SELECT '1' \
