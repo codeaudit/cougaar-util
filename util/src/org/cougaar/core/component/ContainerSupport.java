@@ -433,7 +433,6 @@ implements Container, StateObject
     // find the child and remove it
     Binder removedBinder = null;
     synchronized (boundComponents) {
-      Object found = null;
       for (Iterator it = boundComponents.iterator(); it.hasNext(); ) {
         BoundComponent bc = (BoundComponent) it.next();
 
