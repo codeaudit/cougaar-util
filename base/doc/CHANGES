@@ -1,4 +1,13 @@
 * 10.0
+publishAdd, publishChange and publishRemove now return void rather
+than boolean.  Most users ignored the values anyway, so this change
+implies that serious problems (e.g. change cannot be committed) will
+result in an unchecked exception (BlackboardException) being thrown
+instead of an easy-to-ignore false return value. (bug 168)
+
+ActiveSubscriptionObject methods are now xxxToBlackboard rather than
+xxxToLogPlan and return void rather than boolean.
+
 ClusterIdentifier and NodeIdentifier are gone - all uses are replaced
 by the more generic MessageAddress.  All matching accessors have been
 renamed accordingly.  A 90% solution may be found in the 10.0
