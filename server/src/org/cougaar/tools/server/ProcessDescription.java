@@ -30,6 +30,10 @@ public final class ProcessDescription
 implements java.io.Serializable
 {
 
+  // Make the props and args mutable.  This simplifies 
+  // some client code, but is generally a bad idea.
+  private static final boolean MAKE_IMMUTABLE = false;
+
   private final String name;
   private final String group;
   private final Map javaProps;
@@ -196,6 +200,11 @@ implements java.io.Serializable
    * </ol>.
    */
   private static Map prepareProps(Map m) {
+    if (!MAKE_IMMUTABLE) {
+      // FIXME check for Properties with non-null defaults,
+      // since sometimes "getProperty(..)" != "get(..)"
+      return m;
+    }
     if (m == null) {
       return Collections.EMPTY_MAP;
     }
@@ -228,6 +237,9 @@ implements java.io.Serializable
    * </ol>.
    */
   private static List prepareArgs(List l) {
+    if (!MAKE_IMMUTABLE) {
+      return l;
+    }
     if (l == null) {
       return Collections.EMPTY_LIST;
     }

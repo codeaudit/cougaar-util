@@ -25,9 +25,6 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
-import org.cougaar.tools.server.NodeEvent;
-import org.cougaar.tools.server.NodeEventTranslator;
-
 import org.cougaar.tools.server.RemoteListenable;
 
 import org.cougaar.tools.server.RemoteListenableConfig;
@@ -39,82 +36,129 @@ import org.cougaar.tools.server.OutputPolicy;
 /**
  * Server-side buffer for all output to the client.
  * <p>
- * Can enhance to optionally buffer and only send to client when:
- *   - client forces "flush"  (i.e. client grabs output)
- *   - some maximum buffer size exceeded (i.e. client lets the
- *       server decide, but client can alter it's listen-prefs
- *       to make this occur often/rarely).  Alternately the 
- *       client should be able to specify a "spill" option
- *       to discard the output instead of sending it.
- *   - client toggles some "no-buffer" option (i.e. every "write"
- *       get's sent without buffering)
- *   - some maximum time exceeded (probably a bad idea to 
- *       introduce yet another Thread here!)
- * Could also use a file as a buffer.
+ * Consider enhancing with new non-blocking io (nio).
  */
 class RemoteListenableImpl implements RemoteListenable {
 
-  private static final int MAX_BUFFER_SIZE = 1024;
+  private static final int MIN_SEND_PERIOD = 5000;
 
-  private Object lock = new Object();
+  private final String name;
+  private final BufferWatcher bw;
 
-  // FIXME should be both:
-  //    a list of URLs
-  //    a map of (id, ol) pairs
-  private URL url;
-  private OutputListener ol;
+  /**
+   *
+   */
+  private final Timer timer = new Timer();
+
+  private final TimerTask sendTask = new TimerTask() {
+    public void run() {
+      if (!(flushBuffer(false))) {
+        cancel();
+      }
+    }
+  };
+
+  //
+  // these are locked by the "obLock"
+  //
+  private final Object obLock = new Object();
+  private OutputBundle ob;
+  private OutputStream stdOut;
+  private OutputStream stdErr;
+
+  //
+  // the rest is locked by the "sendLock"
+  //
+  private final Object sendLock = new Object();
+  private OutputWatcher stdOutWatcher;
+  private OutputWatcher stdErrWatcher;
+
+  private Thread stdOutWatcherThread;
+  private Thread stdErrWatcherThread;
+
+  // a map of (id, ol) pairs
+  private final Map listeners = new HashMap(5);
 
   // one policy for all listeners?
   private OutputPolicy op;
 
-  private MyArrayList buf;
-  private boolean stream;
-  private int maxSize;
-  private boolean pushOnFill;
-
-  // stream for URL objects
-  //
-  // FIXME close stream!
-  private Socket urlSocket;
-  private ObjectOutputStream urlStream;
-
   public RemoteListenableImpl(
+      String name,
+      BufferWatcher bw,
       RemoteListenableConfig rlc) {
-    this.ol = rlc.getOutputListener();
-    this.url = rlc.getURL();
-    if ((ol == null) && 
-        (url == null)) {
-      throw new IllegalArgumentException(
-          "Must specify either a URL or OutputListener, or both");
+
+    this.name = name;
+    this.bw = bw;
+    if (bw == null) {
+      throw new IllegalArgumentException("Null buffer watcher");
     }
+
+    // get initial listeners
+    String id = rlc.getId();
+    OutputListener ol = rlc.getOutputListener();
+    if (ol != null) {
+      listeners.put(id, ol);
+    }
+    URL url = rlc.getURL();
+    if (url != null) {
+      listeners.put(id, new URLOutputListenerAdapter(url));
+    }
+
+    // get output policy
     OutputPolicy op = rlc.getOutputPolicy();
-    try {
-      setOutputPolicy(op);
-    } catch (Exception e) {
-      // never, since buffer is empty so no flushing errors
+    this.op = op;
+
+    // create the output buffer
+    ob = new OutputBundle();
+    ob.setCreated(true);
+    ob.setTimeStamp(System.currentTimeMillis());
+
+    // schedule the buffer flush
+    int sendPeriod = MIN_SEND_PERIOD;
+    timer.schedule(sendTask, 0, sendPeriod);
+  }
+
+  public void setStreams(InputStream newIn, InputStream newErr) {
+
+    synchronized (obLock) {
+      if (ob == null) {
+        throw new RuntimeException("Output has been closed");
+      }
+
+      stdOut = ob.getDualStreamBuffer().getOutputStream(true);
+      stdErr = ob.getDualStreamBuffer().getOutputStream(false);
+
+      stdOutWatcher = 
+        new OutputWatcher(newIn, true);
+
+      stdErrWatcher = 
+        new OutputWatcher(newErr, false);
+
+      stdOutWatcherThread = 
+        new Thread(stdOutWatcher, name+"-stdOut");
+      stdErrWatcherThread = 
+        new Thread(stdErrWatcher, name+"-stdErr");
+
+      stdOutWatcherThread.start();
+      stdErrWatcherThread.start();
+    }
+  }
+
+  public List list() {
+    synchronized (sendLock) {
+      return
+        (listeners.isEmpty() ?
+         Collections.EMPTY_LIST :
+         (new ArrayList(listeners.keySet())));
     }
   }
 
   public void addListener(URL url) {
-    if (url == null) {
-      throw new IllegalArgumentException(
-          "Client URL can not be null");
-    }
-    synchronized (lock) {
-      if (this.url != null) {
-        throw new UnsupportedOperationException("Multiple listeners");
-      }
-      this.url = url;
-    }
+    addListener(new URLOutputListenerAdapter(url), url.toString());
   }
 
   public void removeListener(URL url) {
-    synchronized (lock) {
-      if (!(url.equals(this.url))) {
-        throw new IllegalArgumentException("Unknown listener: "+url);
-      }
-      this.url = null;
-    }
+    removeListener(url.toString());
   }
 
   public void addListener(OutputListener ol, String id) {
@@ -122,21 +166,27 @@ class RemoteListenableImpl implements RemoteListenable {
       throw new IllegalArgumentException(
           "Client OutputListener can not be null");
     }
-    synchronized (lock) {
-      if (this.ol != null) {
-        throw new UnsupportedOperationException("Multiple listeners");
+    synchronized (sendLock) {
+      OutputListener x = (OutputListener) listeners.put(id, ol);
+      if (x != null) {
+        listeners.put(id, x);
+        throw new RuntimeException(
+            "A listener with id \""+id+
+            "\" is already registered");
       }
-      this.ol = ol;
     }
   }
 
   public void removeListener(String id) {
-    synchronized (lock) {
-      if (this.ol == null) {
-        throw new IllegalArgumentException("Unknown listener id: "+id);
+    synchronized (sendLock) {
+      OutputListener x = (OutputListener) listeners.remove(id);
+      if (x instanceof URLOutputListenerAdapter) {
+        try {
+          ((URLOutputListenerAdapter) x).close();
+        } catch (Exception e) {
+          System.err.println(e);
+        }
       }
-      // FIXME assume the id is the same
-      this.ol = null;
     }
   }
 
@@ -155,188 +205,275 @@ class RemoteListenableImpl implements RemoteListenable {
           "Client OutputPolicy can not be null");
     }
     // set buffering policy
-    synchronized (lock) {
-      int bufSize = op.getBufferSize();
-      if ((this.op == null) ||
-          (this.op.getBufferSize() != bufSize)) {
-        if ((bufSize == 0) ||
-            (bufSize == 1)) {
-          stream = true;
-        } else {
-          stream = false;
-          if (bufSize < 0) {
-            pushOnFill = false;
-            stream = false;
-            bufSize = (-(bufSize));
-          } else {
-            pushOnFill = true;
-            stream = false;
-          }
-          if (bufSize > MAX_BUFFER_SIZE) {
-            bufSize = MAX_BUFFER_SIZE;
-          }
-          this.maxSize = bufSize;
-          if (buf == null) {
-            buf = new MyArrayList(bufSize+1);
-          } else {
-            // flush events -- note that this doesn't filter them, which
-            //   might seem odd...
-            flushOutput();
-            buf.ensureCapacity(bufSize+1);
-          }
-        }
-      }
-      this.op = op;
-    }
+    // FIXME!
+    this.op = op;
   }
 
   public void flushOutput() throws Exception {
-    synchronized (lock) {
-      if ((!(stream)) &&
-          (buf.size() > 0)) {
-        OutputBundle ob = NodeEventTranslator.fromNodeEvents(buf);
-        sendOutputBundle(ob);
-        buf.clear();
-      }
-    }
+    flushBuffer(false);
   }
 
   //
   // for RemoteProcessImpl use only:
   //
 
-  public void appendProcessCreated() throws Exception {
-    appendNodeEvent(NodeEvent.PROCESS_CREATED);
+  public boolean appendIdleUpdate(double percent, long time) {
+    String msg = percent+":"+time;
+    synchronized (obLock) {
+      if (ob == null) {
+        return false;
+      }
+      ob.getIdleUpdates().add(msg);
+    }
+    return true;
   }
 
-  public void appendProcessDestroyed() throws Exception {
-    appendNodeEvent(NodeEvent.PROCESS_DESTROYED);
-  }
+  public void close() throws Exception {
 
-  public void appendHeartbeat() throws Exception {
-    appendNodeEvent(NodeEvent.HEARTBEAT);
-  }
+    synchronized (obLock) {
+      if (ob == null) {
+        return;
+      }
+      ob.setCreated(false);
+      flushBuffer(true);
+      ob = null;
+    }
 
-  public void appendIdleUpdate(
-      double percent, long time) throws Exception {
-    appendNodeEvent(
-        new NodeEvent(
-          NodeEvent.IDLE_UPDATE, 
-          (percent+":"+time)));
-  }
-
-  public void appendOutput(
-      boolean isStdOut, 
-      byte[] buf,
-      int len) throws Exception {
-    appendOutput(
-        isStdOut,
-        (new String(buf, 0, len)));
-  }
-
-  public void appendOutput(
-      boolean isStdOut, String s) throws Exception {
-    appendNodeEvent(
-        new NodeEvent(
-          (isStdOut ? 
-           NodeEvent.STANDARD_OUT : 
-           NodeEvent.STANDARD_ERR),
-          s));
-  }
-
-  private void appendNodeEvent(
-      int typeId) throws Exception {
-    appendNodeEvent(new NodeEvent(typeId, null));
-  }
-
-  private void appendNodeEvent(
-      NodeEvent ne) throws Exception {
-    int neType = ne.getType();
-    synchronized (lock) {
-      if (stream) {
-        // buffer size is zero
-        OutputBundle ob = NodeEventTranslator.fromNodeEvents(ne);
-        sendOutputBundle(ob);
-      } else if (neType == NodeEvent.HEARTBEAT) {
-        // heartbeat should not be buffered (out-of-order is okay)
-        OutputBundle ob = NodeEventTranslator.fromNodeEvents(ne);
-        sendOutputBundle(ob);
-      } else {
-        // append to buffer
-        buf.add(ne);
-        if (buf.size() >= maxSize) {
-          if (pushOnFill) {
-            // send buffered events
-            OutputBundle ob = NodeEventTranslator.fromNodeEvents(buf);
-            sendOutputBundle(ob);
-            buf.clear();
-          } else {
-            // trim oldest 25% of elements!
-            buf.myRemoveRange(0, (maxSize >> 2));
+    // remove all listeners
+    synchronized (sendLock) {
+      for (
+          Iterator iter = listeners.values().iterator();
+          iter.hasNext();
+          ) {
+        OutputListener ol = (OutputListener) iter.next();
+        if (ol instanceof URLOutputListenerAdapter) {
+          try {
+            ((URLOutputListenerAdapter) ol).close();
+          } catch (Exception e) {
+            System.err.println(e);
           }
+        }
+      }
+      listeners.clear();
+    }
+
+    // wait for the streams to end
+    stdOutWatcherThread.join();
+    stdErrWatcherThread.join();
+  }
+
+  //
+  // the rest is private
+  //
+
+  private boolean flushBuffer(boolean isClosing) {
+    // switch buffers
+    OutputBundle t;
+    synchronized (obLock) {
+      if (ob == null) {
+        return false;
+      }
+      t = ob;
+      ob = new OutputBundle();
+      ob.setTimeStamp(System.currentTimeMillis());
+      stdOut = ob.getDualStreamBuffer().getOutputStream(true);
+      stdErr = ob.getDualStreamBuffer().getOutputStream(false);
+    }
+
+    // send the buffered output
+    if (!(sendOutputBundle(t, isClosing))) {
+      // stop the timer
+      return false;
+    }
+
+    // okay
+    return true;
+  }
+
+  private boolean sendOutputBundle(
+      OutputBundle t, boolean isClosing) {
+    // FIXME:
+    // keep multiple threaded queues, one per listener,
+    // so a slow listener won't block all the other listeners
+    synchronized (sendLock) {
+
+      for (
+          Iterator iter = listeners.entrySet().iterator();
+          iter.hasNext();
+          ) {
+        Map.Entry me = (Map.Entry) iter.next();
+        String id = (String) me.getKey();
+        OutputListener ol = (OutputListener) me.getValue();
+
+        // send the output
+        Exception e;
+        try {
+          ol.handleOutputBundle(t);
+          continue;
+        } catch (Exception xe) {
+          e = xe;
+        }
+
+        if (isClosing) {
+          // we're closing, so we don't care if there's a 
+          // problem
+          continue;
+        }
+
+        // notify the failure listener
+        int i;
+        try {
+          i = bw.handleOutputFailure(id, e);
+        } catch (Exception e2) {
+          i = BufferWatcher.KILL_ALL_LISTENERS;
+        }
+        switch (i) {
+          case BufferWatcher.KEEP_RUNNING:
+            break;
+          case BufferWatcher.KILL_CURRENT_LISTENER:
+            removeListener(id);
+          default:
+          case BufferWatcher.KILL_ALL_LISTENERS:
+            try {
+              close();
+            } catch (Exception e3) {
+              System.err.println("Close listeners exception: "+e3);
+            }
+            return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  private class URLOutputListenerAdapter implements OutputListener {
+    // stream for URL objects
+    private URL url;
+    private Socket urlSocket;
+    private ObjectOutputStream urlStream;
+
+    public URLOutputListenerAdapter(URL url) {
+      this.url = url;
+    }
+
+    public void handleOutputBundle(OutputBundle t) throws Exception {
+      if (url != null) {
+        ensureURLStream();
+        urlStream.writeObject(t);
+      }
+    }
+
+    private void ensureURLStream() throws Exception {
+      // within sync(sendLock)
+      if (urlStream == null) {
+        openURLStream();
+        // catch exception and have retry timer?
+      }
+    }
+
+    private void openURLStream() throws Exception {
+      // within sync(sendLock)
+      Socket socket = new Socket(url.getHost(), url.getPort());
+      OutputStream os = socket.getOutputStream();
+      String header = "PUT "+url.getPath()+" HTTP/1.0\r\n\r\n";
+      os.write(header.getBytes());
+      ObjectOutputStream oos = new ObjectOutputStream(os);
+      // save
+      urlSocket = socket;
+      urlStream = oos;
+    }
+
+    private void close() throws Exception {
+      if (url != null) {
+        url = null;
+        closeURLStream();
+      }
+    }
+
+    private void closeURLStream() throws Exception {
+      // within sync(sendLock)
+      if (urlStream != null) {
+        try {
+          urlStream.writeObject(null);
+          urlStream.close();
+          urlSocket.close();
+        } finally {
+          urlStream = null;
+          urlSocket = null;
         }
       }
     }
   }
 
-  public void close() throws Exception {
-    synchronized (lock) {
-      if (url != null) {
-        closeURLStream();
+  /**
+   * Input-to-buffer pipe.
+   */
+  private class OutputWatcher implements Runnable {
+    private static final int BUFFER_SIZE = 1024;
+    private InputStream in;
+    private final boolean isStdOut;
+
+    public OutputWatcher(
+        InputStream in, 
+        boolean isStdOut) {
+      this.in = in;
+      this.isStdOut = isStdOut;
+    }
+
+    public void run() {
+      // we'll stream into the outer buffer
+      byte[] buf = new byte[BUFFER_SIZE];
+      while (true) {
+
+        // read input
+        int len;
+        try {
+          len = in.read(buf);
+        } catch (Exception e) {
+          // notify the failure listener
+          int i;
+          try {
+            i = bw.handleInputFailure(e);
+          } catch (Exception e2) {
+            i = BufferWatcher.KILL_ALL_LISTENERS;
+          }
+          switch (i) {
+            case BufferWatcher.KEEP_RUNNING:
+              continue;
+            default:
+            case BufferWatcher.KILL_ALL_LISTENERS:
+              try {
+                close();
+              } catch (Exception e3) {
+                System.err.println("Close listeners exception: "+e3);
+              }
+              len = -1;
+          }
+        }
+
+        // check for end-of-input
+        if (len < 0) {
+          return;
+        }
+
+        // write to buffer
+        try {
+          synchronized (obLock) {
+            if (ob == null) {
+              return;
+            }
+            if (isStdOut) {
+              stdOut.write(buf, 0, len);
+            } else {
+              stdErr.write(buf, 0, len);
+            }
+          }
+        } catch (Exception e) {
+          // shouldn't happen
+          System.err.println(e);
+        }
       }
     }
   }
 
-  private void sendOutputBundle(OutputBundle ob) throws Exception {
-    // within sync(lock)
-    if (ol != null) {
-      ol.handleOutputBundle(ob);
-    }
-    if (url != null) {
-      ensureURLStream();
-      urlStream.writeObject(ob);
-    }
-  }
-
-  private void ensureURLStream() throws Exception {
-    if (urlStream == null) {
-      openURLStream();
-      // catch exception and have retry timer?
-    }
-  }
-
-  private void openURLStream() throws Exception {
-    Socket socket = new Socket(url.getHost(), url.getPort());
-    OutputStream os = socket.getOutputStream();
-    String header = "PUT "+url.getPath()+" HTTP/1.0\r\n\r\n";
-    os.write(header.getBytes());
-    ObjectOutputStream oos = new ObjectOutputStream(os);
-    // save
-    urlSocket = socket;
-    urlStream = oos;
-  }
-
-  private void closeURLStream() throws Exception {
-    // within sync(lock)
-    if (urlStream != null) {
-      try {
-        urlStream.writeObject(null);
-        urlStream.close();
-        urlSocket.close();
-      } finally {
-        urlStream = null;
-        urlSocket = null;
-      }
-    }
-  }
-
-  /** allows "removeRange" */
-  private static class MyArrayList extends ArrayList {
-    public MyArrayList(int size) {
-      super(size);
-    }
-    public void myRemoveRange(int fromIndex, int toIndex) {
-      super.removeRange(fromIndex, toIndex);
-    }
-  }
 }

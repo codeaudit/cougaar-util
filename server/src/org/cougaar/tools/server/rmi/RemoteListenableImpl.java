@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
 
 import org.cougaar.tools.server.*;
 
@@ -60,6 +61,9 @@ implements RemoteListenableDecl {
   // delegate the rest:
   //
 
+  public List list() throws Exception {
+    return rl.list();
+  }
   public void addListener(URL listenerURL) throws Exception {
     rl.addListener(listenerURL);
   }

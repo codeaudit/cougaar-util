@@ -84,20 +84,14 @@ implements RemoteProcess {
   private long sysPid;
 
   // various watcher Runnables
-  private HeartbeatWatcher hbWatcher;
   private IdleWatcher idleWatcher;
-  private OutputWatcher stdOutWatcher;
-  private OutputWatcher stdErrWatcher;
   private ProcessCompletionWatcher pcWatcher;
 
   // Threads to run the watchers
-  private Thread hbWatcherThread;
   private Thread idleWatcherThread;
-  private Thread stdOutWatcherThread;
-  private Thread stdErrWatcherThread;
   private Thread pcWatcherThread;
 
-  protected boolean swallowOutputConnectionException = false;
+  protected boolean ignoreIOErrors = false;
 
   public RemoteProcessImpl(
       ProcessDescription pd,
@@ -130,7 +124,8 @@ implements RemoteProcess {
     this.cmdLine = cmdLine;
     this.envVars = envVars;
     this.pdl = pdl;
-    this.myRL = new RemoteListenableImpl(rlc);
+    this.myRL = new RemoteListenableImpl(
+        pd.getName(), new MyBufferWatcher(), rlc);
     this.rl = myRL;
 
     // configure
@@ -142,12 +137,12 @@ implements RemoteProcess {
 
     for (int index = 0; index < cmdLine.length; index++) {
       if (cmdLine[index].equals("-Dorg.cougaar.tools.server.swallowOutputConnectionException=true")) {
-        this.swallowOutputConnectionException = true;
+        this.ignoreIOErrors = true;
         break;
       }
     }
 
-    System.out.println("swallowOutputConnectionException: " + swallowOutputConnectionException);
+    System.out.println("swallowOutputConnectionException: " + ignoreIOErrors);
 
     // create the process-launcher
     ProcessLauncher pl = 
@@ -187,8 +182,6 @@ implements RemoteProcess {
     // spawn the process
     sysProc = Runtime.getRuntime().exec(execCmdLine, envVars);
 
-    myRL.appendProcessCreated();
-
     InputStream procIn = sysProc.getInputStream();
 
     if (pl != null) {
@@ -199,54 +192,28 @@ implements RemoteProcess {
       this.sysPid = -1;
     }
 
-    // create all the "watcher" Runnables
+    // start the output streamers
+    
+    myRL.setStreams(procIn, sysProc.getErrorStream());
 
-    hbWatcher = 
-      new HeartbeatWatcher(
-          20000);
+    // create all the "watcher" Runnables
 
     idleWatcher = 
       new IdleWatcher(
           5000);
-
-    stdOutWatcher = 
-      new OutputWatcher(
-          procIn,
-          true);
-
-    stdErrWatcher = 
-      new OutputWatcher(
-          sysProc.getErrorStream(), 
-          false);
-
-    // <would create a registration-watcher here>
 
     pcWatcher = 
       new ProcessCompletionWatcher();
 
     // start all the watchers
 
-    String procName = pd.getName();
-
-    hbWatcherThread = 
-      new Thread(hbWatcher, procName+"-heartbeat");
-    hbWatcherThread.start();
-
     idleWatcherThread = 
-      new Thread(idleWatcher, procName+"-idle");
+      new Thread(idleWatcher, pd.getName()+"-idle");
     idleWatcherThread.setPriority(Thread.MIN_PRIORITY);
     idleWatcherThread.start();
 
-    stdOutWatcherThread = 
-      new Thread(stdOutWatcher, procName+"-stdOut");
-    stdOutWatcherThread.start();
-
-    stdErrWatcherThread = 
-      new Thread(stdErrWatcher, procName+"-stdErr");
-    stdErrWatcherThread.start();
-
     pcWatcherThread = 
-      new Thread(pcWatcher, procName+"-proc");
+      new Thread(pcWatcher, pd.getName()+"-proc");
     pcWatcherThread.start();
   }
 
@@ -435,7 +402,6 @@ implements RemoteProcess {
       }
     }
     try {
-      myRL.appendProcessDestroyed();
       myRL.flushOutput();
       myRL.close();
     } catch (Exception e) {
@@ -471,6 +437,53 @@ implements RemoteProcess {
   // That's about it for Process-level information...
   //
 
+  /** Handler for buffered input/output failures. */
+  class MyBufferWatcher implements BufferWatcher {
+
+    public int handleOutputFailure(String listenerId, Exception e) {
+      if (isAlive()) {
+        if (ignoreIOErrors) {
+          System.err.println(
+              "Ignoring output failure of process "+pd.getName()+
+              " to listener "+listenerId+
+              ": "+e);
+          return KEEP_RUNNING;
+        }
+
+        if (VERBOSE) {
+          System.err.println(
+              "Aborting process "+pd.getName()+
+              " due to output failure to listener "+listenerId+
+              ": "+e);
+          e.printStackTrace();
+        }
+        destroy();
+      }
+      return KILL_ALL_LISTENERS;
+    }
+
+    public int handleInputFailure(Exception e) {
+      if (isAlive()) {
+        if (ignoreIOErrors) {
+          System.err.println(
+              "Ignoring input failure of process "+pd.getName()+
+              ": "+e);
+          return KEEP_RUNNING;
+        }
+
+        if (VERBOSE) {
+          System.err.println(
+              "Aborting process "+pd.getName()+
+              " due to input failure: "+e);
+          e.printStackTrace();
+        }
+        destroy();
+      }
+      return KILL_ALL_LISTENERS;
+    }
+
+  }
+
   //
   // These are inner-class output wrappers
   //
@@ -480,59 +493,13 @@ implements RemoteProcess {
   //
 
   /**
-   * Make sure that the client is still alive.
-   */
-  class HeartbeatWatcher implements Runnable {
-
-    public static final long MIN_INTERVAL_MILLIS = 10000;
-    private long intervalMillis;
-
-    public HeartbeatWatcher(
-        long intervalMillis) {
-      this.intervalMillis = intervalMillis;
-      if (intervalMillis < MIN_INTERVAL_MILLIS) {
-        this.intervalMillis = MIN_INTERVAL_MILLIS;
-      }
-    }
-
-    public void run() {
-      try {
-        while (RemoteProcessImpl.this.isAlive()) {
-          // beat
-          myRL.appendHeartbeat();
-          try {
-            Thread.sleep(intervalMillis);
-          } catch (Exception e) {
-          }
-        }
-      } catch (java.rmi.ConnectException ce) {
-        if (RemoteProcessImpl.this.swallowOutputConnectionException) {
-          System.out.println("HeartBeatWatcher:run() - swallowing ConnectException");
-        } else {
-          if (VERBOSE) {
-            System.err.println("Client died (heartbeat): Killing "+pd);
-            ce.printStackTrace();
-          }
-          RemoteProcessImpl.this.destroy();
-        }
-      } catch (Exception e) {
-        if (VERBOSE) {
-          System.err.println("Client died (heartbeat): Killing "+pd);
-          e.printStackTrace();
-        }
-        RemoteProcessImpl.this.destroy();
-      }
-    }
-  }
-
-  /**
    * Check for machine idleness.
    * <p>
    * This should be moved to a host-level service.
    */
   class IdleWatcher implements Runnable {
 
-    public static final long MIN_INTERVAL_MILLIS = 10000;
+    public static final long MIN_INTERVAL_MILLIS = 20000;
     private long intervalMillis;
 
     public IdleWatcher(
@@ -544,83 +511,30 @@ implements RemoteProcess {
     }
 
     public void run() {
-      try {
-        long prevTime = System.currentTimeMillis();
-        while (true) {
-          // sleep
-          try {
-            Thread.sleep(intervalMillis);
-          } catch (Exception e) {
-          }
-          // wake
-          if (!(RemoteProcessImpl.this.isAlive())) {
-            break;
-          }
-          // measure how long we've slept (+/- epsilon)
-          long nowTime = System.currentTimeMillis();
-          long diffTime = ((nowTime - prevTime) - intervalMillis);
-          if (diffTime < 0) {
-            diffTime = 0;
-          }
-          double percent = (((double)diffTime) / intervalMillis);
-          myRL.appendIdleUpdate(percent, nowTime);
-          prevTime = nowTime;
+      long prevTime = System.currentTimeMillis();
+      while (true) {
+        // sleep
+        try {
+          Thread.sleep(intervalMillis);
+        } catch (Exception e) {
         }
-      } catch (java.rmi.ConnectException ce) {
-        if (RemoteProcessImpl.this.swallowOutputConnectionException) {
-          System.out.println("IdleWatcher:run() - swallowing ConnectException");
-        } else {
-          if (VERBOSE) {
-            System.err.println("Client died (heartbeat): Killing "+pd);
-            ce.printStackTrace();
-          }
-          RemoteProcessImpl.this.destroy();
+        // wake
+        if (!(isAlive())) {
+          break;
         }
-      } catch (Exception e) {
-        if (VERBOSE) {
-          System.err.println("Client died (idle): Killing "+pd);
-          e.printStackTrace();
+        // measure how long we've slept (+/- epsilon)
+        //
+        // this is a *very* lousy metric!
+        long nowTime = System.currentTimeMillis();
+        long diffTime = ((nowTime - prevTime) - intervalMillis);
+        if (diffTime < 0) {
+          diffTime = 0;
         }
-        RemoteProcessImpl.this.destroy();
-      }
-    }
-  }
-
-  /**
-   * Output streamer.
-   */
-  class OutputWatcher implements Runnable {
-    private static final int BUFFER_SIZE = 1024;
-    private InputStream in;
-    private final boolean isStdOut;
-
-    public OutputWatcher(
-        InputStream in, 
-        boolean isStdOut) {
-      // let the "output-buffer" control the read buffering.
-      this.in = in;
-      this.isStdOut = isStdOut;
-    }
-
-    public void run() {
-      try {
-        byte[] buf = new byte[BUFFER_SIZE];
-        while (true) {
-          int len = in.read(buf);
-          if (len < 0) {
-            return;  // End-of-output or error
-          }
-          myRL.appendOutput(isStdOut, buf, len);
+        double percent = (((double)diffTime) / intervalMillis);
+        if (!(myRL.appendIdleUpdate(percent, nowTime))) {
+          break;
         }
-      } catch (Exception e) {
-        if (VERBOSE) {
-          System.err.println(
-              "Client died ("+
-              (isStdOut ? "std-out" : "std-err")+
-              "): Killing "+pd);
-          e.printStackTrace();
-        }
-        RemoteProcessImpl.this.destroy();
+        prevTime = nowTime;
       }
     }
   }
@@ -634,9 +548,7 @@ implements RemoteProcess {
       try {
         exitVal = sysProc.waitFor();
         // send any remaining output
-        stdOutWatcherThread.join();
-        stdErrWatcherThread.join();
-        RemoteProcessImpl.this.destroy();
+        destroy();
       } catch (InterruptedException ie) {
       }
     }

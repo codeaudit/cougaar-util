@@ -19,36 +19,34 @@
  * </copyright>
  */
 
-package org.cougaar.tools.server.rmi;
+package org.cougaar.tools.server.server;
 
-import java.net.URL;
-import java.rmi.Remote;
-import java.rmi.RemoteException;
-import java.util.List;
-
-import org.cougaar.tools.server.OutputListener;
-import org.cougaar.tools.server.OutputPolicy;
-
-/**
- * RMI delegate
+/** 
+ * This class is used by the RemoteListenableImpl, and is called if 
+ * process output can not be sent back to one or more listeners.
  */
-interface RemoteListenableDecl 
-extends Remote {
+interface BufferWatcher {
 
-  List list() throws Exception, RemoteException;
-  void addListener(
-      URL listenerURL) throws Exception, RemoteException;
-  void removeListener(
-      URL listenerURL) throws Exception, RemoteException;
-  void addListener(
-      OutputListenerDecl old,
-      String id) throws Exception, RemoteException;
-  void removeListener(
-      String id) throws Exception, RemoteException;
-  OutputPolicy getOutputPolicy() 
-    throws Exception, RemoteException;
-  void setOutputPolicy(
-      OutputPolicy op) throws Exception, RemoteException;
-  void flushOutput() throws Exception, RemoteException;
+  int KEEP_RUNNING = 0;
+  int KILL_CURRENT_LISTENER = 1;
+  int KILL_ALL_LISTENERS = 2;
+
+  /**
+   * Handle failure to send output to a listener.
+   *
+   * @return one of the action codes listed above
+   * @throws RuntimeException any thrown exception is equivalent to
+   *    returning KILL_ALL_LISTENERS.
+   */
+  int handleOutputFailure(String listenerId, Exception e);
+
+  /**
+   * Handle failure to read input from the process.
+   *
+   * @return one of the action codes listed above
+   * @throws RuntimeException any thrown exception is equivalent to
+   *    returning KILL_ALL_LISTENERS.
+   */
+  int handleInputFailure(Exception e);
 
 }

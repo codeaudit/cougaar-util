@@ -22,6 +22,7 @@
 package org.cougaar.tools.server;
 
 import java.net.URL;
+import java.util.List;
 
 /**
  * Client support to watch remote process activity.
@@ -30,6 +31,13 @@ import java.net.URL;
  */
 public interface RemoteListenable {
   
+  /**
+   * List the names of all listeners.
+   * <p>
+   * This is actually a set.
+   */
+  List list() throws Exception;
+
   /**
    * Add a listener URL that will handle (pushed)
    * OutputBundles from the remote process.

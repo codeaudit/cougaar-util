@@ -57,6 +57,9 @@ implements RemoteListenable {
   // delegate the rest
   //
 
+  public List list() throws Exception {
+    return rld.list();
+  }
   public void addListener(URL listenerURL) throws Exception {
     rld.addListener(listenerURL);
   }

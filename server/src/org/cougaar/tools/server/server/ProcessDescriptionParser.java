@@ -84,7 +84,8 @@ class ProcessDescriptionParser {
 
     Map descProps = pd.getJavaProperties();
     if ((defaultJavaProps != null) ||
-        (descProps.size() > 0)) {
+        ((descProps != null) && 
+         (descProps.size() > 0))) {
       // merge the default and passed-in props
       Map allProps = new HashMap();
       if (defaultJavaProps != null) {
@@ -385,8 +386,8 @@ class ProcessDescriptionParser {
 
     // add any additional command-line arguments
     List args = pd.getCommandLineArguments();
-    int nargs = args.size();
-    for (int i = 0, n = args.size(); i < n; i++)  {
+    int nargs = ((args != null) ? args.size() : 0);
+    for (int i = 0, n = nargs; i < n; i++)  {
       String argi = (String) args.get(i);
       // SECURITY -- these are probably okay...
       cmdList.add(argi);
