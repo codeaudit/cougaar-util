@@ -1,50 +1,183 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <html> <head>
-<title>Metric Sensors Design</title>
+<title>Metric Sensors Design & Creation</title>
 </head>
 
 <body>
-<h1>Metrics Sensors Design</h1>
+<h1>Metrics Sensors Design & Creation</h1>
 <p>
 The Metrics Package has helper classes for collecting raw sensor
 values, converting them into metrics, adding them into the path
 model, and displaying them in a servlet.
 
-<h3> Metrics Producers </h3>
-<h4>Sensor </h4>
- <p> Gauge
- <p> Counter
- <p> Integrator
 <p>
- <p> Snapshot
- <p> sensor service
+Sources of data to the Metrics Service & the creation of new metrics
+can easily be described as differnent "flows" into the Metrics
+Service. <br>
+There are <b>3 sources</b> of originating data into the Metrics Service,
+these are:
+<ul>
+  <li>Sensor data from code</li>
+  <li>Network Management Configuration Files &</li>
+  <li>Host Level probes</li>
+</ul>
+
+These three sources can be more easily understood using a picture
+of the different <a href="#SensorDataFlow"><i>flows</i></a>.
+<p>
+This picture represents the process of data which flows into the Metrics
+Service through sensors, config files, or host probes, the conversion
+into meaningful, ratified data through formulas, its insertion into
+the Metrics Service with accessible keys, and its corresponding
+extrction from the system with paths, or observing the changing
+Metrics with guis. <br>
+This process is described, in more detail, in the following
+secions. Some explanations of this process are more easily understood
+when referencing specific pieces of the code, which will be
+highlighted in <font color="006633">green</font> for emphasis. 
+
+<h2> Metrics Producers </h2>
+<h4>Sensor </h4> <p> There are 3 kinds of
+"Sensors" available to the Metrics Service, which can reside in either
+the code or host probes.  which are:
+<ul> <li> <b><i>Gauge</i></b>: This is an instantaneous value, such as
+    utilization, current resource
+    capacity.  </li>
+<li> <b><i>Counter</i></b>: Continuously increments
+    some value like MsgsIn/Out or BytesIn/Out.  <font
+    color="006633">org.cougaar.mts.std.AgentStatusAspect</font> is an
+    example of such a Sensor, continuously counting the MsgIn/Out &
+    BytesIn/Out for local agents of a node, and the sums for the node
+    itself. <font
+    color="006633">org.cougaar.core.qos.metrics.AgentLoadServlet</font>
+    is one gui where they user can observe this data.</li>
+<li>
+    <b><i>Integrator</i></b>: Counter that is a weighted Summation of
+    delta t * the value in that period.  </li>
+</ul>
+
+<p>
+When a Sensor samples data, it usually takes a <b>Snapshot</b> in any
+point in time, resulting in a collection of these snapshots which can
+then be inserted into the <b>sensor service</b>.
+<b>
+<br>***JZINKY --- Describe what you mean here</b>
 
 <h4>Rate Conversion </h4>
- <p> Decaying History
-  <p>Record Processing
-  <p>Key generation
+<p>
+When snapshots are collated in the Sensor Service, they are
+interpreted as snapshots in some point in time. To make them
+meaningful, we process them to put them in context. 
+<ul>
+  <li>
+      <b><i>Record Processing</i></b>: Data snapshots are collated and
+      computed as a rolling average of change in time & value, something
+      we call Decaying Histroy.
+  </li>
+  <li>    
+      <b><i>Decaying History</i></b>: The term used to expressed the
+      processing of data snapshots into some meaningful context to express
+      Metrics (1, 10, 100-second averages are common).  <font
+      color="006633"> org.cougaar.core.qos.metrics.AgentStatusRatePlugin</font>
+      is one plugin which implements the DecayingHistory's <font
+      color="006633">newAddition()</font>, which updates the
+      Metrics Service with the processed value. 
+  </li>
+  <li>
+      <b><i>Key generation</i></b>: After the snapshots are processed and
+      represent a value per some time duration, a <a href="keys.html">Key</a> is generated in
+      relation to the rolling average of time, and used to insert this
+      Metric into the Metrics Service. 
+  </li>
+</ul>
 
-<h3> Metrics Service </h3>
+<h2> Metrics Service </h2>
 
 <h4>Metrics Service Models</h4>
-  <p>Resource Context
-  <p>Formula
-  <p>IntegatorDS
+<b>***JZINKY, fill in here?>>---</b>
+<ul>
+  <li>
+      <b>Resource Context</b>: After the Metric is inserted in the
+      Metrics System, it is then 
+</li>
+      <li><b>Formula</b>:
+	  </li>
+  <li><b>IntegatorDS</b>
+	  </li>
 
+</ul>
+  
 <h4>Constants</h4>
-  <p>Metrics Name
-  <p>Averaging intervals
+<p>
+There are several noteworthy constants which reside in the Metrics
+Service. They are used to reference Metrics & the type of Metrics
+available. The list of constants is documented in <font
+color="006633">org.coguaar.core.qos.metrics.Constants</font> 
+<ul>
+  <li><b>Metrics Name</b>: Quite obviously, the name of the Metric, as
+      it applies to its measurement & key generation. Ususally, <font
+      color="006633">CPU_LOAD_AVG, CPU_LOAD_MJIPS, MSG_IN, MSG_OUT, BYTES_IN, BYTES_OUT</font>
+      </li>
+  <li><b>Averaging intervals</b>: Used in the Key of a Metric,
+      referring to the averaging interval of value to time of that
+      value. The current intervals are:  <font color="006633">1_SEC_AVG, 10_SEC_AVG,
+      100_SEC_AVG, 1000_SEC_AVG</font>.  
+  </li>
+</ul>
 
-<h3> Metrics Consumers </h3>
- <h4>Sensor Servlet</h4>
+<h2> Metrics Consumers </h2>
+<p>
+Evaluating the Metrics Service & Observing the system is usually done
+through GUIs in the Cougaar system, using Java Servlets. In the
+Metrics Service, there resides many differnent servlets pertaining to
+communications, resource constraints, etc., please refer to <a
+href="operation.html" target="contents">Operation Using Servlets</a>
+for the different kinds of servlets currently available. 
+
+<p>
+Metrics Servlets are an integral part of using the Metrics Service,
+and fit in with QoS-adaptive components & circuitry, and require some
+explaining as to interpretaion.
 
 <h4> Metrics Servlet</h4>
- <p>query
- <p> Value
- <p> Credibility
- <p>threshold
+<p>
+Metrics Servlets all extend a Metrics Servlet template, which is
+formatted to make easy interpretation of the Metrics with tables,
+background & text colors. Here's a quick guide to interpreting a
+Metrics Servlet: Refer to the servlet page or the picture below for a
+visual. 
 
- <h4>QoS Adaptation Components</h4>
+<ul>
+<li><b>query</b>: This is a servlet window into the Metrics Service,
+    or when a servlet is queried it reveals a current snapshot of
+    those current Metrics Service values. </li> 
+ <li><b>Value</b>: Dislayed as the base text, this is the Metrics name
+     (e.g. AgentA Load)</li>
+ <li><b>Credibility</b>: Displayed as the color of the text: light gray
+     to indicate that the metric value was only determined as a
+     compile-time default; gray to indicate that the metric value was
+     obtained from a configuration file; black to indicate that the
+     metric value was obtained from a run-time measurement.
+     A metric's credibility metric is an approximate measure of how
+     much to believe that the value is true. Credibility takes into
+     account several factors, including when, how, by whom a
+     measurement was made.
+ </li>
+ <li><b>threshold</b>: Displayed in the credibility, and when this
+     this certain Metric's value crosses a threshold, it may be
+     interesting enough to warrant attention. This is shown by the
+     color of the background. A green background indicates that
+     the value is in the normal range. A yellow background
+     indicates that the values is in a typical ground state, i.e
+     nothing is happening. A red background indicates that the
+     value has crossed a metric-specific threshold and may be
+     interesting.
+ </li>
+</ul>
+
+<h4>Sensor Servlet</h4>
+
+<h4>QoS Adaptation Components</h4>
   <p> subscription
    <p>call back
    <p>metrics qualifier
@@ -53,7 +186,7 @@ model, and displaying them in a servlet.
 <table>
   <caption align=bottom><i>Sensor Dataflow </i></caption>
   <tr><td>
-      <img src="gifs/SensorDataflow.gif">
+      <a name="SensorDataFlow"><img src="gifs/SensorDataflow.gif"></a>
   </td></tr>
 </table>
 
@@ -69,6 +202,6 @@ Service, integrated into the Society Model and displayed by a Servlet.
 <hr>
 <address></address>
 <!-- hhmts start -->
-Last modified: Wed Nov  3 10:11:18 EST 2004
+Last modified: Tue Nov  9 17:18:40 EST 2004
 <!-- hhmts end -->
 </body> </html>
