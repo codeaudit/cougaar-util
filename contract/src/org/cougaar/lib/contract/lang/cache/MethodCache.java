@@ -19,7 +19,7 @@ import org.cougaar.lib.contract.lang.*;
  * Method lookup cache.
  * <p>
  * Currently no cache -- add MRU cache here.
- * @see org.cougaar.util.StringObjectFactory
+ * @see org.cougaar.core.util.StringObjectFactory
  **/
 public final class MethodCache {
 
