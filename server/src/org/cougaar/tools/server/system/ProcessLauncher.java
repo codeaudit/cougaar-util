@@ -18,12 +18,12 @@ public interface ProcessLauncher {
   /**
    * @see #getCommandLine(String) preferred usage
    */
-  public String[] getCommandLine(String[] cmd);
+  String[] getCommandLine(String[] cmd);
 
   /**
    * Create a modified <code>String[]</code> command from the
    */
-  public String[] getCommandLine(String fullCmd);
+  String[] getCommandLine(String fullCmd);
 
   /**
    * Read the process identifier from the response.
@@ -38,7 +38,7 @@ public interface ProcessLauncher {
    *
    * @return a process-id, or -1 if the id is not known
    */
-  public long parseProcessIdentifier(
+  long parseProcessIdentifier(
       InputStream in) throws Exception;
 
 }

@@ -21,13 +21,13 @@ public interface ProcessStatusReader {
    * Get the OS-specific command line for invoking the
    * process-status request.
    */
-  public String[] getCommandLine(boolean findAll);
+  String[] getCommandLine(boolean findAll);
 
   /**
    * Parse the output of the <tt>getCommandLine(..)</tt>
    * process.
    */
-  public ProcessStatus[] parseResponse(
+  ProcessStatus[] parseResponse(
       BufferedReader br) throws IOException;
 
   /**
@@ -35,6 +35,6 @@ public interface ProcessStatusReader {
    * in a BufferedReader and then calling
    *   <tt>parseResponse(br)</tt>.
    */
-  public ProcessStatus[] parseResponse(
+  ProcessStatus[] parseResponse(
       InputStream in) throws IOException;
 }

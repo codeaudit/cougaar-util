@@ -17,8 +17,8 @@ import org.cougaar.tools.server.system.ProcessLauncher;
 public class LinuxProcessLauncher 
 implements ProcessLauncher {
 
-  private static final byte START_BYTE = '{';
-  private static final byte END_BYTE = '}';
+  private static final byte START_BYTE = (byte)'{';
+  private static final byte END_BYTE = (byte)'}';
 
   private static final String[] LINUX_EXEC =
     new String[] {

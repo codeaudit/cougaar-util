@@ -17,14 +17,14 @@ public interface JavaThreadDumper {
    * Get the OS-specific command line for invoking the
    * Java Thread-Dump.
    */
-  public String[] getCommandLine(long pid);
+  String[] getCommandLine(long pid);
 
   /**
    * Parse the output of the <tt>getCommandLine(..)</tt>
    * process, return <tt>true</tt> if it looks like the
    * Thread-Dump took place.
    */
-  public boolean parseResponse(
+  boolean parseResponse(
       BufferedReader br) throws IOException;
 
   /**
@@ -32,7 +32,7 @@ public interface JavaThreadDumper {
    * in a BufferedReader and then calling
    *   <tt>parseResponse(br)</tt>.
    */
-  public boolean parseResponse(
+  boolean parseResponse(
       InputStream in) throws IOException;
 
 }
