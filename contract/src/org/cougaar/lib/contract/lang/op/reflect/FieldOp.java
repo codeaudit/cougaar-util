@@ -55,7 +55,6 @@ public final class FieldOp
    */
   public final Op parseField(
       final Field field, final OpParser p) throws ParseException {
-    TypeList origTypeList = p.cloneTypeList();
 
     // get field type
     Class retClass = field.getType();
