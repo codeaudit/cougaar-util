@@ -1,0 +1,14 @@
+[Prototype] Organization
+
+[UIC] "Provider"
+
+[Relationship]
+Supporting "Generator" "AmmunitionProvider"
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "Provider"
+AlternateTypeIdentification String "Provider"
+
+[OrganizationPG]
+Roles Collection<Role> "AmmunitionProvider"

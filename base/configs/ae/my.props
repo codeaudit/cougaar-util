@@ -1,0 +1,13 @@
+log4j.rootCategory=ERROR,Ax
+log4j.appender.Ax=org.apache.log4j.ConsoleAppender
+log4j.appender.Ax.Target=System.out
+log4j.appender.Ax.layout=org.apache.log4j.PatternLayout
+log4j.appender.Ax.layout.ConversionPattern=%d{ABSOLUTE} %-5p [ %t] - %m%n
+log4j.category.org.cougaar.mlm.plugin.sample.AdaptiveUniversalAllocatorPlugin=DEBUG,Ay
+log4j.category.org.cougaar.core.adaptivity=DEBUG,Ay
+log4j.category.org.cougaar.core.persist=WARN,Ay
+log4j.additivity.org.cougaar.core.adaptivity=false
+log4j.appender.Ay=org.apache.log4j.ConsoleAppender
+log4j.appender.Ay.Target=System.out
+log4j.appender.Ay.layout=org.apache.log4j.PatternLayout
+log4j.appender.Ay.layout.ConversionPattern=%d{ABSOLUTE} %-5p [%30c{1}] - %m%n

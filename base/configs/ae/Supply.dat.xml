@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE tasklist SYSTEM "ClusterInput.dat.dtd" []>
+
+<tasklist>
+  <task id="test_task">
+    <verb>Supply</verb>
+    <directobject>
+     <asset id="ammo-1000">Ammo_Prototype</asset>
+    </directobject>
+    <for>3-69-ARBN</for>
+    <oftype>Ammunition</oftype>
+    <to>
+      <geoloc>RUINS</geoloc>
+      <latitude>39.9167</latitude>    
+      <longitude>37.1167</longitude>
+      <name>RUINS</name>
+    </to>
+    <maintaining>
+      <type>Inventory</type>
+      <nomen>120MM APFSDS-T M829A1</nomen>
+      <typeID>DODIC/C380</typeID>
+    </maintaining>
+    <refill/>
+    <enddate>    
+      <bestdate>
+        <year>2005</year> 
+        <month>10</month> 
+        <day>15</day> 
+        <hour>12</hour> 
+        <minute>00</minute> 
+        <second>00</second>
+      </bestdate>
+    </enddate>   
+    <quantity>1</quantity> <!-- quantity preference -->
+  </task>
+</tasklist>

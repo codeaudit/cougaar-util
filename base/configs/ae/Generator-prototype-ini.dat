@@ -1,0 +1,20 @@
+[Prototype] Organization
+
+[UIC] "Generator"
+
+[Relationship]
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "Generator"
+AlternateTypeIdentification String "Generator"
+
+[OrganizationPG]
+Roles Collection<Role> "GenerateSupply"
+
+
+
+
+
+
+
