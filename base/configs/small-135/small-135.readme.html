@@ -2,16 +2,16 @@
 <html>
 <head>
    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-   <meta name="GENERATOR" content="Mozilla/4.76 [en] (WinNT; U) [Netscape]">
+   <meta name="GENERATOR" content="Mozilla/4.76 [en] (X11; U; Linux 2.4.2-2 i686) [Netscape]">
    <title>small-135 Read Me</title>
 </head>
 <body>
-A new directory, configs/small-135, has been included
-to allow some small tests of this release. Its name reflects the scope
-of the tests it is designed to support: Classes 1, 3, 4, and 5 (Subsistence,
+The directory, configs/small-135, has been included to
+allow some small tests of this release. Its name reflects the scope of
+the tests it is designed to support: Classes 1, 3, 4, and 5 (Subsistence,
 Fuel, Construction Materiel, and Ammunition) as well as Strategic Transportation.
 <p>This config directory includes a node file, configs/small-135/SMALL-135-TRANS-NODE.ini,
-which can be run on a single machine. This node includes 27 clusters, which
+which can be run on a single machine. This node includes 26 clusters, which
 fall into the several logical groups.
 <p>Here is a <a href="images/SMALL-135-NODE-descrip.jpg">diagram</a> and
 a listing of these groups and descriptions of their primary functions in
@@ -50,8 +50,7 @@ this community:
 <blockquote>DLAHQ
 <br>IOC</blockquote>
 <b>Strategic Transportation Provider Organizations:</b>
-<blockquote>TRANSCOM
-<br>AmmoTRANSCOM</blockquote>
+<blockquote>TRANSCOM</blockquote>
 
 <hr WIDTH="100%">
 <br><b><font size=+1>Functions of the Organizations in SMALL-135-NODE:</font></b>
@@ -132,22 +131,20 @@ It is the AmmunitionSupplyProvider for 3-FSB and 296-STPBN. It sends transport
 tasks for ammunition containers to AmmoTRANSCOM.</blockquote>
 <b>Strategic Transportation Provider Organization:</b>
 <blockquote><b>TRANSCOM</b> is a stub representing USTRANSCOM. It has a
-universal allocator for all Transport non-Ammunition tasks. It is the StrategicTransportationProvider
-for 3ID-HHC and for IOC.
-<p><b>AmmoTRANSCOM</b> is a stub representing USTRANSCOM for ammunition
-transportation. It has a universal allocator for all Transport Ammunition
-tasks. It is the StrategicTransportationProvider for IOC.</blockquote>
+universal allocator for all Transport tasks (now including ammunition transport).
+It is the StrategicTransportationProvider
+for 3ID-HHC and for IOC.</blockquote>
 
 <hr WIDTH="100%">
-<br>The ALP-8.2.1 release also a node file, SMALL-135-NODE.ini., which
-is the same as SMALL-135-TRANS-NODE.ini., except that it excludes the TRANSCOM
-and AmmoTRANSCOM clusters.&nbsp; This node is designed to run on a single
-machine, while another node, representing TRANSCOM and AmmoTRANSCOM, and
-the rest of the Transportation Community&nbsp; is run on a second machine.
-This second node is defined by the node file, tops/configs/demo-config/configs/SmallTopsNode.ini.
-This node consists of 37 clusters, which fall into several logical groups
-for StrategicTransportation.
-<p>Here is a <a href="images/SmallTopsNode-descrip.jpg">diagram</a> and
+<br>There is also a node file, SMALL-135-NODE.ini., which is the same as
+SMALL-135-TRANS-NODE.ini., except that it excludes the TRANSCOM
+cluster.&nbsp; This node is designed to run on a single machine, while
+another node, representing TRANSCOM and the rest of the
+Transportation Community&nbsp; is run on a second machine. This second
+node is defined by the node file:
+glmtrans/configs/demo-config/config/GLMTransNode.ini. This node consists
+of 7 clusters, which fall into several logical groups for StrategicTransportation.
+<p>Here is a <a href="images/GLMTransNode-descrip.jpg">diagram</a> and
 a listing of these groups and descriptions of their primary functions in
 this community:
 <p>
@@ -155,102 +152,37 @@ this community:
 <br><b>Overall Strategic Transportation Organization:</b>
 <blockquote>TRANSCOM</blockquote>
 <b>CONUS Transportation Organizations:</b>
-<blockquote>CONUSGround
-<br>FortStewartITO
-<br>FortBenningITO
-<br>FortLewisITO
-<br>SupplyDepotITO</blockquote>
+<blockquote>CONUSGround</blockquote>
 <b>Strategic Air Transportation Organizations:</b>
 <blockquote>GlobalAir
-<br>OrganicAir
-<br>McGuireWing
-<br>6thAMSMcGuire
-<br>CharlestonWing
-<br>CharlestonAirSquadron
-<br>McChordWing
-<br>McChordAirSquadron
-<br>DoverWing
-<br>DoverAirSquadron
-<br>WestoverWing
-<br>WestoverAirSquadron
-<br>CommercialWing
-<br>CommercialAirSquadron
-<br>C130WingCairo</blockquote>
+<br>PlanePacker</blockquote>
 <b>Strategic Sea Transportation Organizations:</b>
 <blockquote>GlobalSea
-<br>SavannahPort</blockquote>
+<br>ShipPacker</blockquote>
 <b>Theater Transportaton Organizations:</b>
-<blockquote>MassawaPort
-<br>TheaterMCC
-<br>TheaterAir
-<br>TheaterGround
-<br>TheaterFort
-<br>TheaterSea</blockquote>
-<b>Ammunition Transportation Organizations:</b>
-<blockquote>AmmoTRANSCOM
-<br>AmmoDepotITO
-<br>GlobalSeaAmmo
-<br>SunnyPointPort
-<br>AmmoTheaterMCC
-<br>AmmoTheaterGround
-<br>AmmoTheaterFort
-<br>AmmoTheaterSea</blockquote>
+<blockquote>TheaterGround</blockquote>
 
 <hr WIDTH="100%">
 <br><b><font size=+1>Functions of the Organizations in SmallTopsNode:</font></b>
 <p><b>Overall Strategic Transportation Organization:</b>
 <blockquote><b>TRANSCOM</b> is the SrategicTransportationProvider for Unit
-Equipment (UE), Passengers (PAX) and all commodities, except ammunition.</blockquote>
+Equipment (UE), Passengers (PAX) and all commodities, including ammunition.</blockquote>
 <b>CONUS Transportation Organizations:</b>
 <blockquote><b>CONUSGround</b> manages the ground movement of Unit Equipment,
-Passengers and materiel in CONUS.
-<p><b>FortStewartITO</b>, <b>FortBenningITO</b>,&nbsp; and <b>FortLewisITO</b>
-manage the scheduling of Unit Equipment and Passengers from home installations
-to CONUS air and sea ports.
-<p><b>SupplyDepotITO </b>manages the scheduling of materiel of all commodities,
-except ammunition, from home installations to CONUS air and sea ports.</blockquote>
+Passengers and materiel in CONUS.</blockquote>
 <b>Strategic Air Transportation Organizations:</b>
 <blockquote><b>GlobalAir </b>manages the strategic air transportation of
 equipment, passengers, and materiel.
-<p><b>OrganicAir</b> manages all the military airlift resources.
-<p><b>McGuireWing</b> and <b>6thAMSMcGuire</b> manage the C-17 aircraft
-and crews at McGuire AFB.
-<p><b>CharlestonWing</b> and <b>CharlestonAirSquadron </b>manage the C-17
-aircraft and crews at Charleston AFB.
-<p><b>McChordWing</b> and <b>McChordAirSquadron</b> manage the C-17 aircraft
-and crews at McChord AFB.
-<p><b>DoverWing</b> and <b>DoverAirSquadron</b> manage the C-5 aircraft
-and crews at Dover AFB.
-<p><b>WestoverWing</b> and <b>WestoverAirSquadron</b> manage the C-5 aircraft
-and crews at Westover AFB.
-<p><b>CommercialWing</b> and <b>CommercialAirSquadron</b> manage B-747
-commercial aircraft and crews
-<p><b>C130WingCairo </b>manages the ISB at Cairo, and the fleet of C-130
-aircraft flying between Cairo and theater.</blockquote>
+<p><b>PlanePacker</b> manages the loading of aircraft</blockquote>
 <b>Strategic Sea Transportation Organizations:</b>
 <blockquote><b>GlobalSea</b> manages the strategic sea transportation of
 equipment and materiel.
-<p><b>SavannahPort </b>manages the receipt of equipment and materiel, and
-its staging and loading onto ships.</blockquote>
+<p><b>ShipPacker </b>manages the loading of ships.</blockquote>
 <b>Theater Transportaton Organizations:</b>
-<blockquote><b>MassawaPort</b> arranges the receipt of sea transported
-cargo in theater.
-<p><b>TheaterMCC</b>, <b>TheaterAir</b>, <b>TheaterGround</b>, <b>TheaterFort</b>,
-and <b>TheaterSea</b> arrange the receipt of equipment and materiel and
-its distribution in theater.</blockquote>
+<blockquote><b>TheaterGround</b> manages theater transportation</blockquote>
 <b>Ammunition Transportation Organizations:</b>
-<blockquote><b>AmmoTRANSCOM</b> is the SrategicTransportationProvider for
-ammunition.
-<p><b>AmmoDepotITO</b> arranges ground transportation for ammunition to
-the Sunny Point ammunition seaport
-<p><b>GlobalSeaAmmo</b> arranges sea transportation for ammunition from
-the Sunny Point ammunition seaport to the theater.
-<p><b>SunnyPointPort</b> is the ammunition seaport.
-<p><b>AmmoTheaterMCC</b>, <b>AmmoTheaterGround</b>, <b>AmmoTheaterFort</b>,
-and <b>AmmoTheaterSea</b> arrange the receipt of ammunition and its distribution
-in theater.</blockquote>
+<blockquote>There are no longer any special organizations to handle ammunition</blockquote>
 
-<p><br>
 <hr WIDTH="100%">
 <p><b><font size=+1>To run the society on a single machine</font></b>
 <p>This society will&nbsp; have the Demand Community on one machine, and
@@ -291,12 +223,17 @@ Make sure that COUGAAR_INSTALL_PATH is set properly to the top release
 directory</li>
 
 <li>
-cd to $COUGAAR_INSTALL_PATH/tops/configs/demo-config/configs</li>
+cd to $COUGAAR_INSTALL_PATH/glmtrans/configs/demo-config/configs</li>
 
 <li>
-Type Node SmallTopsNode</li>
+Type Node GLMTransNode</li>
 </ol>
-
+Since the Transportation Community has been greatly simplified, and is
+now much smaller than in previous releases (7 clusters versus 37 clusters),
+it should be possible to run both nodes in a single machine, provided there
+is enough memory (at least about 400 MBytes).
+<br>&nbsp;
+<p>
 <hr WIDTH="100%">
 <p><b><font size=+1>Expected Results</font></b>
 <p>Regardless of the mode in which the system is run, Inventory graphs
