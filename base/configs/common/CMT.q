@@ -1223,6 +1223,10 @@ addAssembly = \
  insert into v4_expt_trial_config_assembly (EXPT_ID,TRIAL_ID,ASSEMBLY_ID,DESCRIPTION) \
    values (':experiment_id',':trial_id',':assembly_id',':trial_name')
 
+addRuntimeAssembly = \
+ insert into v4_expt_trial_assembly (EXPT_ID,TRIAL_ID,ASSEMBLY_ID,DESCRIPTION) \
+   values (':experiment_id',':trial_id',':assembly_id',':trial_name')
+
 getSocietyTemplateForExperiment = \
  SELECT  CFW_GROUP_ID FROM v4_expt_experiment WHERE EXPT_ID=':experiment_id'
 
@@ -1577,9 +1581,9 @@ DROP TABLE  tmp_v4_expt_trial_org_mult:short_assembly_id
 # Stuff to copy an experiment follows
 # Note that these copy only the config assemblies,
 # Not the runtime assemblies
-cloneExperimentEXPT_TRIAL_ASSEMBLYQueries = cloneExperimentEXPT_TRIAL_ASSEMBLY
+cloneExperimentEXPT_TRIAL_CONFIG_ASSEMBLYQueries = cloneExperimentEXPT_TRIAL_CONFIG_ASSEMBLY
 
-cloneExperimentEXPT_TRIAL_ASSEMBLY = \
+cloneExperimentEXPT_TRIAL_CONFIG_ASSEMBLY = \
 INSERT INTO  v4_expt_trial_config_assembly \
    (EXPT_ID,TRIAL_ID,ASSEMBLY_ID,DESCRIPTION) \
  SELECT \
@@ -1595,9 +1599,9 @@ INSERT INTO  v4_expt_trial_config_assembly \
     AND TA.ASSEMBLY_ID=A.ASSEMBLY_ID \
     AND A.ASSEMBLY_TYPE <> 'CSM'
 
-cloneExperimentEXPT_TRIAL_ASSEMBLYQueries.mysql = cloneExperimentEXPT_TRIAL_ASSEMBLYCreateTable cloneExperimentEXPT_TRIAL_ASSEMBLYInsert cloneExperimentEXPT_TRIAL_ASSEMBLYDrop
+cloneExperimentEXPT_TRIAL_CONFIG_ASSEMBLYQueries.mysql = cloneExperimentEXPT_TRIAL_CONFIG_ASSEMBLYCreateTable cloneExperimentEXPT_TRIAL_CONFIG_ASSEMBLYInsert cloneExperimentEXPT_TRIAL_CONFIG_ASSEMBLYDrop
 
-cloneExperimentEXPT_TRIAL_ASSEMBLYCreateTable = \
+cloneExperimentEXPT_TRIAL_CONFIG_ASSEMBLYCreateTable = \
 CREATE TEMPORARY TABLE tmp_v4_expt_trial_config_assembly:short_assembly_id AS \
 SELECT \
   ':new_expt_id' AS EXPT_ID, \
@@ -1612,13 +1616,59 @@ SELECT \
    AND TA.ASSEMBLY_ID=A.ASSEMBLY_ID \
    AND A.ASSEMBLY_TYPE <> 'CSM'
 
-cloneExperimentEXPT_TRIAL_ASSEMBLYInsert = \
+cloneExperimentEXPT_TRIAL_CONFIG_ASSEMBLYInsert = \
 INSERT INTO  v4_expt_trial_config_assembly \
    (EXPT_ID,TRIAL_ID,ASSEMBLY_ID,DESCRIPTION) \
 SELECT EXPT_ID,TRIAL_ID,ASSEMBLY_ID,DESCRIPTION \
        FROM tmp_v4_expt_trial_config_assembly:short_assembly_id
 
-cloneExperimentEXPT_TRIAL_ASSEMBLYDrop = \
+cloneExperimentEXPT_TRIAL_CONFIG_ASSEMBLYDrop = \
 DROP TABLE  tmp_v4_expt_trial_config_assembly:short_assembly_id
 
+# Stuff to copy an experiment follows
+# Note that these copy only the runtime assemblies,
+# Not the config assemblies
+cloneExperimentEXPT_TRIAL_ASSEMBLYQueries = cloneExperimentEXPT_TRIAL_ASSEMBLY
+
+cloneExperimentEXPT_TRIAL_ASSEMBLY = \
+INSERT INTO  v4_expt_trial_assembly \
+   (EXPT_ID,TRIAL_ID,ASSEMBLY_ID,DESCRIPTION) \
+ SELECT \
+  ':new_expt_id' , \
+   (':new_expt_id' || '.TRIAL'), \
+   TA.ASSEMBLY_ID, \
+   TA.DESCRIPTION \
+ FROM \
+   v4_expt_trial_assembly TA, \
+   v4_asb_assembly A \
+ WHERE \
+    TA.EXPT_ID= ':experiment_id' \
+    AND TA.ASSEMBLY_ID=A.ASSEMBLY_ID \
+    AND A.ASSEMBLY_TYPE <> 'CSM'
+
+cloneExperimentEXPT_TRIAL_ASSEMBLYQueries.mysql = cloneExperimentEXPT_TRIAL_ASSEMBLYCreateTable cloneExperimentEXPT_TRIAL_ASSEMBLYInsert cloneExperimentEXPT_TRIAL_ASSEMBLYDrop
+
+cloneExperimentEXPT_TRIAL_ASSEMBLYCreateTable = \
+CREATE TEMPORARY TABLE tmp_v4_expt_trial_assembly:short_assembly_id AS \
+SELECT \
+  ':new_expt_id' AS EXPT_ID, \
+   CONCAT(':new_expt_id','.TRIAL') AS TRIAL_ID, \
+   TA.ASSEMBLY_ID AS ASSEMBLY_ID, \
+   TA.DESCRIPTION AS DESCRIPTION \
+ FROM \
+   v4_expt_trial_assembly TA, \
+   v4_asb_assembly A \
+ WHERE \
+   TA.EXPT_ID= ':experiment_id' \
+   AND TA.ASSEMBLY_ID=A.ASSEMBLY_ID \
+   AND A.ASSEMBLY_TYPE <> 'CSM'
+
+cloneExperimentEXPT_TRIAL_ASSEMBLYInsert = \
+INSERT INTO  v4_expt_trial_assembly \
+   (EXPT_ID,TRIAL_ID,ASSEMBLY_ID,DESCRIPTION) \
+SELECT EXPT_ID,TRIAL_ID,ASSEMBLY_ID,DESCRIPTION \
+       FROM tmp_v4_expt_trial_assembly:short_assembly_id
+
+cloneExperimentEXPT_TRIAL_ASSEMBLYDrop = \
+DROP TABLE  tmp_v4_expt_trial_assembly:short_assembly_id
 
