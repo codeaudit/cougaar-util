@@ -131,191 +131,222 @@ class ServerHostControllerImpl
       ConfigurationWriter cw)
     throws IOException
   {
+    // write config files
     if (cw != null) {
-      cw.writeConfigFiles(new File(tempPath));
-    }
-
-    // p is a merge of server-set properties and passed-in props
-    Properties allProps = new Properties();
-    if (defaultProps != null) {
-      allProps.putAll(defaultProps);
-    }
-    if (props != null) {
-      allProps.putAll(props);
-    }
-
-    // split all properties into three groups:
-    //   "env.*"  process environment properties (e.g. "env.DISPLAY=..")
-    //   "java.*" java options (e.g. "java.class.path=..")
-    //   "*"      all other "-D" system properties (e.g. "foo=bar")
-
-    Properties envProps = new Properties();
-    Properties javaProps = new Properties();
-    Properties sysProps = new Properties();
-
-    for (Iterator iter = allProps.entrySet().iterator();
-         iter.hasNext();
-         ) {
-      // all Properties are non-null (String, String) pairs
-      Map.Entry me = (Map.Entry) iter.next();
-      String name = (String)me.getKey();
-      String value = (String)me.getValue();
-
-      validateProperty(name, value);
-
-      if (name.startsWith("env.")) {
-        name = name.substring(4);
-        if (!(name.startsWith("env."))) {
-          envProps.put(name, value);
-          continue;
+      if (verbose) {
+        System.out.println("Writing configuration files");
+      }
+      try {
+        cw.writeConfigFiles(new File(tempPath));
+      } catch (IOException ioe) {
+        if (verbose) {
+          System.out.println("Unable to write config files:");
+          ioe.printStackTrace();
         }
-      } else if (name.startsWith("java.")) {
-        name = name.substring(5);
-        if (!(name.startsWith("java."))) {
-          javaProps.put(name, value);
-          continue;
+        throw ioe;
+      } catch (RuntimeException re) {
+        if (verbose) {
+          System.out.println("Unable to write config files:");
+          re.printStackTrace();
         }
-      }
-      sysProps.put(name, value);
-    }
-
-    ArrayList cmdList = new ArrayList();
-
-    // select "java" executable
-    String jvmProgram = 
-      (String) javaProps.remove("jvm.program");
-    if (jvmProgram != null) {
-      // SECURITY -- guard against "jvm.program=rm"!!!
-      // use name as-is
-    } else {
-      jvmProgram = "java";
-    }
-
-    cmdList.add(jvmProgram);
-
-    // check for JVM mode ("classic", "hotspot", "client", or "server")
-    String jvmMode = 
-      (String) javaProps.remove("jvm.mode");
-    if (jvmMode != null) {
-      if ((jvmMode.equals("classic")) ||
-          (jvmMode.equals("hotspot")) ||
-          (jvmMode.equals("client")) ||
-          (jvmMode.equals("server"))) {
-        cmdList.add("-"+jvmMode);
-      } else {
-        throw new IllegalArgumentException(
-            "Illegal \"jvm.mode="+jvmMode+"\"");
+        throw re;
       }
     }
 
-    // check for green threads
-    String jvmGreen = 
-      (String) javaProps.remove("jvm.green");
-    if (jvmGreen != null) {
-      if (jvmGreen.equals("true")) {
-        cmdList.add("-green");
+    // assemble the command-line and environment-variables
+    String[] cmdLine;
+    String[] envVars;
+    try {
+      // p is a merge of server-set properties and passed-in props
+      Properties allProps = new Properties();
+      if (defaultProps != null) {
+        allProps.putAll(defaultProps);
       }
-    }
-
-    // check for a classpath
-    String classpath = 
-      (String) javaProps.remove("class.path");
-    if (classpath != null) {
-      classpath = classpath.trim();
-      if (classpath.length() == 0) {
-        throw new IllegalArgumentException(
-            "Classpath must be non-empty");
+      if (props != null) {
+        allProps.putAll(props);
       }
-      // SECURITY -- examine path
-      cmdList.add("-classpath");
-      cmdList.add(classpath);
-    }
 
-    // take classname for later use
-    String classname = 
-      (String) javaProps.remove("class.name");
-    if (classname != null) {
-      classname = classname.trim();
-      if (classname.length() == 0) {
-        throw new IllegalArgumentException(
-            "Classname must be non-empty");
-      }
-      // SECURITY -- examine class name
-    } else {
-      classname = DEFAULT_CLASSNAME;
-    }
+      // split all properties into three groups:
+      //   "env.*"  process environment properties (e.g. "env.DISPLAY=..")
+      //   "java.*" java options (e.g. "java.class.path=..")
+      //   "*"      all other "-D" system properties (e.g. "foo=bar")
 
-    // add all remaining java properties
-    for (Iterator iter = javaProps.entrySet().iterator();
-         iter.hasNext();
-         ) {
-      Map.Entry me = (Map.Entry) iter.next();
-      String name = (String)me.getKey();
-      String value = (String)me.getValue();
+      Properties envProps = new Properties();
+      Properties javaProps = new Properties();
+      Properties sysProps = new Properties();
 
-      // SECURITY -- maybe block some pairs (e.g. "XBootclasspath=..")
-      if (value.length() > 0) {
-        cmdList.add("-"+name+"="+value);
-      } else {
-        cmdList.add("-"+name);
-      }
-    }
-
-    // add all the system properties
-    for (Iterator iter = sysProps.entrySet().iterator();
-         iter.hasNext();
-         ) {
-      Map.Entry me = (Map.Entry) iter.next();
-      String name = (String)me.getKey();
-      String value = (String)me.getValue();
-
-      // SECURITY -- these are probably okay...
-      if (value.length() > 0) {
-        cmdList.add("-D"+name+"="+value);
-      } else {
-        cmdList.add("-D"+name);
-      }
-    }
-
-    // add the class name
-    cmdList.add(classname);
-
-    // add any additional command-line arguments
-    if (args != null) {
-      for (int i = 0; i < args.length; i++) {
-        String argi = args[i];
-        if (argi == null) {
-          throw new IllegalArgumentException(
-              "Command line contained a null entry["+
-              i+" / "+args.length+"]");
-        }
-
-        // SECURITY -- these are probably okay...
-        cmdList.add(argi);
-      }
-    }
-
-    // flatten the command line to a String[]
-    String[] cmdLine = 
-      (String[])cmdList.toArray(new String[cmdList.size()]);
-
-    // flatten the envProps to a String[]
-    int nEnvProps = envProps.size();
-    String[] envVars = new String[nEnvProps];
-    if (nEnvProps > 0) {
-      Iterator iter = envProps.entrySet().iterator();
-      for (int i = 0; i < nEnvProps; i++) {
+      for (Iterator iter = allProps.entrySet().iterator();
+           iter.hasNext();
+           ) {
+        // all Properties are non-null (String, String) pairs
         Map.Entry me = (Map.Entry) iter.next();
         String name = (String)me.getKey();
         String value = (String)me.getValue();
 
-        // SECURITY -- should scan these closely, possibly OS specific
-        if (value.length() > 0) {
-          envVars[i] = (name+"="+value);
+        validateProperty(name, value);
+
+        if (name.startsWith("env.")) {
+          name = name.substring(4);
+          if (!(name.startsWith("env."))) {
+            envProps.put(name, value);
+            continue;
+          }
+        } else if (name.startsWith("java.")) {
+          name = name.substring(5);
+          if (!(name.startsWith("java."))) {
+            javaProps.put(name, value);
+            continue;
+          }
+        }
+        sysProps.put(name, value);
+      }
+
+      ArrayList cmdList = new ArrayList();
+
+      // select "java" executable
+      String jvmProgram = 
+        (String) javaProps.remove("jvm.program");
+      if (jvmProgram != null) {
+        // SECURITY -- guard against "jvm.program=rm"!!!
+        // use name as-is
+      } else {
+        jvmProgram = "java";
+      }
+
+      cmdList.add(jvmProgram);
+
+      // check for JVM mode ("classic", "hotspot", "client", or "server")
+      String jvmMode = 
+        (String) javaProps.remove("jvm.mode");
+      if (jvmMode != null) {
+        if ((jvmMode.equals("classic")) ||
+            (jvmMode.equals("hotspot")) ||
+            (jvmMode.equals("client")) ||
+            (jvmMode.equals("server"))) {
+          cmdList.add("-"+jvmMode);
         } else {
-          envVars[i] = (name);
+          throw new IllegalArgumentException(
+              "Illegal \"jvm.mode="+jvmMode+"\"");
         }
       }
+
+      // check for green threads
+      String jvmGreen = 
+        (String) javaProps.remove("jvm.green");
+      if (jvmGreen != null) {
+        if (jvmGreen.equals("true")) {
+          cmdList.add("-green");
+        }
+      }
+
+      // check for a classpath
+      String classpath = 
+        (String) javaProps.remove("class.path");
+      if (classpath != null) {
+        classpath = classpath.trim();
+        if (classpath.length() == 0) {
+          throw new IllegalArgumentException(
+              "Classpath must be non-empty");
+        }
+        // SECURITY -- examine path
+        cmdList.add("-classpath");
+        cmdList.add(classpath);
+      }
+
+      // take classname for later use
+      String classname = 
+        (String) javaProps.remove("class.name");
+      if (classname != null) {
+        classname = classname.trim();
+        if (classname.length() == 0) {
+          throw new IllegalArgumentException(
+              "Classname must be non-empty");
+        }
+        // SECURITY -- examine class name
+      } else {
+        classname = DEFAULT_CLASSNAME;
+      }
+
+      // add all remaining java properties
+      for (Iterator iter = javaProps.entrySet().iterator();
+           iter.hasNext();
+           ) {
+        Map.Entry me = (Map.Entry) iter.next();
+        String name = (String)me.getKey();
+        String value = (String)me.getValue();
+
+        // SECURITY -- maybe block some pairs (e.g. "XBootclasspath=..")
+        if (value.length() > 0) {
+          cmdList.add("-"+name+"="+value);
+        } else {
+          cmdList.add("-"+name);
+        }
+      }
+
+      // add all the system properties
+      for (Iterator iter = sysProps.entrySet().iterator();
+           iter.hasNext();
+           ) {
+        Map.Entry me = (Map.Entry) iter.next();
+        String name = (String)me.getKey();
+        String value = (String)me.getValue();
+
+        // SECURITY -- these are probably okay...
+        if (value.length() > 0) {
+          cmdList.add("-D"+name+"="+value);
+        } else {
+          cmdList.add("-D"+name);
+        }
+      }
+
+      // add the class name
+      cmdList.add(classname);
+
+      // add any additional command-line arguments
+      if (args != null) {
+        for (int i = 0; i < args.length; i++) {
+          String argi = args[i];
+          if (argi == null) {
+            throw new IllegalArgumentException(
+                "Command line contained a null entry["+
+                i+" / "+args.length+"]");
+          }
+
+          // SECURITY -- these are probably okay...
+          cmdList.add(argi);
+        }
+      }
+
+      // flatten the command line to a String[]
+      cmdLine = (String[])cmdList.toArray(new String[cmdList.size()]);
+
+      // flatten the envProps to a String[]
+      int nEnvProps = envProps.size();
+      envVars = new String[nEnvProps];
+      if (nEnvProps > 0) {
+        Iterator iter = envProps.entrySet().iterator();
+        for (int i = 0; i < nEnvProps; i++) {
+          Map.Entry me = (Map.Entry) iter.next();
+          String name = (String)me.getKey();
+          String value = (String)me.getValue();
+
+          // SECURITY -- should scan these closely, possibly OS specific
+          if (value.length() > 0) {
+            envVars[i] = (name+"="+value);
+          } else {
+            envVars[i] = (name);
+          }
+        }
+      }
+
+      // cmdLine and envVars now ready
+    } catch (RuntimeException re) {
+      if (verbose) {
+        System.out.println(
+            "Unable to assemble command-line and environment variables:");
+        re.printStackTrace();
+      }
+      throw re;
     }
 
     // debugging...
@@ -335,15 +366,31 @@ class ServerHostControllerImpl
       System.out.println();
     } 
 
-    ServerNodeController snc = 
-      new ServerNodeControllerImpl(
-          nodeId,
-          cmdLine, 
-          envVars,
-          rmiHost,
-          rmiPort,
-          cnel,
-          nef);
+    // spawn the node
+    ServerNodeController snc;
+    try {
+      snc = 
+        new ServerNodeControllerImpl(
+            nodeId,
+            cmdLine, 
+            envVars,
+            rmiHost,
+            rmiPort,
+            cnel,
+            nef);
+    } catch (IOException ioe) {
+      if (verbose) {
+        System.out.println("Unable to create Node:");
+        ioe.printStackTrace();
+      }
+      throw ioe;
+    } catch (RuntimeException re) {
+      if (verbose) {
+        System.out.println("Unable to create Node:");
+        re.printStackTrace();
+      }
+      throw re;
+    }
 
     nodes.put(nodeId, snc);
 

@@ -63,14 +63,23 @@ implements HostServesClient {
        null);
 
     // get reference to remote process on app server
-    ServerNodeController snc = (ServerNodeController)
-      shc.createNode(
+    ServerNodeController snc;
+    try {
+      snc = (ServerNodeController)
+        shc.createNode(
           nodeName, 
           nodeProperties, 
           commandLineArgs, 
           cnel,
           nef,
           cw);
+    } catch (IOException ioe) {
+      System.out.println("Unable to create Node (IO Failure)");
+      throw ioe;
+    } catch (RuntimeException re) {
+      System.out.println("Unable to create Node (Runtime Failure)");
+      throw re;
+    }
 
     // wrap for client
     //

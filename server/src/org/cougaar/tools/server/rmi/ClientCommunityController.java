@@ -49,11 +49,26 @@ implements CommunityServesClient {
     // could cache this...
 
     // locate the registry at <hostname, port>
-    Registry reg = LocateRegistry.getRegistry(hostName, hostPort);
+    Registry reg;
+    try {
+      reg = LocateRegistry.getRegistry(hostName, hostPort);
+    } catch (Exception e) {
+      System.out.println(
+          "Unable to contact "+
+          hostName+":"+hostPort);
+      throw e;
+    }
 
     // get the remote implementation
-    ServerHostController shc = 
-      (ServerHostController)reg.lookup("ServerHook");
+    ServerHostController shc;
+    try {
+      shc = (ServerHostController)reg.lookup("ServerHook");
+    } catch (Exception e) {
+      System.out.println(
+          "Unable to find AppServer on "+
+          hostName+":"+hostPort);
+      throw e;
+    }
 
     // return a host controller
     return new ClientHostController(shc);
