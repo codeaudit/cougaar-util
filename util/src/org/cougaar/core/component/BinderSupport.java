@@ -119,13 +119,6 @@ public abstract class BinderSupport
     if (getServiceBroker() != null) {
       BindingUtility.setServices(child, getServiceBroker());
     }
-    /*
-    else {
-      System.err.println("BinderSupport: No ServiceBroker from "+getContainer()+" for "+child);
-      Thread.dumpStack();
-    }
-    */
-
     // cascade
     child.initialize();
   }
@@ -163,13 +156,15 @@ public abstract class BinderSupport
   }
 
   public void setState(Object state) {
-    if (child instanceof StateObject) {
-      ((StateObject)child).setState(state);
+    if (state == null) {
+      return;
     } else {
-      System.err.println(
-          "BinderSupport: No \"setState(..)\" from "+
-          getContainer()+" for "+child);
-      Thread.dumpStack();
+      if (child instanceof StateObject) {
+        ((StateObject)child).setState(state);
+      } else {
+        throw new RuntimeException("BinderSupport: No \"setState(..)\" from "+
+                                   getContainer()+" for "+child);
+      }
     }
   }
 }

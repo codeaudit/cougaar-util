@@ -53,8 +53,8 @@ public abstract class ContainerSupport
     if (sb != null) setChildServiceBroker(sb);
   }
 
+  /** Overridable by extending classes to capture the BindingSite. **/
   public void setBindingSite(BindingSite bs) {
-    //System.err.println("setBindingSite of "+this+" to "+bs);
   }
 
   /** override to specify a different component factory class. 
@@ -479,7 +479,6 @@ public abstract class ContainerSupport
    * A Component is initialized (but not loaded) s a side-effect of binding 
    **/
   protected Binder bindComponent(Object c) {
-    //System.err.println("Binding: "+c);
     synchronized (binderFactories) {
       ArrayList wrappers = null;
       Binder b = null;
@@ -491,7 +490,6 @@ public abstract class ContainerSupport
         } else {
           b = bf.getBinder(c);
           if (b != null) {
-            //System.err.println("Bound by: "+b);
             break;
           }
         }
@@ -510,10 +508,8 @@ public abstract class ContainerSupport
       }
 
       if (b != null) {
-        //System.err.println("setting Binder for "+c);
         BindingUtility.setBindingSite(b, getContainerProxy());
         BindingUtility.setServices(b, getServiceBroker());
-        //System.err.println("Initializing Binder for "+c);
         BindingUtility.initialize(b);
         // done
         return b;

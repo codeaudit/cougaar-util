@@ -58,7 +58,6 @@ public abstract class BindingUtility {
       }
       */
 
-      //System.err.println("Invoking "+child+".setBindingSite("+bindingSite+")");
       m.invoke(child, new Object[]{bindingSite});
       return true;
     } catch (Exception e) {
@@ -95,7 +94,6 @@ public abstract class BindingUtility {
               try {
                 m.invoke(child, args);
               } catch (InvocationTargetException ite) {
-                //ite.getCause().printStackTrace();
                 throw ite.getCause();
               }
             }
@@ -132,17 +130,13 @@ public abstract class BindingUtility {
       } catch (NoSuchMethodException e1) { }
       if (init != null) {
         init.invoke(child, new Object[] {});
-        //System.err.println("Invoked "+method+" on "+child);
         return true;
       }
     } catch (java.lang.reflect.InvocationTargetException ite) {
-      //ite.getCause().printStackTrace();
       throw new ComponentRuntimeException("failed while calling "+method+"()", 
                                           child,
                                           ite.getCause());
     } catch (Exception e) {
-      //e.printStackTrace();
-      //throw e;
       throw new ComponentRuntimeException("failed to call "+method+"()", 
                                           child,
                                           e);

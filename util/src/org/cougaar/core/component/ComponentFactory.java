@@ -92,7 +92,6 @@ public abstract class ComponentFactory
    * a Component in order for the rest of the default code to work.
    **/
   protected Object instantiateClass(Class cc) {
-    System.err.println("MIK: instantiateClass should not be called!!!  Please report this message to bugzilla");
     try {
       return cc.newInstance();
     } catch (Exception e) {

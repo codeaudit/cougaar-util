@@ -78,7 +78,7 @@ public abstract class BinderWrapper
     if (getServiceBroker() != null) {
       BindingUtility.setServices(getChildBinder(), getServiceBroker());
     } else {
-      System.err.println("BinderWrapper: No ServiceBroker!");
+      throw new RuntimeException("BinderWrapper: No ServiceBroker!");
     }
     child.initialize();
   }

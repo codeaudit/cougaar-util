@@ -89,8 +89,6 @@ public class ComponentDescriptions {
           ip.indexOf(".", prefixl+1) == -1   // there are no more '.'s?
           ) {
         l.add(o);
-      } else {
-        //System.err.println("Rejecting "+cd);
       }
     }
     sort(l);
