@@ -8,18 +8,14 @@ queryAssemblyID = \
   WHERE ASSEMBLY_TYPE = ':assembly_type'
 
 queryAgentNames = \
- SELECT A.COMPONENT_NAME \
-   FROM V3_ASB_COMPONENT A, \
-        V3_LIB_COMPONENT B \
-  WHERE A.ASSEMBLY_ID = ':assemblyMatch' \
-    AND B.COMPONENT_LIB_ID = A.COMPONENT_LIB_ID \
-    AND B.INSERTION_POINT = 'Node.AgentManager.Agent' 
+ SELECT COMPONENT_NAME \
+   FROM  V3_ASB_COMPONENT \
+  WHERE ASSEMBLY_ID=':assemblyMatch' \
+   AND COMPONENT_CATEGORY='agent'
 
 queryAgentData = \
- SELECT A.COMPONENT_ID, COMPONENT_CATEGORY \
-   FROM V3_ASB_COMPONENT A, \
-        V3_LIB_COMPONENT B \
-  WHERE A.ASSEMBLY_ID = ':assemblyMatch' \ 
-    AND A.COMPONENT_NAME = ':component_name' \
-    AND B.COMPONENT_LIB_ID = A.COMPONENT_LIB_ID \
-    AND B.INSERTION_POINT = 'Node.AgentManager.Agent' 
+ SELECT COMPONENT_ID, COMPONENT_CATEGORY \
+   FROM  V3_ASB_COMPONENT \
+  WHERE ASSEMBLY_ID=':assemblyMatch' \
+   AND COMPONENT_CATEGORY='agent'
+
