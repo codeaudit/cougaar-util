@@ -39,7 +39,7 @@ public class OperatorFactoryImpl extends OperatorFactory {
     packages[3] = "org.cougaar.domain.planning.ldm.asset.";
     packages[4] = "org.cougaar.domain.planning.ldm.measure.";
     packages[5] = "org.cougaar.domain.glm.";
-    packages[6] = "org.cougaar.domain.glm.asset.";
+    packages[6] = "org.cougaar.domain.glm.ldm.asset.";
     ClassCache.setPackages(packages);
   }
 
