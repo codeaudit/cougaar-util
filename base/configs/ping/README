@@ -1,0 +1,25 @@
+
+Simple example of core's ping support, useful for infrastructure
+and message transport testing.
+
+Add this system property to your Node script to enable logging:
+  -Dorg.cougaar.core.logging.config.filename=log.props
+
+Optionally add these properties to enable persistence and turn
+up the frequency to every 15 seconds:
+  -Dorg.cougaar.core.persistence.enable=true
+  -Dorg.cougaar.core.persistence.lazyInterval=15000
+
+See "AgentA.ini" for notes on how to configure the pings.  The 
+provided configuration will send an endless series of pings from 
+AgentA to AgentB, one per second.  One can modify the agent ".ini" 
+files to increase the number of pings or change their frequency.
+
+See the package-level javadocs in
+  org/cougaar/core/mobility/ping/package.html
+for additional usage and testing notes.
+
+A scripted agent mobility test is illustrated by the MoverAgent.
+The test will move AgentA from NodeA to NodeB and back in an 
+endless loop, pausing for 30 seconds between each move.  See
+"MoverAgent.ini" for details.
