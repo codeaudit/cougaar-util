@@ -36,11 +36,11 @@ import org.cougaar.tools.server.NodeEvent;
 public interface ClientNodeEventListener 
 extends Remote {
 
-  public void handle(
+  void handle(
       //ServerNodeController snc,
       NodeEvent ne) throws RemoteException;
 
-  public void handleAll(
+  void handleAll(
       //ServerNodeController snc,
       List l) throws RemoteException;
 

@@ -48,18 +48,17 @@ extends Remote {
    * @return a byte[] of data, or null if the end of the stream has been
    *   reached
    */
-  public byte[] read(int len) throws IOException, RemoteException;
+  byte[] read(int len) throws IOException, RemoteException;
 
   //
   // all the other methods of InputStream:
   //
 
-  public int read() throws IOException, RemoteException;
-  public long skip(long n) throws IOException, RemoteException;
-  public int available() throws IOException, RemoteException;
-  public void close() throws IOException, RemoteException;
-  public void mark(int readlimit) throws RemoteException;
-  public void reset() throws IOException, RemoteException;
-  public boolean markSupported() throws RemoteException;
-
+  int read() throws IOException, RemoteException;
+  long skip(long n) throws IOException, RemoteException;
+  int available() throws IOException, RemoteException;
+  void close() throws IOException, RemoteException;
+  void mark(int readlimit) throws RemoteException;
+  void reset() throws IOException, RemoteException;
+  boolean markSupported() throws RemoteException;
 }

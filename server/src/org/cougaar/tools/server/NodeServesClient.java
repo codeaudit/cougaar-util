@@ -38,20 +38,20 @@ public interface NodeServesClient {
    * Get the current <code>NodeEventListener</code>, as set by
    * <tt>setNodeEventListener(..)</tt>.
    */
-  public NodeEventListener getNodeEventListener() throws Exception;
+  NodeEventListener getNodeEventListener() throws Exception;
 
   /**
    * The client can set the <code>NodeEventListener</code> to listen for
    * "pushed" events on the Node.
    */
-  public void setNodeEventListener(NodeEventListener nal) throws Exception;
+  void setNodeEventListener(NodeEventListener nal) throws Exception;
 
 
   /**
    * Get the current <code>NodeEventFilter</code>, as set by
    * <tt>setNodeEventFilter(..)</tt>.
    */
-  public NodeEventFilter getNodeEventFilter(
+  NodeEventFilter getNodeEventFilter(
       ) throws Exception;
 
   /**
@@ -59,7 +59,7 @@ public interface NodeServesClient {
    * configure the Node to send or not send specific <code>NodeEvent</code>s
    * and the Node event-buffering policy.
    */
-  public void setNodeEventFilter(
+  void setNodeEventFilter(
       NodeEventFilter nef) throws Exception;
 
 
@@ -70,17 +70,17 @@ public interface NodeServesClient {
    * Also see the <code>NodeEventFilter</code>, which defines the 
    * NodeEvent buffering policy.
    */
-  public void flushNodeEvents() throws Exception;
+  void flushNodeEvents() throws Exception;
 
   /**
    * Get the name of the node.
    */
-  public String getName() throws Exception;
+  String getName() throws Exception;
 
   /**
    * Get the command-line arguments used to create the node.
    */
-  public String[] getCommandLine() throws Exception;
+  String[] getCommandLine() throws Exception;
 
 
   /**
@@ -89,13 +89,13 @@ public interface NodeServesClient {
    *
    * @return true if the node is running
    */
-  public boolean isAlive() throws Exception;
+  boolean isAlive() throws Exception;
 
   /**
    * @return true if the node has registered back with the server,
    *   allowing further details
    */
-  public boolean isRegistered() throws Exception;
+  boolean isRegistered() throws Exception;
 
   //
   // These require (!(isAlive())).
@@ -104,7 +104,7 @@ public interface NodeServesClient {
   /**
    * @return the exit value of the dead node process.
    */
-  public int getExitValue() throws Exception;
+  int getExitValue() throws Exception;
 
   //
   // These require (isAlive()).
@@ -115,19 +115,19 @@ public interface NodeServesClient {
    *
    * @return true if end result is <tt>isRegistered()</tt>
    */
-  public boolean waitForRegistration() throws Exception;
+  boolean waitForRegistration() throws Exception;
 
   /**
    * Wait at most <tt>millis</tt> milliseconds for the node to register.
    *
    * @return true if end result is <tt>isRegistered()</tt>
    */
-  public boolean waitForRegistration(long millis) throws Exception;
+  boolean waitForRegistration(long millis) throws Exception;
 
   /**
    * Wait for the node to exit, then return the exit code.
    */
-  public int waitForCompletion() throws Exception;
+  int waitForCompletion() throws Exception;
 
   /**
    * Wait at most <tt>millis</tt> for the node to exit, then return 
@@ -136,12 +136,12 @@ public interface NodeServesClient {
    * If the node is still alive then <tt>Integer.MIN_VALUE</tt> is 
    * returned -- the client can verify with <tt>isAlive()</tt>.
    */
-  public int waitForCompletion(long millis) throws Exception;
+  int waitForCompletion(long millis) throws Exception;
 
   /**
    * Destroy this node if it <tt>isAlive()</tt>.
    */
-  public void destroy() throws Exception;
+  void destroy() throws Exception;
 
 
   //
@@ -153,14 +153,14 @@ public interface NodeServesClient {
    * <p>
    * Requires <tt>isRegistered()</tt>.
    */
-  public String getHostName() throws Exception;
+  String getHostName() throws Exception;
 
   /**
    * Return a <code>List</code> of <code>ClusterIdentifier</code>s for
    * all the clusters currently running on the Node.
    * Requires <tt>isRegistered()</tt>.
    */
-  public List getClusterIdentifiers() throws Exception;
+  List getClusterIdentifiers() throws Exception;
 
   //
   // Lots of other capabilities soon... see 

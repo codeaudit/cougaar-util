@@ -42,7 +42,7 @@ public interface HostServesClient {
    * Soon we'll likely move the "cw" parameter to a new 
    * "writeConfiguration(ConfigurationWriter cw, String path)" method.
    */
-  public NodeServesClient createNode(
+  NodeServesClient createNode(
       String nodeName,
       Properties nodeProperties,
       String[] commandLineArgs,
@@ -66,7 +66,7 @@ public interface HostServesClient {
    *
    * @param path a directory path that must start with "./" and end in "/"
    */
-  public String[] list(
+  String[] list(
       String path) throws Exception;
 
   /**
@@ -76,7 +76,7 @@ public interface HostServesClient {
    * 
    * @param filename a file name that must start with "./"
    */
-  public InputStream open(
+  InputStream open(
       String filename) throws Exception;
 
   //

@@ -39,28 +39,28 @@ import org.cougaar.tools.server.NodeServesClient;
 public interface ServerNodeController 
 extends Remote {
 
-  public ClientNodeEventListener getClientNodeEventListener() 
+  ClientNodeEventListener getClientNodeEventListener() 
     throws RemoteException;
-  public void setClientNodeEventListener(
+  void setClientNodeEventListener(
       ClientNodeEventListener cnel) throws RemoteException;
 
-  public NodeEventFilter getNodeEventFilter() 
+  NodeEventFilter getNodeEventFilter() 
     throws RemoteException;
-  public void setNodeEventFilter(
+  void setNodeEventFilter(
       NodeEventFilter nef) throws RemoteException;
 
-  public void flushNodeEvents() throws RemoteException;
-  public String getName() throws RemoteException;
-  public String[] getCommandLine() throws RemoteException;
-  public boolean isAlive() throws RemoteException;
-  public boolean isRegistered() throws RemoteException;
-  public boolean waitForRegistration() throws RemoteException;
-  public boolean waitForRegistration(long millis) throws RemoteException;
-  public int waitForCompletion() throws RemoteException;
-  public int waitForCompletion(long millis) throws RemoteException;
-  public int getExitValue() throws RemoteException;
-  public void destroy() throws RemoteException;
-  public String getHostName() throws RemoteException;
-  public List getClusterIdentifiers() throws RemoteException;
+  void flushNodeEvents() throws RemoteException;
+  String getName() throws RemoteException;
+  String[] getCommandLine() throws RemoteException;
+  boolean isAlive() throws RemoteException;
+  boolean isRegistered() throws RemoteException;
+  boolean waitForRegistration() throws RemoteException;
+  boolean waitForRegistration(long millis) throws RemoteException;
+  int waitForCompletion() throws RemoteException;
+  int waitForCompletion(long millis) throws RemoteException;
+  int getExitValue() throws RemoteException;
+  void destroy() throws RemoteException;
+  String getHostName() throws RemoteException;
+  List getClusterIdentifiers() throws RemoteException;
 
 }

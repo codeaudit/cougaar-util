@@ -39,7 +39,7 @@ extends Remote {
   /** 
    * Launch a new Node.
    */
-  public ServerNodeController createNode(
+  ServerNodeController createNode(
       String nodeName, 
       Properties props, 
       String[] args,
@@ -51,35 +51,35 @@ extends Remote {
   /** 
    * Kill the named Node.
    */
-  public boolean destroyNode(String nodeName) throws RemoteException;
+  boolean destroyNode(String nodeName) throws RemoteException;
   
   /** 
    * @return the controllers of all known Nodes on this host
    */
-  public Collection getNodes() throws RemoteException;
+  Collection getNodes() throws RemoteException;
 
   /** 
    * @return the number of active Nodes on this host 
    */
-  public int getNodeCount() throws RemoteException;
+  int getNodeCount() throws RemoteException;
 
   /** 
    * Kill all running Nodes.  
    * <p>
    * This should not generally be used. 
    */
-  public void reset() throws RemoteException;
+  void reset() throws RemoteException;
 
   /**
    * List files on a host.
    */
-  public String[] list(
+  String[] list(
       String path) throws RemoteException;
 
   /**
    * Open a file for reading.
    */
-  public ServerInputStream open(
+  ServerInputStream open(
       String filename) throws RemoteException;
 
 }

@@ -34,11 +34,11 @@ public interface NodeEventListener {
    * <code>NodeEventFilter</code> controls the filtering and
    * buffering-policy.
    */
-  public void handle(NodeServesClient nsc, NodeEvent ne);
+  void handle(NodeServesClient nsc, NodeEvent ne);
 
   /**
    * Given a <code>List</code> of <code>NodeEvent</code>s.
    */
-  public void handleAll(NodeServesClient nsc, List l);
+  void handleAll(NodeServesClient nsc, List l);
 
 }

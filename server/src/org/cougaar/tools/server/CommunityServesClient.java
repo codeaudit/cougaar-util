@@ -43,7 +43,7 @@ public interface CommunityServesClient {
    * <p>
    * The client should cache the result for efficiency.
    */
-  public HostServesClient getHost(
+  HostServesClient getHost(
       String hostName,
       int hostPort) throws Exception;
 
@@ -58,7 +58,7 @@ public interface CommunityServesClient {
    *
    * @deprecated use "createHost", then "HostServesClient#createNode(..)"
    */
-  public NodeServesClient createNode(
+  NodeServesClient createNode(
       String hostName, 
       int hostPort, 
       String regName,
