@@ -71,6 +71,8 @@ public abstract class CallerTracker {
 
   /** Alias for getShallowTracker(1) */
   public static CallerTracker getShallowTracker() { return new ShallowTracker(1); }
+
+
   /** Construct a CallerTracker which discriminates between contexts based only
    * on the stack frame the specified number of frames above the frame which invokes
    * #isNew().<p>
@@ -80,7 +82,6 @@ public abstract class CallerTracker {
    **/
   public static CallerTracker getShallowTracker(int i) { return new ShallowTracker(i); }
 
-
   protected static class ShallowTracker extends CallerTracker {
     private int depth;
     protected ShallowTracker(int n) {
@@ -89,6 +90,30 @@ public abstract class CallerTracker {
     public Object getKey(Throwable t) {
       StackTraceElement[] stack = t.getStackTrace();
       return (stack.length > depth)?stack[depth]:null;
+    }
+  }
+
+  /** Construct a CallerTracker which discriminates between contexts based only
+   * on stack frame selected by the predicate.  The predicate is invoked on the
+   * class names of frames of the stack (innermost first, skipping the first one that is a CallerTracker
+   * frame), until the predicate returns true.  The whole selected frame is the one used as the key.
+   */
+  public static CallerTracker getPredicateTracker(UnaryPredicate p) {
+    return new PredicateTracker(p);
+  }
+
+  protected static class PredicateTracker extends CallerTracker {
+    private UnaryPredicate p;
+    protected PredicateTracker(UnaryPredicate p) {
+      this.p = p;
+    }
+    public Object getKey(Throwable t) {
+      StackTraceElement[] stack = t.getStackTrace();
+      for (int i=1; i< stack.length; i++) {
+        if (p.execute(stack[i].getClassName())) 
+          return stack[i];
+      }
+      return null;
     }
   }
 
