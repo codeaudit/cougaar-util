@@ -115,8 +115,7 @@ XSL Template for NodeAgent, which reuses most of SimpleAgent.
     This is the extra special agent binder (bug 1340), possibly the cause of
     bugs 3038, 3279, and others...
     -->
-    <xsl:call-template name="find">
-      <xsl:with-param name="priority">HIGH</xsl:with-param>
+    <xsl:call-template name="findAll">
       <xsl:with-param name="insertionpoint">Node.AgentManager.</xsl:with-param>
     </xsl:call-template>
   </xsl:template>
