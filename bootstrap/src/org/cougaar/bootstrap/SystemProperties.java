@@ -1,7 +1,7 @@
 /*
  * <copyright>
  *  
- *  Copyright 1997-2004 Networks Associates Technology, Inc
+ *  Copyright 1997-2005 Cougaar Software, Inc
  *  under sponsorship of the Defense Advanced Research Projects
  *  Agency (DARPA).
  * 
@@ -28,45 +28,64 @@
 package org.cougaar.bootstrap;
 
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.security.PrivilegedAction;
 import java.security.AccessController;
 
-/** This utility class allows to retrieve system properties without
-    requiring write access (which would be a security vulnerability).
-    Only the bootstrapper has the permission to call System.getProperties().
-    Warning: in fact, no class should need the entire set of properties.
-    Classes should only use specific properties that they need. 
-    Several properties would create a security threat if they could be read. */
+/**
+ * Utility class to handle system properties.
+ * <p>
+ * 
+ * @property org.cougaar.properties.expand=true
+ *   Set to true to enable system property expansion.
+ *   Set to false to disable property expansion.
+ */
 public class SystemProperties {
-
+  
   private static boolean debug = false;
-
-  /** Returns standard properies that can be read by anyone.
-  */
+  
+  /**
+   * A Pattern used to expand System properties.
+   */
+  private static final Pattern expandPattern =
+    Pattern.compile("\\$\\{([^\\$\\{\\}]*)\\}");
+  
+  private static final Pattern escapePattern =
+    Pattern.compile("\\\\\\$\\\\\\{([^\\$\\{\\}]*)\\\\\\}");
+  
+  /**
+   * Returns standard Java properies without the need for write privileges.
+   * <p>
+   * This method retrieve system properties without requiring write access
+   * privileges (which could be a potential security vulnerability).
+   */
   public static Properties getStandardSystemProperties() {
     String[] propname = {
-      "java.version",
-      "java.vendor",
-      "java.vendor.url",
-      "java.class.version",
-      "os.name",
-      "os.version",
-      "os.arch",
-      "file.separator",
-      "path.separator",
-      "line.separator",
-      "java.specification.version",
-      "java.specification.vendor",
-      "java.specification.name",
-      "java.vm.specification.version",
-      "java.vm.specification.vendor",
-      "java.vm.specification.name",
-      "java.vm.version",
-      "java.vm.vendor",
-      "java.vm.name"
+        "java.version",
+        "java.vendor",
+        "java.vendor.url",
+        "java.class.version",
+        "os.name",
+        "os.version",
+        "os.arch",
+        "file.separator",
+        "path.separator",
+        "line.separator",
+        "java.specification.version",
+        "java.specification.vendor",
+        "java.specification.name",
+        "java.vm.specification.version",
+        "java.vm.specification.vendor",
+        "java.vm.specification.name",
+        "java.vm.version",
+        "java.vm.vendor",
+        "java.vm.name"
     };
-
+    
     Properties props = new Properties();
     for (int i = 0 ; i < propname.length ; i++) {
       // Make a copy of the system properties.
@@ -74,43 +93,115 @@ public class SystemProperties {
     }
     return props;
   }
-
+  
   public static Properties getSystemPropertiesWithPrefix(String prefix) {
     Properties props = new Properties();
     if (debug) {
       System.out.println("getSystemPropertiesWithPrefix: " + prefix);
     }
-
-    Enumeration names = (Enumeration) AccessController.doPrivileged(new PrivilegedAction() {
-	public Object run() {
-	  Enumeration n = System.getProperties().propertyNames();
-	  return n;
-	}
-      });
-
+    
+    Enumeration names = (Enumeration) AccessController.doPrivileged(
+        new PrivilegedAction() {
+          public Object run() {
+            Enumeration n = System.getProperties().propertyNames();
+            return n;
+          }
+        });
+    
     while (names.hasMoreElements()) {
       String key = (String) names.nextElement();
       if (key.startsWith(prefix)) {
-	if (debug) {
-	  System.out.println("Trying to read property: " + key);
-	}
-
-	try {
-	  // Make sure this property can be read. Check against the security policy.
-	  // The following line will throw a security exception if the thread
-	  // does not have the permission to read that property.
-	  System.getProperty(key);
-
-	  props.setProperty(key, System.getProperty(key));
-	} catch (SecurityException e) {
-	  // Don't add the property if we cannot read it.
-	  if (debug) {
-	    System.out.println("Not allowed to read property: " + key);
-	  }
-	}
+        if (debug) {
+          System.out.println("Trying to read property: " + key);
+        }
+        
+        try {
+          // Make sure this property can be read. Check against the security policy.
+          // The following line will throw a security exception if the thread
+          // does not have the permission to read that property.
+          System.getProperty(key);
+          
+          props.setProperty(key, System.getProperty(key));
+        } catch (SecurityException e) {
+          // Don't add the property if we cannot read it.
+          if (debug) {
+            System.out.println("Not allowed to read property: " + key);
+          }
+        }
       }
     }
     //props.list(System.out);
     return props;
-  } 
+  }
+  
+  /**
+   * Expand System properties.
+   * <p>
+   * The purpose of the property expansion is to make Java properties
+   * clearer and easier to maintain. Use the "${}" tag to introduce
+   * substitutable parameters, so they can be expanded to values
+   * indicated with tag names during property retrieval at runtime.
+   * Properties may be nested as shown in the example below:<pre>
+   *   a       = "foo"
+   *   a.subA  = "bob"
+   *   c       = "subA"
+   *   b = "${a} ${a.${c}}/smith"  => b = "foo bob/smith" after
+   *   property expansion.
+   * </pre>
+   */
+  public static void expandProperties() {
+    boolean expandProperties =
+      Boolean.valueOf(System.getProperty("org.cougaar.properties.expand",
+      "true")).booleanValue();
+    
+    if (expandProperties) {
+      Properties props = System.getProperties();
+      Enumeration en = props.propertyNames();
+      while (en.hasMoreElements()) {
+        String key = (String)en.nextElement();
+        Set references = new HashSet();
+        expandProperty(props, key, references);
+      }
+    }
+  }  
+
+  private static String expandProperty(Properties props, String key, Set references) {
+    String value = props.getProperty(key);
+    boolean done = false;
+    while (!done) {
+      Matcher m = expandPattern.matcher(value);
+      StringBuffer sb = new StringBuffer();
+      done = true;
+      while (m.find()) {
+        done = false;
+        String pKey = m.group(1);
+        /* The replaceAll is needed to handle the backslash character
+         * in directory names, e.g. c:\cougaar
+         * Otherwise the resulting string would be "c:cougaar"
+         */
+        String pVal = System.getProperty(pKey);
+        if (pVal == null) {
+          throw new IllegalArgumentException("Unresolved property: " + pKey);
+        }
+        pVal = pVal.replaceAll("\\\\", "\\\\\\\\");
+        if (expandPattern.matcher(pVal).find()) {
+          // This is a forward reference
+          if (references.contains(pKey)) {
+            // This is a circular reference.
+            throw new IllegalArgumentException("Circular reference at " + pKey + " = " + pVal);
+            
+          }
+          references.add(pKey);
+          pVal = expandProperty(props, pKey, references).replaceAll("\\\\", "\\\\\\\\");
+        }
+        m.appendReplacement(sb, pVal);
+      }
+      m.appendTail(sb);
+      value = sb.toString();
+    }
+    value = escapePattern.matcher(value).replaceAll("\\$\\{$1\\}");
+    props.setProperty(key, value);
+    return value;
+  }
+  
 }

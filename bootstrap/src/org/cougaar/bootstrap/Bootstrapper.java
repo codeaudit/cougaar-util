@@ -205,7 +205,7 @@ import java.util.Properties;
  *   application.
  *
  * @property org.cougaar.properties.url=URL
- *   <i>Deprecated:</i> Set to specify where an additional set of
+ *   Set to specify where an additional set of
  *   System Properties should be loaded from.
  */
 public class Bootstrapper
@@ -300,7 +300,8 @@ public class Bootstrapper
   public static void launch(String classname, String[] args){
     setIsBootstrapped();
     readProperties(System.getProperty("org.cougaar.properties.url"));
-
+    SystemProperties.expandProperties();
+    
     getBootstrapper().launchApplication(classname, args);
   }
   
