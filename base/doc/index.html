@@ -99,6 +99,31 @@ example, the errata page for Cougaar 11.0 is <a href="http://cougaar.org/errata/
 performance optimizations, and multiple bug fixes.
 <p>
 <ul>
+<li>Created new "bin/Cougaar[.bat]" scripts that replace the older
+"bin/*Node*" scripts:<br>
+&nbsp;&nbsp;<code>Node, Node.bat, XMLNode, XSLNode, XSLNode.bat</code><br>
+For example, if "MyNode.xml" contains only node "MyNode", then
+instead of the old usage:<br>
+&nbsp;&nbsp;<code>$COUGAAR_INSTALL_PATH/bin/Node MyNode.xml MyNode</code><br>
+now use:<br><code>
+&nbsp;&nbsp;<code>$COUGAAR_INSTALL_PATH/bin/Cougaar MyNode.xml</code><br>
+The new scripts are similar to ACME and the removed XSLNode, which
+read the Java system properties from the XML file, for example:<code><br>
+&nbsp;&nbsp;&lt;node name='MyNode'&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;vm_parameter&gt;-Dx=y&lt;/vm_parameter&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;..</code><br>
+These "-D"s can be specified in a separate "system" XML file and
+run using:<br>
+&nbsp;&nbsp;<code>$COUGAAR_INSTALL_PATH/bin/Cougaar --system mySystem.xml MyNode.xml</code><br>
+INI files are supported for this release, but are scheduled for
+removal in the 12.0 release (
+<a href="http://bugs.cougaar.org/show_bug.cgi?id=3881">bug 3881</a>
+)
+For more details, run:<br>
+&nbsp;&nbsp;<code>$COUGAAR_INSTALL_PATH/bin/Cougaar --help</code><br>
+or see
+<a href="http://bugs.cougaar.org/show_bug.cgi?id=3447#c7">bug 3447</a>
+.</li>
 <li>Added a new "pizza" application suite.  These applications are
 good examples of how to use relays, communities, service discovery, etc.
 The pizza applications also replace "minitestconfig" as the standard
