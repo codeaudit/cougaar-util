@@ -32,7 +32,7 @@ set MYCLASSES=org.cougaar.core.node.Node
 set TOPS_DEMO_PATH=%COUGAAR_INSTALL_PATH%\tops\configs\demo-config
 set TOPS_TEST_PATH=%COUGAAR_INSTALL_PATH%\tops\configs\test-config
 
-set MYPROPERTIES=-Dorg.cougaar.system.path=%COUGAAR3RDPARTY% -Dorg.cougaar.install.path=%COUGAAR_INSTALL_PATH% -Dorg.cougaar.config.path=%TOPS_TEST_PATH%\data;%TOPS_TEST_PATH%\data\PROTOTYPES;%TOPS_TEST_PATH%\data\CLUSTERINPUT; -Duser.timezone=GMT -Dorg.cougaar.core.cluster.startTime=08/10/2005
+set MYPROPERTIES=-Dorg.cougaar.system.path=%COUGAAR3RDPARTY% -Dorg.cougaar.install.path=%COUGAAR_INSTALL_PATH% -Dorg.cougaar.config.path=%TOPS_TEST_PATH%\data;%TOPS_TEST_PATH%\data\PROTOTYPES;%TOPS_TEST_PATH%\data\CLUSTERINPUT; -Duser.timezone=GMT -Dorg.cougaar.core.agent.startTime=08/10/2005
 
 set MYMEMORY=-Xms100m -Xmx300m
 
@@ -72,4 +72,6 @@ set COUGAAR3RDPARTY=%COUGAAR_INSTALL_PATH%\lib
 @ECHO ON
 
 java.exe %MYPROPERTIES% %MYMEMORY% -classpath %LIBPATHS% %MYCLASSES% %MYARGUMENTS% %2 %3
+
+
 
