@@ -55,7 +55,8 @@ the current Cougaar version was released.
   <!-- COUGAAR 10.0 COUGAAR 10.0 COUGAAR 10.0 COUGAAR 10.0 COUGAAR 10.0 -->
 <p> <b>Build 10.0</b> is a major release, including significant code
 repackaging and cleanup.
-ClusterIdentifier -- FIXME
+<ul>
+<li>ClusterIdentifier -- FIXME
 As part of this change, the CSMART configuration database has
 changed. We recommend reloading your database, following the CSMART
 install instructions. You may also update your database in-place,
@@ -63,16 +64,23 @@ using the provided update script in
 csmart/data/database/scripts/mysql/sql/cluster-id-removal.sql
 Finally, at experiment load time, if CSMART still sees a ClusterIdentifier
 in a PropertyGroup, it will replace it with a MessageAddress. You will
-need to re-save your experiment though.
-AspectValue -- FIXME
-Planning split -- FIXME
-ComponentPlugin is now a simple extension of
+need to re-save your experiment though.</li>
+<li>AspectValue -- FIXME</li>
+<li>Planning split -- FIXME</li>
+<li>ComponentPlugin is now a simple extension of
 BlackboardClientComponent. As a result, users may not assume that
 getBindingSite() returns a PluginBindingSite. Plugins should use call
 getAgentIdentifier() or getConfigFinder on the Plugin, and not on the
 BindingSite. For simplicity, a script is provided in
 ./ReleaseNotes/10.0/fixBindingSite.pl for making the necessary (minor)
-changes. 
+changes. </li>
+<li>Insertion points for the major components are now defined by
+public constants in the appropriate classes. For example, the
+insertion point for an Agent is
+org.cougaar.core.agent.Agent.INSERTION_POINT (Plugin is
+org.cougaar.core.plugin.PluginBase). Use these constants wherever
+possible.</li>
+</ul>
 
   <!-- COUGAAR 9.4.1 COUGAAR 9.4.1 COUGAAR 9.4.1 COUGAAR 9.4.1 COUGAAR 9.4.1 -->
  
