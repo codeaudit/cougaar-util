@@ -72,7 +72,7 @@ while [ x"$1" != x ]; do
     -*) preargs="$preargs $1"
 	shift
 	continue;;
-    *)  socname = "$1"
+    *)  socname="$1"
         shift
         nodename=`echo $1 | sed 's/.ini\$//'`
 	shift
@@ -149,7 +149,7 @@ nodeclass="org.cougaar.core.node.Node"
 #uncomment this to turn on validation
 #xmlvalidate="-Dorg.cougaar.core.node.validate=true"
 xmlvalidate=""
-xmlargs="-Dorg.cougaar.core.node.InitializationComponent=XML -Dorg.cougaar.society.file=$societyfile $xmlvalidate"
+xmlargs="-Dorg.cougaar.core.node.InitializationComponent=XML -Dorg.cougaar.society.file=$socname $xmlvalidate"
 
 allargs="${bootargs} \
 ${vmargs} \
