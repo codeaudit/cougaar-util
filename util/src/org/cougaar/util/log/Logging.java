@@ -20,7 +20,7 @@ import java.util.*;
 public final class Logging 
 {
   // cannot be instantiated
-  private Logging() {};
+  private Logging() {}
 
   /** Alias for {@link LoggerFactory#getInstance()} **/
   public static LoggerFactory getLoggerFactory() {
