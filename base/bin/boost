@@ -103,7 +103,8 @@ jars="$COUGAAR_INSTALL_PATH/lib/bootstrap.jar"
 
 # Cougaar Arguments: set up the cougaar application
 cargs="-Dorg.cougaar.install.path=$COUGAAR_INSTALL_PATH \
--Dorg.cougaar.workspace=$COUGAAR_WORKSPACE";
+-Dorg.cougaar.workspace=$COUGAAR_WORKSPACE \
+-Dorg.cougaar.system.path=$COUGAAR3RDPARTY";
 
 # name of the bootstrapper class
 bootclass="org.cougaar.bootstrap.Bootstrapper"
