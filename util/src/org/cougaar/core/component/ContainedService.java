@@ -37,7 +37,7 @@ public interface ContainedService
   extends Service
 {
   
-  /** @returns The ComponentDescription of the component (if known).
+  /** @return The ComponentDescription of the component (if known).
    **/
   ComponentDescription getComponentDescription();
 }
