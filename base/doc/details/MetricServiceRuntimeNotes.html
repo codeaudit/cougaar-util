@@ -132,22 +132,24 @@ thread usage data based on ThreadListenerService callbacks.
 <p>
 Following are some gifs of the data displayed by the
 MetricsServletPlugin for SMALL-135.  In the current implementation
-only some columns have actual data.  A color key is provided at the
+only some columns have significant data; the other columns will
+display real data in future releases.  A color key is provided at the
 end.
 
 <hr>
 
 <p>
 <img alt="" src="metrics-runtime-load.gif">    
+
 <p> In the Load display, only the load itself and the credibility of
-the metric are significant.  This snapshot was capture while SMALL-135
-was starting up, so only some Agents are listed.
+the metric are significant.  This snapshot was captured while
+SMALL-135 was starting up, so only some Agents are listed.
 <hr>
 
 <p>
 <img alt="" src="metrics-runtime-status.gif">    
 <p>
-In the status display, the only real values are "Spoke to" (seconds
+In the Status display, the significant values are "Spoke to" (seconds
 since the last message was sent to this Agent), "Heard from" (seconds
 since this Agent last sent a message), and "eMJIPS" (effective mjips).
 The jips value is constant per-host, and in this case all Agents were
@@ -157,8 +159,8 @@ running on the same host.
 <p>
 <img alt="" src="metrics-runtime-resources.gif">    
 <p>
-In the Resource display all values are real.  This is a per-Host
-display.
+In the Resource display all values are significant.  This is a
+per-Host display.
 
 <hr>
 <p>
@@ -171,7 +173,7 @@ This key describes the use of color in the other displays.
 <address><a href="mailto:rshapiro@bbn.com">R Shapiro</a></address>
 <!-- Created: Mon Jun 24 09:20:53 EDT 2002 -->
 <!-- hhmts start -->
-Last modified: Wed Jun 26 12:53:20 EDT 2002
+Last modified: Wed Jun 26 13:18:18 EDT 2002
 <!-- hhmts end -->
 </body>
 </html>
