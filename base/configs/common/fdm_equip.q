@@ -41,35 +41,27 @@ order by \
     fue.unit_equipment_qty asc
 
 %SQLAggregateAssetCreator
-query = select CAPABILITY AS MOS_LEVEL, PERSONNEL AS MOS_QTY, 'Dummy Nomenclature' \
-	AS "Dummy Nomenclature" \
-	from ORG_MOS, \
+query = select ('MOS/' || billet.unfrmd_srvc_occptn_cd) AS MOS_LEVEL, sum(to_strength) AS MOS_QTY, unfrmd_srvc_occptn_tx  \
+	from \ 
+	fdm_unit_billet billet, \
+	fdm_unfrmd_srvc_occptn occ, \
 	v6_lib_organization liborg \
 	where \
 	liborg.org_id=:agent \
-	and org_mos.uic = liborg.uic
+	and billet.unfrmd_srvc_occptn_cd=occ.unfrmd_srvc_occptn_cd \
+	and occ.rank_subcategory_code(+)='E' \
+	and billet.unit_identifier = liborg.uic \
+	group by billet.unfrmd_srvc_occptn_cd, unfrmd_srvc_occptn_tx
+
 
 # Then, get the containers and generate an aggregate asset
 %SQLAggregateAssetCreator
-query = select '8115001682275' AS NSN, container_20_ft_qty AS QTY_OH, 'Container' AS \
+query = select '8115001682275' AS NSN, decode(container_20_ft_qty,NULL,30,container_20_ft_qty) AS QTY_OH, 'Container' AS \
 	NOMENCLATURE \
 	from ue_summary_mtmc ues, \
 	v6_lib_organization liborg \
 	where \
 	liborg.org_id=:agent \
-	and ues.uic = liborg.uic
-
-
-
-
-
-
-
-
-
-
-
-
-
+	and ues.uic(+) = liborg.uic
 
 
