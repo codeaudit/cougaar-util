@@ -92,6 +92,13 @@ implication is that Componentes should not put initialization code in
 the setParameter method if the Component ever is constructed without
 parameters.
 </li>
+<li>
+The LoggingService is available earlier (during NodeAgent's HIGH
+subcomponent pass).  Furthermore, there is a new class
+<a href="api/org/cougaar/util/log/Logging.html">org.cougaar.util.log.Logging</a>
+which provides a variety of static methods giving access to loggers
+and allowing the set up of thread-specific logging contexts.
+</li>
 <li>CSMART: Add Dos Recipe export scripts</li>
 <li>Minor fix to support running TPFDD Viewer. Avoids necessity for
 workaround described in 9.2.2 - errata.</li>
