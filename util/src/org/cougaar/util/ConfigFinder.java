@@ -320,24 +320,6 @@ public class ConfigFinder {
     }
 
     traceLog(aURL, null);
-    /*
-    StringTokenizer st = new StringTokenizer (aURL, "-.");
-    String sb = st.nextToken() + ".zip";
-    try {
-      File file = locateFile(sb);
-      if (file != null) {
-        return openZip(aURL, file.toString());
-      }
-    } catch (IOException ioe) {
-      if (getLogger().isDebugEnabled()) {
-        getLogger().debug("Exception while looking for "+aURL+" in zip "+sb, ioe);
-      }
-    } catch (NullPointerException npe) {
-      if (getLogger().isDebugEnabled()) {
-        getLogger().debug("Exception while looking for "+aURL+" in zip "+sb, npe);
-      }
-    }
-    */
 
     throw new FileNotFoundException(aURL);
   }
@@ -373,38 +355,6 @@ public class ConfigFinder {
     traceLog(aURL, null);
 
     return null;
-  }
-
-  public InputStream openZip (String aURL, String aZIP) 
-    throws IOException
-  {
-    ZipFile zip = null;
-    InputStream retval = null;
-    try {
-      zip = new ZipFile(aZIP);
-      Enumeration zipfiles = zip.entries();
-      while (zipfiles.hasMoreElements()){
-	ZipEntry file = (ZipEntry)zipfiles.nextElement();
-	try {
-	  if (file.getName().equals(aURL)) {
-	    retval = zip.getInputStream(file);
-	  } else if (file.getName().endsWith (".cfg")) {
-	    InputStream is = zip.getInputStream(file);
-	    BufferedReader in = new BufferedReader(new InputStreamReader(is));
-	    while (in.ready()) {
-	      /*String text = */in.readLine();
-              // this is seriously wrong (MIK)
-	      //appendPathElement(text.substring(0, text.lastIndexOf(File.separator)));
-	    }
-	  }
-	} catch (IOException ioe) {	
-	  continue;
-	}
-      }
-      return retval;
-    } catch (ZipException ioe) {
-    }
-    throw new FileNotFoundException(aZIP);
   }
 
   public Document parseXMLConfigFile(String xmlfile) throws IOException {
