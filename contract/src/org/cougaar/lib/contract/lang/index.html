@@ -46,8 +46,8 @@ parameters, fields, or so on.  Another use is to filter a
 <code>Collection</code> to the subset that match the predicate.
 <p>
 COUGAAR uses UnaryPredicates to define <code>Subscription</code>s, where
-an COUGAAR <code>PlugIn</code> specifies interest in <code>Object</code>s
-contained in a shared blackboard (LogPlan).  A PlugIn is then 
+an COUGAAR <code>Plugin</code> specifies interest in <code>Object</code>s
+contained in a shared blackboard (LogPlan).  A Plugin is then 
 notified whenever an Object matching the Subscription's UnaryPredicate 
 is added-to/modified-in/removed-from the LogPlan.
 <p>
@@ -56,7 +56,7 @@ their "black-box" behavior -- one is unable to view the original
 source or reason about what the UnaryPredicate is "trying" to
 select.  Additionally the use of Java as the language requires a
 full Java compiler (i.e. UnaryPredicates are often statically compiled
-with the PlugIn code) and allows excessive UnaryPredicate code 
+with the Plugin code) and allows excessive UnaryPredicate code 
 complexity.
 <p>
 
@@ -74,7 +74,7 @@ implementation, a "language" and a simple parser.
 The Operator parser will dynamically compile an Operator from either
 a String representation (XML or Lisp-style as defined below) or from
 an XML DOM tree.  This flexablility will easily allow for run-time
-definition and use of Operators in PlugIn Subscriptions and queries.
+definition and use of Operators in Plugin Subscriptions and queries.
 <p>
 The goal of the language is to expose a tree-like structure of the
 filtering predicates.  One benefit of this representation is the
@@ -97,8 +97,8 @@ The comparison algorithm is basically a tree comparison of the two
 Operators, plus using some knowledge of the class heirarchies.
 <p>
 These analysis features will be used to specify the input/output
-behavior of PlugIns and determine when the output (publish) of one
-PlugIn matches the input (subscription) of another PlugIn or PlugIns.
+behavior of Plugins and determine when the output (publish) of one
+Plugin matches the input (subscription) of another Plugin or Plugins.
 <p>
 The langauge supports type checks (instanceof), basic logical operators
 (and/or/not), some set operators (exists/all/empty), and support for 
@@ -339,7 +339,7 @@ Sample statistics for the average Operator size (in terms of the
 number of primitives used) and primitive usage frequence are detailed
 in the tables below.  This sampling was gathered from predicates used
 for a contract-analysis tool to examine the subscribe/publish behavior
-of the COUGAAR PlugIns in ALP's "MiniTestConfig" society.  Details can be
+of the COUGAAR Plugins in ALP's "MiniTestConfig" society.  Details can be
 found on the <a href="https://www.alpine.bbn.com/">ALPINE web site</a>.
 <p>
 Many of these predicates are similar to the ones defined in the
