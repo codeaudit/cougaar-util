@@ -34,6 +34,9 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.cougaar.util.log.Logging;
+import org.cougaar.util.log.Logger;
+
 /**
  * COUGAAR Parameter String utilities.
  *
@@ -74,7 +77,8 @@ public class Parameters {
       //e.printStackTrace();
     }
     if (!found) {
-      System.err.println("Warning: Found no source for (Database) Parameters - looked for ~/.cougaarrc or [ConfigPath]/cougaar.rc (see doc/OnlineManual/DataAccess.html)");
+      Logger log = Logging.getLogger(Parameters.class);
+      log.shout("Found no source for (Database) Parameters - looked for ~/.cougaarrc or [ConfigPath]/cougaar.rc (see doc/OnlineManual/DataAccess.html)");
     }
   }
 
