@@ -1,3 +1,35 @@
+2003-03-17  Ray Tomlinson  <RTomlinson@bbn.com>
+
+	* log/log4j/Log4jLoggerFactory.java:
+	Bug #2478 -- Circularity between logger and config finder
+	Configure logging with the default logging configuration defined
+	in org.cougaar.util.log.log4j.Initializer before using the
+	ConfigFinder and then reconfigure with the logging config file (if
+	any). For reference, default configuration is:
+	log4j.rootCategory=WARN,A1
+	log4j.appender.A1=org.apache.log4j.ConsoleAppender
+	log4j.appender.A1.layout=org.apache.log4j.PatternLayout
+	log4j.appender.A1.layout.ConversionPattern=%d{ISO8601} %-5p [%c{1}] - %m%n
+
+2003-03-14  Ray Tomlinson  <RTomlinson@bbn.com>
+
+	* log/log4j/Util.java: 
+	* log/log4j/LoggerImpl.java: 
+	* log/log4j/DetailPriority.java: 
+	Bug #1645 -- Additional logging level needed for extreme detail
+	Added DETAIL logging level just before DEBUG. All other logging
+	levels have been moved up by one. Remember to specify the priority
+	class in logging configuration files:
+	DETAIL#org.cougaar.util.log.log4j.DetailPriority 
+
+	* log/LoggerAdapter.java: 
+	* log/Logger.java:
+	Bug #1645 -- Additional logging level needed for extreme detail
+	Added DETAIL logging level just before DEBUG. All other logging
+	levels have been moved up by one. Remember to specify the priority
+	class in logging configuration files:
+	DETAIL#org.cougaar.util.log.log4j.DetailPriority 
+
 2003-02-04  Ray Tomlinson  <RTomlinson@bbn.com>
 
 	* ReadOnlySortedSet.java: 
