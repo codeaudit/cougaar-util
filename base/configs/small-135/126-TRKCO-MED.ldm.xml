@@ -1,0 +1,60 @@
+<?xml version="1.0"  encoding="US-ASCII"?>
+
+<!DOCTYPE oplan SYSTEM "AssetList.ldm.dtd" []>
+
+<AssetList>
+
+  <AggregateAsset prototype="MOS-31U" quantity="1">
+    <schedule end="01/05/11" start="06/01/00"/>
+  </AggregateAsset>
+
+  <AggregateAsset prototype="MOS-54B" quantity="1">
+    <schedule end="01/05/11" start="06/01/00"/>
+  </AggregateAsset>
+
+  <AggregateAsset prototype="MOS-63B" quantity="3">
+    <schedule end="01/05/11" start="06/01/00"/>
+  </AggregateAsset>
+
+  <AggregateAsset prototype="MOS-63S" quantity="5">
+    <schedule end="01/05/11" start="06/01/00"/>
+  </AggregateAsset>
+
+  <AggregateAsset prototype="MOS-75B" quantity="1">
+    <schedule end="01/05/11" start="06/01/00"/>
+  </AggregateAsset>
+
+  <AggregateAsset prototype="MOS-77F" quantity="2">
+    <schedule end="01/05/11" start="06/01/00"/>
+  </AggregateAsset>
+
+  <AggregateAsset prototype="MOS-88D" quantity="4">
+    <schedule end="01/05/11" start="06/01/00"/>
+  </AggregateAsset>
+
+  <AggregateAsset prototype="MOS-88M" quantity="113">
+    <schedule end="01/05/11" start="06/01/00"/>
+  </AggregateAsset>
+
+  <AggregateAsset prototype="MOS-88Z" quantity="1">
+    <schedule end="01/05/11" start="06/01/00"/>
+  </AggregateAsset>
+
+  <AggregateAsset prototype="MOS-91S" quantity="1">
+    <schedule end="01/05/11" start="06/01/00"/>
+  </AggregateAsset>
+
+  <AggregateAsset prototype="MOS-92A" quantity="2">
+    <schedule end="01/05/11" start="06/01/00"/>
+  </AggregateAsset>
+
+  <AggregateAsset prototype="MOS-92G" quantity="5">
+    <schedule end="01/05/11" start="06/01/00"/>
+  </AggregateAsset>
+
+  <AggregateAsset prototype="MOS-92Y" quantity="3">
+    <schedule end="01/05/11" start="06/01/00"/>
+  </AggregateAsset>
+
+
+</AssetList>

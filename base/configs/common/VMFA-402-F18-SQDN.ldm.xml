@@ -1,0 +1,50 @@
+<?xml version="1.0"  encoding="US-ASCII"?>
+
+<!DOCTYPE ClusterAssets SYSTEM "ClusterAssets.ldm.dtd" []>
+
+<clusterassets>
+  <prototype name="NSN/F18">
+    <object class="org.cougaar.domain.glm.ldm.asset.FixedWingAircraftWeapon" id="proto-001">
+      <property class="org.cougaar.domain.planning.ldm.asset.TypeIdentificationPG" id="property-001">
+	<field value="NSN/F18" type="java.lang.String" name="TypeIdentification"/>
+	<field value="F18" type="java.lang.String" name="Nomenclature"/>
+      </property>
+    </object>
+  </prototype>
+  <instance prototype="NSN/F18" id="d001">
+    <schedule start="01/01/99" end="12/31/10"/>
+  </instance>
+  <instance prototype="NSN/F18" id="d002">
+    <schedule start="01/01/99" end="12/31/10"/>
+  </instance>
+  <instance prototype="NSN/F18" id="d003">
+    <schedule start="01/01/99" end="12/31/10"/>
+  </instance>
+  <instance prototype="NSN/F18" id="d004">
+    <schedule start="01/01/99" end="12/31/10"/>
+  </instance>
+  <instance prototype="NSN/F18" id="d005">
+    <schedule start="01/01/99" end="12/31/10"/>
+  </instance>
+  <instance prototype="NSN/F18" id="d006">
+    <schedule start="01/01/99" end="12/31/10"/>
+  </instance>
+  <instance prototype="NSN/F18" id="d007">
+    <schedule start="01/01/99" end="12/31/10"/>
+  </instance>
+  <instance prototype="NSN/F18" id="d008">
+    <schedule start="01/01/99" end="12/31/10"/>
+  </instance>
+  <instance prototype="NSN/F18" id="d009">
+    <schedule start="01/01/99" end="12/31/10"/>
+  </instance>
+  <instance prototype="NSN/F18" id="d010">
+    <schedule start="01/01/99" end="12/31/10"/>
+  </instance>
+  <instance prototype="NSN/F18" id="d011">
+    <schedule start="01/01/99" end="12/31/10"/>
+  </instance>
+  <instance prototype="NSN/F18" id="d012">
+    <schedule start="01/01/99" end="12/31/10"/>
+  </instance>
+</clusterassets>

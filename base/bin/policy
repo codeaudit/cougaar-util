@@ -1,0 +1,3 @@
+#!/bin/csh -f
+source $COUGAAR_INSTALL_PATH/bin/setlibpath.csh
+java -green  -cp $LIBPATHS    org.cougaar.domain.mlm.ui.views.PolicyApplication

@@ -1,0 +1,30 @@
+[Prototype] MilitaryOrganization
+
+[UniqueId] "UTC/CombatOrg"
+
+[UIC] "UIC/CG-73-PORT-ROYAL"
+
+[Relationship]
+Superior "CVBG-REAGAN" ""
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "CG-73 Port Royal"
+AlternateTypeIdentification String "SRC/"
+
+[ClusterPG]
+ClusterIdentifier ClusterIdentifier "CG-73-PORT-ROYAL"
+
+[OrganizationPG]
+Roles Collection<Role> ""
+Service Service "Navy"
+Agency Agency "FORSCOM"
+
+[MilitaryOrgPG]
+UIC String "NN5681"
+Echelon String ""
+UTC String ""
+SRC String ""
+Hierarchy2525 String ""
+IsReserve boolean false
+HomeLocation GeolocLocation "GeolocCode=UTAC, InstallationTypeCode=PRT, CountryStateCode=06, CountryStateName=CALIFORNIA, Name=SAN_DIEGO, Latitude=Latitude 32.7500degrees, Longitude=Longitude -117.1667degrees"

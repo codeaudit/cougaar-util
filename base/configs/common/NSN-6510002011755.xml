@@ -1,0 +1,18 @@
+<prototype name = "NSN/6510002011755">
+  <object class="org.cougaar.domain.glm.ldm.asset.ClassVIIIMedical">
+
+      <field name="TypeIdentificationPG" type="object">
+        <value>
+          <object class="org.cougaar.domain.planning.ldm.asset.NewTypeIdentificationPG">
+          <field name="TypeIdentification" type="String">
+            <value> NSN/6510002011755 </value>
+          </field>
+          <field name="Nomenclature" type="String">
+            <value> Bandage Muslin Compressed Brown 37x37x52 Triangular W/Safety Pins </value>
+          </field>
+          </object>
+        </value>
+      </field>
+
+  </object>
+</prototype> <!-- end NSN/6510002011755 Bandage Muslin Compressed Brown 37x37x52 Triangular W/Safety Pins -->

@@ -1,0 +1,34 @@
+#!/bin/csh -f
+
+if (! $?COUGAAR3RDPARTY) then
+    setenv COUGAAR3RDPARTY /opt/alp-jars
+endif
+
+set LIBPATHS=$COUGAAR_INSTALL_PATH/lib/core.jar
+if ($?COUGAAR_DEV_PATH) then
+    set LIBPATHS = "${COUGAAR_DEV_PATH}:$LIBPATHS"
+endif
+
+set MYDOMAINS=""
+set MYPROPERTIES="$MYDOMAINS -Dorg.cougaar.system.path=$COUGAAR3RDPARTY -Dorg.cougaar.install.path=$COUGAAR_INSTALL_PATH -Duser.timezone=GMT"
+set MYMEMORY="-Xmx768m -Xms64m -Xmaxf0.9 -Xminf0.1 -Xoss128k"
+
+set osargs=""
+set os=`uname`
+if ("$os" == "Linux") then
+    set osargs="-green"
+    limit stacksize 16m    #up from 8m
+    limit coredumpsize 0   #down from 1g
+endif
+
+set javaargs="$osargs $MYPROPERTIES $MYMEMORY -classpath $LIBPATHS"
+
+set bt="org.cougaar.core.society.Bootstrapper"
+set cl="org.cougaar.domain.mlm.ui.planviewer.inventory.InventoryChartUI"
+
+if ($?COUGAAR_DEV_PATH) then
+    echo java $javaargs $bt $cl $*
+endif
+
+exec java $javaargs $bt $cl $*
+

@@ -1,0 +1,42 @@
+[Prototype] MilitaryOrganization
+
+[UniqueId] "UTC/CombatOrg"
+
+[UIC] "UIC/KARACHI-SUPPLY-POINT"
+
+[Relationship]
+Superior "11-MEU" ""
+Supporting "BELA-REFUGEE-CAMP" "MedicalSupplyProvider"
+Supporting "HYDERABAD-REFUGEE-CAMP" "MedicalSupplyProvider"
+Supporting "KARACHI-REFUGEE-CAMP" "MedicalSupplyProvider"
+Supporting "MIRPURKHAS-REFUGEE-CAMP" "MedicalSupplyProvider"
+Supporting "NAWABSHA-REFUGEE-CAMP" "MedicalSupplyProvider"
+Supporting "SUKKUR-REFUGEE-CAMP" "MedicalSupplyProvider"
+Supporting "BELA-REFUGEE-CAMP" "SubsistenceSupplyProvider"
+Supporting "HYDERABAD-REFUGEE-CAMP" "SubsistenceSupplyProvider"
+Supporting "KARACHI-REFUGEE-CAMP" "SubsistenceSupplyProvider"
+Supporting "MIRPURKHAS-REFUGEE-CAMP" "SubsistenceSupplyProvider"
+Supporting "NAWABSHA-REFUGEE-CAMP" "SubsistenceSupplyProvider"
+Supporting "SUKKUR-REFUGEE-CAMP" "SubsistenceSupplyProvider"
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "Karachi Supply Point"
+AlternateTypeIdentification String "SRC/"
+
+[ClusterPG]
+ClusterIdentifier ClusterIdentifier "KARACHI-SUPPLY-POINT"
+
+[OrganizationPG]
+Roles Collection<Role> "SubsistenceSupplyProvider, MedicalSupplyProvider"
+Service Service "Red Cross"
+Agency Agency "REFUGEE"
+
+[MilitaryOrgPG]
+UIC String "REFKPT"
+Echelon String ""
+UTC String ""
+SRC String ""
+Hierarchy2525 String ""
+IsReserve boolean false
+HomeLocation GeolocLocation "GeolocCode=LYTM, InstallationTypeCode=PRT, CountryStateCode=PK, CountryStateName=PAKISTAN, Name=KARACHI, Latitude=Latitude 24.7833degrees, Longitude=Longitude 66.9833degrees"

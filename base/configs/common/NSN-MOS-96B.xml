@@ -1,0 +1,38 @@
+<?xml version="1.0"  encoding="US-ASCII"?>
+
+<!DOCTYPE assets SYSTEM "AssetList.ldm.dtd" []>
+
+<prototype name="MOS-96B">
+  <object class="org.cougaar.domain.glm.ldm.asset.MilitaryPerson">
+
+      <field name="TypeIdentificationPG" type="object">
+        <value>
+          <object class="org.cougaar.domain.planning.ldm.asset.NewTypeIdentificationPG">
+            <field name="TypeIdentification" type="String">
+              <value> MOS/96B </value>
+            </field>
+            <field name="Nomenclature" type="String">
+              <value> MOS/96B/Intelligence Analyst </value>
+            </field>
+          </object>
+        </value>
+      </field>
+
+      <field name="PersonPG" type="object">
+        <value>
+          <object class="org.cougaar.domain.glm.ldm.asset.NewPersonPG">
+            <field name="Skills" type="java.util.ArrayList">
+              <value> 
+                <object class="org.cougaar.domain.glm.ldm.plan.Skill">
+                  <field name="Skill" type="String">
+                    <value> MOS/96B </value>
+                  </field>
+                </object>
+              </value>
+            </field>
+          </object>
+        </value>
+      </field>
+
+  </object>
+</prototype> <!-- end Intelligence Analyst -->

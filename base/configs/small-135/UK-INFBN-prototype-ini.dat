@@ -1,0 +1,31 @@
+[Prototype] MilitaryOrganization
+
+[UniqueId] "UTC/CombatOrg"
+
+[UIC] "UIC/UK-INFBN"
+
+[Relationship]
+Superior "UN-BDE-HQ" ""
+Supporting "UK-INFBN" "Level1HealthCareProvider"
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "UK Infantry BN"
+AlternateTypeIdentification String "SRC/"
+
+[ClusterPG]
+ClusterIdentifier ClusterIdentifier "UK-INFBN"
+
+[OrganizationPG]
+Roles Collection<Role> "Combat, Level1HealthCareProvider"
+Service Service "Army"
+Agency Agency "UNITED NATIONS"
+
+[MilitaryOrgPG]
+UIC String "CUKACA"
+Echelon String "5"
+UTC String ""
+SRC String ""
+Hierarchy2525 String "1.X.3.1.1.5.8"
+IsReserve boolean false
+HomeLocation GeolocLocation "GeolocCode=NPJB, InstallationTypeCode=CTY, CountryStateCode=UK, CountryStateName=UNITED_KINGDOM, Name=LONDON, Latitude=Latitude 51.5167degrees, Longitude=Longitude -.1000degrees"

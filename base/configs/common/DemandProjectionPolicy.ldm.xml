@@ -1,0 +1,49 @@
+<?xml version="1.0"  encoding="US-ASCII"?>
+
+<!DOCTYPE Policy SYSTEM "Policy.ldm.dtd" []>
+
+<Policies>
+
+ <Policy name="ConsumableDemandProjectionPolicy" type="org.cougaar.domain.glm.plugins.projection.DemandProjectionPolicy">
+    <RuleParam name="ItemConsumed">
+      	<String value ="Consumable">
+	</String>
+    </RuleParam>
+    <RuleParam name="DaysBetweenDemand">
+      	<Integer value="7" min="0" max="30"> 
+	</Integer>
+    </RuleParam>
+    <RuleParam name="MaxPartsConsumed">
+	<Integer value="3" min="0" max="10000"> 
+	</Integer>
+    </RuleParam>
+  </Policy>
+ <Policy name="BulkPOLDemandProjectionPolicy" type="org.cougaar.domain.glm.plugins.projection.DemandProjectionPolicy">
+    <RuleParam name="ItemConsumed">
+      	<String value ="BulkPOL">
+	</String>
+    </RuleParam>
+    <RuleParam name="DaysBetweenDemand">
+      	<Integer value="7" min="0" max="30"> 
+	</Integer>
+    </RuleParam>
+    <RuleParam name="MaxPartsConsumed">
+	<Integer value="3" min="0" max="10000"> 
+	</Integer>
+    </RuleParam>
+  </Policy>
+ <Policy name="AmmunitionDemandProjectionPolicy" type="org.cougaar.domain.glm.plugins.projection.DemandProjectionPolicy">
+    <RuleParam name="ItemConsumed">
+      	<String value ="Ammunition">
+	</String>
+    </RuleParam>
+    <RuleParam name="DaysBetweenDemand">
+      	<Integer value="1" min="0" max="30"> 
+	</Integer>
+    </RuleParam>
+    <RuleParam name="MaxPartsConsumed">
+	<Integer value="3" min="0" max="10000"> 
+	</Integer>
+    </RuleParam>
+  </Policy>
+</Policies>

@@ -1,0 +1,30 @@
+[Prototype] MilitaryOrganization
+
+[UniqueId] "UTC/CombatOrg"
+
+[UIC] "UIC/KARACHI-REFUGEE-CAMP"
+
+[Relationship]
+Superior "RED-CROSS-HQ" ""
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "Karachi Refugee Camp"
+AlternateTypeIdentification String "SRC/"
+
+[ClusterPG]
+ClusterIdentifier ClusterIdentifier "KARACHI-REFUGEE-CAMP"
+
+[OrganizationPG]
+Roles Collection<Role> "Level1HealthCareProvider, Level2HealthCareProvider, Level3HealthcareProvider"
+Service Service "Red Cross"
+Agency Agency "REFUGEE"
+
+[MilitaryOrgPG]
+UIC String "REFKAR"
+Echelon String ""
+UTC String ""
+SRC String ""
+Hierarchy2525 String "5.X.4.1"
+IsReserve boolean false
+HomeLocation GeolocLocation "GeolocCode=LYSY, InstallationTypeCode=CTY, CountryStateCode=PK, CountryStateName=PAKISTAN, Name=KARACHI, Latitude=Latitude 24.8667degrees, Longitude=Longitude 67.0833degrees"

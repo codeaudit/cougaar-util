@@ -1,0 +1,18 @@
+<prototype name = "NSN/6516013244676">
+  <object class="org.cougaar.domain.glm.ldm.asset.ClassVIIIMedical">
+
+      <field name="TypeIdentificationPG" type="object">
+        <value>
+          <object class="org.cougaar.domain.planning.ldm.asset.NewTypeIdentificationPG">
+          <field name="TypeIdentification" type="String">
+            <value> NSN/6516013244676 </value>
+          </field>
+          <field name="Nomenclature" type="String">
+            <value> Glove Exam Non-Sterile Latex P-Free Textr Beaded Cuff LDP Large </value>
+          </field>
+          </object>
+        </value>
+      </field>
+
+  </object>
+</prototype> <!-- end Glove Exam Non-Sterile Latex P-Free Textr Beaded Cuff LDP Large -->

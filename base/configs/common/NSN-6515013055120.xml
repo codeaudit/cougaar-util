@@ -1,0 +1,18 @@
+<prototype name = "NSN/6515013055120">
+  <object class="org.cougaar.domain.glm.ldm.asset.ClassVIIIMedical">
+
+      <field name="TypeIdentificationPG" type="object">
+        <value>
+          <object class="org.cougaar.domain.planning.ldm.asset.NewTypeIdentificationPG">
+          <field name="TypeIdentification" type="String">
+            <value> NSN/6515013055120 </value>
+          </field>
+          <field name="Nomenclature" type="String">
+            <value> Blade Tongue Depressor Sterile 6.00in </value>
+          </field>
+          </object>
+        </value>
+      </field>
+
+  </object>
+</prototype> <!-- end NSN/6515013055120 Blade Tongue Depressor Sterile 6.00in -->

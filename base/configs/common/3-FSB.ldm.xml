@@ -1,0 +1,157 @@
+<?xml version="1.0"  encoding="US-ASCII"?>
+
+<!DOCTYPE assetlist SYSTEM "AssetList.ldm.dtd" [
+<!ENTITY MOS-29E-PROTOTYPE SYSTEM "MOS-29E.ldm.xml">
+<!ENTITY MOS-29J-PROTOTYPE SYSTEM "MOS-29J.ldm.xml">
+<!ENTITY MOS-29N-PROTOTYPE SYSTEM "MOS-29N.ldm.xml">
+<!ENTITY MOS-29S-PROTOTYPE SYSTEM "MOS-29S.ldm.xml">
+<!ENTITY MOS-35E-PROTOTYPE SYSTEM "MOS-35E.ldm.xml">
+<!ENTITY MOS-39C-PROTOTYPE SYSTEM "MOS-39C.ldm.xml">
+<!ENTITY MOS-39E-PROTOTYPE SYSTEM "MOS-39E.ldm.xml">
+<!ENTITY MOS-43M-PROTOTYPE SYSTEM "MOS-43M.ldm.xml">
+<!ENTITY MOS-44B-PROTOTYPE SYSTEM "MOS-44B.ldm.xml">
+<!ENTITY MOS-44E-PROTOTYPE SYSTEM "MOS-44E.ldm.xml">
+<!ENTITY MOS-45B-PROTOTYPE SYSTEM "MOS-45B.ldm.xml">
+<!ENTITY MOS-45G-PROTOTYPE SYSTEM "MOS-45G.ldm.xml">
+<!ENTITY MOS-45K-PROTOTYPE SYSTEM "MOS-45K.ldm.xml">
+<!ENTITY MOS-52C-PROTOTYPE SYSTEM "MOS-52C.ldm.xml">
+<!ENTITY MOS-52D-PROTOTYPE SYSTEM "MOS-52D.ldm.xml">
+<!ENTITY MOS-62B-PROTOTYPE SYSTEM "MOS-62B.ldm.xml">
+<!ENTITY MOS-63G-PROTOTYPE SYSTEM "MOS-63G.ldm.xml">
+<!ENTITY MOS-63H-PROTOTYPE SYSTEM "MOS-63H.ldm.xml">
+<!ENTITY MOS-63J-PROTOTYPE SYSTEM "MOS-63J.ldm.xml">
+<!ENTITY MOS-63W-PROTOTYPE SYSTEM "MOS-63W.ldm.xml">
+<!ENTITY MOS-27E-PROTOTYPE SYSTEM "MOS-27E.ldm.xml">
+<!ENTITY MOS-35D-PROTOTYPE SYSTEM "MOS-35D.ldm.xml">
+<!ENTITY MOS-35F-PROTOTYPE SYSTEM "MOS-35F.ldm.xml">
+<!ENTITY MOS-QM-PROTOTYPE SYSTEM "MOS-QM.ldm.xml">
+]>
+
+<!--
+ **************************************************************
+ *                                                              
+ *  Copyright 1997-1999 Defense Advanced Research Projects 
+ *  Agency and ALPINE (A BBN Technologies (BBN) and Raytheon 
+ *  Systems Company (RSC) Consortium). This software to be used 
+ *  in accordance with the COUGAAR license agreement.  
+ *                                                              
+ ****************************************************************
+-->
+
+<AssetList>
+
+  <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+  <!-- :::                    First the Prototypes                     ::: -->
+  <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+
+  &MOS-29E-PROTOTYPE;
+  &MOS-29J-PROTOTYPE;
+  &MOS-29N-PROTOTYPE;
+  &MOS-29S-PROTOTYPE;
+  &MOS-35E-PROTOTYPE;
+  &MOS-39C-PROTOTYPE;
+  &MOS-39E-PROTOTYPE;
+  &MOS-43M-PROTOTYPE;
+  &MOS-44B-PROTOTYPE;
+  &MOS-44E-PROTOTYPE;
+  &MOS-45B-PROTOTYPE;
+  &MOS-45G-PROTOTYPE;
+  &MOS-45K-PROTOTYPE;
+  &MOS-52C-PROTOTYPE;
+  &MOS-52D-PROTOTYPE;
+  &MOS-62B-PROTOTYPE;
+  &MOS-63G-PROTOTYPE;
+  &MOS-63H-PROTOTYPE;
+  &MOS-63J-PROTOTYPE;
+  &MOS-63W-PROTOTYPE;
+  &MOS-27E-PROTOTYPE;
+  &MOS-35D-PROTOTYPE;
+  &MOS-35F-PROTOTYPE;
+  &MOS-QM-PROTOTYPE;
+
+  <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+  <!-- :::                      Now the Instances                      ::: -->
+  <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+
+<!-- 
+
+3-FSB   MOS/29E Count=44units   1days
+3-FSB   MOS/29J Count=37units   1days
+3-FSB   MOS/29N Count=15units   1days
+3-FSB   MOS/29S Count=7units    1days
+3-FSB   MOS/35E Count=9units    1days
+3-FSB   MOS/39C Count=15units   1days
+3-FSB   MOS/39E Count=15units   1days
+3-FSB   MOS/43M Count=33units   1days
+3-FSB   MOS/44B Count=132units  1days
+3-FSB   MOS/44E Count=89units   1days
+3-FSB   MOS/45B Count=62units   1days
+3-FSB   MOS/45G Count=53units   1days
+3-FSB   MOS/45K Count=62units   1days
+3-FSB   MOS/52C Count=151units  1days
+3-FSB   MOS/52D Count=310units  1days
+3-FSB   MOS/62B Count=36units   1days
+3-FSB   MOS/63G Count=192units  1days
+3-FSB   MOS/63H Count=239units  1days
+3-FSB   MOS/63J Count=131units  1days
+3-FSB   MOS/63W Count=734units  1days
+
+
+-->  
+  <AggregateAsset prototype="MOS-27E" quantity="1">
+    <schedule end="01/05/11" start="06/01/00"/>
+  </AggregateAsset>
+
+  <AggregateAsset prototype="MOS-35D" quantity="1">
+    <schedule end="01/05/11" start="06/01/00"/>
+  </AggregateAsset>
+
+  <AggregateAsset prototype="MOS-35E" quantity="1">
+    <schedule end="01/05/11" start="06/01/00"/>
+  </AggregateAsset>
+
+  <AggregateAsset prototype="MOS-35F" quantity="1">
+    <schedule end="01/05/11" start="06/01/00"/>
+  </AggregateAsset>
+
+  <AggregateAsset prototype="MOS-45B" quantity="1">
+    <schedule end="01/05/11" start="06/01/00"/>
+  </AggregateAsset>
+
+  <AggregateAsset prototype="MOS-45G" quantity="7">
+    <schedule end="01/05/11" start="06/01/00"/>
+  </AggregateAsset>
+
+  <AggregateAsset prototype="MOS-45K" quantity="15">
+    <schedule end="01/05/11" start="06/01/00"/>
+  </AggregateAsset>
+
+  <AggregateAsset prototype="MOS-52C" quantity="2">
+    <schedule end="01/05/11" start="06/01/00"/>
+  </AggregateAsset>
+
+  <AggregateAsset prototype="MOS-52D" quantity="2">
+    <schedule end="01/05/11" start="06/01/00"/>
+  </AggregateAsset>
+
+  <AggregateAsset prototype="MOS-63H" quantity="26">
+    <schedule end="01/05/11" start="06/01/00"/>
+  </AggregateAsset>
+
+  <AggregateAsset prototype="MOS-63J" quantity="3">
+    <schedule end="01/05/11" start="06/01/00"/>
+  </AggregateAsset>
+
+  <AggregateAsset prototype="MOS-63W" quantity="4">
+    <schedule end="01/05/11" start="06/01/00"/>
+  </AggregateAsset>
+   
+  <instance prototype="MOS-QM" id="QuarterMasterCapability">
+    <schedule end="01/05/11" start="06/01/00"/>
+  </instance>
+
+<!-- 
+
+-->  
+
+</AssetList>

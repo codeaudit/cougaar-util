@@ -1,0 +1,30 @@
+[Prototype] MilitaryOrganization
+
+[UniqueId] "UTC/CombatOrg"
+
+[UIC] "UIC/FUTURE"
+
+[Relationship]
+Superior "NCA" ""
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "Intermediate S9C Supplier"
+AlternateTypeIdentification String "SRC/"
+
+[ClusterPG]
+ClusterIdentifier ClusterIdentifier "FUTURE"
+
+[OrganizationPG]
+Roles Collection<Role> "NonS9CSparePartsProvider"
+Service Service ""
+Agency Agency "DLA"
+
+[MilitaryOrgPG]
+UIC String ""
+Echelon String ""
+UTC String ""
+SRC String ""
+Hierarchy2525 String ""
+IsReserve boolean false
+HomeLocation GeolocLocation "GeolocCode=BVJS, InstallationTypeCode=AMO, CountryStateCode=21, CountryStateName=KENTUCKY, Name=BLUE_GRASS_DEPOT, Latitude=Latitude 37.7000degrees, Longitude=Longitude -84.2167degrees"

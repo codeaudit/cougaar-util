@@ -1,0 +1,62 @@
+<object type="java.util.Vector">
+
+<!-- BEGIN SRA PSPs -->
+
+  <element type="org.cougaar.lib.planserver.NamedPSP">
+    <Classname>org.cougaar.domain.css.ui.PSP_MaintenanceDemand</Classname>
+    <PSPName>alpine/demo/org/cougaar/domain/css/ui/MAINTDEMAND.PSP</PSPName>
+  </element>
+  <element type="org.cougaar.lib.planserver.NamedPSP">
+    <Classname>org.cougaar.domain.css.ui.PSP_QuartermasterDemand</Classname>
+    <PSPName>alpine/demo/org/cougaar/domain/css/ui/QMDEMAND.PSP</PSPName>
+  </element>
+  <element type="org.cougaar.lib.planserver.NamedPSP">
+    <Classname>org.cougaar.domain.css.ui.PSP_WaterDemand</Classname>
+    <PSPName>alpine/demo/org/cougaar/domain/css/ui/WATERDEMAND.PSP</PSPName>
+  </element>
+  <element type="org.cougaar.lib.planserver.NamedPSP">
+    <Classname>org.cougaar.domain.css.ui.PSP_PolicyUI</Classname>
+    <PSPName>alpine/demo/org/cougaar/domain/css/ui/POLICYUI.PSP</PSPName>
+  </element>
+<!--
+  <element type="org.cougaar.lib.planserver.NamedPSP">
+    <Classname>org.cougaar.domain.css.ui.PSP_ReadinessUI</Classname>
+    <PSPName>alpine/demo/org/cougaar/domain/css/ui/READINESSUI.PSP</PSPName>
+  </element>
+-->
+  <element type="org.cougaar.lib.planserver.NamedPSP">
+    <Classname>org.cougaar.domain.css.ui.PSP_Fitness</Classname>
+    <PSPName>alpine/demo/org/cougaar/domain/css/ui/FITNESS.PSP</PSPName>
+  </element>
+  <element type="org.cougaar.lib.planserver.NamedPSP">
+    <Classname>org.cougaar.domain.css.ui.PSP_Personnel</Classname>
+    <PSPName>alpine/demo/org/cougaar/domain/css/ui/PERSONNEL.PSP</PSPName>
+  </element>
+  <element type="org.cougaar.lib.planserver.NamedPSP">
+    <Classname>org.cougaar.domain.css.ui.PSP_CapabilityUI</Classname>
+    <PSPName>alpine/demo/org/cougaar/domain/css/ui/CAPABILITYUI.PSP</PSPName>
+  </element>
+  <element type="org.cougaar.lib.planserver.NamedPSP">
+    <Classname>org.cougaar.domain.css.ui.PSP_Equipment</Classname>
+    <PSPName>alpine/demo/org/cougaar/domain/css/ui/EQUIPMENT.PSP</PSPName>
+  </element>
+  <element type="org.cougaar.lib.planserver.NamedPSP">
+    <Classname>org.cougaar.domain.css.ui.PSP_EquipCondition</Classname>
+    <PSPName>alpine/demo/org/cougaar/domain/css/ui/EQUIPCONDITION.PSP</PSPName>
+  </element>
+  <element type="org.cougaar.lib.planserver.NamedPSP">
+    <Classname>org.cougaar.domain.css.ui.PSP_Training</Classname>
+    <PSPName>alpine/demo/org/cougaar/domain/css/ui/TRAINING.PSP</PSPName>
+  </element>
+  <element type="org.cougaar.lib.planserver.NamedPSP">
+    <Classname>org.cougaar.domain.css.ui.PSP_Overall</Classname>
+    <PSPName>alpine/demo/org/cougaar/domain/css/ui/OVERALL.PSP</PSPName>
+  </element>
+  <element type="org.cougaar.lib.planserver.NamedPSP">
+    <Classname>org.cougaar.domain.css.ui.PSP_Commander</Classname>
+    <PSPName>alpine/demo/org/cougaar/domain/css/ui/COMMANDER.PSP</PSPName>
+  </element>
+
+<!-- END SRA PSPs -->
+
+</object>

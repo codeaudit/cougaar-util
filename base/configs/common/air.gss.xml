@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+
+<!-- GSS specification for the simple air scheduler -->
+
+<!DOCTYPE schedulingSpecs SYSTEM "schedulingSpecs.dtd" []>
+
+<schedulingSpecs taskGroupingMode = "unalligned" >
+
+  <assetFilter> 
+    <assetClassMatch className = "org.cougaar.domain.planning.ldm.asset.CargoFixedWingAircraft" />
+  </assetFilter>
+
+  <taskFilter verb="TransportByAir"
+              generatingCluster = "internal" />
+
+  <capacityConstraint>
+    <taskAccessor preposition = "direct">
+      <assetAccessor propGroup = "PhysicalPG"
+                     propField = "FootprintArea"
+                     units = "SquareFeet"
+                     multiplyByNum = "true" />
+    </taskAccessor>
+    <assetAccessor propGroup = "ContainPG"
+                   propField = "MaximumFootprintArea"
+                   units = "SquareFeet"/>
+  </capacityConstraint>
+
+  <capacityConstraint>
+    <taskAccessor preposition = "direct">
+      <assetAccessor propGroup = "PhysicalPG"
+                     propField = "Mass"
+                     units = "Tons"
+                     multiplyByNum = "true" />
+    </taskAccessor>
+    <assetAccessor propGroup = "ContainPG"
+                   propField = "MaximumWeight"
+                   units = "Tons" />
+  </capacityConstraint>
+
+
+  <taskDuration>
+    <constantAccessor value="86400000" type="long" />
+  </taskDuration>
+
+</schedulingSpecs>

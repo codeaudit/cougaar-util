@@ -1,0 +1,31 @@
+[Prototype] MilitaryOrganization
+
+[UniqueId] "UTC/CombatOrg"
+
+[UIC] "UIC/3-MAWFWD"
+
+[Relationship]
+Superior "1-MEB" ""
+Supporting "3-MAWFWD" "Level1HealthCareProvider"
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "HQ MAW, 3RD MAW"
+AlternateTypeIdentification String "SRC/"
+
+[ClusterPG]
+ClusterIdentifier ClusterIdentifier "3-MAWFWD"
+
+[OrganizationPG]
+Roles Collection<Role> "Combat, Level1HealthCareProvider, Superior"
+Service Service "Marine"
+Agency Agency "MARFORCENT"
+
+[MilitaryOrgPG]
+UIC String "M00300"
+Echelon String "5"
+UTC String "CLMAW"
+SRC String ""
+Hierarchy2525 String "1.X.2.1"
+IsReserve boolean false
+HomeLocation GeolocLocation "GeolocCode=QKJA, InstallationTypeCode=MAP, CountryStateCode=6, CountryStateName=CALIFORNIA, Name=MIRAMAR_NAS, Latitude=Latitude 32.8692degrees, Longitude=Longitude -117.1436degrees"

@@ -1,0 +1,17 @@
+#!/bin/csh -f
+
+source $COUGAAR_INSTALL_PATH/bin/setlibpath.csh
+
+set MYCLASSES="ui.planviewer.supply.SupplyController"
+
+set osargs=""
+set os=`uname`
+if ("$os" == "Linux") then
+  set osargs="-green"
+endif
+
+echo java $osargs -classpath $LIBPATHS $MYCLASSES
+
+java  $osargs -classpath $LIBPATHS $MYCLASSES
+
+

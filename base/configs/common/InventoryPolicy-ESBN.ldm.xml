@@ -1,0 +1,220 @@
+<?xml version="1.0"  encoding="US-ASCII"?>
+
+<!DOCTYPE Policy SYSTEM "Policy.ldm.dtd" []>
+
+<!-- Inventory Policy for FSB, et al: First Level Supply units -->
+
+<Policies>
+
+ <Policy name="ClassISubsistenceInventoryPolicy" type="org.cougaar.domain.glm.plugins.inventory.InventoryPolicy">
+    <RuleParam name="ResourceType">
+      	<String value ="ClassISubsistence">
+	</String>
+    </RuleParam>
+    <RuleParam name="DaysOnHand">
+	<Integer value="1" min="-1" max="90"> 
+	</Integer>
+    </RuleParam>
+    <RuleParam name="DaysForward">
+        <Integer value="7" min="0" max="30">
+	</Integer>
+    </RuleParam>
+    <RuleParam name="DaysBackward">
+        <Integer value="0" min="0" max="30">
+	</Integer>
+    </RuleParam>
+    <RuleParam name="GoalLevelMultiplier">
+        <Double value="2" min="1.0" max="30">
+	</Double>
+    </RuleParam>
+    <RuleParam name="WithdrawSwitchoverDay">
+        <Integer value="45" min="0" max="300">
+        </Integer>
+    </RuleParam>
+    <RuleParam name="RefillSwitchoverDay">
+        <Integer value="45" min="0" max="300">
+        </Integer>
+    </RuleParam>
+    <RuleParam name="TurnOffProjections">
+        <Boolean value="false">
+        </Boolean>
+    </RuleParam>
+  </Policy>
+
+ <Policy name="ClassVIIIMedicalOnHandPolicy" type="org.cougaar.domain.glm.plugins.inventory.InventoryPolicy">
+    <RuleParam name="ResourceType">
+      	<String value ="ClassVIIIMedical">
+	</String>
+    </RuleParam>
+    <RuleParam name="DaysOnHand">
+	<Integer value="7" min="-1" max="90"> 
+	</Integer>
+    </RuleParam>
+    <RuleParam name="DaysForward">
+        <Integer value="30" min="0" max="30">
+	</Integer>
+    </RuleParam>
+    <RuleParam name="DaysBackward">
+        <Integer value="0" min="0" max="30">
+	</Integer>
+    </RuleParam>
+    <RuleParam name="GoalLevelMultiplier">
+        <Double value="2" min="1.0" max="30">
+	</Double>
+    </RuleParam>
+    <RuleParam name="WithdrawSwitchoverDay">
+        <Integer value="45" min="0" max="300">
+        </Integer>
+    </RuleParam>
+    <RuleParam name="RefillSwitchoverDay">
+        <Integer value="45" min="0" max="300">
+        </Integer>
+    </RuleParam>
+    <RuleParam name="TurnOffProjections">
+        <Boolean value="false">
+        </Boolean>
+    </RuleParam>
+  </Policy>
+
+ <Policy name="AmmunitionOnHandPolicy" type="org.cougaar.domain.glm.plugins.inventory.InventoryPolicy">
+    <RuleParam name="ResourceType">
+      	<String value ="Ammunition">
+	</String>
+    </RuleParam>
+    <RuleParam name="DaysOnHand">
+	<Integer value="6" min="-1" max="90"> 
+	</Integer>
+    </RuleParam>
+    <RuleParam name="DaysForward">
+        <Integer value="7" min="0" max="30">
+	</Integer>
+    </RuleParam>
+    <RuleParam name="DaysBackward">
+        <Integer value="0" min="0" max="30">
+	</Integer>
+    </RuleParam>
+    <RuleParam name="GoalLevelMultiplier">
+        <Double value="2" min="1.0" max="30">
+	</Double>
+    </RuleParam>
+    <RuleParam name="WithdrawSwitchoverDay">
+        <Integer value="30" min="0" max="300">
+        </Integer>
+    </RuleParam>
+    <RuleParam name="RefillSwitchoverDay">
+        <Integer value="30" min="0" max="300">
+        </Integer>
+    </RuleParam>
+    <RuleParam name="TurnOffProjections">
+        <Boolean value="false">
+        </Boolean>
+    </RuleParam>
+  </Policy>
+
+ <Policy name="BulkPOLOnHandPolicy" type="org.cougaar.domain.glm.plugins.inventory.InventoryPolicy">
+    <RuleParam name="ResourceType">
+      	<String value ="BulkPOL">
+	</String>
+    </RuleParam>
+    <RuleParam name="DaysOnHand">
+	<Integer value="1" min="-1" max="90"> 
+	</Integer>
+    </RuleParam>
+    <RuleParam name="DaysForward">
+        <Integer value="5" min="0" max="30">
+	</Integer>
+    </RuleParam>
+    <RuleParam name="DaysBackward">
+        <Integer value="0" min="0" max="30">
+	</Integer>
+    </RuleParam>
+    <RuleParam name="GoalLevelMultiplier">
+        <Double value="1.1" min="1.0" max="30">
+	</Double>
+    </RuleParam>
+    <RuleParam name="WithdrawSwitchoverDay">
+        <Integer value="0" min="0" max="300">
+        </Integer>
+    </RuleParam>
+    <RuleParam name="RefillSwitchoverDay">
+        <Integer value="45" min="0" max="300">
+        </Integer>
+    </RuleParam>
+    <RuleParam name="TurnOffProjections">
+        <Boolean value="false">
+        </Boolean>
+    </RuleParam>
+  </Policy>
+
+ <Policy name="PackagedPOLOnHandPolicy" type="org.cougaar.domain.glm.plugins.inventory.InventoryPolicy">
+    <RuleParam name="ResourceType">
+      	<String value ="PackagedPOL">
+	</String>
+    </RuleParam>
+    <RuleParam name="DaysOnHand">
+	<Integer value="1" min="-1" max="90"> 
+	</Integer>
+    </RuleParam>
+    <RuleParam name="DaysForward">
+        <Integer value="5" min="0" max="30">
+	</Integer>
+    </RuleParam>
+    <RuleParam name="DaysBackward">
+        <Integer value="0" min="0" max="30">
+	</Integer>
+    </RuleParam>
+    <RuleParam name="GoalLevelMultiplier">
+        <Double value="1.1" min="1.0" max="30">
+	</Double>
+    </RuleParam>
+    <RuleParam name="WithdrawSwitchoverDay">
+        <Integer value="0" min="0" max="300">
+        </Integer>
+    </RuleParam>
+    <RuleParam name="RefillSwitchoverDay">
+        <Integer value="45" min="0" max="300">
+        </Integer>
+    </RuleParam>
+    <RuleParam name="TurnOffProjections">
+        <Boolean value="false">
+        </Boolean>
+    </RuleParam>
+  </Policy>
+
+
+ <Policy name="ConsumableOnHandPolicy" type="org.cougaar.domain.glm.plugins.inventory.InventoryPolicy">
+    <RuleParam name="ResourceType">
+      	<String value ="Consumable">
+	</String>
+    </RuleParam>
+    <RuleParam name="DaysOnHand">
+	<Integer value="6" min="-1" max="90"> 
+	</Integer>
+    </RuleParam>
+    <RuleParam name="DaysForward">
+        <Integer value="7" min="0" max="30">
+	</Integer>
+    </RuleParam>
+    <RuleParam name="DaysBackward">
+        <Integer value="0" min="0" max="30">
+	</Integer>
+    </RuleParam>
+    <RuleParam name="GoalLevelMultiplier">
+        <Double value="2" min="1.0" max="30">
+	</Double>
+    </RuleParam>
+    <RuleParam name="WithdrawSwitchoverDay">
+        <Integer value="0" min="0" max="300">
+        </Integer>
+    </RuleParam>
+    <RuleParam name="RefillSwitchoverDay">
+        <Integer value="45" min="0" max="300">
+        </Integer>
+    </RuleParam>
+    <RuleParam name="TurnOffProjections">
+        <Boolean value="false">
+        </Boolean>
+    </RuleParam>
+  </Policy>
+
+</Policies>

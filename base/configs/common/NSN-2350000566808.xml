@@ -1,0 +1,91 @@
+<prototype name = "2350-00-056-6808">
+  <object class = "org.cougaar.domain.glm.ldm.asset.ClassVIIMajorEndItem">
+    <field name="TypeIdentificationPG" type="object">
+      <value>
+        <object class="org.cougaar.domain.planning.ldm.asset.NewTypeIdentificationPG">
+          <field name="TypeIdentification" type="String">
+            <value>NSN/2350000566808</value>
+          </field>
+          <field name="Nomenclature" type="String">
+            <value>M577A1 - CARRIER COMD P FTRAC</value>
+          </field>
+          <field name="AlternateTypeIdentification" type="String">
+            <value>LIN/D11538</value>
+          </field>
+        </object>
+      </value>
+    </field>
+    <field name="PhysicalPG" type="object">
+      <value>
+        <object class="org.cougaar.domain.glm.ldm.asset.NewPhysicalPG">
+          <field name="Length" type="object">
+            <value>
+              <object class="org.cougaar.domain.planning.ldm.measure.Distance">
+                <field name="Inches" type="double">
+                  <value>192.0</value>
+                </field>
+              </object>
+            </value>
+          </field>
+          <field name="Width" type="object">
+            <value>
+              <object class="org.cougaar.domain.planning.ldm.measure.Distance">
+                <field name="Inches" type="double">
+                  <value>106.0</value>
+                </field>
+              </object>
+            </value>
+          </field>
+          <field name="Height" type="object">
+            <value>
+              <object class="org.cougaar.domain.planning.ldm.measure.Distance">
+                <field name="Inches" type="double">
+                  <value>109.0</value>
+                </field>
+              </object>
+            </value>
+          </field>
+          <field name="Mass" type="object">
+            <value>
+              <object class="org.cougaar.domain.planning.ldm.measure.Mass">
+                <field name="Pounds" type="double">
+                  <value>22415.0</value>
+                </field>
+              </object>
+            </value>
+          </field>
+          <field name="FootprintArea" type="object">
+            <value>
+              <object class="org.cougaar.domain.planning.ldm.measure.Area">
+                <field name="SquareFeet" type="double">
+                  <value>142.0</value>
+                </field>
+              </object>
+            </value>
+          </field>
+          <field name="Volume" type="object">
+            <value>
+              <object class="org.cougaar.domain.planning.ldm.measure.Volume">
+                <field name="CubicFeet" type="double">
+                  <value>1284.0</value>
+                </field>
+              </object>
+            </value>
+          </field>
+        </object>
+      </value>
+    </field>
+    <field name="MovabilityPG" type="object">
+      <value>
+        <object class="org.cougaar.domain.glm.ldm.asset.NewMovabilityPG">
+          <field name="Moveable" type="boolean">
+            <value>True</value>
+          </field>
+          <field name="CargoCategoryCode" type="String">
+            <value>A1D</value>
+          </field>
+        </object>
+      </value>
+    </field>
+  </object>
+</prototype>

@@ -1,0 +1,1994 @@
+
+<itemlist unitname="659-MAINTCO-DS">
+
+   <item idNumber="A03210" isReportable="N">
+      <erc> C </erc>
+      <name> ACCESSORY OUTFIT GASOLINE FIELD RANGE: ACCOM 50 MEN </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="A24900" isReportable="N">
+      <erc> A </erc>
+      <name> AIR CONDITIONER: FLR MTG A/C 208 V AC 3 PH 60 CY 360 BTU </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="A79381" isReportable="N">
+      <erc> A </erc>
+      <name> ANTENNA GROUP: OE-254()/GRC </name>
+      <quantityOnHand> 2 </quantityOnHand>
+      <quantityAuth> 3 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="A79381" isReportable="N">
+      <erc> B </erc>
+      <name> ANTENNA GROUP: OE-254()/GRC </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="B07126" isReportable="N">
+      <erc> B </erc>
+      <name> AXLE CABLE REEL: RL-27 </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="B60351" isReportable="N">
+      <erc> B </erc>
+      <name> BORESIGHTING EQUIPMENT WEAPON: SMALL ARMS M30 </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="B67766" isReportable="N">
+      <erc> B </erc>
+      <name> BINOCULAR: MODULAR CONSTRUCTION MIL SCALE RETICLE 7X50MM W/E </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="C05541" isReportable="N">
+      <erc> A </erc>
+      <name> CONTROL RECEIVER-TRANSMITTER: C-11561(C)/U </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 3 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="C05701" isReportable="N">
+      <erc> B </erc>
+      <name> MONITOR CHEMICAL AGENT: </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="C08565" isReportable="N">
+      <erc> B </erc>
+      <name> TRANSIT CASE LOGIC MODULE GROUP: </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="C19266" isReportable="N">
+      <erc> A </erc>
+      <name> COUNTER ELECTRONIC DIGITAL READOUT: AN/USM-459 </name>
+      <quantityOnHand> 3 </quantityOnHand>
+      <quantityAuth> 6 </quantityAuth>
+      <capQuantityAuth> 4 </capQuantityAuth>
+   </item>
+
+   <item idNumber="C32887" isReportable="N">
+      <erc> B </erc>
+      <name> CLEANER STEAM PRESSURE JET TRAILER MOUNTED: </name>
+      <quantityOnHand> 3 </quantityOnHand>
+      <quantityAuth> 3 </quantityAuth>
+      <capQuantityAuth> 1 </capQuantityAuth>
+   </item>
+
+   <item idNumber="C36151" isReportable="Y">
+      <erc> A </erc>
+      <name> CRANE WHEEL MTD: HYDRAULIC LIGHT 7-1/2 TON W/CAB </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 1 </capQuantityAuth>
+      <individual_items>
+         <bumper number="GSE14001">
+            <avail> 29 </avail> 
+            <total> 30 </total>
+         </bumper> 
+      </individual_items>
+   </item>
+
+   <item idNumber="C68719" isReportable="N">
+      <erc> B </erc>
+      <name> CABLE TELEPHONE: WD-1/TT DR-8 1/2 KM </name>
+      <quantityOnHand> 24 </quantityOnHand>
+      <quantityAuth> 44 </quantityAuth>
+      <capQuantityAuth> 13 </capQuantityAuth>
+   </item>
+
+   <item idNumber="C68856" isReportable="N">
+      <erc> B </erc>
+      <name> CABLE TELEPHONE: WD-1/TT RL-159/U 2 KM </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="C72376" isReportable="N">
+      <erc> B </erc>
+      <name> CASE TRANSIT MONITOR KEYBOARD GROUP: OA-9252/TYQ-33(V) </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="C89070" isReportable="N">
+      <erc> C </erc>
+      <name> CAMOUFLAGE SCREEN SUPPORT SYSTEM: WOODLAND/DESERT </name>
+      <quantityOnHand> 111 </quantityOnHand>
+      <quantityAuth> 239 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="D12196" isReportable="N">
+      <erc> A </erc>
+      <name> DIAGNOSTIC TEST SET: </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="D26583" isReportable="N">
+      <erc> A </erc>
+      <name> DISTORTION ANALYZER: TS-4084/G </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="D82404" isReportable="Y">
+      <erc> B </erc>
+      <name> DECONTAMINATING APPARATUS: PWR DRVN LT WT </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+      <individual_items>
+         <bumper number="CH1001">
+            <avail> 28 </avail> 
+            <total> 30 </total>
+         </bumper> 
+      </individual_items>
+   </item>
+
+   <item idNumber="D99573" isReportable="N">
+      <erc> A </erc>
+      <name> CHARGER BATTERY: PP-34/MSM </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="D99573" isReportable="N">
+      <erc> B </erc>
+      <name> CHARGER BATTERY: PP-34/MSM </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="E67735" isReportable="N">
+      <erc> A </erc>
+      <name> COMPRESSOR UNIT RCP: ELEC W/RELIEF VALVE AUTO START/STOP CONTROL </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 1 </capQuantityAuth>
+   </item>
+
+   <item idNumber="E69242" isReportable="N">
+      <erc> A </erc>
+      <name> COMP UNIT RCP: AIR REC GAS DRVN 15 CFM 175 PSI </name>
+      <quantityOnHand> 2 </quantityOnHand>
+      <quantityAuth> 4 </quantityAuth>
+      <capQuantityAuth> 3 </capQuantityAuth>
+   </item>
+
+   <item idNumber="E70064" isReportable="N">
+      <erc> B </erc>
+      <name> COMP UNIT RCP: TRK 2 WHL PNEU TIRES GAS DRVN 5 CFM 175 PSI </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="F07657" isReportable="N">
+      <erc> B </erc>
+      <name> CONVEYOR ROLLER GRAVITY: STEEL STRAIGHT 500 10 FT L 14 IN W </name>
+      <quantityOnHand> 6 </quantityOnHand>
+      <quantityAuth> 10 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="F07794" isReportable="N">
+      <erc> B </erc>
+      <name> CONVEYOR ROLLER GRAVITY: CURVED 600 LB PER FT CAP </name>
+      <quantityOnHand> 3 </quantityOnHand>
+      <quantityAuth> 5 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="F55485" isReportable="N">
+      <erc> B </erc>
+      <name> DISTRIBUTION SYSTEM ELEC: 120/208V 3PH 40AMP </name>
+      <quantityOnHand> 2 </quantityOnHand>
+      <quantityAuth> 3 </quantityAuth>
+      <capQuantityAuth> 1 </capQuantityAuth>
+   </item>
+
+   <item idNumber="F55553" isReportable="N">
+      <erc> B </erc>
+      <name> DISTRIBUTION SYSTEM ELEC: 120V 1PH 60AMP </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="F55621" isReportable="N">
+      <erc> B </erc>
+      <name> FEEDER SYSTEM ELECTRICAL: 3PH 100 AMP </name>
+      <quantityOnHand> 2 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 1 </capQuantityAuth>
+   </item>
+
+   <item idNumber="F86209" isReportable="N">
+      <erc> B </erc>
+      <name> DEGREASER: PORTABLE SOLVENT TYPE 1/4 HP 115V 60C SGLE PHASE </name>
+      <quantityOnHand> 2 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 1 </capQuantityAuth>
+   </item>
+
+   <item idNumber="G11966" isReportable="Y">
+      <erc> A </erc>
+      <name> GEN SET: DED SKID MTD 5KW 60HZ </name>
+      <quantityOnHand> 2 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 1 </capQuantityAuth>
+      <individual_items>
+         <bumper number="CH2001">
+            <avail> 27 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="BM8001">
+            <avail> 23 </avail> 
+            <total> 30 </total>
+         </bumper> 
+      </individual_items>
+   </item>
+
+   <item idNumber="G11966" isReportable="Y">
+      <erc> B </erc>
+      <name> GEN SET: DED SKID MTD 5KW 60HZ </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+      <individual_items>
+         <bumper number="CH1002">
+            <avail> 21 </avail> 
+            <total> 30 </total>
+         </bumper> 
+      </individual_items>
+   </item>
+
+   <item idNumber="G18358" isReportable="N">
+      <erc> B </erc>
+      <name> GEN SET: DED SKID MTD 3KW 60HZ </name>
+      <quantityOnHand> 2 </quantityOnHand>
+      <quantityAuth> 3 </quantityAuth>
+      <capQuantityAuth> 1 </capQuantityAuth>
+   </item>
+
+   <item idNumber="G35851" isReportable="Y">
+      <erc> A </erc>
+      <name> GENERATOR SET DIESEL ENGINE TM: PU-803 </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 1 </capQuantityAuth>
+      <individual_items>
+         <bumper number="BM8002">
+            <avail> 26 </avail> 
+            <total> 30 </total>
+         </bumper> 
+      </individual_items>
+   </item>
+
+   <item idNumber="G53778" isReportable="Y">
+      <erc> A </erc>
+      <name> GENERATOR SET DIESEL ENGINE TM: PU-802 </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+      <individual_items>
+         <bumper number="CH2002">
+            <avail> 24 </avail> 
+            <total> 30 </total>
+         </bumper> 
+      </individual_items>
+   </item>
+
+   <item idNumber="G53778" isReportable="Y">
+      <erc> B </erc>
+      <name> GENERATOR SET DIESEL ENGINE TM: PU-802 </name>
+      <quantityOnHand> 0 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+      <individual_items>
+         <bumper number="N/A">
+            <avail> N/A </avail> 
+            <total> 30 </total>
+         </bumper> 
+      </individual_items>
+   </item>
+
+   <item idNumber="G74711" isReportable="Y">
+      <erc> A </erc>
+      <name> GEN SET: DED SKID MTD 10KW 60HZ </name>
+      <quantityOnHand> 4 </quantityOnHand>
+      <quantityAuth> 6 </quantityAuth>
+      <capQuantityAuth> 4 </capQuantityAuth>
+      <individual_items>
+         <bumper number="SUP4004">
+            <avail> 28 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="SUP5001">
+            <avail> 24 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="BM10001">
+            <avail> 26 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="BM10002">
+            <avail> 23 </avail> 
+            <total> 30 </total>
+         </bumper> 
+      </individual_items>
+   </item>
+
+   <item idNumber="G76852" isReportable="N">
+      <erc> A </erc>
+      <name> TEST SET ELEC POWER: 0-33 KW LOAD 50 TO 1000 CPS FREQUENCY RANGE </name>
+      <quantityOnHand> 0 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="G77126" isReportable="N">
+      <erc> A </erc>
+      <name> DUMMY LOAD ELECTRICAL: DA-75/U </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="G78306" isReportable="Y">
+      <erc> A </erc>
+      <name> GENERATOR SET: DIESEL TRL/MTD 60KW 50/60HZ PU805 CHASSIS W/FENDE </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+      <individual_items>
+         <bumper number="GSE13001">
+            <avail> 25 </avail> 
+            <total> 30 </total>
+         </bumper> 
+      </individual_items>
+   </item>
+
+   <item idNumber="H00586" isReportable="N">
+      <erc> B </erc>
+      <name> HEATER: DUCT TYPE PORTABLE 1200-00 BTUS </name>
+      <quantityOnHand> 2 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 1 </capQuantityAuth>
+   </item>
+
+   <item idNumber="H01855" isReportable="N">
+      <erc> A </erc>
+      <name> ELECTRONIC SHOP SEMITRAILER MOUNTED: AN/ASM-189 LESS POWER </name>
+      <quantityOnHand> 3 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="H01857" isReportable="N">
+      <erc> A </erc>
+      <name> ELECTRONIC SHOP SEMITRAILER MOUNTED: AN/ASM-190 LESS POWER </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="H01907" isReportable="N">
+      <erc> A </erc>
+      <name> ELECTRONIC SHOP SHELTER MOUNTED AVIONICS: AN/ASM-146 LESS POWER </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 4 </quantityAuth>
+      <capQuantityAuth> 4 </capQuantityAuth>
+   </item>
+
+   <item idNumber="H35404" isReportable="Y">
+      <erc> A </erc>
+      <name> HF RADIO SET: AN/GRC-193A </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+      <individual_items>
+         <bumper number="GSE13002">
+            <avail> 27 </avail> 
+            <total> 30 </total>
+         </bumper> 
+      </individual_items>
+   </item>
+
+   <item idNumber="J31297" isReportable="N">
+      <erc> B </erc>
+      <name> INST KIT: MK-2195/VRC FOR AN/VRC-87/88/90 IN 2 1/2 AND 5 TON TR </name>
+      <quantityOnHand> 2 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 2 </capQuantityAuth>
+   </item>
+
+   <item idNumber="J31569" isReportable="N">
+      <erc> A </erc>
+      <name> INST KIT: MK-2325/VRC FOR AN/VRC-87/88/90 IN HMMWV </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="J31569" isReportable="N">
+      <erc> B </erc>
+      <name> INST KIT: MK-2325/VRC FOR AN/VRC-87/88/90 IN HMMWV </name>
+      <quantityOnHand> 5 </quantityOnHand>
+      <quantityAuth> 7 </quantityAuth>
+      <capQuantityAuth> 5 </capQuantityAuth>
+   </item>
+
+   <item idNumber="J47151" isReportable="N">
+      <erc> B </erc>
+      <name> INST KIT: MK-2204/VRC FOR AN/VRC-87/88/89 IN M987 M984 M988 </name>
+      <quantityOnHand> 2 </quantityOnHand>
+      <quantityAuth> 4 </quantityAuth>
+      <capQuantityAuth> 4 </capQuantityAuth>
+   </item>
+
+   <item idNumber="J47457" isReportable="N">
+      <erc> A </erc>
+      <name> INST KIT: MK-2326/VRC FOR AN/VRC-89/91/92 IN HMMWV </name>
+      <quantityOnHand> 2 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="J48096" isReportable="N">
+      <erc> A </erc>
+      <name> INSTALLATION KIT: MK-2459/GRC-193A F/AN/GRC-193A WHEELED </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="J86065" isReportable="N">
+      <erc> B </erc>
+      <name> GRINDER PNEUMATIC HORIZONTAL: 8 IN DIA BY 1 IN MAX CAP </name>
+      <quantityOnHand> 0 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 1 </capQuantityAuth>
+   </item>
+
+   <item idNumber="K23814" isReportable="N">
+      <erc> A </erc>
+      <name> HEADSET-MICROPHONE: H-182/PT </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="K38288" isReportable="N">
+      <erc> A </erc>
+      <name> HOIST CHAIN: HAND OP AUTO BRAKE HOOK SUSP MTD </name>
+      <quantityOnHand> 2 </quantityOnHand>
+      <quantityAuth> 3 </quantityAuth>
+      <capQuantityAuth> 2 </capQuantityAuth>
+   </item>
+
+   <item idNumber="K47623" isReportable="N">
+      <erc> A </erc>
+      <name> KY-99: MINTERM </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="K52926" isReportable="N">
+      <erc> B </erc>
+      <name> HOSE ASSEMBLY: NONMETALLIC WATER USE W/PIN ORROCKER LUGWRENCHING </name>
+      <quantityOnHand> 3 </quantityOnHand>
+      <quantityAuth> 6 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="K53748" isReportable="N">
+      <erc> B </erc>
+      <name> HOSE ASSEMBLY: NONMETALLIC FUEL/OIL HYDROCARBON USE BRASS FITTIN </name>
+      <quantityOnHand> 8 </quantityOnHand>
+      <quantityAuth> 16 </quantityAuth>
+      <capQuantityAuth> 4 </capQuantityAuth>
+   </item>
+
+   <item idNumber="L08587" isReportable="N">
+      <erc> B </erc>
+      <name> JACK DOLLY TYPE HYDRAULIC: 4 TON CAPACITY </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 3 </quantityAuth>
+      <capQuantityAuth> 3 </capQuantityAuth>
+   </item>
+
+   <item idNumber="L08724" isReportable="N">
+      <erc> A </erc>
+      <name> JACK DOLLY TYPE HYDRAULIC: 10 TON CAPACITY </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="L28351" isReportable="N">
+      <erc> C </erc>
+      <name> KITCHEN FIELD TRAILER MOUNTED: MTD ON M103A3 TRAILER </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="L44595" isReportable="N">
+      <erc> B </erc>
+      <name> LAUNCHER GRENADE 40 MILLIMETER: SGLE SHOT RIFLE MTD DTCHBLE W/E 800 </name>
+      <quantityOnHand> 4 </quantityOnHand>
+      <quantityAuth> 4 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="L63994" isReportable="N">
+      <erc> B </erc>
+      <name> LIGHT SET GENERAL ILLUMINATION: 25 OUTLET (ARMY) </name>
+      <quantityOnHand> 5 </quantityOnHand>
+      <quantityAuth> 7 </quantityAuth>
+      <capQuantityAuth> 2 </capQuantityAuth>
+   </item>
+
+   <item idNumber="L84098" isReportable="N">
+      <erc> B </erc>
+      <name> LOUDSPEAKER PERMANENT MAGNET: LS-454/U </name>
+      <quantityOnHand> 3 </quantityOnHand>
+      <quantityAuth> 6 </quantityAuth>
+      <capQuantityAuth> 4 </capQuantityAuth>
+   </item>
+
+   <item idNumber="L91975" isReportable="N">
+      <erc> B </erc>
+      <name> MACHINE GUN CALIBER .50: HB FLEXIBLE (GROUND AND VEHICLE) W/E </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="L98359" isReportable="N">
+      <erc> A </erc>
+      <name> MAINTENANCE KIT ELECTRONIC EQUIPMENT: MK-288/URM </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="M09009" isReportable="N">
+      <erc> B </erc>
+      <name> MACHINE GUN 5.56 MILLIMETER: M249 </name>
+      <quantityOnHand> 12 </quantityOnHand>
+      <quantityAuth> 24 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="M12418" isReportable="N">
+      <erc> A </erc>
+      <name> MASK CHEMICAL BIOLOGICAL: M40 </name>
+      <quantityOnHand> 125 </quantityOnHand>
+      <quantityAuth> 200 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="M20190" isReportable="N">
+      <erc> A </erc>
+      <name> MEASURING TOOL SET MACHINISTS: SET NO 6 </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 1 </capQuantityAuth>
+   </item>
+
+   <item idNumber="M23954" isReportable="N">
+      <erc> A </erc>
+      <name> MULTIMETER DIGITAL DISPLAY: AN/USM-486 </name>
+      <quantityOnHand> 3 </quantityOnHand>
+      <quantityAuth> 5 </quantityAuth>
+      <capQuantityAuth> 4 </capQuantityAuth>
+   </item>
+
+   <item idNumber="M60449" isReportable="N">
+      <erc> A </erc>
+      <name> MULTIMETER DIGITAL: AN/PSM-45 </name>
+      <quantityOnHand> 12 </quantityOnHand>
+      <quantityAuth> 23 </quantityAuth>
+      <capQuantityAuth> 8 </capQuantityAuth>
+   </item>
+
+   <item idNumber="M60449" isReportable="N">
+      <erc> B </erc>
+      <name> MULTIMETER DIGITAL: AN/PSM-45 </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 3 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="M61743" isReportable="N">
+      <erc> A </erc>
+      <name> MODULATION METER: ME-523 ()/U F/ELECT CURRENT TESTERS </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="M74364" isReportable="N">
+      <erc> B </erc>
+      <name> MOUNT GUN: RING CAL .50 </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="M74823" isReportable="N">
+      <erc> B </erc>
+      <name> MOUNT MACHINE GUN: MK64 MOD9 </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 3 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="M75577" isReportable="N">
+      <erc> B </erc>
+      <name> MOUNT TRIPOD MACHINE GUN: HEAVY CALIBER 50 </name>
+      <quantityOnHand> 2 </quantityOnHand>
+      <quantityAuth> 4 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="M75714" isReportable="N">
+      <erc> B </erc>
+      <name> MOUNT TRIPOD MACHINE GUN: 7.62 MILLIMETER </name>
+      <quantityOnHand> 2 </quantityOnHand>
+      <quantityAuth> 4 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="M92362" isReportable="N">
+      <erc> B </erc>
+      <name> MACHINE GUN GRENADE 40MM: MK19 MOD III </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 3 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="N05482" isReportable="N">
+      <erc> B </erc>
+      <name> NIGHT VISION GOGGLE: AN/PVS-7 </name>
+      <quantityOnHand> 58 </quantityOnHand>
+      <quantityAuth> 58 </quantityAuth>
+      <capQuantityAuth> 31 </capQuantityAuth>
+   </item>
+
+   <item idNumber="P30693" isReportable="N">
+      <erc> A </erc>
+      <name> OSCILLOSCOPE DC-100MHZ: AN/USM-488 </name>
+      <quantityOnHand> 3 </quantityOnHand>
+      <quantityAuth> 5 </quantityAuth>
+      <capQuantityAuth> 4 </capQuantityAuth>
+   </item>
+
+   <item idNumber="P33687" isReportable="N">
+      <erc> B </erc>
+      <name> OSCILLOSCOPE STORAGE: OS-291/G </name>
+      <quantityOnHand> 0 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="P40745" isReportable="N">
+      <erc> A </erc>
+      <name> POWER SUPPLY: PP-4763/GRC </name>
+      <quantityOnHand> 3 </quantityOnHand>
+      <quantityAuth> 6 </quantityAuth>
+      <capQuantityAuth> 4 </capQuantityAuth>
+   </item>
+
+   <item idNumber="P40750" isReportable="N">
+      <erc> A </erc>
+      <name> POWER SUPPLY: PP-6224/U </name>
+      <quantityOnHand> 3 </quantityOnHand>
+      <quantityAuth> 6 </quantityAuth>
+      <capQuantityAuth> 4 </capQuantityAuth>
+   </item>
+
+   <item idNumber="P40750" isReportable="N">
+      <erc> B </erc>
+      <name> POWER SUPPLY: PP-6224/U </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="P70517" isReportable="N">
+      <erc> A </erc>
+      <name> PURGING KIT FIRE CONTROL: ORG MAINT </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="P91756" isReportable="N">
+      <erc> B </erc>
+      <name> PUMP CENTRF: GAS DRVN FRAME MTD 1-1/2 IN 65GPM 50 FT HD </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="P98152" isReportable="N">
+      <erc> B </erc>
+      <name> PISTOL 9MM AUTOMATIC: M9 </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="R11154" isReportable="N">
+      <erc> B </erc>
+      <name> RAMP LOADING VEHICLE: WHL MTD 16000 LB CAPACITY 96 IN W 36 FT LG </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="R14154" isReportable="N">
+      <erc> C </erc>
+      <name> RANGE OUTFIT FIELD GASOLINE: </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="R20684" isReportable="N">
+      <erc> B </erc>
+      <name> RADIAC SET: AN/VDR-2 </name>
+      <quantityOnHand> 3 </quantityOnHand>
+      <quantityAuth> 4 </quantityAuth>
+      <capQuantityAuth> 1 </capQuantityAuth>
+   </item>
+
+   <item idNumber="R22666" isReportable="N">
+      <erc> A </erc>
+      <name> RADIO FREQUENCY POWER TEST SET: AN/URM-213 </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="R30925" isReportable="N">
+      <erc> B </erc>
+      <name> RADIAC SET: AN/PDR-75 </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="R30993" isReportable="N">
+      <erc> A </erc>
+      <name> RADIAC SET: AN/PDR-77() </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="R31061" isReportable="N">
+      <erc> B </erc>
+      <name> RADIAC SET: AN/UDR-13 </name>
+      <quantityOnHand> 7 </quantityOnHand>
+      <quantityAuth> 9 </quantityAuth>
+      <capQuantityAuth> 6 </capQuantityAuth>
+   </item>
+
+   <item idNumber="R36178" isReportable="N">
+      <erc> A </erc>
+      <name> RADIO TEST SET: AN/GRM-114B </name>
+      <quantityOnHand> 3 </quantityOnHand>
+      <quantityAuth> 6 </quantityAuth>
+      <capQuantityAuth> 4 </capQuantityAuth>
+   </item>
+
+   <item idNumber="R59023" isReportable="N">
+      <erc> B </erc>
+      <name> REELING MACHINE CABLE HAND: RL-31 </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="R59160" isReportable="N">
+      <erc> B </erc>
+      <name> REELING MACHINE CABLE HAND: RL-39 </name>
+      <quantityOnHand> 17 </quantityOnHand>
+      <quantityAuth> 25 </quantityAuth>
+      <capQuantityAuth> 12 </capQuantityAuth>
+   </item>
+
+   <item idNumber="R61406" isReportable="N">
+      <erc> A </erc>
+      <name> RECHARGE/SERVICE KIT: FIRE EXTINGUISHER HALON 1301 </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="R72484" isReportable="N">
+      <erc> A </erc>
+      <name> REPAIR AND REFILLING KIT: HOSE REPAIR AND DIOX FIRE EXT </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="R95035" isReportable="N">
+      <erc> B </erc>
+      <name> RIFLE 5.56 MILLIMETER: M16A2 </name>
+      <quantityOnHand> 177 </quantityOnHand>
+      <quantityAuth> 179 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="S33399" isReportable="N">
+      <erc> C </erc>
+      <name> SANITATION CENTER: FOOD </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="S36837" isReportable="N">
+      <erc> B </erc>
+      <name> SAW CIRCULAR PORTABLE ELECTRIC: 4-1/4 IN VERTICAL DEPTH OF CUT </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="S41715" isReportable="N">
+      <erc> A </erc>
+      <name> SIGNAL GENERATOR VHF-UHF (450 KHZ TO 2.0 GHZ): SG-1207 </name>
+      <quantityOnHand> 3 </quantityOnHand>
+      <quantityAuth> 7 </quantityAuth>
+      <capQuantityAuth> 4 </capQuantityAuth>
+   </item>
+
+   <item idNumber="S65581" isReportable="N">
+      <erc> A </erc>
+      <name> SIGNAL GENERATOR FUNCTION: SG-1171()/U </name>
+      <quantityOnHand> 3 </quantityOnHand>
+      <quantityAuth> 6 </quantityAuth>
+      <capQuantityAuth> 4 </capQuantityAuth>
+   </item>
+
+   <item idNumber="S70027" isReportable="Y">
+      <erc> A </erc>
+      <name> SEMITRAILER FLAT BED: BREAKBULK/CONT TRANSPORTER 22-1/2 TON </name>
+      <quantityOnHand> 3 </quantityOnHand>
+      <quantityAuth> 8 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+      <individual_items>
+         <bumper number="2982">
+            <avail> 27 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="2488">
+            <avail> 25 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="2454">
+            <avail> 24 </avail> 
+            <total> 30 </total>
+         </bumper> 
+      </individual_items>
+   </item>
+
+   <item idNumber="S70517" isReportable="Y">
+      <erc> B </erc>
+      <name> SEMITRAILER LOW BED: 25 TON 4 WHEEL W/E </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+      <individual_items>
+         <bumper number="GSE13001">
+            <avail> 27 </avail>
+            <total> 30 </total>
+         </bumper>
+      </individual_items>
+   </item>
+
+   <item idNumber="S74832" isReportable="N">
+      <erc> A </erc>
+      <name> SEMITRAILER VAN: REPAIR PARTS STORAGE 6 TON 4 WHEEL W/E </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="S75175" isReportable="N">
+      <erc> A </erc>
+      <name> SEMITRAILER VAN: SUPPLY 12 TON 4 WHEEL W/E </name>
+      <quantityOnHand> 8 </quantityOnHand>
+      <quantityAuth> 16 </quantityAuth>
+      <capQuantityAuth> 4 </capQuantityAuth>
+   </item>
+
+   <item idNumber="T07679" isReportable="Y">
+      <erc> A </erc>
+      <name> TRUCK UTILITY: HEAVY VARIANT HMMWV 4X4 10000 GVW W/E </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 4 </quantityAuth>
+      <capQuantityAuth> 4 </capQuantityAuth>
+      <individual_items>
+         <bumper number="GSE13002">
+            <avail> 29 </avail> 
+            <total> 30 </total>
+         </bumper> 
+      </individual_items>
+   </item>
+
+   <item idNumber="T09966" isReportable="N">
+      <erc> A </erc>
+      <name> SHOP EQUIPMENT BATTERY SERVICING SHELTER MOUNTED: </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 1 </capQuantityAuth>
+   </item>
+
+   <item idNumber="T10038" isReportable="N">
+      <erc> A </erc>
+      <name> SHOP EQUIPMENT CANVAS AND GLASS SHOP SHELTER MOUNTED: </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 1 </capQuantityAuth>
+   </item>
+
+   <item idNumber="T10275" isReportable="Y">
+      <erc> A </erc>
+      <name> SHOP EQUIP ELEC REP SEMITRLR MTD: ARMY </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+      <individual_items>
+         <bumper number="GSE12001">
+            <avail> 26 </avail> 
+            <total> 30 </total>
+         </bumper> 
+      </individual_items>
+   </item>
+
+   <item idNumber="T10549" isReportable="Y">
+      <erc> A </erc>
+      <name> SHOP EQUIP GEN PURP REP SEMITRLR MTD: </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 1 </capQuantityAuth>
+      <individual_items>
+         <bumper number="GSE14002">
+            <avail> 27 </avail> 
+            <total> 30 </total>
+         </bumper> 
+      </individual_items>
+   </item>
+
+   <item idNumber="T16000" isReportable="N">
+      <erc> A </erc>
+      <name> SHOP EQUIPMENT RADIATOR TEST AND REPAIR: DM HQS AND SERVICE NO 4 </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 1 </capQuantityAuth>
+   </item>
+
+   <item idNumber="T16597" isReportable="N">
+      <erc> A </erc>
+      <name> SHOP EQUIPMENT SMALL ARMS REPAIR SHELTER MOUNTED: </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 1 </capQuantityAuth>
+   </item>
+
+   <item idNumber="T24660" isReportable="N">
+      <erc> A </erc>
+      <name> SHOP EQUIPMENT AUTOMOTIVE MAINT AND REPAIR: FM BASIC LESS POWER </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 1 </capQuantityAuth>
+   </item>
+
+   <item idNumber="T25619" isReportable="N">
+      <erc> A </erc>
+      <name> SHOP EQUIPMENT AUTO MAINT AND REPAIR: FM SUPPL NO 1 LESS POWER </name>
+      <quantityOnHand> 0 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 1 </capQuantityAuth>
+   </item>
+
+   <item idNumber="T25726" isReportable="N">
+      <erc> B </erc>
+      <name> TONE-SIGNALLING ADAPTER: TA-977( )/PT </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="T30377" isReportable="N">
+      <erc> A </erc>
+      <name> TOOL OUTFIT HYDRAULIC SYSTEM: TEST AND REPAIR 3/4 TON TLR MTD </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="T30414" isReportable="N">
+      <erc> A </erc>
+      <name> SHOP EQUIPMENT FUEL AND ELECT SYSTEM ENGINE: FM BAS LESS POWER </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 1 </capQuantityAuth>
+   </item>
+
+   <item idNumber="T36305" isReportable="N">
+      <erc> B </erc>
+      <name> SHOP SET SPARE PARTS STORAGE: FIELD MAINTENANCE SET NO 1 </name>
+      <quantityOnHand> 13 </quantityOnHand>
+      <quantityAuth> 29 </quantityAuth>
+      <capQuantityAuth> 8 </capQuantityAuth>
+   </item>
+
+   <item idNumber="T36442" isReportable="N">
+      <erc> A </erc>
+      <name> SHOP SET SPARE PARTS STORAGE: FIELD MAINTENANCE SET NO 2 </name>
+      <quantityOnHand> 2 </quantityOnHand>
+      <quantityAuth> 4 </quantityAuth>
+      <capQuantityAuth> 4 </capQuantityAuth>
+   </item>
+
+   <item idNumber="T36442" isReportable="N">
+      <erc> B </erc>
+      <name> SHOP SET SPARE PARTS STORAGE: FIELD MAINTENANCE SET NO 2 </name>
+      <quantityOnHand> 5 </quantityOnHand>
+      <quantityAuth> 11 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="T45419" isReportable="N">
+      <erc> A </erc>
+      <name> TEST STAND AUTOMOTIVE HEATER: PERSONNEL AND ENGINE COOLANT </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 1 </capQuantityAuth>
+   </item>
+
+   <item idNumber="T49255" isReportable="Y">
+      <erc> B </erc>
+      <name> TRUCK LIFT FORK: DSL DRVN 4000 LB CAP ROUGH TERRAIN </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+      <individual_items>
+         <bumper number="SUP5002">
+            <avail> 22 </avail> 
+            <total> 30 </total>
+         </bumper> 
+      </individual_items>
+   </item>
+
+   <item idNumber="T49348" isReportable="N">
+      <erc> A </erc>
+      <name> TEST SET TRANSMISSION TELECOM: AN/USM-485 </name>
+      <quantityOnHand> 0 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="T53471" isReportable="N">
+      <erc> A </erc>
+      <name> TEST SET AVIATORS NIGHT VISION IMAGING SYSTEM: TS-3895/UV </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="T60081" isReportable="Y">
+      <erc> B </erc>
+      <name> TRUCK CARGO: 4X4 LMTV W/E </name>
+      <quantityOnHand> 6 </quantityOnHand>
+      <quantityAuth> 6 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+      <individual_items>
+         <bumper number="CH1003">
+            <avail> 25 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="CH1004">
+            <avail> 24 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="SUP4002">
+            <avail> 26 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="SUP4003">
+            <avail> 28 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="SUP5003">
+            <avail> 29 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="SUP5004">
+            <avail> 27 </avail> 
+            <total> 30 </total>
+         </bumper> 
+      </individual_items>
+   </item>
+
+   <item idNumber="T60149" isReportable="Y">
+      <erc> B </erc>
+      <name> TRUCK CARGO: 4X4 LMTV W/E W/W </name>
+      <quantityOnHand> 0 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+      <individual_items>
+         <bumper number="N/A">
+            <avail> N/A </avail> 
+            <total> 30 </total>
+         </bumper> 
+      </individual_items>
+   </item>
+
+   <item idNumber="T61239" isReportable="Y">
+      <erc> A </erc>
+      <name> TRUCK TRACTOR: MTV W/E </name>
+      <quantityOnHand> 24 </quantityOnHand>
+      <quantityAuth> 23 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+      <individual_items>
+         <bumper number="CH2003">
+            <avail> 21 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="CH2004">
+            <avail> 22 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="CH2005">
+            <avail> 23 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="SUP5005">
+            <avail> 25 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="SUP5006">
+            <avail> 24 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="SUP5007">
+            <avail> 26 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="SUP6001">
+            <avail> 28 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="SUP6002">
+            <avail> 29 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="SUP6003">
+            <avail> 27 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="BM10003">
+            <avail> 28 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="BM10004">
+            <avail> 29 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="BM10005">
+            <avail> 26 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="GSE12002">
+            <avail> 23 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="GSE12003">
+            <avail> 22 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="GSE12004">
+            <avail> 21 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="GSE13003">
+            <avail> 22 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="GSE13004">
+            <avail> 20 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="GSE13005">
+            <avail> 21 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="GSE14003">
+            <avail> 13 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="GSE14004">
+            <avail> 16 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="GSE14005">
+            <avail> 18 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="GSE14006">
+            <avail> 19 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="GSE14007">
+            <avail> 21 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="GSE14008">
+            <avail> 24 </avail> 
+            <total> 30 </total>
+         </bumper> 
+      </individual_items>
+   </item>
+
+   <item idNumber="T61494" isReportable="Y">
+      <erc> A </erc>
+      <name> TRUCK UTILITY: CARGO/TROOP CARRIER 1-1/4 TON 4X4 W/E (HMMWV) </name>
+      <quantityOnHand> 7 </quantityOnHand>
+      <quantityAuth> 7 </quantityAuth>
+      <capQuantityAuth> 5 </capQuantityAuth>
+      <individual_items>
+         <bumper number="GSE11001">
+            <avail> 23 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="GSE11002">
+            <avail> 29 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="GSE11003">
+            <avail> 28 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="GSE11004">
+            <avail> 27 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="GSE11005">
+            <avail> 27 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="GSE12005">
+            <avail> 29 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="GSE12006">
+            <avail> 23 </avail> 
+            <total> 30 </total>
+         </bumper> 
+      </individual_items>
+   </item>
+
+   <item idNumber="T61494" isReportable="Y">
+      <erc> B </erc>
+      <name> TRUCK UTILITY: CARGO/TROOP CARRIER 1-1/4 TON 4X4 W/E (HMMWV) </name>
+      <quantityOnHand> 4 </quantityOnHand>
+      <quantityAuth> 4 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+      <individual_items>
+         <bumper number="CH2006">
+            <avail> 21 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="CH2007">
+            <avail> 23 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="CH2008">
+            <avail> 24 </avail> 
+            <total> 30 </total>
+         </bumper> 
+         <bumper number="CH2009">
+            <avail> 27 </avail> 
+            <total> 30 </total>
+         </bumper> 
+      </individual_items>
+   </item>
+
+   <item idNumber="T61704" isReportable="Y">
+      <erc> A </erc>
+      <name> TRUCK CARGO: MTV LWB W/E </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 1 </capQuantityAuth>
+      <individual_items>
+         <bumper number="BM8003">
+            <avail> 26 </avail> 
+            <total> 30 </total>
+         </bumper> 
+      </individual_items>
+   </item>
+
+   <item idNumber="T62350" isReportable="N">
+      <erc> B </erc>
+      <name> TEST KIT MASK PROTECTIVE: M41 </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="T62474" isReportable="N">
+      <erc> A </erc>
+      <name> TEST SET: TSEC/ST-58 </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="T63093" isReportable="Y">
+      <erc> A </erc>
+      <name> TRUCK WRECKER: TACTICAL 8X8 HEAVY EXPANDED MOBILITY W/WINCH </name>
+      <quantityOnHand> 0 </quantityOnHand>
+      <quantityAuth> 5 </quantityAuth>
+      <capQuantityAuth> 5 </capQuantityAuth>
+      <individual_items>
+         <bumper number="BM8001">
+            <avail> 30 </avail> 
+            <total> 30 </total>
+         </bumper> 
+      </individual_items>
+   </item>
+
+   <item idNumber="T70627" isReportable="N">
+      <erc> A </erc>
+      <name> TEST SET CHEMICAL AGENT AUTOMATIC ALARM: M140 </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="T81598" isReportable="N">
+      <erc> A </erc>
+      <name> TEST SET INTERMEDIATE LEVEL: TSEC/ST-34 </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="T87468" isReportable="N">
+      <erc> A </erc>
+      <name> TEST SET RADIO: AN/GRM-114 </name>
+      <quantityOnHand> 3 </quantityOnHand>
+      <quantityAuth> 6 </quantityAuth>
+      <capQuantityAuth> 4 </capQuantityAuth>
+   </item>
+
+   <item idNumber="T89944" isReportable="N">
+      <erc> A </erc>
+      <name> TEST SET RADIO FREQUENCY POWER: AN/USM-491 </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="T92821" isReportable="N">
+      <erc> B </erc>
+      <name> TEST SET: ELECTRICAL CABLE AN/STM-12 </name>
+      <quantityOnHand> 2 </quantityOnHand>
+      <quantityAuth> 3 </quantityAuth>
+      <capQuantityAuth> 2 </capQuantityAuth>
+   </item>
+
+   <item idNumber="T93484" isReportable="Y">
+      <erc> A </erc>
+      <name> TRUCK VAN: LMTV W/E </name>
+      <quantityOnHand> 0 </quantityOnHand>
+      <quantityAuth> 4 </quantityAuth>
+      <capQuantityAuth> 4 </capQuantityAuth>
+      <individual_items>
+         <bumper number="BM2001">
+            <avail> 29 </avail> 
+            <total> 30 </total>
+         </bumper> 
+      </individual_items>
+   </item>
+
+   <item idNumber="U05008" isReportable="N">
+      <erc> B </erc>
+      <name> SPLICING KIT TELEPHONE CABLE: MK-356/G </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="U81707" isReportable="N">
+      <erc> B </erc>
+      <name> SWITCHBOARD TELEPHONE MANUAL: SB-22/PT </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="U89185" isReportable="N">
+      <erc> B </erc>
+      <name> UTILITY RECEPTACLE: </name>
+      <quantityOnHand> 3 </quantityOnHand>
+      <quantityAuth> 3 </quantityAuth>
+      <capQuantityAuth> 1 </capQuantityAuth>
+   </item>
+
+   <item idNumber="V31211" isReportable="N">
+      <erc> B </erc>
+      <name> TELEPHONE SET: TA-312/PT </name>
+      <quantityOnHand> 14 </quantityOnHand>
+      <quantityAuth> 19 </quantityAuth>
+      <capQuantityAuth> 1 </capQuantityAuth>
+   </item>
+
+   <item idNumber="V57914" isReportable="N">
+      <erc> A </erc>
+      <name> TERMINAL TELEGRAPH-TELEPHONE: AN/TCC-29 </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="V73742" isReportable="N">
+      <erc> A </erc>
+      <name> TEST SET DIESEL INJECTOR: </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="V96110" isReportable="N">
+      <erc> A </erc>
+      <name> TEST SET TELEPHONE: TS-716/U </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="V98788" isReportable="N">
+      <erc> A </erc>
+      <name> POWER SUPPLY VEHICLE: HYP-57/TSEC </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="V99843" isReportable="N">
+      <erc> A </erc>
+      <name> TEST STAND AUTOMOTIVE GENERATOR AND STARTER: FLOOR MTD 500 AMP </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 1 </capQuantityAuth>
+   </item>
+
+   <item idNumber="W29716" isReportable="N">
+      <erc> A </erc>
+      <name> TOOL KIT: TELETYPE EQUIPMENT MAINTENANCE SIG PART/DWG NO TE50B </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 3 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="W32182" isReportable="N">
+      <erc> A </erc>
+      <name> TOOL KIT ARTILLERY MECHANICS: ORD </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 2 </capQuantityAuth>
+   </item>
+
+   <item idNumber="W32456" isReportable="N">
+      <erc> A </erc>
+      <name> TOOL KIT AUTOMOTIVE FUEL AND ELECTRICAL SYSTEM REPAIR: </name>
+      <quantityOnHand> 2 </quantityOnHand>
+      <quantityAuth> 5 </quantityAuth>
+      <capQuantityAuth> 5 </capQuantityAuth>
+   </item>
+
+   <item idNumber="W32593" isReportable="N">
+      <erc> B </erc>
+      <name> SHOP EQUIPMENT AUTO MAINT AND REPAIR: OM COMMON NO 1LESS POWER </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="W32867" isReportable="N">
+      <erc> B </erc>
+      <name> SHOP EQUIPMENT AUTO MAINT AND REPAIR: ORG SUPPL NO 1 LESS POWER </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="W33004" isReportable="N">
+      <erc> A </erc>
+      <name> TOOL KIT GENERAL MECHANICS: AUTOMOTIVE </name>
+      <quantityOnHand> 40 </quantityOnHand>
+      <quantityAuth> 69 </quantityAuth>
+      <capQuantityAuth> 44 </capQuantityAuth>
+   </item>
+
+   <item idNumber="W33004" isReportable="N">
+      <erc> B </erc>
+      <name> TOOL KIT GENERAL MECHANICS: AUTOMOTIVE </name>
+      <quantityOnHand> 5 </quantityOnHand>
+      <quantityAuth> 11 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="W33552" isReportable="N">
+      <erc> A </erc>
+      <name> TOOL KIT BODY AND FENDER REPAIR: MECHANICS SET HAND </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 1 </capQuantityAuth>
+   </item>
+
+   <item idNumber="W33689" isReportable="N">
+      <erc> A </erc>
+      <name> TOOL KIT: BODY AND FENDER </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 3 </quantityAuth>
+      <capQuantityAuth> 3 </capQuantityAuth>
+   </item>
+
+   <item idNumber="W34237" isReportable="N">
+      <erc> A </erc>
+      <name> TOOL KIT CANVAS WORKERS: CANVAS AND LEATHER REPAIR </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 1 </capQuantityAuth>
+   </item>
+
+   <item idNumber="W34648" isReportable="N">
+      <erc> B </erc>
+      <name> TOOL KIT CARPENTERS: ENGINEER SQUAD W/CHEST </name>
+      <quantityOnHand> 2 </quantityOnHand>
+      <quantityAuth> 3 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="W37251" isReportable="N">
+      <erc> A </erc>
+      <name> TOOL KIT ELECTRONIC EQUIPMENT: TK-100/G </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="W37388" isReportable="N">
+      <erc> A </erc>
+      <name> TOOL KIT ELECTRONIC EQUIPMENT: TK-105/G </name>
+      <quantityOnHand> 9 </quantityOnHand>
+      <quantityAuth> 18 </quantityAuth>
+      <capQuantityAuth> 8 </capQuantityAuth>
+   </item>
+
+   <item idNumber="W45060" isReportable="N">
+      <erc> A </erc>
+      <name> TOOL KIT: MASTER MECHANICS </name>
+      <quantityOnHand> 3 </quantityOnHand>
+      <quantityAuth> 7 </quantityAuth>
+      <capQuantityAuth> 4 </capQuantityAuth>
+   </item>
+
+   <item idNumber="W48391" isReportable="N">
+      <erc> A </erc>
+      <name> WELDING SHOP TRAILER MOUNTED: OXY-ACET/ELEC ARC </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 1 </capQuantityAuth>
+   </item>
+
+   <item idNumber="W51362" isReportable="N">
+      <erc> A </erc>
+      <name> TOOL KIT SERVICE REFRIGERATION UNIT: GENERAL MAINTENANCE </name>
+      <quantityOnHand> 3 </quantityOnHand>
+      <quantityAuth> 6 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="W51362" isReportable="N">
+      <erc> B </erc>
+      <name> TOOL KIT SERVICE REFRIGERATION UNIT: GENERAL MAINTENANCE </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="W51636" isReportable="N">
+      <erc> A </erc>
+      <name> TOOL KIT SHEET METAL WORKERS: SHAPE AND FORM SHEET METAL </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 3 </quantityAuth>
+      <capQuantityAuth> 3 </capQuantityAuth>
+   </item>
+
+   <item idNumber="W51910" isReportable="N">
+      <erc> A </erc>
+      <name> TOOL KIT SMALL ARMS REPAIRMAN: ORDNANCE </name>
+      <quantityOnHand> 3 </quantityOnHand>
+      <quantityAuth> 6 </quantityAuth>
+      <capQuantityAuth> 6 </capQuantityAuth>
+   </item>
+
+   <item idNumber="W51910" isReportable="N">
+      <erc> B </erc>
+      <name> TOOL KIT SMALL ARMS REPAIRMAN: ORDNANCE </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="W58075" isReportable="N">
+      <erc> A </erc>
+      <name> TOOL KIT WELDERS: </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 2 </capQuantityAuth>
+   </item>
+
+   <item idNumber="W98825" isReportable="N">
+      <erc> B </erc>
+      <name> TRAILER TANK: WATER 400 GALLON 1-1/2 TON 2 WHEEL W/E </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 1 </capQuantityAuth>
+   </item>
+
+   <item idNumber="X47270" isReportable="N">
+      <erc> B </erc>
+      <name> TRUCK HAND PLATFORM: NONTILT TYPE W/PUSH BAR HANDLES </name>
+      <quantityOnHand> 5 </quantityOnHand>
+      <quantityAuth> 5 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="X47818" isReportable="N">
+      <erc> B </erc>
+      <name> TRUCK HAND PLATFORM: WOOD NONTILT TYPE </name>
+      <quantityOnHand> 2 </quantityOnHand>
+      <quantityAuth> 5 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Y14526" isReportable="N">
+      <erc> A </erc>
+      <name> VOLTMETER DIGITAL: AN/GSM-64 </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Y66656" isReportable="N">
+      <erc> A </erc>
+      <name> WRENCH IMPACT ELECTRIC: 1-1/4 IN DIA MAX RATED THD SIZE </name>
+      <quantityOnHand> 2 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 1 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Y67067" isReportable="N">
+      <erc> A </erc>
+      <name> WRENCH IMPACT PNEUMATIC: 3/4 IN DIA MAX RATED THD SIZE </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Y75239" isReportable="N">
+      <erc> A </erc>
+      <name> WRENCH SET SOCKET: SQ DRIVE 3/4 IN ACROSS FLATS HEX TYPE SOCKETS </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Y84966" isReportable="N">
+      <erc> A </erc>
+      <name> WRENCH TORQUE: 3/4 IN SQ MALE DRIVE 100 TO 500 FT-LB CAPACITY </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Z04910" isReportable="N">
+      <erc> B </erc>
+      <name> ALARM CHEMICAL AGENT AUTOMATIC: XM22 </name>
+      <quantityOnHand> 4 </quantityOnHand>
+      <quantityAuth> 4 </quantityAuth>
+      <capQuantityAuth> 1 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Z19989" isReportable="N">
+      <erc> C </erc>
+      <name> CAMOUFLAGE SCREENING SYS: ULTRA-LTWT RADAR SCATTERING GEN PURPOS </name>
+      <quantityOnHand> 122 </quantityOnHand>
+      <quantityAuth> 258 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Z21128" isReportable="N">
+      <erc> A </erc>
+      <name> DATA TRANSFER DEVICE: AN/CYZ-10 (C) </name>
+      <quantityOnHand> 2 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 11 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Z21128" isReportable="N">
+      <erc> B </erc>
+      <name> DATA TRANSFER DEVICE: AN/CYZ-10 (C) </name>
+      <quantityOnHand> 9 </quantityOnHand>
+      <quantityAuth> 13 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Z21129" isReportable="N">
+      <erc> C </erc>
+      <name> POWERED MULTIFUEL BURNER: (PMB) </name>
+      <quantityOnHand> 3 </quantityOnHand>
+      <quantityAuth> 7 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Z24989" isReportable="N">
+      <erc> A </erc>
+      <name> TEST SET ELECTRONICS SYSTEM: AN/PSM-95 </name>
+      <quantityOnHand> 3 </quantityOnHand>
+      <quantityAuth> 6 </quantityAuth>
+      <capQuantityAuth> 6 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Z24989" isReportable="N">
+      <erc> B </erc>
+      <name> TEST SET ELECTRONICS SYSTEM: AN/PSM-95 </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Z26019" isReportable="N">
+      <erc> A </erc>
+      <name> TEST SET RADIO: AN/USM-626(V)2 </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Z26338" isReportable="N">
+      <erc> A </erc>
+      <name> COMPUTER SET DIGITAL: OL-582/TYQ (ULLS-G CONFIG) </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Z26406" isReportable="N">
+      <erc> A </erc>
+      <name> COMPUTER SET DIGITAL: OL-583/TYQ (ULLS-S4 CONFIG) </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Z31804" isReportable="N">
+      <erc> A </erc>
+      <name> GEN SET: SKID MTD TAC UTIL DED: LT3KW AC 60HZ </name>
+      <quantityOnHand> 2 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 2 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Z31804" isReportable="N">
+      <erc> C </erc>
+      <name> GEN SET: SKID MTD TAC UTIL DED: LT3KW AC 60HZ </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Z35195" isReportable="N">
+      <erc> A </erc>
+      <name> INTERCONNECTING GROUP: ON-373/GRC </name>
+      <quantityOnHand> 3 </quantityOnHand>
+      <quantityAuth> 6 </quantityAuth>
+      <capQuantityAuth> 4 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Z36068" isReportable="N">
+      <erc> A </erc>
+      <name> TRAILER CARGO: LMTV W/DROPSIDES </name>
+      <quantityOnHand> 6 </quantityOnHand>
+      <quantityAuth> 9 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Z36068" isReportable="N">
+      <erc> B </erc>
+      <name> TRAILER CARGO: LMTV W/DROPSIDES </name>
+      <quantityOnHand> 4 </quantityOnHand>
+      <quantityAuth> 4 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Z49371" isReportable="N">
+      <erc> B </erc>
+      <name> HANDHELD STANDOFF MINEFIELD DETECTOR: </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Z59413" isReportable="N">
+      <erc> A </erc>
+      <name> COMPUTER SET DIGITAL: 0L-603/TYQ (SARSS DSU SERVER CONFIG) </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Z59617" isReportable="N">
+      <erc> A </erc>
+      <name> COMPUTER SET DIGITAL: OL-590/TYQ (SAMS-1 CONFIG) </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Z59863" isReportable="N">
+      <erc> B </erc>
+      <name> NAVIGATION SET: GPS RECEIVER </name>
+      <quantityOnHand> 7 </quantityOnHand>
+      <quantityAuth> 13 </quantityAuth>
+      <capQuantityAuth> 9 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Z65205" isReportable="N">
+      <erc> A </erc>
+      <name> M1097 H MOB MULTIPURPOSE WHD VEH: HVY VAR MTD SECM ORD/ENG APPL </name>
+      <quantityOnHand> 2 </quantityOnHand>
+      <quantityAuth> 4 </quantityAuth>
+      <capQuantityAuth> 4 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Z79610" isReportable="N">
+      <erc> C </erc>
+      <name> TENT: EXTENDIBLE MODULAR TEMPER 16L X 20W </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Z79968" isReportable="N">
+      <erc> B </erc>
+      <name> "TENT, LIGHTWEIGHT: MAINTENANCE ENCLOSURE" </name>
+      <quantityOnHand> 2 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 1 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Z84331" isReportable="N">
+      <erc> A </erc>
+      <name> RADIO SET: AN/VRC-89D </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Z84501" isReportable="N">
+      <erc> A </erc>
+      <name> RADIO SET: AN/VRC-90D </name>
+      <quantityOnHand> 2 </quantityOnHand>
+      <quantityAuth> 2 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Z84501" isReportable="N">
+      <erc> B </erc>
+      <name> RADIO SET: AN/VRC-90D </name>
+      <quantityOnHand> 10 </quantityOnHand>
+      <quantityAuth> 13 </quantityAuth>
+      <capQuantityAuth> 11 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Z89051" isReportable="N">
+      <erc> A </erc>
+      <name> COMPUTER SET DIGITAL: OL-604/TYQ (SARSS DSU WS CONFIG) </name>
+      <quantityOnHand> 2 </quantityOnHand>
+      <quantityAuth> 4 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Z94028" isReportable="N">
+      <erc> B </erc>
+      <name> TRUCK LIFT FORK: ALL TERRAIN LIFTER ARTICULATED SYSTEM (ATLAS) </name>
+      <quantityOnHand> 0 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Z94047" isReportable="N">
+      <erc> A </erc>
+      <name> TRUCK TANK: POL MTV W/E </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+   <item idNumber="Z94560" isReportable="N">
+      <erc> A </erc>
+      <name> TRUCK VAN: EXPANSIBLE MTV W/E </name>
+      <quantityOnHand> 1 </quantityOnHand>
+      <quantityAuth> 1 </quantityAuth>
+      <capQuantityAuth> 0 </capQuantityAuth>
+   </item>
+
+
+</itemlist>
+

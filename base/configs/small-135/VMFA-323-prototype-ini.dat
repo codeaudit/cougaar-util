@@ -1,0 +1,31 @@
+[Prototype] MilitaryOrganization
+
+[UniqueId] "UTC/CombatOrg"
+
+[UIC] "UIC/VMFA-323"
+
+[Relationship]
+Superior "MAG-11" ""
+Supporting "VMFA-323" "Level1HealthCareProvider"
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "VMFA-323, MAG-11, 3RD MAW"
+AlternateTypeIdentification String "SRC/"
+
+[ClusterPG]
+ClusterIdentifier ClusterIdentifier "VMFA-323"
+
+[OrganizationPG]
+Roles Collection<Role> "Combat, Level1HealthCareProvider"
+Service Service "Marine"
+Agency Agency "MARFORCENT"
+
+[MilitaryOrgPG]
+UIC String "M01323"
+Echelon String "5"
+UTC String "3NNNA"
+SRC String ""
+Hierarchy2525 String "1.X.2.1.1"
+IsReserve boolean false
+HomeLocation GeolocLocation "GeolocCode=QKJA, InstallationTypeCode=MAP, CountryStateCode=6, CountryStateName=CALIFORNIA, Name=MIRAMAR_NAS, Latitude=Latitude 32.8692degrees, Longitude=Longitude -117.1436degrees"

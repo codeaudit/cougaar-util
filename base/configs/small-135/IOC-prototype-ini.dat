@@ -1,0 +1,37 @@
+[Prototype] MilitaryOrganization
+
+[UniqueId] "UTC/CombatOrg"
+
+[UIC] "UIC/IOC"
+
+[Relationship]
+Superior "NCA" ""
+Supporting "203-FSB" "AmmunitionProvider"
+Supporting "26-FSB" "AmmunitionProvider"
+Supporting "296-SPTBN" "AmmunitionProvider"
+Supporting "3-FSB" "AmmunitionProvider"
+Supporting "603-DASB" "AmmunitionProvider"
+Supporting "703-MSB" "AmmunitionProvider"
+Supporting "DET-1-SUPBN" "AmmunitionProvider"
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "Industrial Operations Command"
+AlternateTypeIdentification String "SRC/"
+
+[ClusterPG]
+ClusterIdentifier ClusterIdentifier "IOC"
+
+[OrganizationPG]
+Roles Collection<Role> "AmmunitionProvider"
+Service Service ""
+Agency Agency "DLA"
+
+[MilitaryOrgPG]
+UIC String ""
+Echelon String ""
+UTC String ""
+SRC String ""
+Hierarchy2525 String ""
+IsReserve boolean false
+HomeLocation GeolocLocation "GeolocCode=BVJS, InstallationTypeCode=AMO, CountryStateCode=21, CountryStateName=KENTUCKY, Name=BLUE_GRASS_DEPOT, Latitude=Latitude 37.7000degrees, Longitude=Longitude -84.2167degrees"

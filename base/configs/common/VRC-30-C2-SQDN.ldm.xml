@@ -1,0 +1,20 @@
+<?xml version="1.0"  encoding="US-ASCII"?>
+
+<!DOCTYPE ClusterAssets SYSTEM "ClusterAssets.ldm.dtd" []>
+
+<clusterassets>
+  <prototype name="NSN/C2">
+    <object class="org.cougaar.domain.glm.ldm.asset.FixedWingAircraftWeapon" id="proto-001">
+      <property class="org.cougaar.domain.planning.ldm.asset.TypeIdentificationPG" id="property-001">
+	<field value="NSN/C2" type="java.lang.String" name="TypeIdentification"/>
+	<field value="H60" type="java.lang.String" name="Nomenclature"/>
+      </property>
+    </object>
+  </prototype>
+  <instance prototype="NSN/C2" id="a001">
+    <schedule start="01/01/99" end="12/31/10"/>
+  </instance>
+  <instance prototype="NSN/C2" id="a002">
+    <schedule start="01/01/99" end="12/31/10"/>
+  </instance>
+</clusterassets>

@@ -1,0 +1,26 @@
+<?xml version="1.0"  encoding="US-ASCII"?>
+
+<!DOCTYPE ClusterAssets SYSTEM "ClusterAssets.ldm.dtd" []>
+
+<clusterassets>
+  <prototype name="NSN/EA6B">
+    <object class="org.cougaar.domain.glm.ldm.asset.FixedWingAircraftWeapon" id="proto-001">
+      <property class="org.cougaar.domain.planning.ldm.asset.TypeIdentificationPG" id="property-001">
+	<field value="NSN/EA6B" type="java.lang.String" name="TypeIdentification"/>
+	<field value="EA6B" type="java.lang.String" name="Nomenclature"/>
+      </property>
+    </object>
+  </prototype>
+  <instance prototype="NSN/EA6B" id="a001">
+    <schedule start="01/01/99" end="12/31/10"/>
+  </instance>
+  <instance prototype="NSN/EA6B" id="a002">
+    <schedule start="01/01/99" end="12/31/10"/>
+  </instance>
+  <instance prototype="NSN/EA6B" id="a003">
+    <schedule start="01/01/99" end="12/31/10"/>
+  </instance>
+  <instance prototype="NSN/EA6B" id="a004">
+    <schedule start="01/01/99" end="12/31/10"/>
+  </instance>
+</clusterassets>

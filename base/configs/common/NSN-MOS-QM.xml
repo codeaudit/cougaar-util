@@ -1,0 +1,52 @@
+<?xml version="1.0"  encoding="US-ASCII"?>
+
+<!DOCTYPE assets SYSTEM "AssetList.ldm.dtd" []>
+
+<!--
+ **************************************************************
+ *                                                              
+ *  Copyright 1997-1999 Defense Advanced Research Projects 
+ *  Agency and ALPINE (A BBN Technologies (BBN) and Raytheon 
+ *  Systems Company (RSC) Consortium). This software to be used 
+ *  in accordance with the COUGAAR license agreement.             
+ *                                                              
+ ****************************************************************
+-->
+
+<prototype name="MOS-QM">
+  <!-- <object class="org.cougaar.domain.glm.ldm.asset.GLMAsset"> -->
+  <object class="org.cougaar.domain.glm.ldm.asset.Capacity"> 
+  <!-- <object class="org.cougaar.domain.planning.ldm.asset.Asset"> -->
+
+      <field name="TypeIdentificationPG" type="object">
+        <value>
+          <object class="org.cougaar.domain.planning.ldm.asset.NewTypeIdentificationPG">
+            <field name="TypeIdentification" type="String">
+              <value> MOS/QM </value>
+            </field>
+            <field name="Nomenclature" type="String">
+              <value> MOS/QM/Quartermaster Handling </value>
+            </field>
+          </object>
+        </value>
+      </field>
+
+      <field name="SupplyPG" type="object">
+        <value>
+          <object class="org.cougaar.domain.glm.ldm.asset.NewSupplyPG">
+            <field name="Class1HandleMassPerDay" type="object">
+              <value>
+                <object class="org.cougaar.domain.planning.ldm.measure.Mass">
+                  <field name="ShortTons" type="double">
+                    <value> 8.0 </value>
+                  </field>
+                </object>
+              </value>
+            </field>
+          </object>
+        </value>
+      </field>
+
+
+  </object>
+</prototype> <!-- end QM Handling -->

@@ -1,0 +1,45 @@
+#!/bin/csh
+
+source $COUGAAR_INSTALL_PATH/bin/setlibpath.csh
+
+
+# Set this to port you want to use for metrics voyager client
+set port=7999
+
+# The threshold for # of changes to make a cluster the hot color
+set threshold=16
+
+# The number of seconds over which the deltas are summed to compute color
+set filtersize=12
+
+# The number of seconds to run behind real-time
+set delay=10
+
+# Set this true to print all records to the shell
+set debug="false"
+
+# Set this true for canned display of 50+ clusters without alp nodes
+# (Still have to run admin node)
+set test="false"
+
+# set this true to use metrics.dat as playback file, ignoring node messages
+set playback="false"
+
+# set this true to record all messages into metrics.dat
+set record="false"
+
+# Color used for maximum activity level
+set hotcolor="0,255,0"
+
+# Color used for no recent activity
+set staticcolor="255,255,255"
+
+#Need to refer to alp_install_path to find IP setting in alpreg.ini
+set props="-Dorg.cougaar.install.path=$COUGAAR_INSTALL_PATH"
+
+set args="-port $port -threshold $threshold -filtersize $filtersize -delay $delay -debug $debug -test $test -record $record -playback $playback -hotcolor $hotcolor -staticcolor $staticcolor"
+
+java $props -classpath $LIBPATHS metrics.MetricsProxy $args
+
+
+

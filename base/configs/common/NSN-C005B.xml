@@ -1,0 +1,218 @@
+<!--
+/***********************************************************************************
+ *                                                                                 *
+ * This is open-source software developed by the TOPS team of BBN Technologies     *
+ * under DARPA's ALPINE program. You can modify the software and redistribute it,  *
+ * but you CANNOT DELETE OR MODIFY THIS COMMENT.                                   *
+ *                                                                                 *
+ * This software is distributed in the hope that it will be useful,                *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of                  *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                            *
+ *                                                                                 *
+ * For details on the ALPINE open-source license please write:                     *
+ * alpine-support@bbn.com                                                          *
+ *                                                                                 *
+ * Copyright (C) 1998, 1999 BBN Technologies                                       *
+ *                                                                                 *
+ ***********************************************************************************/
+-->          
+  <!-- :::::::::::::::::::::::::C5::::::::::::::::::::::::::::::::::::::: -->
+
+  <prototype name="C005B">
+    <object class="org.cougaar.domain.glm.ldm.asset.CargoFixedWingAircraft">
+
+      <field name="TypeIdentificationPG" type="object">
+        <value>
+          <object class="org.cougaar.domain.planning.ldm.asset.TypeIdentificationPG">
+            <field name="TypeIdentification" type="String">
+              <value> C005B  </value>
+            </field>
+            <field name="Nomenclature" type="String">
+              <value> C-5  </value>
+            </field>
+          </object>
+        </value>
+      </field>
+
+      <field name="ContainPG" type="object">
+        <value>
+	  <object class="org.cougaar.domain.glm.ldm.asset.ContainPG">
+
+	    <field name="MaximumLength" type="object">
+	      <value>
+	        <object class="org.cougaar.domain.planning.ldm.measure.Distance">
+		  <field name="Meters" type="double">
+		    <value> 43.8 </value>
+		  </field>
+		</object>
+	      </value>
+            </field>
+
+	    <field name="MaximumWidth" type="object">
+	      <value>
+	        <object class="org.cougaar.domain.planning.ldm.measure.Distance">
+		  <field name="Meters" type="double">
+		    <value> 5.79 </value>
+		  </field>
+		</object>
+	      </value>
+            </field>
+
+	    <field name="MaximumHeight" type="object">
+	      <value>
+	        <object class="org.cougaar.domain.planning.ldm.measure.Distance">
+		  <field name="Meters" type="double">
+		    <value> 4.11 </value>
+		  </field>
+		</object>
+	      </value>
+            </field>
+
+	    <field name="MaximumWeight" type="object">
+	      <value>
+	        <object class="org.cougaar.domain.planning.ldm.measure.Mass">
+		  <field name="Pounds" type="double">
+		    <value> 291000.00 </value>
+		  </field>
+		</object>
+	      </value>
+            </field>
+
+	    <field name="MaximumFootprintArea" type="object">
+	      <value>
+	        <object class="org.cougaar.domain.planning.ldm.measure.Area">
+		  <field name="SquareMeters" type="double">
+		    <value> 253.60  </value>
+		  </field>
+		</object>
+	      </value>
+            </field>
+
+	    <field name="MaximumVolume" type="object">
+	      <value>
+	        <object class="org.cougaar.domain.planning.ldm.measure.Volume">
+		  <field name="CubicMeters" type="double">
+		    <value> 1042.3 </value>
+		  </field>
+		</object>
+	      </value>
+            </field>
+
+	    <field name="TimeToLoad" type="object">
+	      <value>
+	        <object class="org.cougaar.domain.planning.ldm.measure.Duration">
+		  <field name="Hours" type="double">
+		    <value> 4.25  </value>
+		  </field>
+		</object>
+	      </value>
+            </field>
+
+	    <field name="TimeToRefuel" type="object">
+	      <value>
+	        <object class="org.cougaar.domain.planning.ldm.measure.Duration">
+		  <field name="Hours" type="double">
+		    <value> 3.25 </value>
+		  </field>
+		</object>
+	      </value>
+            </field>
+
+	    <field name="TimeToUnload" type="object">
+	      <value>
+	        <object class="org.cougaar.domain.planning.ldm.measure.Duration">
+		  <field name="Hours" type="double">
+		    <value> 3.25 </value>
+		  </field>
+		</object>
+	      </value>
+            </field>
+
+	    <field name="MaximumPassengers" type="long">
+	      <value> 73 </value> 
+            </field>
+
+	  </object>
+	</value>
+      </field>	  
+
+      <field name="AirLiftPG" type="object">
+        <value>
+	  <object class="org.cougaar.domain.glm.ldm.asset.AirLiftPG">
+
+	    <field name="MaximumPallets" type="int">
+	      <value>36 </value>
+            </field>
+
+	    <field name="MaximumBulkVolume" type="object">
+	      <value>
+	        <object class="org.cougaar.domain.planning.ldm.measure.Volume">  
+		  <field name="CubicMeters" type="double">
+		    <value> 1042.3 </value>
+		  </field>
+		</object>
+	      </value>
+            </field>
+
+	    <field name="MaximumBulkWeight" type="object">
+	      <value>
+	        <object class="org.cougaar.domain.planning.ldm.measure.Mass">  
+		  <field name="Pounds" type="double">
+		    <value> 291000.00 </value>
+		  </field>
+		</object>
+	      </value>
+            </field>
+
+	  </object>
+	</value>
+      </field>	  
+
+      <field name="AirVehiclePG" type="object">
+        <value>
+	  <object class="org.cougaar.domain.glm.ldm.asset.AirVehiclePG">
+
+	    <field name="QuickTurnaroundTime" type="object">
+	      <value>
+	        <object class="org.cougaar.domain.planning.ldm.measure.Duration">  
+		  <field name="Hours" type="double">
+		    <value> 4.25 </value>
+		  </field>
+		</object>
+	      </value>
+            </field>
+
+	    <field name="MinimumRunwayLength" type="object">
+	      <value>
+	        <object class="org.cougaar.domain.planning.ldm.measure.Distance">  
+		  <field name="Meters" type="double">
+		    <value> 1828.8 </value>
+		  </field>
+		</object>
+	      </value>
+            </field>
+
+	  </object>
+	</value>
+      </field>	  
+
+      <field name="AirSelfPropulsionPG" type="object">
+        <value>
+	  <object class="org.cougaar.domain.glm.ldm.asset.AirSelfPropulsionPG">
+
+	    <field name="CruiseSpeed" type="object">
+	      <value>
+	        <object class="org.cougaar.domain.planning.ldm.measure.Speed">  
+		  <field name="Knots" type="double">
+		    <value> 450 </value>
+		  </field>
+		</object>
+	      </value>
+            </field>
+
+	  </object>
+	</value>
+      </field>	  
+
+    </object>
+  </prototype>

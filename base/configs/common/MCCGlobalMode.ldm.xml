@@ -1,0 +1,171 @@
+<?xml version="1.0"  encoding="US-ASCII"?>
+
+<!DOCTYPE assetlist SYSTEM "AssetList.ldm.dtd" [
+<!ENTITY truckprototypes SYSTEM "PROTOTYPES/TruckPrototypes.ldm.xml">
+<!ENTITY shipprototypes SYSTEM "PROTOTYPES/ShipPrototypes.ldm.xml">
+<!ENTITY planeprototypes SYSTEM "PROTOTYPES/PlanePrototypes.ldm.xml">
+]>
+
+<AssetList>
+
+  <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+  <!-- :::                    First the Prototypes                     ::: -->
+  <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+
+  &truckprototypes;
+  &shipprototypes;
+  &planeprototypes;
+
+  <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+  <!-- :::                      Now the Instances                      ::: -->
+  <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+
+  <!-- FIRST, THE TRUCKS -->
+
+  <!-- 34 ton flatbed --> 
+  <instance prototype="NSN-2330010398095" id="vin-001">
+    <schedule end="12/31/02" start="01/01/99"/>
+  </instance>
+
+  <!-- 34 ton flatbed --> 
+  <instance prototype="NSN-2330010398095" id="vin-002">
+    <schedule end="12/31/02" start="01/01/99"/>
+  </instance>
+
+  <!-- 34 ton flatbed --> 
+  <instance prototype="NSN-2330010398095" id="vin-003">
+    <schedule end="12/31/02" start="01/01/99"/>
+  </instance>
+
+  <!-- 34 ton flatbed --> 
+  <instance prototype="NSN-2330010398095" id="vin-004">
+    <schedule end="12/31/02" start="01/01/99"/>
+  </instance>
+
+  <!-- 34 ton flatbed --> 
+  <instance prototype="NSN-2330010398095" id="vin-005">
+    <schedule end="12/31/02" start="01/01/99"/>
+  </instance>
+
+  <!-- 34 ton flatbed --> 
+  <instance prototype="NSN-2330010398095" id="vin-006">
+    <schedule end="12/31/02" start="01/01/99"/>
+  </instance>
+
+  <!-- 34 ton flatbed --> 
+  <instance prototype="NSN-2330010398095" id="vin-007">
+    <schedule end="12/31/02" start="01/01/99"/>
+  </instance>
+
+  <!-- 34 ton flatbed --> 
+  <instance prototype="NSN-2330010398095" id="vin-008">
+    <schedule end="12/31/02" start="01/01/99"/>
+  </instance>
+
+  <!-- 34 ton flatbed --> 
+  <instance prototype="NSN-2330010398095" id="vin-009">
+    <schedule end="12/31/02" start="01/01/99"/>
+  </instance>
+
+  <!-- 34 ton flatbed --> 
+  <instance prototype="NSN-2330010398095" id="vin-010">
+    <schedule end="12/31/02" start="01/01/99"/>
+  </instance>
+
+  <!-- 34 ton flatbed --> 
+  <instance prototype="NSN-2330010398095" id="vin-011">
+    <schedule end="12/31/02" start="01/01/99"/>
+  </instance>
+
+  <!-- 34 ton flatbed --> 
+  <instance prototype="NSN-2330010398095" id="vin-012">
+    <schedule end="12/31/02" start="01/01/99"/>
+  </instance>
+
+  <!-- 34 ton flatbed --> 
+  <instance prototype="NSN-2330010398095" id="vin-013">
+    <schedule end="12/31/02" start="01/01/99"/>
+  </instance>
+
+  <!-- 34 ton flatbed --> 
+  <instance prototype="NSN-2330010398095" id="vin-014">
+    <schedule end="12/31/02" start="01/01/99"/>
+  </instance>
+
+  <!-- 34 ton flatbed --> 
+  <instance prototype="NSN-2330010398095" id="vin-015">
+    <schedule end="12/31/02" start="01/01/99"/>
+  </instance>
+
+  <!-- 34 ton flatbed --> 
+  <instance prototype="NSN-2330010398095" id="vin-016">
+    <schedule end="12/31/02" start="01/01/99"/>
+  </instance>  <!-- 34 ton flatbed --> 
+  <instance prototype="NSN-2330010398095" id="vin-017">
+    <schedule end="12/31/02" start="01/01/99"/>
+  </instance>
+
+  <!-- 34 ton flatbed --> 
+  <instance prototype="NSN-2330010398095" id="vin-018">
+    <schedule end="12/31/02" start="01/01/99"/>
+  </instance>
+
+  <!-- 34 ton flatbed --> 
+  <instance prototype="NSN-2330010398095" id="vin-019">
+    <schedule end="12/31/02" start="01/01/99"/>
+  </instance>
+
+  <!-- 34 ton flatbed --> 
+  <instance prototype="NSN-2330010398095" id="vin-020">
+    <schedule end="12/31/02" start="01/01/99"/>
+  </instance>
+
+  <!-- THEN, THE SHIPS -->
+
+  <instance prototype="Endeavor_Prototype" id="Endeavor">
+    <schedule end="12/31/00" start="01/01/99"/>
+  </instance>
+
+  <instance prototype="Alex_Bonnyman_Prototype" id="ALEX_BONNYMAN">
+    <schedule end="12/31/02" start="01/01/99"/>
+  </instance>
+
+  <instance prototype="Jack_Lummus_Prototype" id="JACK_LUMMUS">
+    <schedule end="12/31/00" start="01/01/99"/>
+  </instance>
+
+  <instance prototype="Cape_Farewell_Prototype" id="CAPE_FAREWELL">
+    <schedule end="12/31/00" start="01/01/99"/>
+  </instance>
+
+  <instance prototype="Green_Harbour_Prototype" id="GREEN_HARBOUR">
+    <schedule end="12/31/00" start="01/01/99"/>
+  </instance>
+
+  <!-- FINALLY, THE PLANES -->
+
+  <instance prototype="C141" id="tail-001">
+    <schedule end="12/31/02" start="01/01/99"/>
+  </instance>
+  <instance prototype="C141" id="tail-002">
+    <schedule end="12/31/02" start="01/01/99"/>
+  </instance>
+  <instance prototype="C17" id="tail-003">
+    <schedule end="12/31/02" start="01/01/99"/>
+  </instance>
+  <instance prototype="C17" id="tail-004">
+    <schedule end="12/31/02" start="01/01/99"/>
+  </instance>
+  <instance prototype="C5" id="tail-005">
+    <schedule end="12/31/02" start="01/01/99"/>
+  </instance>
+  <instance prototype="C5" id="tail-006">
+    <schedule end="12/31/02" start="01/01/99"/>
+  </instance>
+
+
+</AssetList>
+
+
+
+

@@ -1,0 +1,31 @@
+[Prototype] MilitaryOrganization
+
+[UniqueId] "UTC/CombatOrg"
+
+[UIC] "UIC/2-69-ARBN"
+
+[Relationship]
+Superior "3-BDE-3ID-HHC" ""
+Supporting "2-69-ARBN" "Level1HealthCareProvider"
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "2/69 Ar Bn"
+AlternateTypeIdentification String "SRC/17375L000100"
+
+[ClusterPG]
+ClusterIdentifier ClusterIdentifier "2-69-ARBN"
+
+[OrganizationPG]
+Roles Collection<Role> "Combat, Level1HealthCareProvider"
+Service Service "Army"
+Agency Agency "FORSCOM"
+
+[MilitaryOrgPG]
+UIC String "WGM6AA"
+Echelon String "5"
+UTC String "23J77"
+SRC String "17375L000100"
+Hierarchy2525 String "1.X.3.1.1.2"
+IsReserve boolean false
+HomeLocation GeolocLocation "GeolocCode=HCML, InstallationTypeCode=AIN, CountryStateCode=13, CountryStateName=GEORGIA, Name=FT_BENNING, Latitude=Latitude 32.3833degrees, Longitude=Longitude -84.8833degrees"

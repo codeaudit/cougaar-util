@@ -1,0 +1,31 @@
+[Prototype] MilitaryOrganization
+
+[UniqueId] "UTC/CombatOrg"
+
+[UIC] "UIC/VMAQ-4"
+
+[Relationship]
+Superior "MAG-11" ""
+Supporting "VMAQ-4" "Level1HealthCareProvider"
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "VMAQ-4, MAG-14, 2ND MAW"
+AlternateTypeIdentification String "SRC/"
+
+[ClusterPG]
+ClusterIdentifier ClusterIdentifier "VMAQ-4"
+
+[OrganizationPG]
+Roles Collection<Role> "Combat, Level1HealthCareProvider"
+Service Service "Marine"
+Agency Agency "MARFORCENT"
+
+[MilitaryOrgPG]
+UIC String "M01010"
+Echelon String "5"
+UTC String "3QJNA"
+SRC String ""
+Hierarchy2525 String "1.X.2.1.1.8"
+IsReserve boolean false
+HomeLocation GeolocLocation "GeolocCode=DNNL, InstallationTypeCode=MAP, CountryStateCode=37, CountryStateName=NORTH_CAROLINA, Name=CHERRY_POINT_MCAS, Latitude=Latitude 34.9025degrees, Longitude=Longitude -76.8814degrees"

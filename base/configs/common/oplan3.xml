@@ -1,0 +1,18 @@
+
+
+<!DOCTYPE oplan SYSTEM "oplan.dtd">
+
+<oplan
+	oplanID = "27896-3"
+	operationName = "Desert Null"
+	priority = "High"
+	cDay = "11/1/2000"
+	theaterId = "SWA"
+	terrainType = "Desert"
+	season = "Summer"
+	enemyForceType = "Conventional Forces"
+	hostNationPOLSupport = "true"
+	hostNationPOLCapability = "1,000,000 gals/day"
+	hostNationWaterSupport = "true"
+	hostNationWaterCapability = "500,000 gals/day">
+</oplan>

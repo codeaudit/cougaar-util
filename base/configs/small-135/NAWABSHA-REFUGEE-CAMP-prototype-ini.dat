@@ -1,0 +1,30 @@
+[Prototype] MilitaryOrganization
+
+[UniqueId] "UTC/CombatOrg"
+
+[UIC] "UIC/NAWABSHA-REFUGEE-CAMP"
+
+[Relationship]
+Superior "RED-CROSS-HQ" ""
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "Nawabsha Refugee Camp"
+AlternateTypeIdentification String "SRC/"
+
+[ClusterPG]
+ClusterIdentifier ClusterIdentifier "NAWABSHA-REFUGEE-CAMP"
+
+[OrganizationPG]
+Roles Collection<Role> "Level1HealthCareProvider, Level2HealthCareProvider, Level3HealthcareProvider"
+Service Service "Red Cross"
+Agency Agency "REFUGEE"
+
+[MilitaryOrgPG]
+UIC String "REFNAW"
+Echelon String ""
+UTC String ""
+SRC String ""
+Hierarchy2525 String "5.X.4.1"
+IsReserve boolean false
+HomeLocation GeolocLocation "GeolocCode=RJDC, InstallationTypeCode=APT, CountryStateCode=PK, CountryStateName=PAKISTAN, Name=NAWABSHAH, Latitude=Latitude 26.2194degrees, Longitude=Longitude 68.3922degrees"

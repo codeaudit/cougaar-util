@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+
+<!-- GSS specification for the simple ground scheduler -->
+
+<!DOCTYPE schedulingSpecs SYSTEM "schedulingSpecs.dtd" []>
+
+<schedulingSpecs taskGroupingMode = "unalligned">
+
+  <assetFilter>
+    <assetClassMatch className = "org.cougaar.domain.planning.ldm.asset.Truck" />
+  </assetFilter>
+
+  <taskFilter verb="TransportByGround"
+              generatingCluster = "internal" />
+
+<!--
+  <capacityConstraint>
+    <taskAccessor preposition = "direct">
+      <assetAccessor propGroup = "PhysicalPG"
+                     propField = "FootprintArea"
+                     units = "SquareFeet"
+                     multiplyByNum = "true" />
+    </taskAccessor>
+    <assetAccessor propGroup = "ContainPG"
+                   propField = "MaximumFootprintArea"
+                   units = "SquareFeet"/>
+  </capacityConstraint>
+
+  <capacityConstraint>
+    <taskAccessor preposition = "direct">
+      <assetAccessor propGroup = "PhysicalPG"
+                     propField = "Mass"
+                     units = "Tons"
+                     multiplyByNum = "true" />
+    </taskAccessor>
+    <assetAccessor propGroup = "ContainPG"
+                   propField = "MaximumWeight"
+                   units = "Tons" />
+  </capacityConstraint>
+-->
+
+
+  <taskDuration>
+    <constantAccessor value="43200000" type="long" />
+  </taskDuration>
+
+</schedulingSpecs>

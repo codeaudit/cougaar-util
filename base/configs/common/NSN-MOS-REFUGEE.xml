@@ -1,0 +1,37 @@
+<?xml version="1.0"  encoding="US-ASCII"?>
+
+<!DOCTYPE assets SYSTEM "AssetList.ldm.dtd" []>
+
+<!--
+ **************************************************************
+ *                                                              
+ *  Copyright 2001 Defense Advanced Research Projects 
+ *  Agency and ALPINE (A BBN Technologies (BBN) and Raytheon 
+ *  Systems Company (RSC) Consortium). This software to be used 
+ *  in accordance with the COUGAAR license agreement.             
+ *                                                              
+ ****************************************************************
+-->
+
+<prototype name="MOS-REFUGEE">
+  <object class="org.cougaar.domain.glm.ldm.asset.Person">
+
+      <field name="TypeIdentificationPG" type="object">
+        <value>
+          <object class="org.cougaar.domain.planning.ldm.asset.NewTypeIdentificationPG">
+            <field name="TypeIdentification" type="String">
+              <value> MOS/REFUGEE </value>
+            </field>
+            <field name="Nomenclature" type="String">
+              <value> MOS/REFUGEE/Refugee Location </value>
+            </field>
+          </object>
+        </value>
+      </field>
+
+  </object>
+</prototype> <!-- end Refugee -->
+
+
+
+

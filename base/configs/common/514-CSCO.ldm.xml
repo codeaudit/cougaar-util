@@ -1,0 +1,64 @@
+<?xml version="1.0"  encoding="US-ASCII"?>
+
+<!DOCTYPE assetlist SYSTEM "AssetList.ldm.dtd" [
+<!ENTITY MOS-35E-PROTOTYPE SYSTEM "MOS-35E.ldm.xml">
+<!ENTITY MOS-35F-PROTOTYPE SYSTEM "MOS-35F.ldm.xml">
+<!ENTITY MOS-35H-PROTOTYPE SYSTEM "MOS-35H.ldm.xml">
+<!ENTITY MOS-39B-PROTOTYPE SYSTEM "MOS-39B.ldm.xml">
+<!ENTITY MOS-44E-PROTOTYPE SYSTEM "MOS-44E.ldm.xml">
+]>
+
+<!--
+ **************************************************************
+ *                                                              
+ *  Copyright 1997-1999 Defense Advanced Research Projects 
+ *  Agency and ALPINE (A BBN Technologies (BBN) and Raytheon 
+ *  Systems Company (RSC) Consortium). This software to be used 
+ *  in accordance with the COUGAAR license agreement.  
+ *                                                              
+ ****************************************************************
+-->
+
+
+<AssetList>
+
+  <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+  <!-- :::                    First the Prototypes                     ::: -->
+  <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+
+  &MOS-35E-PROTOTYPE;
+  &MOS-35F-PROTOTYPE;
+  &MOS-35H-PROTOTYPE;
+  &MOS-39B-PROTOTYPE;
+  &MOS-44E-PROTOTYPE;
+
+  <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+  <!-- :::                      Now the Instances                      ::: -->
+  <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+
+<!-- 
+
+
+-->  
+
+  <AggregateAsset prototype="MOS-35E" quantity="5">
+    <schedule end="01/05/11" start="06/11/00"/>
+  </AggregateAsset>
+
+  <AggregateAsset prototype="MOS-35F" quantity="3">
+    <schedule end="01/05/11" start="06/11/00"/>
+  </AggregateAsset>
+
+  <AggregateAsset prototype="MOS-35H" quantity="3">
+    <schedule end="01/05/11" start="06/11/00"/>
+  </AggregateAsset>
+
+  <AggregateAsset prototype="MOS-39B" quantity="2">
+    <schedule end="01/05/11" start="06/11/00"/>
+  </AggregateAsset>
+
+  <AggregateAsset prototype="MOS-44E" quantity="4">
+    <schedule end="01/05/11" start="06/11/00"/>
+  </AggregateAsset>
+
+</AssetList>

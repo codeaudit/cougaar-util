@@ -1,0 +1,63 @@
+<?xml version="1.0"  encoding="US-ASCII"?>
+
+<!--
+ **************************************************************
+ *                                                              
+ *  Copyright 1997-1999 Defense Advanced Research Projects 
+ *  Agency and ALPINE (A BBN Technologies (BBN) and Raytheon 
+ *  Systems Company (RSC) Consortium). This software to be used 
+ *  in accordance with the COUGAAR license agreement.  
+ *                                                              
+ ****************************************************************
+-->
+
+
+<prototype name="WaterTrailer400">
+    <object class="org.cougaar.domain.glm.ldm.asset.BulkWater">
+
+      <field name="TypeIdentificationPG" type="object">
+        <value>
+          <object class="org.cougaar.domain.planning.ldm.asset.NewTypeIdentificationPG">
+            <field name="TypeIdentification" type="String">
+              <value> M149A1 </value>
+            </field>
+            <field name="Nomenclature" type="String">
+              <value> M149A1 400 gal Water Tank Trailer </value>
+            </field>
+          </object>
+        </value>
+      </field>
+
+      <field name="SupplyPG" type="object">
+        <value>
+
+          <object class="org.cougaar.domain.glm.ldm.asset.NewWaterSupplyPG">
+
+            <field name="IssueVolumePerDay" type="object">
+              <value>
+                <object class="org.cougaar.domain.planning.ldm.measure.Volume">
+                  <field name="Gallons" type="double">
+                    <value> 400.0 </value>
+                  </field>
+                </object>
+              </value>
+            </field>
+
+            <field name="PumpVolumePerMinute" type="object">
+              <value>
+                <object class="org.cougaar.domain.planning.ldm.measure.Volume" name="FillRate">
+                  <field name="Gallons" type="double">
+                    <value> 50.0 </value>
+                  </field>
+                </object>
+              </value>
+            </field>
+
+          </object>
+
+        </value>
+      </field>
+    </object>
+</prototype> 
+
+

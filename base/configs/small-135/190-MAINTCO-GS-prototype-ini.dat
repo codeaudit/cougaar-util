@@ -1,0 +1,36 @@
+[Prototype] MilitaryOrganization
+
+[UniqueId] "UTC/CombatOrg"
+
+[UIC] "UIC/190-MAINTCO-GS"
+
+[Relationship]
+Superior "FORSCOM" ""
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "190 Maintenance Company"
+AlternateTypeIdentification String "SRC/"
+
+[ClusterPG]
+ClusterIdentifier ClusterIdentifier "190-MAINTCO-GS"
+
+[OrganizationPG]
+Roles Collection<Role> "Level1HealthCareProvider"
+Service Service "Army"
+Agency Agency "FORSCOM"
+
+[CSSCapabilityPG]
+Capabilities Collection<CSSCapability> "MOS/00Z Count=10units Duration=1days, MOS/31C Count=30units Duration=1days, MOS/31U Count=30units Duration=1days, MOS/54B Count=10units Duration=1days, MOS/55B Count=10units Duration=1days, MOS/56A Count=10units Duration=1days, MOS/57E Count=10units Duration=1days, MOS/63B Count=30units Duration=1days, MOS/63H Count=10units Duration=1days, MOS/63Z Count=20units Duration=1days, MOS/71D Count=10units Duration=1days, MOS/71L Count=50units Duration=1days, MOS/71M Count=10units Duration=1days, MOS/75B Count=10units Duration=1days, MOS/75H Count=10units Duration=1days, MOS/77F Count=20units Duration=1days, MOS/88D Count=20units Duration=1days, MOS/88M Count=20units Duration=1days, MOS/88N Count=10units Duration=1days, MOS/88Z Count=10units Duration=1days, MOS/90A Count=70units Duration=1days, MOS/91B Count=10units Duration=1days, MOS/91D Count=10units Duration=1days, MOS/92A Count=80units Duration=1days, MOS/92G Count=10units Duration=1days, MOS/92Y Count=60units Duration=1days, MOS/96B Count=10units Duration=1days"
+
+[MaintenancePG]
+Level String "GSMaintenance"
+
+[MilitaryOrgPG]
+UIC String "WE20AA"
+Echelon String "4"
+UTC String ""
+SRC String ""
+Hierarchy2525 String "1.X.3.1.3.5.3"
+IsReserve boolean false
+HomeLocation GeolocLocation "GeolocCode=HFTZ, InstallationTypeCode=AIN, CountryStateCode=48, CountryStateName=TEXAS, Name=FT_HOOD, Latitude=Latitude 31.1333degrees, Longitude=Longitude -97.7667degrees"

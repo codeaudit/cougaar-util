@@ -1,0 +1,18 @@
+#!/bin/csh -f
+
+source $COUGAAR_INSTALL_PATH/bin/setlibpath.csh
+
+set MYCLASSES="ui.planviewer.stoplight.SupplyController"
+set MYPROPERTIES="-Dorg.cougaar.install.path=$COUGAAR_INSTALL_PATH"
+
+set osargs=""
+set os=`uname`
+if ("$os" == "Linux") then
+  set osargs="-green"
+endif
+
+echo java $osargs $MYPROPERTIES -classpath $LIBPATHS $MYCLASSES
+
+java  $osargs $MYPROPERTIES -classpath $LIBPATHS $MYCLASSES $*
+
+

@@ -1,0 +1,18 @@
+<prototype name = "NSN/6505012149062">
+  <object class="org.cougaar.domain.glm.ldm.asset.ClassVIIIMedical">
+
+      <field name="TypeIdentificationPG" type="object">
+        <value>
+          <object class="org.cougaar.domain.planning.ldm.asset.NewTypeIdentificationPG">
+          <field name="TypeIdentification" type="String">
+            <value> NSN/6505012149062 </value>
+          </field>
+          <field name="Nomenclature" type="String">
+            <value> Ibuprofen 800MG Tablet </value>
+          </field>
+          </object>
+        </value>
+      </field>
+
+  </object>
+</prototype> <!-- end NSN/6505012149062 Ibuprofen 800MG Tablet -->

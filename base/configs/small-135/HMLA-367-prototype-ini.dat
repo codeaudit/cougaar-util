@@ -1,0 +1,31 @@
+[Prototype] MilitaryOrganization
+
+[UniqueId] "UTC/CombatOrg"
+
+[UIC] "UIC/HMLA-367"
+
+[Relationship]
+Superior "MAG-39" ""
+Supporting "HMLA-367" "Level1HealthCareProvider"
+
+[TypeIdentificationPG]
+TypeIdentification String "UTC/RTOrg"
+Nomenclature String "HMLA-367, MAG-39, 3RD MAW"
+AlternateTypeIdentification String "SRC/"
+
+[ClusterPG]
+ClusterIdentifier ClusterIdentifier "HMLA-367"
+
+[OrganizationPG]
+Roles Collection<Role> "Combat, Level1HealthCareProvider"
+Service Service "Marine"
+Agency Agency "MARFORCENT"
+
+[MilitaryOrgPG]
+UIC String "M01367"
+Echelon String "5"
+UTC String "3PQAA"
+SRC String ""
+Hierarchy2525 String "1.X.2.1.2"
+IsReserve boolean false
+HomeLocation GeolocLocation "GeolocCode=CAAP, InstallationTypeCode=MAP, CountryStateCode=6, CountryStateName=CALIFORNIA, Name=CP_PENDLETON_MCAF, Latitude=Latitude 33.2958degrees, Longitude=Longitude -117.3625degrees"

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+
+<metl unitType="MAINTCO-GS" mtpType="MTP-43649">
+
+ <task idNumber="43-2-R307">
+   <description> USE passive air defense measures. </description>
+   <status> T </status>
+   <numHours> 0 </numHours>
+ </task> 
+
+ <task idNumber="43-2-R308">
+   <description> TAKE active air defense measures against hostile aircraft. </description>
+   <status> T </status>
+   <numHours> 0 </numHours>
+ </task> 
+
+ <task idNumber="43-2-0193">
+   <description> PERFORM maintenance control functions [GS] </description>
+   <status> T </status>
+   <numHours> 0 </numHours>
+ </task> 
+
+ <task idNumber="43-2-1502">
+   <description> CONDUCT general support maintenance operations </description>
+   <status> T </status>
+   <numHours> 0 </numHours>
+ </task> 
+
+ <task idNumber="43-2-0197">
+   <description> PROVIDE GS repair parts supply support </description>
+   <status> T </status>
+   <numHours> 0 </numHours>
+ </task> 
+
+ <task idNumber="43-2-1503">
+   <description> PROVIDE allied trades and lift services </description>
+   <status> T </status>
+   <numHours> 0 </numHours>
+ </task> 
+
+ <task idNumber="43-2-1504">
+   <status> T </status>
+   <description> PROVIDE COMSEC supply support </description>
+   <numHours> 0 </numHours>
+ </task> 
+
+ <task idNumber="43-2-1505">
+   <description> DESTROY supplies and equipment </description>
+   <status> T </status>
+   <numHours> 0 </numHours>
+ </task> 
+
+ <task idNumber="43-2-1506">
+   <description> CONDUCT backup directo support maintenance operations </description>
+   <status> T </status>
+   <numHours> 0 </numHours>
+ </task> 
+
+ <task idNumber="10-2-1015">
+   <description> PROVIDE personnel and administrative support </description>
+   <status> T </status>
+   <numHours> 0 </numHours>
+ </task> 
+
+ <task idNumber="10-2-C320">
+   <description> PROVIDE company supply support </description>
+   <status> P </status>
+   <numHours> 1 </numHours>
+ </task> 
+
+ <task idNumber="10-2-C317">
+   <description> PERFORM food service support </description>
+   <status> T </status>
+   <numHours> 0 </numHours>
+ </task> 
+
+ <task idNumber="43-2-R322">
+   <description> PERFORM company-level maintenance operations </description>
+   <status> T </status>
+   <numHours> 0 </numHours>
+ </task> 
+
+ <task idNumber="55-2-C325">
+   <description> RECEIVE external sling load resupply </description>
+   <status> U </status>
+   <numHours> 1 </numHours>
+ </task> 
+
+ <task idNumber="43-2-R315">
+   <description> PERFORM field sanitation functions </description>
+   <status> U </status>
+   <numHours> 1 </numHours>
+ </task> 
+
+ <task idNumber="43-OPFOR-1013">
+   <description> CONDUCT terrorist and saboteur attacks </description>
+   <status> T </status>
+   <numHours> 0 </numHours>
+ </task> 
+
+ <task idNumber="43-2-1001">
+   <description> PLAN company move </description>
+   <status> T </status>
+   <numHours> 0 </numHours>
+ </task> 
+
+ <task idNumber="43-2-1501">
+   <description> SUPERVISE GS platoon operations </description>
+   <status> T </status>
+   <numHours> 0 </numHours>
+ </task> 
+
+ <task idNumber="43-2-1002">
+   <description> PREPARE company to move </description>
+   <status> T </status>
+   <numHours> 0 </numHours>
+ </task> 
+
+ <task idNumber="43-2-1003">
+   <description> CONDUCT tactical road march </description>
+   <status> U </status>
+   <numHours> 1 </numHours>
+ </task> 
+
+ <task idNumber="43-2-R226">
+   <description> CROSS a chemically contaminated area </description>
+   <status> T </status>
+   <numHours> 0 </numHours>
+ </task> 
+
+ <task idNumber="43-2-1005">
+   <description> CROSS a radiologically contaminated area </description>
+   <status> T </status>
+   <numHours> 0 </numHours>
+ </task> 
+
+ <task idNumber="43-2-1006">
+   <description> DEFEND march elements </description>
+   <status> T </status>
+   <numHours> 0 </numHours>
+ </task> 
+
+ <task idNumber="43-2-R306">
+   <description> EMPLOY physical security measures </description>
+   <status> T </status>
+   <numHours> 0 </numHours>
+ </task> 
+
+ <task idNumber="43-2-1013">
+   <description> PREPARE company for nuclear, biological, and chemical conditions </description>
+   <status> U </status>
+   <numHours> 1 </numHours>
+ </task> 
+
+ <task idNumber="43-2-1020">
+   <description> RESPOND to the initial effects of nuclear attack </description>
+   <status> U </status>
+   <numHours> 1 </numHours>
+ </task> 
+
+ <task idNumber="43-2-R328">
+   <description> RESPOND to the residual effects of nuclear attack </description>
+   <status> U </status>
+   <numHours> 1 </numHours>
+ </task> 
+
+ <task idNumber="43-2-R207">
+   <description> PERFORM radiological decontamination </description>
+   <status> T </status>
+   <numHours> 0 </numHours>
+ </task> 
+
+ <task idNumber="43-2-1021">
+   <description> DEFEND against a level I attack </description>
+   <status> T </status>
+   <numHours> 0 </numHours>
+ </task> 
+
+</metl>
