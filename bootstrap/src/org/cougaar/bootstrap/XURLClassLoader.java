@@ -252,6 +252,7 @@ public class XURLClassLoader extends SecureClassLoader {
 	byte[] b = res.getBytes();
 	java.security.cert.Certificate[] certs = res.getCertificates();
 	CodeSource cs = new CodeSource(url, certs);
+        if (Bootstrapper.getLoudness()>1) System.out.println("XURLClassLoader: Loaded "+name+" from "+url);
 	return defineClass(name, b, 0, b.length, cs);
     }
 
