@@ -141,8 +141,8 @@ public class ConfigFinder {
    * </ul>
    **/
   public ConfigFinder(String module, String s, Map props) {
-    if (logger.isDebugEnabled()) {
-      logger.debug("ConfigFinder class: " + this.getClass().getName());
+    if (getLogger().isDebugEnabled()) {
+      getLogger().debug("ConfigFinder class: " + this.getClass().getName());
     }
 
     properties = new HashMap();
@@ -175,7 +175,14 @@ public class ConfigFinder {
     else 
       v = new Vector();
     
-    v.addAll(CSVUtility.parseToCollection(s));
+    {
+      System.err.println("s = "+s);
+      String[] els = s.trim().split("\\s*;\\s*");
+      for (int i = 0; i<els.length; i++) {
+        System.err.println("els["+i+"]="+els[i]);
+        v.add(els[i]);
+      }
+    }
 
     int l = v.size();
     for (int i = 0; i < l; i++) {
@@ -216,6 +223,7 @@ public class ConfigFinder {
   }
 
   protected final void appendPathElement(URL url) {
+    System.err.println("Appending path element "+url);
     configPath.add(url);
   }
 
