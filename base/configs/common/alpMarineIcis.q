@@ -1,4 +1,4 @@
-Database = jdbc:oracle:thin:@${icis.database}
+Database = ${icis.database}
 headerQuery=select commodity, nsn, nomenclature, ui, ssc, price, icc, alt, plt, pcm, boq, diq, iaq, nso, qfd, rop, owrmrp, weight, cube, aac, slq from header where NSN = :nsn
 assetsQuery=select nsn, ric, purpose, condition, iaq from assets where NSN = :nsn
 nomen=select nomenclature from header where NSN = :nsn	

@@ -1,5 +1,4 @@
-Driver = oracle.jdbc.driver.OracleDriver
-Database = jdbc:oracle:thin:@${marine.database}
+Database = ${marine.database}
 Username = ${marine.database.plugin.user}
 Password = ${marine.database.plugin.password} 
 

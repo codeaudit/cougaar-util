@@ -1,5 +1,4 @@
-Driver = oracle.jdbc.driver.OracleDriver
-Database = jdbc:oracle:thin:@${org.cougaar.database}
+Database = ${org.cougaar.database}
 Username = ${org.cougaar.database.user}
 Password = ${org.cougaar.database.password}
 
@@ -26,16 +25,28 @@ query = select '8115001682275' NSN, container_20_ft_qty QTY_OH, 'Container' NOME
 
 # Now, get 'eaches' for all pacing assets from fdm
 %SQLAssetCreator
-query = select NSN, QUANTITY, substr(MODEL_DESC,1,12)||'-'||substr(LIN_DESC,1,21) NOMENCLATURE from fdm_vehicle \
+query.oracle = select NSN, QUANTITY, substr(MODEL_DESC,1,12)||'-'||substr(LIN_DESC,1,21) NOMENCLATURE from fdm_vehicle \
 where  UIC = :uic \
 and NSN in (:pacing) \
 and substr(NSN,1,1) != '0' \
 order by NSN
 
+query.mysql = select NSN, QUANTITY, concat(substring(MODEL_DESC,1,12),'-',substring(LIN_DESC,1,21)) as NOMENCLATURE from fdm_vehicle \
+where  UIC = :uic \
+and NSN in (:pacing) \
+and substring(NSN,1,1) != '0' \
+order by NSN
+
 # Now, get all 'non-pacing' assets as aggregates from fdm
 %SQLAggregateAssetCreator
-query = select NSN, QUANTITY, substr(MODEL_DESC,1,12)||'-'||substr(LIN_DESC,1,21) NOMENCLATURE from fdm_vehicle \
+query.oracle = select NSN, QUANTITY, substr(MODEL_DESC,1,12)||'-'||substr(LIN_DESC,1,21) NOMENCLATURE from fdm_vehicle \
 where  UIC = :uic \
 and NSN not in (:pacing) \
 and substr(NSN,1,1) != '0' \
+order by NSN
+
+query.mysql = select NSN, QUANTITY, concat(substring(MODEL_DESC,1,12),'-',substring(LIN_DESC,1,21)) as NOMENCLATURE from fdm_vehicle \
+where  UIC = :uic \
+and NSN not in (:pacing) \
+and substring(NSN,1,1) != '0' \
 order by NSN

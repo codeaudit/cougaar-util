@@ -1,7 +1,7 @@
 # gdss query
 
 %SQLNamedAssetCreator
-Database = jdbc:oracle:thin:@${tops.database}
+Database = ${tops.database}
 Username = ${org.cougaar.database.user}
 Password = ${org.cougaar.database.password}
 query = select ac_type, tail_fleet, ac_type \

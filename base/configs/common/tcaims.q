@@ -1,6 +1,5 @@
 # Live TCAIMS query 
-Driver=com.sybase.jdbc2.jdbc.SybDriver
-Database = jdbc:sybase:Tds:${tcaims.database}
+Database = ${tcaims.database}
 Username = ${tcaims.database.user}
 Password = ${tcaims.database.password}
 

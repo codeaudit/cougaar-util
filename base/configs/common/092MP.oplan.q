@@ -1,4 +1,4 @@
-Database=jdbc:oracle:thin:@${oplan.test.database}
+Database = ${oplan.test.database}
 Username=${oplan.test.database.user}
 Password=${oplan.test.database.password}
 oplanid = 092MP
@@ -9,7 +9,8 @@ AlpLocQuery = select alploc_code, location_name, latitude, longitude from alploc
 
 # get GeoLoc info
 %GeoLocQueryHandler
-GeoLocQuery = select geoloc_code, location_name, installation_type_code, civil_aviation_code, latitude, longitude, country_state_code, country_state_long_name  from geoloc where geoloc_code in (select relates_to from drop_relationship where relation_name = 'LOCATION')
+GeoLocQuery.oracle = select geoloc_code, location_name, installation_type_code, civil_aviation_code, latitude, longitude, country_state_code, country_state_long_name  from geoloc where geoloc_code in (select relates_to from drop_relationship where relation_name = 'LOCATION')
+GeoLocQuery.mysql = select distinct g.geoloc_code, g.location_name, g.installation_type_code, g.civil_aviation_code, g.latitude, g.longitude, g.country_state_code, g.country_state_long_name from geoloc g, drop_relationship dr where g.geoloc_code = dr.relates_to and dr.relation_name = 'LOCATION'
 
 
 # get Oplan info

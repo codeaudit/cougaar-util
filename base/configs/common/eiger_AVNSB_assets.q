@@ -1,5 +1,4 @@
-Driver = oracle.jdbc.driver.OracleDriver
-Database = jdbc:oracle:thin:@${org.cougaar.database}
+Database = ${org.cougaar.database}
 Username = ${org.cougaar.database.user}
 Password = ${org.cougaar.database.password} 
 

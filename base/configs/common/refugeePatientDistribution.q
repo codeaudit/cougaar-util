@@ -1,5 +1,4 @@
-Database=jdbc:oracle:thin:@${org.cougaar.database}
-Driver = oracle.jdbc.driver.OracleDriver
+Database = ${org.cougaar.database}
 Username = ${blackjack.database.user}
 Password = ${blackjack.database.password}
 MIN_IN_POOL= 1

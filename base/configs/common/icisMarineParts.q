@@ -1,5 +1,4 @@
-Database=jdbc:oracle:thin:@${marine.database}
-Driver = oracle.jdbc.driver.OracleDriver
+Database = ${marine.database}
 Username = ${marine.database.supply.user}
 Password = ${marine.database.supply.password}
 MIN_IN_POOL= 1
