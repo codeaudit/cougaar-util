@@ -41,25 +41,25 @@ queryComponents = \
     AND P.COMPONENT_ALIB_ID = H.PARENT_COMPONENT_ALIB_ID \
     AND C.COMPONENT_LIB_ID = A.COMPONENT_LIB_ID \
     AND C.INSERTION_POINT like ':container_insertion_point:%' \
-    and instr(substring(c.insertion_point, length(':container_insertion_point:') + 1), '.') = 0 \
+    AND INSTR(SUBSTR(C.INSERTION_POINT, LENGTH(':container_insertion_point:') + 1), '.') = 0 \
     AND P.COMPONENT_NAME = ':parent_name:' \
 ORDER BY INSERTION_ORDER
 
 queryComponents.mysql = \
-    select a.component_name component_name, c.component_class component_class, \
-           a.component_alib_id component_id, c.insertion_point, h.insertion_order insertion_order \
-      from v4_alib_component p \
-inner join v4_asb_component_hierarchy h \
-        on p.component_alib_id = h.parent_component_alib_id \
-inner join v4_alib_component a \
-        on a.component_alib_id = h.component_alib_id \
-inner join v4_lib_component c \
-        on c.component_lib_id = a.component_lib_id \
-     where h.assembly_id :assemblyMatch: \
-       and c.insertion_point like ':container_insertion_point:%' \
-       and instr(substring(c.insertion_point, length(':container_insertion_point:') + 1), '.') = 0 \
-       and p.component_name = ':parent_name:' \
-  order by insertion_order
+    SELECT A.COMPONENT_NAME COMPONENT_NAME, C.COMPONENT_CLASS COMPONENT_CLASS, \
+           A.COMPONENT_ALIB_ID COMPONENT_ID, C.INSERTION_POINT, H.INSERTION_ORDER INSERTION_ORDER \
+      FROM V4_ALIB_COMPONENT P \
+INNER JOIN V4_ASB_COMPONENT_HIERARCHY H \
+        ON P.COMPONENT_ALIB_ID = H.PARENT_COMPONENT_ALIB_ID \
+INNER JOIN V4_ALIB_COMPONENT A \
+        ON A.COMPONENT_ALIB_ID = H.COMPONENT_ALIB_ID \
+INNER JOIN V4_LIB_COMPONENT C \
+        ON C.COMPONENT_LIB_ID = A.COMPONENT_LIB_ID \
+     WHERE H.ASSEMBLY_ID :assemblyMatch: \
+       AND C.INSERTION_POINT LIKE ':container_insertion_point:%' \
+       AND INSTR(SUBSTRING(C.INSERTION_POINT, LENGTH(':container_insertion_point:') + 1), '.') = 0 \
+       AND P.COMPONENT_NAME = ':parent_name:' \
+  ORDER BY INSERTION_ORDER
 
 queryComponentParams = \
  SELECT ARGUMENT \

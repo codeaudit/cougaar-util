@@ -39,16 +39,19 @@ queryHostNodes = \
    AND H.ASSEMBLY_ID :assemblyMatch \
    AND HC.COMPONENT_TYPE = 'host'
 
-queryMetrics = \
-  SELECT METRIC_ID \
-    FROM V4_EXPT_TRIAL_METRIC \
-   WHERE TRIAL_ID = ':trial_id' \
-    AND EXPT_ID = ':expt_id'
+queryRecipes = \
+  SELECT ETMR.MOD_RECIPE_LIB_ID, LMR.NAME, LMR.JAVA_CLASS \
+    FROM V4_EXPT_TRIAL_MOD_RECIPE ETMR, V4_LIB_MOD_RECIPE LMR \
+   WHERE ETMR.MOD_RECIPE_LIB_ID = LMR.MOD_RECIPE_LIB_ID \
+     AND ETMR.TRIAL_ID = ':trial_id' \
+     AND ETMR.EXPT_ID = ':expt_id' \
+ORDER BY ETMR.RECIPE_ORDER
 
-queryMetricProperties = \
+queryRecipeProperties = \
   SELECT PROP_NAME, PROP_VALUE \
-    FROM V4_EXPT_TRIAL_METRIC_PROP \
-   WHERE TRIAL_ID = ':trial_id' AND METRIC_ID = ':metric_id'
+    FROM V4_EXPT_TRIAL_RECIPE_PROP \
+   WHERE TRIAL_ID = ':trial_id' AND MOD_RECIPE_LIB_ID = ':recipe_id' \
+ORDER BY ARG_ORDER
 
 queryExperiment = \
  SELECT ASSEMBLY_ID \

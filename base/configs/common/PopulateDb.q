@@ -176,3 +176,60 @@ copyCMTAssemblies2=\
    FROM `TMP_CMTA_:expt_id:`
 
 copyCMTAssemblies3=DROP TABLE `TMP_CMTA_:expt_id:`
+
+copyCMTThreadsQueryNames.oracle=copyCMTThreads
+
+copyCMTThreads=\
+ INSERT INTO V4_EXPT_TRIAL_THREAD (EXPT_ID, TRIAL_ID, THREAD_ID) \
+ SELECT ':expt_id:', ':new_trial_id:', THREAD_ID \
+   FROM V4_EXPT_TRIAL_THREAD \
+  WHERE TRIAL_ID = ':old_trial_id:'
+
+copyCMTThreadsQueryNames.mysql=copyCMTThreads1 copyCMTThreads2 copyCMTThreads3
+
+copyCMTThreads1=\
+ CREATE TEMPORARY TABLE `TMP_CMTT_:expt_id:` AS \
+ select THREAD_ID \
+   FROM V4_EXPT_TRIAL_THREAD \
+  WHERE TRIAL_ID = ':old_trial_id:'
+
+copyCMTThreads2=\
+ INSERT INTO V4_EXPT_TRIAL_THREAD (EXPT_ID, TRIAL_ID, THREAD_ID) \
+ SELECT ':expt_id:', ':new_trial_id:', THREAD_ID \
+   FROM `TMP_CMTT_:expt_id:`
+
+copyCMTThreads3=DROP TABLE `TMP_CMTT_:expt_id:`
+
+queryLibRecipeByName=\
+ SELECT MOD_RECIPE_LIB_ID, JAVA_CLASS \
+   FROM V4_LIB_MOD_RECIPE \
+  WHERE NAME = ':recipe_name:'
+
+queryLibRecipeProps=\
+ SELECT ARG_NAME, ARG_VALUE \
+   FROM V4_LIB_MOD_RECIPE_ARG \
+  WHERE MOD_RECIPE_LIB_ID = ':recipe_id:'
+
+queryMaxRecipeId=\
+ SELECT MAX(MOD_RECIPE_LIB_ID) \
+   FROM V4_LIB_MOD_RECIPE \
+  WHERE MOD_RECIPE_LIB_ID LIKE ':max_id_pattern:'
+
+insertLibRecipe=\
+ INSERT INTO V4_LIB_MOD_RECIPE \
+    (MOD_RECIPE_LIB_ID, NAME, JAVA_CLASS, DESCRIPTION) \
+ VALUES (':recipe_id:', ':recipe_name:', ':java_class:', ':description:')
+
+insertLibRecipeProp=\
+ INSERT INTO V4_LIB_MOD_RECIPE_ARG \
+    (MOD_RECIPE_LIB_ID, ARG_NAME, ARG_VALUE, ARG_ORDER) \
+ VALUES (':recipe_id:', ':arg_name:', ':arg_value:', ':arg_order:')
+
+insertTrialRecipe=\
+ INSERT INTO V4_EXPT_TRIAL_MOD_RECIPE \
+    (TRIAL_ID, MOD_RECIPE_LIB_ID, RECIPE_ORDER, EXPT_ID) \
+ VALUES (':trial_id:', ':recipe_id:', ':recipe_order:', ':expt_id:')
+
+cleanTrialRecipe=\
+ DELETE FROM V4_EXPT_TRIAL_MOD_RECIPE \
+  WHERE TRIAL_ID = ':trial_id:'
