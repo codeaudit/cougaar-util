@@ -32,12 +32,9 @@ jdbc:oracle:thin:@HOST:PORT:SID
 jdbc:postgresql://HOST:PORT/DBNAME
 </pre></td></tr></table>
 <p>
-The file should define parameters used by various plugins.  Note that
-the databases referred to here usually point to at most two distinct
-databases: 1 for the Cougaar domain data (from 1ADDomainData.sql
-formerly mysqldump.txt) and one for CSMART configuration data (see the
-CSMART Installation instructions). Your cougaar.rc file, when running
-the included societies, would need to define the following information:
+The file should define parameters used by various plugins.
+For example, your cougaar.rc file, when running
+the UltraLog societies, would need to define the following information:
 <table border=1><tr><td><pre>
 
 # core database
@@ -75,6 +72,11 @@ generic.database.expander.expansion_table=construction_expansion
 org.cougaar.configuration.database=DBConnectionString
 org.cougaar.configuration.user=User
 org.cougaar.configuration.password=Password
+
+# XML based societies' OPLAN and OrgAsset definitions
+org.cougaar.refconfig.database=DBConnectionString
+org.cougaar.refconfig.user=User
+org.cougaar.refconfig.password=Password
 
 # HTTPS keystore and password
 # the keystore path is relative to the $COUGAAR_INSTALL_PATH
