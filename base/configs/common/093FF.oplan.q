@@ -26,7 +26,7 @@ select DISTINCT \
     COUNTRY_STATE_CODE, \
     COUNTRY_STATE_LONG_NAME \
 FROM geoloc, \
-     asb_oplan_agent_attr \
+     oplan_agent_attr \
 WHERE ATTRIBUTE_NAME = 'LOCATION' \
     AND GEOLOC_CODE=ATTRIBUTE_VALUE
 
@@ -36,45 +36,26 @@ OplanInfoQuery = \
 select OPERATION_NAME, \
    PRIORITY, \
    C0_DATE \
-FROM asb_oplan OPLAN, \
-   expt_trial_assembly ETA \
-WHERE OPLAN_ID = '093FF' \
- AND ETA.TRIAL_ID=':exptid' \
- AND ETA.ASSEMBLY_ID=OPLAN.ASSEMBLY_ID
+FROM lib_oplan OPLAN \
+WHERE OPLAN_ID = '093FF'
 
 #Get Orgactivities
 %OrgActivityQueryHandler
 
-OrgActivityQuery = \
-select ATTRIBUTE_NAME AS RELATION_NAME, \
-        COMPONENT_ALIB_ID AS FORCE, \
-	'FORCE_TYPE' AS FORCE_TYPE, \
-	ATTRIBUTE_VALUE AS RELATES_TO, \
-	'RELATES_TO_TYPE' AS RELATES_TO_TYPE, \
-	START_CDAY AS START_DAY, \
-	END_CDAY AS END_DAY, \
-	TO_DATE('10-MAY-2001') AS LAST_MODIFIED \
-  FROM asb_oplan_agent_ATTR \
-   WHERE OPLAN_ID = '093FF' \
-   AND ASSEMBLY_ID IN \
-   (select DISTINCT ASSEMBLY_ID FROM expt_trial_assembly WHERE TRIAL_ID=':exptid') AND ATTRIBUTE_NAME IN ('ACTIVITY_TYPE','OPTEMPO','LOCATION')
-
 OrgActivityQuery.mysql = \
 select DISTINCT ATTRIBUTE_NAME AS RELATION_NAME, \
-    COMPONENT_ALIB_ID AS FORCE, \
+    ORG_ID AS FORCE, \
     'FORCE_TYPE' AS FORCE_TYPE, \
     ATTRIBUTE_VALUE AS RELATES_TO, \
     'RELATES_TO_TYPE' AS RELATES_TO_TYPE, \
     START_CDAY AS START_DAY, \
     END_CDAY AS END_DAY, \
     OP.C0_DATE AS LAST_MODIFIED \
- FROM asb_oplan_agent_attr ATTR, \
-      expt_trial_assembly ETA, \
-      asb_oplan OP \
+ FROM oplan_agent_attr ATTR, \
+      lib_oplan OP \
  WHERE \
-  ATTR.OPLAN_ID = '093FF' \
+  ATTR.ORG_ID = :agent \
+  AND ATTR.OPLAN_ID = '093FF' \
   AND OP.OPLAN_ID = '093FF' \
-  AND ETA.TRIAL_ID=':exptid' \
-  AND ETA.ASSEMBLY_ID=ATTR.ASSEMBLY_ID \
   AND ATTRIBUTE_NAME IN ('ACTIVITY_TYPE','OPTEMPO','LOCATION')
 
