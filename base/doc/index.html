@@ -44,7 +44,7 @@ Components)</a></li>
 
       <h2> <a name="introduction"></a>Introduction</h2>
 
-This file contains the release notes for Cougaar 11.0.
+This file contains the release notes for Cougaar 11.2.
 <p>
 Please see our <a href="FAQ.html">Cougaar FAQ</a>
 (<a href="http://cougaar.org/faq.html">online version</a>) for a high-level
@@ -111,6 +111,25 @@ There is a service alternative to ConfigFinder in the form of
 ConfigurationService. The service is provided by org.cougaar.core.node.ConfigurationServiceComponent
 which is loaded by default only in XML configurations. 
 See cougaar bug (RFE) 2569.
+</li>
+<li>
+ActiveSubscriptionObject actions may now be delayed from immediate
+(upon object publish) to LogicProvider time.  This is more correct,
+but breaks a fair amount of old code. In particular, new code should
+avoid expecting that objects change immediately at publish time - the
+most common problems are dependence on Task.getPlanElement() and
+immediate updates to Assets RoleSchedules after allocation or
+reassignment.  See ActiveSubscriptionObject for more information.
+This new option defaults to the old behavior, but will probably switch
+to the more correct semantics in a future release.  When enabled,
+turns on extensive debugging code which notes problematic usage. (see
+cougaar bug 3663)
+</li>
+<li>
+</li>
+<li>
+</li>
+<li>
 </li>
 </ul>
 
