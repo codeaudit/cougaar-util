@@ -176,10 +176,8 @@ public class ConfigFinder {
       v = new Vector();
     
     {
-      System.err.println("s = "+s);
       String[] els = s.trim().split("\\s*;\\s*");
       for (int i = 0; i<els.length; i++) {
-        System.err.println("els["+i+"]="+els[i]);
         v.add(els[i]);
       }
     }
@@ -223,7 +221,6 @@ public class ConfigFinder {
   }
 
   protected final void appendPathElement(URL url) {
-    System.err.println("Appending path element "+url);
     configPath.add(url);
   }
 
