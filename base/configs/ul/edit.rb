@@ -29,6 +29,8 @@ print "EDITING: #{file}\n"
 builder = Cougaar::SocietyBuilder.from_xml_file(file)
 society = builder.society
 
+print "unless you edited this file to set the parameters for your configuration, it's probably not doing what you want\n"
+
 society.each_host do |host|
 	host.each_node do |node|
 		if (display)
@@ -42,6 +44,17 @@ society.each_host do |host|
 		node.remove_parameter("-Dorg.cougaar.tools.server.swallowOutputConnectionException")
 		node.override_parameter("-Dorg.cougaar.core.node.InitializationComponent","XML")
 		node.override_parameter("-Dorg.cougaar.society.file","#{file}")
+
+    # the acme service will substitute for $COUGAAR_INSTALL_PATH
+		node.override_parameter("-Dorg.cougaar.config.path","$COUGAAR_INSTALL_PATH/configs/common\\\;$COUGAAR_INSTALL_PATH/configs/glmtrans\\\;")
+		node.override_parameter("-Dorg.cougaar.workspace","$COUGAAR_INSTALL_PATH/workspace")
+		node.override_parameter("-Dorg.cougaar.install.path","$COUGAAR_INSTALL_PATH")
+		node.override_parameter("-Dorg.cougaar.system.path","$COUGAAR_INSTALL_PATH/sys")
+		node.override_parameter("-Djava.class.path","$COUGAAR_INSTALL_PATH/lib/bootstrap.jar")
+		node.remove_parameter("-Xbootclasspath/p:$COUGAAR_INSTALL_PATH/lib/javaiopatch.jar")
+		node.add_parameter("-Xbootclasspath/p:$COUGAAR_INSTALL_PATH/lib/javaiopatch.jar")
+
+
 		node.each_agent do |agent|
 			agent.remove_component("org.cougaar.core.topology.TopologyReaderServlet")
 			agent.each_component do |comp|
