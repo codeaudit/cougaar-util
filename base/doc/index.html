@@ -25,7 +25,7 @@
       <p>Jump down to:&nbsp; </p>
       <ul>
   <li> <a href="#introduction">Introduction</a></li>
-  <li> <a href="#licence">Licence</a></li>
+  <li> <a href="#license">License</a></li>
   <li> <a href="#requirements">Requirements</a></li>
   <li> <a href="#overview">Overview of this Release</a></li>
   <li> <a href="#documentation">Additional Documentation</a></li>
@@ -252,9 +252,9 @@ new toXML method (
 <a href="http://bugs.cougaar.org/show_bug.cgi?id=3804">bug 3804</a>,
 bug 3805, bug 3811, bug 3812, bug 3813, bug 3814).</li>
 <li>The RescindLP is much more aggressive in removing orphaned
-objects.  Whenever a Task is added or changed or a PE is added or
+objects.  Whenever a Task is added or changed or a PlanElement is added or
 removed, the links among Tasks and PEs are checked to ensure they
-are "consistent" -- references point to Objects that exist on 
+are "consistent" -- ensuring references point to Objects that exist on 
 the blackboard, for example.</li>
 <li>Added new "/consistency" servlet
 (org.cougaar.planning.servlet.ConsistencyCheckServlet) to show
@@ -275,12 +275,12 @@ template files.  The default behavior is:<br>
  This is primarily used for rehydrating an agent on a remote
 node (bug 3713).</li>
 <li>Allow host addresses to change at runtime (bug 3575)</li>
-<li>Do not publish Compositions</li>
+<li>Do not publish Compositions.</li>
 <li>AspectValue subclass fields are now final.</li>
 <li>Added org.cougaar.util.ToStringMemo to help in caching toStrings
 (bug 3692)</li>
 <li>Bug 3695: Added version of
-RelationshipSchedul.getMatchingRelationships that takes a single
+RelationshipSchedule.getMatchingRelationships that takes a single
 time.</li>
 <li>Bug 3667: Added system properties to WP SelectManager to allow
 favoring a local WP</li>
@@ -288,19 +288,19 @@ favoring a local WP</li>
 implementations</li>
 <li>Turned off Blackboard pedantic mode by default (bug 3674) </li>
 <li>Bug 3680: Preserve backpointers in Tasks and Expansions.</li>
-<li>Bug 3685: OplanReaderPlugin's MyStages serializable</li>
+<li>Bug 3685: OplanReaderPlugin's MyStages serializable.</li>
 <li>Bug 3678: Aggregations made to match bug
 3663's API change</li>
 <li>Bug 3688: Ensure myAgentAddr is initialized in OrgDataPlugin</li>
 <li>Bug 3696: Fix Subscriber support for multiple watchers</li>
 <li>Remove DataGathererServlet from MiniTest</li>
-<li>Bug 3722: Avoid publishAdd a Task with a null verb</li>
+<li>Bug 3722: Avoid publishAdd'ing a Task with a null verb</li>
 <li>Bug 3725: The node-level servlet server now advertises a
 RootServletService, to avoid confusion by service listeners</li>
 <li>YPServer drops unused database connections. Default to 10
 minutes. Set via -Dorg.cougaar.yp.UnusedDBConnectionInterval</li>
 <li>Moved TrafficMatrix and AgentFlowAspect out of core.</li>
-<li>Bug 3757: Do not make local changes when incoming Task is past its
+<li>Bug 3757: Do not make local changes when an incoming Task is past its
 commitment date (logged at INFO).</li>
 <li>Bug 3760: The /agentQuiescentState servlet now shows which
 quiescence clients are blocking quiescence. Also logged at
@@ -321,12 +321,11 @@ subclasses.</li>
 with the same name on the same host to avoid dying due to YP database
 name </li>
 <li>Bug 3698 fixed in service discovery</li>
-<li>Various changes and additions to metrics service</li>
+<li>Various changes and additions to the metrics service.</li>
 <li>Various small changes to support minimal agent configurations (no
 Blackboard?)</li>
 <li>Avoid calling postRehydration on inActive objects in
 PersistenceServiceComponent (bug 3588)</li>
-<li>Allow host addresses to change at runtime (bug 3575)</li>
 <li>Optimize Blackboard handling of MessageAddresses with attributes
 (bug 3796) </li>
 </ul>
@@ -731,9 +730,9 @@ full and incremental persistence.</li>
   For additional details, please review the following documentation:  
  <ul>
   <li> Cougaar <a href="http://cougaar.org/faq.html">FAQ</a></li>
-  <li> Cougaar <a href="http://cougaar.org/cougaarwiki/">WIKI</a>.</li>
+  <li> Cougaar <a href="http://cougaar.cougaar.org/wiki/wiki.pl">WIKI</a>.</li>
   <li> Cougaar Developers' Guide, v11.0 (March 2004), available on
-the Cougaar website</li>
+the Cougaar website see <a href="http://cougaar.org/docman/?group_id=17">http://cougaar.org/docman/?group_id=17</a></li>
   <li> Cougaar Architecture Document, v11.0 (dated March 2004), available
 on the Cougaar website</li>
   <li> Release Notes for other modules such as:</li> 
@@ -757,7 +756,7 @@ on the basis of @property javadoc tags in the source code. .&nbsp;</li>
  <!-- ---------------------------------------------------------------------- -->  
  <h2> <a name="bugs"></a>Known bugs and bugs resolved/closed since Cougaar release 10.2</h2>
 The Cougaar bug tracker (Bugzilla, the Mozilla bug system) is online available
-at <a href="http://www.cougaar.org/bugs">Cougaar website -&gt; Bug Lists</a>.  
+at <a href="http://bugs.cougaar.org/">Cougaar website -&gt; Bug Lists</a>.  
  <ul>
 <li> For a list of bugs that were resolved/closed since Cougaar release
 10.4 see <a href="ReleaseNotes/10.4/ClosedBugs103-104.htm">ClosedBugs103-104.htm</a>.</li>
@@ -806,18 +805,17 @@ are included, without requiring CLASSPATH modifications.</li>
       <li>contract/: Plugin contracts - not completely supported.</li>
       <li>core/: The core Cougaar Agent architecture.</li>
       <li>csmart/: CSMART is the Cougaar Society Management, Analysis, and Reporting
-Tool. Use it to configure, run, and monitor large Cougaar societies. See
+Tool. Although deprecated, it may be used to configure, run, and monitor large Cougaar societies. See
 <a href="../csmart/doc/index.html">csmart/doc/index.html</a></li>
-      <li>datagrabber/: For collecting and displaying plan results, in
-      particular TPFDD (military logistics) displays.</li>
       <li>glm/: Defines Plugins and data model for a military logistics domain
 and application.</li>
       <li>javaiopatch/: Small JDK over-rides to support persistence.</li>
 application.</li>
-      <li>mtsstd/: Standard Message Transport for Cougaar
-      (RMI-based)</li>
-      <li>ping/: Simple "ping" society support.</li>
-      <li>planning/: Tasks, Assets, and other Planning Domain support.</li>
+      <li>mtsstd/: Robust Message Transport</li>
+      <li>ping/: Simple application that sends pings between agents,
+      for performance testing.</li>
+      <li>planning/: Planning domain, providing Assets, Tasks,
+      Workflows. </li>
       <li>qos/: Quality of Service support for Message Transport</li>
       <li>quo/: More Message Transport support</li>
       <li>server/: The AppServer (or Node Server) is a daemon used by CSMART to
@@ -856,18 +854,19 @@ go in the sys/ directory.</li>
  </ul>
 
   <b>To install Cougaar</b>: <br>
-Go to the cougaar website (<a href="http://www.cougaar.org">www.cougaar.org</a>) 
-to get the latest windows Cougaar installer which will install Cougaar as
+<p>  Go to the cougaar website (<a href="http://www.cougaar.org">www.cougaar.org</a>) 
+to get the latest Windows or Linux Cougaar installer which will install Cougaar as
 well as a MySQL database.&nbsp; This will allow users to run off of a local
-MySQL database. 
-      <p><b>Note that if you are installing MySQL on linux or unix, you must 
-instruct the database to translate all table names to lowercase</b> (which 
+MySQL database (not required).
+      <p>(<br><b>Note</b> that if you are installing MySQL on Linux or Unix, you must 
+instruct the database to translate all table names to lowercase (which 
 is the default on Windows machines).&nbsp; To do this, you must set the variable
 lower_case_table_names=1 by including the line in /etc/my.cnf: </p>
       <p>[mysqld] <br>
 set-variable&nbsp;&nbsp; =&nbsp;&nbsp; lower_case_table_names=1 </p>
-      <p></p>
-      <p>Alternatively you can follow these instructions. <br>
+      <p>)</p>
+
+<p>   <b>Alternatively</b> you can follow these instructions. <br>
 <ol>
 <li>You'll need cougaar.zip and cougaar-support.zip (the first time) to
 get a runnable system.&nbsp; The rest are extras.&nbsp; Furthermore,
@@ -882,10 +881,10 @@ on unix: <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setenv COUGAAR_INSTALL_PATH `pwd` 
 </pre>
       </li>
+      <li>You are now ready to run. Try the tutorials (see the slides
+      on cougaar.org). Alternately, try running the <b>Pizza Party</b>
+      application. For details, see the <a href="../pizza/doc/index.html">Pizza Readme</a>.</li>
     </ol>
-      <p>Note that $COUGAAR_INSTALL_PATH/bin/Node and setarguments.bat set
-the Cougaar start time with the following Node argument: <br>
--Dorg.cougaar.core.cluster.startTime=07/11/2005 <br>
       <br>
 For instructions on installing and using CSMART, see the <a href="../csmart/doc/InstallAndTest.html">
 CSMART installation document</a>.<br>
@@ -898,17 +897,50 @@ CSMART installation document</a>.<br>
  <h2> <a name="example"></a>Test Harness Example Implementations</h2>
 We only maintain society configurations that we are currently using for testing
 purposes and for&nbsp; Cougaar demonstrations. These society configurations 
-are available in subdirectories under "configs" in the release. To execute 
+are usually available in subdirectories under "configs" in the release. To execute 
 these Cougaar societies, these nodes can be executed on a single computer 
 or distributed across multiple computers.&nbsp; 
-  <p>One society, <b> minitestconfig</b> 
-will work "out of the box". We intend to expand this test society
-in subsequent releases in size and complexity to test new infrastructure
-features and to provide reference examples of components component and service
-design patterns. Plugin and component developers are encouraged to use 
-<b>minitestconfig</b> as a starting point for testing their software for compliance
-with the latest infrastructure release. Minitestconfig can be run as a multiple 
+  <p>The primary example society for testing an installation, and core
+ changes, is the <p>Pizza Party</b> application, available in the
+ "pizza" module. Use this for testing your installation. See the <a href="../pizza/doc/index.html">pizza Readme</a>.</p>
+  <p>Another society, <b> minitestconfig</b> 
+will work "out of the box", but uses many deprecated classes and
+ patterns.. Plugin and component developers are encouraged to use
+ <p>pizza as their initial starting point, but 
+<b>minitestconfig</b> may also be useful. Minitestconfig can also be run as a multiple 
 node, multiple host society.&nbsp; </p>
+  <p>MiniTest is a simple 4 agent planning and logistics
+ application. To run it as a single Node:
+<pre>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cd $COUGAAR_INSTALL_PATH/configs/minitestconfig 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; XSLNode MiniNode.xml MiniNode
+</pre>
+You should see something like:
+<pre>
+/cougaar/B11_2/configs/minitestconfig $ XSLNode.bat MiniNode.xml MiniNode
+
+COUGAAR 11.2.2 built on Thu Nov 18 19:23:35 GMT 2004
+Repository: B11_2 on Thu Nov 18 19:20:17 GMT 2004
+VM: JDK 1.4.2_03-b02 (mixed mode)
+OS: Windows 2000 (5.0)
+2004-11-19 14:25:01,109 SHOUT [XMLComponentInitializerServiceProvider] - Initializing node
+ "MiniNode" from XML file "MiniNode.xml"
+2004-11-19 14:25:08,329 WARN  [ExecutionTimer] - Multi-node societies will have execution-
+time clock skew: Set org.cougaar.core.society.startTime or society.timeOffset to avoid thi
+s problem.
+2004-11-19 14:25:08,329 WARN  [ExecutionTimer] - Starting Time set to Wed Aug 10 00:05:00
+GMT 2005 offset=22757991671ms
+2004-11-19 14:25:09,330 SHOUT [AssetInitializerServiceComponent] - Not using a database, i
+nitializing solely from Files.
+2004-11-19 02:25:11,293 SHOUT [DOTS] - +-+-+-+-+-.
+.....
+</pre>
+At this point, push the "Publish Oplan" button. Then push the "Send
+GLS Root" button. You should see 20 succesful Allocations in the
+Allocations window. You have a running Cougaar install!
+</p>
+<p>An alternate test society is the "ping" society. See for starting
+instructions, the simple Ping <a href="../ping/configs/ping/README">README</a>.</p>
 
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->
@@ -943,6 +975,7 @@ Please watch the
 <a href="mailto:cougaar-information@cougaar.org">information mailing list</a>
 and carefully read the latest Cougaar Developers Guide (CDG),
 the Cougaar Architecture Document (CAD), and all release notes.&nbsp;  
+Additionally, the <a href="http://cougaar.cougaar.org/wiki/wiki.pl?RoadMap">CougaarSE Wiki</a> has information on planned future releases.
 
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->
@@ -952,6 +985,6 @@ the Cougaar Architecture Document (CAD), and all release notes.&nbsp;
  <h2> <a name="questions"></a>Questions and Submission of Bug Reports</h2>
 In addition, email infrastructure questions and initiate community discussions 
 through our <a href="mailto:cougaar-developers@cougaar.org">mailing list</a>. Bug and system-enhancement reports 
-can be submitted through the <a href="http://www.cougaar.org">Cougaar website</a>.&nbsp; 
+can be submitted through the <a href="http://bugs.cougaar.org">Cougaar website</a>.&nbsp; 
 </body>
 </html>
