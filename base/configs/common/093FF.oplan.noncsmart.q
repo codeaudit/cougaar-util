@@ -1,16 +1,21 @@
 # Used by glm/src/org/cougaar/mlm/plugin/ldm/OrgActivityQueryHandler
 # Referenced by the glm/src/org/cougaar/mlm/plugin/GLSInitServlet
 # Note that the word select must be lowercase cause of bad plugin
+# Note that lowercase database is necessary because of different plugins access
 
 # This version does not depend on a pre-existing CSMART configuration
 
 Database=${org.cougaar.refconfig.database}
 Username=${org.cougaar.refconfig.user}
 Password=${org.cougaar.refconfig.password}
+database=${org.cougaar.configuration.database}
 oplanid = 093FF
 activity = ACTIVITY_TYPE
 opTempo = OPTEMPO
 location = LOCATION
+
+# get Oplan Timeframe info
+OplanTimeframeQuery = select OPERATION_NAME, min_planning_offset, start_offset, end_offset from oplan where oplan_id = ':oplan_id:'
 
 # get AlpLoc info
 %AlpLocQueryHandler
@@ -37,9 +42,8 @@ WHERE ATTRIBUTE_NAME = 'LOCATION' \
 %OplanQueryHandler
 OplanInfoQuery = \
 select DISTINCT OPERATION_NAME, \
-   PRIORITY, \
-   C0_DATE \
-FROM lib_oplan OPLAN \
+   PRIORITY \
+FROM oplan OPLAN \
 WHERE OPLAN_ID = '093FF' 
 
 #Get Orgactivities
@@ -53,10 +57,9 @@ select DISTINCT ATTRIBUTE_NAME AS RELATION_NAME, \
     ATTRIBUTE_VALUE AS RELATES_TO, \
     'RELATES_TO_TYPE', \
     START_CDAY AS START_DAY, \
-    END_CDAY AS END_DAY, \
-    OP.C0_DATE AS LAST_MODIFIED \
+    END_CDAY AS END_DAY \
  FROM oplan_agent_attr ATTR, \
-      lib_oplan OP \
+      oplan OP \
  WHERE \
   ATTR.OPLAN_ID = '093FF' \
   AND OP.OPLAN_ID = '093FF' \
