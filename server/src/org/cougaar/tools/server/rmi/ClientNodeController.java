@@ -22,6 +22,7 @@
 package org.cougaar.tools.server.rmi;
 
 import java.io.*;
+import java.net.URL;
 import java.util.*;
 import java.rmi.*;
 import java.rmi.registry.*;
@@ -43,6 +44,7 @@ implements NodeServesClient {
   private ServerNodeController snc;
 
   private NodeEventListener nel;
+  private URL listenerURL;
   private NodeEventFilter nef;
 
   private ClientNodeEventListener cnel;
@@ -58,6 +60,21 @@ implements NodeServesClient {
     this.nel = nel;
     this.cnel = cnel;
     this.nef = nef;
+    this.listenerURL = null;
+  }
+
+  public ClientNodeController(
+      ProcessDescription desc,
+      ServerNodeController snc,
+      URL listenerURL,
+      ClientNodeEventListener cnel,
+      NodeEventFilter nef) {
+    this.desc = desc;
+    this.snc = snc;
+    this.listenerURL = listenerURL;
+    this.cnel = cnel;
+    this.nef = nef;
+    this.nel = null;
   }
 
   public NodeEventListener getNodeEventListener() {
@@ -73,7 +90,17 @@ implements NodeServesClient {
       snc.setClientNodeEventListener(newCnel);
       this.nel = nel;
       this.cnel = newCnel;
+      this.listenerURL = null;
     }
+  }
+
+  public URL getNodeListenerURL() {
+    return listenerURL;
+  }
+
+  public void setNodeListenerURL(URL listenerURL) throws Exception {
+    this.listenerURL = listenerURL;
+    this.nel = null;
   }
 
   public NodeEventFilter getNodeEventFilter() {

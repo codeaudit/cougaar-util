@@ -21,6 +21,7 @@
  
 package org.cougaar.tools.server;
 
+import java.net.URL;
 import java.util.List;
 
 import org.cougaar.tools.server.system.ProcessStatus;
@@ -41,9 +42,26 @@ public interface NodeServesClient {
 
   /**
    * The client can set the <code>NodeEventListener</code> to listen for
-   * "pushed" events on the Node.
+   * "pushed" events on the Node. Note that listener can be 
+   * a <code>URL</code> or a <code>NodeEventListener</code> but not both.
    */
   void setNodeEventListener(NodeEventListener nal) throws Exception;
+
+
+  /**
+   * Get the <code>URL</code> for the current node listener. Note that 
+   * listener can be a <code>URL</code> or a <code>NodeEventListener</code> 
+   * but not both.
+   * <tt>setNodeListenerURL(..)</tt>.
+   */
+  URL getNodeListenerURL() throws Exception;
+
+  /**
+   * The client can set the <code>URL</code> to listen for
+   * "pushed" events on the Node. Note that the listener have be either a
+   * <code>URL</code> or a <code>NodeEventListener</code> but not both
+   */
+  void setNodeListenerURL(URL listenerURL) throws Exception;
 
 
   /**

@@ -23,6 +23,7 @@ package org.cougaar.tools.server;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
 import java.util.List;
 import java.util.Properties;
 
@@ -63,6 +64,31 @@ public interface HostServesClient {
   NodeServesClient createNode(
       ProcessDescription desc,
       NodeEventListener nel,
+      NodeEventFilter nef,
+      ConfigurationWriter cw) throws Exception;
+
+  /**
+   * Create a new process with the given description.
+   * <p>
+   * The "NodeEventListener" is a callback for the
+   * caller to handle "NodeEvent"s, such as standard-out.
+   * The "NodeEventFilter" configures the filtering and
+   * buffering policy for sending the NodeEvents.
+   * <p>
+   * The "ConfigurationWriter" can be used to write
+   * files just before creating the process.  This will
+   * be removed in a future implementation -- consider it
+   * deprecated.
+   *
+   * @throws IllegalArgumentException if the description's
+   *    ".getName()" is already in use by another running 
+   *    process.
+   * @throws Exception if unable to create or start the 
+   *    process.
+   */
+  NodeServesClient createNode(
+      ProcessDescription desc,
+      URL listenerURL,
       NodeEventFilter nef,
       ConfigurationWriter cw) throws Exception;
 

@@ -22,6 +22,7 @@
 package org.cougaar.tools.server.rmi;
 
 import java.io.*;
+import java.net.URL;
 import java.util.*;
 import java.rmi.*;
 import java.rmi.registry.*;
@@ -111,6 +112,53 @@ implements HostServesClient {
 
     return cnc;
   }
+
+  public NodeServesClient createNode(
+      ProcessDescription desc,
+      URL listenerURL,
+      NodeEventFilter nef,
+      ConfigurationWriter cw) throws Exception {
+    ClientNodeEventListenerImpl cnel =
+      ((listenerURL != null) ? 
+       (new ClientNodeEventListenerImpl(listenerURL)) :
+       null);
+
+    // get reference to remote process on app server
+    ServerNodeController snc;
+    try {
+      snc = (ServerNodeController)
+        shc.createNode(
+          desc, 
+          cnel,
+          nef,
+          cw);
+    } catch (IOException ioe) {
+      System.out.println("Unable to create Node (IO Failure)");
+      throw ioe;
+    } catch (RuntimeException re) {
+      System.out.println("Unable to create Node (Runtime Failure)");
+      throw re;
+    }
+
+    // wrap for client
+    //
+    // Note: what if snc wants to send a listen event _before_ it
+    //   returns from "shc.createNode"?  The cnel would
+    //   have a null cnc, which would be a bug.  For now I think
+    //   this shouldn't happen...
+    //
+    ClientNodeController cnc = 
+      new ClientNodeController(
+          desc,
+          snc,
+          listenerURL,
+          cnel,
+          nef);
+    cnel.setClientNodeController(cnc);
+
+    return cnc;
+  }
+
 
   public int killNode(
       String procName) throws Exception {

@@ -79,7 +79,7 @@ public final class NodeEvent implements java.io.Serializable, Cloneable {
   public NodeEvent(
       int type) {
     this.type = type;
-    this.msg = null;
+    this.msg = new String();
     if ((type < 0) || 
         (type > MAX_TYPE)) {
       throw new IllegalArgumentException(
@@ -91,7 +91,12 @@ public final class NodeEvent implements java.io.Serializable, Cloneable {
       int type,
       String msg) {
     this.type = type;
-    this.msg = msg;
+    if (msg != null) {
+      this.msg = msg;
+    } else {
+      this.msg = new String();
+    }
+      
     if ((type < 0) || 
         (type > MAX_TYPE)) {
       throw new IllegalArgumentException(
@@ -123,10 +128,11 @@ public final class NodeEvent implements java.io.Serializable, Cloneable {
   public String toString() {
     String pf = PREFIX[type];
     return 
-      ((msg != null) ?
+      (((msg != null) && (!msg.equals("")))  ?
        (pf+": \""+msg+"\"") :
        (pf));
   }
 
   private static final long serialVersionUID = 8909182368192098122L;
 }
+
