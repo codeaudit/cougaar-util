@@ -42,9 +42,17 @@ insertRelationship=\
  INSERT INTO V4_ASB_AGENT_RELATION \
     (ASSEMBLY_ID, ROLE, \
      SUPPORTING_COMPONENT_ALIB_ID, SUPPORTED_COMPONENT_ALIB_ID, \
-     START_DATA, END_DATE) \
- VALUES
+     START_DATE, END_DATE) \
+ VALUES \
     (:assembly_id:, :role:, :supporting:, :supported:, :start_date:, :end_date:)
+
+checkRelationship=\
+ SELECT ASSEMBLY_ID FROM V4_ASB_AGENT_RELATION \
+     WHERE ASSEMBLY_ID= :assembly_id: \
+     AND  ROLE = :role: \
+     AND SUPPORTING_COMPONENT_ALIB_ID= :supporting: \
+     AND SUPPORTED_COMPONENT_ALIB_ID= :supported:\	       
+     AND START_DATE =:start_date:
 
 insertAttribute=\
  INSERT INTO V4_ASB_AGENT_PG_ATTR \
