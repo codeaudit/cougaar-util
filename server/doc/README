@@ -6,13 +6,13 @@ for running Nodes, which are documented below.
 
 The Application-Server ("AppServer") is used to spawn COUGAAR 
 Nodes from a remote Console.  The AppServer is started on a 
-machine as a daemon-process and listens for remote clients.
+machine as an independent process and listens for remote clients.
 Remote clients contact the AppServer (via RMI) and can:
 
   - Start Nodes.
   
   - Listen for StdOut/StdErr and other output from the Node,
-      which is buffered for efficiency.
+      which is buffered within the AppServer for efficiency.
       
   - Interact with a running Node.
   
@@ -25,7 +25,7 @@ Remote clients contact the AppServer (via RMI) and can:
       of a running Node's JVM, list the running processes, etc).
 
 A remote client may interact with multiple AppServers to launch 
-a distributed application (such as COUGAAR Nodes).
+a distributed application (such as a distributed COUGAAR society).
 
 
 Currently there is little security built into the AppServer.  In the
@@ -63,8 +63,9 @@ where:
     such as "-Dorg.cougaar.install.path=/opt/alp".  See below for 
     details.
 
-This may be done at a system prompt or may be started as part of
-system start-up (Windows ".bat" files, Unix "init.d", etc).
+The AppServer may be started at a system prompt or as part of
+system start-up (Windows "autoexec.bat" file, Unix "init.d" daemon, 
+etc).
 
 
 The server properties default to reasonable values, but they can 
@@ -92,34 +93,34 @@ be specified on the command-line.  They are:
 
 The application properties are specified in this order:
 
-  1) If "loadDefaultProps" was defined as "true", then 
-     "Common.props" is loaded.
+  1) If "loadDefaultProps" was defined as "true" then a couple
+     "default" ".props" files are loaded -- by default this is
+     *not* done.  First "Common.props" is loaded.  Next the 
+     "{OSNAME}.props" files are loaded.  Under Linux this loads 
+     "Linux.props".  Under WindowsNT this loads "Windows.props" and 
+     "Windows_NT.props".
 
-  2) If "loadDefaultProps" is defined as "true", then 
-     "{OSNAME}.props" is loaded.  Under Linux this loads 
-     "Linux.props".  Under WindowsNT this loads "Windows.props"
-     and "Windows_NT.props".
-
-  3) Next the AppServer's command-line arguments are loaded
+  2) Next the AppServer's command-line arguments are loaded
      in order.  Arguments that start with "-D" are set as
      properties, and all other arguments are loaded as ".props"
      files.
 
-  4) Lastly the remote client can override these properties
+  3) Lastly the remote client can override these properties
      when starting a Node.  This is typically used to define
      the Node's name and other per-Node-specific properties.
 
 Together these properties define *all* the properties used to 
-start the Nodes.  The AppServer is intended to be a generic
+start a Node.  The AppServer is intended to be a generic
 application launcher, so all COUGAAR-specific properties must
-be specified.  Note that the system properties and shell
+be explicitly specified.  Note that the system properties and shell
 environment used to start the AppServer are *not* passed to the
 running Nodes.
 
 Property files ("*.props)" must follow the "java.util.Properties"
 syntax.  Some characters must be "escaped" -- for example, on
 Windows machines one must write the path "c:\a\b" as 
-"c\:\\a\\b".  Properties must not include whitespace.
+"c\:\\a\\b".  Properties must not include whitespace.  See the
+example "win-server-sample.props" and "unix-server-sample.props".
 
 
 The Node properties follow this format:
@@ -131,13 +132,13 @@ The Node properties follow this format:
         defaults to false)
     "java.jvm.mode=NAME" (-classic, -hotspot, etc)
     "java.class.path=PATH" for "-classpath PATH".  This must
-        be specified.
+        be specified and is not inherited from the AppServer.
     "java.class.name=NAME" for the classname, which defaults to 
         "org.cougaar.core.society.Node")
     "java.X*" for the "-X*" parameters (for example,
         "java.Xms100m" translates to "-Xms100m").
     "java.java.*" to preserve a "-Djava.*" property (for example,
-        "java.java.foo.bar" translates to "-Djava.foo=bar").
+        "java.java.foo=bar" translates to "-Djava.foo=bar").
 
   "env.*" properties are system environment properties.  These
   are typically operating-system specific:
@@ -150,10 +151,11 @@ The Node properties follow this format:
     "env.SYSTEMROOT=PATH" is an example system environment 
         variable that may be required by third-party jars.
     "env.env.*" to preserve a "-Denv.*" property (for example,
-        "env.env.foo.bar" translates to "-Denv.foo=bar").
+        "env.env.foo=bar" translates to "-Denv.foo=bar").
 
-  All other properties, such as "org.cougaar.node.name=3ID",
-    are passed as "-D" system properties.
+  All other properties are passed as "-D" system properties.
+  For example, "org.cougaar.node.name=3ID" is passed as
+  "-Dorg.cougaar.node.name=3ID".
 
 The remote client can also pass command-line arguments, but
 for COUGAAR these are not used.
