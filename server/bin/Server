@@ -80,8 +80,8 @@ endif
 # and only modify the Server's behavior.  See the Server 
 # documentation ("server/doc/README") for details.
 #
-set SERVERCONFIG = "-Dorg.cougaar.tools.server.verbose=true"
-#set SERVERCONFIG = ""
+#set SERVERCONFIG = "-Dorg.cougaar.tools.server.verbose=true"
+set SERVERCONFIG = ""
 
 # Specify the classpath for loading the Server.
 #
