@@ -1,7 +1,8 @@
 Readme for minitestconfig
 
-Note that old INI based configurations for minitestconfig have been
-removed.
+Note that minitestconfig is old and deprecated, and likely to be
+removed in the next major Cougaar release. See the pizza application
+instaed.
 
 MiniTestConfig is a simple 4 agent application used as a basic
 plumbing test. It is useful to verify that your installation is
