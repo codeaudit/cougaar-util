@@ -22,7 +22,7 @@ org.cougaar.install.path=/opt/cougaar
 # Enable or disable persistence.
 #
 # By default persistence is disabled.
-#org.cougaar.core.cluster.persistence.enabled=true
+#org.cougaar.core.cluster.persistence.enable=true
 
 # Add the "java-io-patch" to allow Cougaar persistence.
 #
