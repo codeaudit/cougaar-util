@@ -6,7 +6,8 @@
 <h2>Cougaar Database Access Information</h2>
 <p>
 CSMART and some plugins found in the Cougaar infrastructure and the
-glm/mlm packages require information from a database.  These plugins are
+glm/mlm packages require information from a database (most do not need
+one). These plugins are
 able to query a database to gather necessary information using
 parameters that are set in a file called cougaar.rc or .cougaarrc. You
 can place a .cougaarrc file in $HOME or you can place a cougaar.rc file
@@ -16,10 +17,6 @@ directory (e.g. $COUGAAR_INSTALL_PATH/configs/common).
 <p>
 The following information provides examples to show the required syntax
 for these parameters.
-<p>
-<b>We have recently added an additional notional database
-(<i>org.cougaar.oplan.database</i>) for some of the UltraLog societies, and
-that entry is also listed here.</b>
 <p>
 For scripts to load data into the example databases listed here, see
 csmart/data/database/mysql/scripts
