@@ -45,3 +45,6 @@ ConsumableNavyMDS=select MDS, NSN, OPTEMPO, DEMANDS_PER_DAY from NAVYAIR_SPARES_
 #
 #%org.cougaar.glm.ldm.GLMPrototypeProvider
 #%org.cougaar.glm.ldm.GLMPropertyProvider
+#SRA
+ACRMultiplierQuery=select supply_type, optempo, orgactivity, multiplier from acr_multipliers where supply_type = :type order by orgactivity
+
