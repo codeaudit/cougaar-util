@@ -79,7 +79,19 @@ order by \
     fue.unit_equipment_qty asc
 
 %SQLMOSAggregateAssetCreator
-query = select ('MOS/' || billet.unfrmd_srvc_occptn_cd) AS MOS_LEVEL, sum(to_strength) AS MOS_QTY, unfrmd_srvc_occptn_tx  \
+#query = select ('MOS/' || billet.unfrmd_srvc_occptn_cd) AS MOS_LEVEL, sum(to_strength) AS MOS_QTY, unfrmd_srvc_occptn_tx  \
+#	from \ 
+#	fdm_unit_billet billet, \
+#	fdm_unfrmd_srvc_occptn occ, \
+#	v6_lib_organization liborg \
+#	where \
+#	liborg.org_id=:agent \
+#	and billet.unfrmd_srvc_occptn_cd=occ.unfrmd_srvc_occptn_cd \
+#	and occ.rank_subcategory_code(+)='E' \
+#	and billet.unit_identifier = liborg.uic \
+#	group by billet.unfrmd_srvc_occptn_cd, unfrmd_srvc_occptn_tx
+
+query = select 'MOS/11B' AS MOS_LEVEL, nvl(sum(to_strength),0) AS MOS_QTY, 'MOS/11B/Infantryman'  \
 	from \ 
 	fdm_unit_billet billet, \
 	fdm_unfrmd_srvc_occptn occ, \
@@ -88,11 +100,25 @@ query = select ('MOS/' || billet.unfrmd_srvc_occptn_cd) AS MOS_LEVEL, sum(to_str
 	liborg.org_id=:agent \
 	and billet.unfrmd_srvc_occptn_cd=occ.unfrmd_srvc_occptn_cd \
 	and occ.rank_subcategory_code(+)='E' \
-	and billet.unit_identifier = liborg.uic \
-	group by billet.unfrmd_srvc_occptn_cd, unfrmd_srvc_occptn_tx
+	and billet.unit_identifier = liborg.uic
+
+
+#query.mysql = \
+#select concat('MOS/',billet.unfrmd_srvc_occptn_cd) AS MOS_LEVEL, sum(to_strength) AS MOS_QTY, unfrmd_srvc_occptn_tx  \
+#  from \ 
+#   fdm_unit_billet billet, \
+#   v6_lib_organization liborg \
+#   left join fdm_unfrmd_srvc_occptn occ on \
+#     (billet.unfrmd_srvc_occptn_cd=occ.unfrmd_srvc_occptn_cd \
+#       and occ.rank_subcategory_code='E') \
+#  where \
+#   liborg.org_id=:agent \
+#   and billet.unit_identifier = liborg.uic \
+#   group by billet.unfrmd_srvc_occptn_cd, unfrmd_srvc_occptn_tx
+#
 
 query.mysql = \
-select concat('MOS/',billet.unfrmd_srvc_occptn_cd) AS MOS_LEVEL, sum(to_strength) AS MOS_QTY, unfrmd_srvc_occptn_tx  \
+select 'MOS/!!B' AS MOS_LEVEL, ifnull(sum(to_strength),0) AS MOS_QTY,  'MOS/11B/Infantryman'  \
   from \ 
    fdm_unit_billet billet, \
    v6_lib_organization liborg \
@@ -101,9 +127,7 @@ select concat('MOS/',billet.unfrmd_srvc_occptn_cd) AS MOS_LEVEL, sum(to_strength
        and occ.rank_subcategory_code='E') \
   where \
    liborg.org_id=:agent \
-   and billet.unit_identifier = liborg.uic \
-   group by billet.unfrmd_srvc_occptn_cd, unfrmd_srvc_occptn_tx
-
+   and billet.unit_identifier = liborg.uic
 
 # Then, get the containers and generate an aggregate asset
 %SQLAggregateAssetCreator
