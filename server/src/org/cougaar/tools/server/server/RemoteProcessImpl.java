@@ -40,6 +40,16 @@ import org.cougaar.tools.server.system.*;
  * Implementation of process-runner.
  * <p>
  * Some JDK limitations of note: see JDK bug 4109888.
+ *
+ * Uses the cmdLine args to determine whether or not it should kill
+ * the remote process when a ConnectionException on the RemoteListenable 
+ * occurs. If -Dorg.cougaar.tools.server.swallowOutputConnectionException is 
+ * true, ConnectionExceptions are ignored. Otherwise (the default), 
+ * ConnectionExceptions trigger a call to destroy(). 
+ *
+ * Be very careful with the swallowOutputConnectionException property. If true,
+ * processes started by RemoteProcessImpl will outlive both CSMART and the 
+ * AppServer. They will need to be explicitly killed.
  */
 class RemoteProcessImpl 
 implements RemoteProcess {
@@ -87,6 +97,8 @@ implements RemoteProcess {
   private Thread stdErrWatcherThread;
   private Thread pcWatcherThread;
 
+  protected boolean swallowOutputConnectionException = false;
+
   public RemoteProcessImpl(
       ProcessDescription pd,
       String[] cmdLine,
@@ -127,7 +139,16 @@ implements RemoteProcess {
 
     // get the system factory
     this.saf = SystemAccessFactory.getInstance();
-    
+
+    for (int index = 0; index < cmdLine.length; index++) {
+      if (cmdLine[index].equals("-Dorg.cougaar.tools.server.swallowOutputConnectionException=true")) {
+        this.swallowOutputConnectionException = true;
+        break;
+      }
+    }
+
+    System.out.println("swallowOutputConnectionException: " + swallowOutputConnectionException);
+
     // create the process-launcher
     ProcessLauncher pl = 
       ((USE_PROCESS_LAUNCHER) ? 
@@ -484,6 +505,16 @@ implements RemoteProcess {
           } catch (Exception e) {
           }
         }
+      } catch (java.rmi.ConnectException ce) {
+        if (RemoteProcessImpl.this.swallowOutputConnectionException) {
+          System.out.println("HeartBeatWatcher:run() - swallowing ConnectException");
+        } else {
+          if (VERBOSE) {
+            System.err.println("Client died (heartbeat): Killing "+pd);
+            ce.printStackTrace();
+          }
+          RemoteProcessImpl.this.destroy();
+        }
       } catch (Exception e) {
         if (VERBOSE) {
           System.err.println("Client died (heartbeat): Killing "+pd);
@@ -534,6 +565,16 @@ implements RemoteProcess {
           double percent = (((double)diffTime) / intervalMillis);
           myRL.appendIdleUpdate(percent, nowTime);
           prevTime = nowTime;
+        }
+      } catch (java.rmi.ConnectException ce) {
+        if (RemoteProcessImpl.this.swallowOutputConnectionException) {
+          System.out.println("IdleWatcher:run() - swallowing ConnectException");
+        } else {
+          if (VERBOSE) {
+            System.err.println("Client died (heartbeat): Killing "+pd);
+            ce.printStackTrace();
+          }
+          RemoteProcessImpl.this.destroy();
         }
       } catch (Exception e) {
         if (VERBOSE) {
