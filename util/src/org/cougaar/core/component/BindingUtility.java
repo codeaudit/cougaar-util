@@ -86,14 +86,32 @@ public abstract class BindingUtility {
               if (dot>-1) pname = pname.substring(dot+1);
             }
             
-            if (s.endsWith(pname)) {
+            if (s.endsWith(pname)) { 
               // ok: m is a "public setX(X)" method where X is a Service.
+
+              // create the revocation listener
+              final Method fm = m;
+              final Object fc = child;
+              ServiceRevokedListener srl = new ServiceRevokedListener() {
+                  public void serviceRevoked(ServiceRevokedEvent sre) {
+                    Object[] args = new Object[] { null };
+                    try {
+                      fm.invoke(fc, args);
+                    } catch (InvocationTargetException ite) {
+                      throw ite.getCause();
+                    }
+                  }
+                };
+
               // Let's try getting the service...
-              Object service = servicebroker.getService(child, p, null);
+              Object service = servicebroker.getService(child, p, srl);
               Object[] args = new Object[] { service };
               try {
                 m.invoke(child, args);
               } catch (InvocationTargetException ite) {
+                if (service != null) {
+                  servicebroker.releaseService(child,p,service);
+                }
                 throw ite.getCause();
               }
             }

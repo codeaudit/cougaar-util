@@ -41,6 +41,14 @@ import org.cougaar.util.GenericStateModel;
  * defined.
  * 3. The binder (if capable) will use introspection to 
  * find setX(X) methods where X is a known service in the Context.
+ * Any such methods will be called with matching service instances
+ * or null if no such service was available.  If the service
+ * is later revoked, the set methods will be called with null.
+ * Note that such methods should be very simple and only set 
+ * data members: in particular, they should not invoke the service
+ * because it is undefined which thread of execution it will
+ * be invoked in and may not actually have permission to use
+ * the service instance passed.
  * 4. the binder will call the initialize(BindingSite x) method
  * where x is the binder chosen for this component.
  * <p>
