@@ -78,9 +78,6 @@ public class TestTimeSpanSet extends TestCase {
       assertTrue(tss.add(new X(i, Long.toString(i))));
     }    
 
-    System.err.println(tss.toString());
-    // assertEqual("zorch", tss.toString());
-
     int[] expected = new int[] {
       5,5,5,5,6,6,7,7,8,8,
       11,11,12,12,13,13,14,14,14,14};

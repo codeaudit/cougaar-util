@@ -74,10 +74,8 @@ public class TestDoubleBufferedList extends TestCase {
       assertEquals("A",it.next());
       assertEquals("B",it.next());
 
-      System.err.println(cname+" didn't cause CME");
       assertTrue(cname+" didn't cause CME", expectation);
     } catch (ConcurrentModificationException e) {
-      System.err.println(cname+" caused CME");
       assertTrue(cname+" caused CME", !expectation);
     }
   }
