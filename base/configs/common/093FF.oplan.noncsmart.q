@@ -39,7 +39,7 @@ OplanInfoQuery = \
 select DISTINCT OPERATION_NAME, \
    PRIORITY, \
    C0_DATE \
-FROM oplan OPLAN
+FROM lib_oplan OPLAN \
 WHERE OPLAN_ID = '093FF' 
 
 #Get Orgactivities
@@ -55,7 +55,7 @@ select DISTINCT ATTRIBUTE_NAME AS RELATION_NAME, \
     END_CDAY AS END_DAY, \
     OP.C0_DATE AS LAST_MODIFIED \
  FROM oplan_agent_attr ATTR, \
-      oplan OP \
+      lib_oplan OP \
  WHERE \
   ATTR.OPLAN_ID = '093FF' \
   AND OP.OPLAN_ID = '093FF' \
