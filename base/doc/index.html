@@ -60,7 +60,7 @@ repackaging and cleanup.
 excellent threading and synchronization package which forms the basis
 of <a href="http://gee.cs.oswego.edu/dl/concurrent/dist/docs/index.html">JSR-166</a>.
 </li>
-<li>ClusterIdentifier -- FIXME
+<li>ClusterIdentifier <b>-- FIXME</b>
 As part of this change, the CSMART configuration database has
 changed. We recommend reloading your database, following the CSMART
 install instructions. You may also update your database in-place,
@@ -69,9 +69,9 @@ csmart/data/database/scripts/mysql/sql/cluster-id-removal.sql
 Finally, at experiment load time, if CSMART still sees a ClusterIdentifier
 in a PropertyGroup, it will replace it with a MessageAddress. You will
 need to re-save your experiment though.</li>
-<li>AspectValue -- FIXME</li>
-<li>Planning split -- FIXME</li>
-<li>BindingSite -- FIXME</li>
+<li>AspectValue -- <b>FIXME</b></li>
+<li>Planning split -- <b>FIXME</b></li>
+<li>BindingSite -- <b>FIXME</b></li>
 <li>ComponentPlugin is now a simple extension of
 BlackboardClientComponent. As a result, users may not assume that
 getBindingSite() returns a PluginBindingSite. Plugins should use call
@@ -81,8 +81,7 @@ BindingSite. For simplicity, a script is provided in
 changes. </li>
 <li>A list of the hard-coded components that are loaded in all agents
 and node-agents has been documented in
-<a href="details/DefaultComponents.html"
->doc/details/DefaultComponents.html</a>.
+<a href="details/DefaultComponents.html">doc/details/DefaultComponents.html</a>.
 <li>Insertion points for the major components are now defined by
 public constants in the appropriate classes. For example, the
 insertion point for an Agent is
@@ -92,10 +91,12 @@ possible.</li>
 <li>Made multiple CSMART Changes. As usual, see the <a
 href="../csmart/doc/release-notes.txt">CSMART Release Notes</a> for details.
   <ul>
-    <li>Removed CSMART Domain - change your LDMDomains.ini as
-    necessary.</li>
-    <li>Dropped the ABC and Scalability societies and ABC
-    Impacts.</li>
+    <li>Removed various obsolete and unused pieces of code. This
+    includes the CSMART Domain (change your LDMDomains.ini as
+    necessary), the ABC Impacts and society, and the un-used multiple
+    trial support.</li>
+    <li>Replaced the 'Default Workspace.bin' workspace file with a
+    simple XML file.</li>
     <li>Changed to use SimpleAgent by default, rather than
     ClusterImpl, and updated to use MessageAddress instead of
     ClusterIdentifier. Reload your database to match.</li>
