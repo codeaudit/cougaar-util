@@ -1,3 +1,9 @@
+* 10.4
+OrgActivity is now an interface, implemented by OrgActivityImpl and 
+constructable using the new class OplanFactory.
+
+* 10.2
+
 * 10.0
 publishAdd, publishChange and publishRemove now return void rather
 than boolean.  Most users ignored the values anyway, so this change
