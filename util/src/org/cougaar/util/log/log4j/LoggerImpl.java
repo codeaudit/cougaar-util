@@ -41,9 +41,13 @@ class LoggerImpl extends LoggerAdapter
   public LoggerImpl(Object obj) {
     String s;
     if (obj instanceof Class) {
-      s = ((Class)obj).getName();
+      s = ((Class) obj).getName();
+    } else if (obj instanceof String) {
+      s = (String) obj;
+    } else if (obj != null) {
+      s = obj.getClass().getName();
     } else {
-      s = obj.toString();
+      s = "null";
     }
     cat = Category.getInstance(s);
   }
