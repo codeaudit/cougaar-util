@@ -57,6 +57,11 @@ implements Container, StateObject
    **/
   protected final ArrayList binderFactories = new ArrayList();
 
+  /**
+   * The ComponentDescriptions for loaded binder factories.
+   **/
+  protected final ArrayList binderFactoryDescriptions = new ArrayList();
+
   protected ContainerSupport() {
     // child service broker
     ServiceBroker csb = specifyChildServiceBroker();
@@ -134,6 +139,18 @@ implements Container, StateObject
 
   protected ServiceBroker getChildServiceBroker() {
     return childServiceBroker;
+  }
+
+  /** Return (or construct) a serviceBroker instance for 
+   * a particular child component.
+   * <p>The default is to ignore the child and return the value
+   * of getChildServiceBroker with no arguments.
+   * <p>This can be used to build per-child ServiceBroker instances
+   * as a simpler option than adding an additional high-priority wrapping binder.
+   * See also getChildContainerProxy.
+   **/
+  protected ServiceBroker getChildServiceBroker(Object child) {
+    return getChildServiceBroker();
   }
 
   protected BinderFactory createBinderFactory() {
@@ -567,8 +584,8 @@ implements Container, StateObject
       }
 
       if (b != null) {
-        BindingUtility.setBindingSite(b, getContainerProxy());
-        BindingUtility.setServices(b, getChildServiceBroker());
+        BindingUtility.setBindingSite(b, getChildContainerProxy(c));
+        BindingUtility.setServices(b, getChildServiceBroker(c));
         BindingUtility.initialize(b);
         // done
         return b;
@@ -585,6 +602,7 @@ implements Container, StateObject
     if (checkBinderFactory(cd)) {
       Component bfc = componentFactory.createComponent(cd);
       if (bfc instanceof BinderFactory) {
+        binderFactoryDescriptions.add(cd);
         return attachBinderFactory((BinderFactory)bfc);
       } else {
         throw new ComponentLoadFailure("Not a BinderFactory", cd);
@@ -607,7 +625,7 @@ implements Container, StateObject
       Collections.sort(binderFactories, BinderFactory.comparator);
     }
     return BindingUtility.activate(
-        c, getContainerProxy(), getChildServiceBroker());
+        c, getChildContainerProxy(c), getChildServiceBroker());
   }
 
   /** Specifies an object to use as the "parent" proxy object
@@ -615,9 +633,20 @@ implements Container, StateObject
    * This will be either be the Container itself (this) or a
    * simple proxy for the container so that BinderFactory instances
    * cannot downcast the object to get additional privileges.
+   * @note Most uses should use/override getChildContainerProxy instead.
    **/
   protected ContainerAPI getContainerProxy() {
     return new DefaultProxy();
+  }
+
+  /** Specifies an object to use as the "parent" proxy object
+   * for a particular object (generally an <em>unbound</em> component).
+   * This will be either be the Container itself (this) or a
+   * simple proxy for the container so that BinderFactory instances
+   * cannot downcast the object to get additional privileges.
+   **/
+  protected ContainerAPI getChildContainerProxy(Object o) {
+    return getContainerProxy();
   }
 
   /** Matching setter for getExternalComponentDescriptions **/
@@ -636,7 +665,8 @@ implements Container, StateObject
   protected ComponentDescriptions captureState() {
     synchronized (boundComponents) {
       int n = boundComponents.size();
-      List l = new ArrayList(n);
+      List l = new ArrayList(n + binderFactoryDescriptions.size());
+      l.addAll(binderFactoryDescriptions);
       for (int i = 0; i < n; i++) {
         BoundComponent bc = (BoundComponent) boundComponents.get(i);
         Object comp = bc.getComponent();
@@ -773,17 +803,24 @@ implements Container, StateObject
    * @return true iff the specified ComponentDescription should be loaded.
    **/
   protected boolean isSubComponentLoadable(Object o) {
-    String cpr = containmentPrefix;
-    int cprl = cpr.length();
-    
     ComponentDescription cd =
       ((o instanceof StateTuple) ?
-       (((StateTuple) o).getComponentDescription()) :
-       ((ComponentDescription) o));
-    String ip = cd.getInsertionPoint();
-    return (ip.startsWith(cpr) && // starts with the containment point+'.'
-            ip.indexOf(".", cprl+1) == -1 // no more '.'
-            );
+       (((StateTuple) o).getComponentDescription()) : ((ComponentDescription) o));
+    return isInsertionPointLoadable(cd.getInsertionPoint());
+  }
+
+  /** validate a child component's InsertionPoint.  Simpler but
+   * less flexible mechanism to isSubComponentLoadable.
+   * <p>The default behavior is to return true IFF the insertion point
+   * is a direct child of the container's containement prefix.
+   **/
+  protected boolean isInsertionPointLoadable(String ip) {
+    String cpr = containmentPrefix;
+    int cprl = cpr.length();
+    boolean r = (ip.startsWith(cpr) && // starts with the containment point+'.'
+                 ip.indexOf(".", cprl+1) == -1 // no more '.'
+                 );
+    return r;
   }
 
   /** Hook for loading all the high priority subcomponents.  The default implementation

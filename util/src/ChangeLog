@@ -1,3 +1,13 @@
+2003-08-29  Ray Tomlinson  <RTomlinson@bbn.com>
+
+	* org/cougaar/core/component/ContainerSupport.java:
+	Bug #3278 -- plugin binders and persistence
+	captureState did not include binder factories in the
+	ComponentDescriptions returned. The means that binder
+	factories are omitted after rehydration.
+	Keep track of the binder factories and include in
+	the value of captureState.
+
 2003-04-17  Michael Thome  <mthome@bbn.com>
 
 	* org/cougaar/util/ConfigFinder, .../jar/*

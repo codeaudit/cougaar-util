@@ -22,6 +22,7 @@
 package org.cougaar.util;
 
 import java.util.HashMap;
+import java.util.WeakHashMap;
 import java.lang.reflect.Method;
 import java.lang.reflect.Constructor;
 
@@ -32,7 +33,7 @@ import java.lang.reflect.Constructor;
 
 public final class Reflect {
   /** map of class->methods **/
-  private static final HashMap methodsCache = new HashMap(89);
+  private static final WeakHashMap methodsCache = new WeakHashMap(89);
 
   /** memoize class.getMethods(); **/
   public static Method[] getMethods(Class cl) {
@@ -63,7 +64,7 @@ public final class Reflect {
   }
          
 
-  private static final HashMap constructorCache = new HashMap(89);
+  private static final WeakHashMap constructorCache = new WeakHashMap(89);
 
   /** memoize class.getConstructors(); **/
   public static Constructor[] getConstructors(Class cl) {
@@ -113,9 +114,47 @@ public final class Reflect {
   }
 
   public static void main(String argv[]) {
-    Method m = getMethod(String.class, "hashCode", null);
-    System.out.println("Found "+m);
-    Constructor c = getConstructor(String.class, new Class[] {String.class});
-    System.out.println("Found "+c);
+    final int max = Integer.parseInt(argv[0]);
+
+    {
+      long t0 = System.currentTimeMillis();
+      Class clazz = String.class; 
+      for (int i = 0; i<max;i++) {
+        getMethods(clazz);
+      }
+      long t1 = System.currentTimeMillis();
+      System.out.println("Reflect.getMethods: "+(t1-t0));
+    }
+
+    {
+      long t0 = System.currentTimeMillis();
+      Class clazz = String.class; 
+      for (int i = 0; i<max;i++) {
+        clazz.getMethods();
+      }
+      long t1 = System.currentTimeMillis();
+      System.out.println("class.getMethods: "+(t1-t0));
+    }
+
+    {
+      long t0 = System.currentTimeMillis();
+      Class clazz = String.class; 
+      for (int i = 0; i<max;i++) {
+        getConstructors(clazz);
+      }
+      long t1 = System.currentTimeMillis();
+      System.out.println("Reflect.getConstructors: "+(t1-t0));
+    }
+
+    {
+      long t0 = System.currentTimeMillis();
+      Class clazz = String.class; 
+      for (int i = 0; i<max;i++) {
+        getConstructors(clazz);
+      }
+      long t1 = System.currentTimeMillis();
+      System.out.println("class.getConstructors: "+(t1-t0));
+    }
+
   }      
 }

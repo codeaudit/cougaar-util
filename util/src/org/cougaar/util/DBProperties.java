@@ -39,6 +39,9 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Properties;
 
+import org.cougaar.util.log.*;
+
+
 /**
  * This utility extends <code>java.util.Properties</code> by doing parameter
  * substitutions after loading a .q file. q files are cached, such that they
@@ -53,7 +56,9 @@ import java.util.Properties;
  * handler class names. Each handler class knows the name of the query
  * property that it uses.
  **/
-public class DBProperties extends java.util.Properties {
+public abstract class DBProperties extends java.util.Properties {
+  protected static final Logger log = Logging.getLogger(DBProperties.class);
+
   private String default_dbtype;
   private boolean debug = false;
   private String name;
@@ -211,6 +216,47 @@ public class DBProperties extends java.util.Properties {
     return dbp;
   }
 
+  private static DBProperties createDBProperties(String name, InputStream is)
+    throws IOException
+  {
+    InputStream i = new BufferedInputStream(is);
+    try {
+      return new Immutable(name, i);
+    } catch (RuntimeException re) {
+      log.error("CreateDBProperties exception", re);
+      throw re;
+    } catch (IOException ioe) {
+      log.error("CreateDBProperties exception", ioe);
+      throw ioe;
+    } finally {
+      i.close();
+    }
+  }
+
+  //
+  // constructors
+  //
+
+  protected DBProperties(DBProperties that) {
+    for (Enumeration props = that.propertyNames(); props.hasMoreElements(); ) {
+      String key = (String)props.nextElement();
+      super.setProperty(key, that.getProperty(key));
+    }
+    default_dbtype = that.getDefaultDatabase();
+    name = that.getName();
+  }
+
+  protected DBProperties(String name, InputStream i) throws IOException {
+    this.name = name;
+    load(i);
+    default_dbtype = getDBType(getProperty("database"));
+  }
+
+
+  //
+  // accessors
+  //
+
   /**
    * Add the queries from the given query file to this instance's collection.
    *
@@ -232,30 +278,20 @@ public class DBProperties extends java.util.Properties {
     InputStream i = new BufferedInputStream(ConfigFinder.getInstance(module).open(qfile));
     try {
       load(i);
+    } catch (RuntimeException re) {
+      log.error("addQueryFile exception", re);
+      throw re;
+    } catch (IOException ioe) {
+      log.error("addQueryFile exception", ioe);
+      throw ioe;
     } finally {
       i.close();
     }
   }
 
-  private static DBProperties createDBProperties(String name, InputStream is)
-    throws IOException
-  {
-    InputStream i = new BufferedInputStream(is);
-    try {
-      DBProperties result = new DBProperties(name);
-      result.load(i);
-      // The database property, case sensitive, must exist
-      // in the .q file. It's value is usually ${<db name from cougaar.rc>}
-      String dburl = result.getProperty("database");
-      if (dburl != null) result.setDefaultDatabase(dburl);
-      return result;
-    } finally {
-      i.close();
-    }
-  }
 
-  private DBProperties(String name) {
-    this.name = name;
+  public String getName() {
+    return name;
   }
 
   /**
@@ -268,6 +304,10 @@ public class DBProperties extends java.util.Properties {
    **/
   public void setDefaultDatabase(String dburl) {
     default_dbtype = getDBType(dburl);
+  }
+
+  public String getDefaultDatabase() {
+    return default_dbtype;
   }
 
   /**
@@ -283,8 +323,16 @@ public class DBProperties extends java.util.Properties {
    * Convert a db url into a database type string
    **/
   public String getDBType(String dburl) {
+    if (dburl == null) {
+      log.error("Missing DB URL!");
+      throw new IllegalArgumentException("Missing DB URL!");
+    }
     int ix1 = dburl.indexOf("jdbc:") + 5;
     int ix2 = dburl.indexOf(":", ix1);
+    if (ix1 < 0 || ix2 < 0) {
+      log.error("Malformed DB Url: " + dburl);
+      throw new IllegalArgumentException("Malformed DB URL: " + dburl);
+    }
     return dburl.substring(ix1, ix2);
   }
 
@@ -388,4 +436,150 @@ public class DBProperties extends java.util.Properties {
   public String toString() {
     return name;
   }
+
+  /** Return a locked copy of this DBProperties object.
+   **/
+  public abstract DBProperties lock();
+
+  /** Return an unlocked copy of this DBProperties object.
+   **/
+  public abstract DBProperties unlock();
+
+  public abstract boolean isLocked();
+
+  //
+  // instantiable classes
+  //
+
+  /** A mutable DBProperties class **/
+  private static class Mutable extends DBProperties {
+    public Mutable(DBProperties p) {
+      super(p);
+    }
+    public Object clone() {
+      return new Mutable(this);
+    }
+    public DBProperties lock() {
+      return new Immutable(this);
+    }
+    public DBProperties unlock() {
+      return new Mutable(this);
+    }
+    public boolean isLocked() {
+      return false;
+    }
+  }
+
+  /** An immutable variation of DBProperties **/
+  private static class Immutable extends DBProperties {
+    public Immutable(DBProperties p) {
+      super(p);
+      lockdown = true;
+    }
+    public Immutable(String name, InputStream i) throws IOException {
+      super(name, i);
+      lockdown = true;
+    }
+
+    private boolean lockdown = false;
+
+    public void load(InputStream isStream) throws IOException {
+      if (lockdown) {
+        log.error("Attempt to modify Immutable instance", new Throwable());
+        throw new IllegalArgumentException("Immutable DBProperties instance");
+      }
+      super.load(isStream);
+    }
+    public void clear() {
+      log.error("Attempt to modify Immutable instance", new Throwable());
+      throw new IllegalArgumentException("Immutable DBProperties instance");
+    }
+    public void putAll(Map m) {
+      log.error("Attempt to modify Immutable instance", new Throwable());
+      throw new IllegalArgumentException("Immutable DBProperties instance");
+    }
+    public Object remove(Object key) {
+      log.error("Attempt to modify Immutable instance", new Throwable());
+      throw new IllegalArgumentException("Immutable DBProperties instance");
+    }
+    public Object put(Object key, Object value) {
+      if (lockdown) {
+        log.error("Attempt to modify Immutable instance", new Throwable());
+        throw new IllegalArgumentException("Immutable DBProperties instance");
+      }
+      return super.put(key,value);
+    }      
+    public Object clone() {
+      return this;
+    }
+    public void setDefaultDatabase(String dburl) {
+      log.error("Attempt to modify Immutable instance", new Throwable());
+      throw new IllegalArgumentException("Immutable DBProperties instance");
+    }
+    public DBProperties lock() {
+      return this;
+    }
+    public DBProperties unlock() {
+      return new Mutable(this);
+    }
+    public boolean isLocked() {
+      return true;
+    }
+    public void addQueryFile(String qfile, String module) {
+      log.error("Attempt to modify Immutable instance", new Throwable());
+      throw new IllegalArgumentException("Immutable DBProperties instance");
+    }
+  }
+
+  //
+  // regression test - should convert to junit!
+  //
+
+  private static void gettest(String text, DBProperties ps) {
+    System.err.println(text+": get b = "+ps.getProperty("b"));
+  }
+  private static void settest(String text, DBProperties ps, String v) {
+    try {
+      System.err.print(text+": set b to "+v+": ");
+      ps.setProperty("b",v);
+      System.err.println("ok");
+    } catch (Exception e) {
+      System.err.println("failed");
+    }
+  }
+
+  public static void main(String[] arg) {
+    DBProperties a = null;
+    try {
+      FileInputStream i = new FileInputStream(arg[0]);
+      a = new Immutable("a",i);
+      i.close();
+    } catch (Exception e) {e.printStackTrace(); }
+
+    gettest("A1", a);
+    settest("A2", a, "99");
+    gettest("A3", a);
+   
+    a = a.unlock();
+    gettest("B1", a);
+    settest("B2", a, "99");
+    gettest("B3", a);
+
+    a = a.lock();
+    gettest("C1", a);
+    settest("C2", a, "42");
+    gettest("C3", a);
+  }
+
+  /* main on a file containing the line b = 2 should output:
+A1: get b = 2
+A2: set b to 99: failed
+A3: get b = 2
+B1: get b = 2
+B2: set b to 99: ok
+B3: get b = 99
+C1: get b = 99
+C2: set b to 42: failed
+C3: get b = 99
+  */
 }

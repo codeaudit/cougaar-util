@@ -135,6 +135,35 @@ implements Serializable
     return l;
   }
 
+  public String toString() {
+    List l;
+    StringBuffer buf = new StringBuffer();
+    buf.append("ComponentDescriptions[");
+    buf.append(cds.size());
+    buf.append("] {\n  HIGH[");
+    l = selectComponentDescriptions(
+                    ComponentDescription.PRIORITY_HIGH);
+    buf.append(l.size()).append("] ").append(l);
+    buf.append("\n  INTERNAL[");
+    l = selectComponentDescriptions(
+                    ComponentDescription.PRIORITY_INTERNAL);
+    buf.append(l.size()).append("] ").append(l);
+    buf.append("\n  BINDER[");
+    l = selectComponentDescriptions(
+                    ComponentDescription.PRIORITY_BINDER);
+    buf.append(l.size()).append("] ").append(l);
+    buf.append("\n  COMPONENT[");
+    l = selectComponentDescriptions(
+                    ComponentDescription.PRIORITY_COMPONENT);
+    buf.append(l.size()).append("] ").append(l);
+    buf.append("\n  LOW[");
+    l = selectComponentDescriptions(
+                    ComponentDescription.PRIORITY_LOW);
+    buf.append(l.size()).append("] ").append(l);
+    buf.append("\n}");
+    return buf.toString();
+  }
+
   /** 
    * A comparator which may be used for sorting a mixed set of
    * StateTuples and ComponentDescriptions by priority 

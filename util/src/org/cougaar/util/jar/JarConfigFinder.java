@@ -27,6 +27,7 @@
 package org.cougaar.util.jar;
 
 import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileOutputStream;
@@ -97,12 +98,18 @@ public class JarConfigFinder
   /** A directory to store files extracted from JAR files, so that we
    *  can return a File reference to the client.
    */
-  private File _jarFileCacheDirectory;
+  protected File _jarFileCacheDirectory;
 
   /** A directory to extract files from JAR files, before they are
    *  moved to the _jarFileCacheDirectory.
    */
-  private File _tmpDirectory;
+  protected File _tmpDirectory;
+
+  /** Parent directory to _tmpDirectory and _jarFileCacheDirectory,
+   * specified by getTmpBaseDirectoryName().  If null, we will
+   * use the system-defined tmp directory (see File.createTempFile).
+   **/
+  protected File _tmpBaseDirectory;
 
   private boolean _jarFilesOnly;
 
@@ -190,7 +197,7 @@ public class JarConfigFinder
    * Opens an InputStream to access the named file. The file is sought
    * in all the places specified in configPath.
    * @param aURL - The name of a file being searched
-   * @throws IOException if the resource cannot be found.
+   * @throws FileNotFoundException if the resource cannot be found.
    **/
   public InputStream open(String aURL)
     throws IOException {
@@ -202,7 +209,7 @@ public class JarConfigFinder
       getLogger().debug("Found:" + (aUrl != null ? aUrl.toString() : null));
     }
     if (aUrl == null) {
-      throw new IOException("Resource cannot be found: " + aURL);
+      throw new FileNotFoundException("Resource cannot be found: " + aURL);
     }
     else {
       // The resolveUrl() method checks that the
@@ -290,6 +297,32 @@ public class JarConfigFinder
       }
     }
 
+    if (theURL == null) {
+      if (getLogger().isDebugEnabled()) {
+	File f = new File(aFileName);
+	getLogger().debug("Looking up " + aFileName + " - Accept absolute path:"
+			  + acceptAbsoluteFileNames() + " - isAbsolutePath:" +
+			  f.isAbsolute() + " - Jar Files only:" + jarFilesOnly());
+      }
+      // The URL may be an absolute file name
+      if (acceptAbsoluteFileNames()) {
+	File f = new File(aFileName);
+	if (f.isAbsolute() && !jarFilesOnly()) {
+	  try {
+	    if (isValidUrl(f.toURL())) {
+	      addFileEntryToCache(f.getName(), f.toURL());
+	      // Is there a match?
+	      if (f.getPath().equals(aFileName)) {
+		theURL = f.toURL();
+	      }
+	    }
+	  } catch (Exception e) {
+	    getLogger().warn("Unable to get URL for " + f.getPath());
+	  }
+	}
+      }
+    }
+
     // Verify the integrity of the input stream.
     try {
       verifyInputStream(theURL);
@@ -322,24 +355,69 @@ public class JarConfigFinder
     }
   }
 
+  /** Return a pathname to use as the directory argument for File.createTempFile.
+   * to construct _tmpBaseDirectory.
+   * If null, then we'll use the system-defined tmp directory location
+   * The default implementation returns the value of the system property "org.cougaar.workspace"
+   * if defined, otherwise null.
+   */
+  protected String getTmpBaseDirectoryName() {
+    /*
+      // for instance, the SecureConfigFinder might define this as:
+    return System.getProperty("org.cougaar.workspace") + File.separator +
+      "security" + File.separator + 
+      "jarconfig" + File.separator +
+      System.getProperty("org.cougaar.node.name");
+    */
+    // by default, use /tmp or the equivalent
+    return System.getProperty("org.cougaar.workspace");
+  }
+
+  /** create a set of uniquely-named temporary directories for
+   * our use.
+   */
   protected void createJarFileCacheDirectory() {
     // Create temporary directory to store files
     try {
-      _jarFileCacheDirectory =
-	new File(System.getProperty("org.cougaar.workspace") +
-		 File.separator + "jarFileCache");
-      deleteDirectory(_jarFileCacheDirectory);
-      if (!_jarFileCacheDirectory.exists()) {
-	_jarFileCacheDirectory.mkdirs();
+      String base = getTmpBaseDirectoryName();
+      File baseF;
+      if (base == null) {
+        baseF = null;
+      } else {
+        baseF = new File(base);
+        if (!baseF.exists()) {
+          baseF.mkdirs();
+        }
       }
 
-      _tmpDirectory =
-	new File(System.getProperty("org.cougaar.workspace") +
-		 File.separator + "tmp");
-      deleteDirectory(_tmpDirectory);
-      if (!_tmpDirectory.exists()) {
-	_tmpDirectory.mkdirs();
+      // creates a regular ".lck" file.  We'll use the base name
+      // of the created file to create the directory (without the .lck suffix)
+      File fL = File.createTempFile("jarconfig", ".lck", baseF);
+      fL.deleteOnExit();      
+
+      // Now we create a base directory using the created temp file
+      // as a lock and a suggestion for a name
+      String tmpPath;
+      {
+        String tmp = fL.getCanonicalPath();
+        tmpPath = tmp.substring(0, tmp.length()-4); // trim off the ".lck"
       }
+
+      _tmpBaseDirectory = new File(tmpPath);
+      if (_tmpBaseDirectory.exists()) {
+        getLogger().warn("tmpBaseDirectory "+tmpPath+" already exists!");
+      }
+      _tmpBaseDirectory.mkdirs();
+      _tmpBaseDirectory.deleteOnExit();
+
+      _jarFileCacheDirectory = new File(tmpPath + File.separator + "jarFileCache");
+      _jarFileCacheDirectory.mkdirs();
+      _jarFileCacheDirectory.deleteOnExit();
+
+      _tmpDirectory = new File(tmpPath + File.separator + "tmp");
+      _tmpDirectory.mkdirs();
+      _tmpDirectory.deleteOnExit();
+
     }
     catch (Exception e) {
       getLogger().warn("Unable to create temporary directory", e);
@@ -456,7 +534,7 @@ public class JarConfigFinder
       try {
 	URL aURL = new URL(s);
 	addFileEntryToCache(entryName, aURL);
-	if (aFileName.equals(entryName)) {
+	if (entryName.equals(aFileName)) {
 	  theURL = aURL;
 	}
       }
@@ -536,18 +614,17 @@ public class JarConfigFinder
 	JarFile aJarFile = getJarFile(aFile);
 	if (aJarFile == null) {
 	  // This is not a Jar file, or the file could not be read
-	  if (!jarFilesOnly()) {
-	    if (acceptUnsignedFiles() && aFileName != null) {
-	      try {
+	  if (!jarFilesOnly() && aFileName != null) {
+	    try {
+	      if (isValidUrl(aFile.toURL())) {
 		addFileEntryToCache(aFile.getName(), aFile.toURL());
 		// Is there a match?
-		if (aFileName.equals(aFile.getName())) {
+		if (aFile.getPath().equals(aFileName)) {
 		  theURL = aFile.toURL();
 		}
 	      }
-	      catch (Exception e) {
-		getLogger().warn("Unable to get URL for " + aFile.getPath());
-	      }
+	    } catch (Exception e) {
+	      getLogger().warn("Unable to get URL for " + aFile.getPath());
 	    }
 	  }
 	}
@@ -595,25 +672,24 @@ public class JarConfigFinder
 	// Also try to find simple files in that directory
 	// (if allowed by the configuration)
 	if (!jarFilesOnly()) {
-	  if (acceptUnsignedFiles()) {
-	    File files[] = aFile.listFiles(new FileFilter() {
-		public boolean accept(File pathname) {
-		  return true;
-		}
-	      });
-	    for (int i = 0 ; i < files.length ; i++) {
-	      try {
-		File confFile = files[i];
-
+	  File files[] = aFile.listFiles(new FileFilter() {
+	      public boolean accept(File pathname) {
+		return true;
+	      }
+	    });
+	  for (int i = 0 ; i < files.length ; i++) {
+	    try {
+	      File confFile = files[i];
+	      if (isValidUrl(confFile.toURL())) {
 		addFileEntryToCache(confFile.getName(), confFile.toURL());
 		// Is there a match?
-		if (aFileName.equals(confFile.getName())) {
+		if (confFile.getPath().equals(aFileName)) {
 		  theURL = confFile.toURL();
 		}
 	      }
-	      catch (Exception e) {
-		getLogger().warn("Unable to get URL for " + aFile.getPath());
-	      }
+	    }
+	    catch (Exception e) {
+	      getLogger().warn("Unable to get URL for " + aFile.getPath());
 	    }
 	  }
 	}
@@ -644,18 +720,39 @@ public class JarConfigFinder
     }
     if (theURL == null) {
       // Process the given URL as a standard file
-      if (aFileName.equals(base.getFile())) {
+      if (base.getFile().equals(aFileName)) {
 	theURL = base;
       }
     }
     return theURL;
   }
 
-  protected boolean acceptUnsignedFiles() {
+  /**
+   * Determines if a simple configuration file can be loaded.
+   * When signed jar files are used, files that are not in signed jar files
+   * are not loaded. However, there might be exceptions to the rule and
+   * specific files may be authorized even if they are not signed.
+   * By default, the base JarConfigFinder always allows unsigned jar files.
+   *
+   * @param aUrl The URL of a configuration file
+   */
+  protected boolean isValidUrl(URL aUrl) {
     return true;
   }
 
+  /**
+   * Determines if configuration files must be stored in signed jar files.
+   *
+   * @return true if configuration files must be in signed jar files only
+   */
   protected boolean jarFilesOnly() {
     return _jarFilesOnly;
+  }
+
+  /**
+   * Determines if ConfigFinder client may specify absolute file names.
+   */
+  protected boolean acceptAbsoluteFileNames() {
+    return true;
   }
 }

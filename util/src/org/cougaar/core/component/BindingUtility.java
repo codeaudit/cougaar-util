@@ -55,13 +55,6 @@ public abstract class BindingUtility {
         return false;
       }
 
-      /*
-      // getMethod currently never returns null (it'll throw and exception instead)
-      if (m == null) {
-        return false;
-      }
-      */
-
       m.invoke(child, new Object[]{bindingSite});
       return true;
     } catch (Exception e) {
@@ -79,26 +72,16 @@ public abstract class BindingUtility {
       this.m = m; this.o = o; this.service = s; this.p = p;
     }
     void invoke() throws InvocationTargetException, IllegalAccessException {
-      // preset to null to catch evildoers
-      try {
-        Object[] args = new Object[] { null };
-        m.invoke(o, args);
-      } catch (Throwable t) {
-        logger.error("Component "+o+" service setter "+m+" fails on null argument", t);
-      }
+      // we shouldn't have been here if service is null.
+      assert service != null;
 
-      if (service != null) {    // no need to conditionalize once brokenMode goes away
-        Object[] args = new Object[] { service };
-        m.invoke(o, args);
-      }
+      Object[] args = new Object[] { service };
+      m.invoke(o, args);
     }
     void release(ServiceBroker b, Object child) {
       b.releaseService(child,p,service);
     }
   }
-
-  /** MIK: when true, allows loading of components which do not have all their services (bug 2714) **/
-  private static final boolean brokenMode = true;
 
   public static boolean setServices(Object child, ServiceBroker servicebroker) {
     Class childClass = child.getClass();
@@ -137,20 +120,17 @@ public abstract class BindingUtility {
                     try {
                       fm.invoke(fc, args);
                     } catch (Throwable e) {
-                      // ugly, but we don't want to pass it through.
-                      e.printStackTrace();
+                      logger.error("Component "+fc+" service setter "+fm+" fails on null argument", e);
                     }
                   }
                 };
               // Let's try getting the service...
               try {
                 Object service = servicebroker.getService(child, p, srl);
-                // this belongs here (not below) - brokenMode
-                if (!brokenMode) {if (service == null) throw new Throwable("No service for "+p);}
+                if (service == null) throw new Throwable("No service for "+p);
 
                 // remember the services to set for the second pass
                 ssi.add(new SetServiceInvocation(m,child,service,p));
-                if (brokenMode) {if (service == null) throw new Throwable("No service for "+p);}
               } catch (Throwable t) {
                 Object[] fail = new Object[] {p,t};
                 failures.add(fail);
@@ -162,7 +142,7 @@ public abstract class BindingUtility {
       }
 
       // call the setters if we haven't failed yet
-      if (brokenMode || failures.size() == 0) {
+      if (failures.size() == 0) {
         for (Iterator it = ssi.iterator(); it.hasNext(); ) {
           SetServiceInvocation setter = (SetServiceInvocation) it.next();
           try {
@@ -181,17 +161,13 @@ public abstract class BindingUtility {
           Object[] fail = (Object[]) it.next();
           logger.error("Component "+child+" Failed service "+fail[0], (Throwable) fail[1]);
         }
-        if (brokenMode)
-          logger.error("BrokenMode: Component "+child+" will be loaded anyway (see bug 2714)");
-        if (!brokenMode) {
-          // now release any services we had grabbed
-          for (Iterator it = ssi.iterator(); it.hasNext(); ) {
-            SetServiceInvocation setter = (SetServiceInvocation) it.next();
-            try {
-              setter.release(servicebroker, child);
-            } catch (Throwable t) {
-              logger.error("Failed to release service "+setter.p+" while backing out initialization of "+child, t);
-            }
+        // now release any services we had grabbed
+        for (Iterator it = ssi.iterator(); it.hasNext(); ) {
+          SetServiceInvocation setter = (SetServiceInvocation) it.next();
+          try {
+            setter.release(servicebroker, child);
+          } catch (Throwable t) {
+            logger.error("Failed to release service "+setter.p+" while backing out initialization of "+child, t);
           }
         }
       }
@@ -200,79 +176,12 @@ public abstract class BindingUtility {
       throw new ComponentLoadFailure("Couldn't get services", child, e);
     }
 
-    if (!brokenMode && failures.size() > 0) {
+    if (failures.size() > 0) {
       return false;
     } else {
       return true;
     }
   }
-
-  /*
-    // remove me when dropping brokenMode
-  public static boolean setServices(Object child, ServiceBroker servicebroker) {
-    Class childClass = child.getClass();
-    try {
-      Method[] methods = childClass.getMethods();
-
-      int l = methods.length;
-      for (int i=0; i<l; i++) { // look at all the methods
-        Method m = methods[i];
-        String s = m.getName();
-        if ("setBindingSite".equals(s)) continue;
-        Class[] params = m.getParameterTypes();
-        if (s.startsWith("set") &&
-            params.length == 1) {
-          Class p = params[0];
-          if (Service.class.isAssignableFrom(p)) {
-            String pname = p.getName();
-            {                     // trim the package off the classname
-              int dot = pname.lastIndexOf(".");
-              if (dot>-1) pname = pname.substring(dot+1);
-            }
-            
-            if (s.endsWith(pname)) { 
-              // ok: m is a "public setX(X)" method where X is a Service.
-              // create the revocation listener
-              final Method fm = m;
-              final Object fc = child;
-              ServiceRevokedListener srl = new ServiceRevokedListener() {
-                  public void serviceRevoked(ServiceRevokedEvent sre) {
-                    Object[] args = new Object[] { null };
-                    try {
-                      fm.invoke(fc, args);
-                    } catch (Throwable e) {
-                      // ugly, but we don't want to pass it through.
-                      e.printStackTrace();
-                    }
-                  }
-                };
-              // Let's try getting the service...
-              Object service = servicebroker.getService(child, p, srl);
-              Object[] args = new Object[] { null };
-              try {
-                if (service != null) {
-                  args[0] = service;
-                  m.invoke(child, args);
-                } else {
-                  // we should really fail the component load.
-                  m.invoke(child, args);
-                }
-              } catch (InvocationTargetException ite) {
-                if (service != null) {
-                  servicebroker.releaseService(child,p,service);
-                }
-                throw ite.getCause();
-              }
-            }
-          }
-        }
-      }
-    } catch (Throwable e) {
-      throw new ComponentLoadFailure("Couldn't set services", child, e);
-    }
-    return true;
-  }
-  */
 
   /** Run initialize on the child component if possible **/
   public static boolean initialize(Object child) { 
