@@ -97,6 +97,13 @@ The YP server code now supports multiple servers in the same VM.
 ServiceDiscovery now uses YP.  See servicediscovery/doc/yp-info.txt
 for more information.
 </li>
+<li>
+The method for obtaining the oplan has changed.  Each agent now obtains the 
+oplan and its org activities directly from the database.  The GetOplanPlugin 
+has been replaced by the OplanReaderPlugin and the GLSInitServlet has been 
+modified. The OplanEditServlet must be loaded at each agent in order
+to modify Org Activities.  This change should be transparent to most users.
+</li>
 </ul>
 
   <!-- COUGAAR 10.2 COUGAAR 10.2 COUGAAR 10.2 COUGAAR 10.2 COUGAAR 10.2 -->
