@@ -14,7 +14,7 @@ public final class RemoteALPServerImpl_Skel
 	new java.rmi.server.Operation("void reset()")
     };
     
-    private static final long interfaceHash = 2150617389876796038L;
+    private static final long interfaceHash = -8512868820359343529L;
     
     public java.rmi.server.Operation[] getOperations() {
 	return (java.rmi.server.Operation[]) operations.clone();
@@ -24,7 +24,7 @@ public final class RemoteALPServerImpl_Skel
 	throws java.lang.Exception
     {
 	if (opnum < 0) {
-	    if (hash == 4812093566473888825L) {
+	    if (hash == 5757402735857331319L) {
 		opnum = 0;
 	    } else if (hash == 7159991675886862877L) {
 		opnum = 1;

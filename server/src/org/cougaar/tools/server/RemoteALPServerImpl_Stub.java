@@ -15,7 +15,7 @@ public final class RemoteALPServerImpl_Stub
 	new java.rmi.server.Operation("void reset()")
     };
     
-    private static final long interfaceHash = 2150617389876796038L;
+    private static final long interfaceHash = -8512868820359343529L;
     
     private static final long serialVersionUID = 2;
     
@@ -62,7 +62,7 @@ public final class RemoteALPServerImpl_Stub
     {
 	try {
 	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_createNode_0, new java.lang.Object[] {$param_String_1, $param_Properties_2, $param_arrayOf_String_3, $param_RemoteOutputStream_4, $param_RemoteOutputStream_5}, 4812093566473888825L);
+		Object $result = ref.invoke(this, $method_createNode_0, new java.lang.Object[] {$param_String_1, $param_Properties_2, $param_arrayOf_String_3, $param_RemoteOutputStream_4, $param_RemoteOutputStream_5}, 5757402735857331319L);
 		return ((org.cougaar.tools.server.RemoteProcess) $result);
 	    } else {
 		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 0, interfaceHash);

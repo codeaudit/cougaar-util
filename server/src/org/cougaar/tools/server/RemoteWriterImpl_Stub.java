@@ -12,7 +12,7 @@ public final class RemoteWriterImpl_Stub
 	new java.rmi.server.Operation("void write(org.cougaar.tools.server.RemoteOutputStream.ByteArray)")
     };
     
-    private static final long interfaceHash = -3853296237394704472L;
+    private static final long interfaceHash = 4897579543281931711L;
     
     private static final long serialVersionUID = 2;
     
@@ -74,7 +74,7 @@ public final class RemoteWriterImpl_Stub
     {
 	try {
 	    if (useNewInvoke) {
-		ref.invoke(this, $method_write_1, new java.lang.Object[] {$param_RemoteOutputStream$ByteArray_1}, -7503023837992041611L);
+		ref.invoke(this, $method_write_1, new java.lang.Object[] {$param_RemoteOutputStream$ByteArray_1}, -229716213762784618L);
 	    } else {
 		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 1, interfaceHash);
 		try {

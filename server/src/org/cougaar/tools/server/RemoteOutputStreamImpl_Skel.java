@@ -11,7 +11,7 @@ public final class RemoteOutputStreamImpl_Skel
 	new java.rmi.server.Operation("void write(org.cougaar.tools.server.RemoteOutputStream.ByteArray)")
     };
     
-    private static final long interfaceHash = -3853296237394704472L;
+    private static final long interfaceHash = 4897579543281931711L;
     
     public java.rmi.server.Operation[] getOperations() {
 	return (java.rmi.server.Operation[]) operations.clone();
@@ -23,7 +23,7 @@ public final class RemoteOutputStreamImpl_Skel
 	if (opnum < 0) {
 	    if (hash == -4742752445160157748L) {
 		opnum = 0;
-	    } else if (hash == -7503023837992041611L) {
+	    } else if (hash == -229716213762784618L) {
 		opnum = 1;
 	    } else {
 		throw new java.rmi.UnmarshalException("invalid method hash");
