@@ -8,16 +8,15 @@
 
 <h2>Metric Keys</h2>
 
-<p>This section discusses the structure of the Metrics Keys name-space and
-defines common Keys. 
+<p>This section discusses the structure of the Metrics keys name-space
+and defines common keys.
 
-<p>Metrics are written into the 
-<A Href="MetricsUpdateService.html" Target="Contents">MetricsUpdateService</A> based on Key-Value
-pairs. While the Key itself is just a string, we impose a structure to
-help organize the information. Metric keys form a hierarchical name
-space that is loosely modeled after SNMP MIBs.  The value is a 
-<A Href="Metric.html" Target="Contents">Metric</A>,
-record with slots for value, credibility, time-stamp, units, etc. 
+<p>Metrics are written into the <a href="MetricsUpdateService.html"
+target="contents">MetricsUpdateService</a> as key-value pairs. While
+the key itself is just a string, we impose a structure to help
+organize the information, loosely modeled after SNMP MIBs.  The value
+is a <a href="Metric.html" target="contents">Metric</a>, a structured
+object with slots for value, credibility, time-stamp, units, etc.
 
 <p>At runtime, each Node has a store of Key-Value pairs. When the
 MetricsUpdaterService receives a new Key-Value pair, it looks up the
@@ -30,7 +29,7 @@ integration rules based on credibility and timestamps.
 <p>Normally, Key-Value pairs are not read from the Metrics Service, but
 are only processed by internal formulas. One debugging trick to view
 the effective value of a key is to the Path 
-<A Href="paths.html" Target="Contents">Integrater</A>, 
+<a href="paths.html" target="contents">Integrater</a>, 
 which takes a Key as a parameter and returns the effective metric.
 Currently, there is no way to list all the Keys available to a Node.
 

@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<html> <head>
+<title>Remote Agent Status servlet</title>
+</head>
+
+<body>
+
+<p>
+<table>
+  <caption align=bottom><i>Remote Agent Status Servlet</i></caption>
+  <tr><td>
+      <img src="gifs/RemoteStatusServlet.gif">
+  </td></tr>
+</table>
+
+<dl> 
+      <dt><b>Spoke To</b></dt>
+	<dd>number of seconds since this node has spoke to this agent. </dd>
+      <dt><b>Heard From</b></dt> 
+	<dd>number of seconds since something has heard from this
+	agent (includes other node via gossip)</dd>
+      <dt><b>Spoke Error</b> </dt> 
+      <dd> number of seconds since the last communication error</dd>
+      <dt><b>Queue</b> </dt> 
+	<dd>instantaneous queue length for messages waiting to be sent to
+	agent. (Includes messages in the process of being sent)</dd>
+      <dt><b>MsgTo</b> </dt> 
+      <dd>message per second from all agents on this node to agent</dd>
+      <dt><b>MsgFrom</b> </dt> 
+      <dd>messages per second from agent to any agent on this node</dd>
+      <dt><b>eMJIP</b> </dt> 
+      <dd> effective Million Java Instruction Per Second that a single
+	thread on the agent host.</dd>
+      <dt><b>mKbps</b> </dt> 
+      <dd>maximum kilobits per second for the network path between
+	this node and the agent</dd>
+      <dt><b>eKbps</b> </dt> 
+      <dd>expected kilobits per second for the network path between
+	this node and the agent</dd>
+    </dl>
+
+
+</body> </html>

@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+
+<html> <head>
+<title>Agent Load Servlet</title>
+</head>
+
+<body>
+
+<table>
+  <caption align=bottom><i>Agent Load Servlet</i></caption>
+  <tr><td>
+      <img src="gifs/AgentLoadServlet.gif">
+  </td></tr>
+</table>
+
+    <dl>
+      <dt><b>CPULoadAvg</b> </dt> 
+      <dd>Average number of thread
+      servicing the agent. For example, a load average of 2, means
+      that two threads were servicing the agent for the whole
+      averaging interval. This is unlikely and is a indicator that one
+      of the Agent's plugins is inappropriately holding onto a thread
+      during a sleep, or wait for I/O</dd>
+      <dt><b>CPULoadMJIPS</b> </dt> 
+      <dd>Average rate of CPU used servicing the agent. This is the integration 
+	load average * the effective cpu. </dd>
+      <dt><b>MsgIn</b></dt> 
+      <dd>Message Per Second from all agent to this agent</dd>
+      <dt><b>MsgOut</b></dt> 
+      <dd>Message Per Second from this agent to all other agents </dd>
+      <dt><b>BytesIn</b></dt> 
+      <dd>Bytes Per Second from all agent to this agent </dd>
+      <dt><b>BytesOut</b></dt> 
+      <dd>Bytes Per Second from this agent to all agent </dd>
+      <dt><b>PersistSize</b></dt> 
+      <dd>Size of the last Agent Persist </dd>
+    </dl>
+
+</body> </html>

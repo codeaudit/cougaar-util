@@ -1,0 +1,37 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+
+<html> <head>
+<title>Message Statistics Service</title>
+</head>
+
+<body>
+
+<p>
+<table>
+  <caption align=bottom><i>Message Statistics Servlet</i></caption>
+  <tr><td>
+      <img src="gifs/MessageStatisticsServlet.gif">
+  </td></tr>
+</table>
+<dl>
+  <dt><b>AvgQueueLength</b></dt> 
+      <dd>Average of the number of messages waiting on all Destination
+      Links. The average is calculated using a decaying average</dd>
+      <dt><b>Total Bytes</b></dt> 
+      <dd>Count of the number of bytes set from all agents on this
+	node. This statistic does not include inter-node messages,
+	which are not serialized</dd>
+      <dt><b>Total Count</b></dt> 
+      <dd>Count of Messages sent from all agents on this node. This
+	count includes both inter-node messages and intra-node messages</dd>
+      <dt><b>Message Length Histogram</b></dt> 
+      <dd>Count of Messages sent from all agents on this node,
+	organized by size. The bins are labeled by the max size in
+	the bin </dd>
+    </dl>
+
+<p>
+
+
+</body> </html>
