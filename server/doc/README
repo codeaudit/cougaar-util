@@ -149,8 +149,8 @@ The Node properties follow this format:
         to popup on your remote client's display.  This is true
         even if both the AppServer and client are on the same
         machine.
-    "env.SYSTEMROOT=PATH" is an example system environment 
-        variable that may be required by third-party jars.
+    "env.SYSTEMROOT=PATH" is an system environment 
+        variable that is required by database drivers on Windows machines.
     "env.env.*" to preserve a "-Denv.*" property (for example,
         "env.env.foo=bar" translates to "-Denv.foo=bar").
 

@@ -9,8 +9,9 @@
 #
 # Note that some symbols, such as "\", must be encoded ("\\")
 
-# On Windows machines the Oracle driver needs the "%SYSTEMROOT%" set
-#   to the windows install directory.
+# On Windows machines the database drivers need the "%SYSTEMROOT%" set
+#   to the windows install directory. On 2000 based machines
+#   must be edited, usually to C\:\\WINDOWS
 env.SYSTEMROOT=C\:\\WINNT
 
 # Set the Cougaar install path.
