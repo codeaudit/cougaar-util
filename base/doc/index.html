@@ -108,6 +108,23 @@ Console Node Info window.</li>
 href="../csmart/doc/release-notes.txt">notes</a> for details.</li>
 <li>CSMART: Allow arbitrary insertion points in Specific Insertion
 recipes. This solves bug 1387 mentioned in the errata document.</li>
+<li>
+The Bootstrapper now, by default, uses XURLClassLoader rather than
+BootstrapClassLoader.  XURLClassLoader is pretty much identical to 
+URLClassLoader except without the same serialization/RMI implications.
+Unlike BootstrapClassLoader, XURLClassLoader implements the
+recommended method of extending ClassLoaders (e.g. by extending
+findClass rather than loadClass).  This change brings Cougaar into
+closer compliance to standard java applications.  The most significant
+implication of this change is that CLASSPATH should include no Cougaar
+jars other than bootstrap.jar when using the bootstrapper - failure to
+follow this rule will result is various java reflection failures, due
+to mismatches between the system classloader and the application one.
+this change implements RFE 1434 (bug 1434) and fixes bug 1413.
+The old behavior can be invoked by specifying
+<em>-Dorg.cougaar.bootstrap.classloader.class=org.cougaar.bootstrap.BootstrapClassLoader</em>
+on the java command line.
+</li>
 </ul>
 
 <!-- COUGAAR 9.2.2 COUGAAR 9.2.2 COUGAAR 9.2.2 COUGAAR 9.2.2 COUGAAR 9.2.2 -->
