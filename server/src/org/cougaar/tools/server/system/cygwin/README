@@ -1,0 +1,114 @@
+
+Future home for Windows-cygwin system access utilities.
+
+Unfortunately, both Windows *and* cygwin are not POSIX compliant, 
+so working with them is a mess...
+
+For now I'm collecting these notes.  This testing was done
+on a _single_ WinNT machine, and may not be valid for other
+Windows OS and/or cygwin installations.
+
+
+
+It looks like "System.getProperties()" provides no hint that cygwin
+is running.  The "os.name" is "Windows NT".
+
+We could call some simple cygwin exec to check, e.g. exec("true"),
+and examine the error code, which should be "0".  This test could
+be done within the "SystemAccessFactory".
+
+
+
+The ProcessLauncher seems the same as the Linux one:
+  sh -c "echo $$; exec <java>"
+On the command line this requires "\$\$", but that's probably not
+neccessary from within the JVM's exec(..).
+
+The PID seems to be the PGID, *not* the "ps" PID.  More notes below
+in the ProcessStatusReader section...
+
+
+
+The JavaStackDumper the same as the Linux one:
+  kill -s SIGQUIT <pid>
+
+
+
+The ProcessStatusReader is fairly different.  The short listing
+can be invoked using command:
+  ps
+which returns a list like:
+--------------------------------------------------------------
+      PID    PPID    PGID     WINPID  TTY  UID    STIME COMMAND
+      768       1     768        768  con 1000 10:30:50 /usr/bin/bash
+      612     768     612        612  con 1000 10:32:05 /cygdrive/d/jdk1.3.1/bin/java
+      165       1     165        165  con 1000 10:32:05 /usr/bin/ps
+--------------------------------------------------------------
+
+As noted above, the "PGID=612" is the launcher's PID.  The above
+may be a bad example, since it was called from the command line
+instead of within a JVM exec(..).
+
+So far I've found the "PID" and "WINPID" to be identical.
+
+There seems to be no way to customize this output, or to trim off 
+the "PID PPID .." header.
+
+A full listing can be issued with:
+  ps -Wa
+which returns a list like:
+--------------------------------------------------------------
+      PID    PPID    PGID     WINPID  TTY  UID    STIME COMMAND
+        2       0       0          2    ?    0 15:24:48 *** unknown ***
+       20       0       0         20    ?    0   Oct  9 \SystemRoot\System32\smss.exe
+       34       0       0         34    ?    0   Oct  9 \??\C:\WINNT\system32\winlogon.exe
+       40       0       0         40    ?    0   Oct  9 C:\WINNT\system32\services.exe
+       43       0       0         43    ?    0   Oct  9 C:\WINNT\system32\lsass.exe
+       68       0       0         68    ?    0   Oct  9 C:\WINNT\system32\spoolss.exe
+       89       0       0         89    ?    0   Oct  9 C:\WINNT\System32\Hummbird\inetd32.exe
+       94       0       0         94    ?    0   Oct  9 C:\WINNT\System32\mgasc.exe
+       83       0       0         83    ?    0   Oct  9 C:\PROGRA~1\Navnt\navapsvc.exe
+      108       0       0        108    ?    0   Oct  9 C:\WINNT\System32\nddeagnt.exe
+       96       0       0         96    ?    0   Oct  9 C:\WINNT\Explorer.exe
+      117       0       0        117    ?    0   Oct  9 C:\PROGRA~1\Navnt\npssvc.exe
+      123       0       0        123    ?    0   Oct  9 C:\WINNT\System32\LOCATOR.EXE
+      133       0       0        133    ?    0   Oct  9 C:\WINNT\system32\RpcSs.exe
+      136       0       0        136    ?    0   Oct  9 C:\WINNT\system32\tcpsvcs.exe
+      148       0       0        148    ?    0   Oct  9 c:\winnt\system32\pstores.exe
+      151       0       0        151    ?    0   Oct  9 C:\WINNT\system32\MSTask.exe
+      216       0       0        216    ?    0   Oct  9 C:\PROGRA~1\Navnt\alertsvc.exe
+      119       0       0        119    ?    0   Oct  9 C:\WINNT\System32\SysTray.Exe
+      211       0       0        211    ?    0   Oct  9 C:\WINNT\System32\loadwc.exe
+      218       0       0        218    ?    0   Oct  9 C:\Program Files\Navnt\navapw32.exe
+      248       0       0        248    ?    0   Oct  9 D:\Abria Merlin\MySQL\bin\mysqld-nt.exe
+      259       0       0        259    ?    0   Oct  9 C:\WINNT\System32\taskmgr.exe
+      185       0       0        185    ?    0   Oct 10 C:\WINNT\System32\ddhelp.exe
+      281       0       0        281    ?    0   Oct 10 C:\Program Files\Microsoft Office\Office\POWERPNT.EXE
+      143       0       0        143    ?    0   Oct 11 C:\Program Files\Exceed.nt\exceed.exe
+      494       0       0        494    ?    0 13:17:26 C:\Program Files\Qualcomm\Eudora Mail\Eudora.exe
+      670       0       0        670    ?    0 13:40:43 D:\emacs\emacs-20.7\bin\emacs.exe
+      370       0       0        370    ?    0 10:28:35 C:\PROGRA~1\Plus!\MICROS~1\iexplore.exe
+      241       0       0        241    ?    0 10:30:50 C:\WINNT\System32\CMD.exe
+      768       1     768        768  con 1000 10:30:50 /usr/bin/bash
+      497       0       0        497    ?    0 10:31:32 C:\WINNT\system32\CMD.EXE
+      612     768     612        612  con 1000 10:32:05 /cygdrive/d/jdk1.3.1/bin/java
+      630       0       0        630    ?    0 10:32:05 d:\jdk1.3.1\bin\java.exe
+      165       1     165        165  con 1000 10:32:05 /usr/bin/ps
+--------------------------------------------------------------
+
+STIME formatting is awkward: it's either "MMM d" or "HH:MM:SS".
+Hopefully there's not yet another format for prior-year processes
+(e.g. "Oct 2001").
+
+All Windows processes have:
+  PPID = 0 
+  TTY = ?
+  UID = 0  
+  COMMAND = Mix of <drive:><etc with "\" slashes> and others...
+
+In contrast, cygwin processes have:
+  PPID = Usually a reference to a PPID, except for some "1"s.
+  TTY = "con"
+  UID = 1000
+  COMMAND = Unix-style "/" separated path
+
