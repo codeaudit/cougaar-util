@@ -6,7 +6,7 @@
 
 <Policies>
 
- <Policy name="AmmunitionInventoryPolicy" type="org.cougaar.glm.plugins.inventory.InventoryPolicy">
+ <Policy name="AmmunitionInventoryPolicy" type="org.cougaar.domain.glm.plugins.inventory.InventoryPolicy">
     <RuleParam name="ResourceType">
       	<String value ="Ammunition">
 	</String>

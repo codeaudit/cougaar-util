@@ -6,7 +6,7 @@
 
 <Policies>
 
- <Policy name="ClassISubsistenceInventoryPolicy" type="org.cougaar.glm.plugins.inventory.InventoryPolicy">
+ <Policy name="ClassISubsistenceInventoryPolicy" type="org.cougaar.domain.glm.plugins.inventory.InventoryPolicy">
     <RuleParam name="ResourceType">
       	<String value ="ClassISubsistence">
 	</String>
