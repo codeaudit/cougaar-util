@@ -21,27 +21,25 @@ Additional PSPs loaded by PSP Launcher
        Keep the old "alpine/demo" paths, even though these are now core.
   -->
   <element type="org.cougaar.lib.planserver.NamedPSP">
-    <Classname>org.cougaar.domain.mlm.ui.psp.naming.PSP_YPDemo</Classname>
-    <PSPName>ul/demo/YPDEMO.PSP</PSPName>
-  </element>
-
-  <element type="org.cougaar.lib.planserver.NamedPSP">
-    <Classname>org.cougaar.lib.planserver.psp.PSP_EditPSPBlackBoard</Classname>
-    <PSPName>alpine/demo/EBB.PSP</PSPName>
-  </element>
-  <element type="org.cougaar.lib.planserver.NamedPSP">
-    <Classname>org.cougaar.lib.planserver.psp.PSP_KeepAlive</Classname>
-    <PSPName>alpine/demo/KEEPALIVE.PSP</PSPName>
+    <Classname>org.cougaar.lib.planserver.psp.PSP_PlanView</Classname>
+    <PSPName>alpine/demo/TASKS.PSP</PSPName>
+    <Comment>View the contents of the Blackboard</Comment>
   </element>
   <element type="org.cougaar.lib.planserver.NamedPSP">
     <Classname>org.cougaar.lib.planserver.psp.PSP_LocateClusters</Classname>
     <PSPName>alpine/demo/CLUSTERS.PSP</PSPName>
+    <Comment>List Agents in the society</Comment>
   </element>
   <element type="org.cougaar.lib.planserver.NamedPSP">
-    <Classname>org.cougaar.lib.planserver.psp.PSP_PlanView</Classname>
-    <PSPName>alpine/demo/TASKS.PSP</PSPName>
+    <Classname>org.cougaar.lib.planserver.psp.PSP_PlugInLoader</Classname>
+    <PSPName>alpine/demo/PLUGIN_LOADER.PSP</PSPName>
+    <Comment>Dynamically load a new Plugin</Comment>
   </element>
-  <!-- Other core PSP: -->
+  <element type="org.cougaar.lib.planserver.NamedPSP">
+    <Classname>org.cougaar.lib.planserver.psp.PSP_AgentMover</Classname>
+    <PSPName>alpine/demo/AGENT_MOVER.PSP</PSPName>
+    <Comment>Request an Agent to move to another Node</Comment>
+  </element>
   <element type="org.cougaar.lib.planserver.NamedPSP">
     <Classname>org.cougaar.lib.planserver.psp.PSP_ClusterMetrics</Classname>
     <PSPName>alpine/demo/CLUSTER_METRICS.PSP</PSPName>
@@ -51,14 +49,19 @@ Additional PSPs loaded by PSP Launcher
     <PSPName>alpine/demo/SOCIETY_METRICS.PSP</PSPName>
   </element>
   <element type="org.cougaar.lib.planserver.NamedPSP">
-    <Classname>org.cougaar.lib.planserver.psp.PSP_PlugInLoader</Classname>
-    <PSPName>alpine/demo/PLUGIN_LOADER.PSP</PSPName>
+    <Classname>org.cougaar.lib.planserver.psp.PSP_EditPSPBlackBoard</Classname>
+    <PSPName>alpine/demo/EBB.PSP</PSPName>
   </element>
   <element type="org.cougaar.lib.planserver.NamedPSP">
-    <Classname>mil.darpa.log.alpine.blackjack.plugins.PSP_FeedingPolicy</Classname>
-    <PSPName>FeedingPolicy.PSP</PSPName>
+    <Classname>org.cougaar.lib.planserver.psp.PSP_KeepAlive</Classname>
+    <PSPName>alpine/demo/KEEPALIVE.PSP</PSPName>
   </element>
+
   <!-- ALPINE PSPs -->
+  <element type="org.cougaar.lib.planserver.NamedPSP">
+    <Classname>org.cougaar.domain.mlm.ui.psp.naming.PSP_YPDemo</Classname>
+    <PSPName>ul/demo/YPDEMO.PSP</PSPName>
+  </element>
   <element type="org.cougaar.lib.planserver.NamedPSP">
     <Classname>org.cougaar.domain.mlm.ui.psp.xmlservice.PSP_LogPlanProvider</Classname>
     <PSPName>alpine/demo/DEBUG.PSP</PSPName>
@@ -226,6 +229,10 @@ Additional PSPs loaded by PSP Launcher
   </element>
 
 <!-- BEGIN BLACKJACK PSPs -->
+  <element type="org.cougaar.lib.planserver.NamedPSP">
+    <Classname>mil.darpa.log.alpine.blackjack.plugins.PSP_FeedingPolicy</Classname>
+    <PSPName>FeedingPolicy.PSP</PSPName>
+  </element>
 	<element type="org.cougaar.lib.planserver.NamedPSP">
     <Classname>mil.darpa.log.alpine.blackjack.plugins.PSP_BlackJackDemand</Classname>
     <PSPName>BlackJackDemand.PSP</PSPName>
