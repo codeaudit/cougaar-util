@@ -181,7 +181,29 @@ through the PersistenceControlPlugin.
 setting the SYSTEMROOT environment variable for database driver support.
 See server/data/win-server-sample.props for details.
 </li>
-<li> Added and fixed <a href="ReleaseNotes/9.2/compload_info.txt">ContainmentService and LoadServlet</a>.</li>
+<li> Added and fixed <a
+href="ReleaseNotes/9.2/compload_info.txt">ContainmentService and
+LoadServlet</a>.</li>
+<li><a href="../csmart/doc/index.html">CSMART</a> now supports running arbitrary Cougaar societies,
+not just those in the CSMART configuration database. All Cougaar
+developers can now use CSMART to configure, control, and monitor their
+societies. You may now create a CSMART "experiment" by loading the
+definition from old-style INI files (allowing you to run all tutorial
+examples, minitestconfig, etc), or by creating it directly from the
+CSMART User Interface.</li>
+<li>CSMART also includes support for adding components to a Node
+Agent, and adding components other than Plugins or Binders to
+Agents.</li>
+<li>The process for loading the CSMART configuration database has
+changed. For details, see <a
+href="../csmart/doc/InstallAndTest.html">the CSMART Install
+instructions</a>.</li>
+<li>Finally, there are a few known issues in this release. These
+include occasional JVM errors that make use of the DataGrabber
+impossible, noticable performance problems in CSMART, and bugs in
+CSMART Agent recipes and Society Monitor. All of these will be
+addressed in a patch release of Cougaar shortly. As always, see the
+<a href="http://www.cougaar.org/bugs">Cougaar Bugzilla site</a> for details on bugs.</li>
 </ul>
 
 
@@ -731,10 +753,9 @@ General Development&nbsp;</h3>
 Cougaar is compiled and tested using the 1.4 release of JDK. 
 We recommend that users use this release. 
 
-Cougaar uses the following Java extensions that are not part of the 
+Cougaar uses the JSSE Java extension, which now comes with the 
 default JDK 1.4 installation. 
-These packages should be obtained and installed 
-according to the instructions accompanying them:
+For detail, see:
 <ul>
 <li>
 <a href="http://java.sun.com/products/jsse/">Java Secure Socket Extension
@@ -768,8 +789,6 @@ through cougaar-developers@cougaar.org. Bug and system-enhancement reports
 can be submitted through the <a href="http://www.cougaar.org">COUGAAR</a>
 website.&nbsp;
 
-
-
 </td>
 </tr>
 
@@ -780,5 +799,3 @@ website.&nbsp;
 
 </body>
 </html>
-
-
