@@ -13,7 +13,7 @@ package org.cougaar.lib.contract.lang.parser;
 import java.io.*;
 import java.util.*;
 
-import com.ibm.xml.parsers.*;
+import org.apache.xerces.parsers.DOMParser;
 
 import org.cougaar.lib.contract.lang.*;
 
