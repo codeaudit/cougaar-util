@@ -26,8 +26,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /** Utility for reading MSWindows-style .ini files.
  **/
@@ -44,23 +45,23 @@ public class INIParser {
   public void setCommentChar(char c) { commentChar = c; }
 
   public static class SlotHolder {
-    /** vector of Slot **/
-    private Vector slots = new Vector();
-    public Vector getSlots() { return slots; }
-    public void addSlot(Slot s) { slots.addElement(s); }
+    /** List<Slot> **/
+    private List slots = new ArrayList(5);
+    public List getSlots() { return slots; }
+    public void addSlot(Slot s) { slots.add(s); }
     public Slot getSlot(String name) {
       int ix = slots.indexOf(name);
       if (ix < 0)
 	return null;
-      return (Slot) slots.elementAt(ix);
+      return (Slot) slots.get(ix);
     }
   }
 
   public static class Group extends SlotHolder {
-    private Vector sections = new Vector();
+    private List sections = new ArrayList(5);
 
-    public Vector getSections() { return sections; }
-    public void addSection(Section s) { sections.addElement(s); }
+    public List getSections() { return sections; }
+    public void addSection(Section s) { sections.add(s); }
   }
 
   public static class Section extends SlotHolder {
@@ -68,10 +69,10 @@ public class INIParser {
     private String name = null;
     public String getName() { return name; }
     
-    /** Vector of String **/
-    private Vector parameters = new Vector();
-    public Vector getParameters() { return parameters; }
-    public void addParameter(String p) { parameters.addElement(p); }
+    /** List<String> **/
+    private List parameters = new ArrayList();
+    public List getParameters() { return parameters; }
+    public void addParameter(String p) { parameters.add(p); }
 
     public Section(String name) { this.name = name; }
 
@@ -82,14 +83,14 @@ public class INIParser {
     private String name;
     public String getName() { return name; }
     
-    private Vector values = new Vector();
-    public Vector getValues() { return values; }
+    private List values = new ArrayList(1);
+    public List getValues() { return values; }
     public String getValue() {
       if (values.size() < 1) return null;
-      return (String) values.elementAt(0);
+      return (String) values.get(0);
     }
-    public void setValues(Vector v) { values = v; }
-    public void addValue(String v) { values.addElement(v); }
+    public void setValues(List v) { values = v; }
+    public void addValue(String v) { values.add(v); }
 
     public Slot(String name) { this.name = name; }
     public String toString() { return "Slot "+name; }
@@ -149,9 +150,8 @@ public class INIParser {
     
     Group g = runParser(br);
     if (g != null) {
-      Enumeration sections = g.getSections().elements();
-      while (sections.hasMoreElements()) {
-        Section s = (Section) sections.nextElement();
+      for (Iterator it = g.getSections().iterator(); it.hasNext();) {
+        Section s = (Section) it.next();
         if (section.equals(s.getName())) {
           return s;
         }
@@ -201,15 +201,15 @@ public class INIParser {
         j = line.indexOf(']');
         String stuff = line.substring(1, j).trim();
 
-        Vector v = StringUtility.explode(stuff);
+        String[] v = stuff.split("\\s*");
           
-        if (v.size() < 1) {
+        if (v.length < 1) {
           throw new RuntimeException("Empty Section at line "+ln);
         }
 
-        section = new Section((String) v.elementAt(0));
-        for (i=1; i<v.size(); i++) {
-          section.addParameter((String) v.elementAt(i));
+        section = new Section(v[0]);
+        for (i=1; i<v.length; i++) {
+          section.addParameter(v[i]);
         }
 
         g.addSection(section);
@@ -217,7 +217,7 @@ public class INIParser {
         // a param line
 
         String name = line.substring(0, j).trim();
-        Vector v = StringUtility.parseCSV(line, j+1);
+        List v = CSVUtility.parseToList(line.substring(j+1));
           
 	Slot slot = new Slot(name);
 	slot.setValues(v);

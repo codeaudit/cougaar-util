@@ -1606,6 +1606,7 @@ public class DBConnectionPool {
           }
           return d;
 	}
+        /** @deprecated **/
 	public java.math.BigDecimal getBigDecimal(int arg0, int arg1) throws java.sql.SQLException {
           try {
             return theCallableStatement.getBigDecimal(arg0, arg1); 
