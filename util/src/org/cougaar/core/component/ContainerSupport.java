@@ -358,13 +358,10 @@ implements Container, StateObject
           }
           BoundComponent bc = (BoundComponent) oi;
           Object bcc = bc.getComponent();
-          if (bcc instanceof ComponentDescription) {
-            ComponentDescription bccd = (ComponentDescription) bcc;
-            if (cd.equals(bcc)) {
-              // already loaded
-              return false;
-            }
-          }
+	  if (cd.equals(bcc)) {
+	    // already loaded
+	    return false;
+	  }
         }
         // FIXME should add within lock to prevent duplicates
       }
