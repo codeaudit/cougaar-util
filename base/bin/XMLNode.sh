@@ -21,40 +21,106 @@
 
 
 #
-# Sample script to run a Node from an XML file.
-# First argument is the name of the society XML file to be
-# found on your config_path.
-# Second argument is the name of the Node to run.
+# Node runs a cougaar society node from an xml config file
+# usage:  XMLNode [-v] [-preoptions ...] society.xml Nodename[.ini] [-postoptions ...]
+#   -v  outputs debugging information to stdout during the script's execution
+#   -preoptions are passed as VM arguments, generally -D args, but must start with "-"
+#   society.xml  The name of the society xml spec file.
+#   Nodename[.ini] The name of the Node to run.  the ".ini" suffix is tolerated but discouraged.
+#   -postoptions are passed as Node arguments (e.g. after the node classname) and may be of
+#      any form understood by the Node class
+# 
+# The environment variable $COUGAAR_INSTALL_PATH should be set to the installed location
+# of Cougaar if not set, the script will check $CIP and then will attempt to 
+# guess based on where the Node script is located.
 #
 
-# Environment variables
-# COUGAAR_INSTALL_PATH = the head of the alp install.
-# COUGAAR3RDPARTY = a directory containing 3rd party jar files
-#
-# COUGAAR bootstrapping classpath will be:
-#  $COUGAAR_DEV_PATH	if defined
-#  $COUGAAR_INSTALL_PATH/lib/core.jar
-#
-# once running, jar files will be searched for in (in order):
-#  -Dorg.cougaar.class.path 	like classpath
-#  $CLASSPATH		(alp bootstrapping path from above)
-#  $COUGAAR_INSTALL_PATH/lib/*
-#  $COUGAAR_INSTALL_PATH/plugins/*
-#  -Dorg.cougaar.system.path=$COUGAAR3RDPARTY
-#  $COUGAAR_INSTALL_PATH/sys/*
-#
+# figure out COUGAAR_INSTALL_PATH
+scriptname=`basename $0`
+if [ -z "$COUGAAR_INSTALL_PATH" ]; then
+    if [ "$CIP" ]; then
+	export COUGAAR_INSTALL_PATH="$CIP";
+    else
+	s=`echo "$0" | sed -e "s,/bin/${scriptname},,"`
+	if [ x$s != x ] ; then
+	    echo "Warning: Defaulting COUGAAR_INSTALL_PATH to '$s'!";
+	    export COUGAAR_INSTALL_PATH=$s
+	else
+	    echo "Error: Could not find COUGAAR_INSTALL_PATH!";
+	    exit;
+	fi
+    fi
+fi
 
-source $COUGAAR_INSTALL_PATH/bin/setlibpath.sh
-source $COUGAAR_INSTALL_PATH/bin/setarguments.sh
+# -v for verbose mode
+verbose=
 
-societyfile="$1"
-shift
-node="$1"
-shift
-rest="$*"
+# deal with command-line arguments
+# commandline arguments before the nodename
+preargs=
+# commandline arguments after the nodename
+postargs=
+# the nodename is defined to be the first name without a "-" prefix
+nodename=
+socname=
 
-args="$rest"
-# arguments to adjust (defaults are given)
+while [ x"$1" != x ]; do
+  case $1 in
+    -v) verbose=1
+	shift
+	continue;;
+    -*) preargs="$preargs $1"
+	shift
+	continue;;
+    *)  socname = "$1"
+        shift
+        nodename=`echo $1 | sed 's/.ini\$//'`
+	shift
+	break;;
+  esac
+done
+# anything leftover is postargs
+postargs="$*"
+
+if [ x"$socname" == x ] ; then
+    echo "Warning: default society configuration name to \"society.xml\"";
+    socname="society.xml"
+fi
+if [ x"$nodename" == x ]; then
+    echo "Warning: defaulting Nodename to \"Node\"";
+    nodename="Node"
+fi
+
+# figure out workspace
+if [ -z "$COUGAAR_WORKSPACE" ]; then
+    export COUGAAR_WORKSPACE="$COUGAAR_INSTALL_PATH/workspace";
+    if [ $verbose ]; then echo "Defaulting COUGAAR_WORKSPACE to $COUGAAR_WORKSPACE"; fi
+fi
+
+
+# This is a minimal classpath for booting - usually only bootstrap.jar is required
+jars="$COUGAAR_INSTALL_PATH/lib/bootstrap.jar"
+
+# domains are now usually defined by the config file LDMDomains.ini.
+# But you may still use properties if you wish.
+# eg:
+# MYDOMAINS="-Dorg.cougaar.domain.alp=org.cougaar.glm.GLMDomain"
+
+
+# Cougaar Arguments: set up the cougaar application
+cargs="-Dorg.cougaar.install.path=$COUGAAR_INSTALL_PATH \
+-Dorg.cougaar.workspace=$COUGAAR_WORKSPACE";
+if [ -n "$MYDOMAINS" ]; then
+    cargs="$cargs $MYDOMAINS";
+fi
+
+# add your cougaar options here (or on the command line):
+# To quiet the complainingLP:
+# -Dorg.cougaar.planning.ldm.lps.ComplainingLP.level=0
+coptions="-Dorg.cougaar.core.agent.startTime=08/10/2005"
+
+# vm arguments to adjust (defaults are given).  You can tune the VM performance
+# by fooling with these values... or you can render your society unrunnable.
 # -Xmx64m	      # max java heap
 # -Xms3m	      # min (initial) java heap
 # -Xmaxf0.6       # max heap free percent
@@ -62,33 +128,40 @@ args="$rest"
 # -Xmaxe4m        # max heap expansion increment
 # -Xmine1m	      # min heap expansion increment
 # -Xoss400k       # per-thread *java* stack size
-MYMEMORY="-Xmx768m -Xms64m -Xmaxf0.9 -Xminf0.1 -Xoss128k"
-#set MYMEMORY="-Xmx300m -Xms100m"
+vmargs="-Xmx768m -Xms64m -Xoss256k"
 
-if [ "$OS" = "Linux" ]; then
-    # set some system runtime limits
-    if [ "$SHELL" = "/bin/bash" ]; then
-       ulimit -s 16384 #up from 8m
-       ulimit -c 0   #down from 1g
-    fi
+# environment arguments - e.g. set timezone to GMT to avoid confusion
+eargs="-Duser.timezone=GMT";
 
-    if [ "$SHELL" = "/bin/tcsh" ]; then
-       limit stacksize 16m    # up from 8m
-       limit coredumpsize 0   #down from 1g
-    fi
-    #turn this on to enable inprise JIT
-    #setenv JAVA_COMPILER javacomp
-fi
+# Specify the name of the node to run.
+nodeargs="-Dorg.cougaar.node.name=$nodename"
 
-# Use the other version of this to validate the society XML schema - MAY BE SLOW!
+# extend the bootclasspath with cougaar's persistence support
+bootargs="-Xbootclasspath/p:${COUGAAR_INSTALL_PATH}/lib/javaiopatch.jar"
+
+# name of the bootstrapper class
+bootclass="org.cougaar.bootstrap.Bootstrapper"
+
+# name of the node class
+nodeclass="org.cougaar.core.node.Node"
+
+# XML init arguments
+#uncomment this to turn on validation
 #xmlvalidate="-Dorg.cougaar.core.node.validate=true"
 xmlvalidate=""
+xmlargs="-Dorg.cougaar.core.node.InitializationComponent=XML -Dorg.cougaar.society.file=$societyfile $xmlvalidate"
 
-javaargs="$MYPROPERTIES $MYMEMORY -Dorg.cougaar.node.name=$node -Dorg.cougaar.core.node.InitializationComponent=XML -Dorg.cougaar.society.file=$societyfile $xmlvalidate -classpath $LIBPATHS $DEVP $BOOTSTRAPPER $MYCLASSES"
-
-if [ "$COUGAAR_DEV_PATH" != "" ]; then
-    echo java $javaargs $args
-fi
-
-# exec instead of eval
-exec java $javaargs $args
+allargs="${bootargs} \
+${vmargs} \
+${eargs} \
+${cargs} \
+${preargs} \
+${nodeargs} \
+${coptions} \
+-classpath $jars \
+$xmlargs \
+${bootclass} ${nodeclass} \
+${postargs}"
+    
+if [ $verbose ]; then echo "java $allargs"; fi
+exec java $allargs
