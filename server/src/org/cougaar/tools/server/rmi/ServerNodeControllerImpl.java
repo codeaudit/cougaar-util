@@ -345,6 +345,10 @@ implements ServerNodeController {
       extNode = null;
       if (sysProc != null) {
         sysProc.destroy();
+        try {
+          sysProc.waitFor();
+        } catch (InterruptedException e) {
+        }
         sysProc = null;
       }
       try {
