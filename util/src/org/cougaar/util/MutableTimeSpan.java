@@ -61,19 +61,19 @@ public class MutableTimeSpan implements NewTimeSpan, Serializable {
   }
 
   /**
-   * setTimeSpan - sets the start and end time of the time span
+   * setTimeSpan - sets the start and end time of the time span. 
    * Expected to enforce that startTime < endTime
    * 
    * @throws IllegalArgumentException if startTime >= endTime
    */
   public void setTimeSpan(long startTime, long endTime) {
     if ((startTime >= MIN_VALUE) &&
-        (endTime <= MAX_VALUE) &&
-        (endTime >= startTime + EPSILON)) {
+	 (endTime <= MAX_VALUE) &&
+	 (endTime >= startTime + EPSILON)) {
       myStartTime = startTime;
       myEndTime = endTime;
     } else {
-      throw new IllegalArgumentException();
+      throw new IllegalArgumentException("startTime (" + startTime + ") >= endTime (" + endTime +" or outside bounds: MIN_VALUE=" + MIN_VALUE + ", MAX_VALUE=" + MAX_VALUE);
     }
   }
 
