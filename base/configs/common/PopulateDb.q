@@ -1,3 +1,7 @@
+# PopulateDb.q
+# Used by CSMART to populate the Configuration database, the assembly
+# tables, with data for running the society.
+# See org.cougaar.tools.csmart.core.db.PopulateDb
 database=${org.cougaar.configuration.database}
 username=${org.cougaar.configuration.user}
 password=${org.cougaar.configuration.password}
@@ -55,14 +59,6 @@ checkComponentHierarchy=\
    FROM V4_ASB_COMPONENT_HIERARCHY ACH, V4_EXPT_TRIAL_ASSEMBLY ETA \
   WHERE ACH.ASSEMBLY_ID = ETA.ASSEMBLY_ID \
     AND ETA.TRIAL_ID = ':trial_id:' \
-    AND ACH.COMPONENT_ALIB_ID = :component_alib_id:
-
-checkComponentHierarchy.mysql=\
- SELECT COMPONENT_ALIB_ID \
-   FROM V4_ASB_COMPONENT_HIERARCHY ACH \
-  INNER JOIN V4_EXPT_TRIAL_ASSEMBLY ETA \
-     ON ACH.ASSEMBLY_ID = ETA.ASSEMBLY_ID \
-  WHERE ETA.TRIAL_ID = ':trial_id:' \
     AND ACH.COMPONENT_ALIB_ID = :component_alib_id:
 
 insertComponentHierarchy=\
@@ -310,23 +306,19 @@ insertAsbAgent=\
 # Find all agents
 recipeQueryAllAgents=\
  SELECT C.COMPONENT_ALIB_ID \
-   FROM V4_ALIB_COMPONENT C, V4_EXPT_TRIAL E, V4_EXPT_TRIAL_ASSEMBLY A, V4_ASB_COMPONENT_HIERARCHY H \
+   FROM V4_ALIB_COMPONENT C, V4_ASB_COMPONENT_HIERARCHY H \
   WHERE C.COMPONENT_TYPE='agent' \
-    AND E.TRIAL_ID = A.TRIAL_ID \
-    AND A.ASSEMBLY_ID = H.ASSEMBLY_ID \
     AND (H.COMPONENT_ALIB_ID = C.COMPONENT_ALIB_ID OR H.PARENT_COMPONENT_ALIB_ID = C.COMPONENT_ALIB_ID) \
     AND H.ASSEMBLY_ID :assembly_match:
 
 # Find some agents by name - in this case, subordinates of 2BDE
 recipeQuery2BDE_Sub_AgentsByName=\
  SELECT C.COMPONENT_ALIB_ID \
-   FROM V4_ALIB_COMPONENT C, V4_EXPT_TRIAL E, V4_EXPT_TRIAL_ASSEMBLY A, V4_ASB_COMPONENT_HIERARCHY H \
+   FROM V4_ALIB_COMPONENT C, V4_ASB_COMPONENT_HIERARCHY H \
   WHERE C.COMPONENT_TYPE='agent' \
-    AND E.TRIAL_ID = A.TRIAL_ID \
-    AND A.ASSEMBLY_ID = H.ASSEMBLY_ID \
     AND (H.COMPONENT_ALIB_ID = C.COMPONENT_ALIB_ID OR H.PARENT_COMPONENT_ALIB_ID = C.COMPONENT_ALIB_ID) \
-    AND C.COMPONENT_NAME in ('2-7-INFBN', '3-69-ARBN', '3-FSB') \
-    AND H.ASSEMBLY_ID :assembly_match:
+    AND H.ASSEMBLY_ID :assembly_match: \
+    AND C.COMPONENT_NAME in ('2-7-INFBN', '3-69-ARBN', '3-FSB')
 
 # Find the subordinates of 3BDE. By changing the agent name and the role,
 # you can do different relationships. Note that this must be a direct relationship - 
@@ -336,8 +328,8 @@ recipeQuerySubordinatesOf3_BDE_2ID_HHC=\
    FROM V4_ALIB_COMPONENT SPTG, V4_ALIB_COMPONENT SPTD, V4_ASB_AGENT_RELATION R \
   WHERE R.SUPPORTED_COMPONENT_ALIB_ID = SPTD.COMPONENT_ALIB_ID \
     AND R.SUPPORTING_COMPONENT_ALIB_ID = SPTG.COMPONENT_ALIB_ID \
-    AND R.ROLE = 'Subordinate' \
     AND R.ASSEMBLY_ID :assembly_match: \
+    AND R.ROLE = 'Subordinate' \
     AND SPTD.COMPONENT_NAME = '3-BDE-2ID-HHC'
 
 # Similar to above, but a different agent name
@@ -346,8 +338,8 @@ recipeQuerySubordinatesOf2_BDE_3ID_HHC=\
    FROM V4_ALIB_COMPONENT SPTG, V4_ALIB_COMPONENT SPTD, V4_ASB_AGENT_RELATION R \
   WHERE R.SUPPORTED_COMPONENT_ALIB_ID = SPTD.COMPONENT_ALIB_ID \
     AND R.SUPPORTING_COMPONENT_ALIB_ID = SPTG.COMPONENT_ALIB_ID \
-    AND R.ROLE = 'Subordinate' \
     AND R.ASSEMBLY_ID :assembly_match: \
+    AND R.ROLE = 'Subordinate' \
     AND SPTD.COMPONENT_NAME = '2-BDE-3ID-HHC'
 
 # Next, sample queries where the target is a Node (for inserting Agents or
@@ -364,18 +356,19 @@ recipeQueryAllNodes =\
 recipeQuerySetOfNodes =\
  SELECT COMPONENT_ALIB_ID \
    FROM V4_ALIB_COMPONENT \
-  WHERE COMPONENT_NAME IN ('Name1', 'Name2')
+  WHERE COMPONENT_TYPE = 'node' \
+  AND COMPONENT_NAME IN ('Name1', 'Name2')
 
 # Finally, get some Nodes by specifying the names of the agent
 # that should be in those Nodes
 recipeQueryNodesWithSpecificAgents =\
  SELECT N.COMPONENT_ALIB_ID \
    FROM V4_ALIB_COMPONENT A, V4_ASB_COMPONENT_HIERARCHY H, V4_ALIB_COMPONENT N \
-  WHERE A.COMPONENT_NAME='Agent Name' \
-   AND A.COMPONENT_ALIB_ID = H.COMPONENT_ALIB_ID \
+  WHERE A.COMPONENT_ALIB_ID = H.COMPONENT_ALIB_ID \
    AND H.PARENT_COMPONENT_ALIB_ID = N.COMPONENT_ALIB_ID \
    AND N.COMPONENT_TYPE='node' \
-   AND H.ASSEMBLY_ID :assembly_match:
+   AND H.ASSEMBLY_ID :assembly_match: \
+   AND A.COMPONENT_NAME='Agent Name' \
 
 ### Now, queries to get the component to insert
 # These examples dont actually get the data from the DB,
@@ -417,4 +410,4 @@ recipeQuerySelectNothing=\
  SELECT * FROM DUAL WHERE DUMMY IS NULL
 
 recipeQueryNCAAgent=\
- SELECT component_alib_id from v4_alib_component where component_name='NCA'
+ SELECT COMPONENT_ALIB_ID FROM V4_ALIB_COMPONENT WHERE COMPONENT_TYPE = 'node' AND COMPONENT_NAME='NCA'
