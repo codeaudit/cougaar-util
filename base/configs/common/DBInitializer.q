@@ -42,7 +42,7 @@ queryComponents = \
     AND P.COMPONENT_ALIB_ID = H.PARENT_COMPONENT_ALIB_ID \
     AND C.COMPONENT_LIB_ID = A.COMPONENT_LIB_ID \
     AND C.INSERTION_POINT = ':insertion_point' \
-    AND P.COMPONENT_NAME = ':parent_name' \
+    AND P.COMPONENT_NAME = :parent_name \
 ORDER BY INSERTION_ORDER
 
 queryComponentParams = \
