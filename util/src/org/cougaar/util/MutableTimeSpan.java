@@ -21,12 +21,13 @@
 
 package org.cougaar.util;
 
+import java.io.Serializable;
 
 /**
  * Implementation of NewTimeSpan interface
  * @see NewTimeSpan
  */
-public class MutableTimeSpan implements NewTimeSpan {
+public class MutableTimeSpan implements NewTimeSpan, Serializable {
 
   private long myStartTime = MIN_VALUE;
   private long myEndTime = MAX_VALUE;
