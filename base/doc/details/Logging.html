@@ -1,53 +1,148 @@
-<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
 <html>
-<head>
-   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-   <meta name="GENERATOR" content="Mozilla/4.77 [en] (Windows NT 5.0; U) [Netscape]">
-   <meta name="Template" content="C:\Program Files\Microsoft Office\Office\html.dot">
-   <title>Release Notes</title>
-</head>
-<body link="#0000FF" vlink="#800080">
-&nbsp;
-<table BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH="600" >
-<tr>
+<head><title>Cougaar Logging Service</title></head>
+<body bgcolor=white>
+<h2>Cougaar Logging Service</h2>
+<p>
+Cougaar provides a standardized logging service to all components.  The
+logging support includes a "LoggingService", which is used by components
+to append to the log, and configuration utilities to customize the logger:
+set logging levels, set logging destinations, etc.
+<p>
+The LoggingService is the most important API for component developers.
+This service can be obtained through the ServiceBroker, just like any
+other service -- see the section on use of the ServiceBroker for further
+details.  For example, this is an easy way to obtain the logger during
+component load-time:
+<pre>
+   import org.cougaar.core.service.LoggingService;
+   ...
+     private LoggingService log;
+     public void setLoggingService(LoggingService log) {
+       this.log = log;
+     }
+</pre>
+Currently a component can only obtain a log with its classname as the
+log category name; i.e. log messages written by the component will be
+identified by the component classname.
+<p>
+The LoggingService defines 5 logging levels:
+<pre>
+   DEBUG &lt; INFO &lt; WARN &lt; ERROR &lt; FATAL
+</pre>
+and three generic methods:
+<pre>
+   /** @return true if the logger is enabled at the given level */
+   public boolean isEnabledFor(int level);
 
+   /** Append the given message to the log at the given level.  */
+   public void log(int level, String message);
 
-<td ALIGN=CENTER WIDTH="200">
-<h2>
-<b><font size=+2>Generic Logging Facility</font></b></h2>
+   /** Append both the given message and exception at the given level.  */
+   public void log(int level, String message, Throwable t);
+</pre>
+plus there are short-cut methods for all the levels:
+<pre>
+   /** Equivalent to "isEnabledFor(DEBUG)" */
+   public boolean isDebugEnabled();
 
-<h2>
-<b><font size=+2>COUGAAR 8.6</font></b></h2>
-</td>
+   /** Equivalent to "log(DEBUG, message)" */
+   public void debug(String message);
 
+   /** Equivalent to "log(DEBUG, message, t)" */
+   public void debug(String message, Throwable t);
 
-</table>
-
-<table ALIGN=LEFT BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH="600" >
-<tr>
-<td ALIGN=LEFT WIDTH="600">
-<hr>
+   // ditto for all the other levels (isInfoEnabled(), etc)
+</pre>
+<p>
+As noted above, all logging statements specify a logging level, and 
+if the logger is configured at a level &gt;= to the specified 
+level then the logging message is appended to the log.
+<p>
+A general guide to logging levels is:
 <ul>
-<li>Two Logging Services Implemented: Logging and LoggingControl
-<ul>
-<li> Logging service used by developers to mark software events (org.cougaar.core.service.LoggingService)</li>
-<li> Logging Control service used to control logging output (org.cougaar.core.logging.LoggingControlService)</li>
-</ul></li>&nbsp
-<li> Log4j serves as the backend for both services</li>&nbsp
-<br>
-<li>Logging service has two axis: Object doing logging and Severity level
-<ul>
-<li> First you request a LoggingService from the ServiceBroker </li>
-<li> Request marks the object doing the logging </li>
-<li> Calls to the logging service take the form objectLog.debug("String") </li>
-<li> Five levels of severity: debug, info, warn, error, fatal </li>
-</ul> </li>
-&nbsp
-<li>Standardized logging system allows Cougaar developers to log software events  without developing their own logging tools</li>
-
-<li>Standardized logging controls via PSP allows Cougaar users to control the logging dynamically at runtime even in parts of the software the are unfamiliar with</li>
-<li>A request to the node level ServiceBroker will create a logging service for the component.</li>
+  <li>use DEBUG for code-level developer details that are
+      just for code debugging</li>
+  <li>use INFO for user-level "verbose" details that may be 
+      of interest but can be ignored</li>
+  <li>use WARN for user-level warnings that are important 
+      but ignorable</li>
+  <li>use ERROR for significant problems (exceptions, etc)
+      that can't be recovered from</li>
+  <li>only use FATAL for violations of major assumptions</li>
 </ul>
-</tr></td>
-</table>
-<hr>
+<p>
+<b>Make sure</b> to wrap all "log(..)" calls with the related
+"is*Enabled(..)" check.  For example, use:
+<pre>
+   if (log.isDebugEnabled()) {
+     log.debug("some message");  // good
+   }
+</pre>
+instead of just using:
+<pre>
+   log.debug("some message");  // <b>wasteful!</b>
+</pre>
+This is most important when the log message requires the 
+creation of a new String, such as:
+<pre>
+   log.debug("cons together "+this+" plus other args "+i+", etc");
+</pre>
+since the above string-creation will incur a runtime memory and
+performance cost whether or not the logger is at the DEBUG 
+level.  In practice this can be a significant performance 
+penalty.
+<p>
+The LoggingService API is essentially a subset of the 
+<a href="http://jakarta.apache.org/log4j">log4j</a> API, but the
+LoggingService API itself is not compile-time dependent upon log4j.
+In the future the underlying implemention may be modified to use
+Sun's JSR47, so LoggingService clients shouldn't make log4j 
+assumptions when using the LoggingService.
+<p>
+By default Cougaar will write all logging calls to system-out, 
+in a form like:
+<pre>
+   [Thread-name] DEBUG classname - your message
+</pre>
+This can be configured at node creation time by setting "-D"
+system properties.  Currently these properties use log4j-style
+statements, and the underlying LoggingService implementation
+uses log4j.  Logging configuration can assume that log4j is 
+in use.
+<p>
+The system properties are:
+<ul>
+  <li>"-Dorg.cougaar.core.logging.config.filename=FILE"<br>
+      Specify a log4j property filename, which is found
+      using the ConfigFinder.</li><p>
+  <li>"-Dorg.cougaar.core.logging.NAME=VALUE<br>
+      Pass the given "NAME=VALUE" to override the above FILE
+      contents.</li>
+</ul>
+<p>
+Here is a minimal log4j property file:
+<pre>
+  log4j.rootCategory=DEBUG,A1
+  log4j.appender.A1=org.apache.log4j.ConsoleAppender
+  log4j.appender.A1.layout=org.apache.log4j.PatternLayout
+  log4j.appender.A1.layout.ConversionPattern=%d %-4r [%t] %-5p %c %x - %m%n
+</pre>
+Additional examples are provided in 
+<a href="http://jakarta.apache.org/log4j/docs/manual.html"
+>the log4j manual</a>.
+<p>
+Log4j supports many open-source log appenders and log 
+visualizers.  For example, log4j can be configured to stream
+logging statements over sockets.  Log visualizers include
+<a href="http://traxel.com/lumbermill">the lumbermill UI</a>.
+<p>
+For Cougaar 9.0 there is minimal support to change logging 
+levels and appenders at runtime.  The "LoggingControlService"
+is overly limited, and will likely be redesigned in a future
+Cougaar release.
+<p>
+Cougaar also has a non-service logging API, 
+"org.cougaar.util.log", which can be used by external 
+applications such as CSMART.
+</body>
+</html>
