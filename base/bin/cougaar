@@ -27,20 +27,26 @@
 #
 
 # find the bootstrap jar
-if [ -z $CIP ]; then
-  if [ -z $COUGAAR_INSTALL_PATH ]; then
-    echo "\$COUGAAR_INSTALL_PATH not set"
-    exit -1
+if [ -z "$COUGAAR_INSTALL_PATH" ]; then
+  if [ "$CIP" ]; then
+    export COUGAAR_INSTALL_PATH="$CIP"
+  else
+    s=`echo "$0" | sed -e 's,/bin/Cougaar,,'`
+    if [ x$s != x ]; then
+      export COUGAAR_INSTALL_PATH=$s
+    else
+      echo "\$COUGAAR_INSTALL_PATH not set"
+      exit -1
+    fi
   fi
-  CIP=$COUGAAR_INSTALL_PATH
 fi
-if [ ! -e $CIP/lib/bootstrap.jar ]; then
-  echo "Unable to find boostrap.jar in \$CIP: $CIP"
+if [ ! -e $COUGAAR_INSTALL_PATH/lib/bootstrap.jar ]; then
+  echo "Unable to find lib/bootstrap.jar in \$COUGAAR_INSTALL_PATH: $COUGAAR_INSTALL_PATH"
   exit -1
 fi
 
 # get the java command line based on our arguments
-cmd=`java -classpath $CIP/lib/bootstrap.jar org.cougaar.bootstrap.CommandLine $*`
+cmd=`java -classpath $COUGAAR_INSTALL_PATH/lib/bootstrap.jar org.cougaar.bootstrap.CommandLine $*`
 if [ $? != 0 ]; then
   exit -1
 fi
