@@ -176,6 +176,13 @@ better progress feedback (
 <li>Fixed WP RMI-based bootstrap where two nodes on the same host
 specify "-Dorg.cougaar.name.server=SomeAgent@localhost:8800" to 
 correctly use the specified agent.</li>
+<li>Modified ComponentInitializerService to add an
+"includesDefaultComponents()" method, to distinguish between XML
+template-based configurations (which include default components,
+<a href="http://bugs.cougaar.org/show_bug.cgi?id=2522">bug 2522</a>)
+verses old INI/DB configurations (
+<a href="http://bugs.cougaar.org/show_bug.cgi?id=3828">bug 3828</a>
+)</li>
 <li>Dropped unused and obsolete code:
   <ul>
     <li>uiframework module was obsolete, and has been dropped from
