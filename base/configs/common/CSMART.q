@@ -211,3 +211,9 @@ queryPGValues = \
 	AND COMPONENT_ALIB_ID = ':agent_name' \
 	AND ASSEMBLY_ID :assemblyMatch
 
+queryCMTAssembly = \
+	SELECT '1' \
+	FROM V4_EXPT_TRIAL A, V4_EXPT_TRIAL_CONFIG_ASSEMBLY B \
+	WHERE A.EXPT_ID = ':expt_id:' \
+	AND A.TRIAL_ID = B.TRIAL_ID \
+	AND ASSEMBLY_ID LIKE 'CMT%'
