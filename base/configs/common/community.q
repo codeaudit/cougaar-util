@@ -5,9 +5,9 @@ password=${org.cougaar.configuration.password}
 
 queryAssemblyID = \
  SELECT DISTINCT E.ASSEMBLY_ID \
- FROM v4_expt_experiment B, \
-      v4_expt_trial_assembly E, \
-      v4_asb_assembly A \
+ FROM expt_experiment B, \
+      expt_trial_assembly E, \
+      asb_assembly A \
  WHERE A.ASSEMBLY_ID = E.ASSEMBLY_ID \
        AND A.ASSEMBLY_TYPE = 'COMM' \
        AND E.EXPT_ID = B.EXPT_ID \
