@@ -132,23 +132,40 @@ public class StateMachine {
       });
   }
 
-  /** Sets the State of the machine **/
+  /** Sets the State of the machine.  Use #reset(State) instead if
+   * explicitly skipping states or resetting a machine back to start.
+   * @throws IllegalStateException When entering ERROR or if skipping a state, e.g. if 
+   * two sets are done in sequence without the opportunity to process the first one.
+   **/
   public synchronized void set(State s) {
-    if (s == null) throw new IllegalStateException("Null state");
-    if (s == ERROR) throw new IllegalStateException("ERROR state entered");
     if (progressed) {
-      /*
-      synchronized(System.err) {
-        System.err.println("Ack!  Already progressed!");
-        (new Throwable()).printStackTrace();
-      }
-      */
       throw new IllegalStateException("Already progressed");
     }
+    _set(s);
+  }
+
+  public final synchronized void set(String k) {
+    set(decodeKey(k));
+  }
+
+  /** like set, except allows a machine to jump states.  This is important
+   * primarily if you want to reset a machine to the initial state.
+   **/
+  public synchronized void reset(State s) {
+    _set(s);
+  }
+
+  public final synchronized void reset(String k) {
+    reset(decodeKey(k));
+  }
+
+  protected void _set(State s) {
+    if (s == null) throw new IllegalStateException("Null state");
+    if (s == ERROR) throw new IllegalStateException("ERROR state entered");
     current = s;
     progressed = true;
   }
-
+    
   protected synchronized final void transit(State s) {
     transit(getState(), s);
   }
@@ -163,9 +180,6 @@ public class StateMachine {
     set(newState);
   }
 
-  public final synchronized void set(String k) {
-    set(decodeKey(k));
-  }
    
   private synchronized State decodeKey(String k) {
     State s = (State)table.get(k);
@@ -229,51 +243,4 @@ public class StateMachine {
   public static class IllegalStateException extends RuntimeException {
     public IllegalStateException(String s) { super(s); }
   }
-
-  //
-  // example
-  //
-  
-  public static void main(String[] args) {
-    StateMachine sm = new StateMachine() {
-        public void transit(State s0, State s1) {
-          System.err.println("transiting from "+s0+" to "+s1);
-          super.transit(s0, s1);
-        }
-      };
-
-            
-    sm.add(new State("A") { public void invoke() { transit("B"); }});
-    sm.add(new State("B") { public void invoke() { transit("C"); }});
-    sm.add(new State("C") { public void invoke() { transit("D"); }});
-    sm.add(new State("D") { public void invoke() { transit("DONE"); }});
-
-    sm.set("A");
-   
-    while (sm.getState() != DONE) {
-      System.out.println("next");
-      sm.step();
-    }
-
-    sm.set("A");
-    System.out.println("stepUntilDone():");
-    sm.stepUntilDone();
-
-    sm.set("A");
-    System.out.println("go():");
-    // replace B with a state which requires several invokes
-    sm.add(new State("B") {
-        private int count = 0;
-        public void invoke() { 
-          count++;
-          if (count >= 3) transit("C"); 
-        }});
-
-    while (sm.getState() != DONE) {
-      System.out.println("next");
-      sm.go();
-    }
-    
-  }
-
 }
