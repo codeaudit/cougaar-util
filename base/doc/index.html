@@ -70,6 +70,12 @@ that were detected/posted after this Cougaar version was released.
 <li>Converted minitestconfig to run completely from XML. Running of MiniNode
 does not require the database.  All ini files have been removed as they
 are no longer supported.</li>
+<li>
+org.cougaar.planning.plugin.PluginSanityBinder is an optional new
+binder for use with plugins.  When inserted, it will complain whenever
+a bound object (e.g. plugin) publish adds/changes a task which did not
+originate in the agent.
+</li>
 </ul>
 
   <!-- COUGAAR 11.0 COUGAAR 11.0 COUGAAR 11.0 COUGAAR 11.0 COUGAAR 11.0 -->
