@@ -8,7 +8,17 @@
 <body>
 <h2>Metrics Service Overview</h2>
 
-<p> Cougaar Metrics Service construct and maintain a data model which
+<p> The Cougaar Metrics Service records and integrates metrics data
+captured by local sensors, such as CPU load and message traffic
+sensors, and advertises these real-time metrics to local components
+and remote user interfaces.  For example servlet view snapshots, see
+the <a href="operation.html">Operation Using Servlets</a> page.  The
+remainder of this manual covers the design, configuration, and 
+developer use of the Metrics Service.
+
+<hr>
+
+<p> The Metrics Service constructs and maintains a data model which
 integrates raw sensor values from sources throughout any given Node's
 containment hierarchy, reconciling conflicting sensor view as
 needed. The resulting metrics are accessible to any client Component
