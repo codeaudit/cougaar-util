@@ -37,19 +37,57 @@ This stylesheet is imported by agent templates, such as
   Find components at the specified priority and insertion point, where
   the default insertion point selects agent-level components.
 
+  The default component priority is "COMPONENT", and the default
+  insertionpoint is "Node.AgentManager.Agent.PluginManager.Plugin".
+  If the name attribute is not specified, then it is generated as
+  the classname+"("+comma-separated-arguments+")".
+
   We want "${insertionpoint}[^\.]*+", i.e. all direct subcomponents.
   -->
   <xsl:template name="find">
     <xsl:param name="priority">COMPONENT</xsl:param>
     <xsl:param name="insertionpoint">Node.AgentManager.Agent.</xsl:param>
-    <xsl:for-each select="component[@priority=$priority]">
-      <xsl:if test="starts-with(@insertionpoint, $insertionpoint)">
+    <xsl:param name="default_priority">COMPONENT</xsl:param>
+    <xsl:param name="default_insertionpoint">Node.AgentManager.Agent.PluginManager.Plugin</xsl:param>
+    <xsl:for-each select="component[(@priority=$priority) or (not(@priority) and ($default_priority=$priority))]">
+      <xsl:variable name="ip">
+        <xsl:choose>
+          <xsl:when test="@insertionpoint">
+            <xsl:value-of select="@insertionpoint"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$default_insertionpoint"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:if test="starts-with($ip, $insertionpoint)">
         <xsl:variable name="ext">
-          <xsl:value-of select="substring-after(@insertionpoint, $insertionpoint)"/>
+          <xsl:value-of select="substring-after(@ip, $insertionpoint)"/>
         </xsl:variable>
         <xsl:if test="not(contains($ext, '.'))">
           <xsl:element name="{name(.)}" namespace="{namespace-uri()}">
             <xsl:copy-of select="@*"/>
+            <xsl:if test="not(@insertionpoint)">
+              <xsl:attribute name="insertionpoint">
+                <xsl:value-of select="$default_insertionpoint"/>
+              </xsl:attribute>
+            </xsl:if>
+            <xsl:if test="not(@priority)">
+              <xsl:attribute name="priority">
+                <xsl:value-of select="$default_priority"/>
+              </xsl:attribute>
+            </xsl:if>
+            <xsl:if test="not(@name)">
+              <xsl:attribute name="name">
+                <xsl:value-of select="@class"/>
+                <xsl:text>(</xsl:text>
+                <xsl:for-each select="argument">
+                  <xsl:value-of select="normalize-space(.)"/>
+                  <xsl:if test="position() != last()">,</xsl:if> 
+                </xsl:for-each>
+                <xsl:text>)</xsl:text>
+              </xsl:attribute>
+            </xsl:if>
             <xsl:for-each select="argument">
               <xsl:element name="{name(.)}" namespace="{namespace-uri()}">
                 <xsl:value-of select="normalize-space(.)"/>
