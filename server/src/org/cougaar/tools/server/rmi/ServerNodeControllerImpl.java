@@ -117,20 +117,6 @@ implements ServerNodeController {
           "Must specify enviroment variables, or \"String[0]\"");
     }
 
-    /* WINDOWS_ENV_WORKAROUND */
-    String osname = System.getProperty("os.name");
-    if ((osname != null) &&
-        (osname.startsWith("Windows"))) {
-      System.err.println(
-          "\n\nKLUDGE: Windows \"env.*\" environment variables disabled!!!!\n"+
-          "Ignoring "+envVars.length+" variables:");
-      for (int i = 0; i < envVars.length; i++) {
-        System.err.println("  env."+envVars[i]);
-      }
-      System.err.println("Instead will use parent's variables\n");
-      envVars = null;
-    }
-    /* WINDOWS_ENV_WORKAROUND */
     // configure
     this.state = STATE_WAITING_FOR_REGISTRATION;
     this.exitVal = Integer.MIN_VALUE;

@@ -52,19 +52,19 @@ class ServerHostControllerImpl
   // list of currently running nodes
   private final Map nodes = new HashMap();
     
-  private Properties defaultProps; 
+  private final Properties defaultProps; 
 
   public ServerHostControllerImpl(
       boolean verbose,
       String rmiHost,
       int rmiPort,
       String tempPath,
-      Properties defaultProps) throws RemoteException {
+      boolean loadDefaultProps,
+      String[] args) throws RemoteException {
 
     this.verbose = verbose;
     this.rmiHost = rmiHost;
     this.rmiPort = rmiPort;
-    this.defaultProps = defaultProps;
 
     if ((rmiHost == null) ||
         ((rmiHost = rmiHost.trim()).length() == 0) ||
@@ -72,6 +72,20 @@ class ServerHostControllerImpl
       throw new IllegalArgumentException(
           "Illegal host:port configuration: "+
           rmiHost+":"+rmiPort+")");
+    }
+
+    this.defaultProps = new Properties();
+    loadApplicationProperties(
+      defaultProps,
+      loadDefaultProps,
+      args);
+    if (verbose) {
+      System.out.println("Default properties["+defaultProps.size()+"]:");
+      for (Iterator iter = defaultProps.entrySet().iterator();
+           iter.hasNext();
+           ) {
+        System.out.println("  "+iter.next());
+      }
     }
 
     // tempPath uses the system-style path separator
@@ -182,6 +196,10 @@ class ServerHostControllerImpl
         Map.Entry me = (Map.Entry) iter.next();
         String name = (String)me.getKey();
         String value = (String)me.getValue();
+
+        // trim and null-check
+        name = name.trim();
+        value = value.trim();
 
         validateProperty(name, value);
 
@@ -592,4 +610,110 @@ class ServerHostControllerImpl
     return sin;
   }
 
+  /**
+   * Load the properties for this Host's Nodes.
+   * <p>
+   * The environment to be used is specified by System properties
+   * overlayed with OS-specific properties overlayed with the
+   * optional properties file description passed as an argument.
+   * <p>
+   * The OS-specific property is a resource file named 
+   * "{OSNAME}.props", where OSNAME is the value of the System 
+   * "os.name" property (e.g. "Windows").
+   * <p>
+   * For convenience, OS names which start with "Windows " 
+   * <em>also</em> get properties from "Windows.props". 
+   *
+   * @param toProps Properties are filled into this data structure
+   * @param loadDefaultProps if true then "Common.props" and 
+   *   "{os.name}.props" are loaded
+   * @param args An array of strings, which are ".props" names or 
+   *    individual "-D" properties
+   */
+  private final void loadApplicationProperties(
+      Properties toProps,
+      boolean loadDefaultProps,
+      String[] args) {
+
+    if (loadDefaultProps) {
+      // load the common props
+      loadProperties(toProps, "Common.props");
+
+      // load the OS-specific props
+      String osname = System.getProperty("os.name");
+      if (osname != null) {
+        if (osname.startsWith("Windows ")) {
+          loadProperties(toProps, "Windows.props");
+        }
+
+        String barname = osname.replace(' ','_');
+        loadProperties(toProps, barname+".props");
+      }
+    }
+
+    // find the argument props (if provided)
+    int n = ((args != null) ? args.length : 0);
+    for (int i = 0; i < n; i++) {
+      String argi = args[i];
+      if (argi.startsWith("-D")) {
+        // add a command-line "-D" property
+        int sepIdx = argi.indexOf('=');
+        if (sepIdx < 0) {
+          toProps.put(
+              argi.substring(2), "");
+        } else {
+          toProps.put(
+              argi.substring(2, sepIdx),
+              argi.substring(sepIdx+1));
+        }
+      } else {
+        // load another property file
+        loadProperties(toProps, argi);
+      }
+    }
+  }
+
+  /**
+   * Load properties from the given resource path.
+   */
+  private final boolean loadProperties(
+      Properties toProps, 
+      String resourcePath) {
+    if (verbose) {
+      System.out.println(
+          "Loading properties from \""+resourcePath+"\"");
+    }
+
+    InputStream is = null;
+    try {
+      // first check for a resource
+      is = 
+        getClass().getResourceAsStream(
+            resourcePath); 
+      if (is == null) {
+        // then a URL
+        try {
+          URL url = new URL(resourcePath);
+          is = url.openStream();
+        } catch (MalformedURLException murle) {
+          // then a File
+          is = new FileInputStream(resourcePath);
+        }
+      }
+      toProps.load(is);
+    } catch (Exception ioe) {
+      System.err.println(
+          "Warning: couldn't load Properties from \""+
+          resourcePath+"\".");
+      //ioe.printStackTrace();
+      return false;
+    } finally {
+      if (is != null) {
+        try {
+          is.close();
+        } catch (IOException ioe) {}
+      }
+    }
+    return true;
+  }
 }

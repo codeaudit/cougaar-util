@@ -55,6 +55,9 @@ import org.cougaar.tools.server.*;
  * <pre>
  * @property org.cougaar.tools.server.verbose
  *    Provide verbose output, defaults to false
+ * @property org.cougaar.tools.server.loadDefaultProps
+ *    Load "Common.props" and "{OSNAME}.props" (e.g. "Windows.props"),
+ *    defaults to false
  * @property org.cougaar.tools.server.host
  *    Host for the RMI registry, defaults to "localhost"
  * @property org.cougaar.tools.server.port
@@ -67,73 +70,17 @@ import org.cougaar.tools.server.*;
  */
 public class ServerDaemon {
 
-  public static final boolean DEFAULT_VERBOSITY = false;
-  public static final String DEFAULT_NAME = "ServerHook";
-  public static final String DEFAULT_HOST = "localhost";
-  public static final int    DEFAULT_PORT = 8484;
-  public static final String DEFAULT_TEMP_PATH = ("."+File.separatorChar);
-
   private Registry registry = null;
   private ServerHostController server = null;
 
-  private final boolean verbose;
-  private final String serverName;
-  private final String rmiHost;
-  private final int rmiPort;
-  private final String tempPath;
-  private final Properties appProps;
+  private final ServerConfig serverConfig;
+  private final String[] args;
 
-  public ServerDaemon(Properties appProps) {
-
-    //
-    // configure the server from the SYSTEM properties
-    //
-
-    String sverbose = 
-      System.getProperty(
-            "org.cougaar.tools.server.verbose");
-    if (sverbose != null) {
-      verbose = 
-        (sverbose.equals("true") ||
-         sverbose.equals(""));
-    } else {
-      verbose = DEFAULT_VERBOSITY;
-    }
-
-    this.serverName = 
-      System.getProperty(
-        "org.cougaar.tools.server.name",
-        DEFAULT_NAME);
-
-    this.rmiHost = 
-      System.getProperty(
-        "org.cougaar.tools.server.host",
-        DEFAULT_HOST);
-
-    String srmiPort = 
-      System.getProperty("org.cougaar.tools.server.port");
-    if (srmiPort != null) {
-      try {
-        this.rmiPort = Integer.parseInt(srmiPort);
-      } catch (NumberFormatException nfe) {
-        throw new IllegalArgumentException(
-            "Illegal \"org.cougaar.tools.server.port="+
-            srmiPort+"\"");
-      }
-    } else {
-      this.rmiPort = DEFAULT_PORT;
-    }
-
-    this.tempPath =
-      System.getProperty(
-        "org.cougaar.tools.server.temp.path",
-        DEFAULT_TEMP_PATH);
-
-    //
-    // configure the Apps with the PASSED properties
-    //
-
-    this.appProps = appProps;
+  public ServerDaemon(
+      ServerConfig serverConfig,
+      String[] args) {
+    this.serverConfig = serverConfig;
+    this.args = args;
   }
 
   /**
@@ -141,38 +88,39 @@ public class ServerDaemon {
    */
   public void start() throws Exception {
 
-    if (verbose) {
-      if (appProps != null) {
-        appProps.list(System.err);
-      }
+    if (serverConfig.isVerbose()) {
+      System.err.println(serverConfig);
     }
 
     // start an RMIRegistry - exit on failure
-    if (verbose) {
+    if (serverConfig.isVerbose()) {
       System.err.print("Creating Registry: ");
     }
-    registry = LocateRegistry.createRegistry(rmiPort);
-    if (verbose) {
+    registry = 
+      LocateRegistry.createRegistry(
+          serverConfig.getRMIPort());
+    if (serverConfig.isVerbose()) {
       System.err.println(registry.toString());
     }
 
     // create and register a server instance
-    if (verbose) {
+    if (serverConfig.isVerbose()) {
       System.err.print("Creating Server: ");
     }
     server =
       new ServerHostControllerImpl(
-          verbose,
-          rmiHost,
-          rmiPort,
-          tempPath,
-          appProps);
-    if (verbose) {
-      System.out.println(serverName);
+          serverConfig.isVerbose(),
+          serverConfig.getRMIHost(),
+          serverConfig.getRMIPort(),
+          serverConfig.getTempPath(),
+          serverConfig.getLoadDefaultProps(),
+          args);
+    if (serverConfig.isVerbose()) {
+      System.out.println(serverConfig.getServerName());
     }
 
-    registry.rebind(serverName, server);
-    if (verbose) {
+    registry.rebind(serverConfig.getServerName(), server);
+    if (serverConfig.isVerbose()) {
       System.err.println(server.toString());
     }
 
@@ -190,12 +138,11 @@ public class ServerDaemon {
    */
   public final static void main(String args[]) {
 
-    // load the application properties
-    Properties appProps = new Properties();
-    loadApplicationProperties(appProps, args);
+    // get the server configuration
+    ServerConfig serverConfig = new ServerConfig();
 
     // create a new server
-    ServerDaemon sd = new ServerDaemon(appProps);
+    ServerDaemon sd = new ServerDaemon(serverConfig, args);
 
     // start it
     try {
@@ -206,101 +153,120 @@ public class ServerDaemon {
     }
   }
 
+
   /**
-   * Load properties for the applications.
-   * <p>
-   * The environment to be used is specified by System properties
-   * overlayed with OS-specific properties overlayed with the
-   * optional properties file description passed as an argument.
-   * <p>
-   * The OS-specific property is a resource file named
-   * by alp/server/OSNAME.props
-   * where OSNAME is the value of the System os.name property.
-   * <p>
-   * For convenience, OS names which start with "Windows " 
-   * <em>also</em> get properties from "Windows.props". 
-   *
-   * @param toProps Properties are filled into this data structure
-   * @param args An array of strings, which are ".props" names or 
-   *    individual "-D" properties
+   * Configure the server from system properties.
    */
-  private static final void loadApplicationProperties(
-      Properties toProps,
-      String[] args) {
+  private static final class ServerConfig {
 
-    // load the common props
-    loadProperties(toProps, "Common.props");
+    private static final boolean DEFAULT_VERBOSITY = false;
+    private static final boolean DEFAULT_LOAD_DEFAULT_PROPS = false;
+    private static final String DEFAULT_NAME = "ServerHook";
+    private static final String DEFAULT_HOST = "localhost";
+    private static final int    DEFAULT_PORT = 8484;
+    private static final String DEFAULT_TEMP_PATH = ("."+File.separatorChar);
 
-    // load the OS-specific props
-    String osname = System.getProperty("os.name");
-    if (osname != null) {
-      if (osname.startsWith("Windows ")) {
-        loadProperties(toProps, "Windows.props");
+    public final boolean verbose;
+    public final boolean loadDefaultProps;
+    public final String serverName;
+    public final String rmiHost;
+    public final int rmiPort;
+    public final String tempPath;
+
+    public ServerConfig() {
+
+      //
+      // configure the server from the SYSTEM properties
+      //
+
+      String sverbose = 
+        System.getProperty(
+            "org.cougaar.tools.server.verbose");
+      if (sverbose != null) {
+        verbose = 
+          (sverbose.equals("true") ||
+           sverbose.equals(""));
+      } else {
+        verbose = DEFAULT_VERBOSITY;
       }
 
-      String barname = osname.replace(' ','_');
-      loadProperties(toProps, barname+".props");
-    }
+      String sloadDefaultProps = 
+        System.getProperty(
+            "org.cougaar.tools.server.loadDefaultProps");
+      if (sloadDefaultProps != null) {
+        loadDefaultProps =
+          (sloadDefaultProps.equals("true") ||
+           sloadDefaultProps.equals(""));
+      } else {
+        loadDefaultProps = DEFAULT_LOAD_DEFAULT_PROPS;
+      }
 
-    // find the argument props (if provided)
-    int n = ((args != null) ? args.length : 0);
-    for (int i = 0; i < n; i++) {
-      String argi = args[i];
-      if (argi.startsWith("-D")) {
-        // add a command-line "-D" property
-        int sepIdx = argi.indexOf('=');
-        if (sepIdx < 0) {
-          toProps.put(
-              argi.substring(2), "");
-        } else {
-          toProps.put(
-              argi.substring(2, sepIdx),
-              argi.substring(sepIdx+1));
+      this.serverName = 
+        System.getProperty(
+            "org.cougaar.tools.server.name",
+            DEFAULT_NAME);
+
+      this.rmiHost = 
+        System.getProperty(
+            "org.cougaar.tools.server.host",
+            DEFAULT_HOST);
+
+      String srmiPort = 
+        System.getProperty("org.cougaar.tools.server.port");
+      if (srmiPort != null) {
+        try {
+          this.rmiPort = Integer.parseInt(srmiPort);
+        } catch (NumberFormatException nfe) {
+          throw new IllegalArgumentException(
+              "Illegal \"org.cougaar.tools.server.port="+
+              srmiPort+"\"");
         }
       } else {
-        // load another property file
-        loadProperties(toProps, argi);
+        this.rmiPort = DEFAULT_PORT;
       }
-    }
-  }
 
-  /**
-   * Load properties from the given resource path.
-   */
-  private final static boolean loadProperties(
-      Properties toProps, 
-      String resourcePath) {
-    InputStream is = null;
-    try {
-      // first check for a resource
-      is = 
-        ServerDaemon.class.getResourceAsStream(
-            resourcePath); 
-      if (is == null) {
-        // then a URL
-        try {
-          URL url = new URL(resourcePath);
-          is = url.openStream();
-        } catch (MalformedURLException murle) {
-          // then a File
-          is = new FileInputStream(resourcePath);
-        }
-      }
-      toProps.load(is);
-    } catch (Exception ioe) {
-      System.err.println(
-          "Warning: couldn't load Properties from \""+
-          resourcePath+"\".");
-      //ioe.printStackTrace();
-      return false;
-    } finally {
-      if (is != null) {
-        try {
-          is.close();
-        } catch (IOException ioe) {}
-      }
+      this.tempPath =
+        System.getProperty(
+            "org.cougaar.tools.server.temp.path",
+            DEFAULT_TEMP_PATH);
     }
-    return true;
+
+    public boolean isVerbose() {
+      return verbose;
+    }
+
+    public boolean getLoadDefaultProps() {
+      return loadDefaultProps;
+    }
+
+    public String getServerName() {
+      return serverName;
+    }
+
+    public String getRMIHost() {
+      return rmiHost;
+    }
+
+    public int getRMIPort() {
+      return rmiPort;
+    }
+
+    public String getTempPath() {
+      return tempPath;
+    }
+
+    public String toString() {
+      return 
+        "Server Configuration {"+
+        "\n  verbose: "+isVerbose()+
+        "\n  loadDefaultProps: "+getLoadDefaultProps()+
+        "\n  serverName: "+getServerName()+
+        "\n  RMIHost: "+getRMIHost()+
+        "\n  RMIPort: "+getRMIPort()+
+        "\n  tempPath: "+getTempPath()+
+        "\n}";
+    }
+
   }
 
 }
