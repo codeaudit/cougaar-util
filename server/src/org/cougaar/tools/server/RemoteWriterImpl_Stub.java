@@ -7,40 +7,22 @@ public final class RemoteWriterImpl_Stub
     extends java.rmi.server.RemoteStub
     implements org.cougaar.tools.server.RemoteOutputStream, java.rmi.Remote
 {
-    private static final java.rmi.server.Operation[] operations = {
-	new java.rmi.server.Operation("void close()"),
-	new java.rmi.server.Operation("void write(org.cougaar.tools.server.RemoteOutputStream.ByteArray)")
-    };
-    
-    private static final long interfaceHash = 4897579543281931711L;
-    
     private static final long serialVersionUID = 2;
     
-    private static boolean useNewInvoke;
     private static java.lang.reflect.Method $method_close_0;
     private static java.lang.reflect.Method $method_write_1;
     
     static {
 	try {
-	    java.rmi.server.RemoteRef.class.getMethod("invoke",
-		new java.lang.Class[] {
-		    java.rmi.Remote.class,
-		    java.lang.reflect.Method.class,
-		    java.lang.Object[].class,
-		    long.class
-		});
-	    useNewInvoke = true;
 	    $method_close_0 = org.cougaar.tools.server.RemoteOutputStream.class.getMethod("close", new java.lang.Class[] {});
 	    $method_write_1 = org.cougaar.tools.server.RemoteOutputStream.class.getMethod("write", new java.lang.Class[] {org.cougaar.tools.server.RemoteOutputStream.ByteArray.class});
 	} catch (java.lang.NoSuchMethodException e) {
-	    useNewInvoke = false;
+	    throw new java.lang.NoSuchMethodError(
+		"stub class initialization failed");
 	}
     }
     
     // constructors
-    public RemoteWriterImpl_Stub() {
-	super();
-    }
     public RemoteWriterImpl_Stub(java.rmi.server.RemoteRef ref) {
 	super(ref);
     }
@@ -52,13 +34,7 @@ public final class RemoteWriterImpl_Stub
 	throws java.io.IOException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		ref.invoke(this, $method_close_0, null, -4742752445160157748L);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 0, interfaceHash);
-		ref.invoke(call);
-		ref.done(call);
-	    }
+	    ref.invoke(this, $method_close_0, null, -4742752445160157748L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.io.IOException e) {
@@ -73,19 +49,7 @@ public final class RemoteWriterImpl_Stub
 	throws java.io.IOException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		ref.invoke(this, $method_write_1, new java.lang.Object[] {$param_RemoteOutputStream$ByteArray_1}, -229716213762784618L);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 1, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_RemoteOutputStream$ByteArray_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		ref.done(call);
-	    }
+	    ref.invoke(this, $method_write_1, new java.lang.Object[] {$param_RemoteOutputStream$ByteArray_1}, -229716213762784618L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.io.IOException e) {
