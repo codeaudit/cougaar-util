@@ -67,6 +67,7 @@ in a PropertyGroup, it will replace it with a MessageAddress. You will
 need to re-save your experiment though.</li>
 <li>AspectValue -- FIXME</li>
 <li>Planning split -- FIXME</li>
+<li>BindingSite -- FIXME</li>
 <li>ComponentPlugin is now a simple extension of
 BlackboardClientComponent. As a result, users may not assume that
 getBindingSite() returns a PluginBindingSite. Plugins should use call
@@ -74,6 +75,10 @@ getAgentIdentifier() or getConfigFinder on the Plugin, and not on the
 BindingSite. For simplicity, a script is provided in
 ./ReleaseNotes/10.0/fixBindingSite.pl for making the necessary (minor)
 changes. </li>
+<li>A list of the hard-coded components that are loaded in all agents
+and node-agents has been documented in
+<a href="details/DefaultComponents.html"
+>doc/details/DefaultComponents.html</a>.
 <li>Insertion points for the major components are now defined by
 public constants in the appropriate classes. For example, the
 insertion point for an Agent is
