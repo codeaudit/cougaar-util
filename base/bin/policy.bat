@@ -22,4 +22,4 @@ REM "</copyright>"
 CALL %COUGAAR_INSTALL_PATH%\bin\setlibpath.bat
 @echo ON
 
-java -classpath %LIBPATHS%;s:\assess\lib\glm.jar;s:\assess\sys\xerces.jar   org.cougaar.mlm.ui.views.PolicyApplication
+java -classpath %LIBPATHS%;%COUGAAR_INSTALL_PATH%\lib\glm.jar;%COUGAAR_INSTALL_PATH%\sys\xerces.jar   org.cougaar.mlm.ui.views.PolicyApplication
