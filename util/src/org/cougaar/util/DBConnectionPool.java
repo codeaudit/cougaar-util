@@ -34,6 +34,8 @@ import java.math.BigDecimal;
 import java.io.Reader;
 import java.io.InputStream;
 
+import org.cougaar.util.log.*;
+
 /**
  * A database connection manager that creates pools of db connections
  * that can be reused to improve performance. DBConnectionPool should
@@ -58,11 +60,14 @@ import java.io.InputStream;
  * @property org.cougaar.util.DBConnectionPool.timeout milliseconds
  * that a connection must be idle in order to be collected by the
  * reaper (10000).
- * @property org.cougaar.util.DBConnectionPool.verbosity should
- * verbose debugging messages be turned on? 0=off (default)
- * 1=progress, 2=warnings, 3=loud progress.
+ * @note The property org.cougaar.util.DBConnectionPool.verbosity used
+ * to be used to control logging behavior.  Now it uses standard cougaar
+ * logging with the name org.cuogaar.util.DBConnectionPool at the log levels
+ * ERROR, WARN and DEBUG.
  **/
 public class DBConnectionPool {
+  // keep a logger around for status.
+  protected static final Logger logger = Logging.getLogger(DBConnectionPool.class);
   
   /**
    * A hash table relating the database URL and user to a connection
@@ -95,11 +100,6 @@ public class DBConnectionPool {
    */
   private static int MAX_CONNECTIONS = 5;
 
-  /** 
-   * Is debugging enabled?  Defaults to 0 (quiet).  1=progress, 2=warnings, 3=loudprogress
-   **/
-  private static int VERBOSITY = 0;
-
   static {
     String prefix = "org.cougaar.util.DBConnectionPool.";
 
@@ -110,8 +110,6 @@ public class DBConnectionPool {
     MAX_CONNECTIONS = (Integer.valueOf(System.getProperty(prefix+"maxConnections", 
                                                           String.valueOf(MAX_CONNECTIONS)))).intValue();
 
-    VERBOSITY = (Integer.valueOf(System.getProperty(prefix+"verbosity", 
-                                                    String.valueOf(VERBOSITY)))).intValue();
   }
 
   /**
@@ -240,7 +238,7 @@ public class DBConnectionPool {
             statements.add(statement);
             return statement;
           } catch (SQLException sqle) {
-            if (isRetryable(sqle) && rc < maxRetries) {
+            if (rc < maxRetries && isRetryable(sqle)) {
               rc++;
               try {
                 Thread.sleep(retryTimeout);
@@ -263,7 +261,7 @@ public class DBConnectionPool {
             statements.add(statement);
             return statement;
           } catch (SQLException sqle) {
-            if (isRetryable(sqle) && rc < maxRetries) {
+            if (rc < maxRetries && isRetryable(sqle) ) {
               rc++;
               try {
                 Thread.sleep(retryTimeout);
@@ -590,7 +588,7 @@ public class DBConnectionPool {
             statements.add(statement);
             return statement;
           } catch (SQLException sqle) {
-            if (isRetryable(sqle) && rc < maxRetries) {
+            if (rc < maxRetries && isRetryable(sqle)) {
               rc++;
               try {
                 Thread.sleep(retryTimeout);
@@ -2197,8 +2195,6 @@ public class DBConnectionPool {
                  ) {
         return true;
       } else if (m.indexOf("Cannot connect to MySQL") > -1) { // MySQL DB unreachable
-        System.err.println("SQLException: " + m);
-        System.err.println("Possible busy server. Retrying....");
         return true;
       } else {
         return false;
@@ -2234,26 +2230,20 @@ public class DBConnectionPool {
           entries.add(entry);
           if (waitingP) {
             waitingCounter--;
-            if (VERBOSITY>=1) {
-              if (VERBOSITY>=3) {
-                System.err.println("DBConnectionPool finished waiting for "+key+" ("+waitingCounter+")");
-              } else {
-                System.err.print("f");
-              }
+            if (logger.isDebugEnabled()) {
+              logger.debug("Finished waiting for "+key+" ("+waitingCounter+")");
             }
           }
         } catch (SQLException sqle) {
-          if (VERBOSITY>=2) System.err.println("DBConnectionPool "+key+" saw: "+sqle);
-          if (isRetryable(sqle) && retries<maxRetries) {
+          if (logger.isWarnEnabled()) {
+            logger.warn("DBConnectionPool "+key+" saw exception", sqle);
+          }
+          if (retries<maxRetries && isRetryable(sqle)) {
             retries++;
             waitingP = true;
             waitingCounter++;
-            if (VERBOSITY>=1) {
-              if (VERBOSITY>=3) {
-                System.err.println("DBConnectionPool waiting to retry for "+key+" ("+waitingCounter+")");
-              } else {
-                System.err.print("w");
-              }
+            if (logger.isDebugEnabled()) {
+              logger.debug("Waiting to retry for "+key+" ("+waitingCounter+")");
             }
             try {
               wait(retryTimeout);
@@ -2267,13 +2257,9 @@ public class DBConnectionPool {
           if (!waitingP) {
             waitingP = true;
             waitingCounter++;
-            if (VERBOSITY>=1) {
-              if (VERBOSITY>=3) {
-                System.err.println("DBConnectionPool waiting for "+key+
-                                   " ("+waitingCounter+" of "+entries.size()+"/"+maxConnections+")");
-              } else {
-                System.err.print("w");
-              }
+            if (logger.isDebugEnabled()) {
+              logger.debug("Waiting for "+key+
+                           " ("+waitingCounter+" of "+entries.size()+"/"+maxConnections+")");
             }
           }
           wait();
@@ -2307,8 +2293,9 @@ public class DBConnectionPool {
       }
       int ndrops = entriesToDelete.size();
       if (ndrops > 0) {
-        if (VERBOSITY>=3)
-          System.err.println("DBConnectionPool "+key+" dropping "+entriesToDelete.size()+" entries");
+        if (logger.isDebugEnabled()) {
+          logger.debug("DBConnectionPool "+key+" dropping "+entriesToDelete.size()+" entries");
+        }
         for (Iterator e = entriesToDelete.iterator(); e.hasNext(); ) {
           DBConnectionPoolEntry entry = (DBConnectionPoolEntry) e.next();
           delete(entry);
