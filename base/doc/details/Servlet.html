@@ -1,0 +1,245 @@
+<html>
+<head>
+<title>Cougaar Servlets</title>
+</head>
+<body bgcolor="white">
+<p>
+<center><h1>Cougaar Servlets</h1></center>
+<p>
+These notes focus upon porting the existing PSPs to the new
+Servlet API.
+<p>
+<ol>
+<li>
+The standard Servlet API is used by the "ServletService".  Here
+are some tutorials and documentation:
+<ul>
+  <li><a href=
+  "http://java.sun.com/docs/books/tutorial/servlets"
+  >http://java.sun.com/docs/books/tutorial/servlets</a></li>
+  <li><a href=
+  "http://www.apl.jhu.edu/~hall/java/Servlet-Tutorial"
+  >http://www.apl.jhu.edu/~hall/java/Servlet-Tutorial</a></li>
+  <li><a href=
+  "http://www.novocode.com/doc/servlet-essentials"
+  >http://www.novocode.com/doc/servlet-essentials</a></li>
+  <li><a href=
+  "http://www.servlets.com/jservlet2/examples"
+  >http://www.servlets.com/jservlet2/examples</a></li>
+</ul>
+Most of the API is very similar to the existing PSP API -- there 
+are methods for parsing URL parameters, reading POST data,
+and writing to the response output (text or data).
+</li><p>
+
+<li>
+See the webserver doc for Cougaar installation and testing notes:<br>
+<a href="../../webserver/doc/install.html"
+>webserver/doc/install.html</a>.<br>
+It will walk you through:
+<ul>
+  <li>enabling the new Servlet server (which is disabled by default)</li>
+  <li>enabling the (optional) HTTPS and client authentication support</li>
+  <li>loading the existing Servlets (such as the 
+      <a href="#planview">ported TASKS.PSP</a>)</li>
+  <li>running and testing the Servlets</li>
+</ul>
+</li><p>
+
+<li>
+The default port for the Servlet server is HTTP on port 8800 and HTTPS 
+on port 8400.  These and other server properties can be configured
+with system properties -- see the properties list in "Parameters.html"
+for details.
+</li><p>
+
+<li>
+<a name="ini">
+All Servlets are loaded by INI "plugin = " lines, *not* from
+a "default.psps.xml" file.  There's a corresponding CSMART recipe
+that can be used.
+<p>
+The existing "plugin = ..PlanViewerPlugin" can be removed from
+the agent's configuration once all neccessary PSPs have been
+ported to Servlets.
+</li><p>
+
+<li>
+There's one important browser/client API change for PSP porters to
+note:<br>
+The URL parameter separator is <b>fixed</b> from:<br>
+  url?arg1=val1?arg2=val2?arg3=val3<br>
+to<br>
+  url?arg1=val1&amp;arg2=val2&amp;arg3=val3<br>
+See 
+<a href=
+"https://www.alpine.bbn.com/bugzilla/show_bug.cgi?id=20">
+bug 20</a>.  The old "&amp;" usage didn't match the HTTP specs.
+<p>
+In both the client code and the ported PSP this URL parameter-passing 
+must be modified to match.  Other than that, the existing browser/user 
+API is the same for both PSPs and Servlets.
+</li><p>
+
+<li>
+The ServletService API (with lots of javadocs) is in:
+<br><tt>
+core/src/org/cougaar/core/servlet/ServletService.java
+</tt><br>
+This defines the basic "register(servlet, path)" API.
+</li><p>
+
+<li>
+See the example "HelloComponent" for a "raw" use of the 
+"ServletService" API:
+<br><tt>
+  core/examples/org/cougaar/core/examples/servlet/HelloComponent.java
+</tt><br>
+This illustrates the use of a ServiceBroker to obtain the
+ServletService and the registration of a Servlet within the
+"Component.load()".  
+<p>
+In general any Component can obtain and use the ServletService, 
+including existing subscription-based Plugins and even the Agent 
+or Blackboard itself.  All existing PSPs follow the more simple
+Plugin-like usage of the ServletService that's described here.
+</li><p>
+
+<li>
+Most developers will use the simple loader that's in core:
+<br><tt>
+  core/src/org/cougaar/core/servlet/SimpleServletComponent.java
+</tt><br>
+The loader takes two args:  (classname, path), and will pass a
+"SimpleServletSupport" API to the created Servlet instance:
+<br><tt>
+  core/src/org/cougaar/core/servlet/SimpleServletSupport.java
+</tt><br>
+<p>
+This loader is ideal for either "pure-Servlets" (i.e. Servlets
+with no need to access Cougaar Services) or Servlets that only 
+need to:
+<ul>
+  <li>know the agent's ID</li>
+  <li>query the blackboard</li>
+  <li>know the names of all the agents in the society</li>
+</ul>
+Since most PSPs are simple data-gatherers and data-formatters,
+most PSPs can be ported by using the simple loader.  See the 
+ported "PlanViewServlet" as an example:
+<br><tt>
+  <a name="planview">
+  core/src/org/cougaar/planning/servlet/PlanViewServlet.java
+</tt><br>
+<p>
+More complicated PSPs, such as those that need access to need 
+blackboard publishAdd access or other Services, can not be based
+of the existing loader.  See the loader source for details.
+</li><p>
+
+<li>
+Here's a "hello world" example that can be loaded with the
+simple loader:
+<pre>
+------------------------------------------------------------
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import org.cougaar.core.servlet.*;
+
+public class HelloServlet extends HttpServlet {
+  private SimpleServletSupport support;
+  public HelloServlet(SimpleServletSupport support) {
+     this.support = support;
+  }
+  public void doGet(
+      HttpServletRequest req,
+      HttpServletResponse res) throws IOException {
+    PrintWriter out = req.getWriter();
+    out.print("Hello from agent "+support.getEncodedAgentName());
+  }
+}
+------------------------------------------------------------
+</pre>
+</li><p>
+
+<li>
+The <a href="#planview">PlanViewServlet</a> illustrates a 
+recommended design pattern, which is generalized here:
+<pre>
+------------------------------------------------------------
+import <i>packages</i>;
+
+public class <i>Your</i>Servlet
+extends HttpServlet 
+{
+
+  private SimpleServletSupport support;
+
+  public <i>Your</i>Servlet(SimpleServletSupport support) {
+    this.support = support;
+  }
+
+  public void doGet(
+      HttpServletRequest request,
+      HttpServletResponse response) throws IOException, ServletException
+  {
+    // create a new "<i>YourWorker</i>" context per request
+    <i>YourWorker</i> yw = new <i>YourWorker</i>(support);
+    yw.execute(request, response);  
+  }
+
+  public void doPost(
+      HttpServletRequest request,
+      HttpServletResponse response) throws IOException, ServletException
+  {
+    // create a new "<i>YourWorker</i>" context per request
+    <i>YourWorker</i> yw = new <i>YourWorker</i>(support);
+    yw.execute(request, response);  
+  }
+
+  /**
+   * This inner class does all the work.
+   * 
+   * A new class is created per request, to keep all the
+   * instance fields separate.  If there was only one
+   * instance then multiple simultaneous requests would
+   * corrupt the instance fields (e.g. the "out" stream).
+   * 
+   * This acts as a <b>context</b> per request.
+   */
+  private static class <i>YourWorker</i> {
+
+    // all per-request state:
+    private <i>your-variables</i>;
+
+    public <i>YourWorker</i>(SimpleServletSupport support) {
+      this.support = support;
+    }
+
+    public void execute(
+        HttpServletRequest request, 
+        HttpServletResponse response) throws IOException, ServletException 
+    {
+      <i>set your-variables based upon URL-params / POST-data</i>
+      <i>handle the request!</i>
+    }
+  }
+}
+------------------------------------------------------------
+<pre>
+This design is (relatively) cleaner and thread-safe than the
+"static-methods/PSPState" design used in many existing PSPs.
+<p>
+If you have state that must be shared across requests, and 
+therefore must be <tt>synchronized</tt>, the <i>YourWorker</i> 
+class can be made non-static and the fields of the outer 
+<i>YourServlet</i> class can be accessed (including 
+<i>support</i>, if you want to trim the code down).  Each
+agent will load a separate Servlet instance, as instructed
+by the <a href="#ini">INI file</a>.
+</li><p>
+
+</ol>
+</body></html>
