@@ -267,7 +267,7 @@ query = select NSN, SUM(QTY_OH) AS "SUM(QTY_OH)", 'NONE' AS  NOMENCLATURE \
 
 # Then, get the PREPO Assets and generate an aggregate asset
 %SQLAggregateAssetCreator
-query = select NSN, SUM(QTY_OH) AS "SUM(QTY_OH)", 'NONE' AS  NOMENCLATURE \ 
+query = select NSN, SUM(QTY_OH) AS "SUM(QTY_OH)", 'NONE' AS  NOMENCLATURE \
 	from jtav_equipment \
         where uic = :uic and uln like '%B' and \
         NSN in ( '0000000000000', \

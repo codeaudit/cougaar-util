@@ -17,8 +17,8 @@ query = select '8115001682275' AS NSN, container_20_ft_qty AS QTY_OH, 'Container
 
 # Now, get 'eaches' for all pacing assets from fdm
 %SQLAssetCreator
-query = select NSN, QUANTITY, substr(MODEL_DESC,1,12)||'-'||substr(LIN_DESC,1,21) AS NOMENCLATURE \ 
-	from fdm_vehicle where  UIC = :uic and NSN in (:pacing) and substr(NSN,1,1) != '0' \ 
+query = select NSN, QUANTITY, substr(MODEL_DESC,1,12)||'-'||substr(LIN_DESC,1,21) AS NOMENCLATURE \
+	from fdm_vehicle where  UIC = :uic and NSN in (:pacing) and substr(NSN,1,1) != '0' \
 	order by NSN
 
 query.mysql = select NSN, QUANTITY, concat(substring(MODEL_DESC,1,12),'-',substring(LIN_DESC,1,21)) \
@@ -27,12 +27,12 @@ query.mysql = select NSN, QUANTITY, concat(substring(MODEL_DESC,1,12),'-',substr
 
 # Now, get all 'non-pacing' assets as aggregates from fdm
 %SQLAggregateAssetCreator
-query = select NSN, QUANTITY, substr(MODEL_DESC,1,12)||'-'||substr(LIN_DESC,1,21) AS NOMENCLATURE from \ 
+query = select NSN, QUANTITY, substr(MODEL_DESC,1,12)||'-'||substr(LIN_DESC,1,21) AS NOMENCLATURE from \
 	fdm_vehicle where  UIC = :uic and NSN not in (:pacing) and substr(NSN,1,1) != '0' \
 	order by NSN	
 
 query.mysql = select NSN, QUANTITY, concat(substring(MODEL_DESC,1,12),'-',substring(LIN_DESC,1,21)) \
-	as NOMENCLATURE from fdm_vehicle where  UIC = :uic and NSN not in (:pacing) \ 
+	as NOMENCLATURE from fdm_vehicle where  UIC = :uic and NSN not in (:pacing) \
 	and substring(NSN,1,1) != '0' order by NSN
 
 
