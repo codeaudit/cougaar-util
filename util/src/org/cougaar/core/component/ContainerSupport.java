@@ -65,7 +65,7 @@ implements Container, StateObject
   /** The actual set of child BoundComponent loaded. 
    * @see org.cougaar.core.component.BoundComponent
    **/
-  private final List boundComponents = new DoubleBufferedList();
+  private final DoubleBufferedList boundComponents = new DoubleBufferedList();
 
   /** a Sorted Collection of child BinderFactory components.
    * Note that we cannot use TreeSet because of the Collection API's
@@ -270,6 +270,14 @@ implements Container, StateObject
    */
   protected List listComponents() {
     return (List) Filters.filter(iterator(), pred_isComponentDescription);
+  }
+
+  protected List getBoundComponentList() {
+    return boundComponents.getUnmodifiableList();
+  }
+
+  protected Iterator getBoundComponentIterator() {
+    return boundComponents.iterator();
   }
 
   /** Map BoundComponent to Binder **/
