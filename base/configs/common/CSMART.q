@@ -79,9 +79,12 @@ queryRecipeProperties = \
    WHERE MOD_RECIPE_LIB_ID = ':recipe_id' \
 ORDER BY ARG_ORDER
 
+# Change this to query from expt_trial_config_assembly
+# This query used in OrganizerHelper to load the 
+# experiment from the DB
 queryExperiment = \
  SELECT ASSEMBLY_ID \
-   FROM V4_EXPT_TRIAL_ASSEMBLY \
+   FROM V4_EXPT_TRIAL_CONFIG_ASSEMBLY \
   WHERE EXPT_ID = ':expt_id' \
     AND TRIAL_ID = ':trial_id'
 
@@ -147,9 +150,21 @@ queryAllAgentNames = \
     WHERE C.COMPONENT_TYPE = 'agent' \
     ORDER BY C.COMPONENT_NAME
 
+# Get all experiments that have the given Society 
+# where Society is specified by name (assembly description)
+queryExptsWithSociety = \
+  SELECT DISTINCT E.NAME \
+    FROM V4_EXPT_EXPERIMENT E, V4_EXPT_TRIAL T, V4_ASB_ASSEMBLY A, V4_EXPT_TRIAL_CONFIG_ASSEMBLY C, V4_EXPT_TRIAL_ASSEMBLY R \
+	WHERE E.EXPT_ID = T.EXPT_ID \
+        AND ((T.TRIAL_ID = R.TRIAL_ID \
+	AND R.ASSEMBLY_ID = A.ASSEMBLY_ID) \
+	OR \
+	(T.TRIAL_ID = C.TRIAL_ID \
+	AND C.ASSEMBLY_ID = A.ASSEMBLY_ID)) \
+	AND A.DESCRIPTION = ':societyName'
+
 # Get all experiments that have the given Recipe 
 # where Recipe is specified by name
-
 queryExptsWithRecipe = \
   SELECT DISTINCT E.NAME \
     FROM V4_EXPT_EXPERIMENT E, V4_EXPT_TRIAL_MOD_RECIPE R, V4_EXPT_TRIAL T, V4_LIB_MOD_RECIPE M \

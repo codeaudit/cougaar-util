@@ -6,9 +6,24 @@ database=${org.cougaar.configuration.database}
 username=${org.cougaar.configuration.user}
 password=${org.cougaar.configuration.password}
 
+# Get all assemblies used in running this trial
 queryTrialAssemblies=\
  SELECT ASSEMBLY_ID FROM V4_EXPT_TRIAL_ASSEMBLY \
   WHERE TRIAL_ID = ':trial_id:'
+
+# Get all assemblies used in configuring this Trial
+queryConfigTrialAssemblies=\
+ SELECT ASSEMBLY_ID FROM V4_EXPT_TRIAL_CONFIG_ASSEMBLY \
+  WHERE TRIAL_ID = ':trial_id:'
+
+# See if Assembly is used anywhere. Return nothing if not
+checkUsedAssembly=\
+ SELECT	'1' FROM V4_EXPT_TRIAL_ASSEMBLY R, \
+   V4_EXPT_TRIAL_CONFIG_ASSEMBLY C \
+   WHERE (C.ASSEMBLY_ID = ':assembly_id:' \
+      and C.TRIAL_ID != ':trial_id:') \
+      OR (R.ASSEMBLY_ID = ':assembly_id:' \
+      and R.TRIAL_ID != ':trial_id:')
 
 queryExptAlibComponents=\
  SELECT H.COMPONENT_ALIB_ID \
@@ -54,6 +69,8 @@ updateLibComponent=\
         INSERTION_POINT = :insertion_point: \n\
  WHERE COMPONENT_LIB_ID = :component_lib_id:
 
+# Is this component already in the RUNTIME 
+# configuration hierarchy for this Trial?
 checkComponentHierarchy=\
  SELECT COMPONENT_ALIB_ID \
    FROM V4_ASB_COMPONENT_HIERARCHY ACH, V4_EXPT_TRIAL_ASSEMBLY ETA \
@@ -99,6 +116,8 @@ insertAgentOrg=\
  VALUES \
     (:component_lib_id:, :agent_lib_name:, :agent_org_class:)
 
+# Is this relationship already in the RUNTIME configuration
+# for this trial?
 checkRelationship=\
  SELECT '1' \
    FROM V4_ASB_AGENT_RELATION AAR, V4_EXPT_TRIAL_ASSEMBLY ETA \
@@ -175,14 +194,33 @@ queryMaxAssemblyId=\
 
 insertAssemblyId=\
  INSERT INTO V4_ASB_ASSEMBLY (ASSEMBLY_ID, ASSEMBLY_TYPE, DESCRIPTION) \
- VALUES (:assembly_id:, ':assembly_type:', ':assembly_type: assembly')
+ VALUES (':assembly_id:', ':assembly_type:', ':assembly_type: assembly')
 
+# Used in PopulateDb.java when just added a CSA assembly
+updateAssemblyDesc=\
+ UPDATE V4_ASB_ASSEMBLY SET DESCRIPTION = ':soc_desc:' \
+   WHERE ASSEMBLY_ID = ':assembly_id:'
+
+# Add new RUNTIME assembly
 insertTrialAssembly=\
  INSERT INTO V4_EXPT_TRIAL_ASSEMBLY (EXPT_ID, TRIAL_ID, ASSEMBLY_ID, DESCRIPTION) \
  VALUES (':expt_id:', ':trial_id:', :assembly_id:, ':assembly_type: assembly')
 
+# Delete runtime assembly from trial
 cleanTrialAssembly=\
  DELETE FROM V4_EXPT_TRIAL_ASSEMBLY \
+  WHERE EXPT_ID = ':expt_id:' \
+    AND TRIAL_ID = ':trial_id:' \
+    AND ASSEMBLY_ID IN :assemblies_to_clean:
+
+# Add new CONFIG assembly to the trial
+insertTrialConfigAssembly=\
+ INSERT INTO V4_EXPT_TRIAL_CONFIG_ASSEMBLY (EXPT_ID, TRIAL_ID, ASSEMBLY_ID, DESCRIPTION) \
+ VALUES (':expt_id:', ':trial_id:', :assembly_id:, ':assembly_type: assembly')
+
+# Delete config time assembly from trial
+cleanTrialConfigAssembly=\
+ DELETE FROM V4_EXPT_TRIAL_CONFIG_ASSEMBLY \
   WHERE EXPT_ID = ':expt_id:' \
     AND TRIAL_ID = ':trial_id:' \
     AND ASSEMBLY_ID IN :assemblies_to_clean:
@@ -199,6 +237,27 @@ cleanASBComponentHierarchy=\
  DELETE FROM V4_ASB_COMPONENT_HIERARCHY \
   WHERE ASSEMBLY_ID IN :assemblies_to_clean:
 
+cleanASBAgent=\
+ DELETE FROM V4_ASB_AGENT \
+  WHERE ASSEMBLY_ID IN :assemblies_to_clean:
+
+cleanASBAgentPGAttr=\
+ DELETE FROM V4_ASB_AGENT_PG_ATTR \
+  WHERE ASSEMBLY_ID IN :assemblies_to_clean:
+
+cleanASBAgentRel=\
+ DELETE FROM V4_ASB_AGENT_RELATION \
+  WHERE ASSEMBLY_ID IN :assemblies_to_clean:
+
+cleanASBOplan=\
+ DELETE FROM V4_ASB_OPLAN \
+  WHERE ASSEMBLY_ID IN :assemblies_to_clean:
+
+cleanASBOplanAAttr=\
+ DELETE FROM V4_ASB_OPLAN_AGENT_ATTR \
+  WHERE ASSEMBLY_ID IN :assemblies_to_clean:
+
+# Get list of non CMT assemblies in RUNTIME configuration
 queryAssembliesToClean=\
  SELECT AA.ASSEMBLY_ID \
    FROM V4_ASB_ASSEMBLY AA, V4_EXPT_TRIAL_ASSEMBLY ETA \
@@ -208,6 +267,7 @@ queryAssembliesToClean=\
 
 copyCMTAssembliesQueryNames=copyCMTAssemblies
 
+# Copy RUNTIME CMT assemblies from old trial to new
 copyCMTAssemblies=\
  INSERT INTO V4_EXPT_TRIAL_ASSEMBLY (EXPT_ID, TRIAL_ID, ASSEMBLY_ID, DESCRIPTION) \
  SELECT ':expt_id:', ':new_trial_id:', ETA.ASSEMBLY_ID, ETA.DESCRIPTION \
@@ -218,6 +278,7 @@ copyCMTAssemblies=\
 
 copyCMTAssembliesQueryNames.mysql=copyCMTAssemblies1 copyCMTAssemblies2 copyCMTAssemblies3
 
+# Copy RUNTIME CMT assemblies from old trial to new
 copyCMTAssemblies1=\
  CREATE TEMPORARY TABLE `TMP_CMTA_:expt_id:` AS \
  SELECT ':expt_id:' as EXPT_ID, \
@@ -236,6 +297,39 @@ copyCMTAssemblies2=\
 
 copyCMTAssemblies3=DROP TABLE `TMP_CMTA_:expt_id:`
 
+copyCMTConfigAssembliesQueryNames=copyCMTConfigAssemblies
+
+# Copy CONFIG CMT assemblies from old trial to new
+copyCMTConfigAssemblies=\
+ INSERT INTO V4_EXPT_TRIAL_CONFIG_ASSEMBLY (EXPT_ID, TRIAL_ID, ASSEMBLY_ID, DESCRIPTION) \
+ SELECT ':expt_id:', ':new_trial_id:', ETA.ASSEMBLY_ID, ETA.DESCRIPTION \
+   FROM V4_EXPT_TRIAL_CONFIG_ASSEMBLY ETA, V4_ASB_ASSEMBLY AA \
+  WHERE ETA.ASSEMBLY_ID = AA.ASSEMBLY_ID \
+    AND ETA.TRIAL_ID = ':old_trial_id:' \
+    AND AA.ASSEMBLY_TYPE = ':cmt_type:'
+
+copyCMTConfigAssembliesQueryNames.mysql=copyCMTConfigAssemblies1 copyCMTConfigAssemblies2 copyCMTConfigAssemblies3
+
+# Copy CONFIG CMT assemblies from old trial to new
+copyCMTConfigAssemblies1=\
+ CREATE TEMPORARY TABLE `TMP_CMTA_:expt_id:` AS \
+ SELECT ':expt_id:' as EXPT_ID, \
+        ':new_trial_id:' as TRIAL_ID, \
+        ETA.ASSEMBLY_ID as ASSEMBLY_ID, \
+        ETA.DESCRIPTION as DESCRIPTION \
+   FROM V4_EXPT_TRIAL_CONFIG_ASSEMBLY ETA, V4_ASB_ASSEMBLY AA \
+  WHERE ETA.ASSEMBLY_ID = AA.ASSEMBLY_ID \
+    AND ETA.TRIAL_ID = ':old_trial_id:' \
+    AND AA.ASSEMBLY_TYPE = ':cmt_type:'
+
+copyCMTConfigAssemblies2=\
+ INSERT INTO V4_EXPT_TRIAL_CONFIG_ASSEMBLY (EXPT_ID, TRIAL_ID, ASSEMBLY_ID, DESCRIPTION) \
+ SELECT EXPT_ID, TRIAL_ID, ASSEMBLY_ID, DESCRIPTION \
+   FROM `TMP_CMTA_:expt_id:`
+
+copyCMTConfigAssemblies3=DROP TABLE `TMP_CMTA_:expt_id:`
+
+# Copy the CMT Threads from one Trial to another
 copyCMTThreadsQueryNames.oracle=copyCMTThreads
 
 copyCMTThreads=\
@@ -258,6 +352,48 @@ copyCMTThreads2=\
    FROM `TMP_CMTT_:expt_id:`
 
 copyCMTThreads3=DROP TABLE `TMP_CMTT_:expt_id:`
+
+copyOPLANQueryNames.oracle=copyOPLANEntry copyOPLANAttrEntries
+
+copyOPLANEntry=\
+ INSERT INTO V4_ASB_OPLAN (ASSEMBLY_ID, OPLAN_ID, OPERATION_NAME, PRIORITY, C0_DATE) \
+ SELECT ':new_assembly_id:', OPLAN_ID, OPERATION_NAME, PRIORITY, C0_DATE \
+	FROM V4_ASB_OPLAN \
+   WHERE ASSEMBLY_ID = ':old_assembly_id:'
+
+copyOPLANAttrEntries=\
+ INSERT INTO V4_ASB_OPLAN_AGENT_ATTR (ASSEMBLY_ID, OPLAN_ID, COMPONENT_ALIB_ID, COMPONENT_ID, START_CDAY, ATTRIBUTE_NAME, END_CDAY, ATTRIBUTE_VALUE) \
+   SELECT ':new_assembly_id:', OPLAN_ID, COMPONENT_ALIB_ID, COMPONENT_ID, START_CDAY, ATTRIBUTE_NAME, END_CDAY, ATTRIBUTE_VALUE) \
+       FROM V4_ASB_OPLAN_AGENT_ATTR \
+    WHERE ASSEMBLY_ID = ':old_assembly_id:'
+
+copyOPLANQueryNames.mysql=copyOPLANEntry1 copyOPLANEntry2 copyOPLANEntry3 copyOPLANAttrEntries1 copyOPLANAttrEntries2 copyOPLANAttrEntries3
+
+copyOPLANEntry1=\
+ CREATE TEMPORARY TABLE `TMP_OPE_:old_assembly_id:` AS \
+   SELECT OPLAN_ID, OPERATION_NAME, PRIORITY, C0_DATE \
+    FROM V4_ASB_OPLAN \
+   WHERE ASSEMBLY_ID = ':old_assembly_id:'
+
+copyOPLANEntry2=\
+ INSERT INTO V4_ASB_OPLAN (ASSEMBLY_ID, OPLAN_ID, OPERATION_NAME, PRIORITY, C0_DATE) \
+  SELECT ':new_assembly_id:', OPLAN_ID, OPERATION_NAME, PRIORITY, C0_DATE \
+   FROM `TMP_OPE_:old_assembly_id:`
+
+copyOPLANEntry3=DROP TABLE `TMP_OPE_:old_assembly_id:`
+
+copyOPLANAttrEntries1=\
+ CREATE TEMPORARY TABLE `TMP_OPAE_:old_assembly_id:` AS \
+   SELECT OPLAN_ID, COMPONENT_ALIB_ID, COMPONENT_ID, START_CDAY, ATTRIBUTE_NAME, END_CDAY, ATTRIBUTE_VALUE \  
+    FROM V4_ASB_OPLAN_AGENT_ATTR \
+   WHERE ASSEMBLY_ID = ':old_assembly_id:'
+
+copyOPLANAttrEntries2=\
+ INSERT INTO V4_ASB_OPLAN_AGENT_ATTR (ASSEMBLY_ID, OPLAN_ID, COMPONENT_ALIB_ID, COMPONENT_ID, START_CDAY, ATTRIBUTE_NAME, END_CDAY, ATTRIBUTE_VALUE) \  
+   SELECT ':new_assembly_id:', OPLAN_ID, COMPONENT_ALIB_ID, COMPONENT_ID, START_CDAY, ATTRIBUTE_NAME, END_CDAY, ATTRIBUTE_VALUE \  
+    FROM `TMP_OPAE_:old_assembly_id:`
+
+copyOPLANAttrEntries3=DROP TABLE `TMP_OPAE_:old_assembly_id:`
 
 queryLibRecipeByName=\
  SELECT MOD_RECIPE_LIB_ID, JAVA_CLASS \
