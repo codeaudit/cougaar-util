@@ -99,6 +99,7 @@ REM modified to alter the Node's configuration.
 
 SET LIBPATHS=^
 %COUGAAR_INSTALL_PATH%\lib\server.jar;^
+%COUGAAR_INSTALL_PATH%\lib\core.jar;^
 %COUGAAR_INSTALL_PATH%\lib\csmart.jar
 
 IF NOT ("%COUGAAR_DEV_PATH%" == "") SET LIBPATHS=%COUGAAR_DEV_PATH%;%LIBPATHS%
