@@ -36,6 +36,10 @@ public abstract class BinderWrapper
     super(bf, childX);
   }
 
+  public final ComponentDescription getComponentDescription() { 
+    return child==null?null:child.getComponentDescription();
+  }
+
   protected void attachChild(Object cd) {
     if (cd instanceof Binder) {
       child = (Binder) cd;

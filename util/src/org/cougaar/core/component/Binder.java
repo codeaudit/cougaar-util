@@ -46,5 +46,13 @@ import org.cougaar.util.GenericStateModel;
 public interface Binder 
   extends GenericStateModel, StateObject // BindingSite 
 {
+  /** Get the ComponentDescription of the bound component.
+   * The returned value may be null if the component was
+   * loaded as an instance rather than from a ComponentDescription
+   * or if an intervening Binder declines to pass this information
+   * up to parents.
+   */
+  ComponentDescription getComponentDescription();
+
 }
 
