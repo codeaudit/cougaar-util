@@ -29,34 +29,62 @@ import java.lang.ref.SoftReference;
 
 /** A hack for computing a complex object's toString as needed,
  * but without keeping it around for ever.
+ * @property org.cougaar.util.ToStringMemo.cache If set to false (default is true)
+ * ToStringMemo will actually not cache toStrings at all, allowing 
+ * profiling code to have visibility into the toString process.
  **/
 public abstract class ToStringMemo {
-  private SoftReference memo = null;
-  public final synchronized void discard() {
-    memo = null;
-  }
-  public final synchronized String toString() {
-    if (memo != null) {         // we've got a memo
-      String s = (String) memo.get();
-      if (s != null) {          // and the memo isn't empty
-        return s;               // return it
-      }
-    }
-    // otherwise, recompute the memo
-    String s = generate();
-    memo = new SoftReference(s);
-    return s;
-  }
-  
+  protected static final boolean isCaching = PropertyParser.getBoolean("org.cougaar.util.ToStringMemo.cache", true);
+
   /** Implement this to be the actual toString implementation **/
   protected abstract String generate();
-      
+
+  /** called to discard any cached toString information **/
+  public abstract void discard(); 
+
+  /** return a cached value or call generate **/
+  public abstract String toString();
+
+  /** The standard ToStringMemo implementation **/
+  public static abstract class SoftToStringMemo extends ToStringMemo {
+    private transient SoftReference memo = null;
+
+    public final synchronized void discard() {
+      memo = null;
+    }
+    public final synchronized String toString() {
+      if (memo != null) {         // we've got a memo
+        String s = (String) memo.get();
+        if (s != null) {          // and the memo isn't empty
+          return s;               // return it
+        }
+      }
+      // otherwise, recompute the memo
+      String s = generate();
+      memo = new SoftReference(s);
+      return s;
+    }
+  }
+
+
+  /** A version of ToStringMemo which doesn't really ever cache **/
+  public static abstract class UncachedToStringMemo extends ToStringMemo {
+    public void discard() {}
+    public String toString() { return generate(); };
+  }
+
   /** Construct a ToStringMemo which uses the parameter object's toString
    * to build the memoized toString value.
    **/
   public static ToStringMemo getInstance(final Object gen) {
-    return new ToStringMemo() {
-        protected String generate() { return gen.toString(); }
-      };
+    if (isCaching) {
+      return new SoftToStringMemo() {
+          protected String generate() { return gen.toString(); }
+        };
+    } else {
+      return new UncachedToStringMemo() {
+          protected String generate() { return gen.toString(); }
+        };
+    }
   }
 }
