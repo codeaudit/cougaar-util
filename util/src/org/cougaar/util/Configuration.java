@@ -23,15 +23,6 @@ package org.cougaar.util;
 import java.io.*;
 import java.net.*;
 import java.util.*;
-import java.util.zip.*;
-import org.apache.xerces.parsers.DOMParser;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.EntityResolver;
-import org.w3c.dom.Document;
-
-//import org.apache.log4j.*;
-import org.cougaar.util.log.*;
 
 /**
  * Configuration is a holder of a collection of static configuration utility methods,
