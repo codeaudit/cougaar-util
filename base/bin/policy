@@ -19,5 +19,7 @@
 #  PERFORMANCE OF THE COUGAAR SOFTWARE.
 # </copyright>
 
-source $COUGAAR_INSTALL_PATH/bin/setlibpath.csh
-java -green  -cp $LIBPATHS    org.cougaar.domain.mlm.ui.views.PolicyApplication
+#source $COUGAAR_INSTALL_PATH/bin/setlibpath.csh
+
+
+java -cp $COUGAAR_INSTALL_PATH/lib/core.jar:$COUGAAR_INSTALL_PATH/lib/glm.jar:$COUGAAR_INSTALL_PATH/sys/xerces.jar:    org.cougaar.domain.mlm.ui.views.PolicyApplication
