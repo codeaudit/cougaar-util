@@ -1,5 +1,9 @@
 2002-06-14  Ray Tomlinson  <RTomlinson@bbn.com>
 
+	* ReadOnlySortedSet.java:
+	Wrapper for SortedSets the restricts access to be read-only. All
+	the mutators throw UnimplementedOperationException.
+
 	* Collectors.java:
 	Fix BOZO comments. There is no BOZO. New comments explain the
 	situation that was apparently anomalous to the previous commenter.
