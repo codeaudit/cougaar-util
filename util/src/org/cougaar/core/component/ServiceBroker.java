@@ -29,22 +29,27 @@ import java.util.*;
  * @see java.beans.beancontext.BeanContextServices 
  **/
 public interface ServiceBroker {
-  /** add a ServiceListener to this Services Context **/
+  /** Add a ServiceListener to this Services Context. **/
   void addServiceListener(ServiceListener sl);
-  /** remove a services listener **/
+
+  /** Remove a services listener. **/
   void removeServiceListener(ServiceListener sl);
 
-  /** add a Service to this Services Context.
+  /** Add a Service to this Services Context.
    * @return true IFF successful and not redundant.
    **/
   boolean addService(Class serviceClass, ServiceProvider serviceProvider);
-  /** remoke or remove an existing service **/
+
+  /** Remoke or remove an existing service **/
   void revokeService(Class serviceClass, ServiceProvider serviceProvider);
 
-  /** is the service currently available? **/
+  /** Is the service currently available? **/
   boolean hasService(Class serviceClass);
 
-  /** gets the currently available services for this context **/
+  /** Gets the currently available services for this context.
+   * All standard implementations return an Iterator over a copy of the set of ServiceClasses
+   * so that there is no risk of ComodificationException.
+   **/
   Iterator getCurrentServiceClasses();
 
   /** get an instance of the requested service from a service provider associated
@@ -53,8 +58,19 @@ public interface ServiceBroker {
    * thrown by the associated ServiceProvider.  The ServiceBroker itself may
    * throw ClassCastException if the ServiceProvider returns a non-null 
    * service object which is not an instance of the requested serviceClass.
+   * <p>
+   * Note that a successful call to getService almost always implies memory allocation,
+   * often not garbage-collectable, due to internal references.  
+   * @note It is always a 
+   * good idea to pair getService and releaseService calls.
    **/
   Object getService(Object requestor, Class serviceClass, ServiceRevokedListener srl);
 
+  /** Release a service object previously requested by a call to getService.
+   * Service object instances usually require significant non-GCable memory, so
+   * must be released to reclaim the memory and/or the associated resources.
+   * @note It is always a 
+   * good idea to pair getService and releaseService calls.
+   */
   void releaseService(Object requestor, Class serviceClass, Object service);
 }

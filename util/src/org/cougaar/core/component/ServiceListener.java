@@ -20,7 +20,12 @@
  */
 package org.cougaar.core.component;
 
-/** Base interface for all service listeners **/
+/** Base interface for all service listeners.
+ * @note ServiceListeners are invoked at the very end of the service add or
+ * remove process <em>in the thread of the adding/removing processes</em>. 
+ * Listener code should do as little work as possible, e.g. set a flag and kick a 
+ * semaphore.
+ **/
 public interface ServiceListener extends java.util.EventListener 
 {
 }
