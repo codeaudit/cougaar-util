@@ -20,7 +20,7 @@ REM " PERFORMANCE OF THE COUGAAR SOFTWARE."
 REM "</copyright>"
 
 
-set LIBPATHS=%COUGAAR_INSTALL_PATH%\lib\bootstrap.jar
+set LIBPATHS="%COUGAAR_INSTALL_PATH%\lib\bootstrap.jar"
 
 REM Make sure that COUGAAR3RDPARTY is specified
 IF NOT "%COUGAAR3RDPARTY%" == "" GOTO L_3
