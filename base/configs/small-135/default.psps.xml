@@ -129,6 +129,11 @@ Additional PSPs loaded by PSP Launcher
     <PSPName>alpine/demo/MAP.PSP</PSPName>
   </element>
   <element type="org.cougaar.lib.planserver.NamedPSP">
+    <Classname>org.cougaar.lib.planserver.psp.PSP_LoggingControl</Classname>
+    <PSPName>alpine/demo/LOGGING.PSP</PSPName>
+    <Comment>View the contents of the Blackboard</Comment>
+  </element>
+  <element type="org.cougaar.lib.planserver.NamedPSP">
     <Classname>org.cougaar.domain.mlm.ui.psp.plan.PSP_Inventory</Classname>
     <PSPName>alpine/demo/INVENTORY.PSP</PSPName>
   </element>
