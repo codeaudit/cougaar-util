@@ -27,6 +27,11 @@
 # But you may still use properties if you wish.
 # set MYDOMAINS=-Dorg.cougaar.domain.alp=org.cougaar.glm.GLMDomain
 
+# Ensure the COUGAAR_WORKSPACE is set
+if [ "$COUGAAR_WORKSPACE"="" ]; then
+    COUGAAR_WORKSPACE="${COUGAAR_INSTALL_PATH}/workspace"
+fi
+
 MYDOMAINS=""
 BOOTSTRAPPER=org.cougaar.bootstrap.Bootstrapper
 MYCLASSES=org.cougaar.core.node.Node
@@ -35,7 +40,7 @@ OS=`uname`
 #if [ "$OS" == "Linux" ]; then
 #  MYPROPERTIES="-green"
 #fi
-MYPROPERTIES="$MYPROPERTIES $MYDOMAINS  -Dorg.cougaar.system.path=$COUGAAR3RDPARTY -Dorg.cougaar.install.path=$COUGAAR_INSTALL_PATH"
+MYPROPERTIES="$MYPROPERTIES $MYDOMAINS  -Dorg.cougaar.system.path=$COUGAAR3RDPARTY -Dorg.cougaar.install.path=$COUGAAR_INSTALL_PATH -Dorg.cougaar.workspace=$COUGAAR_WORKSPACE"
 MYPROPERTIES="$MYPROPERTIES -Duser.timezone=GMT -Dorg.cougaar.core.useBootstrapper=true"
 
 MYMEMORY="-Xms100m -Xmx300m"

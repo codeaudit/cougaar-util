@@ -20,6 +20,32 @@ REM " PERFORMANCE OF THE COUGAAR SOFTWARE."
 REM "</copyright>"
 
 
+REM Make sure that COUGAAR_INSTALL_PATH is specified
+IF NOT "%COUGAAR_INSTALL_PATH%" == "" GOTO L_2
+
+REM Unable to find cougaar-install-path
+ECHO COUGAAR_INSTALL_PATH not set!
+GOTO L_END
+:L_2
+
+REM Make sure that COUGAAR3RDPARTY is specified
+IF NOT "%COUGAAR3RDPARTY%" == "" GOTO L_3
+
+REM Unable to find "sys" path for 3rd-party jars
+REM This is usually COUGAAR_INSTALL_PATH/sys
+ECHO COUGAAR3RDPARTY not set! Defaulting to CIP\sys
+SET COUGAAR3RDPARTY=%COUGAAR_INSTALL_PATH%\sys
+:L_3
+
+REM Make sure that COUGAAR_WORKSPACE is set
+IF NOT "%COUGAAR_WORKSPACE%" == "" GOTO L_4
+
+REM Path for runtime output not set.
+REM Default is CIP/workspace
+ECHO COUGAAR_WORKSPACE not set. Defaulting to CIP/workspace
+SET COUGAAR_WORKSPACE=%COUGAAR_INSTALL_PATH%\workspace
+:L_4
+
 REM calls setlibpath.bat which sets the path to the required jar files.
 REM calls setarguments.bat which sets input parameters for system behavior
 CALL %COUGAAR_INSTALL_PATH%\bin\setlibpath.bat
@@ -36,3 +62,4 @@ if "%1"=="EmptyNode" set MYMEMORY= -Xms16m
 
 java.exe -Dorg.cougaar.core.persistence.enable=true -Xbootclasspath/p:%COUGAAR_INSTALL_PATH%\lib\javaiopatch.jar %MYPROPERTIES% %MYMEMORY% -classpath %LIBPATHS% %MYCLASSES% %MYARGUMENTS% %2 %3
 
+:L_END
