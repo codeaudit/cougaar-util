@@ -230,6 +230,9 @@ queryAgentAssetData = \
 ##############################################
 # Community editing queries follow
 # See DatabaseTableModel and CommunityDBUtils in octc.ui.community
+# Note that this code uses table and column names explicitly,
+# including aliases, so the code must be edited if these
+# queries are edited
 
 queryCommunities = \
   SELECT DISTINCT COMMUNITY_ID \
