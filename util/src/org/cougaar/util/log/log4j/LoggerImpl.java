@@ -21,20 +21,22 @@
 
 package org.cougaar.util.log.log4j;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Enumeration;
-
 import org.apache.log4j.Category;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.cougaar.util.StackElements;
 import org.cougaar.util.log.LoggerAdapter;
 import org.cougaar.util.log.Logging;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashSet;
+
 /**
  * Package-private log4j implementation of logger.
- * <p>
+ * <p/>
  * This is an log4j based implementation of Logger. One
  * important note is that when this instance is created it
  * creates a log4j Logger based on the class passed in. If
@@ -43,23 +45,28 @@ import org.cougaar.util.log.Logging;
  * cause confusion. To avoid this each object can get its own
  * instance or use its own "classname:method" name.
  *
- * @see LoggerFactory
+ * @property org.cougaar.util.log.checkwrappers
+ * Debugging check to ensure that every call to the logger is wrapped with an <code>isEnabled</code> check.
+ * @see org.cougaar.util.log.LoggerFactory
  */
-class LoggerImpl extends LoggerAdapter
-{
+class LoggerImpl extends LoggerAdapter {
   private static final int MAXDOTS = 50;
   private static int ndots = 0;
   private static Object dotsLock = new Object();
   private static SimpleDateFormat dateFormat =
-    new SimpleDateFormat("yyyy-MM-dd hh:mm:ss,SSS");
+      new SimpleDateFormat("yyyy-MM-dd hh:mm:ss,SSS");
 
   // log4j logger, which does the real work...
   private final Logger cat;
 
   private boolean checkDots = false;
 
+  private static boolean checkForWrappers = Boolean.getBoolean("org.cougaar.util.log.checkwrappers");
+
+  private static final HashSet throwables = new HashSet();
+
   private static boolean hasConsoleAppender(Category cat) {
-    for (Enumeration e = cat.getAllAppenders(); e.hasMoreElements(); ) {
+    for (Enumeration e = cat.getAllAppenders(); e.hasMoreElements();) {
       Object o = e.nextElement();
       if (o instanceof ConsoleAppender) {
         return true;
@@ -73,10 +80,10 @@ class LoggerImpl extends LoggerAdapter
   }
 
   /**
-   * Constructor which uses the specified name to form a 
+   * Constructor which uses the specified name to form a
    * log4j Logger.
    *
-   * @param requestor Object requesting this service.
+   * @param obj requestor Object requesting this service.
    */
   public LoggerImpl(Object obj) {
     String s = Logging.getKey(obj);
@@ -98,6 +105,18 @@ class LoggerImpl extends LoggerAdapter
 
   public void log(int level, String message, Throwable t) {
     Level p = Util.convertIntToLevel(level);
+    if (checkForWrappers && !cat.isEnabledFor(p)) {
+      Throwable th = new Throwable();
+      StackElements st = new StackElements(th);
+      boolean res;
+      synchronized (throwables) {
+        res = throwables.add(st);
+      }
+
+      if (res) {
+        cat.error("Call to Logger is missing wrapper: ", th);
+      }
+    }
     if (checkDots && cat.isEnabledFor(p)) {
       // synchronize to prevent any dots between dumpDots and logging.
       synchronized (dotsLock) {
@@ -128,7 +147,7 @@ class LoggerImpl extends LoggerAdapter
    * spontaneous output with logging output, but doing so would
    * require adjusting all ConsoleAppenders to use the original
    * stdout/stderr to avoid.
-   **/
+   */
 
   public void printDot(String dot) {
     synchronized (dotsLock) {
@@ -144,15 +163,15 @@ class LoggerImpl extends LoggerAdapter
   }
 
   public String toString() {
-    return 
-      "logger \""+cat.getName()+"\" at "+
-      (isDetailEnabled() ? "detail" :
-       isDebugEnabled() ? "debug" :
-       isInfoEnabled() ? "info" :
-       isWarnEnabled() ? "warn" :
-       isErrorEnabled() ? "error" :
-       isShoutEnabled() ? "shout" :
-       isFatalEnabled() ? "fatal" :
-       "none");
+    return
+        "logger \"" + cat.getName() + "\" at " +
+        (isDetailEnabled() ? "detail" :
+        isDebugEnabled() ? "debug" :
+        isInfoEnabled() ? "info" :
+        isWarnEnabled() ? "warn" :
+        isErrorEnabled() ? "error" :
+        isShoutEnabled() ? "shout" :
+        isFatalEnabled() ? "fatal" :
+        "none");
   }
 }
