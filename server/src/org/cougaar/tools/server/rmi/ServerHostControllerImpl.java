@@ -228,7 +228,12 @@ class ServerHostControllerImpl
         // SECURITY -- guard against "jvm.program=rm"!!!
         // use name as-is
       } else {
-        jvmProgram = "java";
+        String javaHome = System.getProperty("java.home");
+        if (javaHome != null) {
+          jvmProgram = javaHome+"/bin/java";
+        } else {
+          jvmProgram = "java";
+        }
       }
 
       cmdList.add(jvmProgram);
