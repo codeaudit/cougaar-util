@@ -1,12 +1,16 @@
-// A Comment
-//Foo ==  512: AdaptiveUniversalAllocatorPlugin.SPEED = 512;
-//Foo ==  256: AdaptiveUniversalAllocatorPlugin.SPEED = 256;
-//Foo ==  128: AdaptiveUniversalAllocatorPlugin.SPEED = 128;
-//Foo ==   64: AdaptiveUniversalAllocatorPlugin.SPEED =  64;
-//Foo ==   32: AdaptiveUniversalAllocatorPlugin.SPEED =  32;
-//Foo ==   16: AdaptiveUniversalAllocatorPlugin.SPEED =  16;
-//Foo ==    8: AdaptiveUniversalAllocatorPlugin.SPEED =   8;
-//Foo ==    4: AdaptiveUniversalAllocatorPlugin.SPEED =   4;
-//Foo ==    2: AdaptiveUniversalAllocatorPlugin.SPEED =   2;
-//Foo ==    1: AdaptiveUniversalAllocatorPlugin.SPEED =   1;
-true: AdaptiveUniversalAllocatorPlugin.SPEED =   1;
+TaskRateSensorPlugin.TASKRATE / CPUTestPlugin.CPU in    0 to    8: AdaptiveUniversalAllocatorPlugin.SPEED = 512;
+TaskRateSensorPlugin.TASKRATE / CPUTestPlugin.CPU in    8 to   16: AdaptiveUniversalAllocatorPlugin.SPEED = 256;
+TaskRateSensorPlugin.TASKRATE / CPUTestPlugin.CPU in   16 to   32: AdaptiveUniversalAllocatorPlugin.SPEED = 128;
+TaskRateSensorPlugin.TASKRATE / CPUTestPlugin.CPU in   32 to   64: AdaptiveUniversalAllocatorPlugin.SPEED =  64;
+TaskRateSensorPlugin.TASKRATE / CPUTestPlugin.CPU in   64 to  128: AdaptiveUniversalAllocatorPlugin.SPEED =  32;
+TaskRateSensorPlugin.TASKRATE / CPUTestPlugin.CPU in  128 to  256: AdaptiveUniversalAllocatorPlugin.SPEED =  16;
+TaskRateSensorPlugin.TASKRATE / CPUTestPlugin.CPU in  256 to  512: AdaptiveUniversalAllocatorPlugin.SPEED =   8;
+TaskRateSensorPlugin.TASKRATE / CPUTestPlugin.CPU in  512 to 1024: AdaptiveUniversalAllocatorPlugin.SPEED =   4;
+TaskRateSensorPlugin.TASKRATE / CPUTestPlugin.CPU in 1024 to 2048: AdaptiveUniversalAllocatorPlugin.SPEED =   2;
+TaskRateSensorPlugin.TASKRATE / CPUTestPlugin.CPU >= 2048        : AdaptiveUniversalAllocatorPlugin.SPEED =   1;
+TRUE
+  :Persistence.lcl.interval =  5000:Persistence.lcl.consolidationPeriod = 6
+  :Persistence.foo.interval = 10000:Persistence.foo.consolidationPeriod = 3
+  :Persistence.bar.interval = 30000:Persistence.bar.consolidationPeriod = 1;
+TRUE:Persistence.foo.signing=OFF:Persistence.bar.encryption=OFF:Persistence.lcl.signing=OFF;
+TRUE:Persistence.lcl.encryption=OFF:Persistence.bar.signing=OFF:Persistence.foo.encryption=OFF;
