@@ -59,8 +59,13 @@ CALL %COUGAAR_INSTALL_PATH%\bin\setarguments.bat
 
 REM pass in "NodeName" to run a specific named Node
 
+REM Use the other version of this line to validate the schema - MAY BE SLOW!
+REM SET VALIDATESCHEMA=-Dorg.cougaar.core.node.validate=true
+SET VALIDATESCHEMA=
+
+
 @ECHO ON
 
-java.exe %MYPROPERTIES% -Dorg.cougaar.core.node.InitializationComponent=XML -Dorg.cougaar.society.file=%1 -Dorg.cougaar.core.node.validate=true %MYMEMORY% -classpath %LIBPATHS% %MYCLASSES% %MYARGUMENTS% -c -n %2 %3
+java.exe %MYPROPERTIES% -Dorg.cougaar.core.node.InitializationComponent=XML -Dorg.cougaar.society.file=%1 %VALIDATESCHEMA% %MYMEMORY% -classpath %LIBPATHS% %MYCLASSES% %MYARGUMENTS% -c -n %2 %3
 
 :L_END
