@@ -46,7 +46,7 @@ queryExptsWithSociety = \
    AND B.DESCRIPTION = ':societyName:'
 
 queryHosts = \
- SELECT H.COMPONENT_ALIB_ID \
+ SELECT H.COMPONENT_NAME \
    FROM v4_asb_component_hierarchy H, v4_alib_component C \
   WHERE H.COMPONENT_ALIB_ID = C.COMPONENT_ALIB_ID \
     AND C.COMPONENT_TYPE = 'host' \
