@@ -8,25 +8,9 @@ database=${org.cougaar.configuration.database}
 username=${org.cougaar.configuration.user}
 password=${org.cougaar.configuration.password}
 
-queryAssemblyID = \
- SELECT ASSEMBLY_ID, DESCRIPTION \
-   FROM v4_asb_assembly \
-  WHERE ASSEMBLY_TYPE = ':assemblytype'
-
-updateAssemblyID = \
- UPDATE v4_asb_assembly \
-   SET ASSEMBLY_ID=ASSEMBLY_ID \
-   WHERE ASSEMBLY_ID = ':assembly_id'
-
 getAssemblyIDOnExpt = \
  SELECT ASSEMBLY_ID \
    FROM v4_expt_trial_config_assembly \
-  WHERE expt_id = ':experiment_id' \
-   AND ASSEMBLY_ID LIKE 'CMT-%'
-
-getRuntimeAssemblyIDOnExpt = \
- SELECT ASSEMBLY_ID \
-   FROM v4_expt_trial_assembly \
   WHERE expt_id = ':experiment_id' \
    AND ASSEMBLY_ID LIKE 'CMT-%'
 
@@ -1229,9 +1213,6 @@ addRuntimeAssembly = \
  insert into v4_expt_trial_assembly (EXPT_ID,TRIAL_ID,ASSEMBLY_ID,DESCRIPTION) \
    values (':experiment_id',':trial_id',':assembly_id',':trial_name')
 
-getSocietyTemplateForExperiment = \
- SELECT  CFW_GROUP_ID FROM v4_expt_experiment WHERE EXPT_ID=':experiment_id'
-
 createExperiment = \
  insert into v4_expt_experiment (EXPT_ID, DESCRIPTION, NAME, CFW_GROUP_ID) \
   values (':experiment_id',':experiment_id',':experiment_id',':cfw_group_id')
@@ -1250,9 +1231,6 @@ updateCMTAssembly = \
 
 updateRuntimeCMTAssembly = \
  UPDATE v4_expt_trial_assembly SET ASSEMBLY_ID= ':assembly_id' WHERE EXPT_ID=':experiment_id' AND ASSEMBLY_ID LIKE 'CMT-%'
-
-getSocietyTemplates = \
- SELECT  DESCRIPTION,CFW_GROUP_ID FROM v6_cfw_group
 
 getOrganizationGroups = \
  SELECT DISTINCT \
@@ -1278,62 +1256,6 @@ getOrganizationsInGroup = \
   AND EXP.CFW_GROUP_ID =GM.CFW_GROUP_ID \
   AND OM.CFW_ID=GM.CFW_ID \
   AND OM.ORG_GROUP_ID=':group_id'
-
-addNodeAssignments = \
- INSERT INTO v4_asb_component_hierarchy \
-    (ASSEMBLY_ID, COMPONENT_ALIB_ID, PARENT_COMPONENT_ALIB_ID, PRIORITY, INSERTION_ORDER) \
-  SELECT DISTINCT \
-   ':assembly_id', \
-   AGENT.COMPONENT_ALIB_ID, \
-   NODE.COMPONENT_ALIB_ID, \
-   'COMPONENT' AS PRIORITY, \	
-   0 \
-  FROM \
-   v4_alib_component NODE, \
-   v4_alib_component AGENT \
-  WHERE \
-   NODE.COMPONENT_NAME=':nodename' \
-   AND AGENT.COMPONENT_NAME=':agentname'
-
-addCSMARTAssembly = \
- INSERT INTO v4_asb_assembly \
-   (ASSEMBLY_ID, ASSEMBLY_TYPE, DESCRIPTION) \
-  values (':assembly_id','CSMART',':assembly_description')
-
-addMachineAssignmentsUpdate = \
-UPDATE v4_asb_component_hierarchy A \
- SET ASSEMBLY_ID = ASSEMBLY_ID
-  WHERE \
-   ASSEMBLY_ID = ':assembly_id' \
-     AND EXISTS \
-      (SELECT ASSEMBLY_ID \
-        FROM \
-	v4_asb_component_hierarchy B, \
-	v4_alib_component machine, \
-	v4_alib_component node \
-       WHERE	 \
-        ASSEMBLY_ID = ':assembly_id' \
-	AND MACHINE.COMPONENT_NAME=':machinename' \
-	AND NODE.COMPONENT_NAME=':nodename' \
-	AND B.COMPONENT_ALIB_ID=NODE.COMPONENT_ALIB_ID \
-	AND B.PARENT_COMPONENT_ALIB_ID=MACHINE.COMPONENT_ALIB_ID)
-
-
-addMachineAssignmentsInsert = \
- INSERT INTO v4_asb_component_hierarchy \
-   (ASSEMBLY_ID, COMPONENT_ALIB_ID, PARENT_COMPONENT_ALIB_ID, PRIORITY, INSERTION_ORDER) \
-  SELECT DISTINCT \
-   ':assembly_id' , \
-   NODE.COMPONENT_ALIB_ID, \
-   MACHINE.COMPONENT_ALIB_ID, \
-   'COMPONENT' AS PRIORITY, \	
-   0 \
-  FROM \
-    v4_alib_component MACHINE, \
-    v4_alib_component NODE \
-   WHERE \
-   MACHINE.COMPONENT_NAME=':machinename' \
-   AND NODE.COMPONENT_NAME=':nodename'
 
 isULThreadSelected = \
  SELECT * \
