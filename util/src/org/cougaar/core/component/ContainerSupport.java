@@ -53,7 +53,7 @@ implements Container, StateObject
   protected ServiceBroker childServiceBroker = null;
 
   /** The actual set of child BoundComponent loaded. 
-   * @see BoundComponent
+   * @see org.cougaar.core.component.BoundComponent
    **/
   protected final ArrayList boundComponents = new ArrayList(11);
 
