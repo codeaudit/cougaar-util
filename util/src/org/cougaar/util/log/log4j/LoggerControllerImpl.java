@@ -16,12 +16,13 @@ import java.util.Enumeration;
 import java.util.Vector;
 import java.util.HashSet;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Appender;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.WriterAppender;
 import org.apache.log4j.FileAppender;
-import org.apache.log4j.Priority;
+import org.apache.log4j.Level;
 
 import org.cougaar.util.log.*;
 
@@ -29,12 +30,12 @@ import org.cougaar.util.log.*;
  * Package-private log4j implementation of a logger-controller.
  * <p>
  * Note that log4j uses static methods to control its logging,
- * such as "Category.*" methods.
+ * such as "Logger.*" methods.
  */
 class LoggerControllerImpl implements LoggerController {
 
   private String name;
-  private Category cat;
+  private Logger cat;
 
   public LoggerControllerImpl() {
     // must get a logger-controller!
@@ -43,9 +44,9 @@ class LoggerControllerImpl implements LoggerController {
   public LoggerControllerImpl(String name) {
     this.name = name;
     if ("root".equals(name)) {
-      this.cat = Category.getRoot();
+      this.cat = Logger.getRootLogger();
     } else {
-      this.cat = Category.getInstance(name);
+      this.cat = Logger.getLogger(name);
     }
   }
 
@@ -65,15 +66,15 @@ class LoggerControllerImpl implements LoggerController {
    */
   public Enumeration getAllLoggerNames() {
     HashSet s = new HashSet();
-    Enumeration cats = Category.getCurrentCategories();
+    Enumeration cats = LogManager.getCurrentLoggers();
     while (cats.hasMoreElements()) {
-      Category c = (Category) cats.nextElement();
+      Logger c = (Logger) cats.nextElement();
       while (c != null) {
         Enumeration appenders = c.getAllAppenders();
         if (appenders.hasMoreElements()) {
           s.add(c.getName());
         }
-        Category rootC = c.getRoot();
+        Logger rootC = c.getRootLogger();
         if (c == rootC) {
           c = null;
         } else {
@@ -93,8 +94,8 @@ class LoggerControllerImpl implements LoggerController {
    * @see Logger
    */
   public int getLoggingLevel() {
-    Priority p = cat.getChainedPriority();
-    return Util.convertPriorityToInt(p);
+    Level p = cat.getEffectiveLevel();
+    return Util.convertLevelToInt(p);
   }
 
   /**
@@ -105,8 +106,8 @@ class LoggerControllerImpl implements LoggerController {
    * @see Logger
    */
   public void setLoggingLevel(int level) {
-    Priority p = Util.convertIntToPriority(level);
-    cat.setPriority(p);
+    Level p = Util.convertIntToLevel(level);
+    cat.setLevel(p);
   }
 
   /**
@@ -116,8 +117,8 @@ class LoggerControllerImpl implements LoggerController {
    * the various logging destinations.
    */
   public LogTarget[] getLogTargets() {
-    Priority p = cat.getChainedPriority();
-    int loggingLevel = Util.convertPriorityToInt(p);
+    Level p = cat.getEffectiveLevel();
+    int loggingLevel = Util.convertLevelToInt(p);
     Enumeration appenders = cat.getAllAppenders();
 
     Vector outputs = new Vector();

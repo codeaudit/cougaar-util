@@ -15,6 +15,7 @@ import java.io.OutputStream;
 
 import org.apache.log4j.Appender;
 import org.apache.log4j.Priority;
+import org.apache.log4j.Level;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.WriterAppender;
 import org.apache.log4j.FileAppender;
@@ -38,6 +39,7 @@ final class Util {
    * Private utility to change between int defined by Logger
    * and Priority class of log4j.
    * @param level An integer from Logger.
+   * @deprecated Use Level methods instead
    */
   public static final Priority convertIntToPriority(int level) {
     switch (level) {
@@ -55,6 +57,7 @@ final class Util {
    * Private utility to change between int defined by Logger
    * and Priority class of log4j.
    * @param level A log4j Priority
+   * @deprecated Use Level methods instead
    */
   public static final int convertPriorityToInt(Priority level) {
     switch (level.toInt()) {
@@ -64,6 +67,41 @@ final class Util {
       case Priority.ERROR_INT:      return Logger.ERROR;
       case ShoutPriority.SHOUT_INT: return Logger.SHOUT;
       case Priority.FATAL_INT:      return Logger.FATAL;
+      default: 
+                               return 0;
+    }
+  }
+
+  /**
+   * Private utility to change between int defined by Logger
+   * and Level class of log4j.
+   * @param level An integer from Logger.
+   */
+  public static final Level convertIntToLevel(int level) {
+    switch (level) {
+    case Logger.DEBUG : return Level.DEBUG;
+    case Logger.INFO  : return Level.INFO;
+    case Logger.WARN  : return Level.WARN;
+    case Logger.ERROR : return Level.ERROR;
+    case Logger.SHOUT : return ShoutPriority.SHOUT;
+    case Logger.FATAL : return Level.FATAL;
+    default: return null;
+    }
+  }
+
+  /**
+   * Private utility to change between int defined by Logger
+   * and Level class of log4j.
+   * @param level A log4j Level
+   */
+  public static final int convertLevelToInt(Level level) {
+    switch (level.toInt()) {
+      case Level.DEBUG_INT:      return Logger.DEBUG;
+      case Level.INFO_INT :      return Logger.INFO;
+      case Level.WARN_INT :      return Logger.WARN;
+      case Level.ERROR_INT:      return Logger.ERROR;
+      case ShoutPriority.SHOUT_INT: return Logger.SHOUT;
+      case Level.FATAL_INT:      return Logger.FATAL;
       default: 
                                return 0;
     }

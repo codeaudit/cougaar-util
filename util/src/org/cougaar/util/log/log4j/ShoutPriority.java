@@ -21,6 +21,7 @@
 
 package org.cougaar.util.log.log4j;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Priority;
 
 /**
@@ -28,7 +29,7 @@ import org.apache.log4j.Priority;
  * fatal, which is used for information messages that should 
  * rarely be filtered.
  * <p>
- * <b>NOTE:</b> a reference to the "SHOUT" priority from a
+ * <b>NOTE:</b> a reference to the "SHOUT" level from a
  * log4j properties file must specify the full 
  * "SHOUT#org.cougaar.util.log.log4j.ShoutPriority"
  * line, otherwise log4j doesn't know this class and will
@@ -45,9 +46,9 @@ import org.apache.log4j.Priority;
  *   ...
  * </pre>
  */
-public class ShoutPriority extends Priority {
+public class ShoutPriority extends Level {
 
-  static final int SHOUT_INT = Priority.ERROR_INT + 1;
+  static final int SHOUT_INT = Level.ERROR_INT + 1;
 
   static String SHOUT_STR = "SHOUT";
 
@@ -70,5 +71,21 @@ public class ShoutPriority extends Priority {
       ((i == SHOUT_INT)?
        (SHOUT) :
        (Priority.toPriority(i)));
+  }
+
+  public static Level toLevel(String sArg) {
+    return ((SHOUT_STR.equalsIgnoreCase(sArg)) ? (SHOUT) : (Level.toLevel(sArg)));
+  }
+
+  public static Level toLevel(int val) {
+    return ((val == SHOUT_INT) ? (SHOUT) : (Level.toLevel(val)));
+  }
+
+  public static Level toLevel(int val, Level defaultLevel) {
+    return ((val == SHOUT_INT) ? (SHOUT) : Level.toLevel(val, defaultLevel));
+  }
+
+  public static Level toLevel(String sArg, Level defaultLevel) {
+    return ((SHOUT_STR.equalsIgnoreCase(sArg)) ? (SHOUT) : Level.toLevel(sArg, defaultLevel));
   }
 }

@@ -10,8 +10,8 @@
 
 package org.cougaar.util.log.log4j;
 
-import org.apache.log4j.Priority;
-import org.apache.log4j.Category;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.cougaar.util.log.*;
 
 /**
@@ -19,9 +19,9 @@ import org.cougaar.util.log.*;
  * <p>
  * This is an log4j based implementation of Logger. One
  * important note is that when this instance is created it
- * creates a log4j Category based on the class passed in. If
+ * creates a log4j Logger based on the class passed in. If
  * subclasses use the same LoggerImpl as the superclass
- * they will have the same log4j Category. This may possibly
+ * they will have the same log4j Logger. This may possibly
  * cause confusion. To avoid this each object can get its own
  * instance or use its own "classname:method" name.
  *
@@ -29,18 +29,18 @@ import org.cougaar.util.log.*;
  */
 class LoggerImpl extends LoggerAdapter
 {
-  // log4j category, which does the real work...
-  private final Category cat;
+  // log4j logger, which does the real work...
+  private final Logger cat;
 
   /**
    * Constructor which uses the specified name to form a 
-   * log4j Category.
+   * log4j Logger.
    *
    * @param requestor Object requesting this service.
    */
   public LoggerImpl(Object obj) {
     String s = Logging.getKey(obj);
-    cat = Category.getInstance(s);
+    cat = Logger.getLogger(s);
   }
 
   /**
@@ -50,13 +50,13 @@ class LoggerImpl extends LoggerAdapter
     if (level > WARN) {
       return true;
     } else {
-      Priority p = Util.convertIntToPriority(level);
+      Level p = Util.convertIntToLevel(level);
       return cat.isEnabledFor(p);
     }
   }
 
   public void log(int level, String message, Throwable t) {
-    Priority p = Util.convertIntToPriority(level);
+    Level p = Util.convertIntToLevel(level);
     cat.log(p, message, t);
   }
 
