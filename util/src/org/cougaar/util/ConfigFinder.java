@@ -83,11 +83,11 @@ import org.cougaar.util.log.*;
  * @property org.cougaar.config The configuration being run, for example minitestconfig or small-135.
  * Setting this property means that CIP/configs/<value of this property> will be searched before configs/common 
  **/
-public final class ConfigFinder {
+public class ConfigFinder {
   private List configPath = new ArrayList();
-  private Map properties = null;
+  private final  Map properties; // initialized by all constructors
 
-  private Logger logger = null;
+  private Logger logger = null; // use getLogger to access
 
   protected final synchronized Logger getLogger() {
     if (logger == null) {
@@ -141,6 +141,10 @@ public final class ConfigFinder {
    * </ul>
    **/
   public ConfigFinder(String module, String s, Map props) {
+    if (logger.isDebugEnabled()) {
+      logger.debug("ConfigFinder class: " + this.getClass().getName());
+    }
+
     properties = new HashMap();
     if (props != null) properties.putAll(props);
 
@@ -171,7 +175,7 @@ public final class ConfigFinder {
     else 
       v = new Vector();
     
-    v.addAll(StringUtility.parseCSV(s, ';'));
+    v.addAll(CSVUtility.parseToCollection(s));
 
     int l = v.size();
     for (int i = 0; i < l; i++) {
@@ -207,15 +211,15 @@ public final class ConfigFinder {
    **/
   public URL getConfigURL() { return Configuration.getConfigURL(); }
 
-  private void appendPathElement(URL url) {
-    configPath.add(url);
-  }
-
-  private String substituteProperties(String s) {
+  protected final String substituteProperties(String s) {
     return Configuration.substituteProperties(s, properties);
   }
 
-  private void appendPathElement(String el) {
+  protected final void appendPathElement(URL url) {
+    configPath.add(url);
+  }
+
+  protected final void appendPathElement(String el) {
     String s = el;
     s = Configuration.substituteProperties(el,properties);
     URL u = Configuration.urlify(s);
@@ -395,14 +399,73 @@ public final class ConfigFinder {
   private static Map moduleConfigFinders;
 
   // Singleton pattern
-  private static final ConfigFinder defaultConfigFinder = new ConfigFinder(Configuration.getConfigPath());
+  private static ConfigFinder defaultConfigFinder = null;
+
+  private static Class getConfigFinderClass() {
+    String configFinderClassName = 
+      System.getProperty("org.cougaar.util.ConfigFinder.ClassName");
+    Class theClass = ConfigFinder.class;
+    if (configFinderClassName != null) {
+      try {
+	theClass = Class.forName(configFinderClassName);
+      }
+      catch (Exception e) {
+	throw new RuntimeException("Not a valid ConfigFinder class: "
+				   + configFinderClassName, e);
+      }
+      if (!ConfigFinder.class.isAssignableFrom(theClass)) {
+	throw new RuntimeException(ConfigFinder.class.getName() + " should be a superclass of "
+				   + configFinderClassName);
+      }
+    }
+    return theClass;
+  }
+
+  private static ConfigFinder getConfigFinderInstance(String path) {
+    Class cls = getConfigFinderClass();
+    Class paramCls[] = new Class[] { String.class };
+    Object paramVal[] = new Object[] { path };
+
+    try {
+      return (ConfigFinder) cls.getConstructor(paramCls).newInstance(paramVal);
+    }
+    catch (Exception e) {
+      throw new RuntimeException("Unable to instantiate ConfigFinder", e);
+    }
+  }
+
+  private static ConfigFinder getConfigFinderInstance(String module, String path) {
+    Class cls = getConfigFinderClass();
+    Class paramCls[] = new Class[] {String.class, String.class};
+    Object paramVal[] = new Object[] { module, path };
+
+    try {
+      return (ConfigFinder) cls.getConstructor(paramCls).newInstance(paramVal);
+    }
+    catch (Exception e) {
+      throw new RuntimeException("Unable to instantiate ConfigFinder");
+    }
+  }
+
+  private synchronized static ConfigFinder getDefaultConfigFinder() {
+    if (defaultConfigFinder == null) {
+      try {
+	defaultConfigFinder =
+	  (ConfigFinder) getConfigFinderClass().newInstance();    
+      }
+      catch (Exception e) {
+	throw new Error("Unable to instantiate ConfigFinder", e);
+      }
+    }
+    return defaultConfigFinder;
+  }
 
   /**
    * Return the default static instance of the ConfigFinder,
    * configured using the system properties.
    **/
   public static ConfigFinder getInstance() {
-    return defaultConfigFinder;
+    return getDefaultConfigFinder();
   }
 
   /**
@@ -412,10 +475,14 @@ public final class ConfigFinder {
    **/
   public static ConfigFinder getInstance(String module) {
     if (module == null || module.equals("")) {
-      return defaultConfigFinder;
+      return getDefaultConfigFinder();
     }
     
-    String config_path = Configuration.getConfigPath();
+    String config_path = System.getProperty("org.cougaar.config.path");
+    if (config_path != null && 
+	config_path.charAt(0) == '"' &&
+	config_path.charAt(config_path.length()-1) == '"')	
+      config_path = config_path.substring(1, config_path.length()-1);
     
     // Build static hash on $module of these
     if (moduleConfigFinders == null)
@@ -423,11 +490,12 @@ public final class ConfigFinder {
 
     ConfigFinder mcf = (ConfigFinder)moduleConfigFinders.get(module);
     if (mcf == null) {
-      mcf = new ConfigFinder(module, config_path);
+      mcf = getConfigFinderInstance(module, config_path);
       moduleConfigFinders.put(module, mcf);
     }
     return mcf;
   }
+
 
   class ConfigResolver implements EntityResolver {
     public InputSource resolveEntity (String publicId, String systemId) {

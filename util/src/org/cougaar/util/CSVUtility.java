@@ -48,6 +48,16 @@ public class CSVUtility {
     }
     return (String[]) l.toArray(emptyStrings);
   }
+
+  public static Collection parseToCollection(String str) {
+    String[] elements = parse(str);
+    int l = elements.length;
+    ArrayList c = new ArrayList(l);
+    for (int i=0; i<l; i++) {
+      c.add(elements[i]);
+    }
+    return c;
+  }
 }  
 
 /*
