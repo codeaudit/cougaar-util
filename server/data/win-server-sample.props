@@ -66,7 +66,10 @@ org.cougaar.config.path="D\:\\opt\\cougaar\\configs\\common\;D\:\\opt\\cougaar\\
 # If you get an error like: Error: no `server' JVM at `C:\Program
 # Files\Java\j2re1.4.0\bin\server\jvm.dll'.
 # then this is usually the cause.
-java.server
+
+# This should be un-commented only for running a Node that has
+# only the AggAgent
+# java.server
 
 # Set some standard JVM memory settings.
 #

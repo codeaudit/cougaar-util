@@ -54,7 +54,8 @@ java.class.path=/opt/cougaar/lib/bootstrap.jar
 org.cougaar.config.path="/opt/cougaar/configs/common\;/opt/cougaar/glmtrans/configs/demo-config/config\;"
 
 # Tell java to use the Server HotSpot virtual machine
-java.server
+# This should be done only on a Node running the AggAgent
+# java.server
 
 # Some standard memory settings.
 #
