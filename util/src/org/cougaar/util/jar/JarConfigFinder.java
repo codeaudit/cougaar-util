@@ -277,23 +277,38 @@ public class JarConfigFinder
       // Update the list of jar files by looking in the configPath and
       // finding jar files. Remove jar files from configPath as they
       // are added to _jarFileCache.
-      if (getLogger().isDebugEnabled()) {
-	getLogger().debug("Looking up " + aFileName + " in config path ("
-		      + _configPathList.size() + " elements)");
+      List configPath = null;
+      List pathsToRemove = null;
+      synchronized (_configPathList) {
+        configPath = new ArrayList(_configPathList);
       }
-      ListIterator it = _configPathList.listIterator();
-      while(it.hasNext() && (theURL == null)) {
+      if (getLogger().isDebugEnabled()) {
+	getLogger().debug(
+            "Looking up " + aFileName + " in config path (" +
+	    configPath.size() + " elements)");
+      }
+      for (ListIterator it = configPath.listIterator();
+           (it.hasNext() && (theURL == null));
+          ) {
 	URL base = (URL) it.next();
 	theURL = locateFileInPathElement(base, aFileName);
-	// Remove from _configPathList, so that we don't look it
+	// plan to remove the path, so that we don't look it
 	// up again the next time we search.
 	getLogger().debug("Removing " + base + " from path");
-	it.remove();
+        if (pathsToRemove == null) {
+          pathsToRemove = new ArrayList();
+        }
+        pathsToRemove.add(base);
 	/*
-	  for (int i = 0 ; i < _configPathList.size() ; i++) {
-	  getLogger().debug(_configPathList.get(i).toString());
+	  for (int i = 0 ; i < configPath.size() ; i++) {
+	  getLogger().debug(configPath.get(i).toString());
 	  }
 	*/
+      }
+      if (pathsToRemove != null) {
+        synchronized (_configPathList) {
+          _configPathList.removeAll(pathsToRemove);
+        }
       }
     }
 
