@@ -16,7 +16,14 @@ getAssemblyIDOnExpt = \
  SELECT ASSEMBLY_ID \
    FROM V4_EXPT_TRIAL_ASSEMBLY \
   WHERE expt_id = ':experiment_id' \
-   AND ASSEMBLY_ID LIKE ':match_pattern'
+   AND ASSEMBLY_ID LIKE 'CMT-%'
+
+
+updateAssemblyIDOnExpt = \
+ UPDATE V4_EXPT_TRIAL_ASSEMBLY \
+ SET ASSEMBLY_ID = ':assembly_id' \
+ WHERE expt_id = ':experiment_id' \
+ AND ASSEMBLY_ID LIKE 'CMT-%'
 
 getCFWInstancesFromGroup = \
  SELECT CFW_ID FROM V6_CFW_GROUP_MEMBER WHERE CFW_GROUP_ID=':cfw_group_id'
