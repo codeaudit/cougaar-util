@@ -252,16 +252,36 @@ public abstract class ContainerSupport
       return loadBinderFactory(cd);
     }
 
-    int subi = tail.indexOf(".");
-    if (subi == -1) {
-      // no more dots: insert here
+    boolean isDirectChild = (0 >= tail.indexOf('.'));
+
+    if (isDirectChild) {
+      // no more dots
+      // check to see if the component is already loaded
+      synchronized (boundComponents) {
+        for (int i = 0, n = boundComponents.size(); i < n; i++) {
+          Object oi = boundComponents.get(i);
+          if (!(oi instanceof BoundComponent)) {
+            continue;
+          }
+          BoundComponent bc = (BoundComponent) oi;
+          Object bcc = bc.getComponent();
+          if (bcc instanceof ComponentDescription) {
+            ComponentDescription bccd = (ComponentDescription) bcc;
+            if (cd.equals(bcc)) {
+              // already loaded
+              return false;
+            }
+          }
+        }
+        // FIXME should add within lock to prevent duplicates
+      }
+      // insert here
       return loadComponent(cd, cstate);
     }
 
     // more dots: try inserting in subcomponents
     synchronized (boundComponents) {
-      int l = boundComponents.size();
-      for (int i=0; i<l; i++) {
+      for (int i = 0, n = boundComponents.size(); i < n; i++) {
         Object oi = boundComponents.get(i);
         if (!(oi instanceof BoundComponent)) {
           continue;
@@ -282,7 +302,7 @@ public abstract class ContainerSupport
         }
         try {
           boolean ret = ((ContainerBinder)b).add(o);
-          // child added it
+          // child already contains or added it
           return ret;
         } catch (IncorrectInsertionPointException ipE) {
           // wrong insertion point
@@ -298,7 +318,79 @@ public abstract class ContainerSupport
   }
 
   public boolean remove(Object o) {
-    throw new UnsupportedOperationException();
+    if (!(o instanceof ComponentDescription)) {
+      // could support Components, but not required at this time
+      throw new UnsupportedOperationException(
+          "Removal of non-ComponentDescription not supported");
+    }
+
+    ComponentDescription cd = (ComponentDescription) o;
+    String ip = cd.getInsertionPoint();
+    if ((ip == null) ||
+        (!(ip.startsWith(containmentPrefix)))) {
+      return false;
+    }
+    String tail = ip.substring(containmentPrefix.length());
+
+    if ("Binder".equals(tail) || "BinderFactory".equals(tail)) {
+      throw new UnsupportedOperationException(
+          "Binder and BinderFactory removal not supported ("+
+          ip+")");
+    }
+
+    boolean isDirectChild = (0 >= tail.indexOf('.'));
+
+    // find the child and remove it
+    Binder removedBinder;
+    synchronized (boundComponents) {
+      for (int i = 0, n = boundComponents.size(); ; i++) {
+        if (i >= n) {
+          // not found
+          return false;
+        }
+        Object oi = boundComponents.get(i);
+        if (!(oi instanceof BoundComponent)) {
+          continue;
+        }
+        BoundComponent bc = (BoundComponent) oi;
+        Object bcc = bc.getComponent();
+        if (!(bcc instanceof ComponentDescription)) {
+          continue;
+        }
+        ComponentDescription bccd = (ComponentDescription) bcc;
+        if (isDirectChild) {
+          // at this level in hierarchy
+          if (cd.equals(bccd)) {
+            removedBinder = bc.getBinder();
+            boundComponents.remove(i);
+            break;
+          }
+        } else {
+          // child container
+          String bctail = 
+            bccd.getInsertionPoint().substring(
+                containmentPrefix.length());
+          if (tail.startsWith(bctail)) {
+            Binder bcb = bc.getBinder();
+            if ((bcb instanceof ContainerBinder) &&
+                (((ContainerBinder) bcb).remove(cd))) {
+              return true;
+            }
+          }
+        }
+      }
+    }
+
+    // unload the removed direct child
+    try {
+      removedBinder.halt();
+      removedBinder.unload();
+    } catch (RuntimeException e) {
+      throw new ComponentRuntimeException(
+          "Removed component with unclean unload", cd, e);
+    }
+
+    return true;
   }
 
   public void clear() {
