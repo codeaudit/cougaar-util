@@ -12,7 +12,7 @@
 	</String>
     </RuleParam>
     <RuleParam name="DaysOnHand">
-	<Integer value="1" min="-1" max="90"> 
+	<Integer value="2" min="-1" max="90"> 
 	</Integer>
     </RuleParam>
     <RuleParam name="DaysForward">
@@ -82,7 +82,7 @@
 	</String>
     </RuleParam>
     <RuleParam name="DaysOnHand">
-	<Integer value="6" min="-1" max="90"> 
+	<Integer value="2" min="-1" max="90"> 
 	</Integer>
     </RuleParam>
     <RuleParam name="DaysForward">
@@ -117,7 +117,7 @@
 	</String>
     </RuleParam>
     <RuleParam name="DaysOnHand">
-	<Integer value="1" min="-1" max="90"> 
+	<Integer value="2" min="-1" max="90"> 
 	</Integer>
     </RuleParam>
     <RuleParam name="DaysForward">
@@ -152,7 +152,7 @@
 	</String>
     </RuleParam>
     <RuleParam name="DaysOnHand">
-	<Integer value="1" min="-1" max="90"> 
+	<Integer value="2" min="-1" max="90"> 
 	</Integer>
     </RuleParam>
     <RuleParam name="DaysForward">
@@ -188,7 +188,7 @@
 	</String>
     </RuleParam>
     <RuleParam name="DaysOnHand">
-	<Integer value="6" min="-1" max="90"> 
+	<Integer value="3" min="-1" max="90"> 
 	</Integer>
     </RuleParam>
     <RuleParam name="DaysForward">
