@@ -71,8 +71,8 @@
 <p>
 Build 9.2.1 is a patch release of 9.2 intended to address known issues
 in 9.2, and further stabilize a few of the APIs. APIs that have
-changed include: BlackboardService (and therefore PluginAdapter) and the
-ThreadService.
+changed include: BlackboardService (and therefore PluginAdapter); 
+ThreadService; CommunityService.
 
 <ul>
 <li>The AggAgent should be run in a node using  the 
@@ -85,8 +85,9 @@ bugzilla bug 1252</a>) but may slow down general execution speed
 and exposes another VM bug (see <a href="https://www.alpine.bbn.com/bugzilla/show_bug.cgi?id=1322">
 bugzilla bug 1322</a>).
 </li>
-<li>javaiopatch Jar file is now always required, to support Agent
-Mobility. Node startup scripts have been updated to match. Users may
+<li>The <em>javaiopatch.jar</em> file is now always required in the JVM bootclasspath. 
+This was added to support Agent Mobility even if Persistence is disabled. 
+Node startup scripts have been updated to match. Users may
 need to update their AppServer properties files to match. See the
 samples in ../server/data for details.</li>
 <li>Add new Environment variable / -D argument:
@@ -121,6 +122,8 @@ trying to have it both ways.  See
 <a href="api/org/cougaar/bootstrap/Bootstrapper.html">api/org/cougaar/bootstrap/Bootstrapper.html</a> 
 (if cougaar-api.zip has been installed) for details.
 </li>
+<li>Added support for component removal through both the AgentContainment Service
+and the <em>/load</em> Servlet. 
 <li>
 Standard Cougaar components now support a number of load-time
 priorities which allow externally-specified components to be loaded in various ways
@@ -146,6 +149,29 @@ join points has been defined in the interfaces MessageWriter and
 MessageReader. Attaching Aspect delegates at these interfaces provides the 
 ability to control and/or monitor 
 <a href="ReleaseNotes/9.2.1/MessageExternalizationAspects.htm">message externalization</a>.
+<li>Configuration database has been updated to have only lowercase table names in all
+database dump files and q files. Unused configuration database tables have been removed.
+<li>Enhanced community support. This includes:
+<ul>
+<li>Support for Attribute Based Address messaging is now provided and used for 
+CommunityChangeNotifications.
+<li>The CommunityServiceAPI has been updated to provide support for Attribute Based Addressing.
+<li>Community configuration is now loaded into a communities context in the yellow pages from
+two new database tables in the configuration database instead of from a xml file.
+<li>SpokesAgentDescriptor and SpokesagentList classes have been removed.
+<li>See the 
+<a href="../community/doc/README">Community Readme File</a> 
+describing how to acess community components.
+</ul>
+<li>New Blackboard Timestamp capabilities have been added:
+<ul>
+<li>An envelope-level timestamp subscription that allows a plugin to monitor
+the start and end time of blackboard transactions.
+<li>A new subscription type that captures the creation and modification times for blackboard objects,
+and its service-based API (BlackboardTimestampService).
+</ul>
+<li>The servlet server now returns an improved error code if the user requests an unknown servlet path
+(also addresses Bugs 1242, 1298).
 </ul>
 
 
