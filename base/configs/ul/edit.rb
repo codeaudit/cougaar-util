@@ -22,7 +22,7 @@
 # If you don't know what this is, you don't need it.
 display = nil # eg "localhost"
 
-require 'cougaar/society_builder'
+require 'cougaar/scripting'
 
 file = ARGV[0]
 print "EDITING: #{file}\n"
