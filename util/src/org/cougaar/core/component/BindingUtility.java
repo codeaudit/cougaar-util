@@ -106,9 +106,11 @@ public abstract class BindingUtility {
               Object service = servicebroker.getService(child, p, srl);
               Object[] args = new Object[] { null };
               try {
-                m.invoke(child, args);
                 if (service != null) {
                   args[0] = service;
+                  m.invoke(child, args);
+                } else {
+                  // we should really fail the component load.
                   m.invoke(child, args);
                 }
               } catch (InvocationTargetException ite) {
