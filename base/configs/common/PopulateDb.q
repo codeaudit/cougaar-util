@@ -29,17 +29,12 @@ updateAlibComponent=\
  WHERE COMPONENT_ALIB_ID = :component_alib_id:
 
 checkAlibComponent=\
- SELECT (COMPONENT_NAME = :component_name: \
-     AND COMPONENT_LIB_ID = :component_lib_id: \
-     AND COMPONENT_TYPE = :component_category: \
-     AND CLONE_SET_ID = 0) \
+ SELECT COMPONENT_NAME, COMPONENT_LIB_ID, COMPONENT_TYPE, CLONE_SET_ID \
    FROM V4_ALIB_COMPONENT \
   WHERE COMPONENT_ALIB_ID = :component_alib_id:
 
 checkLibComponent=\
- SELECT (COMPONENT_TYPE = :component_category: \
-     AND COMPONENT_CLASS = :component_class: \
-     AND INSERTION_POINT = :insertion_point:) \
+ SELECT COMPONENT_TYPE, COMPONENT_CLASS, INSERTION_POINT \
    FROM V4_LIB_COMPONENT \
   WHERE COMPONENT_LIB_ID = :component_lib_id:
 
@@ -142,7 +137,7 @@ insertAttribute=\
      ATTRIBUTE_VALUE, ATTRIBUTE_ORDER, \
      START_DATE, END_DATE) \
  VALUES \
-    (:assembly_id:, :component_alib_id:, pg_attribute_lib_id:, \
+    (:assembly_id:, :component_alib_id:, :pg_attribute_lib_id:, \
      :attribute_value:, :attribute_order:, \
      :start_date:, :end_date:)
 
