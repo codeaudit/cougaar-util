@@ -48,9 +48,9 @@ queryRecipes = \
 ORDER BY ETMR.RECIPE_ORDER
 
 queryRecipeProperties = \
-  SELECT PROP_NAME, PROP_VALUE \
-    FROM V4_EXPT_TRIAL_RECIPE_PROP \
-   WHERE TRIAL_ID = ':trial_id' AND MOD_RECIPE_LIB_ID = ':recipe_id' \
+  SELECT ARG_NAME, ARG_VALUE \
+    FROM V4_LIB_MOD_RECIPE_ARG \
+   WHERE MOD_RECIPE_LIB_ID = ':recipe_id' \
 ORDER BY ARG_ORDER
 
 queryExperiment = \
