@@ -1,3 +1,13 @@
+2003-03-14  Ray Tomlinson  <RTomlinson@bbn.com>
+
+	* org/cougaar/core/component/BindingUtility.java:
+	Bug #2658 -- Components incompatible with automatic service revocation feature
+	Call service setters with a null service before setting the real
+	service during load. This will help flush out instances where null
+	services are improperly handled. Without this, such cases will not
+	be found until the component is unloaded. This should probably be
+	removed eventually.
+
 2002-06-18  Ray Tomlinson  <RTomlinson@bbn.com>
 
 	* org/cougaar/core/component/ServiceBrokerSupport.java:
