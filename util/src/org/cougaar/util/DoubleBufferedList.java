@@ -44,7 +44,7 @@ import java.util.*;
  **/
 
 public class DoubleBufferedList 
-  implements List
+  implements List, java.io.Serializable
 {
   /** current backing list **/
   private List back;
