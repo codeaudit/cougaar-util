@@ -76,6 +76,21 @@ stage - leaving the old tasks behind. It is generally bad usage to
 modify a task in place to have entirely different meaning. In this
 case, it appeared to cause confusion about the meaning of the
 allocation results. See bug 3407.</li>
+<li>The MTS implementation has been factored into a separate 
+module and project.  In CougaarForge, it is now the "std" module of
+the "mts" project. Cougaar builds package it as "mtsstd.jar". 
+The major effect of this refactoring is that most of the classes 
+previously in org.cougaar.core.mts are now in org.cougaar.mts.std 
+(e.g. those which <em>implement</em> the MTS interface have changed
+packages, while those which <em>define</em> the interface have not.
+See <a href="ReleaseNotes/11.0/mts-refactor.txt">ReleaseNotes/11.0/mts-refactor.txt</a> for
+details.  Also see the perl script <a href="ReleaseNotes/11.0/mts-refactor.pl">ReleaseNotes/11.0/mts-refactor.pl</a>
+which will do most of the substitutions requires to port 10.0 code to
+11.0.  As a side effect of the refactoring, there is a new 
+service available at the node level SocketFactoryService which allows
+clients to find an appropriate SocketFactory without needing to 
+know about the MTS implementation which may be supporting it.
+</li>
 </ul>
 <p>
   <!-- COUGAAR 10.4.6 COUGAAR 10.4.6 COUGAAR 10.4.6 COUGAAR 10.4.6 COUGAAR 10.4.6 -->
