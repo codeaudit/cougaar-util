@@ -246,6 +246,41 @@ cleanTrialRecipe=\
  DELETE FROM V4_EXPT_TRIAL_MOD_RECIPE \
   WHERE TRIAL_ID = ':trial_id:'
 
+
+
+########
+# Sample recipe queries follow
+# _ALL_ queries that you use in your recipes _must_ be included in this file.
+# Typical usage therefore is to create a new query by editing this file,
+# copying one of the provided sample queries.
+
+# First, sample target component queries: where to insert the component
+# First, those that look for agents
+
+# Find all agents
+recipeQueryAllAgents=\
+ SELECT C.COMPONENT_ALIB_ID \
+   FROM V4_ALIB_COMPONENT C, V4_EXPT_TRIAL E, V4_EXPT_TRIAL_ASSEMBLY A, V4_ASB_COMPONENT_HIERARCHY H \
+  WHERE C.COMPONENT_TYPE='agent' \
+    AND E.TRIAL_ID = A.TRIAL_ID \
+    AND A.ASSEMBLY_ID = H.ASSEMBLY_ID \
+    AND (H.COMPONENT_ALIB_ID = C.COMPONENT_ALIB_ID OR H.PARENT_COMPONENT_ALIB_ID = C.COMPONENT_ALIB_ID) \
+    AND H.ASSEMBLY_ID :assembly_match:
+
+# Find some agents by name - in this case, subordinates of 2BDE
+recipeQuery2BDE_Sub_AgentsByName=\
+ SELECT C.COMPONENT_ALIB_ID \
+   FROM V4_ALIB_COMPONENT C, V4_EXPT_TRIAL E, V4_EXPT_TRIAL_ASSEMBLY A, V4_ASB_COMPONENT_HIERARCHY H \
+  WHERE C.COMPONENT_TYPE='agent' \
+    AND E.TRIAL_ID = A.TRIAL_ID \
+    AND A.ASSEMBLY_ID = H.ASSEMBLY_ID \
+    AND (H.COMPONENT_ALIB_ID = C.COMPONENT_ALIB_ID OR H.PARENT_COMPONENT_ALIB_ID = C.COMPONENT_ALIB_ID) \
+    AND C.COMPONENT_NAME in ('2-7-INFBN', '3-69-ARBN', '3-FSB') \
+    AND H.ASSEMBLY_ID :assembly_match:
+
+# Find the subordinates of 3BDE. By changing the agent name and the role,
+# you can do different relationships. Note that this must be a direct relationship - 
+# this is not transitive.
 recipeQuerySubordinatesOf3_BDE_2ID_HHC=\
  SELECT SPTG.COMPONENT_ALIB_ID \
    FROM V4_ALIB_COMPONENT SPTG, V4_ALIB_COMPONENT SPTD, V4_ASB_AGENT_RELATION R \
@@ -255,12 +290,79 @@ recipeQuerySubordinatesOf3_BDE_2ID_HHC=\
     AND R.ASSEMBLY_ID :assembly_match: \
     AND SPTD.COMPONENT_NAME = '3-BDE-2ID-HHC'
 
+# Similar to above, but a different agent name
+recipeQuerySubordinatesOf2_BDE_3ID_HHC=\
+ SELECT SPTG.COMPONENT_ALIB_ID \
+   FROM V4_ALIB_COMPONENT SPTG, V4_ALIB_COMPONENT SPTD, V4_ASB_AGENT_RELATION R \
+  WHERE R.SUPPORTED_COMPONENT_ALIB_ID = SPTD.COMPONENT_ALIB_ID \
+    AND R.SUPPORTING_COMPONENT_ALIB_ID = SPTG.COMPONENT_ALIB_ID \
+    AND R.ROLE = 'Subordinate' \
+    AND R.ASSEMBLY_ID :assembly_match: \
+    AND SPTD.COMPONENT_NAME = '2-BDE-3ID-HHC'
+
+# Next, sample queries where the target is a Node (for inserting Agents or
+# Agent level Binders)
+# First, get all nodes in the experiment
+recipeQueryAllNodes =\
+ SELECT C.COMPONENT_ALIB_ID \
+   FROM V4_ALIB_COMPONENT C, V4_ASB_COMPONENT_HIERARCHY H \
+  WHERE C.COMPONENT_TYPE='node' \
+    AND H.PARENT_COMPONENT_ALIB_ID = C.COMPONENT_ALIB_ID \
+    AND H.ASSEMBLY_ID :assembly_match:
+
+# Then, get a set of Nodes by name
+recipeQuerySetOfNodes =\
+ SELECT COMPONENT_ALIB_ID \
+   FROM V4_ALIB_COMPONENT \
+  WHERE COMPONENT_NAME IN ('Name1', 'Name2')
+
+# Finally, get some Nodes by specifying the names of the agent
+# that should be in those Nodes
+recipeQueryNodesWithSpecificAgents =\
+ SELECT N.COMPONENT_ALIB_ID \
+   FROM V4_ALIB_COMPONENT A, V4_ASB_COMPONENT_HIERARCHY H, V4_ALIB_COMPONENT N \
+  WHERE A.COMPONENT_NAME='Agent Name' \
+   AND A.COMPONENT_ALIB_ID = H.COMPONENT_ALIB_ID \
+   AND H.PARENT_COMPONENT_ALIB_ID = N.COMPONENT_ALIB_ID \
+   AND N.COMPONENT_TYPE='node' \
+   AND H.ASSEMBLY_ID :assembly_match:
+
+### Now, queries to get the component to insert
+# These examples dont actually get the data from the DB,
+# but rather, hard code the values.
+# We are retrieving the component name, type, and class
 recipeQueryExampleBinderSpecification=\
  SELECT 'org.cougaar.core.examples.PluginServiceFilter', 'binder', 'org.cougaar.core.examples.PluginServiceFilter' \
    FROM DUAL
 
+# Here we load the MIC TechSpecBinder. Be sure that techspecs.jar (built
+# against your version of Cougaar and including the appropriate
+# default_techspecs.xml is in CIP/sys on all machines)
+recipeQueryMICBinder=\
+ SELECT 'com.mobile_intelligence.contracts.TechSpecBinderFactory', 'binder', 'com.mobile_intelligence.contracts.TechSpecBinderFactory' \
+   FROM DUAL
+
+#####
+# Next, queries to get the arguments to the inserted component.
+# The number of arguments is arbitrary - use the last selectNothing query if you
+# don't need any arguments
+
+# Here we supply the properties for the MIC TechSpecBinder for one community in capture mode
+# Note that you will want to put the property file on the ConfigPath.
+# One option is to create a separate directory for these files,
+# And add the a -D argument to the appropriate Nodes to include that directory on
+# the config path, as in:
+# org.cougaar.config.path="C\:\\Cougaar\\configs\\mic\;"
+recipeQueryMICBinderParams2BDEPropFileCaptureMode=\
+ SELECT 'file=2bde.properties', 'CAPTURE' FROM DUAL WHERE DUMMY IS NULL
+
+recipeQueryMICBinderParamsOnePropFileMonitorMode=\
+ SELECT 'file=2bde.properties', 'MONITOR' FROM DUAL WHERE DUMMY IS NULL
+
+# Here is a query that gives no arguments to the component.
 recipeQueryExampleBinderArgs=\
  SELECT NULL, NULL FROM DUAL WHERE DUMMY IS NULL;
 
 recipeQuerySelectNothing=\
  SELECT * FROM DUAL WHERE DUMMY IS NULL;
+
