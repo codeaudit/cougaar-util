@@ -104,6 +104,32 @@ referred to in non-adaptive OperatingModePolicies directly, without using the
 AdaptivityEngine. Non-adaptive OperatingModePolicies are defined as ones that
 have a TRUE ifCondition and instruct OperatingModes to have a single point
 range value.</li>
+<li> The Bootstrapper has be refactored to allow clean and flexible
+extensions, particularly for the use by a high security bootstrap
+mechanism.  The various calling scripts have been cleaned up, and
+bootstrap.jar is now an executable jar file.
+The system property org.cougaar.useBootstrapper is now deprecated: users
+should execute Bootstrapper directly or use classpath rather than
+trying to have it both ways.  See <a href="api/org/cougaar/bootstrap/Bootstrapper.html">
+api/org/cougaar/bootstrap/Bootstrapper.html</a> (if cougaar-api.zip
+has been installed) for details.
+</li>
+<li>
+Standard Cougaar components now support a number of load-time
+priorities which allow externally-specified components to be loaded in various ways
+interspersed with "built in" components of a container.  See
+<a href="api/org/cougaar/core/component/ComponentDescription.html">ComponentDescription</a> 
+for discussion of the priorities,
+<a href="api/org/cougaar/core/component/ContainerSupport.html">ContainerSupport</a> 
+for information on how the standard Container implementation
+interprets this information, and 
+<a href="api/org/cougaar/core/node/INIParse.html">INIParser</a> for a
+discussion of the <em>.ini</em> file extensions which allow this
+information to be specified. CSMART does not yet support this
+mechanism - until it does, all CSMART-specified components will always be
+loaded at COMPONENT-level priority.  This functionality is fully
+implemented in 9.2.1 for Plugins, and Agent Components (including NodeAgent).
+</li>
 </ul>
 
 
