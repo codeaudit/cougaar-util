@@ -53,8 +53,20 @@
 #
 # Also see the Server documentation ("server/doc/README") for 
 # further details.
-set NODE_PROPS_FILE = \
-   "server.props"
+#set NODE_PROPS_FILE = "server.props"
+if ( $# == 0 ) then
+    set NODE_PROPS_FILE = "server.props"
+    echo Using default properties file: server.props
+else 
+    set NODE_PROPS_FILE = $1
+    echo "Using properties file : $1"
+endif
+
+
+if ( ! -f $NODE_PROPS_FILE ) then
+    echo "ERROR : properties file [${NODE_PROPS_FILE}] does not exist"
+    exit 1
+endif
 
 #
 # The remaining settings should not require modifications
@@ -68,8 +80,8 @@ set NODE_PROPS_FILE = \
 # and only modify the Server's behavior.  See the Server 
 # documentation ("server/doc/README") for details.
 #
-#set SERVERCONFIG = "-Dorg.cougaar.tools.server.verbose=true"
-set SERVERCONFIG = ""
+set SERVERCONFIG = "-Dorg.cougaar.tools.server.verbose=true"
+#set SERVERCONFIG = ""
 
 # Specify the classpath for loading the Server.
 #
