@@ -51,6 +51,13 @@ insertComponentHierarchy=\
      INSERTION_ORDER) \
  VALUES (:assembly_id:, :component_alib_id:, :parent_component_alib_id:, :insertion_order:)
 
+checkComponentArg=\
+ SELECT COMPONENT_ALIB_ID \
+   FROM V4_ASB_COMPONENT_ARG \
+  WHERE ASSEMBLY_ID = :assembly_id: \
+   AND ARGUMENT = :argument_value: \
+   AND ARGUMENT_ORDER = :argument_order:
+
 insertComponentArg=\
  INSERT INTO V4_ASB_COMPONENT_ARG \
     (ASSEMBLY_ID, COMPONENT_ALIB_ID, ARGUMENT, ARGUMENT_ORDER) \
