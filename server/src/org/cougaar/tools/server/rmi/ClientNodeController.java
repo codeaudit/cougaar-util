@@ -30,6 +30,8 @@ import org.cougaar.tools.server.NodeEventListener;
 import org.cougaar.tools.server.NodeEventFilter;
 import org.cougaar.tools.server.NodeServesClient;
 
+import org.cougaar.tools.server.system.ProcessStatus;
+
 /**
  */
 public class ClientNodeController 
@@ -105,6 +107,12 @@ implements NodeServesClient {
     } catch (Exception e) {
       return false;
     }
+  }
+  public void dumpThreads() throws Exception {
+    snc.dumpThreads();
+  }
+  public ProcessStatus[] listProcesses(boolean showAll) throws Exception {
+    return snc.listProcesses(showAll);
   }
   public boolean isRegistered() { //throws Exception 
     try {

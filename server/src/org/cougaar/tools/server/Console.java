@@ -33,7 +33,7 @@ import javax.swing.text.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 
-import org.cougaar.core.cluster.ClusterIdentifier;
+import org.cougaar.tools.server.system.ProcessStatus;
 
 /**
  * Sample GUI console for community control.
@@ -93,6 +93,9 @@ public class Console {
 
     private JButton runButton;
     private JButton flushNodeEventsButton;
+    private JButton dumpThreadsButton;
+    private JButton listNodeProcessesButton;
+    private JButton listAllProcessesButton;
     private JButton listClustersButton;
     private JButton getFileButton;
     private JButton listFilesButton;
@@ -116,8 +119,8 @@ public class Console {
       stdoutPane = new JScrollPane(stdoutArea);
       buttons = Box.createVerticalBox();
       buttons1 = new JPanel();
+      buttons2 = new JPanel(new GridLayout(3,3));
 
-      buttons2 = new JPanel();
       // panel for typelist & configlist
       typePanel = new JPanel(new BorderLayout());               
       // get configs
@@ -134,6 +137,9 @@ public class Console {
       configscroll = new JScrollPane(configList);
 
       runButton = new JButton("Run");
+      dumpThreadsButton = new JButton("Trigger-Stack-Trace");
+      listNodeProcessesButton = new JButton("List-Node-Procs");
+      listAllProcessesButton = new JButton("List-All-Procs");
       listClustersButton = new JButton("List-Clusters");
       getFileButton = new JButton("Get-File");
       listFilesButton = new JButton("List-Files");
@@ -196,6 +202,31 @@ public class Console {
               flushNodeEvents(selectedNodeName);
             }
           });
+
+      // handle "Trigger-Stack-Trace" button
+      dumpThreadsButton.addActionListener(
+          new ActionListener() {    
+            public void actionPerformed(ActionEvent e) {
+              dumpThreads(selectedNodeName);
+            }
+          });
+
+      // handle "List-Node-Procs" button
+      listNodeProcessesButton.addActionListener(
+          new ActionListener() {    
+            public void actionPerformed(ActionEvent e) {
+              listProcesses(selectedNodeName, false);
+            }
+          });
+
+      // handle "List-All-Procs" button
+      listAllProcessesButton.addActionListener(
+          new ActionListener() {    
+            public void actionPerformed(ActionEvent e) {
+              listProcesses(selectedNodeName, true);
+            }
+          });
+
 
       // handle "List-Clusters" button
       listClustersButton.addActionListener(
@@ -270,12 +301,18 @@ public class Console {
       add(buttons, BorderLayout.SOUTH);
       buttons.add(buttons1, BorderLayout.NORTH);
       buttons.add(buttons2, BorderLayout.SOUTH);    
+
       buttons2.add(runButton);
+      buttons2.add(stopButton);
       buttons2.add(flushNodeEventsButton);
+
+      buttons2.add(dumpThreadsButton);
+      buttons2.add(listNodeProcessesButton);
+      buttons2.add(listAllProcessesButton);
+
       buttons2.add(listClustersButton);
       buttons2.add(getFileButton);
       buttons2.add(listFilesButton);
-      buttons2.add(stopButton);
     }  
 
     /**
@@ -406,6 +443,55 @@ public class Console {
         System.err.println(
             "Unable to flush events");
         e.printStackTrace();
+      }
+    }
+
+    private void dumpThreads(String name) {
+      NodeServesClient nsc = (NodeServesClient)myNodes.get(name);
+      if (nsc == null) {
+        System.err.println(
+            "Unknown node name: "+name);
+        return;
+      }
+
+      try {
+        nsc.dumpThreads();
+      } catch (Exception e) {
+        System.err.println(
+            "Unable to trigger a stack dump for node: "+name);
+        e.printStackTrace();
+        return;
+      }
+
+      // replace with pretty GUI code...
+      System.out.println("Triggered a stack dump for node: "+name);
+    }
+
+    private void listProcesses(String name, boolean showAll) {
+      NodeServesClient nsc = (NodeServesClient)myNodes.get(name);
+      if (nsc == null) {
+        System.err.println(
+            "Unknown node name: "+name);
+        return;
+      }
+
+      ProcessStatus[] psa;
+      try {
+        psa = nsc.listProcesses(showAll);
+      } catch (Exception e) {
+        System.err.println(
+            "Unable to list processes for node: "+name);
+        e.printStackTrace();
+        return;
+      }
+
+      // replace with pretty GUI code...
+      int n = ((psa != null) ? psa.length : 0);
+      System.out.println(
+          ((showAll) ? "All" : "Node's")+
+          " ProcessStatus["+n+"] for node "+name+":");
+      for (int i = 0; i < n; i++) {
+        System.out.println("  "+psa[i]);
       }
     }
 

@@ -29,6 +29,8 @@ import org.cougaar.tools.server.NodeEventListener;
 import org.cougaar.tools.server.NodeEventFilter;
 import org.cougaar.tools.server.NodeServesClient;
 
+import org.cougaar.tools.server.system.ProcessStatus;
+
 /**
  * Contains most of the methods in <code>NodeServesClient</code>, except
  * here they throw RMI exceptions.  This simply hides the RMI exceptions
@@ -53,6 +55,8 @@ extends Remote {
   String getName() throws RemoteException;
   String[] getCommandLine() throws RemoteException;
   boolean isAlive() throws RemoteException;
+  void dumpThreads() throws RemoteException;
+  ProcessStatus[] listProcesses(boolean showAll) throws RemoteException;
   boolean isRegistered() throws RemoteException;
   boolean waitForRegistration() throws RemoteException;
   boolean waitForRegistration(long millis) throws RemoteException;

@@ -33,11 +33,11 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.cougaar.core.cluster.ClusterIdentifier;
-
 import org.cougaar.tools.server.NodeEvent;
 import org.cougaar.tools.server.NodeEventListener;
 import org.cougaar.tools.server.NodeEventFilter;
+
+import org.cougaar.tools.server.system.ProcessStatus;
 
 // RMI hook to actual Node
 import org.cougaar.core.society.ExternalNodeController;
@@ -261,6 +261,19 @@ implements ServerNodeController {
 
   public String[] getEnvironmentVariables() {
     return envVars;
+  }
+
+  //
+  // interact with the system
+  //
+
+  public void dumpThreads() {
+    System.out.println("$$$$$$$$$$$ dumpThreads $$$$$$$$$$$$$");
+  }
+
+  public ProcessStatus[] listProcesses(boolean showAll) {
+    System.out.println("$$$$$$$$$$$ listProcesses("+showAll+") $$$$$$$$$$$$$");
+    return new ProcessStatus[0];
   }
 
   //

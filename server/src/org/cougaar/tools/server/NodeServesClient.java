@@ -23,6 +23,8 @@ package org.cougaar.tools.server;
 
 import java.util.List;
 
+import org.cougaar.tools.server.system.ProcessStatus;
+
 // Note that "getClusterIdentifiers" returns ClusterIdentifiers!
 //import org.cougaar.core.cluster.ClusterIdentifier;
 
@@ -109,6 +111,32 @@ public interface NodeServesClient {
   //
   // These require (isAlive()).
   //
+
+  /**
+   * Trigger the node's JVM to produce a Thread-Dump, which is 
+   * printed to Standard-Out and will be sent back as a typical
+   * <code>NodeEvent</code>.
+   * <p>
+   * This is Operating System specific and may not be supported
+   * on all hosts.
+   * <p>
+   * See the JVM documentation for the "stackTrace" syntax.
+   */
+  void dumpThreads() throws Exception;
+
+  /**
+   * List all running processes on the host, marking the
+   * node process as <tt>ProcessStatus.MARK_SELF</tt>.
+   * <p>
+   * If <tt>(showAll == false)</tt> then only process information
+   * is only gathered for the node process and it's children.
+   * <p>
+   * This is Operating System specific and may not be supported
+   * on all hosts.
+   *
+   * @see ProcessStatus
+   */
+  ProcessStatus[] listProcesses(boolean showAll) throws Exception;
 
   /**
    * Wait for the node to register.
