@@ -24,8 +24,8 @@ meiQuery=select NOMENCLATURE from aggregated_mei_nomenclature where MEI = :nsn a
 ConsumableArmyNSN=select MEI_NSN, PART_NSN, OPTEMPO, DCR from army_spares_dcr_by_optempo where MEI_NSN = :nsn and OPTEMPO = 'HIGH' order by DCR desc
 PackagedPOLArmyNSN=select MEI_NSN, PACKAGED_NSN, OPTEMPO, DCR from army_packaged_dcr_by_optempo where MEI_NSN = :nsn order by DCR desc
 #BulkPOLArmyNSN=select NSN, FUEL_NSN, OPTEMPO, GALLONS_PER_DAY from army_fuels_dcr_by_optempo where NSN = :nsn order by GALLONS_PER_DAY desc
-BulkPOLArmyNSN=select NSN, FUEL_NSN, OPTEMPO, GALLONS_PER_DAY from alp_mei_fuel where NSN = :nsn order by GALLONS_PER_DAY desc
-AmmunitionArmyNSN=select MEI_NSN, DODIC, OPTEMPO, TONS_PER_DAY from alp_mei_dodic_2_view where MEI_NSN = :nsn order by TONS_PER_DAY desc
+BulkPOLArmyNSN=select NSN, FUEL_NSN, UCASE(OPTEMPO), GALLONS_PER_DAY from alp_mei_fuel where NSN = :nsn order by GALLONS_PER_DAY desc
+AmmunitionArmyNSN=select MEI_NSN, DODIC, UCASE(OPTEMPO), TONS_PER_DAY from alp_mei_dodic_2_view where MEI_NSN = :nsn order by TONS_PER_DAY desc
 # AirForce
 #
 ConsumableAirforceMDS=select MDS, NSN, OPTEMPO, DEMANDS_PER_DAY from airforce_spares_dcr_by_optempo where MDS = :nsn order by DEMANDS_PER_DAY
