@@ -129,7 +129,6 @@ public class StringUtility {
   /** @deprecated Use {@link String#split(String)} **/
   public static Vector explode(String s) {
     Vector v = new Vector();
-    int j = 0;                  //  non-white
     int k = 0;                  // char after last white
     int l = s.length();
     int i = 0;
