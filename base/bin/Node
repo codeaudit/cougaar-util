@@ -53,6 +53,11 @@ if (! $?COUGAAR_WORKSPACE) then
 endif
 
 set LIBPATHS=$COUGAAR_INSTALL_PATH/lib/bootstrap.jar
+
+# Optional environment variable COUGAAR_DEV_PATH can be
+# used to point to custom developer code: one or more colon separated
+# directories/jars/zips. It may also be left unset.
+
 set devp=""
 if ($?COUGAAR_DEV_PATH) then
     set devp="-Dorg.cougaar.class.path=${COUGAAR_DEV_PATH}"

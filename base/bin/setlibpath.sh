@@ -36,6 +36,11 @@ if [ $os = "Linux" -o $os = "SunOS" ]; then SEP=":"; fi
 
 LIBPATHS=$COUGAAR_INSTALL_PATH/lib/bootstrap.jar
 DEVP=""
+
+# Optional environment variable COUGAAR_DEV_PATH can be
+# used to point to custom developer code: one or more colon separated
+# directories/jars/zips. It may also be left unset.
+
 if [ "$COUGAAR_DEV_PATH" != "" ]; then
     DEVP="-Dorg.cougaar.class.path=${COUGAAR_DEV_PATH}"
 fi
