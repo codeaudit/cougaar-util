@@ -58,6 +58,14 @@ while [ x"$1" != x ]; do
     -v) verbose=1
 	shift
 	continue;;
+    -h) echo "Usage: Node [-v] [-preoptions ...] [<society>.xml] <Nodename>[.ini] [otherOptions ...]"
+        echo "  if <society>.xml is specified, Node will take the Node specification from the xml file."
+        echo "  -v run the script in verbose mode"
+	echo "Environment variables:"
+	echo "  COUGAAR_INSTALL_PATH is where cougaar is installed.  The script will attempt to discover"
+	echo "     the correct value if not specified"
+	echo "  CIP is an alias for COUGAAR_INSTALL_PATH"
+	exit;;
     *) 	break;;
   esac
 done
