@@ -53,7 +53,21 @@
 #
 # Also see the Server documentation ("server/doc/README") for 
 # further details.
-NODE_PROPS_FILE="server.props"
+#NODE_PROPS_FILE="server.props"
+if [ $# == 0 ]; then
+    NODE_PROPS_FILE="server.props"
+    echo Using default properties file: server.props
+else 
+    NODE_PROPS_FILE=$1
+    echo "Using properties file : $1"
+fi
+
+
+if [ ! -f $NODE_PROPS_FILE ]; then
+    echo "ERROR : properties file [${NODE_PROPS_FILE}] does not exist"
+    exit 1
+fi
+
 
 #
 # The remaining settings should not require modifications
