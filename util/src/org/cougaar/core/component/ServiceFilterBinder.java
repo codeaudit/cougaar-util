@@ -25,6 +25,9 @@
  */
 package org.cougaar.core.component;
 
+import org.cougaar.util.log.Logger;
+import org.cougaar.util.log.Logging;
+
 import java.util.ArrayList;
 
 /** A Wrapper Binder contructed by ServiceFilter which 
@@ -41,6 +44,8 @@ import java.util.ArrayList;
 public abstract class ServiceFilterBinder 
   extends BinderWrapper         // only uses part of it...
 {
+  private final static Logger logger = Logging.getLogger(ServiceFilterBinder.class);
+
   protected ServiceFilterBinder(BinderFactory bf, Object child) {
     super(bf, child);
     myContainerProxy = createContainerProxy();
@@ -114,38 +119,7 @@ public abstract class ServiceFilterBinder
      **/
     private ArrayList serviceTuples = new ArrayList(1);
 
-    public class Tuple {
-      public Object client;
-      public Object clientProxy;
-      public Class serviceClass;
-      public Object service;
-      public Object serviceProxy;
-      public Tuple(Object r, Object cp, Class sc, Object s, Object sp) {
-        client = r;
-        clientProxy = cp;
-        serviceClass = sc;
-        service = s;
-        serviceProxy = sp;
-      }
-      public Tuple(Object r, Class sc) { client=r; serviceClass = sc; }
-      public Object getClient() { return client; }
-      public Object getClientProxy() { return clientProxy; }
-      public Class getServiceClass() { return serviceClass; }
-      public Object getService() { return service; }
-      public Object getServiceProxy() { return serviceProxy; }
-      public Object getRequestedClient() {
-        return (clientProxy!=null)?clientProxy:client;
-      }
-      public Object getReturnedService() {
-        return (serviceProxy!=null)?serviceProxy:service;
-      }
-      public boolean equals(Object o) {
-        return ((o instanceof Tuple) &&
-                client.equals(((Tuple)o).client) &&
-                serviceClass.equals(((Tuple)o).serviceClass));
-      }
-    }
-      
+    
     /**
      * This implementation of getService calls allowService(serviceClass).  If allowService 
      * returns true, will then call getClientProxy to proxy the client, delegates to the real broker
@@ -153,17 +127,38 @@ public abstract class ServiceFilterBinder
      **/
     public Object getService(Object requestor, Class serviceClass, ServiceRevokedListener srl) {
       if (allowService(serviceClass)) {
+        // get the client proxy
         Object clientProxy = getClientProxy(requestor, serviceClass);
+        if (clientProxy == requestor) {
+          logger.warn("getClientProxy should return null instead of result == requestor", new Throwable());
+          clientProxy = null;
+        }
         Object rc = (clientProxy != null)?clientProxy:requestor;
 
+        // get the service
         Object service = super.getService(rc, serviceClass, srl);
         if (service == null) return null;
 
+        // get the service proxy
         Object serviceProxy = getServiceProxy(service, serviceClass, rc);
+        if (serviceProxy == service) {
+          logger.warn("getServiceProxy should return null instead of result == service", new Throwable());
+          serviceProxy = null;
+        }
         Object rs = (serviceProxy != null)?serviceProxy:service;
+
+        if (clientProxy == null && serviceProxy == null) {
+          // no client or server proxies - no need to track it with a tuple
+          return service;
+        }
+        if (logger.isDebugEnabled()) {
+          if (clientProxy != null && serviceProxy==null) {
+            logger.debug("ClientProxy without ServiceProxy. service="+serviceClass+", binder="+this);
+          }
+        }
         
         synchronized (serviceTuples) {
-          serviceTuples.add(new Tuple(requestor,clientProxy,serviceClass,service,serviceProxy));
+          serviceTuples.add(new ServiceTuple(requestor,clientProxy,serviceClass,service,serviceProxy));
         }
         return rs;
       } else {
@@ -203,26 +198,29 @@ public abstract class ServiceFilterBinder
      * Calls releaseServiceProxy and releaseClientProxy as appropriate.
      **/
     public void releaseService(Object requestor, Class serviceClass, Object service) {
-      Tuple t;
+      ServiceTuple t;
       synchronized (serviceTuples) {
-        int i = serviceTuples.indexOf(new Tuple(requestor, serviceClass));
+        int i = serviceTuples.indexOf(new ServiceTuple(requestor, serviceClass));
         if (i == -1) {
-          // no such service, ignore the request.
+          // no proxy information - just pass it up
+          super.releaseService(requestor, serviceClass, service);
           return;
         }
-        t = (Tuple)serviceTuples.remove(i);
+        t = (ServiceTuple)serviceTuples.remove(i);
       }
       
       // release our service proxy
       Object sp = t.getServiceProxy();
       if (sp != null) releaseServiceProxy(sp, t.getService(), t.getServiceClass());
 
-      // really release the service
-      super.releaseService(t.getRequestedClient(), t.getServiceClass(), t.getService());
-
-      // release our client proxy
-      Object cp = t.getClientProxy();
-      if (cp != null) releaseClientProxy(cp, t.getClient(), t.getServiceClass());
+      try {
+        // really release the service
+        super.releaseService(t.getRequestedClient(), t.getServiceClass(), t.getService());
+      } finally {
+        // release our client proxy
+        Object cp = t.getClientProxy();
+        if (cp != null) releaseClientProxy(cp, t.getClient(), t.getServiceClass());
+      }
     }
     
     /** Called to release a serviceProxy previously constructed by the binder.
@@ -237,6 +235,39 @@ public abstract class ServiceFilterBinder
      * method is called <em>after</em> the service is released.
      **/
     protected void releaseClientProxy(Object clientProxy, Object client, Class serviceClass) {
+    }
+  }
+
+  public static class ServiceTuple {
+    public Object client;
+    public Object clientProxy;
+    public Class serviceClass;
+    public Object service;
+    public Object serviceProxy;
+    public ServiceTuple(Object r, Object cp, Class sc, Object s, Object sp) {
+      client = r;
+      clientProxy = cp;
+      serviceClass = sc;
+      service = s;
+      serviceProxy = sp;
+    }
+    // used for only to create match for .equals
+    public ServiceTuple(Object r, Class sc) { client=r; serviceClass = sc; }
+    public Object getClient() { return client; }
+    public Object getClientProxy() { return clientProxy; }
+    public Class getServiceClass() { return serviceClass; }
+    public Object getService() { return service; }
+    public Object getServiceProxy() { return serviceProxy; }
+    public Object getRequestedClient() {
+      return (clientProxy!=null)?clientProxy:client;
+    }
+    public Object getReturnedService() {
+      return (serviceProxy!=null)?serviceProxy:service;
+    }
+    public boolean equals(Object o) {
+      return ((o instanceof ServiceTuple) &&
+              client.equals(((ServiceTuple)o).client) &&
+              serviceClass.equals(((ServiceTuple)o).serviceClass));
     }
   }
 }
