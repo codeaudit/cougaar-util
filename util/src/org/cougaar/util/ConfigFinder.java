@@ -392,7 +392,7 @@ public class ConfigFinder {
 	    InputStream is = zip.getInputStream(file);
 	    BufferedReader in = new BufferedReader(new InputStreamReader(is));
 	    while (in.ready()) {
-	      String text = in.readLine();
+	      /*String text = */in.readLine();
               // this is seriously wrong (MIK)
 	      //appendPathElement(text.substring(0, text.lastIndexOf(File.separator)));
 	    }

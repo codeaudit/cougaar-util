@@ -99,13 +99,13 @@ public final class Configuration {
   }
 
   public static final URL urlify(String s) throws MalformedURLException {
-    MalformedURLException savedx = null;
+//    MalformedURLException savedx = null;
     s = s.replace('\\', '/').replace('\\', '/'); // These should be URL-like
     try {
       if (!s.endsWith("/")) s += "/";
       return new URL(s);
     } catch (MalformedURLException mue) {
-      savedx = mue;
+//      savedx = mue;
     }
 
     try {
@@ -119,7 +119,7 @@ public final class Configuration {
   private static final URL filenameToURL(String s) throws MalformedURLException {
     try {
       File f = new File(s);
-      return (new File(s)).getCanonicalFile().toURL();
+      return f.getCanonicalFile().toURL();
     } catch (Exception e) {
       throw new MalformedURLException("Cannot convert string to file URL "+s);
     }

@@ -725,7 +725,7 @@ public class JarConfigFinder
     // First, try to open the file as a Jar URL connection
     try {
       JarURLConnection juc = (JarURLConnection)base.openConnection();
-      JarFile jf = juc.getJarFile();
+//      JarFile jf = juc.getJarFile();
       // This is a Jar file.
       // Add the new jar file to the list of jar files.
       JarFileInfo entry = appendJarFile(juc.getURL());
