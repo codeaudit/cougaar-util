@@ -43,10 +43,10 @@
 <a href="#organization">Organization of a Release</a></li>
 
 <li>
-<a href="#example">MiniTestConfig Example Implementations</a></li>
+<a href="#example">Example Society Implementations</a></li>
 
 <li>
-<a href="#delivering">Delivering Software Products (Plugins)</a></li>
+<a href="#delivering">Delivering Software Products (Plugins and other Components)</a></li>
 
 <li>
 <a href="#developing">Developing and Running COUGAAR Societies</a></li>
@@ -81,7 +81,8 @@ the current Cougaar version was released.
 
 <p>
 Build 9.4 is a significant release of Cougaar 9 intended to add
-additional functionality and address known issues in 9.2.
+additional functionality and address known issues in 9.2, as well as
+include enhancements developed as part of the Ultra*Log integration.
 <ul>
 <li>
 The standard initializer service implementations will no longer construct
@@ -741,131 +742,8 @@ csv format suitable for Excel.&nbsp;</li>
 <br>(See the datagrabber/doc/TPFDDViewer-Introduction.html file for more
 information on these new features.)</ul>
 </ul>
-Build 8.8.0 is a point release along COUGAAR 8.0 and represents 8.6.0 with
-assorted bugs fixed and some minor new features, specifically to support
-and incorporate Ultra*Log integration work previously done in 8.4.1. In
-Particular, 8.8.0 is intended to be the final release before 9.0. 8.8.0
-is the final snapshot of the 8.6.2 integration branch. Any third-party
-software which works with 8.6.2 will work with 8.8.0. Notable additions
-for this release include:
-<ul>
-<li>
-Bugs fixed.</li>
 
-<li>
-<i>Manager</i> is an experimental/proof-of-concept module which attempts
-to detect and react to unexpected node and server death. Right now, this
-is a demo capability only, but may serve as a sneak preview into 9.x functionality.
-A small (linux-only) example is documented in <a href="ReleaseNotes/9.0/NodeManager.txt">Node
-Manager Demo Instructions</a>.</li>
-
-<li>
-MessageTransport Adaptability enhancements to include Traffic Generation
-to aide in masking actual Cougaar message traffic.&nbsp; Its important
-to note that single pieces of the the Message Transport Adaptibility architecture,
-such as Secure Name Service access and Traffic Generation can be turned
-on and off using -D arguments.&nbsp; For more details, please see the Parameters.html
-catalog found in $COUGAAR_INSTALL_PATH/doc/api, the <a href="details/JSSE-Keystore-Instructions.txt">JSSE
-and keystore creation instructions</a> and the <a href="details/MTS-Adapt-Demo.htm">Message
-Transport Adaptibility Demo document</a>.
-
-Message Transport release notes are in <a
-					  href="details/MessageTransport-9.0.htm">MTS Release 9.0 </a>.
-</li>
-
-</ul>
-
-<p><br>Build 8.6.2 is a point release along COUGAAR 8.0 and represents
-8.6.0 with assorted bugs fixed and some minor new features, specifically
-to support and incorporate Ultra*Log integration work previously done in
-8.4.1. Notable additions for this release include:
-<ul>
-<li>
-Bugs fixed.</li>
-
-<li>
-CSMART enhancements (See: <a href="../csmart/doc/release-notes.txt">CSMART
-release notes</a> for details)</li>
-
-<ul>&nbsp;
-<li>
-Added support for assessment societies defined in MySQL database</li>
-
-<li>
-New concept: Recipe - for adding components to a society</li>
-
-<li>
-Multiple improvements to ability to configure and control societies from
-CSMART</li>
-</ul>
-</ul>
-Build 8.6.1 is a point release along COUGAAR 8.0 and represents 8.6.0 with
-assorted bugs fixed and some minor new features, specifically to support
-and incorporate Ultra*Log integration work previously done in 8.4.1. Notable
-additions for this release include:
-<ul>
-<li>
-Third-party jars have been significantly updated. See
-<a href="../sys/index.html">cougaar-support.zip:sys/index.html</a>
-for a list of the packages, the included version numbers, notes and download
-references.</li>
-</ul>
-Build 8.6.0 is a point release along COUGAAR 8.0 and will be the final
-release under the ALP project.&nbsp; Future Cougaar releases will be under
-the Ultra*Log project. Notable additions for this release include:
-<ul>
-<li>
-Changes to plugin parameters defined in the cougaar.rc file.&nbsp; Please
-see <a href="details/DataAccess.html">Data Access document</a> for the
-current list of parameters needed to run a small-135 society.</li>
-
-<li>
-Heterogeneous Database Capability.&nbsp; The query based LDMPlugins now
-support database connectivity via any JDBC driver.&nbsp; MySQL and PostgreSQL
-database exports for running the SMALL-135 configuration are posted on
-the Cougaar web site.&nbsp; <a href="details/HeterogeneousDatabase.html">HeterogeneousDatabase</a></li>
-
-<li>
-New Configuration database to replace "ini" files. This new database and
-the Node enhancements that support reading from it allow running societies
-without distributing multiple configuration files. For details, see the
-JavaDocs for Node, the Cougaar Developer's Guide, and the CSMART User's
-Guide.</li>
-
-<li>
-CSMART enhancements to support configuring, executing, and monitoring large
-distributed societies using the above configuration database. This is now
-the preferred mechanism for configuring, running, and monitoring large
-distributed societies. For further details, see the CSMART User's Guide
-and release documention in the CSMART module (csmart/doc/CSMART-Readme.txt
-to start).</li>
-
-<li>
-The AppServer, which is used by CSMART to remotely create and destroy Cougaar
-Node processes, has been enhanced to meet the new CSMART requirements.
-The CSMART documentation contains basic usage details, and the "server"
-module includes a "server/doc/README" text file.</li>
-
-<li>
-Generic <a href="details/Logging.html">logging facility</a>. Both logging
-and logging control services provide a front-end to popular log4j third-party
-logging package.</li>
-
-<li>
-Archiving architecture which allows old tasks to be deleted while a Cougaar
-society is running. Views can still be obtained based on data that existed
-in the past, but has been deleted from the running society.&nbsp; For more
-details and screen shots from a test run, please see the <a href="details/ArchivingTest.htm">Archiving
-Test document</a>.</li>
-
-<li>
-Enhancements to the generic UniversalExpanderPlugin which expands tasks
-according to sub-tasks defined in a database table. Enhancements include
-better ability to defined task parameters, ability to specify more than
-2 levels of expansion, and the ability to expand levels fully or expand
-them into a single flat workflow. For details please see glm/doc/UniversalExpanderPlugin.html</li>
-</ul>
-
+<br>
 <!-- ---------------------------------------------------------------------- -->
 <!-- ---------------------------------------------------------------------- -->
 <!-- ---------------------------------------------------------------------- -->
@@ -952,44 +830,78 @@ The lists are results of Bugzilla queries (run on May 1, 15, 29, ..., resp.).
 
 <h2>
 <a NAME="organization"></a>Organization of a Release&nbsp;</h2>
-The files in a COUGAAR release fall into several organizational
-areas. These include:
-
+When you download a Cougaar release, there are several logical pieces.
 <ul>
-<li>
-"core:" domain independent agent architecture</li>
-<li>
-"glm:" LDM and Plugins which have a logistics domain focus based on the
-ALP program objectives</li>
-<li>
-"utility:" GSS and Plugin Contracts</li>
-<li>
-"tools:" scalability and test tools</li>
-<li>
-"tutorial:" non-logistics sample societies and Plugins</li>
-
-<li>
-"server:" centralized society initiation and management for testing, integration
-and demonstration</li>
-</ul>
-The COUGAAR release will contain the following zip files:
-
+<li>Cougaar runtime files: these come from the <b>cougaar.zip</b> file and
+include jar files, startup scripts, and data files. These in turn are
+spread out across several directories or "modules". The directories
+that come in cougaar.zip do not contain source code or Javadoc, which
+is available separately.<br>
 <ul>
-<li>
-cougaar.zip:&nbsp; COUGAAR demo runtime - all built jar files, configs,
-data, bin, minimum doc.</li>
-<li>
-cougaar-support.zip:&nbsp; All non-built supporting .jars (unpacks into
-"sys" subdirectory where Bootstrapper will find them).</li>
-<li>
-cougaar-api.zip:&nbsp; the javadoc for all the main cougaar classes in
-one place. unpacks to api/* instead of under doc as in previous releases.</li>
-<li>
-*-dev.zip:&nbsp; sources, docs (including javadoc) for each "public" module.</li>
-<li>
-md5sums.txt:&nbsp; md5 checksums of all the zips.</li>
-<li>
-build.out: output of the build process</li>
+<li>lib/: This directory contains the Cougaar-developed jar files.</li>
+<li>bin/: This directory contains all the primary Cougaar startup
+scripts.</li>
+<li>doc/: This is where Cougaar documentation is stored, including this
+file. Note that the Developer's Guide and Javadoc come
+separately.</li>
+<li>configs/: All the basic runtime data and configuration files are
+stored here. In various documents you will often see reference to
+"configs/common", which subdirectory is found here, and includes
+common data files. Some simple flat-file base Cougaar society
+definitions are also found here.</li>
+<li>aggagent/: This software module includes the Aggregation Agent
+architecture for collecting data from various Cougaar Agents and
+summarizing it.</li>
+<li>blackjack/: This software module defines some military logistics
+supply-chain Plugins and related classes and data files.</li>
+<li>bootstrap/: Cougaar classloader that ensures jar files in usual
+places are included, without requiring CLASSPATH modifications.</li>
+<li>bol/: The Books Online Cougaar example application.</li>
+<li>build/: The scripts used to compile and build a Cougaar release.</li>
+<li>community/: Support for defining communities of Agents and their communitications.</li>
+<li>contract/: </li>
+<li>core/: The core Cougaar Agent architecture.</li>
+<li>csmart/: CSMART is the Cougaar Society Management, Analysis, and
+Reporting Tool. Use it to configure, run, and monitor large Cougaar
+societies. See csmart/doc/index.html</li>
+<li>datagrabber/: </li>
+<li>glm/: Defines Plugins and data model for a military logistics
+domain and application.</li>
+<li>glmtrans/: Transportation Plugins to support a military logistics application.</li>
+<li>javaiopatch/: Small JDK over-rides.</li>
+<li>manager/: Support for management Agents to monitor the health of a
+Cougaar application.</li>
+<li>planserver/: Deprecated interface support - use servlets instead.</li>
+<li>qos/: </li>
+<li>quo/: </li>
+<li>scalability/: Testing society for evaluating the scalability of
+the Cougaar architecture.</li>
+<li>server/: The AppServer (or Node Server) is a daemon used by CSMART
+to remotely startup and stop Cougaar Nodes.</li>
+<li>toolkit/: </li>
+<li>tutorial/: Simple tutorials for learning Cougaar, plus examples,
+as used in the periodically offered Cougaar Tutorial classes.</li>
+<li>uiframework/: Framework for constructing some UIs.</li>
+<li>util/: Cougaar component architecture and utility classes,
+including logging.</li>
+<li>vishnu/: GA based scheduler.</li>
+<li>webserver/: Servlet support.</li>
+<li>webtomcat/: Integration with Apache Tomcat.</li>
+</ul></li>
+<li>Cougaar source: The source code for each of the various Cougaar
+modules, along with Javadoc, is available in
+<b>&lt;module&gt;-dev.zip</b>. Here you will also often find JUnit regression
+tests (in a sub-directory called "regress"), and examples (in the
+"examples" sub-directory).</li>
+<li>Consolidated core API: The <b>cougaar-api.zip</b> contains the
+consolidated Javadoc for the "basic" Cougaar modules, for extraction
+into the top-level doc directory.</li>
+<li>Cougaar third-party support libraries: The <b>cougaar-support.zip</b>
+file contains third-party jar files and libraries, which when
+extracted go in the sys/ directory.</li>
+<li><b>md5sums.txt</b>:&nbsp; md5 checksums of all the zips.</li>
+<li><b>build.out</b>: output of the build process</li>
+<li><b>errors.out</b>: Any errors or warnings encountered by build.</li>
 </ul>
 
 <b>To install Cougaar</b>:
@@ -1048,11 +960,27 @@ patterns. Plugin and component developers are encouraged to use <b>minitestconfi
 as a starting point for testing their software for compliance with the
 latest infrastructure release. Minitestconfig can be run as a multiple
 node, multiple host society.&nbsp;
-<p>In addition, there is a much larger configuration in
-<b>configs/small-135</b>.
-The default configuration supports running a relatively small but interesting
-two node society distributed across two machines.&nbsp; See the small-135.readme.html
-file in the configuration directory for more information.&nbsp;
+<p>There are 2 standard societies derived from the military logistics domain that are included in the distribution.<br>
+<ul>
+<li><b>Small-135</b>: This is an ini file based society where the
+     configuration is provided in <code>configs/small-135</code>. The
+     default configuration supports running a relatively small but
+     interesting two node society distributed across two machines. See
+     the <a href="../configs/small-134/small-135.readme.html">small-135.readme.html</a> file in the configuration directory for more information. </li>
+<li><b>Tiny/Small/Full-1AD</b>: This is a set of database based societies where the
+     configuration information is provided through the CSMART
+     database. These military logistics supply applications are
+     similar in structure and content to the small-135
+     society. However, they use different military units and simulate
+     different operations.  These configurations are entirely configured and run
+     through CSMART. These span in size from TINY (fits on one
+     machine) through SMALL (best run on 3 or 4 machines) through FULL
+     (usually requires at least 6 machines).  Each of these may
+     include the full-fledged TRANSCOM transportation scheduler (more
+     compute intensive) or just a Stub scheduler (those with the -STUB
+     suffix).  For details on configuring and running these CSMART
+     societies, see the <a href="../csmart/doc/InstallAndTest.html">CSMART Installation instructions</a>.</li>
+</ul>
 
 <!-- ---------------------------------------------------------------------- -->
 <!-- ---------------------------------------------------------------------- -->
