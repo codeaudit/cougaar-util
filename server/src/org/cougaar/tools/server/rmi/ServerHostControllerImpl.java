@@ -230,7 +230,13 @@ class ServerHostControllerImpl
       } else {
         String javaHome = System.getProperty("java.home");
         if (javaHome != null) {
-          jvmProgram = javaHome+"/bin/java";
+          // defaults to "{java.home}/bin/java"
+          jvmProgram = 
+            javaHome+
+            File.separator+
+            "bin"+
+            File.separator+
+            "java";
         } else {
           jvmProgram = "java";
         }
