@@ -385,7 +385,13 @@ public final class ConfigFinder {
     if (cs != null)
       m.put("CONFIG", cs);
 
-    defaultConfigFinder = new ConfigFinder(System.getProperty("org.cougaar.config.path"));
+    String config_path = System.getProperty("org.cougaar.config.path");
+    if (config_path != null && 
+	config_path.charAt(0) == '"' &&
+	config_path.charAt(config_path.length()-1) == '"')	
+	config_path = config_path.substring(1, config_path.length()-1);
+	
+    defaultConfigFinder = new ConfigFinder(config_path);
   }
 
   public static ConfigFinder getInstance() {
