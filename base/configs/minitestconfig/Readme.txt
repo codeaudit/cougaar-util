@@ -19,5 +19,3 @@ This runs the single node named "MiniNode" which is definied in
 MiniNode.xml. You can split the agents across multiple Nodes by
 editing this XML file. This is useful for a more complete test of the
 infrastructure.
-
-
