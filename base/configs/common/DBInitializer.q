@@ -131,6 +131,17 @@ queryAgentRelation.mysql = \
     AND LIB_PG.ATTRIBUTE_NAME = 'TypeIdentification' \
     AND SPTG.COMPONENT_NAME = ':agent_name:'
 
+queryCommunityAttributes = \
+ SELECT A.COMMUNITY_ID, A.ATTRIBUTE_ID, A.ATTRIBUTE_VALUE \
+   FROM community_attribute A \
+  WHERE A.ASSEMBLY_ID :assemblyMatch:
+
+queryCommunityEntityAttributes = \
+ SELECT A.COMMUNITY_ID, A.ENTITY_ID, A.ATTRIBUTE_ID, A.ATTRIBUTE_VALUE \
+   FROM community_entity_attribute A \
+  WHERE A.ASSEMBLY_ID :assemblyMatch:
+
+
 # This query used for MilitaryOrgPG.HomeLocation when creating
 # OrgAssets when running from the DB. This happens
 # because in the lib_pg table in the DB this query name
