@@ -28,7 +28,7 @@ import org.cougaar.util.log.Logger;
 import org.cougaar.util.log.Logging;
 
 /** A little state machine framework to allow proper sequencing of a set
- * of logical tasks/states.
+ * of logical states.
  **/
 
 public class StateMachine {
