@@ -92,6 +92,15 @@ implication is that Componentes should not put initialization code in
 the setParameter method if the Component ever is constructed without
 parameters.
 </li>
+<li>CSMART: Add Dos Recipe export scripts</li>
+<li>Minor fix to support running TPFDD Viewer. Avoids necessity for
+workaround described in 9.2.2 - errata.</li>
+<li>CSMART: Minor fix to allow seeing non-Plugin Agent contents in
+Console Node Info window.</li>
+<li>CSMART: Avoid some NPEs. See the CSMART release <a
+href="../csmart/doc/release-notes.txt">notes</a> for details.</li>
+<li>CSMART: Allow arbitrary insertion points in Specific Insertion
+recipes. This solves bug 1387 mentioned in the errata document.</li>
 </ul>
 
 <!-- COUGAAR 9.2.2 COUGAAR 9.2.2 COUGAAR 9.2.2 COUGAAR 9.2.2 COUGAAR 9.2.2 -->
@@ -100,6 +109,25 @@ parameters.
 Build 9.2.2 is a patch release of 9.2 intended to address known issues
 in 9.2.1.
 <ul>
+<li>Message Transport Service:
+<ul>
+<li>Removed a redundant API on the Registery interface for looking up
+    the node's address. The NameSupport.getNodeMessageAddress() should
+    be used instead.</li>
+<li>If a client requests the MessageTransportService and is not a
+    MessageTransportClient, the service provider will now throw an
+    IllegalArgumentException instead of returning Null. </li>
+</ul>
+<li>Thread Service:<br>
+Thread service now returns a Schedulable instead of a
+    Thread. Schedulables are thread proxies from the user's perspective
+    (things which can be started).  From the system perspective the
+    implementation class is the bridge between Schedulers and lava
+    Threads.  Java Threads are only associated with Schedulables as needed
+    (i.e. when the Scheduler allows the Schedulable to run).<br>
+    Version 9.4 will include extensive changes to and simplifications
+    of the thread services.</li>
+<li>Topology Service: QoSMonitorService was removed and replaced with the topology service.</li>
 <li>
 New service org.cougaar.core.service.BlackboardQueryService is a form of
 very simple but very limited blackboard access for clients which need
@@ -118,6 +146,32 @@ details.</li>
 <li>The included MySQL JDBC Driver has been upgraded to version
 2.0.14. Changes include bug fixes with Timestamps and performance
 improvements. Be sure to re-install 3rd party jars from cougaar-support.zip</li>
+<li>Bug 1313, "Separate topology from MTS"
+Created new "TopologyReaderService" for components to list all agents, hosts, 
+nodes, find out which host an agent is on, etc.  This simplifies the MTS and 
+allows for future agent mobility enhancements.</li>
+<li>Bug 1073, "Servlet-loader should pass servlet as the service-requestor"
+Servlets now use the "BlackboardQueryService", which allows better servlet 
+security binding.  Servlets must now use a "setSimpleServletSupport(..)" 
+method instead of a "<classname>(SimpleServletSuport ..)"
+constructor.</li>
+<li>Bug 1290, "Tomcat needs to read from the server.xml for which SSLServer"
+Created new system properties for setting the web-server socket factories.  
+This will be used for NAI custom SSL server configuration.</li>
+<li>Bug 1291, "Tomcat SSL should not throw exception when keystore environm"
+Related to bug 1291, which allows a custom socket factory to configure the 
+keystore.</li>
+<li>Bug 1163, "Agent Identity Service"
+Integrated new agent crypto identity service into agent and node, and 
+modified the agent to transfer this identity when the agent moves.  The 
+default built-in service provider implementation does nothing and can be 
+overridden by a HIGH-priority component specified in the node ".ini" 
+configuration.</li>
+<li>Bug 1358, "Topology manager does not support MTS message address"
+Created new "system" category in the topology service, and modified the MTS 
+to register itself with this category.</li>
+<li>Bug 1380, "CSMART topology display must show hostname instead of IP add"
+Modified topology services to use the host's name instead of IP address. </li>
 </ul>
 
 
