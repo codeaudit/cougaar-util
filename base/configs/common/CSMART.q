@@ -55,6 +55,11 @@ queryLibRecipes = \
     FROM V4_LIB_MOD_RECIPE \
 ORDER BY NAME
 
+queryRecipeByName = \
+  SELECT NAME \
+    FROM V4_LIB_MOD_RECIPE \
+   WHERE NAME = ':recipe_name:'
+
 queryRecipe = \
   SELECT MOD_RECIPE_LIB_ID, NAME, JAVA_CLASS \
     FROM V4_LIB_MOD_RECIPE \
@@ -94,6 +99,11 @@ querySocietyName = \
  SELECT DESCRIPTION \
    FROM V4_ASB_ASSEMBLY \
   WHERE ASSEMBLY_ID = ':assembly_id:'
+
+querySocietyByName = \
+ SELECT DESCRIPTION \
+   FROM V4_ASB_ASSEMBLY \
+  WHERE DESCRIPTION = ':society_name:'
 
 queryPluginNames = \
  SELECT DISTINCT LC.COMPONENT_CLASS, AC.COMPONENT_ALIB_ID, AC.COMPONENT_LIB_ID, AC.COMPONENT_NAME \
