@@ -14,7 +14,7 @@
   <td align="Center" width="200"> 
       <h2> <b><font size="+2">Release Notes</font></b></h2>
   
-      <h2> <b><font size="+2">COUGAAR 11.0</font></b></h2>
+      <h2> <b><font size="+2">COUGAAR 11.2</font></b></h2>
  </td>
  </tr>
  
@@ -96,7 +96,7 @@ example, the errata page for Cougaar 11.0 is <a href="http://cougaar.org/errata/
   <!-- COUGAAR 11.2 COUGAAR 11.2 COUGAAR 11.2 COUGAAR 11.2 COUGAAR 11.2 -->
 <p> <b>Build 11.2</b>
 <ul>
-<li>Converted minitestconfig to run completely from XML. Running of MiniNode
+<li>Converted minitestconfig and tutorials to run completely from XML. Running of MiniNode
 does not require the database.  All ini files have been removed as they
 are no longer supported.</li>
 <li>
@@ -130,10 +130,94 @@ Support running plugins in a mode where only a single transaction may
 be open at one time (default is off: that is, fully parallel plugin
 operation). See cougaar bug 3664.
 </li>
-<li>
+<li>GLSExpanderPlugin supports a -D argument which forces a
+persistence after the GLS task has been propogated. See the source for
+that plugin.
+</li>
+<li>The RescindLP now does many sanity checks on the addition and
+removal of objects. In particular, it enforces that Tasks are added
+before PlanElements that handle them, and child tasks after the
+PlanElements. Typically the result is that many tasks without a parent
+task (because an infrastructure rescind is in progress) are
+removed. System properties permit disabling this behavior.
 </li>
 <li>
+New XSL Style sheets.
 </li>
+<li> New XML Node startup scripts to use -D args specified in XML
+files and apply XSL style sheets.</li>
+<li>
+New Components and component load order, removing hard coded
+components.
+</li>
+<li>
+Many fewer native threads created directly - more use of the Thread
+Service.
+</li>
+<li> New OperationalSuperior concept.
+</li>
+<li> New optional core servlet, QuiescenceStateServlet, which shows the
+quiescence status of individual Nodes and the agents within those
+nodes.
+</li>
+<li> Multiple planning object tweaks: synchronize access to key members,
+avoid serializing un-necessary members, and add debug logging on acess
+to other members.
+</li>
+<li> Added component to restrict the number of threads per node. </li>
+<li> Added component to restrict the number of threads per agent. </li>
+<li> PluginHelper: New method which plugins should use when removing a
+task from its workflow, to recalculate the aggregated Allocation
+Result if necessary.</li>
+<li> Added multiple utilities.</li>
+<li> Multiple enhancements in initializers to reduce String consing,
+LogginService instances, and other memory enhancements. In particular,
+community file is only parsed once per Node. </li>
+<li> Added new BlackboardAlert object for indicating a problem on the
+local blackboard for higher-level application resolution.</li>
+<li> MessageTransportClient API change: added getIncarnationNumber. </li>
+<li> Added DestinationLink validity support. </li>
+<li> Added MTS OldIncarnationAspect to ignore messages from an old
+instance of an agent that has restarted elsewhere. </li>
+<li> Restore prototype cache on rehydration. </li>
+<li> Added more regression tests.</li>
+<li> Further work for propogating Allocation Result changes up to a
+task that was Expanded. In particular support a change to
+undefined. See bug 3462.</li>
+<li> Multiple fixes to optimize performance when persistence is
+disabled. In particular, consolidate tuples to allow GC of un-ncessary
+tuples between persists.</li>
+<li> Multiple fixes to avoid locking agent when persistence is
+slow.</li>
+<li> Drop explicit garbage collection before persistence. This means
+persistence may temporarily store removed objects.</li>
+<li> Improve algorithm efficiency for detecting Node-level
+queiscence. </li>
+<li> Reduce usage of deprecated blocking WP calls. </li>
+<li> Modified API for PluginAlarm to take an absolute time instead of
+a delay, allowing for consistent usage between base classes.</li>
+<li> Alarms now use the ThreadService for scheduling.</li>
+<li> Added a SimpleRelayExample to core/relay package.</li>
+<li> Moved Ping society and configuration to new ping module. </li>
+<li> Shortened Node quiescence announcement delay to 20 seconds, and
+added -D argument to configure this value.</li>
+<li> Suppress some YP errors that may be transient while component
+re-tries. </li>
+<li> Updated Vishnu server 3rd party jar to include a performance
+improvement.</li>
+<li> Support community service access control. </li>
+<li> Added new -D argument to suppress reconciliation
+(org.cougaar.core.node.SkipReconciliation). </li>
+<li> Added trivial single-node MTS implementation. </li>
+<li> Apply updated & simplified BSD-derived copyright notice. </li>
+<li> Require reasonable AspectScorePoints in ScoringFunctions. </li>
+<li> Do not propogate add/change of Allocations of Tasks that are not
+on the blackboard (have just been rescinded).</li>
+<li> Multi-threading fixes to GLM's ClusterOPlan fix to ensure start &
+end times are consistent.</li>
+<li> Javadoc cleanup.</li>
+<li> Suppress resending the self Organization if only LocalPG changes
+have happened (as in OPlanWatcherLP).</li>
 </ul>
 
   <!-- COUGAAR 11.0 COUGAAR 11.0 COUGAAR 11.0 COUGAAR 11.0 COUGAAR 11.0 -->
