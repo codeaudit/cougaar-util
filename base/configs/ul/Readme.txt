@@ -1,4 +1,4 @@
-This directory contains XML file specification(s) for Ultra*Log 1AD
+This directory contains XML file specifications for Ultra*Log 1AD
 societies.
 
 As of Cougaar 10.2, there is _minimal_ support for running Cougaar
@@ -24,7 +24,7 @@ To run this sample 1AD society, you must
 unzipping) into that database
 4) Then run XMLNode from this directory, giving it the 2 arguments:
    TINY-1AD-TRANS-STUB-1359.xml 1AD_TINY
-indicating you want to use this XML file, and run the Node with that
+   indicating you want to use this XML file, and run the Node with that
    name.
 
 5) You will then likely need to run the GLSInit.[bat/sh] client to
