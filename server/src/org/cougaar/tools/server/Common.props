@@ -1,27 +1,16 @@
 # Common COUGAAR property file
 # These should not depend on architecture.
 
-# The port of the server's RMI Registry
-#org.cougaar.tools.server.port=8484
-
-# The name of the server in the RMI Registry at org.cougaar.tools.server.port
-#org.cougaar.tools.server.name=NodeServer
-
-# The class of RemoteNodeServer to instantiate 
-#org.cougaar.tools.server.class=org.cougaar.tools.server.RemoteNodeServerImpl
-
-# when true, the server will report on various activities (default false)
-#org.cougaar.tools.server.verbose=true
+# The java vm command to run nodes with
+#java.jvm.program=java
 
 # The class of Node to start (default org.cougaar.core.society.Node)
-#org.cougaar.tools.server.node.class=org.cougaar.core.society.Node
-
-# The java vm command to run nodes with
-#org.cougaar.tools.server.java=java
+#java.class.name=org.cougaar.core.society.Node
 
 # The classpath to use to run nodes - defaults to the classpath of the 
 # server environment. Note that only core.jar needs to be in here.
 #java.class.path=...
 
 # some standard memory settings
-org.cougaar.tools.server.vm.memory=-Xms100m -Xmx300m
+java.Xms100m 
+java.Xmx300m

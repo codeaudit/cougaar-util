@@ -55,6 +55,7 @@ implements ServerNodeController {
 
   private String nodeName;
   private String[] cmdLine;
+  private String[] envVars;
   private ClientNodeEventListener cnel;
   private NodeEventFilter nef;
 
@@ -94,6 +95,7 @@ implements ServerNodeController {
   public ServerNodeControllerImpl(
       String nodeName,
       String[] cmdLine,
+      String[] envVars,
       String rmiHost,
       int rmiPort,
       ClientNodeEventListener cnel,
@@ -123,7 +125,15 @@ implements ServerNodeController {
       for (int i = 0; i < cmdLine.length; i++) {
         System.err.println("  "+cmdLine[i]);
       }
+      if (envVars.length > 0) {
+        System.err.println("with environment:");
+        for (int i = 0; i < envVars.length; i++) {
+          System.err.println("  "+envVars[i]);
+        }
+      }
     }
+
+    // FIXME add envVars
 
     // spawn the node
     sysProc = Runtime.getRuntime().exec(cmdLine);
@@ -242,6 +252,10 @@ implements ServerNodeController {
 
   public String[] getCommandLine() {
     return cmdLine; 
+  }
+
+  public String[] getEnvironmentVariables() {
+    return envVars;
   }
 
   //

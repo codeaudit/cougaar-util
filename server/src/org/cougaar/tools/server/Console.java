@@ -182,17 +182,10 @@ public class Console {
               hostList.setSelectedIndex(0);
               selectedHostName = (String) hostList.getSelectedValue();
             }
-            String[] additionalArgs = new String[4];
-            additionalArgs[0] = "-f";
-            additionalArgs[1] = selectedNodeName+".ini";
-            additionalArgs[2] = "-controlPort";
-            additionalArgs[3] = Integer.toString(port);
             createNode(
                 selectedHostName, 
                 port,
-                selectedNodeName, 
-                ConfigFileName, 
-                additionalArgs);
+                selectedNodeName);
             }
           });
 
@@ -317,15 +310,13 @@ public class Console {
      * Create a Node on the given host.
      */
     private void createNode(
-        String hostname, 
-        int port,
-        String name, 
-        String configname, 
-        String[] args) {
+        String hostName, 
+        int controlPort,
+        String nodeName) {
 
       // remember the first host that is spawned
       if (this.firstHost == null) {
-        this.firstHost = hostname;
+        this.firstHost = hostName;
       }
 
       // add a tab and panel to the main window
@@ -335,7 +326,7 @@ public class Console {
         doc = new DefaultStyledDocument();
         JTextPane pane = new JTextPane(doc);
         JScrollPane stdoutPane = new JScrollPane(pane);
-        nodePane.add(name, stdoutPane);
+        nodePane.add(nodeName, stdoutPane);
       } catch (Exception e) {
         return;
       }
@@ -344,8 +335,11 @@ public class Console {
       Properties c_props = new Properties();
       c_props.putAll(
           Console.this.properties);
-      c_props.put("org.cougaar.node.name", name);
-      c_props.put("org.cougaar.config", configname);
+      c_props.put("org.cougaar.node.name", nodeName);
+      c_props.put(
+          "org.cougaar.control.port", 
+          Integer.toString(controlPort));
+
       String nsps = 
         Console.this.properties.getProperty(
             "org.cougaar.tools.server.nameserver.ports", 
@@ -361,11 +355,11 @@ public class Console {
       try {
         nel = 
           new MyListener(
-              getLogFileName(name), 
+              getLogFileName(nodeName), 
               doc);
       } catch (Exception e) {
         System.err.println(
-            "Unable to create output for \""+name+"\"");
+            "Unable to create output for \""+nodeName+"\"");
         e.printStackTrace();
         // remove panel!
         return;
@@ -378,24 +372,24 @@ public class Console {
       try {
         newNode = 
           communitySupport.createNode(
-              hostname, 
-              port, 
+              hostName, 
+              controlPort, 
               regName,
-              name,
+              nodeName,
               c_props,
-              args,
+              null,
               nel,
               nef,
               null);
       } catch (Exception e) {
         System.err.println(
-            "Unable to create node \""+name+"\" on host \""+hostname+"\"");
+            "Unable to create node \""+nodeName+"\" on host \""+hostName+"\"");
         e.printStackTrace();
         // remove panel!
         return;
       }
 
-      myNodes.put(name, newNode);
+      myNodes.put(nodeName, newNode);
     }
 
     private void flushNodeEvents(String name) {
