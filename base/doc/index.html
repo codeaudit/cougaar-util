@@ -109,6 +109,9 @@ are loaded and which services they have advertised/obtained.  This
 includes a "/components" servlet that generates XML views (
 <a href="http://bugs.cougaar.org/show_bug.cgi?id=1113#c5">bug 1113</a>
 ).</li>
+<li>Blackboard now complains about possible performance hits (like use
+of DynamicUnaryPredicates). To quiet these, set the -D 
+org.cougaar.blackboard.pedantic=false</li>
 <li>Code cleanup to remove deprecated method calls and fix many
 <a href="http://pmd.sourceforge.net/">PMD</a> style warnings.</li>
 <li>Lots of javadoc cleanup, including a major rewrite of the
@@ -205,7 +208,7 @@ component descriptions that filtered out at runtime, but binders
 were duplicated (bug 3862).</li>
 <li>Do getPrimary on MessageAddresses before doing .equals to avoid
 comparing attributes.</li>
-<li>Tutorials' TakeVacationServlet is now part of the exercices.</li>
+<li>Tutorials' TakeVacationServlet is now part of the exercises.</li>
 <li>Persistence SequenceNumbers now public for extensions of
 persistence</li>
 <li>Refactored Asset serialization (
