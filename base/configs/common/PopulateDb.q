@@ -9,6 +9,11 @@ insertAlibComponent=\
      COMPONENT_TYPE) \
  VALUES (:component_alib_id, :component_name, :component_lib_id, :component_category)
 
+checkAlibComponent=\
+ SELECT COMPONENT_ALIB_ID \
+   FROM V4_ALIB_COMPONENT \
+  WHERE COMPONENT_ALIB_ID = :component_alib_id
+
 insertComponentHierarchy=\
  INSERT INTO V4_ASB_COMPONENT_HIERARCHY \
     (ASSEMBLY_ID, COMPONENT_ALIB_ID, \
@@ -46,7 +51,20 @@ insertAttribute=\
      :start_date, :end_date)
 
 queryLibPGAttribute=\
- SELECT PG_ATTRIBUTE_LIB_ID, ATTRIBUTE_TYPE, AGGREGATE_TYPE \
+ SELECT PG_NAME, ATTRIBUTE_NAME, PG_ATTRIBUTE_LIB_ID, ATTRIBUTE_TYPE, AGGREGATE_TYPE \
    FROM V4_LIB_PG_ATTRIBUTE \
-  WHERE PG_NAME = :pg_name \
-    AND ATTRIBUTE_NAME = :attribute_name
+  WHERE PG_NAME = :pg_name
+
+queryMaxAssemblyId=\
+ SELECT MAX(ASSEMBLY_ID) \
+   FROM V4_ASB_ASSEMBLY \
+  WHERE ASSEMBLY_TYPE = 'CSM' \
+    AND ASSEMBLY_ID LIKE ':assembly_id_pattern'
+
+insertAssemblyId=\
+ INSERT INTO V4_ASB_ASSEMBLY (ASSEMBLY_ID, ASSEMBLY_TYPE, DESCRIPTION) \
+ VALUES (:assembly_id, 'CSM', 'CSM assembly')
+
+insertTrialAssembly=\
+ INSERT INTO V4_EXPT_TRIAL_ASSEMBLY (EXPT_ID, TRIAL_ID, ASSEMBLY_ID, DESCRIPTION) \
+ VALUES (':expt_id', ':trial_id', :assembly_id, 'CSM assembly')
