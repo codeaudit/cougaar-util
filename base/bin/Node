@@ -67,7 +67,7 @@ endif
 # But you may still use properties if you wish.
 #set MYDOMAINS="-Dorg.cougaar.domain.alp=org.cougaar.glm.GLMDomain"
 set MYDOMAINS=""
-set MYPROPERTIES="$MYDOMAINS -Dorg.cougaar.system.path=$COUGAAR3RDPARTY -Dorg.cougaar.install.path=$COUGAAR_INSTALL_PATH -Duser.timezone=GMT -Dorg.cougaar.core.agent.startTime=08/10/2005 -Dorg.cougaar.planning.ldm.lps.ComplainingLP.level=0 -Dorg.cougaar.workspace=$COUGAAR_WORKSPACE"
+#set MYPROPERTIES="$MYDOMAINS -Dorg.cougaar.system.path=$COUGAAR3RDPARTY -Dorg.cougaar.install.path=$COUGAAR_INSTALL_PATH -Duser.timezone=GMT -Dorg.cougaar.core.agent.startTime=08/10/2005 -Dorg.cougaar.planning.ldm.lps.ComplainingLP.level=0 -Dorg.cougaar.workspace=$COUGAAR_WORKSPACE"
 set MYMEMORY=""
 
 set node = $argv[1]
@@ -80,7 +80,7 @@ if ( "$node" == "admin" ) then
     set args="-c -r -n Administrator -p 8000 $rest"
     set MYMEMORY="-Djava.compiler=NONE"
 else 
-    set args="-n $node -c $rest"
+    set args="-Dorg.cougaar.node.name=$node $rest"
     # arguments to adjust (defaults are given)
     # -Xmx64m	      # max java heap
     # -Xms3m	      # min (initial) java heap
