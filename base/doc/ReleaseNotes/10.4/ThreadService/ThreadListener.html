@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<html> <head>
+<title>COUGAAR Thread Services in a Nutshell: ThreadListener</title>
+</head>
+
+<body>
+
+<h2>org.cougaar.core.thread.ThreadListener</h2>
+
+<dl>
+
+  <dt>
+      <code>void threadQueued(Schedulable schedulable, Object
+      consumer)
+      </code>
+  </dt>
+      
+  <dd>
+
+      Subscribed <code>ThreadListeners</code> at any given level
+      will receive this callback when any <code>Schedulable</code>
+      is placed on the queue of pending 'threads' for that level.
+      The consumer on whose behalf the <code>Schedulable</code> was
+      created is also provided.<p>
+      
+  </dd>
+
+  <dt>
+      <code>void threadDequeued(Schedulable schedulable, Object
+      consumer)
+      </code>
+  </dt>
+      
+  <dd>
+
+      Subscribed <code>ThreadListeners</code> at any given level
+      will receive this callback when any <code>Schedulable</code>
+      is popped of the queue of pending 'threads' for that level, in
+      preparation for being run.  The consumer on whose behalf the
+      <code>Schedulable</code> was created is also provided.<p>
+      
+  </dd>
+
+  <dt>
+      <code>void threadStarted(Schedulable schedulable, Object
+      consumer
+      </code>
+  </dt>
+      
+  <dd>
+
+      Subscribed <code>ThreadListeners</code> at any given level
+      will receive this callback when any <code>Schedulable</code>
+      at that level starts running.  The consumer on whose behalf
+      the <code>Schedulable</code> was created is also provided.<p>
+      
+  </dd>
+
+  <dt>
+      <code>void threadStopped(Schedulable schedulable, Object
+      consumer)
+      </code>
+  </dt>
+      
+  <dd>
+      
+      Subscribed <code>ThreadListeners</code> at any given level
+      will receive this callback when any <code>Schedulable</code>
+      at that level stops running.  The consumer on whose behalf
+      the <code>Schedulable</code> was created is also provided.<p>
+      
+  </dd>
+
+  <dt>
+      <code>void rightGiven(String consumer);</code>
+  </dt>
+      
+  <dd>
+
+      Subscribed <code>ThreadListeners</code> at any given level
+      will receive this callback when the next higher Thread
+      Services have granted this level a "right" for the given
+      thread consumer.  No <code>Schedulable</code> has claimed
+      the right at this point so none is passed in the
+      callback.<p>
+      
+  </dd>
+
+  <dt>
+      <code>void rightReturned(String consumer)</code>
+  </dt>
+      
+  <dd>
+
+      Subscribed <code>ThreadListeners</code> at any given level
+      will receive this callback when that level returns a
+      "right" to the next higher level.  The
+      <code>Schedulable</code> which used the right is already
+      back in the thread pool at this point, so it isn't passed
+      in the callback.<p>
+      
+  </dd>
+
+</dl>
+
+</body>
+
+</html>

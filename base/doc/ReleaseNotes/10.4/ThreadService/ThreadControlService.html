@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<html> <head>
+<title>COUGAAR Thread Services in a Nutshell: ThreadControlService</title>
+</head>
+
+<body>
+
+<h2>org.cougaar.core.service.ThreadControlService</h2>
+
+<dl>
+
+  <dt>
+      <code>void setMaxRunningThreadCount(int count)</code>
+  </dt>
+      
+  <dd>
+      Sets the maximum number of <code>Schedulables</code>
+      that are allowed to run at any one time (across all
+      levels).<p>
+  </dd>
+
+  <dt>
+      <code>void setQueueComparator(Comparator comparator)</code>
+  </dt>
+      
+  <dd>
+
+      Sets the <code>Comparator</code> used by the queue at this level
+      to order its elements (<code>Schedulables</code>).  The
+      'smallest' value, as determined by the <code>Comparator</code>,
+      is the first element of the queue. By default the queue is
+      sorted by time (fifo). <p>
+      
+  </dd>
+
+  <dt>
+      <code>void setRightsSelector(RightsSelector selector)</code>
+  </dt>
+      
+  <dd>
+      
+      By default, the "right" to run is handled in a round-robin
+      fashion.  This can be overridden by providing a different
+      <code>RightsSelector</code>.  The rights-selection
+      mechanism is experimental and lightly tested, and
+      shouldn't be used (yet) except for experimenting.<p>
+      
+  </dd>
+
+  <dt>
+      <a name="disqualification">
+      <code>boolean setQualifier(UnaryPredicate predicate)</code>
+      </a>
+  </dt>
+      
+  <dd>
+      
+      Sets the qualifier at this level.  The qualifier is used
+      to disqualify queued <code>Schedulables</code> temorarily.
+      Any <code>Schedulable</code> on the queue which doesn't
+      satisfy the predicate is removed and held in another list.
+      Such a <code>Schedulable</code> will only be returned to
+      the queue (and thus given the opportunity to run
+      eventually) if the qualifier is unset (ie, set to
+      <code>null</code>).
+
+      <p> NB: The qualifier can only be set to a
+      non-<code>null</code> value if it's current
+      <code>null</code> .<p>
+      
+  </dd>
+
+
+  <dt>
+      <a name="childdisqualification">
+      <code>boolean setChildQualifier(UnaryPredicate predicate)</code>
+      </a>
+  </dt>
+      
+  <dd>
+      
+      Sets the qualifier for child schedulers at this level.  The
+      qualifier is used to prevent children from gaining rights they
+      might otherwise have access to.  This is useful to keep one
+      child from using up all its parents rights (for example).
+
+      <p> NB: The qualifier can only be set to a
+      non-<code>null</code> value if it's current
+      <code>null</code> .<p>
+      
+  </dd>
+      
+
+  <dt>
+      <code>int runningThreadCount()</code>
+  </dt>
+      
+  <dd> Returns the number of <code>Schedulables</code> that are
+      currently running at this level.<p> </dd>
+
+  <dt>
+      <code>int pendingThreadCount()</code>
+  </dt>
+      
+  <dd> Returns the number of <code>Schedulables</code> that are
+      currently queued at this level,<p> </dd>
+
+  <dt>
+      <code>int activeThreadCount()</code>
+  </dt>
+      
+  <dd> Returns the number of <code>Schedulables</code> that are
+      currently either running or queued at this level.<p> </dd>
+
+  <dt>
+      <code>int maxRunningThreadCount()</code>
+  </dt>
+      
+  <dd> Returns the maximum number of <code>Schedulables</code>
+      that are allowed to run at any one time (across all
+      levels).<p> </dd>
+
+</dl>
+
+</body>
+
+</html>

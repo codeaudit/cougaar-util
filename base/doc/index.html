@@ -9,15 +9,13 @@
 <table border="0" cellspacing="0" cellpadding="0" width="600">
  <tbody>
     <tr>
- <td align="Center" width="200"><a href="http://www.cougaar.org/"><img src="cougaar_small_left.jpg" border="0"></a>
+ <td align="Center" width="200"><a href="http://www.cougaar.org/"><img src="cougaar.png" border="0"></a>
       </td>
   <td align="Center" width="200"> 
       <h2> <b><font size="+2">Release Notes</font></b></h2>
   
-      <h2> <b><font size="+2">COUGAAR 10.4</font></b></h2>
+      <h2> <b><font size="+2">COUGAAR 11.0</font></b></h2>
  </td>
-  <td align="Center" width="200"><a href="http://www.cougaar.org"><img src="cougaar_small_right.jpg" border="0"></a>
-      </td>
  </tr>
  
   </tbody>
@@ -49,10 +47,10 @@ Components)</a></li>
 
       <h2> <a name="introduction"></a>Introduction</h2>
 
-This file contains the release notes for Cougaar 10.4.
+This file contains the release notes for Cougaar 11.0.
 <p>
 Please see our <a href="FAQ.html">Cougaar FAQ</a> for a high-level
-introduction to the Cougaar agent architecture, system requirements,
+introduction to the Cougaar agent architecture, system requirements, 3rd party software,
 and pointers to additional documentation.
 <p>
 Please also visit our
@@ -65,6 +63,337 @@ Please see our website for updated information on problems/workarounds
 that were detected/posted after this Cougaar version was released.
 
       <h2> <a name="overview"></a>Overview of this Release</h2>
+
+  <!-- COUGAAR 11.0 COUGAAR 11.0 COUGAAR 11.0 COUGAAR 11.0 COUGAAR 11.0 -->
+
+<p> <b>Build 11.0</b> is a major release, including multiple new
+  pieces of functionality.
+<p>
+<ul>
+</ul>
+<p>
+  <!-- COUGAAR 10.4.6 COUGAAR 10.4.6 COUGAAR 10.4.6 COUGAAR 10.4.6 COUGAAR 10.4.6 -->
+
+<p> <b>Build 10.4.6</b> is a minor release, including minor improvements
+in a number of services and multiple bug fixes.  It also adds support for
+distributed hierarchical yellow pages, and service discovery through those.
+<p>
+<ul>
+<li>Bug 3315: Fix up specification of agentStartTime. Now uses the full hours,
+minutes, seconds of system GMT time for the specified day. Allows
+specification of the hours and minutes, and an offset for more
+accuracy. See the bug report for details.</li>
+<li>Added support for service discovery using distributed YPServers. The 
+default behaviour is unchanged, i.e.  a single YPServer. For the distributed 
+case, each agent belongs to a YPCommunity which is served by a YPServer. The 
+YP communities are organized along the same lines as the command hierarchy. 
+Service discovery uses the community service to traverse the hierarchy of 
+YPServers to find the providers which most closely match the client's 
+specification.
+</li>
+<li>RFE 3162: ServiceDiscovery ClientPlugin forces a persist after FindProviders
+is complete - killing an agent before that point when using
+ServiceDiscovery is not supported.</li>
+<li>Bug 3324: Suppress RDF startup warnings from ServiceDiscovery</li>
+<li>Bug 3313: Fix problem of MTS holding messages forever</li>
+<li>Bug 3330: Ensure first metric on queue is processed.</li>
+<li>Bug 3331: In MTS, only drop due to timeout on receiver if enabled
+by a -D flag.</li>
+<li>Bug 3340: In MTS Gossip stuff, move WP calls out of a
+synchronize.</li>
+<li>Bug 3343: Fix a QuO gui synchronization issue.</li>
+<li>Bug 3345: Various Gossip scalability improvements.</li>
+<li>Bug 3346: Filter metrics Gossip to send only credible info.</li>
+<li>Bug 3348: Drop log level for DeliveryVerification and RogueThread
+to WARN after 100 seconds.</li>
+<li>Bug 3351: Expose the Contract API to allow using servlets instead
+of pop-up windows.</li>
+<li>Bug 3357: Run QoS schedulables in serial instead of parallel.</li>
+<li>Bug 3358: Add a synchronization in QuO jar.</li>
+<li>Bugs 3316, 3317, 3318: WP performance improvements</li>
+<li>Bug 3341: Fix a WP replication forwarding bug.</li>
+<li>Fix AdaptivityEngine servlet to be able to change OpMode
+settings</li>
+<li>Implement Serializable in a ServiceDiscovery object.</li>
+<li>SDRegistrationPlugin, matchmaker plugin: small changes to support
+proper quiescence.</li>
+<li>Bug 3332: UniversalAllocatorPlugin now restores its sink asset
+from the blackboard on rehydration.</li>
+<li>Bug 3334: GenericTablePlugin avoids publishChanging PlanElement if
+the ReportedAR.isEqual(EstimatedAR) already.</li>
+<li>Bug 3337: Fix .equals method for TwoPointScoringFunction.</li>
+<li>Bug 3333: ReceiveNotificationLP: Suppress un-necessary
+publishChange of PlanElements if ReceivedAR is already .isEqual the
+ReportedAR.</li>
+</li>Bug 3352: Fix ExpansionImpl to properly re-wire the workflow of
+subtasks, avoiding later illegal publishRemove warnings.</li>
+<li>Tweak local Juddi jar to support closing DB connections.</li>
+<li>Community caches are now per-Node (bug 3354)</li>
+<li>Bug 3094: Fully account for possible GCing of objects during both
+full and incremental persistence.</li>
+</ul>
+<p>
+
+  <!-- COUGAAR 10.4.5 COUGAAR 10.4.5 COUGAAR 10.4.5 COUGAAR 10.4.5 COUGAAR 10.4.5 -->
+
+<p> <b>Build 10.4.5</b> is a minor release, including minor improvements
+in a number of services and multiple bug fixes. It also adds support
+for replicated white pages and a persistent or mobile yellow pages.
+<p>
+<ul>
+<li>Added a new servlet in core:
+<code>org.cougaar.core.util.LocateAgentServlet</code>: Use it at
+runtime to find the current Node/Host containing an agent (or agents).</li>
+<li>YPServers now have a complete persistence and mobility
+implemementation (RFE 3252).</li>
+<li>Multiple significant community service bugs were addressed,
+including: <ul>
+  <li>Bug 3210 - Some nodes do not get community information</li>
+  <li>Bug 3243 - CommunityResponseListener not called</li>
+  <li>Bug 3202 - Community ClassCastException (from RelayLP)</li>
+  <li>Bug 3280 - ComplainingLP warnings</li>
+ </ul></li>
+<li>Avoid possible ClassCastExceptions in forwarding Relay responses
+(bug 3202).</li>
+<li>The Service Discovery client plugin was refactored, adding support for
+service discovery perturbations (eg providers going away).</li>
+<li>Made a fix to avoid possible confidence flip/flop in ServiceDiscovery
+registration.</li>
+<li>In finding providers bootstrap sequence, treat partial completion
+as incomplete to avoid margin for error at GLSExpander.</li>
+<li>Made multiple Metrics service fixes and performance improvements:
+Bugs 3213, 3234, 3120, 3254, 3255, 3272, and 3292.</li>
+<li>Added support for explicit white pages server agents
+(e.g. "AgentX@localhost:8888"),  replicated white pages servers,
+and white pages access control (bug 3183).  These enhancements are
+backwards-compatible with prior "alpreg.ini" and
+"-Dorg.cougaar.name.server=<i>host:port</i>" configurations.
+For additional details on the new features see the
+<a href="ReleaseNotes/10.4/WhitePages.html">White Pages documentation</a>
+</li>
+<li>Fixed packaging of agents for mobility to support recovering agent
+identity when using DataProtectionService (bug 3212).</li>
+<li>Web server enhancement 3249 - support special syntax to find
+node-agent servlets ("/$~/" and "/$~<i>AgentX</i>/").
+For example, <code>"http://localhost:8800/$~/threads/top"</code>
+will access the node-agent's "/threads/top" servlet, and
+<code>"http://localhost:8800/$~AgentX/threads/top"</code> will
+access the "/threads/top" servlet in the node-agent of whichever node
+is currently hosting AgentX, redirecting the client as necessary.</li>
+<li>Bugs 3256, 3253: DemoControlService fixes to support demo control of time.</li>
+<li>Bug 3265: Ensure demo time is correctly advanced in ExecutionTimer.</li>
+<li>Added missing getAllocationTask method in AllocationforCollections
+(bug 3260).</li>
+<li>Avoid possible stacktrace in CompletionServlet (bug 3241).</li>
+<li>Vishnu bridge plugins correctly mark when they are waiting on
+Vishnu for quiescence.</li>
+<li>Bug 3266: Forward commitment date of tasks when allocating across
+agents.</li>
+<li>Bug 3277: Persistence speedup.</li>
+<li>Bugs 3150 and 3270: Added WP timeouts:  "/$" lookups: <code>-Dorg.cougaar.lib.web.redirect.timeout=MILLIS (default=0)</code>
+and "/agents" listing lookups:
+  <code>-Dorg.cougaar.lib.web.list.timeout=MILLIS (default=0)</code>
+The defaults are the backwards-compabible "block forever" values.</li>
+<li>Bug 3278: Restore binder factories on rehydration.</li>
+<li>Fix ServiceDiscovery plugins to avoid work on rehydration,
+announce when non-quiescent (bug 3289, etc)</li>
+<li>Various fixes to restore subscriptions on rehydration
+(OplanReaderPlugin, etc)</li>
+<li>Various improvements to quiescence calculation - in particular,
+storing quiescence state on agent moves. (bug 3296)</li>
+<li>Dropped obsolete <code>BasePersistence</code> (bug 3296)</li>
+<li>Improvements to the Ping plugins (bug 3288)</li>
+<li>Remove extraneous stacktrace on javaiopatch (bug 3248)</li>
+<li>Avoid getting Oplan Info from DB twice in GLSInitServlet (bug
+3312)</li>
+<li>Added a Gossip servlet to the sensor servlets.</li>
+</ul>
+<p>
+
+  <!-- COUGAAR 10.4.4 COUGAAR 10.4.4 COUGAAR 10.4.4 COUGAAR 10.4.4 COUGAAR 10.4.4 -->
+
+<p> <b>Build 10.4.4</b> is a minor release, including minor improvements
+in a number of services and multiple bug fixes.
+<p>
+<ul>
+<li>Resolved several community service issues, including bugs 3198,
+3201, and 3211.</li>
+<li>Resolved issues restarting Nodes when using DataProtectionService:
+bugs 3038 and 3141.</li>
+<li>Also addressed bugs 3142, 3206, and 3216.</li>
+<li>Agent start time has been restored to 8/10/2005</li>
+</ul>
+<p>
+
+  <!-- COUGAAR 10.4.3 COUGAAR 10.4.3 COUGAAR 10.4.3 COUGAAR 10.4.3 COUGAAR 10.4.3 -->
+
+<p> <b>Build 10.4.3</b> is a minor release, including minor improvements
+in a number of services and multiple bug fixes.
+<p>
+<ul>
+<li>Configuration, bugfixing and plugin support for 500-agent society.</li>
+<li>ServiceDiscovery now uses only the non-blocking YellowPages API.</li>
+<li>Support for hierarchical ServiceDiscovery.</li>
+<li>Support for replicated WhitePages.</li>
+<li>Staged oplan-org activities added for 1AD agents.</li>
+<li>Errata identified bugs in <b>10.4.2</b> have been fixed: Cougaar
+		bugs 3168, 3155, 3170.</li>
+</ul>
+<p>
+
+  <!-- COUGAAR 10.4.2 COUGAAR 10.4.2 COUGAAR 10.4.2 COUGAAR 10.4.2 COUGAAR 10.4.2 -->
+
+<p> <b>Build 10.4.2</b> is a minor release, including improved
+threading and performance in the community service and yellow pages,
+some improved application quiescence detection, and upgrade in the
+vishnu server version used, and multiple bug fixes.
+
+<p>
+<ul>
+<li>Updated to include lastest Vishnu server and client code.
+Compatible with UA/FCS-Supportability agents.</li>
+<li>Added new StateMachine utility - useful for Plugin
+developers.</li>
+<li>Modified oplan table definition to accomodate oplans with hourly
+granularity. Be sure to reload your database.</li>
+<li>Added new QuiescenceService, for use in detecting application
+level quiescence (where the Cougaar architecture may still be
+processing).</li>
+<li>Multiple bug fixes to white pages, aggagents, etc.</li>
+<li>Make Service Discovery's PublishTaxonomy asynchronous.</li>
+<li>Add some pre-fetching to White pages cache for recently used
+items, and allow clients to force a flush of the cache
+(performance improvement).</li>
+<li>Multiple community service improvements, including: Move most work
+out of Alarm callbacks and reduce thread usage. Eliminate synchronous
+WP calls. Support retrieving
+names of nested parent communities. Dropped the Community domain.</li>
+<li>Added SchedulableStatus to help detect Rogue Threads that are
+blocking.</li>
+<li>New OrgDataParamPlugin which creates a self Org Asset using
+strictly plugin parameters, regardless of the component initalization
+service.</li>
+<li>Augmented OrgDataPlugin to permit taking Relationships as plugin
+parameters, to augment those found through the initialization
+service.</li>
+<li>Removed additional synchronous calls to the WP.</li>
+<li>Various bug-fixes to Service Discovery and GLS propagation.</li>
+<li>Various Metrics servlet fixes and improvements.</li>
+<li>Improvements to JarConfigFinder.</li>
+<li>Added new NodeBusyService - used to mark when a Node is
+persisting, so agents are not erroneously reported as Complete while persisting.</li>
+</ul>
+
+<p>
+  <!-- COUGAAR 10.4.1 COUGAAR 10.4.1 COUGAAR 10.4.1 COUGAAR 10.4.1 COUGAAR 10.4.1 -->
+
+<p> <b>Build 10.4.1</b> is a minor release, including several bug
+fixes not ready in time for 10.4.
+<p>
+<ul>
+<li>Database loading scripts have been simplified. As a result, you
+<em>WILL</em> need to update your cougaar.rc file. See the <a
+href="./ReleaseNotes/10.4/DataAccess.html">Data Access documentation</a>
+for details on this change. See the <a
+href="../csmart/data/database/README.txt" CSMART script
+readme</a> or the CSMART <a
+href="../csmart/doc/InstallAndTest.html">Install document</a> for details
+on the new simplified database load process.</li>
+<li>ClusterImpl has been dropped entirely to avoid some confusing
+situations in the future.</li>
+<li>Dropped the scalability module, which has not been functional for
+some time.</li>
+<li>OPLAN and GLS propagation mechanisms have been significantly
+modified. Users of the GLSInitServlet will need to
+update to match the new API. The provided GLSInit UI will look
+different. To use it: 1) Wait for all superior/subordinate
+relationships to be established. 2) Hit "Connect" to talk to the
+GLSInitServlet, 3) Hit Get Oplan Info, then modify the C-0 date as
+desired, and 4) Send the GLS Task (which also instructs each agent to
+separately retreive its OPLAN. </li>
+<li>The searchCommunity, getCommunity, and getParentCommunities
+methods in CommunityService now return results if the required
+information is available in local cache. Callbacks are still used
+for those operations requiring interaction with remote manager
+agent. WhitePages timeout values may now be set via the
+org.cougaar.community.manager.WPTimeout property. Default value
+is 60000 (ms).</li>
+<li>The default set of domains now includes the ServiceDiscovery domain in
+the LDMDomains.ini file. ServiceDiscovery is now used to establish all provider
+relationships in more complex (UltraLog) configurations. </li>
+<li>Increased the default max Threads in the Cougaar Thread Pool from
+30 to 100.</li>
+<li>Multiple fixes to the ServiceDiscovery module, including changes
+to simplify installation and usage. See
+servicediscovery/doc/README.txt for installation and usage
+instructions </li>
+<li>Bug 2558: Add @event javadoc taglet handling in builds. </li>
+<li>Enhancement to GenericTablePlugin (bug 2914)</li>
+<li>Some modifications to the DemoTimeControlService and
+ClusterServesClocks APIs in
+preparation for enhancements to this functionality.</li>
+<li>Several WP bugs have been fixed, such as better startup support
+to avoid version number lookup problems (bug 2963) and new behavior
+to deconflict overlapping local rebind requests (bug 2902).</li>
+<li>Error-checking code has been added to SimpleAgent to verify
+that the agent name has been correctly set.</li>
+<li>Agent mobility "add agent" support has been fixed to specify
+SimpleAgent instead of ClusterImpl when creating new agents, plus it
+now allows the client to specify the agent's full ComponentDescription
+(bug 2924)</li>
+<li>Otherwise unhandled messages to an agent is held during agent
+boot until it has had a chance to load all possible MessageHandlers.
+This prevents a problem where YP messages could start flowing
+before the YPServer was loaded. (bug 2926)</li>
+<li>The servlet server was fixed to catch a new variant of
+"port already in use" exception now thrown by some JVMs (bug 2921)</li>
+<li>WP blocking calls removed in MTS and Metrics Service (bug 2925)</li>
+<li> Metric Service has new servlets to allow remote query of
+    metrics via http. Both an XML and Java format is supported.(2776)</li>
+<li> Metrics Service has support for message flow between agents. The
+    Metrics service can be queried for AgentFlow paths, but 10.4.1
+    does not actually collect the statistics. Statitistics collection
+    Robustness UC3 and will be moved of 10.4.2. See the
+    <a href="ReleaseNotes/10.4/MetricsService/index.html">Metrics
+    Service web-based documentation</a>
+<li> The Agg Agent code was fixed so that it could handle receiving a null
+    reference to the LoggingService. This has been fixed so that it will work
+    properly in the case of no LoggingService. (bug 2969)</li>
+<li>A new servlet, <b>org.cougaar.core.plugin.freeze.FreezeServlet</b> , can be use to suspend
+the activity of a single agent.  It accepts the same rule
+parameters as the current FreezePlugins.  See bug 2968</li>
+<li>GLM Constants class may now be sub-classed.</li>
+<li>XMLComponentInitializer now does some sanity checks on the input
+Node name and society XML files.</li>
+<li>Bug 2855 -- In addition to preferences, task prepositional phrases,
+    contexts, and verb are compared for determining if a task has changed.
+    This fixes a problem of plugins not seeing such changes.
+</li>
+<li>The name of the RemoteClusterAllocationLP has been changed to
+    RemoteAllocationLP.
+</li>
+<li>Bug 2889 -- Tasks with end time preferences that are in the past are not
+    propagated to other agents. This is done to avoid resurrecting deleted
+    tasks after a restart. Some plugins create tasks without regard to whether
+    the tasks have end times in the past and may encounter problem. The
+    "past" ends 24 hours before the present scenario time.
+</li>
+<li>Fixed bug 2923: Correctly handle Log4J config params prefixed by
+"org.cougaar.util.log". Also, if a -D logging config param specifies a
+file for a File appender in a non-existent directory, try to create
+it. If that fails, skip this property.</li>
+<li>Fix bug 2913, allowing very large Timer / alarm deltas to be
+compared correctly.</li>
+<li>YPServer bug 2962 fix to ensure early incoming messages are
+handled correctly.</li>
+<li>Minitestconfig now uses differently named GLSMiniAllocator and
+GLSMiniExpander, as the originals now support finding relationships
+and oplan to support ServiceDiscovery. Functionality is the same.</li>
+<li>Fixed bug 3001 (and 2993): the YPService now queues messages at
+both client and server ends for handling by pooled threads.  This
+avoids a potential deadlock when using the blackboard-based
+yp queries while persisting. </li>
+</ul>
 
   <!-- COUGAAR 10.4 COUGAAR 10.4 COUGAAR 10.4 COUGAAR 10.4 COUGAAR 10.4 -->
 
@@ -90,6 +419,13 @@ the following additional features and fixes.
 <li>The refconfig db (used with XML societies) is now loaded by a script:
   csmart/data/database/scripts/mysql/load_ref_data.sh
 </li>
+<li>The RMI-based JNDI Naming Service has been replaced with an in-band White Pages
+implementation modeled after DNS. 
+Minor API changes to the WP service have been implemented
+(e.g., to classes AddressEntry, Application).
+For design details see the Cougaar Architecture Document.
+The behavior of the new WP should be identical to the old Naming Service.
+</li>
 <li>Minitestconfig now includes the WhitePages servlet. It also uses
   the newer GLM completion servlet instead of the older one.
 </li>
@@ -105,13 +441,63 @@ extra options in most cases.
 files.  If you discover that your favorite package has been removed in
 this release, please write to cougaar-developers@cougaar.org
 </li>
+<li>Deprecated methods in TimeSpan.java have been removed. See Bug 188.
+The blackjack module has some callers of these methods thus if this 
+module is required in the future, it needs to be updated for the replacement
+methods.</li>
 <li>Some unused 3rd party jar files were removed.
 </li>
 <li>OrgActivity has been refactored to separate interface from
 implementation and factory.
-<li>The default society start time is now 7/11/05 (vice 8/10) (bug 2883).</li>
 </li>
-
+<li>The default society start time is now 7/11/05 (vice 8/10) (bug 2883).</li>
+<li>GLSInitServlet/GLSClient and GUI have been changed. 'Publish Oplan' button
+has been replaced by 'Get Oplan Info'.  Pressing this button retrieves
+some Oplan information but does not publish the oplan to the agents.
+A default C0 date can now be overridden via the GUI.  GLS Task now
+contains additional information (oplan id and C0 date) and sending GLS
+causes each agent to read the database for the oplan and org activities.</li>
+<li>
+A new unified source view script has been added to this release (Bug #2502).
+See build/bin/unify_source.sh for details.
+</li>
+<li>
+The Thread service has a new
+Top Servlet
+for viewing the currently running and queued
+schedulables. This servlet is useful for debugging threading issues
+where threads do unnecessary or buggy sleeps, waits, or blocks on
+IO. In general, threads in plugins should NOT use sleep, wait, or
+    blocking IO. See the
+    <a href="ReleaseNotes/10.4/ThreadService/index.html">Thread
+    Service web-based documentation</a>
+</li>
+<li> 
+The Metrics service provides valuable information for debugging and
+    monitoring a society.
+The Metric Service has been improved with better servlets for viewing
+    metrics. A new Gossip service has been added.
+The new services and servlets are pluggable components that can
+be added to the configuration.
+See the Cougaar Developers Guide for details.
+</li>    
+<li>The default society start time is now 7/11/05 (vice 8/10) (bug 2883).</li>
+<li>
+The interface "DomainBindingSite" has been removed.
+Domains should now use the plain BindingSite API.
+New domain-internal services have been created (DomainRegistryService, XPlanService).
+This may impact domain developers (cf. Bug #1375).
+</li>
+<li>
+The ContainerSupport base class has been modified to support future work
+on the component model viewer. Developers of containers should see
+Bug #1113 for details.
+</li>
+<li>
+The "doc/details" and "doc/ComponentModel" directories have been removed.
+Their content has been merged into the Cougaar Developers Guide or
+moved to "doc/ReleaseNotes/[release number]".
+</li>
 </ul>
 
   <!-- COUGAAR 10.3 COUGAAR 10.3 COUGAAR 10.3 COUGAAR 10.3 COUGAAR 10.3 -->
@@ -1100,13 +1486,6 @@ on these new features.)
        <li> <a href="../csmart/doc/index.html">CSMART docs</a></li>
         <li> <a href="../glm/doc/index.html">GLM Module docs</a></li> 
      </ul>
-  <li> Attachments to previous release notes such as: 
-     <ul>
-      <li> <a href="ComponentModel/ComponentModel_Index.html">Component Model</a> docs</li>
-      <li> <a href="ComponentModel/DynamicComponents.html">Dynamic Component </a>
-docs</li>
-     </ul>
-  </li>
   <li> Several ChangeLog files (e.g., core/src/ChangeLog) and files
 under doc/details</li>
   <li> Core infrastructure javadocs available in api/index.html if the cougaar-api.zip
@@ -1118,12 +1497,6 @@ on the basis of @property javadoc tags in the source code. .&nbsp;</li>
 the Cougaar website</li>
   <li> Cougaar Architecture Document, v10.4 (dated 1-May-2003), available
 on the Cougaar website</li>
-  <li> Ultra*Log Developer Workshop presentations (on the <a href="http://www.ultralog.net">
-Ultra*Log website</a>
-)</li>
-  <li> <a href="details/JSSE-Keystore-Instructions.txt">Installing JSSE and
-creating keystores</a>
- for use with SSL enabled Cougaar functionality.</li> 
       </ul>
 
  <!-- ---------------------------------------------------------------------- -->
@@ -1190,8 +1563,6 @@ and application.</li>
 application.</li>
       <li>qos/: Quality of Service support for Message Transport</li>
       <li>quo/: More Message Transport support</li>
-      <li>scalability/: Testing society for evaluating the scalability of the
-Cougaar architecture.</li>
       <li>server/: The AppServer (or Node Server) is a daemon used by CSMART to
 remotely startup and stop Cougaar Nodes.</li>
       <li>toolkit/: Various support utilities, particularly to support
@@ -1235,6 +1606,7 @@ is the default on Windows machines).&nbsp; To do this, you must set the variable
 lower_case_table_names=1 by including the line in /etc/my.cnf: </p>
       <p>[mysqld] <br>
 set-variable&nbsp;&nbsp; =&nbsp;&nbsp; lower_case_table_names=1 </p>
+      <p></p>
       <p>Alternatively you can follow these instructions. <br>
 <ol>
 <li>You'll need cougaar.zip and cougaar-support.zip (the first time) to
@@ -1253,9 +1625,7 @@ on unix: <br>
     </ol>
       <p>Note that $COUGAAR_INSTALL_PATH/bin/Node and setarguments.bat set
 the Cougaar start time with the following Node argument: <br>
--Dorg.cougaar.core.cluster.startTime=08/010/2005 <br>
-This start time is optimal for the Oplan used with the sample military
-logistics societies.&nbsp; 
+-Dorg.cougaar.core.cluster.startTime=07/11/2005 <br>
       <br>
 For instructions on installing and using CSMART, see the <a href="../csmart/doc/InstallAndTest.html">
 CSMART installation document</a>.<br>
@@ -1271,8 +1641,7 @@ purposes and for&nbsp; Cougaar demonstrations. These society configurations
 are available in subdirectories under "configs" in the release. To execute 
 these Cougaar societies, these nodes can be executed on a single computer 
 or distributed across multiple computers.&nbsp; 
-  <p>One society, <b><a
-  href="ReleaseNotes/common/MiniTestConfig.html">minitestconfig</a></b> 
+  <p>One society, <b> minitestconfig</b> 
 will work "out of the box". We intend to expand this test society
 in subsequent releases in size and complexity to test new infrastructure
 features and to provide reference examples of components component and service
@@ -1287,8 +1656,6 @@ node, multiple host society.&nbsp; </p>
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->
   <h2> <a name="delivering"></a>Delivering Software Products&nbsp;</h2>
- Please see the Integration Information Area that can be found on the <a href="http://www.ultralog.net">
-UltraLog</a> web site. 
   <p>All Plugin software must use the Java system parameter
   "org.cougaar.install.path" as the basis for all searches, data
   files, etc. For writing output, use "org.cougaar.workspace". For example, if your product is "tops," your classes will be in:&nbsp; </p>
@@ -1311,14 +1678,6 @@ File.separatorChar + "myData.dat";</font></font></dt>
  <!-- ---------------------------------------------------------------------- -->  
  <h2> <a name="developing"></a>Developing and Running Cougaar Societies</h2>
   
-  <h3> General Development&nbsp;</h3>  
-   <ul>
-    <li> <a href="ReleaseNotes/common/SocStartup-Config.html">Society Configuration and Startup</a></li>
-    <li> <a href="ReleaseNotes/common/MiniTestConfig.html">MiniTestConfig Functional
-    Description</a></li> 
-    <li> For a general description of running a society from CSMART,
-    see the <a href="../csmart/doc/InstallAndTest.html">CSMART Install guide</a>.</li>
-   </ul>
   <br>
   <h3> <a name="jvm"></a>Java Virtual Machine Requirements&nbsp;</h3>
 Cougaar requires the 1.4 release of <a href="http://java.sun.com/j2se/1.4">

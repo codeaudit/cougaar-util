@@ -1,0 +1,102 @@
+<html>
+<head>
+<title>Data Access</title>
+</head>
+<body>
+<h2>Cougaar Database Access Information</h2>
+<p>
+CSMART and some plugins found in the Cougaar infrastructure and the
+glm/mlm packages require information from a database.  These plugins are
+able to query a database to gather necessary information using
+parameters that are set in a file called cougaar.rc or .cougaarrc. You
+can place a .cougaarrc file in $HOME or you can place a cougaar.rc file
+in your config directory (e.g.
+$COUGAAR_INSTALL_PATH/configs/minitestconfig) or the more often, the common
+directory (e.g. $COUGAAR_INSTALL_PATH/configs/common).
+<p>
+The following information provides examples to show the required syntax
+for these parameters.
+<p>
+<b>We have recently added an additional notional database
+(<i>org.cougaar.oplan.database</i>) for some of the UltraLog societies, and
+that entry is also listed here.</b>
+<p>
+For scripts to load data into the example databases listed here, see
+csmart/data/database/mysql/scripts
+<p>
+The file should define various database drivers that will be used.  For
+example:
+<table border=1><tr><td><pre>
+driver.mysql=org.gjt.mm.mysql.Driver
+driver.oracle=oracle.jdbc.driver.OracleDriver
+driver.postgresql=org.postgresql.Driver
+</pre></td></tr></table>
+<p>
+Various Database Connection strings may be used.  For example:
+<table border=1><tr><td><pre>
+jdbc:mysql://HOST/DBNAME (For MySQL)
+jdbc:oracle:thin:@HOST:PORT:SID (For Oracle)
+jdbc:postgresql://HOST:PORT/DBNAME (For PostGres)
+</pre></td></tr></table>
+<p>
+The file should define parameters used by various plugins.
+For example, your cougaar.rc file, when running
+the UltraLog societies, would need to define the following information:
+<table border=1><tr><td><pre>
+
+# domain database
+org.cougaar.database=DBConnectionString
+org.cougaar.database.user=User
+org.cougaar.database.password=Password
+
+# oplan database -- A new (10.4.1) entry for OPLAN information.
+org.cougaar.oplan.database=DBConnectionString
+org.cougaar.oplan.user=User
+org.cougaar.oplan.password=Password
+
+# ua database (not normally needed)
+fcs.database=DBConnectionString
+fcs.database.user=User
+fcs.database.password=Password
+
+# configuration database - CSMART
+org.cougaar.configuration.database=DBConnectionString
+org.cougaar.configuration.user=User
+org.cougaar.configuration.password=Password
+
+# refconfig database - running from xml
+org.cougaar.refconfig.database=DBConnectionString
+org.cougaar.refconfig.user=User
+org.cougaar.refconfig.password=Password
+
+# blackjack
+blackjack.database=DBConnectionString
+blackjack.database.user=User
+blackjack.database.password=Password
+
+# icis
+icis.database=DBConnectionString
+icis.database.user=User
+icis.database.password=Password
+
+### Note that older sample database names used by some glm/mlm plugins
+# are no longer used. These include:
+# oplan.test.database
+# blackjack8.database
+# generic.database.expander.database
+# construction.database
+
+# HTTPS keystore and password
+# the keystore path is relative to the $COUGAAR_INSTALL_PATH
+org.cougaar.web.keystore=Filename
+org.cougaar.web.keypass=Password
+
+# datagrabber database configuration
+# On the next line, DATAGRABBER_DBNAME is typically "Grabber" but can be
+anything you like.
+org.cougaar.mlm.ui.grabber.config.DBConfig.connectionURL=jdbc:mysql://HOST/DATAGRABBER_DBNAME
+org.cougaar.mlm.ui.grabber.config.DBConfig.user=User  
+org.cougaar.mlm.ui.grabber.config.DBConfig.password=Password
+org.cougaar.mlm.ui.grabber.config.DBConfig.syntax=MySQL 
+</pre></td></tr></table>
+</body></html>

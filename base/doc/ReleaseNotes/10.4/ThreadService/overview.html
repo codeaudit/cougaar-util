@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+
+<html> <head>
+<title>Thread Services Overview</title>
+</head>
+
+<body>
+
+<h2>Overview</h2>
+
+<p> The COUGAAR Thread Services are designed to replace the direct use
+of Java Threads with a threading system that can be more tightly
+controlled.  The central new interface is
+
+<a href="Schedulable.html"><code>Schedulable</code></a>,
+which can be thought of as taking the place of a Java native thread.
+<code>Schedulables</code> are created and returned by the
+
+<a href="ThreadService.html"><code>ThreadService</code></a>
+and started by client code.  Unlike native Java threads,
+<code>Schedulables</code> don't necessarily run immediately.  The
+Threading Services allow only a certain number of threads to be
+running at once.  If a <code>Schedulable</code> is started when all
+threads slots are in use, it will be queued and will only run when
+enough running threads have become stopped to allow it reach the head
+of the queue.  The maximum number of running <code>Schedulables</code>
+as well as the queue ordering can be controlled by the
+
+<a
+href="ThreadControlService.html"><code>ThreadControlService</code></a>.
+The Thread Services can also be used to schedule Java
+<code>TimerTasks</code>.  </p>
+
+<p> In addition to the running of threads and tasks, the COUGAAR
+Thread Services offers two other features: an event-like mechanism for
+receiving callbacks when 'interesting' events occur (<a
+href="ThreadListenerService.html"><code>ThreadListenerService</code></a>),
+and a certain amount of explicit control over scheduling (<a
+href="ThreadControlService.html"><code>ThreadControlService</code></a>).
+These interfaces, as well as the <code>Schedulable</code> and
+<code>ThreadService</code> interfaces, are described in detail below.
+
+<p> The COUGAAR Thread Services are hierchical.  Each Agent has a set
+of Thread Services of its own, as does the MTS and certain other
+Node-level components.  These local Thread Services handle threading
+at their own level and are in turn controlled by a root Thread Service
+at the Node level.  The inter-level control mechanism takes the form
+of "rights" given by the higher to the lower level services, and
+returned after use by the lower to the higher level services.  When
+the higher level service has multiple children, a
+<code>RightsSelector</code> is used to choose the child service that
+will be the next to receive rights (round-robin by default).
+In principle this hierarchy could be extended to a further depth
+but so far we haven't found any good reason to do that in practice.
+</p>
+
+<p>The design of the thread services has important implications for
+the runtime pattern of the <code>Runnables</code> it will be running.
+In particular, it's not generally a good idea for these
+<code>Runnables</code> to block.  The common Java pattern of a loop
+with a <code>wait</code> or <code>sleep</code> call should usually be
+unwrapped into a simple 'strip' of code that reschedules itself if it
+needs to run again.  Examples can be seen in <a
+href="usecases.html">Use Cases and Examples</a>.</p>
+
+</body>
+</html>
+
+
+</body> </html>

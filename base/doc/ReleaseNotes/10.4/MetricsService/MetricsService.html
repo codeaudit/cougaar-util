@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<html> <head>
+<title>COUGAAR Metrics Service in a Nutshell: MetricsService</title>
+</head>
+
+<body>
+
+<h2>org.cougaar.core.qos.metrics.MetricsService</h2>
+
+
+<dl>
+  <dt>
+      <code>Metric getValue(String path, 
+		    VariableEvaluator evaluator,
+		    Properties qos_tags)</code>
+  </dt>
+      
+  <dd> The most general query function in the Metric Service.  The
+      <code>path</code> specifies the metric to be returned.  For a
+      description of the syntax, see the <a href="path.html">Path</a>
+      section.  The <code>evaluator</code> is used to handle
+      shell-variable-style references in generic paths.  For more
+      details on this, see <a
+      href="VariableEvaluator.html">VariableEvaluator</a>.  The
+      <code>qos_tags</code> are for future use.  <p>
+      
+  </dd>
+
+  <dt>
+      <code>Metric getValue(String path, 
+		    Properties qos_tags)</code>
+  </dt>
+      
+  <dd> As above but with no variable replacement.
+      <p>
+  </dd>
+
+      
+  <dt>
+      <code>Metric getValue(String path, 
+		    VariableEvaluator evaluator)</code>
+  </dt>
+      
+  <dd> As above but with no QoS tags.
+      <p>
+  </dd>
+
+
+  <dt>
+      <code>Metric getValue(String path)</code>
+  </dt>
+      
+  <dd> As above but with neither variable replacement
+      nor QoS tags. 
+      <p>
+  </dd>
+      
+  <dt>
+      <code>Object subscribeToValue(String path, 
+                    Observer observer,
+		    VariableEvaluator evaluator,
+		    MetricNotificationQualifier qualifier)</code>
+  </dt>
+      
+  <dd>
+
+      The most general subscription function in the Metric Service.  The
+      <code>path</code> specifies the metric to subscribe to.  For a
+      description of the syntax, see the <a href="path.html">Path</a>
+      section.  The <code>observer</code> is the entity which will
+      receive a callback when the specified metric changes. The
+      <code>evaluator</code> is used to handle shell-variable-style
+      references in generic paths.  For more details on this, see <a
+      href="VariableEvaluator.html">VariableEvaluator</a>.  The
+      <code>qualifier</code>w is used to restrict the frequency of
+      callbacks, for example by specifying the smallest change that
+      should trigger one.  For more details, see <a
+      href="MetricNotificationQualifier.html">MetricNotificationQualifier</a>. The
+      value returned by this method is a subscription handle and
+      should only be used for a subsquent call to
+      <code>unsubscribeToValue</code>.  <p>
+
+  </dd>
+
+  <dt>
+      <code>Object subscribeToValue(String path, 
+                    Observer observer,
+		    VariableEvaluator evaluator)</code>
+  </dt>
+  <dd> As above but without callback qualification.
+      <p>
+  </dd>
+
+  <dt>
+      <code>Object subscribeToValue(String path, 
+                    Observer observer,
+		    MetricNotificationQualifier qualifier)</code>
+  </dt>
+  <dd> As above but without variable replacement.
+      <p>
+  </dd>
+
+  <dt>
+      <code>Object subscribeToValue(String path, 
+                    Observer observer)</code>
+  </dt>
+  <dd> As above but with neither variable replacement
+      nor callback qualification.
+      <p>
+  </dd>
+
+  <dt>
+      <code>void unsubscribeToValue(Object handle)</code>
+  </dt>
+  <dd> Terminates a previously established subscription.  The handle
+      is as returned by one of the <code>subscribeToValue</code> calls.
+      <p>
+  </dd>
+
+</dl>
+
+</body>
+
+</html>

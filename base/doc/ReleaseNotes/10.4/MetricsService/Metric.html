@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<html> <head>
+<title>COUGAAR Metrics Service in a Nutshell: Metric</title>
+</head>
+
+<body>
+
+<h2>org.cougaar.core.qos.metrics.Metric</h2>
+
+<dl>
+
+
+  <dt>
+      <code>Object getRawValue()</code>
+  </dt>
+      
+  <dd> Returns the raw value of the metric.  If you know what type
+      the value should be, use one of the type-specific reader
+      methods instead.
+      <p>
+  </dd>
+
+  <dt>
+      <code>String stringValue()</code>
+  </dt>
+      
+  <dd> Returns the raw value of the metric as a <code>String</code>,
+      via <code>toString()</code>.
+      <p>
+  </dd>
+
+  <dt>
+      <code>byte byteValue()</code>
+  </dt>
+      
+  <dd> Returns the raw value of the metric as a <code>byte</code> if
+      it's a <code>Number</code>.  Otherwise returns 0.
+      <p>
+  </dd>
+
+  <dt>
+      <code>short shortValue()</code>
+  </dt>
+      
+  <dd> Returns the raw value of the metric as a <code>short</code>  if
+      it's a <code>Number</code>.  Otherwise returns 0.
+      <p>
+  </dd>
+
+
+  <dt>
+      <code>int intValue()</code>
+  </dt>
+      
+  <dd> Returns the raw value of the metric as a <code>int</code> if
+      it's a <code>Number</code>.  Otherwise returns 0.
+      <p>
+  </dd>
+
+
+  <dt>
+      <code>long longValue()</code>
+  </dt>
+      
+  <dd> Returns the raw value of the metric as a <code>long</code> if
+      it's a <code>Number</code>.  Otherwise returns 0.
+      <p>
+  </dd>
+
+
+  <dt>
+      <code>float floatValue()</code>
+  </dt>
+      
+  <dd> Returns the raw value of the metric as a <code>float</code> if
+      it's a <code>Number</code>.  Otherwise returns 0.
+      <p>
+  </dd>
+
+  <dt>
+      <code>double doubleValue()</code>
+  </dt>
+      
+  <dd> Returns the raw value of the metric as a <code>double</code>  if
+      it's a <code>Number</code>.  Otherwise returns 0.
+      <p>
+  </dd>
+
+
+  <dt>
+      <code>char charValue()</code>
+  </dt>
+      
+  <dd> Returns the raw value of the metric as a <code>char</code> if
+      it's a <code>String</code> or a <code>Number</code>.  Otherwise
+      returns '?'.
+      <p>
+  </dd>
+
+  <dt>
+      <code>boolean booleanValue()</code>
+  </dt>
+      
+  <dd> Returns the raw value of the metric as a <code>boolean</code>  if
+      it's a <code>Boolean</code>.  Otherwise returns <code>false</code>.
+      <p>
+  </dd>
+      
+  <dt>
+      <code>double getCredibility()</code>
+  </dt>
+      
+  <dd> Returns the credibility of the metric as value between 0.0 (no
+      credibility) and 1.0 (absolute certainty).
+      <p>
+  </dd>
+
+  <dt>
+      <code>String getUnits()</code>
+  </dt>
+      
+  <dd> Returns the units of the metric. In the current release this
+      field is not generally filled in .
+      <p>
+  </dd>
+
+  <dt>
+      <code>String getProvenence()</code>
+  </dt>
+      
+  <dd> Returns a tag indicating the source of the metric. In the
+      current release this field is not generally filled in .
+      <p>
+  </dd>
+      
+  <dt>
+      <code>long getTimestamp()</code>
+  </dt>
+      
+  <dd> Returns the time at which the metric was entered into the
+      Metric Service.
+      <p>
+  </dd>
+
+  <dt>
+      <code>long getHalflife()</code>
+  </dt>
+      
+  <dd> Returns the time after which the credibility of this metric
+      will begin to degrade. For 10.4 the degrade feature is not implmented.
+      <p>
+  </dd>
+      
+
+</dl>
+
+</body>
+
+</html>

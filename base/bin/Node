@@ -34,24 +34,8 @@
 # guess based on where the Node script is located.
 #
 
-# figure out COUGAAR_INSTALL_PATH
 scriptname=`basename $0`
-if [ -z "$COUGAAR_INSTALL_PATH" ]; then
-    if [ "$CIP" ]; then
-	export COUGAAR_INSTALL_PATH="$CIP";
-    else
-	s=`echo "$0" | sed -e "s,/bin/${scriptname},,"`
-	if [ x$s != x ] ; then
-	    echo "Warning: Defaulting COUGAAR_INSTALL_PATH to '$s'!";
-	    export COUGAAR_INSTALL_PATH=$s
-	else
-	    echo "Error: Could not find COUGAAR_INSTALL_PATH!";
-	    exit;
-	fi
-    fi
-fi
 
-# -v for verbose mode
 verbose=
 
 # deal with command-line arguments
@@ -79,11 +63,26 @@ done
 postargs="$*"
 
 if [ x"$nodename" == x ]; then
-    echo "Warning: defaulting Nodename to \"Node\"";
+    echo "Nodename=\"Node\"";
     nodename="Node"
 fi
 
-# figure out workspace
+
+if [ -z "$COUGAAR_INSTALL_PATH" ]; then
+    if [ "$CIP" ]; then
+	export COUGAAR_INSTALL_PATH="$CIP";
+    else
+	s=`echo "$0" | sed -e 's,/bin/Node,,'`
+	if [ x$s != x ] ; then
+	    if [ $verbose ]; then echo "COUGAAR_INSTALL_PATH='$s'"; fi
+	    export COUGAAR_INSTALL_PATH=$s
+	else
+	    echo "Error: Could not find COUGAAR_INSTALL_PATH!";
+	    exit;
+	fi
+    fi
+fi
+
 if [ -z "$COUGAAR_WORKSPACE" ]; then
     export COUGAAR_WORKSPACE="$COUGAAR_INSTALL_PATH/workspace";
     if [ $verbose ]; then echo "Defaulting COUGAAR_WORKSPACE to $COUGAAR_WORKSPACE"; fi

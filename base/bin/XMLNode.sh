@@ -43,7 +43,7 @@ if [ -z "$COUGAAR_INSTALL_PATH" ]; then
     else
 	s=`echo "$0" | sed -e "s,/bin/${scriptname},,"`
 	if [ x$s != x ] ; then
-	    echo "Warning: Defaulting COUGAAR_INSTALL_PATH to '$s'!";
+	    if [ $verbose ]; then echo "COUGAAR_INSTALL_PATH='$s'"; fi
 	    export COUGAAR_INSTALL_PATH=$s
 	else
 	    echo "Error: Could not find COUGAAR_INSTALL_PATH!";
@@ -117,7 +117,7 @@ fi
 # add your cougaar options here (or on the command line):
 # To quiet the complainingLP:
 # -Dorg.cougaar.planning.ldm.lps.ComplainingLP.level=0
-coptions="-Dorg.cougaar.core.agent.startTime=07/11/2005"
+coptions="-Dorg.cougaar.core.agent.startTime=08/10/2005 -Dorg.cougaar.config.path=$COUGAAR_INSTALL_PATH/configs/common\;$COUGAAR_INSTALL_PATH/configs/glmtrans\;"
 
 # vm arguments to adjust (defaults are given).  You can tune the VM performance
 # by fooling with these values... or you can render your society unrunnable.

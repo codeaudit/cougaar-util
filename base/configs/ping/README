@@ -12,8 +12,9 @@ up the frequency to every 15 seconds:
 
 See "AgentA.ini" for notes on how to configure the pings.  The 
 provided configuration will send an endless series of pings from 
-AgentA to AgentB, one per second.  One can modify the agent ".ini" 
-files to increase the number of pings or change their frequency.
+AgentA to AgentB, one every other second.  One can modify the agent
+".ini" files to increase the number of pings or change their
+frequency.
 
 See the package-level javadocs in
   org/cougaar/core/mobility/ping/package.html

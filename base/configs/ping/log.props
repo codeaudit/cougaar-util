@@ -11,3 +11,7 @@ log4j.appender.A1.layout.ConversionPattern=%d{ABSOLUTE} %-5p - %c{1} - %m%n
 #log4j.category.org.cougaar.core.mobility=INFO
 
 #log4j.category.org.cougaar.core.examples.mobility=INFO
+
+# enable cougaar events for "eventMillis" statistics, as
+# documented in the PingAdderPlugin javadocs:
+#log4j.category.EVENT.org.cougaar.core.mobility.ping=DEBUG

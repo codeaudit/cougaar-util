@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+
+<html> <head>
+<title>COUGAAR Metrics Service in a Nutshell: VariableEvaluator</title>
+</head>
+
+<body>
+<h2>org.cougaar.core.qos.metrics.VariableEvaluator</h2>
+
+<p> Path specifications in the Metrics Service support a limited
+notion of variables for which actual values are substituted
+dynamically.  The syntax is taken from make: <code>
+$(var)</code>.  The evaluation of such variables is handled by a
+user-supplied <code>VariableEvaluator</code> instance.  The parsing
+and substitution is handled by the Metrics Service.
+
+<p>A useful base-class for classes which implement this interface
+<code>StandardVariableEvaluator</code>, which can supply values for
+the variables <code>localagent</code>, <code>localnode</code> and
+<code>localhost</code>.
+
+<hr>
+
+<dl>
+  <dt><code>String evaluateVariable(String var)</code></dt>
+
+  <dd> Given a variable reference in a path this method should return
+      the String to be spliced in as a replacement.  The argument is
+      the variable name itself, without the $ or the parens.  <p>
+      </dd>
+</dl>
+
+
+
+
+
+
+</body> </html>

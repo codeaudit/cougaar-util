@@ -1,0 +1,211 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<html> <head>
+<title>COUGAAR Metrics Service:  Paths</title>
+</head>
+
+<body>
+
+<h2>Metric Paths</h2>
+<p>This section discusses the structure of the Metrics Paths and
+defines common Paths. 
+
+<p> Metrics read from the 
+<A Href="MetricsService.html" Target="Contents">MetricsService</A>
+are the values from a real-time model of the status of the Cougaar
+Society and system resources. The MetricsService allow access to
+<em>formulas</em> in the model. Formulas are relative to a <em>
+Scope</em>, which define instances of modeled entries and there
+relationship between each other.
+
+<p> Containment is a major relationship which is modeled. Child
+scopes inherit all the formulas of its parent. The useful
+containment relationship in Cougaar are
+<code>Host-&gt;Node-&gt;Agent</code>.
+For example, Agents have all the formulas of their hosts, and when
+agents moves to a new host the metrics track new hosts values.
+
+
+<h3> Path Syntax </h3>
+
+<p>A Path is a series of Scopes followed by a Formula. If there is
+more than one child Scope of the same type in the parent Scope, then
+the child Scope is narrowed by Parameters. Each Scope has a fixed
+number of parameters and parameter order is import. The Scope type is used as
+the name of the scope. Scope and Formula names are case sensitive. For example:
+<pre><code>IpFlow(128.33.15.114,128.33.15.113):CapacityMax</code></pre>
+<p>
+The separator between Scopes and formulas is the ":" and the separator
+between parameters is the ",". But your code you should use the
+constant <code>PATH_SEPR</code> defined in interface
+<code>org.cougaar.core.qos.metrics.Constants</code>:
+<pre><code>"IpFlow(128.33.15.114,128.33.15.113)" +PATH_SEPR+ "CapacityMax"</code></pre>
+
+The following sections will use the convention of writing variable parameter fields in brackets [] for variable parameters; using ":"
+as the Path Separator; and "," as the parameter separator.
+The syntax is as follows
+<pre><code>ScopeType1([parameter1],[parameter2]...):ScopeType2([parameter]):Formula</code></pre>
+<p>
+The Averaging Period are sometimes hardwired into the Formula name,
+(yuck!). The Averaging Periods are: "1SecAvg", "10SecAvg",
+"100SecAvg", and "1000SecAvg". This section will use the
+convention 1xxxSecAvg to represent the averaging period.
+<p>
+Also, please use the constants interface in core module
+    <code>org.cougaar.core.qos.metrics.Constants</code> whenever
+    possible. This will allow compile time detection of errors, when 
+    the Metrics Service interface inevitably changes in the future
+
+<h3> Host Scope </h3>
+
+Host Scopes can be accessed at root level and take one parameter which
+is the Host address. The Host address can be IP V4 address or the
+domain name. Hosts scopes are not contained in other Scopes.
+
+<dl>
+  <dt> <b><code>Host([host Addr]):EffectiveMJips</code> </b></dt>
+  <dd> The expected per thread Millions of Java Instructions Per
+      Second. The formula takes into account the base CPU JIPS, the
+      number of CPUs, and the Load Average on the Host <p> </dd>
+
+   <dt><code><b>Host([Host Addr]):Jips</b></code></dt>
+  <dd>CPU capacity in Java Instructions Per Second. JIPS is
+	determined through a benchmark. <p></dd>
+
+  <dt><code><b>Host([Host Addr]):LoadAverage</b></code></dt>
+  <dd>CPU load average, i.e. the average number of processes that are
+	ready to run. <p> </dd>
+
+  <dt><code><b>Host([Host Addr]):Count</b></code></dt>
+  <dd> The number of CPUs in this host <p> </dd>
+
+  <dt><code><b>Host([Host Addr]):Cache</b></code></dt>
+  <dd> Size of CPU level 2 cache<p> </dd>
+
+  <dt><code><b>Host([Host Addr]):TotalMemory</b></code></dt>
+  <dd> Total Physical Memory<p> </dd>
+
+   <dt><code><b>Host([Host Addr]):FreeMemory</b></code></dt>
+   <dd> Free Physical Memory<p> </dd>
+
+  <dt><code><b>Host([Host Addr]):TcpInUse</b></code></dt>
+  <dd> TCP sockets in use<p> </dd>
+
+  <dt><code><b>Host([Host Addr]):UdpInUse</b></code></dt>
+  <dd> UDP sockets in use<p> </dd>
+
+
+</dl>
+
+<h3> Node Scope </h3>
+Node Scopes can be accessed at root level and take one parameter which is the
+the Node's Message address. The Node is also contained within a Host
+Scope and inherits all the Host Scope's formulas.
+
+<p> No additional formulas are defined for Nodes
+
+<h3> Agent Scope </h3>
+Agent Scopes can be accessed at root level and take one parameter which is the
+the Agent's Message address. The Agent Scope is also contained within a Node
+Scope and inherits all the Node Scope's formulas. When an
+Agent moves to a new Node, the Agent Scope will be moved the the
+corresponding Node, i.e. all the re-wiring is automatic, but may be
+slightly delayed due to discovery issues.
+
+<dl>
+  <dt> <b><code>Agent([Agent ID]):LastHeard</code> </b></dt>
+  <dd> Seconds since some component has heard from this agent. This
+  can be from any source such as <em>successful</em> communication, acknowledgment, or gossip.<p> </dd>
+
+  <dt> <b><code>Agent([Agent ID]):LastSpoke</code> </b></dt>
+  <dd> Seconds since some component attempted to Speak to the
+  Agent. The attempt does not have to be successful. For example, if
+  a failed  message is retied,  LastSpoke will be the time of last retry <p> </dd>
+
+  <dt> <b><code>Agent([Agent ID]):SpokeErrorTime</code> </b></dt>
+  <dd> Seconds since last error in communications. This is a large
+  number with 0.0 credibility, if no error has occurred. <p> </dd>
+
+  <dt> <b><code>Agent([Agent ID]):CPULoadAvg1xxxSecAvg</code> </b></dt>
+      
+  <dd>The average number of threads working for this Agent during the
+  Averaging Period. The Averaging Periods are: "1SecAvg", "10SecAvg",
+"100SecAvg", and "1000SecAvg". <p> </dd>
+
+  <dt> <b><code>Agent([Agent ID]):CPULoadMJips1xxxSecAvg</code> </b></dt>
+      
+  <dd>The average MJIPS used by all the threads for this Agent during the
+  Averaging Period. The Averaging Periods are: "1SecAvg", "10SecAvg",
+"100SecAvg", and "1000SecAvg". <p> </dd>
+
+  <dt> <b><code>Agent([Agent ID]):MsgIn1xxxSecAvg</code> </b></dt>
+      
+  <dd>The average messages into this Agent during the
+  Averaging Period. The Averaging Periods are: "1SecAvg", "10SecAvg",
+"100SecAvg", and "1000SecAvg". <p> </dd>
+
+  <dt> <b><code>Agent([Agent ID]):MsgOut1xxxSecAvg</code> </b></dt>
+      
+  <dd>The average messages out of this Agent during the
+  Averaging Period. The Averaging Periods are: "1SecAvg", "10SecAvg",
+"100SecAvg", and "1000SecAvg". <p> </dd>
+
+      
+  <dt> <b><code>Agent([Agent ID]):BytesIn1xxxSecAvg</code> </b></dt>
+      
+  <dd>The average number of bytes (for all messages) into this Agent during the
+  Averaging Period. The Averaging Periods are: "1SecAvg", "10SecAvg",
+"100SecAvg", and "1000SecAvg". <p> </dd>
+
+  <dt> <b><code>Agent([Agent ID]):BytesOut1xxxSecAvg</code> </b></dt>
+      
+  <dd>The average number of bytes (for all messages) out of this Agent during the
+  Averaging Period. The Averaging Periods are: "1SecAvg", "10SecAvg",
+"100SecAvg", and "1000SecAvg". <p> </dd>
+
+
+  <dt> <b><code>Agent([Agent ID]):PersistSizeLast</code> </b></dt>
+  <dd>Size in Bytes of the last persistence file for this agent <p> </dd>
+      
+
+</dl>
+
+
+<h3> IpFlow Scope </h3>
+IpFlow Scope can be accessed at root level and takes two parameters which is the
+ source and destination host addresses. The Host address can be the IP V4
+address or the domain name.
+
+<dl>
+  <dt> <b><code>IpFlow([SrcAddr],[DstAddr]):CapacityMax</code> </b></dt>
+  <dd> Maximum Bandwidth between two hosts<p> </dd>
+
+  <dt> <b><code>IpFlow([SrcAddr],[DstAddr]):CapacityUnused</code> </b></dt>
+  <dd> Unused Bandwidth between two hosts <p> </dd>
+
+
+</dl>
+
+
+<h3> AgentFlow Scope </h3>
+AgentFlow Scope can be accessed at root level and takes two
+parameters which is the source and destination agent message address. 
+<p>
+In 10.4.2 AgentFlow will Inherit formulas from the corresponding IpFlow
+Scope between the Agent's hosts.
+<dl>
+  <dt><b><code>AgentFlow([SrcAddr],[DstAddr]):MsgRate1xxxSecAvg</code></b></dt>
+
+  <dd> Messages per Second from Source Agent to Destination Agent. The
+      Averaging Periods are: "1SecAvg", "10SecAvg", "100SecAvg", and
+      "1000SecAvg"<p> </dd>
+      
+  <dt><b><code>AgentFlow([SrcAddr],[DstAddr]):ByteRate1xxxSecAvg</code></b></dt>
+  <dd> Bytes per Second from Source Agent to Destination Agent. The
+      Averaging Periods are: "1SecAvg", "10SecAvg", "100SecAvg", and
+      "1000SecAvg"<p> </dd>
+</dl>
+
+</body>
+
+</html>

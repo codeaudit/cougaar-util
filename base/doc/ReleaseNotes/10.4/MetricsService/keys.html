@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<html> <head>
+<title>COUGAAR Metrics Service: Keys</title>
+</head>
+
+<body>
+
+<h2>Metric Keys</h2>
+
+<p>This section discusses the structure of the Metrics Keys name-space and
+defines common Keys. 
+
+<p>Metrics are written into the 
+<A Href="MetricsUpdateService.html" Target="Contents">MetricsUpdateService</A> based on Key-Value
+pairs. While the Key itself is just a string, we impose a structure to
+help organize the information. Metric keys form a hierarchical name
+space that is loosely modeled after SNMP MIBs.  The value is a 
+<A Href="Metric.html" Target="Contents">Metric</A>,
+record with slots for value, credibility, time-stamp, units, etc. 
+
+<p>At runtime, each Node has a store of Key-Value pairs. When the
+MetricsUpdaterService receives a new Key-Value pair, it looks up the
+Key in the store. If the value has changed, all the Metrics
+Formulas that have subscribed to this Key will be called-back with the
+new Value.  The Metrics Service in each Node has one and only one effective Value
+for each Key, which is derived through a complicated set of
+integration rules based on credibility and timestamps.
+
+<p>Normally, Key-Value pairs are not read from the Metrics Service, but
+are only processed by internal formulas. One debugging trick to view
+the effective value of a key is to the Path 
+<A Href="paths.html" Target="Contents">Integrater</A>, 
+which takes a Key as a parameter and returns the effective metric.
+Currently, there is no way to list all the Keys available to a Node.
+
+<h3> Key Syntax </h3>
+
+A Metrics Key is a string divided into fields using the Key Separator, e.g.
+<pre><code>Host_128.33.15.114_CPU_Jips</code></pre>
+
+<p> The current Key Separators is "_".  But your code you should use the
+string constant <code>KEY_SEPR</code> defined in
+<code>org.cougaar.core.qos.metrics.Constants</code>:
+<pre><code>"Host" +KEY_SEPR+ "128.33.15.114" +KEY_SEPR+ "CPU"
+      +KEY_SEPR+ "Jips"</code></pre>
+
+Notice that some of the fields are types (e.g. Host, CPU, Jips) and
+others are identifiers (e.g. 128.33.15.114). The types are fixed and
+case sensitive. Identifiers are variable and define branches in naming
+hierarchy.
+
+<p>In the following section we will use the
+convention of writing identifier fields in brackets [], and using "_"
+as the Key Separator
+<pre><code>Host_[Host IP]_CPU_Jips</code></pre>
+
+<h3> Host </h3>
+Host Keys start with identifying the host and then have several
+    optional field for different host characteristics. Host identifiers
+    are raw IP V4 addresses, not domain names. 
+<dl>
+  <dt><code><b>Host_[Host IP]_CPU_Jips</b></code></dt>
+  <dd>CPU capacity in Java Instructions Per Second. JIPS is
+	determined through a benchmark. <p></dd>
+
+  <dt><code><b>Host_[Host IP]_CPU_loadavg</b></code></dt>
+  <dd>CPU load average, i.e. the average number of processes that are
+	ready to run. <p> </dd>
+
+  <dt><code><b>Host_[Host IP]_CPU_count</b></code></dt>
+  <dd> The number of CPUs in this host <p> </dd>
+
+  <dt><code><b>Host_[Host IP]_CPU_cache</b></code></dt>
+  <dd> Size of CPU level 2 cache<p> </dd>
+
+  <dt><code><b>Host_[Host IP]_Memory_Physical_Total</b></code></dt>
+  <dd> Total Physical Memory<p> </dd>
+
+   <dt><code><b>Host_[Host IP]_Memory_Physical_Free</b></code></dt>
+   <dd> Free Physical Memory<p> </dd>
+
+  <dt><code><b>Host_[Host IP]_Network_TCP_sockets_inuse</b></code></dt>
+  <dd> TCP sockets in use<p> </dd>
+
+  <dt><code><b>Host_[Host IP]_Network_UDP_sockets_inuse</b></code></dt>
+  <dd> UDP sockets in use<p> </dd>
+
+
+</dl>
+
+<h3> IP Flow </h3>
+Network Keys start with identifying the IP Flow and then have several
+    optional field for different network characteristics. End-point
+    addresses are raw IP V4 addresses and not domain names. 
+
+<dl>
+  <dt> <code><b>Ip_Flow_[src IP]_[dst IP]_Capacity_Max</b></code></dt>
+  <dd> The maximum bandwidth (kbps)for path across the network, i.e. with no
+	competing traffic. <p> </dd>
+
+  <dt> <code><b>Ip_Flow_[src IP]_[dst IP]_Capacity_Unused</b></code></dt>
+  <dd> The expected available bandwidth (kbps) for a path across the network,
+	i.e. the max minus the competing traffic.<p> </dd>
+
+</dl>
+
+<h3> Site Flow </h3>
+
+Sites are an IP subnetwork which can be represented with a simple mask
+(number of bits with leading 1's). Site_Flows between sites can be
+used as defaults, instead of specify specific Ip_Flows. For example,
+<pre><code>Site_Flow_128.89.0.0/16_128.33.15.0/28_Capacity_Max</code></pre>
+
+<dl>
+  <dt><code><b>Site_Flow_[src IP/mask]_[dst IP/mask]_Capacity_Max</b></code>
+  </dt>
+  <dd> Maximum bandwidth (kbps) between Sites. The current formulas can
+	model asymmetric bandwidth between Sites, by publishing
+	Site_Flows for both direction. If only one direction is
+	published, the formulas will assume the bandwidth is the same
+	in both directions. <p> </dd>
+</dl>
+
+<h3> Agent </h3>
+Agents are identified by their message Id. 
+
+<dl>
+  <dt><code><b>Agent_[Message ID]_HeardTime</b></code>
+  </dt>
+  <dd> System.currentTimeMillis() time-stamp for the last time
+	some component has heard from this agent<p> </dd>
+
+  <dt><code><b>Agent_[Message ID]_SpokeTime</b></code>
+  </dt>
+  <dd> System.currentTimeMillis() time-stamp for the last time
+	some component has attempted to speak to this agent<p> </dd>
+
+</dl>
+
+<h3> Node </h3>
+Nodes are identified by their message Id. Currently, there are no Node
+    specific Keys
+
+</body>
+
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<html> <head>
+<title>COUGAAR Thread Services in a Nutshell: Schedulable</title>
+</head>
+
+<body>
+
+<h2>org.cougaar.core.thread.Schedulable</h2>
+
+<dl>
+  <dt>
+      <code>void start()</code>
+  </dt>
+      
+  <dd> Starting a <code>Schedulable</code> is conceptually the
+      same as starting a Java native thread, but the behavior is
+      slightly different in two ways. First, if no thread
+      resources are available, the <code>Schedulable</code> will
+      be queued instead of running righy away.  It will only run
+      when enough resources have become available for it to
+      reach the head of the queue. Second, if the
+      <code>Schedulable</code> is running at the time of the
+      call, this call will cause the <code>Schedulable</code>
+      restart itself after the current run finishes (unless it's
+      cancelled in the meantime). If the Schedulable is pending at the
+      time of the call, this method is a no-op.<p> </dd>
+
+      
+  <dt>
+      <code>void schedule(long delay)</code>
+  </dt>
+  <dd>
+      Equivalent to calling <code>start()</code> after the given
+      delay (in millis).<p>
+  </dd>
+
+  <dt>
+      <code>void schedule(long delay, long period)</code>
+  </dt>
+  <dd>
+      Runs a <code>Schedulable</code> periodically at the period given, where each
+      run is equivalent to <code>start()</code> (ie it may not start
+      immediately). The delay applies to the first run.<p>
+  </dd>
+
+  <dt>
+      <code>void scheduleAtFixedRate(long delay, long period)</code>
+  </dt>
+  <dd>
+      This is to the method above as the method by the same name on
+      <code>TimerTask</code> is to the <code>schedule</code> method on
+      that class (see Sun's
+      <a
+      href="http://java.sun.com/j2se/1.4.1/docs/api/java/util/TimerTask.html">
+      TimerTask</a> javadoc).<p>
+  </dd>
+
+
+  <dt>
+      <code>void cancelTimer()</code>
+  </dt>
+  <dd>
+     This method cancels the active periodic schedule.  It does not
+     cancel the <code>Schedulable</code> entirely (see
+      <code>cancel()</code>). <p> 
+  </dd>
+      
+
+
+  <dt>
+      <code>boolean cancel()</code>
+  </dt>
+      
+  <dd> Cancelling a <code>Schedulable</code> will prevent it
+      starting if it's currently queued or from restarting if it
+      was scheduled to do so.  It will not cancel the current
+      run. This method also runs <code>cancelTimer</code>. <p> </dd>
+
+  <dt>
+      <code>int getState()</code>
+  </dt>
+      
+  <dd>Returns the current state of the <code>Schedulable</code>.
+      The states are defined in
+      org.cougaar.core.thread.CougaarThread and consist of the
+      following:
+      <ul>
+
+	<li>THREAD_RUNNING</li>
+
+	<li>THREAD_PENDING  (ie queued)</li>
+
+	<li>THREAD_DISQUALIFIED
+	    (see <a href="ThreadControlService.html#disqualification">
+	    thread disqualification</a>)
+	</li>
+
+	<li>THREAD_DORMANT (ie none of the above)</li>
+
+	<li>THREAD_SUSPENDED (not currently used)</li>
+
+      </ul>
+      <p>
+  </dd>
+
+  <dt>
+      <code>Object getConsumer()</code>
+  </dt>
+      
+  <dd> Returns the COUGAAR entity for which the
+      <code>ThreadService</code> made this
+      <code>Schedulable</code>. See
+      <a href="ThreadService.html#creation">thread creation</a>.
+  </dd>
+
+</dl>
+
+</body>
+
+</html>

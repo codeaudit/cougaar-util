@@ -1,0 +1,136 @@
+<html>
+<head>
+<title>White Pages</title>
+</head>
+<body>
+<h2>Cougaar White Pages</h2>
+<p>
+<h3>Overview</h3>
+<p>
+The white pages service is the Cougaar naming service for name to
+address resolution, similar to DNS's job of resolving host names
+to IP addresses.
+<p>
+Earlier versions of Cougaar (&lt;10.0) used an RMI-based JNDI naming
+service.  The current white pages service uses the in-band Cougaar
+message transport.
+<p>
+The current white pages also features DNS-style caching.  Client
+entries are leased and periodically renewed to reconcile crashed
+servers.
+<p>
+
+<h3>Enhancements in 10.4.4:</h3>
+<p>
+All 10.4.4 enhancements are backwards-compatible with old "alpreg.ini"
+and "-Dorg.cougaar.name.server=<i>host:port</i>" configurations dating
+back to 9.0.
+<p>
+
+<h4>New system properties</h4>
+See the properties file ("api/Parameters.html") for a list of all
+"org.cougaar.core.wp" system properties.  For example, there are
+system properties to reduce white pages message traffic by
+changing the default cache expiration time (90 seconds) and
+lease expiration time (4 minutes).
+<p>
+
+<h4>Performance enhancments</h4>
+Various performance enhancements were implemented, such as better
+client-side cache prefetching (bug 3069), request message batching,
+and new UID-based cache and lease renewal (bug 3082).
+<p>
+
+<h4>Explicit server agents</h4>
+Added support for explicit White Pages server agents.  In prior
+releases the "alpreg.ini" and name server system property only
+specified the host and port address, e.g.<pre>
+  -Dorg.cougaar.name.server=foo.com:8888
+</pre>
+If multiple nodes are started on that host then they would race to
+become the name server.  In this release the configuration can now
+optionally explicitly specify the agent's (or node's) name,
+e.g.<pre>
+  -Dorg.cougaar.name.server=AgentX@foo.com:8888
+</pre>
+This allows the user to know precisely which agent is acting as
+the server, which is useful for security and debugging purposes.
+In future release the explicit approach will likely be required.
+For additional configuration details see the javadocs for<pre>
+  org.cougaar.core.wp.resolver.ConfigReader
+</pre>
+
+<h4>Explicit server plugin</h4>
+Related to the above explicit White Pages server option, a new
+system property has been added to disable the default load of the
+name server in all nodes:<pre>
+  -Dorg.cougaar.core.load.wp.server=<i>boolean</i>
+</pre>
+where the default is the backwards-compatible "true".  If this
+is disabled then the server plugin should be added to the ".ini"
+file of the agent that will run the server:<pre>
+  Node.AgentManager.Agent.WPServer = org.cougaar.core.wp.server.Server
+</pre>
+The default behavior of loading servers into all nodes is often
+wasteful since only the agents specified as servers in the
+configuration will be asked to perform white pages server actions.
+In future release the explicit approach will likely be required.
+<p>
+
+<h4>Agent-based servers</h4>
+As suggested above, a white pages server can now be loaded as a
+node-agent plugin or as a plugin in a regular agent.  The use of
+a regular agent allows a node to host the server agent, crash,
+and a new differently-named node on that host to restart the
+server agent.
+<p>
+
+<h4>Server aliases</h4>
+All servers now use unique configuration alias, where the default
+alias is "WP".  Other aliases start with "WP-" and end in a number,
+e.g. "WP-123".  For example, the configuration can say:<pre>
+  -Dorg.cougaar.name.server.WP-123=AgentX@foo.com:8888
+</pre>
+In an "alpreg.ini" this would look like:<pre>
+  WP-123=AgentX@foo.com:8888
+</pre>
+These aliases are used for server replication, as documented
+<a ref="#replication">below.</a>
+<p>
+
+<a name="replication">
+<h4>Server replication</h4>
+Added support for replicated White Pages servers.  Additional servers
+are added with aliases and can be explicit agents as noted above,
+e.g.:<pre>
+  -Dorg.cougaar.name.server.WP=AgentA@host1.com:8888
+  -Dorg.cougaar.name.server.WP-2=AgentB@host2.com:8888
+  -Dorg.cougaar.name.server.WP-3=AgentC@host3.com:8888
+</pre>
+Nodes dynamically select servers based upon round-trip-time metrics.
+The selection algorithm is documented in:<pre>
+  org.cougaar.core.wp.resolver.SelectManager
+  org.cougaar.core.wp.resolver.SelectService
+</pre>
+This balances the clients across the servers and allows the
+clients to select alternate servers if their current selection
+becomes unresponsive (e.g. due to a crash).  Both clients and
+servers set message delivery timeouts to avoid excessive message
+transport delivery queuing (bug 3213 and bug 3276).
+<p>
+
+<h4>Access control</h4>
+A new WhitePagesProtectionService has been added (bug 3183).  By
+default there is no implementation, but the white pages client and
+server will use the service if it's advertised by a HIGH-level
+node-agent component.  The node's white pages client uses the service
+to wrap modification (bind/unbind) requests and the server uses the
+service to unwrap these requests.  The agent making the request is
+specified when wrapping/unwrapping requests.  For example, a
+WhitePagesProtectionService implementation could sign all client
+requests and the server unwrapping could check the signature and
+check a "denied-agents" list before allowing the modification.
+<p>
+
+</body>
+</html>

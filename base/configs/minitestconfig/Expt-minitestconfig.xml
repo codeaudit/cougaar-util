@@ -38,9 +38,9 @@
         </component>
         <component name='1BDE|org.cougaar.mlm.plugin.organization.OrgReportPlugin' class='org.cougaar.mlm.plugin.organization.OrgReportPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
         </component>
-        <component name='1BDE|org.cougaar.mlm.plugin.organization.GLSAllocatorPlugin' class='org.cougaar.mlm.plugin.organization.GLSAllocatorPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        <component name='1BDE|org.cougaar.mlm.plugin.organization.GLSMiniAllocatorPlugin' class='org.cougaar.mlm.plugin.organization.GLSMiniAllocatorPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
         </component>
-        <component name='1BDE|org.cougaar.mlm.plugin.organization.GLSExpanderPlugin' class='org.cougaar.mlm.plugin.organization.GLSExpanderPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        <component name='1BDE|org.cougaar.mlm.plugin.organization.GLSMiniExpanderPlugin' class='org.cougaar.mlm.plugin.organization.GLSMiniExpanderPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
         </component>
         <component name='1BDE|org.cougaar.mlm.plugin.strategictransport.TaskStrategicTransportAllocatorPlugin' class='org.cougaar.mlm.plugin.strategictransport.TaskStrategicTransportAllocatorPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
         </component>
@@ -150,9 +150,9 @@
         </component>
         <component name='3-69-ARBN|org.cougaar.mlm.plugin.organization.OrgReportPlugin' class='org.cougaar.mlm.plugin.organization.OrgReportPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
         </component>
-        <component name='3-69-ARBN|org.cougaar.mlm.plugin.organization.GLSAllocatorPlugin' class='org.cougaar.mlm.plugin.organization.GLSAllocatorPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        <component name='3-69-ARBN|org.cougaar.mlm.plugin.organization.GLSMiniAllocatorPlugin' class='org.cougaar.mlm.plugin.organization.GLSMiniAllocatorPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
         </component>
-        <component name='3-69-ARBN|org.cougaar.mlm.plugin.organization.GLSExpanderPlugin' class='org.cougaar.mlm.plugin.organization.GLSExpanderPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        <component name='3-69-ARBN|org.cougaar.mlm.plugin.organization.GLSMiniExpanderPlugin' class='org.cougaar.mlm.plugin.organization.GLSMiniExpanderPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
           <argument>
             StrategicTransportation
           </argument>
@@ -268,9 +268,9 @@
         </component>
         <component name='3ID|org.cougaar.mlm.plugin.organization.GLSRescindPlugin' class='org.cougaar.mlm.plugin.organization.GLSRescindPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
         </component>
-        <component name='3ID|org.cougaar.mlm.plugin.organization.GLSAllocatorPlugin' class='org.cougaar.mlm.plugin.organization.GLSAllocatorPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        <component name='3ID|org.cougaar.mlm.plugin.organization.GLSMiniAllocatorPlugin' class='org.cougaar.mlm.plugin.organization.GLSMiniAllocatorPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
         </component>
-        <component name='3ID|org.cougaar.mlm.plugin.organization.GLSExpanderPlugin' class='org.cougaar.mlm.plugin.organization.GLSExpanderPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        <component name='3ID|org.cougaar.mlm.plugin.organization.GLSMiniExpanderPlugin' class='org.cougaar.mlm.plugin.organization.GLSMiniExpanderPlugin' priority='COMPONENT' insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
           <argument>
             StrategicTransportation
           </argument>
