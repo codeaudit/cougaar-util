@@ -62,7 +62,7 @@ public interface RemoteHost {
    * Kill the process with the given ProcessDescription 
    * ".getName()".
    *
-   * @returns the exit value of the process, or
+   * @return the exit value of the process, or
    *    <tt>Integer.MIN_VALUE</tt> if no such process
    *    exists.
    *

@@ -108,7 +108,7 @@ implements Serializable, Cloneable {
    * standard-out <b>and</b> standard-error (interleaved in 
    * correct ordering).
    *
-   * @see writeTo(OutputStream)
+   * @see #writeTo(OutputStream)
    */
   public InputStream getInputStream() {
     return 
@@ -120,8 +120,8 @@ implements Serializable, Cloneable {
    * Get an InputStream for just standard-out
    * <b>or</b> standard-error.
    *
-   * @see writeTo(OutputStream,boolean)
-   * @see writeTo(OutputStream,OutputStream)
+   * @see #writeTo(OutputStream,boolean)
+   * @see #writeTo(OutputStream,OutputStream)
    */
   public InputStream getInputStream(boolean isOut) {
     // not hard to code...  let's wait until there's a need.

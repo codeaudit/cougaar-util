@@ -26,7 +26,7 @@ import java.net.URL;
 /**
  * Snapshot for RemoteListenable creation.
  * <p>
- * @see RemoteProcess.createRemoteProcess
+ * @see RemoteHost#createRemoteProcess
  */
 public final class RemoteListenableConfig 
 implements java.io.Serializable {
