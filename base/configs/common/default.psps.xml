@@ -194,7 +194,7 @@ Additional PSPs loaded by PSP Launcher
   </element>
 
 
-<!-- BEGIN SRA PSPs -->
+<!-- BEGIN SRA PSPs
 
   <element type="org.cougaar.lib.planserver.NamedPSP">
     <Classname>org.cougaar.domain.css.ui.PSP_MaintenanceDemand</Classname>
@@ -216,7 +216,7 @@ Additional PSPs loaded by PSP Launcher
     <Classname>org.cougaar.domain.css.ui.PSP_ReadinessUI</Classname>
     <PSPName>alpine/demo/org/cougaar/domain/css/ui/READINESSUI.PSP</PSPName>
   </element>
-
+-->
 <!-- END SRA PSPs -->
 
   <element type="org.cougaar.lib.planserver.NamedPSP">
