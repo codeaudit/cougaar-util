@@ -173,5 +173,5 @@ queryGeolocLocation.mysql = \
       ,', Name='                 , REPLACE(LOCATION_NAME, ' ', '_') \
       ,', Latitude=Latitude '    , LATITUDE , 'degrees' \
       ,', Longitude=Longitude '  , LONGITUDE , 'degrees') \
-   FROM cougaar.GEOLOC \
+   FROM GEOLOC \
   WHERE GEOLOC_CODE = SUBSTRING(':key:', 12)
