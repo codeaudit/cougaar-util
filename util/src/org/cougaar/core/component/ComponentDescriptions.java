@@ -33,7 +33,9 @@ import org.cougaar.util.*;
  * are simply ComponentDescription wrappers with an addition 
  * "Object state".  These two concepts may be merged in the future...
  **/
-public class ComponentDescriptions {
+public class ComponentDescriptions
+implements Serializable
+{
   /** Storage for the ComponentDescriptions.
    * @todo A more efficient form for traversal would be good - we're not optimizing it 
    * for now.

@@ -28,12 +28,21 @@ import org.cougaar.util.GenericStateModelAdapter;
 /** A basic implementation of a Container.
  **/
 public abstract class ContainerSupport
-  extends GenericStateModelAdapter
-  implements Container 
+extends GenericStateModelAdapter
+implements Container, StateObject
 {
   protected final ComponentFactory componentFactory = specifyComponentFactory();
   /** this is the prefix that all subcomponents must have as a prefix **/
   protected final String containmentPrefix = specifyContainmentPoint()+".";
+
+  protected Object loadState = null;
+
+  private ComponentDescriptions externalComponentDescriptions = null;
+
+  // my service broker
+  protected ServiceBroker serviceBroker = null;
+
+  // the service broker for all child components
   protected ServiceBroker childServiceBroker = null;
 
   /** The actual set of child BoundComponent loaded. 
@@ -49,12 +58,31 @@ public abstract class ContainerSupport
   protected final ArrayList binderFactories = new ArrayList();
 
   protected ContainerSupport() {
-    ServiceBroker sb = specifyChildServiceBroker();
-    if (sb != null) setChildServiceBroker(sb);
+    // child service broker
+    ServiceBroker csb = specifyChildServiceBroker();
+    if (csb != null) setChildServiceBroker(csb);
+
+    // binder factory
+    BinderFactory bf = createBinderFactory();
+    if (bf != null && !attachBinderFactory(bf)) {
+      throw new RuntimeException(
+          "Failed to load the DefaultBinderFactory");
+    }
   }
 
   /** Overridable by extending classes to capture the BindingSite. **/
   public void setBindingSite(BindingSite bs) {
+    this.serviceBroker = bs.getServiceBroker();
+
+    // late-binding child service broker
+    ServiceBroker csb = createChildServiceBroker(bs);
+    if (csb != null) {
+      setChildServiceBroker(csb);
+    }
+  }
+
+  protected ServiceBroker getServiceBroker() {
+    return serviceBroker;
   }
 
   /** override to specify a different component factory class. 
@@ -63,6 +91,7 @@ public abstract class ContainerSupport
   protected ComponentFactory specifyComponentFactory() {
     return new ComponentFactory() {};
   }
+
   /** override to specify insertion point of this component, 
    * the parent insertion point which sub Components must match,
    * e.g. "Node.AgentManager.Agent.PluginManager"
@@ -82,7 +111,17 @@ public abstract class ContainerSupport
   protected ServiceBroker specifyChildServiceBroker() {
     return null;
   }
+
+  protected ServiceBroker createChildServiceBroker(BindingSite bs) {
+    return new DefaultServiceBroker(bs);
+  }
   
+  protected void destroyChildServiceBroker(ServiceBroker csb) {
+    if (csb instanceof DefaultServiceBroker) {
+      ((DefaultServiceBroker) csb).myDestroy();
+    }
+  }
+
   protected final void setChildServiceBroker(ServiceBroker sb) {
     if (sb == null) {
       throw new IllegalArgumentException("Specified ServiceBroker must not be null");
@@ -93,9 +132,12 @@ public abstract class ContainerSupport
     childServiceBroker = sb;
   }
 
-  /** satisfy ContainerAPI extends BindingSite and provides access to the (local) ServiceBroker **/
-  public ServiceBroker getServiceBroker() {
+  protected ServiceBroker getChildServiceBroker() {
     return childServiceBroker;
+  }
+
+  protected BinderFactory createBinderFactory() {
+    return new DefaultBinderFactory();
   }
 
 
@@ -173,6 +215,23 @@ public abstract class ContainerSupport
         tmp.add(bc.getComponent());
       }
       return tmp.iterator();
+    }
+  }
+
+  /** Get a List of all child components */
+  protected List listComponents() {
+    synchronized (boundComponents) {
+      int n = boundComponents.size();
+      List result = new ArrayList(n);
+      for (int i = 0; i < n; i++) {
+        BoundComponent bc = (BoundComponent) boundComponents.get(i);
+        Object comp = bc.getComponent();
+        if (comp instanceof ComponentDescription) {
+          ComponentDescription cd = (ComponentDescription) comp;
+          result.add(cd);
+        }
+      }
+      return result;
     }
   }
 
@@ -509,7 +568,7 @@ public abstract class ContainerSupport
 
       if (b != null) {
         BindingUtility.setBindingSite(b, getContainerProxy());
-        BindingUtility.setServices(b, getServiceBroker());
+        BindingUtility.setServices(b, getChildServiceBroker());
         BindingUtility.initialize(b);
         // done
         return b;
@@ -547,7 +606,8 @@ public abstract class ContainerSupport
       binderFactories.add(c);
       Collections.sort(binderFactories, BinderFactory.comparator);
     }
-    return BindingUtility.activate(c, getContainerProxy(), getServiceBroker());
+    return BindingUtility.activate(
+        c, getContainerProxy(), getChildServiceBroker());
   }
 
   /** Specifies an object to use as the "parent" proxy object
@@ -556,15 +616,45 @@ public abstract class ContainerSupport
    * simple proxy for the container so that BinderFactory instances
    * cannot downcast the object to get additional privileges.
    **/
-  abstract protected ContainerAPI getContainerProxy();
-
-
-  private ComponentDescriptions externalComponentDescriptions = null;
+  protected ContainerAPI getContainerProxy() {
+    return new DefaultProxy();
+  }
 
   /** Matching setter for getExternalComponentDescriptions **/
   protected final void setExternalComponentDescriptions(ComponentDescriptions cds) {
     externalComponentDescriptions = cds;
   }
+
+  public void setState(Object loadState) {
+    this.loadState = loadState;
+  }
+
+  public Object getState() {
+    return captureState();
+  }
+
+  protected ComponentDescriptions captureState() {
+    synchronized (boundComponents) {
+      int n = boundComponents.size();
+      List l = new ArrayList(n);
+      for (int i = 0; i < n; i++) {
+        BoundComponent bc = (BoundComponent) boundComponents.get(i);
+        Object comp = bc.getComponent();
+        if (comp instanceof ComponentDescription) {
+          ComponentDescription cd = (ComponentDescription)comp;
+          Binder b = bc.getBinder();
+          Object state = b.getState();
+          StateTuple ti = new StateTuple(cd, state);
+          l.add(ti);
+        } else {
+          // error?
+        }
+      }
+      return new ComponentDescriptions(l);
+    }
+  }
+
+  protected abstract ComponentDescriptions findInitialComponentDescriptions();
 
   /** return a ComponentDescriptions object which contains a set of ComponentDescriptions
    * defined externally to be loaded into this Container. 
@@ -572,26 +662,43 @@ public abstract class ContainerSupport
    * Note that this value is not filled until ContainerSupport.load() has been called.
    * @see #findExternalComponentDescriptions
    * @return null if no component descriptions specified.
-   **/
+   */
   protected final ComponentDescriptions getExternalComponentDescriptions() {
     return externalComponentDescriptions;
   }
-  
+
   /** Extending classes may override this method to define a set of externally-specified
    * Component to load.  Will be called during load() immediately after super.load().
    * load will set the value returned by getExternalComponentDescriptions(), so that 
    * loadInternalSubcomponents, etc can retrieve the values.
    * @return null if none.
-   **/
+   */
   protected ComponentDescriptions findExternalComponentDescriptions() {
-    return null;
+    if (loadState instanceof ComponentDescriptions) {
+      ComponentDescriptions descs = (ComponentDescriptions) loadState;
+      loadState = null;
+      return descs;
+    } else {
+      // ask the container
+      return findInitialComponentDescriptions();
+    }
   }
 
-  /** Calles super.load() to transit the state, sets the value of getExternalComponentDescriptions() 
-   * by calling findExternalComponentDescriptions(), then invokes each of
-   * loadHighPriorityComponents(), loadInternalPriorityComponents(), 
-   * loadBinderPriorityComponents(), loadComponentPriorityComponents(), loadLowPriorityComponents() in order.
-   **/
+  /** 
+   * Called by super.load() to transit the state, sets the value of
+   * getExternalComponentDescriptions() 
+   * by calling
+   * findExternalComponentDescriptions(),
+   * then invokes each of
+   * <ul>
+   * <li>loadHighPriorityComponents()</li>
+   * <li>loadInternalPriorityComponents()</li>
+   * <li>loadBinderPriorityComponents()</li>
+   * <li>loadComponentPriorityComponents()</li>
+   * <li>loadLowPriorityComponents()</li>
+   * </ul>
+   * in order.
+   */
   public void load() {
     super.load();
     setExternalComponentDescriptions(findExternalComponentDescriptions());
@@ -601,7 +708,59 @@ public abstract class ContainerSupport
     loadComponentPriorityComponents();
     loadLowPriorityComponents();
   }
-    
+
+  public void suspend() {
+    super.suspend();
+    List childBinders = listBinders();
+    for (int i = childBinders.size() - 1; i >= 0; i--) {
+      Binder b = (Binder) childBinders.get(i);
+      b.suspend();
+    }
+  }
+
+  public void resume() {
+    super.resume();
+    for (Iterator childBinders = binderIterator();
+        childBinders.hasNext();
+        ) {
+      Binder b = (Binder)childBinders.next();
+      b.resume();
+    }
+  }
+
+  public void stop() {
+    super.stop();
+    List childBinders = listBinders();
+    for (int i = childBinders.size() - 1; i >= 0; i--) {
+      Binder b = (Binder) childBinders.get(i);
+      b.stop();
+    }
+  }
+
+  public void halt() {
+    suspend();
+    stop();
+  }
+
+  public void unload() {
+    super.unload();
+
+    List childBinders = listBinders();
+    for (int i = childBinders.size() - 1; i >= 0; i--) {
+      Binder b = (Binder) childBinders.get(i);
+      b.unload();
+    }
+    synchronized (boundComponents) {
+      // unsafe?
+      boundComponents.clear();
+    }
+
+    if (childServiceBroker != null) {
+      destroyChildServiceBroker(childServiceBroker);
+      childServiceBroker = null;
+    }
+  }
+  
   /** Should check the ComponentDescription to see if it should
    * be loaded into the Container.  Implementations may use any rules 
    * they'd like.  The default implementation returns true IFF the
@@ -685,4 +844,46 @@ public abstract class ContainerSupport
       }
     }
   }
+
+  //
+  // support classes
+  //
+
+  private static class DefaultBinderFactory
+    extends BinderFactorySupport {
+      public Binder getBinder(Object child) {
+        return new DefaultBinder(this, child);
+      }
+      private static class DefaultBinder 
+        extends ContainerBinderSupport
+        implements BindingSite {
+          public DefaultBinder(BinderFactory bf, Object child) {
+            super(bf, child);
+          }
+          protected BindingSite getBinderProxy() {
+            return this;
+          }
+        }
+    }
+
+  private static class DefaultServiceBroker 
+    extends PropagatingServiceBroker {
+      public DefaultServiceBroker(BindingSite bs) {
+        super(bs);
+      }
+      private void myDestroy() {
+        super.destroy();
+      }
+    }
+
+  private class DefaultProxy
+    implements ContainerAPI {
+      public ServiceBroker getServiceBroker() {
+        return ContainerSupport.this.getChildServiceBroker();
+      }
+      public boolean remove(Object childComponent) {
+        return ContainerSupport.this.remove(childComponent);
+      }
+      public void requestStop() {}
+    }
 }

@@ -25,7 +25,7 @@ import java.util.*;
 /** A pair of Binder and Component, useful for keeping 
  * state in Containers.
  **/
-public class BoundComponent
+class BoundComponent
 {
   private final Binder b;
   private final Object c;
