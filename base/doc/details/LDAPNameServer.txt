@@ -62,7 +62,9 @@ the defaults]
 
 You can do this by editing Node.bat or in the CSMART "Global Command Line" list.
 
-7) That should do it.  Run it.
+7) Install the Sun LDAP service provider jar files in COUGAAR_INSTALL_PATH/sys
+
+8) That should do it.  Run it.
 
 
 Unlike the Cougaar RMI nameserver, the LDAP nameserver is persistent.  If 
