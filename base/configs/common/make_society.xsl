@@ -47,6 +47,13 @@ which is saved in the Cougaar release as:
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   version="1.0">
 
+  <!--
+  optional xsl parameters, passed by:
+    -Dorg.cougaar.society.xsl.param.$name=$value
+  -->
+  <xsl:param name="defaultAgent">SimpleAgent.xsl</xsl:param>
+  <xsl:param name="defaultNode">NodeAgent.xsl</xsl:param>
+
   <xsl:output method="xsl" indent="yes"/>
 
   <xsl:key name="templates" match="agent|node" use="@template"/>
@@ -100,24 +107,24 @@ which is saved in the Cougaar release as:
     <xsl:comment> use "include" to check for conflicts </xsl:comment>
     <!-- check for default agent/node -->
     <xsl:variable 
-      name="needs-SimpleAgent"
+      name="needs-defaultAgent"
       select="//agent[not(@template) and not(@type)]"/>
     <xsl:variable 
-      name="needs-NodeAgent"
+      name="needs-defaultNode"
       select="//node[not(@template) and not(@type)]"/>
-    <!-- default SimpleAgent -->
-    <xsl:if test="$needs-SimpleAgent">
+    <!-- default agent -->
+    <xsl:if test="$needs-defaultAgent">
       <xsl:element name="xsl:include">
         <xsl:attribute name="href">
-          <xsl:text>SimpleAgent.xsl</xsl:text>
+          <xsl:value-of select="$defaultAgent"/>
         </xsl:attribute>
       </xsl:element>
     </xsl:if>
-    <!-- default NodeAgent -->
-    <xsl:if test="$needs-NodeAgent">
+    <!-- default node -->
+    <xsl:if test="$needs-defaultNode">
       <xsl:element name="xsl:include">
         <xsl:attribute name="href">
-          <xsl:text>NodeAgent.xsl</xsl:text>
+          <xsl:value-of select="$defaultNode"/>
         </xsl:attribute>
       </xsl:element>
     </xsl:if>
@@ -125,7 +132,7 @@ which is saved in the Cougaar release as:
     <xsl:for-each select="//node|//agent">
       <xsl:if test="@template and count(. | key('templates', @template)[1]) = 1">
         <!-- filter out our defaults -->
-        <xsl:if test="not(@template = 'SimpleAgent.xsl' and $needs-SimpleAgent) and not(@template = 'NodeAgent.xsl' and $needs-NodeAgent)">
+        <xsl:if test="not(@template = $defaultAgent and $needs-defaultAgent) and not(@template = $defaultNode and $needs-defaultNode)">
           <xsl:element name="xsl:include">
             <xsl:attribute name="href">
               <xsl:value-of select="@template"/>
