@@ -84,13 +84,12 @@ updateLibComponent=\
  WHERE COMPONENT_LIB_ID = :component_lib_id:
 
 # Is this component already in the RUNTIME 
-# configuration hierarchy for this Trial?
+# configuration hierarchy for this Trial? Uses assembly_match
 checkComponentHierarchy=\
  SELECT COMPONENT_ALIB_ID \
-   FROM V4_ASB_COMPONENT_HIERARCHY ACH, V4_EXPT_TRIAL_ASSEMBLY ETA \
-  WHERE ACH.ASSEMBLY_ID = ETA.ASSEMBLY_ID \
-    AND ETA.TRIAL_ID = ':trial_id:' \
-    AND ACH.COMPONENT_ALIB_ID = :component_alib_id:
+   FROM V4_ASB_COMPONENT_HIERARCHY \
+  WHERE ASSEMBLY_ID :assembly_match: \
+    AND COMPONENT_ALIB_ID = :component_alib_id:
 
 insertComponentHierarchy=\
  INSERT INTO V4_ASB_COMPONENT_HIERARCHY \
@@ -99,10 +98,11 @@ insertComponentHierarchy=\
      INSERTION_ORDER) \
  VALUES (:assembly_id:, :component_alib_id:, :parent_component_alib_id:, :insertion_order:)
 
+# Used in populate
 queryComponentArgs=\
  SELECT ARGUMENT, ARGUMENT_ORDER \
    FROM V4_ASB_COMPONENT_ARG \
-  WHERE ASSEMBLY_ID = :assembly_id: \
+  WHERE ASSEMBLY_ID :assembly_match: \
     AND COMPONENT_ALIB_ID = :component_alib_id: \
   ORDER BY ARGUMENT_ORDER, ARGUMENT
  
@@ -131,16 +131,15 @@ insertAgentOrg=\
     (:component_lib_id:, :agent_lib_name:, :agent_org_class:)
 
 # Is this relationship already in the RUNTIME configuration
-# for this trial?
+# for this trial? Use assembly_match
 checkRelationship=\
  SELECT '1' \
-   FROM V4_ASB_AGENT_RELATION AAR, V4_EXPT_TRIAL_ASSEMBLY ETA \
-  WHERE AAR.ASSEMBLY_ID = ETA.ASSEMBLY_ID \
-    AND ETA.TRIAL_ID = ':trial_id:' \
-    AND AAR.ROLE = :role: \
-    AND AAR.SUPPORTING_COMPONENT_ALIB_ID = :supporting: \
-    AND AAR.SUPPORTED_COMPONENT_ALIB_ID = :supported: \
-    AND AAR.START_DATE = :start_date:
+   FROM V4_ASB_AGENT_RELATION \
+  WHERE ASSEMBLY_ID :assembly_match: \
+    AND ROLE = :role: \
+    AND SUPPORTING_COMPONENT_ALIB_ID = :supporting: \
+    AND SUPPORTED_COMPONENT_ALIB_ID = :supported: \
+    AND START_DATE = :start_date:
 
 insertRelationship=\
  INSERT INTO V4_ASB_AGENT_RELATION \
@@ -294,6 +293,13 @@ queryAssembliesToClean=\
   WHERE AA.ASSEMBLY_ID = ETA.ASSEMBLY_ID \
     AND ETA.TRIAL_ID = ':trial_id:' \
     AND AA.ASSEMBLY_TYPE != ':cmt_type:'
+
+# Get all the CSMI and CSHNA assemblies
+# Used to find orphaned assemblies
+queryNonSocietyAssemblies=\
+ SELECT ASSEMBLY_ID \
+   FROM V4_ASB_ASSEMBLY \
+ WHERE ASSEMBLY_TYPE NOT IN (':cmt_type:', ':csa_type:')
 
 # Get list of config assemblies of either of 2 types in this trial
 # Used to make sure that only most recent society definition included
