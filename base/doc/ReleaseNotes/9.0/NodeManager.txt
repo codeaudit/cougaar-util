@@ -1,0 +1,88 @@
+Standalone Test
+
+This is a tiny demo configuration designed to show-off the node
+manager functionality.  It runs MiniTestConfig and then does its best
+to keep everything going. You'll find template shell scripts and data files in
+$COUGAAR_INSTALL_PATH/manager/doc. Scripts are linux-only.  
+
+to run demo:
+0.  Create a directory for the demo and set the DEMO environment 
+variable to point to that directory. Copy the files in 
+$COUGAAR_INSTALL_PATH/manager/doc to %DEMO. 
+        mkdir <demo dir>
+        setenv DEMO <demo dir>
+        cp $COUGAAR_INSTALL_PATH/manager/doc/* $DEMO
+
+1. Edit the shell scripts and data files in $DEMO as needed:
+ a. S1 = same as $COUGAAR_INSTALL_PATH/server/bin/Server script
+ b. S2 = same as $COUGAAR_INSTALL_PATH/server/bin/Server scriptt except sets port to 8585
+ c. Bootstrap = same as (very recent) $COUGAAR_INSTALL_PATH/bin/Bootstrap
+ d. nodes.list = list of nodes to start in form "config/nodename".
+	This is a hack only for use without csmart.
+ e. server.props = node property config file.  Must edit for install
+ f. servers.list = list of appserver references in form of "host:port"
+        "host" == "host:8484"
+ These files assume
+	"host"= "draught"
+	COUGAAR_INSTALL_PATH=/tmp/foo
+	DEMO=/home/mthome/s
+
+2. open three windows (xterm1, xterm2, xterm3)
+
+3. in all three: 
+        setenv COUGAAR_INSTALL_PATH <cougaar install path>
+        setenv DEMO <demo dir>
+
+4. Run in the following order:
+ xterm1% $DEMO/S1 $DEMO/server.props
+
+ xterm2% $DEMO/S2 $DEMO/server.props
+ 
+ xterm3% $DEMO/Bootstrap org.cougaar.tools.manager.Manager -Dmanager.nodelist=$DEMO/nodes.list $DEMO/servers.list
+
+5. If manager is to track a csmart society, replace the command in xterm3 with:
+ xterm3% $DEMO/Bootstrap org.cougaar.tools.manager.Manager $DEMO/servers.list
+
+
+Testing the interaction between CSMART and the Node Manager
+
+1. Build a new experiment in CSMART:
+
+Use TINY_1AD_TRANS_STUB as a starting point. Society should have 2 nodes - one
+with 5-CORPS, AWR-2, DLAHQ, HNS, OSC, USEUCOM, USAEUR, all the other clusters
+should go to the other node. Within the Experiment Builder, modify the 
+properties for the 5-CORPS node. Set 
+org.cougaar.core.cluster.persistence.enable to true. This will allow the node
+manager to restart the 5-CORPS node from a persisted state. 
+
+
+2. Start AppServers
+
+Run $COUGAAR_INSTALL_PATH/server/bin/Server on the hosts specified in the 
+CSMART experiment. See CSMART doc for info creating a valid server.props file.
+
+3. Start Manager
+
+Modify $DEMO/servers.list to include the host(s) specified in the CSMART 
+experiment. The following command will start the Manager :
+$DEMO/Bootstrap org.cougaar.tools.manager.Manager $DEMO/servers.list
+  
+
+4. Run the experiment
+
+Use the CSMART Experiment Controller to start the society. (Manager 
+UI should now show the 2 nodes.) Once processing from GLS has stopped, kill 
+5-CORPS node from the Manager UI. Button should turn red and then green as the
+Manager restarts the 5-CORPS node. Output from 5-CORPS node should now appear 
+in the window running the manager. CSMART UI will show 5-CORPS node as dead -
+restart by Manager will not be visible through CSMART.
+
+Once 5-CORPS node has finished rehydrating, use TASKS.PSP and CLUSTERS_R.PSP to
+verify that the society looks healthy. Can test further by rescinding and then
+resending GLS.
+
+
+
+
+
+
