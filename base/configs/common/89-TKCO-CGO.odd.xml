@@ -357,9 +357,7 @@
 <VALUE value="31DA" />
 </LIST>
 </FIELD>
-<FIELD name="depotIndex">
- <VALUE value="2.00"/>
-</FIELD>
+<FIELD name="depotIndex" value="2.00" />
 </OBJECT>
 </GLOBAL>
 </GLOBAL_DATA_LIST>
