@@ -42,6 +42,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 public final class Mappings {
+  private Mappings() {};
 
   /** Compute an element-by-element map of the input collection.
    * Essentially, this means constructing a new Collection which is
@@ -116,4 +117,12 @@ public final class Mappings {
     return mapcan(m,c,null);
   }
 
+  /** Map over an iterator **/
+  public static Iterator map(final Mapping m, final Iterator it) {
+    return new Iterator() {
+        public Object next() { return m.map(it.next()); }
+        public boolean hasNext() { return it.hasNext(); }
+        public void remove() { it.remove(); }
+      };
+  }
 }

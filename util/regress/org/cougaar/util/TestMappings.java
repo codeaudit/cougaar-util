@@ -1,7 +1,7 @@
 /*
  * <copyright>
  *  
- *  Copyright 2002-2004 BBNT Solutions, LLC
+ *  Copyright 2004 BBNT Solutions, LLC
  *  under sponsorship of the Defense Advanced Research Projects
  *  Agency (DARPA).
  * 
@@ -25,29 +25,26 @@
  */
 
 package org.cougaar.util;
+import java.util.*;
 
 import junit.framework.TestCase;
 import junit.framework.*;
 
-public class UtilTest extends TestCase {
-  public void test1() {
-    assertEquals(1, 1);
-  }
+public class TestMappings extends TestCase {
+  public void test_map_iterator() {
+    List l = new ArrayList();
+    l.add("a");
+    l.add("b");
+    Iterator it = Mappings.map(new Mapping() {
+        public Object map(Object o) {
+          return ((String)o).toUpperCase();
+        }}, l.iterator());
 
-  public static Test suite() {
-    TestSuite suite= new TestSuite("Cougaar Utility Class Tests");
-    suite.addTest(new TestSuite(TestCircularQueue.class));
-    suite.addTest(new TestSuite(TestDBProperties.class));
-    suite.addTest(new TestSuite(TestDoubleBufferedList.class));
-    suite.addTest(new TestSuite(TestMappings.class));
-    suite.addTest(new TestSuite(TestNonOverlappingTimeSpanSet.class));
-    suite.addTest(new TestSuite(TestPropertyTree.class));
-    suite.addTest(new TestSuite(TestShortDateFormat.class));
-    suite.addTest(new TestSuite(TestStackMachine.class));
-    suite.addTest(new TestSuite(TestStateMachine.class));
-    suite.addTest(new TestSuite(TestStringUtility.class));
-    suite.addTest(new TestSuite(TestTimeSpanSet.class));
-    suite.addTest(new TestSuite(TestWaitQueue.class));
-    return suite;
+    assertEquals("A", it.next());    
+    assertEquals("B", it.next());
+    assertFalse(it.hasNext());
   }
 }
+
+
+
