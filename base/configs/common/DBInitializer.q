@@ -26,6 +26,40 @@ queryAgentNames = \
     AND C.INSERTION_POINT = 'Node.AgentManager.Agent' \
     AND B.NODE_ID = ':node_name'
 
+queryComponents = \
+ SELECT A.COMPONENT_NAME, C.COMPONENT_CLASS, A.COMPONENT_ID \
+   FROM V3_ASB_COMPONENT A, \
+        V3_LIB_COMPONENT C, \
+        V3_ASB_COMPONENT P \
+  WHERE A.ASSEMBLY_ID :assemblyMatch \
+    AND P.ASSEMBLY_ID :assemblyMatch \
+    AND C.COMPONENT_LIB_ID = A.COMPONENT_LIB_ID \
+    AND C.INSERTION_POINT = ':insertion_point' \
+    AND A.PARENT_COMPONENT_ID = P.COMPONENT_ID \
+    AND P.COMPONENT_NAME = ':parent_name' \
+UNION ALL \
+ SELECT A.COMPONENT_NAME, C.COMPONENT_CLASS, A.COMPONENT_ID \
+   FROM V3_ASB_COMPONENT A, \
+        V3_ASB_COMPONENT_NODE B, \
+        V3_ASB_NODE D, \
+        V3_LIB_COMPONENT C \
+  WHERE B.ASSEMBLY_ID :assemblyMatch \
+    AND A.ASSEMBLY_ID :assemblyMatch \
+    AND D.ASSEMBLY_ID :assemblyMatch \
+    AND B.COMPONENT_ID = A.COMPONENT_ID \
+    AND C.COMPONENT_LIB_ID = A.COMPONENT_LIB_ID \
+    AND B.NODE_ID = D.NODE_ID \
+    AND C.INSERTION_POINT = ':insertion_point' \
+    AND A.PARENT_COMPONENT_ID is NULL \
+    AND D.NODE_NAME = ':parent_name'
+
+queryComponentParams = \
+ SELECT ARGUMENT \
+   FROM V3_ASB_COMPONENT_ARG \
+  WHERE ASSEMBLY_ID :assemblyMatch \
+    AND COMPONENT_ID = ':component_id' \
+  ORDER BY ARGUMENT_ORDER
+
 queryPluginNames = \
  SELECT C.COMPONENT_CLASS, A.COMPONENT_ID \
    FROM V3_ASB_COMPONENT A, \
