@@ -24,10 +24,14 @@ import java.util.*;
 
 /**
  * Wraps a Set disabling all mutator methods.
+ * @deprecated Use java.util.Collections.unmodifiableCollection() method
  **/
 public class ReadOnlyCollection implements Collection {
   private Collection inner;
 
+  /**
+   * @deprecated Use java.util.Collections.unmodifiableCollection() method
+   **/
   public ReadOnlyCollection(Collection s) {
     inner = s;
   }

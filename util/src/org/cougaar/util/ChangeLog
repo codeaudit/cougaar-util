@@ -1,3 +1,10 @@
+2003-02-04  Ray Tomlinson  <RTomlinson@bbn.com>
+
+	* ReadOnlySortedSet.java: 
+	* ReadOnlySet.java: 
+	* ReadOnlyCollection.java:
+	Deprecate
+
 2002-06-14  Ray Tomlinson  <RTomlinson@bbn.com>
 
 	* ReadOnlySortedSet.java:

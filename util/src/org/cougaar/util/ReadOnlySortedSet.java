@@ -24,10 +24,14 @@ import java.util.*;
 
 /**
  * Wraps a SortedSet disabling all mutator methods.
+ * @deprecated Use java.util.Collections.unmodifiableSortedSet() method
  **/
 public class ReadOnlySortedSet extends ReadOnlySet implements SortedSet {
   private SortedSet inner;
 
+/**
+ * @deprecated Use java.util.Collections.unmodifiableSortedSet() method
+ **/
   public ReadOnlySortedSet(SortedSet s) {
     super(s);
     inner = s;
