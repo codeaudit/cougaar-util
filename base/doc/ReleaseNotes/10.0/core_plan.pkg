@@ -1,0 +1,124 @@
+# This is a list of package moves to be applied in order to port
+# COUGAAR core software from the cougaar 9.6 to cougaar 10.0 pacakge
+# layout.  This file is used as an input file to the repackage and
+# the mvsources scripts.
+#
+# empty lines and anything after a '#' are ignored.
+#
+# format:
+# old.package.prefix	new.package.prefix
+# The package prefixes are simple java package strings separated
+# by whitespace.
+# Order is important.  The first matching pattern always wins.
+#
+# A number of package prefix abbreviations are accepted:
+#  (abbrev  =  actual)
+oc.	=	org.cougaar.
+occ.	=	org.cougaar.core.
+ocp.	=	org.cougaar.planning.
+
+# move servlet service api to the service package (leaving impls in place)
+occ.servlet.ServletService		occ.service.ServletService
+
+#
+# occ.agent
+#
+occ.agent.ClusterServesPlugin                                  ocp.ldm.ClusterServesPlugin
+occ.agent.service.registry.DefaultPrototypeProviderPlugin      ocp.plugin.DefaultPrototypeProviderPlugin
+occ.agent.service.registry.PrototypeRegistry                   ocp.plugin.PrototypeRegistry
+occ.agent.service.registry.PrototypeRegistryServiceProvider    ocp.plugin.PrototypeRegistryServiceProvider
+
+# occ.blackboard
+occ.blackboard.AssetSet                   ocp.ldm.asset.AssetSet
+occ.blackboard.DelayedLPAction            occ.domain.DelayedLPAction
+occ.blackboard.LogPlan                    ocp.ldm.LogPlan
+occ.blackboard.PlanElementSet             ocp.ldm.plan.PlanElementSet
+occ.blackboard.SupportsDelayedLPActions   occ.domain.SupportsDelayedLPActions
+occ.blackboard.XPlanServesBlackboard      occ.domain.XPlan
+
+# occ.domain
+occ.domain.LDMServesClient                ocp.ldm.LDMServesClient
+occ.domain.LDMServesPlugin                ocp.ldm.LDMServesPlugin
+RootFactory                               PlanningFactory
+occ.domain.RootFactory                    ocp.ldm.PlanningFactory   # still need to fix clients!
+occ.domain.PlanningFactory                ocp.ldm.PlanningFactory   # still need to fix clients!
+
+# NOTE: must s/RootFactory/PlanningFactory/g
+
+# occ.node
+occ.node.NodePolicyWatcher                ocp.plugin.node.NodePolicyWatcher
+occ.node.NodeTrustComponent               ocp.plugin.node.NodeTrustComponent
+occ.node.NodeTrustPolicy                  ocp.plugin.node.NodeTrustPolicy
+occ.node.PolicyMulticastMessage           ocp.plugin.node.PolicyMulticastMessage
+occ.node.TrustStatusService               ocp.plugin.node.TrustStatusService
+occ.node.TrustStatusServiceImpl           ocp.plugin.node.TrustStatusServiceImpl
+occ.node.TrustStatusServiceProvider       ocp.plugin.node.TrustStatusServiceProvider
+
+# occ.plugin
+occ.plugin.Annotation                     ocp.ldm.plan.Annotation
+occ.plugin.Assessor                       ocp.plugin.legacy.Assessor
+ocp.plugin.DeletionPlugin                 ocp.plugin.legacy.DeletionPlugin
+occ.plugin.LDMPluginServesLDM             ocp.ldm.LDMPluginServesLDM
+occ.plugin.LDMService                     ocp.service.LDMService
+occ.plugin.LDMServiceProvider             ocp.plugin.legacy.LDMServiceProvider
+occ.plugin.LatePropertyProvider           ocp.plugin.legacy.LatePropertyProvider
+occ.plugin.MinPlugin                      ocp.plugin.legacy.MinPlugin
+occ.plugin.ParameterizedPlugin            ocp.plugin.legacy.ParameterizedPlugin
+occ.plugin.Plugin                         ocp.plugin.legacy.Plugin
+occ.plugin.PluginAdapter                  ocp.plugin.legacy.PluginAdapter
+occ.plugin.PluginContext                  ocp.plugin.legacy.PluginContext
+occ.plugin.PluginDelegate                 ocp.plugin.legacy.PluginDelegate
+occ.plugin.PluginStateModel               ocp.plugin.legacy.PluginStateModel
+occ.plugin.PluginSupport                  ocp.plugin.legacy.PluginSupport
+occ.plugin.PropertyProvider               ocp.ldm.PropertyProvider
+occ.plugin.PrototypeProvider              ocp.ldm.PrototypeProvider
+occ.plugin.ScheduleablePlugin             ocp.plugin.legacy.ScheduleablePlugin
+occ.plugin.SimplePlugin                   ocp.plugin.legacy.SimplePlugin
+occ.plugin.SimplifiedFatPlugin            ocp.plugin.legacy.SimplifiedFatPlugin
+occ.plugin.SimplifiedPlugin               ocp.plugin.legacy.SimplifiedPlugin
+occ.plugin.SimplifiedPluginTest           ocp.plugin.legacy.SimplifiedPluginTest
+occ.plugin.SingleThreadedPlugin           ocp.plugin.legacy.SingleThreadedPlugin
+occ.plugin.StateModelAdapter              ocp.plugin.legacy.StateModelAdapter
+occ.plugin.StatelessPluginAdapter         ocp.plugin.legacy.StatelessPluginAdapter
+occ.plugin.ThinPlugin                     ocp.plugin.legacy.ThinPlugin
+occ.plugin.PersistencePlugin              ocp.plugin.legacy.PersistencePlugin
+occ.plugin.completion.TestPlugin          ocp.plugin.completion.TestPlugin
+occ.plugin.util.                          ocp.plugin.util.
+
+# occ.service
+occ.service.PrototypeRegistryService      ocp.service.PrototypeRegistryService
+
+# occ.servlet
+occ.servlet.BlackboardServletComponent    ocp.servlet.BlackboardServletComponent
+occ.servlet.BlackboardServletSupport      ocp.servlet.BlackboardServletSupport
+
+# occ.util
+occ.util.AbstractPrinter                  oc.mlm.ui.util.AbstractPrinter
+occ.util.AsciiPrettyPrinter               oc.mlm.ui.util.AsciiPrettyPrinter
+occ.util.AsciiPrinter                     oc.mlm.ui.util.AsciiPrinter
+occ.util.DataPrinter                      oc.mlm.ui.util.DataPrinter
+occ.util.DefaultPrinter                   oc.mlm.ui.util.DefaultPrinter
+occ.util.HTMLPrinter                      oc.mlm.ui.util.HTMLPrinter
+occ.util.PrettyStringPrinter              oc.mlm.ui.util.PrettyStringPrinter
+occ.util.PrettyXMLPrinter                 oc.mlm.ui.util.PrettyXMLPrinter
+occ.util.SelfPrinter                      oc.mlm.ui.util.SelfPrinter
+occ.util.StringObjectFactory              oc.mlm.ui.util.StringObjectFactory
+occ.util.StringPrinter                    oc.mlm.ui.util.StringPrinter
+occ.util.XMLObjectFactory                 oc.mlm.ui.util.XMLObjectFactory
+occ.util.XMLPrinter                       oc.mlm.ui.util.XMLPrinter
+
+# ocp.ldm.plan
+ocp.ldm.plan.Directive          occ.blackboard.Directive
+ocp.ldm.plan.DirectiveImpl      occ.blackboard.DirectiveImpl
+ocp.ldm.plan.NewDirective       occ.blackboard.NewDirective
+
+# ocp.plugin
+ocp.plugin.AssetDataCallback    ocp.plugin.asset.AssetDataCallback
+ocp.plugin.AssetDataDBReader    ocp.plugin.asset.AssetDataDBReader
+ocp.plugin.AssetDataFileReader  ocp.plugin.asset.AssetDataFileReader
+ocp.plugin.AssetDataPlugin      ocp.plugin.asset.AssetDataPlugin
+ocp.plugin.AssetDataPluginBase  ocp.plugin.asset.AssetDataPluginBase
+ocp.plugin.AssetDataPluginDB    ocp.plugin.asset.AssetDataPluginDB
+ocp.plugin.AssetDataPluginFile  ocp.plugin.asset.AssetDataPluginFile
+ocp.plugin.AssetDataReader      ocp.plugin.asset.AssetDataReader
+ocp.plugin.AssetReportPlugin    ocp.plugin.asset.AssetReportPlugin

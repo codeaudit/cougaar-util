@@ -1,0 +1,51 @@
+#! /bin/sh 
+
+if (test -z "$1"); then
+cat <<EOF
+Repackage for the separation of planning from core.
+USAGE:  $0 [src] [dest]
+
+After repackaging, these manual fixes may be required:
+
+1)
+Some additional imports may be necessary, such as:
+  import org.cougaar.planning.plugin.legacy.*
+
+2)
+  domainService.getFactory() 
+has been removed, since it is in core but returns a
+planning-specific factory.  The replacement is:
+  (PlanningFactory)domainService.getFactory("planning");
+The PluginAdapter base class, which is in the planning module, has
+a simple replacement:
+  getFactory()
+
+3)
+  planningFactory.getNextUID()
+has been removed.  The replacement is the UIDService's:
+   uidService.nextUID();
+
+4)
+  planningFactory.cachePrototype(aTypeName, aPrototype);
+has been removed.  It has been replaced by the
+PrototypeRegistryService:
+   protoReg.cachePrototype(aTypeName, aPrototype)
+The same goes for other prototype registration methods.
+
+5)
+The script sometimes mangles this import:
+  import org.cougaar.core.plugin.PluginBindingSite
+Plugins should not rely on the binding site, but instead use the 
+methods provided in the plugin base classes:
+  getAgentIdentifier()
+  getConfigFinder()
+or use the equivalent "AgentIdentificationService" and
+"ConfigFinderService".
+EOF
+exit 1
+fi
+
+src=$1
+dest=$2
+
+./core-rpkg.pl -m -d $dest $src core_plan.pkg
