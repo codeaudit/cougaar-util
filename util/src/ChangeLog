@@ -1,5 +1,28 @@
 2002-06-05  Michael Thome  <mthome@bbn.com>
 
+	* org/cougaar/util/ChainingIterator
+	Utility for combining any number of iterators into a single
+	ordered iterator.
+
+	* occ/component/ContainedService
+	ContainedService implements an alternative route for getting
+	control and information about the components context.  This
+	initial implementation just provides the component with the
+	ComponentDescription used to load it, if available.  Simplest way
+	to use it is to extend ContainedBinderSupport rather than
+	BinderSupport for your binder.
+	
+	* occ/component/ContainedBinderSupport
+	Makes available a ContainedService implementation to the binder's
+	direct child, using AddonServiceBroker.
+	
+	* occ/component/AddonServiceBroker
+	Implements a component-local service provider attached to a
+	forwarding ServiceBroker.  Used by ContainedBinderSupport.
+
+	* occ/component/BinderBase
+	Add setter method for serviceBroker so that it can be caught.
+
 	* org/cougaar/util/log/LoggerFactory.java
 	Refactored logger facility, added ability to specify factory
 	implementation, implemented singleton, simplified API.

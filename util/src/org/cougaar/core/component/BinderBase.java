@@ -39,10 +39,14 @@ public abstract class BinderBase
     attachChild(child);
   }
 
+  protected void setServiceBroker(ServiceBroker sb) {
+    servicebroker = sb;
+  }
+
   public void setBindingSite(BindingSite bs) {
     if (bs instanceof ContainerAPI) {
       parent = (ContainerAPI) bs;
-      servicebroker = parent.getServiceBroker();
+      setServiceBroker(parent.getServiceBroker());
     } else {
       throw new RuntimeException("Help: BindingSite of Binder not a ContainerAPI!");
     }
