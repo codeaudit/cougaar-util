@@ -94,7 +94,13 @@ if [ x"$clname" == x ]; then
 fi
 
 # anything leftover is postargs
-postargs="$*"
+# special postarg handling - not sure why I cannot just use $*, even with IFS
+# postargs="$*"
+while [ x"$1" != x ]; do
+    postargs="$postargs
+$1"
+    shift
+done
 
 if [ -z "$COUGAAR_WORKSPACE" ]; then
     export COUGAAR_WORKSPACE="$COUGAAR_INSTALL_PATH/workspace";
