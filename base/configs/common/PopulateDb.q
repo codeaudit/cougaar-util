@@ -76,7 +76,8 @@ queryComponentArgs=\
  SELECT ARGUMENT, ARGUMENT_ORDER \
    FROM V4_ASB_COMPONENT_ARG \
   WHERE ASSEMBLY_ID :assembly_match: \
-    AND COMPONENT_ALIB_ID = :component_alib_id:
+    AND COMPONENT_ALIB_ID = :component_alib_id: \
+  ORDER BY ARGUMENT_ORDER, ARGUMENT
  
 checkComponentArg=\
  SELECT COMPONENT_ALIB_ID \
@@ -112,17 +113,6 @@ checkRelationship=\
     AND AAR.SUPPORTED_COMPONENT_ALIB_ID = :supported: \
     AND AAR.START_DATE = :start_date:
 
-checkRelationship.mysql=\
- SELECT '1' \
-   FROM V4_ASB_AGENT_RELATION AAR \
-  INNER JOIN V4_EXPT_TRIAL_ASSEMBLY ETA \
-     ON AAR.ASSEMBLY_ID = ETA.ASSEMBLY_ID \
-    AND ETA.TRIAL_ID = ':trial_id:' \
-    AND AAR.ROLE = :role: \
-    AND AAR.SUPPORTING_COMPONENT_ALIB_ID = :supporting: \
-    AND AAR.SUPPORTED_COMPONENT_ALIB_ID = :supported: \
-    AND AAR.START_DATE = :start_date:
-
 insertRelationship=\
  INSERT INTO V4_ASB_AGENT_RELATION \
     (ASSEMBLY_ID, ROLE, \
@@ -151,9 +141,19 @@ queryMaxExptId=\
    FROM V4_EXPT_EXPERIMENT \
   WHERE EXPT_ID LIKE ':max_id_pattern:'
 
+queryExptCFWGroupId=\
+ SELECT CFW_GROUP_ID \
+   FROM V4_EXPT_EXPERIMENT \
+  WHERE EXPT_ID LIKE ':expt_id:'
+
+queryExptName=\
+ SELECT NAME \
+   FROM V4_EXPT_EXPERIMENT \
+  WHERE EXPT_ID LIKE ':expt_id:'
+
 insertExptId=\
- INSERT INTO V4_EXPT_EXPERIMENT (EXPT_ID, DESCRIPTION, NAME) \
- VALUES (':expt_id:', ':description:', ':expt_name:')
+ INSERT INTO V4_EXPT_EXPERIMENT (EXPT_ID, DESCRIPTION, NAME, CFW_GROUP_ID) \
+ VALUES (':expt_id:', ':description:', ':expt_name:', ':cfw_group_id:')
 
 queryMaxTrialId=\
  SELECT MAX(TRIAL_ID) \
@@ -161,7 +161,7 @@ queryMaxTrialId=\
   WHERE TRIAL_ID LIKE ':max_id_pattern:'
 
 insertTrialId=\
- INSERT INTO V4_EXPT_TRIAL (TRIAL_ID, EXPT_ID, DESCRIPTION, NAME) \
+ INSERT INTO V4_EXPT_TRIAL (EXPT_ID, TRIAL_ID, DESCRIPTION, NAME) \
  VALUES (':expt_id:', ':trial_id:', ':description:', ':trial_name:')
 
 queryMaxAssemblyId=\
@@ -290,13 +290,13 @@ checkAsbAgent=\
  SELECT '1' \
    FROM V4_ASB_AGENT \
   WHERE COMPONENT_ALIB_ID = :component_alib_id: \
-   AND ASSEMBLY_ID :assembly_match:
+    AND ASSEMBLY_ID :assembly_match:
 
 insertAsbAgent=\
  INSERT INTO V4_ASB_AGENT \
-  (ASSEMBLY_ID, COMPONENT_ALIB_ID, COMPONENT_LIB_ID, CLONE_SET_ID, COMPONENT_NAME) \
-  VALUES \
-   (:assembly_id:,:component_alib_id:,:component_lib_id:,:clone_set_id:, :component_name:)
+    (ASSEMBLY_ID, COMPONENT_ALIB_ID, COMPONENT_LIB_ID, CLONE_SET_ID, COMPONENT_NAME) \
+ VALUES \
+    (:assembly_id:, :component_alib_id:, :component_lib_id:, :clone_set_id:, :component_name:)
 
 ########
 # Sample recipe queries follow
@@ -416,3 +416,5 @@ recipeQueryExampleBinderArgs=\
 recipeQuerySelectNothing=\
  SELECT * FROM DUAL WHERE DUMMY IS NULL;
 
+recipeQueryNCAAgent=\
+ SELECT component_alib_id from v4_alib_component where component_name='NCA'

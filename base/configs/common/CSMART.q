@@ -29,7 +29,8 @@ queryComponentArgs = \
  SELECT ARGUMENT \
    FROM V4_ASB_COMPONENT_ARG \
    WHERE COMPONENT_ALIB_ID=':comp_alib_id' \
-   AND ASSEMBLY_ID :assemblyMatch
+   AND ASSEMBLY_ID :assemblyMatch \
+ORDER BY ARGUMENT_ORDER, ARGUMENT
 
 queryHosts = \
  SELECT H.COMPONENT_ALIB_ID \
@@ -101,7 +102,7 @@ queryPluginArgs = \
    FROM V4_ASB_COMPONENT_ARG \
    WHERE COMPONENT_ALIB_ID=':comp_alib_id' \
    AND ASSEMBLY_ID :assemblyMatch \
-   ORDER BY ARGUMENT_ORDER
+   ORDER BY ARGUMENT_ORDER, ARGUMENT
 
 queryComponents = \
  SELECT A.COMPONENT_NAME, C.COMPONENT_CLASS, \
