@@ -1,6 +1,6 @@
-Database=${org.cougaar.configuration.database}
-Username=${org.cougaar.configuration.user}
-Password=${org.cougaar.configuration.password}
+Database=${org.cougaar.refconfig.database}
+Username=${org.cougaar.refconfig.user}
+Password=${org.cougaar.refconfig.password}
 
 %SQLFDMAggregateAssetCreator
 query= select \
@@ -118,7 +118,7 @@ query = select 'MOS/11B' AS MOS_LEVEL, NVL(SUM(TO_STRENGTH),0) AS MOS_QTY, 'MOS/
 #
 
 query.mysql = \
-select 'MOS/11B' AS MOS_LEVEL, IFNULL(SUM(TO_STRENGTH),0) AS MOS_QTY,  'MOS/11B/INFANTRYMAN'  \
+select 'MOS/11B', IFNULL(SUM(TO_STRENGTH),0) AS MOS_QTY,  'MOS/11B/INFANTRYMAN'  \
   FROM \
    fdm_unit_billet BILLET, \
    lib_organization LIBORG \
@@ -140,9 +140,9 @@ query = select '8115001682275' AS NSN, DECODE(CONTAINER_20_FT_QTY,NULL,30,CONTAI
 	AND UES.UIC(+) = LIBORG.UIC
 
 
-query.mysql = select DISTINCT '8115001682275' AS NSN, \
-        30 AS QTY_OH, \
-	'CONTAINER' AS 	NOMENCLATURE \
+query.mysql = select DISTINCT '8115001682275', \
+        30, \
+	'CONTAINER' \
 	FROM \
 	lib_organization LIBORG \
 	WHERE \
