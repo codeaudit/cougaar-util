@@ -45,9 +45,10 @@ WHERE OPLAN_ID = '093FF'
 #Get Orgactivities
 %OrgActivityQueryHandler
 
+# FORCE is a MySQL4.0 keyword so avoid using it
 OrgActivityQuery.mysql = \
 select DISTINCT ATTRIBUTE_NAME AS RELATION_NAME, \
-    ORG_ID AS FORCE, \
+    ORG_ID, \
     'FORCE_TYPE', \
     ATTRIBUTE_VALUE AS RELATES_TO, \
     'RELATES_TO_TYPE', \
