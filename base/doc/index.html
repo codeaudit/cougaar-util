@@ -125,6 +125,11 @@ The old behavior can be invoked by specifying
 <em>-Dorg.cougaar.bootstrap.classloader.class=org.cougaar.bootstrap.BootstrapClassLoader</em>
 on the java command line.
 </li>
+<li> AEViewer servlet now uses introspection to determine the type of
+OperatingMode. It should be possible to use the servlet to set the value
+of any OM that has a String constructor.  </li>
+<li> The objects listed in the AEViewer servlet are now sorted 
+alphabetically  (enhancement bug 1490) </li>
 </ul>
 
 <!-- COUGAAR 9.2.2 COUGAAR 9.2.2 COUGAAR 9.2.2 COUGAAR 9.2.2 COUGAAR 9.2.2 -->
