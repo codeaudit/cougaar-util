@@ -208,6 +208,11 @@ queryExptName=\
    FROM V4_EXPT_EXPERIMENT \
   WHERE EXPT_ID LIKE ':expt_id:'
 
+# Used from Experiment via PopulateDb to avoid complete resaves
+updateExptName=\
+ UPDATE V4_EXPT_EXPERIMENT SET NAME = ':expt_name:' \
+  WHERE EXPT_ID LIKE ':expt_id:'
+
 insertExptId=\
  INSERT INTO V4_EXPT_EXPERIMENT (EXPT_ID, DESCRIPTION, NAME, CFW_GROUP_ID) \
  VALUES (':expt_id:', ':description:', ':expt_name:', ':cfw_group_id:')
