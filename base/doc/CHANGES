@@ -1,3 +1,14 @@
+* 9.2.1
+
+Bootstrapper has been refactored to allow convenient subclassing and 
+extension. See org.cougaar.bootstrap.Bootstrapper for details.
+
+ComponentDescription objects now support "priority" which specifies
+how sets of components, perhaps specified by different sources may
+be loaded.  The component model now strongly recommends that
+components be loaded in the same order that they are specified, all
+other factors being equal.
+
 * 9.2
 Cougaar now requires JDK 1.4.
 
