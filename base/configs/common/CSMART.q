@@ -227,6 +227,10 @@ queryAgentAssetData = \
         WHERE ASSEMBLY_ID = ':assembly_id' \
         AND COMPONENT_ALIB_ID = ':agent:'
 
+##############################################
+# Community editing queries follow
+# See DatabaseTableModel and CommunityDBUtils in octc.ui.community
+
 queryCommunities = \
   SELECT DISTINCT COMMUNITY_ID \
     FROM community_attribute
@@ -234,67 +238,77 @@ queryCommunities = \
 queryEntities = \
   SELECT DISTINCT ENTITY_ID \
     FROM community_entity_attribute \
-   WHERE COMMUNITY_ID = ':community_id'
+   WHERE COMMUNITY_ID = ':community_id' \
+     AND ASSEMBLY_ID :assembly_match:
 
-queryMemberType = \
+queryEntityType = \
   SELECT ATTRIBUTE_VALUE \
     FROM community_entity_attribute \
    WHERE ENTITY_ID = ':entity_id' \
-     AND ATTRIBUTE_ID = 'MemberType'
+     AND ATTRIBUTE_ID = 'EntityType' \
+     AND ASSEMBLY_ID :assembly_match:
 
 queryAllCommunityInfo = \
-  SELECT community_entity_attribute.COMMUNITY_ID, \
-         community_entity_attribute.ENTITY_ID, \
-         community_entity_attribute.ATTRIBUTE_ID, \
-         community_entity_attribute.ATTRIBUTE_VALUE, \
-         community_attribute.ATTRIBUTE_ID, \
-         community_attribute.ATTRIBUTE_VALUE \
-    FROM community_attribute, community_entity_attribute \
-   WHERE community_attribute.COMMUNITY_ID = \
-            community_entity_attribute.COMMUNITY_ID \
-     AND community_attribute.COMMUNITY_ID = ':community_id'
+  SELECT cea.COMMUNITY_ID, \
+         cea.ENTITY_ID, \
+         cea.ATTRIBUTE_ID, \
+         cea.ATTRIBUTE_VALUE, \
+         ca.ATTRIBUTE_ID AS COMMUNITY_ATTRIBUTE_ID, \
+         ca.ATTRIBUTE_VALUE AS COMMUNITY_ATTRIBUTE_VALUE \
+    FROM community_attribute ca, community_entity_attribute cea \
+   WHERE ca.COMMUNITY_ID = \
+            cea.COMMUNITY_ID \
+     AND ca.COMMUNITY_ID = ':community_id' \
+     AND ca.ASSEMBLY_ID :assembly_match: \
+     AND cea.ASSEMBLY_ID = ca.ASSEMBLY_ID
 
 queryCommunityInfo = \
-  SELECT * FROM community_attribute \
-   WHERE COMMUNITY_ID = ':community_id'
+  SELECT COMMUNITY_ID, ATTRIBUTE_ID, ATTRIBUTE_VALUE FROM community_attribute \
+   WHERE COMMUNITY_ID = ':community_id' \
+     AND ASSEMBLY_ID :assembly_match:
 
 queryEntityInfo = \
   SELECT ENTITY_ID, ATTRIBUTE_ID, ATTRIBUTE_VALUE \
     FROM community_entity_attribute \
    WHERE COMMUNITY_ID = ':community_id' \
-     AND ENTITY_ID = ':entity_id'
+     AND ENTITY_ID = ':entity_id' \
+     AND ASSEMBLY_ID :assembly_match:
 
 queryChildrenEntityInfo = \
   SELECT ENTITY_ID, ATTRIBUTE_ID, ATTRIBUTE_VALUE \
     FROM community_entity_attribute \
    WHERE COMMUNITY_ID = ':community_id' \
-     AND ENTITY_ID IN (':children_entity_ids')
+     AND ENTITY_ID IN (':children_entity_ids') \
+     AND ASSEMBLY_ID :assembly_match:
 
 queryInsertCommunityInfo = \
   INSERT INTO community_attribute \
-  VALUES (':community_id', 'CommunityType', ':community_type')
+  VALUES (':assembly_id:', ':community_id', 'CommunityType', ':community_type')
 
 queryInsertCommunityAttribute = \
   INSERT INTO community_attribute \
-  VALUES (':community_id', '', '')
+  VALUES (':assembly_id:', ':community_id', '', '')
 
 queryInsertEntityInfo = \
   INSERT INTO community_entity_attribute \
-  VALUES (':community_id', ':entity_id', ':attribute_id', ':attribute_value')
+  VALUES (':assembly_id:', ':community_id', ':entity_id', ':attribute_id', ':attribute_value')
 
 queryInsertEntityAttribute = \
   INSERT INTO community_entity_attribute \
-  VALUES (':community_id', ':entity_id', '', '')
+  VALUES (':assembly_id:', ':community_id', ':entity_id', '', '')
 
 queryDeleteCommunityInfo = \
   DELETE FROM community_attribute \
-   WHERE COMMUNITY_ID = ':community_id'
+   WHERE COMMUNITY_ID = ':community_id' \
+     AND ASSEMBLY_ID :assembly_match:
 
 queryDeleteEntityInfo = \
   DELETE FROM community_entity_attribute \
    WHERE COMMUNITY_ID = ':community_id' \
-     AND ENTITY_ID = ':entity_id'
+     AND ENTITY_ID = ':entity_id' \
+     AND ASSEMBLY_ID :assembly_match:
 
+# FIXME: qualify by assembly_id?
 queryIsCommunityInUse = \
   SELECT ENTITY_ID \
     FROM community_entity_attribute \
@@ -305,14 +319,16 @@ queryUpdateCommunityAttributeId  = \
      SET ATTRIBUTE_ID = ':attribute_id' \
    WHERE COMMUNITY_ID = ':community_id' \
      AND ATTRIBUTE_ID = ':prev_attribute_id' \
-     AND ATTRIBUTE_VALUE = ':attribute_value'
+     AND ATTRIBUTE_VALUE = ':attribute_value' \
+     AND ASSEMBLY_ID :assembly_match:
 
 queryUpdateCommunityAttributeValue = \
   UPDATE community_attribute \
      SET ATTRIBUTE_VALUE = ':attribute_value' \
    WHERE COMMUNITY_ID = ':community_id' \
      AND ATTRIBUTE_ID = ':attribute_id' \
-     AND ATTRIBUTE_VALUE = ':prev_attribute_value'
+     AND ATTRIBUTE_VALUE = ':prev_attribute_value' \
+     AND ASSEMBLY_ID :assembly_match:
 
 queryUpdateEntityAttributeId  = \
   UPDATE community_entity_attribute \
@@ -320,7 +336,8 @@ queryUpdateEntityAttributeId  = \
    WHERE COMMUNITY_ID = ':community_id' \
      AND ENTITY_ID = ':entity_id' \
      AND ATTRIBUTE_ID = ':prev_attribute_id' \
-     AND ATTRIBUTE_VALUE = ':attribute_value'
+     AND ATTRIBUTE_VALUE = ':attribute_value' \
+     AND ASSEMBLY_ID :assembly_match:
 
 queryUpdateEntityAttributeValue = \
   UPDATE community_entity_attribute \
@@ -328,17 +345,20 @@ queryUpdateEntityAttributeValue = \
    WHERE COMMUNITY_ID = ':community_id' \
      AND ENTITY_ID = ':entity_id' \
      AND ATTRIBUTE_ID = ':attribute_id' \
-     AND ATTRIBUTE_VALUE = ':prev_attribute_value'
+     AND ATTRIBUTE_VALUE = ':prev_attribute_value' \
+     AND ASSEMBLY_ID :assembly_match:
 
 queryDeleteCommunityAttribute = \
   DELETE FROM community_attribute \
    WHERE COMMUNITY_ID = ':community_id' \
      AND ATTRIBUTE_ID = ':attribute_id' \
-     AND ATTRIBUTE_VALUE = ':attribute_value'
+     AND ATTRIBUTE_VALUE = ':attribute_value' \
+     AND ASSEMBLY_ID :assembly_match:
 
 queryDeleteEntityAttribute = \
   DELETE FROM community_entity_attribute \
    WHERE COMMUNITY_ID = ':community_id' \
      AND ENTITY_ID = ':entity_id' \
      AND ATTRIBUTE_ID = ':attribute_id' \
-     AND ATTRIBUTE_VALUE = ':attribute_value'
+     AND ATTRIBUTE_VALUE = ':attribute_value' \
+     AND ASSEMBLY_ID :assembly_match:
