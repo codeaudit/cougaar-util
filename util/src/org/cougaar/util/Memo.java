@@ -32,7 +32,6 @@ import java.util.*;
  * A "memoization" utility - as long as the specified condition object
  * doesn't change, then the result doesn't change.
  **/
-
 public class Memo
 {
   private static Object UNDEFINED = new Object();
@@ -43,10 +42,15 @@ public class Memo
 
   private Memo(Memo.Function f) { this.function = f; }
 
+  /** Factory method for a Memo **/
   public static Memo get(Memo.Function f) {
     return new Memo(f);
   }
 
+  /** Compute the result of applying the Memo's function to the parameter.
+   * The function might not actually be run if the parameter's value is ==
+   * the previous value (if any).
+   **/
   public synchronized Object eval(Object p) {
     if (param != p) {           // catches UNDEFINED, too
       result = function.eval(p);
@@ -54,6 +58,24 @@ public class Memo
     }
     return result;
   }
+
+  /** Similar to #eval(Object), except will return the result of applying
+   * the function to the parameter IFF the function was actually called.
+   * This allows the caller to easily abort a sequence of events if
+   * the previous computation is still in force.
+   * @note Use of this method implies that the function should never return null
+   * as a valid result or it will be impossible to distinguish between that case
+   * and a "not new" case.
+   **/
+  public synchronized Object evalIfNew(Object p) {
+    if (param != p) {           // catches UNDEFINED, too
+      result = function.eval(p);
+      param = p;
+      return result;
+    } else {
+      return null;
+    }
+  }    
 
   public static interface Function {
     Object eval(Object x);
