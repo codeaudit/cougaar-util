@@ -86,9 +86,10 @@ public final class Mappings {
    * to returning a Collection with one element.
    *
    * @return an ArrayList representing the mapped collection.
-   * @param result a Collection to add elements to.
+   * @param result a Collection to add elements to.  If null, creates a new ArrayList.
    **/
   public static Collection mapcan(Mapping m, Collection input, Collection result) {
+    if (result == null) result = new ArrayList();
     for (Iterator i = input.iterator(); i.hasNext(); ) {
       Object e = i.next();
       Object me = m.map(e);
