@@ -75,6 +75,17 @@ queryComponents = \
     AND P.COMPONENT_NAME = ':parent_name' \
 ORDER BY INSERTION_ORDER
 
+queryAgentRelationships = \
+  SELECT SUPPORTED_COMPONENT_ALIB_ID, ROLE, START_DATE, END_DATE \
+    FROM V4_ASB_AGENT_RELATION \
+   WHERE SUPPORTING_COMPONENT_ALIB_ID=':agent_name' \
+     AND ASSEMBLY_ID :assemblyMatch
+   
+queryAgentAssetClass = \
+  SELECT AGENT_ORG_CLASS \
+    FROM V4_LIB_AGENT_ORG \
+   WHERE AGENT_LIB_NAME = ':agent_name'
+
 
 
 
