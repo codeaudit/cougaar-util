@@ -82,6 +82,10 @@ JDK/bin/java is found before any JRE version of java.</li>
 Mobility. Node startup scripts have been updated to match. Users may
 need to update their AppServer properties files to match. See the
 samples in ../server/data for details.</li>
+<li>Add new Environment variable / -D argument:
+COUGAAR_WORKSPACE / org.cougaar.workspace. This directory, which defaults to CIP/workspace, is
+where all runtime components should do all file output. This includes
+persistence. Future releases may restrict output to this area.</li>
 <li>Most known issues in CSMART have been addressed, including
 performance issues and problems with the Society Monitor and Agent
 Insertion Recipe. See the <a
