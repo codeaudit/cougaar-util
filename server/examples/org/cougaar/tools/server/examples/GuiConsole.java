@@ -95,7 +95,8 @@ public class GuiConsole {
     private JButton dumpThreadsButton;
     private JButton listNodeProcessesButton;
     private JButton listAllProcessesButton;
-    private JButton getFileButton;
+    private JButton readFileButton;
+    private JButton writeFileButton;
     private JButton listFilesButton;
     private JButton stopButton;
 
@@ -138,7 +139,8 @@ public class GuiConsole {
       dumpThreadsButton = new JButton("Trigger-Stack-Trace");
       listNodeProcessesButton = new JButton("List-Node-Procs");
       listAllProcessesButton = new JButton("List-All-Procs");
-      getFileButton = new JButton("Get-\"./dir/test.txt\"");
+      readFileButton = new JButton("Read-\"./dir/test.txt\"");
+      writeFileButton = new JButton("Write-\"./dir/test.txt\"");
       listFilesButton = new JButton("List-Files");
       flushNodeEventsButton = new JButton("Flush-Output");
       stopButton = new JButton("Stop");
@@ -225,11 +227,19 @@ public class GuiConsole {
           });
 
 
-      // handle "Get-File" button
-      getFileButton.addActionListener(
+      // handle "Read-File" button
+      readFileButton.addActionListener(
           new ActionListener() {    
             public void actionPerformed(ActionEvent e) {
-              getFile();
+              readFile();
+            }
+          });
+
+      // handle "Write-File" button
+      writeFileButton.addActionListener(
+          new ActionListener() {    
+            public void actionPerformed(ActionEvent e) {
+              writeFile();
             }
           });
 
@@ -299,7 +309,8 @@ public class GuiConsole {
       buttons2.add(listNodeProcessesButton);
       buttons2.add(listAllProcessesButton);
 
-      buttons2.add(getFileButton);
+      buttons2.add(readFileButton);
+      buttons2.add(writeFileButton);
       buttons2.add(listFilesButton);
       // empty slot
     }  
@@ -488,7 +499,7 @@ public class GuiConsole {
       }
     }
 
-    private void getFile() {
+    private void readFile() {
       // for now this test is hard-coded
       System.out.println(
           "Test -- read file \"./dir/test.txt\" from \"localhost:8484\"");
@@ -506,6 +517,24 @@ public class GuiConsole {
           }
           System.out.println(i+"\t"+s);
         }
+      } catch (Exception e) {
+        System.err.println("Failed: "+e);
+        e.printStackTrace();
+      }
+    }
+
+    private void writeFile() {
+      // for now this test is hard-coded
+      System.out.println(
+          "Test -- write file \"./dir/test.txt\" from \"localhost:8484\"");
+      try {
+        HostServesClient hsc =
+          communitySupport.getHost(
+              "localhost",
+              8484);
+        OutputStream os = hsc.write("./dir/test.txt", false);
+        os.write("test foo\ncontents".getBytes());
+        os.close();
       } catch (Exception e) {
         System.err.println("Failed: "+e);
         e.printStackTrace();
