@@ -31,7 +31,7 @@ public class ParseException extends Exception {
 
   public ParseException(Exception e) {
     this(e.toString());
-    e.printStackTrace();
+    //e.printStackTrace();
   }
 
   public void addTrace(String line) {

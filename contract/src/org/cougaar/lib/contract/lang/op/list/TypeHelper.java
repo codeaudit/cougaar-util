@@ -18,11 +18,12 @@ import org.cougaar.lib.contract.lang.*;
  **/
 public final class TypeHelper {
 
-  public static final int EXPECT_ARRAY =       0;
-  public static final int EXPECT_COLLECTION =  1;
-  public static final int EXPECT_ITERATOR =    2;
-  public static final int EXPECT_ENUMERATION = 3;
-  public static final int EXPECT_UNKNOWN     = 4;
+  public static final int EXPECT_ARRAY       = 0;
+  public static final int EXPECT_LIST        = 1;
+  public static final int EXPECT_COLLECTION  = 2;
+  public static final int EXPECT_ITERATOR    = 3;
+  public static final int EXPECT_ENUMERATION = 4;
+  public static final int EXPECT_UNKNOWN     = 5;
 
   public static final int getExpectedId(
       final OpParser p, 
@@ -51,19 +52,25 @@ public final class TypeHelper {
             p.setTypeList(ticl.getComponentType());
           }
           return EXPECT_ARRAY;
-        } else if (ticl.isAssignableFrom(Collection.class)) {
-          // elements are in Collection
+        } else if (List.class.isAssignableFrom(ticl)) {
+          // elements are in List
+          if (setToElementType) {
+            p.setTypeList(Object.class);
+          }
+          return EXPECT_LIST;
+        } else if (Collection.class.isAssignableFrom(ticl)) {
+          // elements are in a non-List Collection
           if (setToElementType) {
             p.setTypeList(Object.class);
           }
           return EXPECT_COLLECTION;
-        } else if (ticl.isAssignableFrom(Iterator.class)) {
+        } else if (Iterator.class.isAssignableFrom(ticl)) {
           // elements are in Iterator
           if (setToElementType) {
             p.setTypeList(Object.class);
           }
           return EXPECT_ITERATOR;
-        } else if (ticl.isAssignableFrom(Enumeration.class)) {
+        } else if (Enumeration.class.isAssignableFrom(ticl)) {
           // elements are in Enumeration
           if (setToElementType) {
             p.setTypeList(Object.class);

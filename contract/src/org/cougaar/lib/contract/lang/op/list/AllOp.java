@@ -102,6 +102,23 @@ public final class AllOp
               return true;
             }
           }
+        case TypeHelper.EXPECT_LIST:
+          {
+            List l = (List)o;
+            int lsize = l.size();
+            if (lsize <= 0) {
+              return VALUE_WHEN_EMPTY;
+            } else {
+              int i = 0;
+              do {
+                Object o2 = l.get(i);
+                if (!(u.execute(o2))) {
+                  return false;
+                }
+              } while (++i < lsize);
+              return true;
+            }
+          }
         case TypeHelper.EXPECT_COLLECTION:
           {
             Iterator iter = ((Collection)o).iterator();

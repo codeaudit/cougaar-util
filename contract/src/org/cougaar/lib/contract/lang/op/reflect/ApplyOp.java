@@ -85,11 +85,20 @@ public final class ApplyOp
         u3.getClass().getName());
     }
 
-    // (apply u1 u2)
-    this.u1 = u1;
-    this.u2 = u2;
-    p.setTypeList(origTypeList);
-    return this;
+    int u2id = u2.getID();
+    if ((u2id == OpCodes.TRUE_ID) ||
+        (u2id == OpCodes.FALSE_ID)) {
+      // (apply u1 true) is (true)
+      // (apply u1 false) is (false)
+      return u2;
+    } else {
+      // (apply u1 u2)
+      // typical case
+      this.u1 = u1;
+      this.u2 = u2;
+      p.setTypeList(origTypeList);
+      return this;
+    }
   }
 
   public boolean execute(final Object o) {

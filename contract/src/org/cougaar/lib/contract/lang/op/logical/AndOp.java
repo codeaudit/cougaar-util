@@ -76,6 +76,9 @@ parseOps:
           // (and x false y) is (false)
           hasTrue = false;
           nlsize = 0;
+          while (p.nextOp() != null) {
+            // skip remaining ops
+          }
           break parseOps;
         case OpCodes.AND_ID:
           {

@@ -91,6 +91,18 @@ public final class ExistsOp
             }
             return false;
           }
+        case TypeHelper.EXPECT_LIST:
+          {
+            List l = (List)o;
+            int lsize = l.size();
+            for (int i = 0; i < lsize; i++) {
+              Object o2 = l.get(i);
+              if (u.execute(o2)) {
+                return true;
+              }
+            }
+            return false;
+          }
         case TypeHelper.EXPECT_COLLECTION:
           {
             Iterator iter = ((Collection)o).iterator();

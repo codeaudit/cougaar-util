@@ -47,8 +47,10 @@ public final class ThisOp
     int i = -1;
     while (true) {
       if (!(ti.isNot())) {
-        if (clazz == null) {
-          clazz = ti.getClazz();
+        Class tiClazz = ti.getClazz();
+        if ((clazz == null) ||
+            (clazz.isAssignableFrom(tiClazz))) {
+          clazz = tiClazz;
         } else {
           throw new ParseException(
             "\""+OpCodes.THIS_NAME+"\" unable to handle multiple types:\n"+

@@ -72,7 +72,7 @@ public class ParenStringVisitor implements StringVisitor {
       sb.append("\"").append(value).append("\"");
     } else {
       sb.append("(const \"").append(type);
-      sb.append("\" \"").append(value).append(")");
+      sb.append("\" \"").append(value).append("\")");
     }
   }
 

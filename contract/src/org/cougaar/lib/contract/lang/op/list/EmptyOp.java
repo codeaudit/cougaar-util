@@ -60,6 +60,8 @@ public final class EmptyOp
       switch (expected_id) {
         case TypeHelper.EXPECT_ARRAY: 
           return (Array.getLength(o) <= 0);
+        case TypeHelper.EXPECT_LIST:
+          return (((List)o).size() <= 0);
         case TypeHelper.EXPECT_COLLECTION:
           return (((Collection)o).size() <= 0);
         case TypeHelper.EXPECT_ITERATOR:

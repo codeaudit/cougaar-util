@@ -75,20 +75,33 @@ public final class MethodOp
         if (u2 != null) {
           // (meth[] arg1 .. argN) is broken!
           throw new ParseException(
-            "Method \""+meth.getName()+"\" expecting "+
-            "zero arguments but given additional "+
-             u1.getClass().getName());
+              "Method \""+meth.getName()+"\" expecting "+
+              "zero arguments but given additional "+
+              //u1.getClass().getName());
+            u1.getClass().getName()+"  !!added: "+
+            u2.getClass().getName());
+
         }
         // (meth[] u1) is (apply meth u1)
         //
         // This shorthand confuses both parser and user to no end...
         //
-        this.meth = meth;
-        this.argOps = zeroOps;
-        this.argBuf = zeroArgs;
-        ApplyOp aop = new ApplyOp(this, u1);
-        p.setTypeList(origTypeList);
-        return aop;
+        int u1id = u1.getID();
+        if ((u1id == OpCodes.TRUE_ID) ||
+            (u1id == OpCodes.FALSE_ID)) {
+          // (apply meth true) is (true)
+          // (apply meth false) is (false)
+          return u1;
+        } else {
+          // (apply meth u1)
+          // typical case
+          this.meth = meth;
+          this.argOps = zeroOps;
+          this.argBuf = zeroArgs;
+          ApplyOp aop = new ApplyOp(this, u1);
+          p.setTypeList(origTypeList);
+          return aop;
+        }
       }
     } else {
       // Expecting (meth[nArgs] arg1 .. argN), where the args are each

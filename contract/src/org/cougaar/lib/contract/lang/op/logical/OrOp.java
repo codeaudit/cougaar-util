@@ -63,6 +63,9 @@ public final class OrOp
       switch (uCurr.getID()) {
         case OpCodes.TRUE_ID:
           // (or x true y) is (true)
+          while (p.nextOp() != null) {
+            // skip remaining ops
+          }
           p.setTypeList(origTypeList);
           return uCurr;
         case OpCodes.FALSE_ID:
