@@ -159,7 +159,7 @@ public final class ConfigFinder {
 
     Vector mv = null;
     if (module != null) {
-      props.put("MOD", module);
+      properties.put("MOD", module);
       // Tack on to the front of the search path CIP/module/configs/$CONFIG
       // CIP/module/configs, CIP/module/data/CONFIG, CIP/module/data
       mv = new Vector(4);
