@@ -35,6 +35,11 @@ public final class StateTuple implements java.io.Serializable
       Object state) {
     this.cd = cd;
     this.state = state;
+    if (cd == null) {
+      throw new IllegalArgumentException(
+          "ComponentDescription is null");
+    }
+    // okay for state to be null
   }
 
   /**
