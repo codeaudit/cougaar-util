@@ -21,6 +21,7 @@
 package org.cougaar.core.component;
 
 import java.util.*;
+import org.cougaar.util.log.*;
 import org.cougaar.util.GenericStateModelAdapter;
 
 /** A basic implementation of a Container.
@@ -661,7 +662,12 @@ public abstract class ContainerSupport
     for (Iterator it = pcd.iterator(); it.hasNext(); ) {
       Object o = it.next();
       if (isSubComponentLoadable(o)) {
-        add(o);
+        try {
+          add(o);
+        } catch (RuntimeException re) {
+          Logger l = Logging.getLogger(ContainerSupport.class);
+          l.error("Skipping load of "+o+" into "+this, re);
+        }
       }
     }
   }
