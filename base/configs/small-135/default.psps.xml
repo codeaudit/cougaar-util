@@ -296,11 +296,4 @@ Additional PSPs loaded by PSP Launcher
   </element>
 <!-- END DataGatherer PSPs -->
 
-<!-- BEGIN UIFramework AggAgent PSPs -->
-  <element type="org.cougaar.lib.planserver.NamedPSP">
-    <Classname>org.cougaar.lib.aggagent.psp.PSP_GenericReaderWriter</Classname>
-    <PSPName>alpine/demo/GENERIC.PSP</PSPName>
-  </element>
-<!-- END UIFramework AggAgent PSPs -->
-
 </object>
