@@ -14,7 +14,7 @@ Nomenclature String "DET, H&S BN 1ST FSSG"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "CSSG-1"
+MessageAddress MessageAddress "CSSG-1"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider, Superior"

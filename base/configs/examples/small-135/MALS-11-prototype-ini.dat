@@ -38,7 +38,7 @@ Nomenclature String "MALS-11, MAG-11, 3RD MAW"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "MALS-11"
+MessageAddress MessageAddress "MALS-11"
 
 [OrganizationPG]
 Roles Collection<Role> "AmmunitionProvider, Combat, DSMaintenanceProvider, Level1HealthCareProvider, SparePartsProvider"

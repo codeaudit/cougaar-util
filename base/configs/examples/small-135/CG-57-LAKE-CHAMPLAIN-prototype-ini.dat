@@ -13,7 +13,7 @@ Nomenclature String "CG-57 Lake Champlain"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "CG-57-LAKE-CHAMPLAIN"
+MessageAddress MessageAddress "CG-57-LAKE-CHAMPLAIN"
 
 [OrganizationPG]
 Roles Collection<Role> ""

@@ -43,7 +43,7 @@ Nomenclature String "Med Co, 61 Area Spt Med Bn"
 AlternateTypeIdentification String "SRC/08455L000100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "61-ASMEDBN-MEDCO"
+MessageAddress MessageAddress "61-ASMEDBN-MEDCO"
 
 [OrganizationPG]
 Roles Collection<Role> "Level2HealthCareProvider, Level1HealthCareProvider"

@@ -13,7 +13,7 @@ Nomenclature String "Consol Tanker"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "CONSOL-TANKER"
+MessageAddress MessageAddress "CONSOL-TANKER"
 
 [OrganizationPG]
 Roles Collection<Role> ""

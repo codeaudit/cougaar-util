@@ -71,7 +71,7 @@ public class CougaarEvent implements Serializable {
         return type;
     }
 
-    public String getClusterIdentifier() {
+    public String getMessageAddress() {
         return clusterIdentifier;
     }
 
@@ -97,7 +97,7 @@ public class CougaarEvent implements Serializable {
     public static void postComponentEvent(CougaarEvent event) {
         Logging.defaultLogger().shout(
                 CougaarEventGenerator.generateEventString(event.getType(),
-                        event.getClusterIdentifier(), event.getComponent(),
+                        event.getMessageAddress(), event.getComponent(),
                         event.getEventText(), event.isEncoded()));
     }
 

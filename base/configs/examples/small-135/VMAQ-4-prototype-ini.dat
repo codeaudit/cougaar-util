@@ -14,7 +14,7 @@ Nomenclature String "VMAQ-4, MAG-14, 2ND MAW"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "VMAQ-4"
+MessageAddress MessageAddress "VMAQ-4"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider"

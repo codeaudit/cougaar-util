@@ -13,7 +13,7 @@ Nomenclature String "94 Maintenance Company"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "94-MAINTCO-GS"
+MessageAddress MessageAddress "94-MAINTCO-GS"
 
 [OrganizationPG]
 Roles Collection<Role> "Level1HealthCareProvider"

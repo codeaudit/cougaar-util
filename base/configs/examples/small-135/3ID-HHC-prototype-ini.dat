@@ -33,7 +33,7 @@ Nomenclature String "HHC, 3ID"
 AlternateTypeIdentification String "SRC/87004A200100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "3ID-HHC"
+MessageAddress MessageAddress "3ID-HHC"
 
 [OrganizationPG]
 Roles Collection<Role> "StrategicTransportationProvider, Superior, Level1HealthCareProvider"

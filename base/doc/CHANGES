@@ -1,4 +1,28 @@
 * 10.0
+ClusterIdentifier and NodeIdentifier are gone - all uses are replaced
+by the more generic MessageAddress.  All matching accessors have been
+renamed accordingly.  A 90% solution may be found in the 10.0
+subdirectory of the ReleaseNotes in fixCID.pl - see the documentation
+for help.
+
+ClusterIdentifier.cleanToString() has been dropped entirely (use
+toString() instead).  A better solution would be to not rely on
+MessageAddresses being one-to-one with organizations.
+
+All MessageAddress constructors are non-public.  All construction must
+be through static factory methods (MessageAddress.getMessageAddress())
+on the appropriate class.
+
+MessageAttributes are now attached to a MessageAddress via
+delegation using the MessageAddressWithAttributes class.  This is
+generally transparent, though MTS aspects which are concerned about the
+details will may have to check for instanceof
+MessageAddressWithAttributes and then do getDelegate() to walk up to
+the parent or MessageAddress.getPrimary() to find the unadorned target.
+
+MessageAddress multicast constants have been prefixed with the string
+"MULTICAST_".  An additional NULL_SINK constant has been added.
+
 AspectValues are now immutable (See bug 2430).  This allows dramatic
 reduction in object copying, increased security and some significant
 performance improvements. There are several minor api changes implied

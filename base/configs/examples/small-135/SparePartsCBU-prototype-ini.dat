@@ -14,7 +14,7 @@ Nomenclature String "Spare Parts CBU"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "SparePartsCBU"
+MessageAddress MessageAddress "SparePartsCBU"
 
 [OrganizationPG]
 Roles Collection<Role> "SupplyProvider"

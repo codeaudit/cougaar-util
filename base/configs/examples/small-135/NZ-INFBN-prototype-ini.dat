@@ -14,7 +14,7 @@ Nomenclature String "New Zealand Infantry BN"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "NZ-INFBN"
+MessageAddress MessageAddress "NZ-INFBN"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider"

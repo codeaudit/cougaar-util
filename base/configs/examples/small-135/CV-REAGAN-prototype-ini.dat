@@ -13,7 +13,7 @@ Nomenclature String "Aircraft Carrier Ronald Reagan"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "CV-REAGAN"
+MessageAddress MessageAddress "CV-REAGAN"
 
 [OrganizationPG]
 Roles Collection<Role> ""

@@ -14,7 +14,7 @@ Nomenclature String "2/3 Inf Bn"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "2-3-INFBN"
+MessageAddress MessageAddress "2-3-INFBN"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider"

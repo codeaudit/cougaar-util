@@ -14,7 +14,7 @@ Nomenclature String "HHC 3 Avn Bde"
 AlternateTypeIdentification String "SRC/01302A000100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "3-AVNBDE-HHC"
+MessageAddress MessageAddress "3-AVNBDE-HHC"
 
 [OrganizationPG]
 Roles Collection<Role> "Superior, Level1HealthCareProvider"

@@ -14,7 +14,7 @@ Nomenclature String "Maritime Prepo Ship 2ND SQN"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "MPSRON-2"
+MessageAddress MessageAddress "MPSRON-2"
 
 [OrganizationPG]
 Roles Collection<Role> "PackagedPOLSupplyProvider, PrepoTransportationProvider"

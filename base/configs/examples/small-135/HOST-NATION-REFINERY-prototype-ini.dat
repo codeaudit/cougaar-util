@@ -15,7 +15,7 @@ Nomenclature String "Host Nation refinery"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "HOST-NATION-REFINERY"
+MessageAddress MessageAddress "HOST-NATION-REFINERY"
 
 [OrganizationPG]
 Roles Collection<Role> "FuelSupplyProvider, PackagedPOLSupplyProvider"

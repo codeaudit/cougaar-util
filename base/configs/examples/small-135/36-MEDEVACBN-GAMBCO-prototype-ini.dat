@@ -14,7 +14,7 @@ Nomenclature String "Gnd Amb Co,36 Med Evac Bn"
 AlternateTypeIdentification String "SRC/08446L000100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "36-MEDEVACBN-GAMBCO"
+MessageAddress MessageAddress "36-MEDEVACBN-GAMBCO"
 
 [OrganizationPG]
 Roles Collection<Role> "Level1HealthCareProvider"

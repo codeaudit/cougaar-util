@@ -14,7 +14,7 @@ Nomenclature String "Medical Vendor"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "MedicalVendor"
+MessageAddress MessageAddress "MedicalVendor"
 
 [OrganizationPG]
 Roles Collection<Role> "SparePartsProvider"

@@ -14,7 +14,7 @@ Nomenclature String "18 QM Perishable Sub Plat"
 AlternateTypeIdentification String "SRC/42518LB00100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "18-QMPLT"
+MessageAddress MessageAddress "18-QMPLT"
 
 [OrganizationPG]
 Roles Collection<Role> "Level1HealthCareProvider"

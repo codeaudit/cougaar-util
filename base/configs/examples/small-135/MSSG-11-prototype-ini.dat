@@ -23,7 +23,7 @@ Nomenclature String "MSSG-11"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "MSSG-11"
+MessageAddress MessageAddress "MSSG-11"
 
 [OrganizationPG]
 Roles Collection<Role> "AmmunitionProvider, Combat, DSMaintenanceProvider, FuelSupplyProvider, Level1HealthCareProvider, SparePartsProvider, MaterielTransportProvider-Truck"

@@ -13,7 +13,7 @@ Nomenclature String "DDG-59 Russell"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "DDG-59-RUSSELL"
+MessageAddress MessageAddress "DDG-59-RUSSELL"
 
 [OrganizationPG]
 Roles Collection<Role> ""

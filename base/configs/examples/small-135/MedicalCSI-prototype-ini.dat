@@ -14,7 +14,7 @@ Nomenclature String "Medical CSI"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "MedicalCSI"
+MessageAddress MessageAddress "MedicalCSI"
 
 [OrganizationPG]
 Roles Collection<Role> "SparePartsProvider"

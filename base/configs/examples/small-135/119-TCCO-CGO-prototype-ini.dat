@@ -14,7 +14,7 @@ Nomenclature String "119 TC Co CGO Transfer"
 AlternateTypeIdentification String "SRC/55819L000100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "119-TCCO-CGO"
+MessageAddress MessageAddress "119-TCCO-CGO"
 
 [OrganizationPG]
 Roles Collection<Role> "Level1HealthCareProvider"

@@ -13,7 +13,7 @@ Nomenclature String "United Nations Headquarters"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "UN-HQ"
+MessageAddress MessageAddress "UN-HQ"
 
 [OrganizationPG]
 Roles Collection<Role> "Superior"

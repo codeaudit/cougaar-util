@@ -15,7 +15,7 @@ Nomenclature String "HMM-165, MAG-16, 3RD MAW"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "HMM-165"
+MessageAddress MessageAddress "HMM-165"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider, MaterielTransportProvider-Helo"

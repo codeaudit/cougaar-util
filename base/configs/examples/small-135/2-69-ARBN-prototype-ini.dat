@@ -14,7 +14,7 @@ Nomenclature String "2/69 Ar Bn"
 AlternateTypeIdentification String "SRC/17375L000100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "2-69-ARBN"
+MessageAddress MessageAddress "2-69-ARBN"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider"

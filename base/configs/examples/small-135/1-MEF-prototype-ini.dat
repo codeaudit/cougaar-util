@@ -13,7 +13,7 @@ Nomenclature String "1ST Marine Expeditionary Force"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "1-MEF"
+MessageAddress MessageAddress "1-MEF"
 
 [OrganizationPG]
 Roles Collection<Role> "Superior"

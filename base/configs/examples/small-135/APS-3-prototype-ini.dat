@@ -15,7 +15,7 @@ Nomenclature String "Army Prepositoned Ship 3"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "APS-3"
+MessageAddress MessageAddress "APS-3"
 
 [OrganizationPG]
 Roles Collection<Role> "Superior, FuelSupplyProvider, PackagedPOLSupplyProvider"

@@ -14,7 +14,7 @@ Nomenclature String "Construction Vendor"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "ConstructionVendor"
+MessageAddress MessageAddress "ConstructionVendor"
 
 [OrganizationPG]
 Roles Collection<Role> "SparePartsProvider"

@@ -14,7 +14,7 @@ Nomenclature String "HQ MAW, 3RD MAW"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "3-MAWFWD"
+MessageAddress MessageAddress "3-MAWFWD"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider, Superior"

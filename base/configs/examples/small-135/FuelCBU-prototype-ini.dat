@@ -14,7 +14,7 @@ Nomenclature String "Fuel CBU"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "FuelCBU"
+MessageAddress MessageAddress "FuelCBU"
 
 [OrganizationPG]
 Roles Collection<Role> "SupplyProvider"

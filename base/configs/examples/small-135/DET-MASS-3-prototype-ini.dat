@@ -14,7 +14,7 @@ Nomenclature String "MASS-3, MACG-28, 3RD MAW"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "DET-MASS-3"
+MessageAddress MessageAddress "DET-MASS-3"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider"

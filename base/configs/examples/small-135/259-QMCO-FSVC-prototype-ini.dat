@@ -14,7 +14,7 @@ Nomenclature String "259 QM Fld Svc Co"
 AlternateTypeIdentification String "SRC/42414L000300"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "259-QMCO-FSVC"
+MessageAddress MessageAddress "259-QMCO-FSVC"
 
 [OrganizationPG]
 Roles Collection<Role> "Level1HealthCareProvider"

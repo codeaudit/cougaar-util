@@ -14,7 +14,7 @@ Nomenclature String "Subsistence Vendor"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "SubsistenceVendor"
+MessageAddress MessageAddress "SubsistenceVendor"
 
 [OrganizationPG]
 Roles Collection<Role> "SparePartsProvider"

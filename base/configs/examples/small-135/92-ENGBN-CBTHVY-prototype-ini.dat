@@ -15,7 +15,7 @@ Nomenclature String "92 Engineering BN - Combat Heavy"
 AlternateTypeIdentification String "SRC/05415L000100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "92-ENGBN-CBTHVY"
+MessageAddress MessageAddress "92-ENGBN-CBTHVY"
 
 [OrganizationPG]
 Roles Collection<Role> "ConstructionProvider, Level1HealthCareProvider"

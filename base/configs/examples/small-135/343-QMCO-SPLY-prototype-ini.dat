@@ -22,7 +22,7 @@ Nomenclature String "343 QM Supply Co"
 AlternateTypeIdentification String "SRC/42447L000100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "343-QMCO-SPLY"
+MessageAddress MessageAddress "343-QMCO-SPLY"
 
 [OrganizationPG]
 Roles Collection<Role> "SubsistenceSupplyProvider, Level1HealthCareProvider"

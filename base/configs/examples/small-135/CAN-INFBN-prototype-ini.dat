@@ -14,7 +14,7 @@ Nomenclature String "Canada Infantry BN"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "CAN-INFBN"
+MessageAddress MessageAddress "CAN-INFBN"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider"

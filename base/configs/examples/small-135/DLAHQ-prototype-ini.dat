@@ -50,7 +50,7 @@ Nomenclature String "DLA Headquarters"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "DLAHQ"
+MessageAddress MessageAddress "DLAHQ"
 
 [OrganizationPG]
 Roles Collection<Role> "SparePartsProvider, SubsistenceSupplyProvider, FuelSupplyProvider, PackagedPOLSupplyProvider, MedicalSupplyProvider, ConstructionSupplyProvider"

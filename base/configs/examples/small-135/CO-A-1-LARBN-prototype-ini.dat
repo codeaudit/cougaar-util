@@ -14,7 +14,7 @@ Nomenclature String "CO A, 1ST LAR BN, 1ST MARDIV"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "CO-A-1-LARBN"
+MessageAddress MessageAddress "CO-A-1-LARBN"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider"

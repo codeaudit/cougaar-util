@@ -13,7 +13,7 @@ Nomenclature String "HS-2 H-60 Squadron"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "HS-2-H60-SQDN"
+MessageAddress MessageAddress "HS-2-H60-SQDN"
 
 [OrganizationPG]
 Roles Collection<Role> ""

@@ -14,7 +14,7 @@ Nomenclature String "VMFA-232, MAG-11, 3RD MAW"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "VMFA-232"
+MessageAddress MessageAddress "VMFA-232"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider"

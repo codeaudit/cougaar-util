@@ -156,7 +156,7 @@ Nomenclature String "Location Information Aggregation"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "LocationInfo"
+MessageAddress MessageAddress "LocationInfo"
 
 [OrganizationPG]
 Roles Collection<Role> "LocationAuthority"

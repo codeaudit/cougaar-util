@@ -14,7 +14,7 @@ Nomenclature String "3 MP Co"
 AlternateTypeIdentification String "SRC/19333L000100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "3-MPCO"
+MessageAddress MessageAddress "3-MPCO"
 
 [OrganizationPG]
 Roles Collection<Role> "Level1HealthCareProvider"

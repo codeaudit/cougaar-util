@@ -13,7 +13,7 @@ Nomenclature String "644 Ordnance Company"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "664-ORDCO"
+MessageAddress MessageAddress "664-ORDCO"
 
 [OrganizationPG]
 Roles Collection<Role> "Level1HealthCareProvider"

@@ -17,7 +17,7 @@ Nomenclature String "126 MD Tm Fwd Surgical"
 AlternateTypeIdentification String "SRC/08518LA00100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "126-MEDTM-FSURG"
+MessageAddress MessageAddress "126-MEDTM-FSURG"
 
 [OrganizationPG]
 Roles Collection<Role> "Level2HealthCareProvider, Level3HealthCareProvider, Level1HealthCareProvider"

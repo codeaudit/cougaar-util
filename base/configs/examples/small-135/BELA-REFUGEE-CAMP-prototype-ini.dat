@@ -13,7 +13,7 @@ Nomenclature String "Bela Refugee Camp"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "BELA-REFUGEE-CAMP"
+MessageAddress MessageAddress "BELA-REFUGEE-CAMP"
 
 [OrganizationPG]
 Roles Collection<Role> "Level1HealthCareProvider, Level2HealthCareProvider, Level3HealthcareProvider"

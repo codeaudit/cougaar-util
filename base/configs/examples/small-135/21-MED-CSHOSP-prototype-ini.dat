@@ -23,7 +23,7 @@ Nomenclature String "21 MD Combat Support HSP"
 AlternateTypeIdentification String "SRC/08705L000100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "21-MED-CSHOSP"
+MessageAddress MessageAddress "21-MED-CSHOSP"
 
 [OrganizationPG]
 Roles Collection<Role> "Superior, Level2HealthCareProvider, Level3HealthCareProvider, Level1HealthCareProvider"

@@ -14,7 +14,7 @@ Nomenclature String "24 OD Co, Ammo DS PLS"
 AlternateTypeIdentification String "SRC/09484L000100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "24-ODCO"
+MessageAddress MessageAddress "24-ODCO"
 
 [OrganizationPG]
 Roles Collection<Role> "Level1HealthCareProvider"

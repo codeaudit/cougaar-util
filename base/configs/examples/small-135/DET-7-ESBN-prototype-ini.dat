@@ -82,7 +82,7 @@ Nomenclature String "DET, 7TH ENGRSPT BN"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "DET-7-ESBN"
+MessageAddress MessageAddress "DET-7-ESBN"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, FuelSupplyProvider, Level1HealthCareProvider, WaterProvider"

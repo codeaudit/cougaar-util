@@ -22,7 +22,7 @@ Nomenclature String "HHC 24 Spt Group"
 AlternateTypeIdentification String "SRC/63422L000100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "24-SPTGP-HHC"
+MessageAddress MessageAddress "24-SPTGP-HHC"
 
 [OrganizationPG]
 Roles Collection<Role> "Superior, DSMaintenanceProvider, GSMaintenanceProvider, SupportForceProvider, WaterPoster, WaterProvider, Level1HealthCareProvider"

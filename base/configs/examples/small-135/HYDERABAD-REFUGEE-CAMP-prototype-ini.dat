@@ -13,7 +13,7 @@ Nomenclature String "Hyderabad Refugee Camp"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "HYDERABAD-REFUGEE-CAMP"
+MessageAddress MessageAddress "HYDERABAD-REFUGEE-CAMP"
 
 [OrganizationPG]
 Roles Collection<Role> "Level1HealthCareProvider, Level2HealthCareProvider, Level3HealthcareProvider"

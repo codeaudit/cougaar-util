@@ -14,7 +14,7 @@ Nomenclature String "Spare Parts CSI"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "SparePartsCSI"
+MessageAddress MessageAddress "SparePartsCSI"
 
 [OrganizationPG]
 Roles Collection<Role> "SparePartsProvider"

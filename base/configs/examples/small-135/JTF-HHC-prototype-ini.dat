@@ -13,7 +13,7 @@ Nomenclature String "Joint Task Force Headquarters"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "JTF-HHC"
+MessageAddress MessageAddress "JTF-HHC"
 
 [OrganizationPG]
 Roles Collection<Role> ""

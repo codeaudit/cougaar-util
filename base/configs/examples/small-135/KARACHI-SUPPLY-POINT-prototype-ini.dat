@@ -25,7 +25,7 @@ Nomenclature String "Karachi Supply Point"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "KARACHI-SUPPLY-POINT"
+MessageAddress MessageAddress "KARACHI-SUPPLY-POINT"
 
 [OrganizationPG]
 Roles Collection<Role> "SubsistenceSupplyProvider, MedicalSupplyProvider"

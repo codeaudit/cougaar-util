@@ -14,7 +14,7 @@ Nomenclature String "VMGR-352, MAG-11, 3RD MAW"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "VMGR-352"
+MessageAddress MessageAddress "VMGR-352"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider"

@@ -13,7 +13,7 @@ Nomenclature String "Sukkur Refugee Camp"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "SUKKUR-REFUGEE-CAMP"
+MessageAddress MessageAddress "SUKKUR-REFUGEE-CAMP"
 
 [OrganizationPG]
 Roles Collection<Role> "Level1HealthCareProvider, Level2HealthCareProvider, Level3HealthcareProvider"

@@ -70,7 +70,7 @@ Nomenclature String "110 QM POL Supply Co"
 AlternateTypeIdentification String "SRC/10427L000100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "110-QMCO-POLSPLY"
+MessageAddress MessageAddress "110-QMCO-POLSPLY"
 
 [OrganizationPG]
 Roles Collection<Role> "FuelSupplyProvider, PackagedPOLSupplyProvider, Level1HealthCareProvider"

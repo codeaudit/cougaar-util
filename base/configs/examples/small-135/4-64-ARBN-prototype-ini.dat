@@ -14,7 +14,7 @@ Nomenclature String "4/64 Tnk Bn"
 AlternateTypeIdentification String "SRC/17375L000100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "4-64-ARBN"
+MessageAddress MessageAddress "4-64-ARBN"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider"

@@ -14,7 +14,7 @@ Nomenclature String "Fuel Depot"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "FuelDepot"
+MessageAddress MessageAddress "FuelDepot"
 
 [OrganizationPG]
 Roles Collection<Role> "SparePartsProvider"

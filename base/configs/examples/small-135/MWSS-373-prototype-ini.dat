@@ -22,7 +22,7 @@ Nomenclature String "MWSS 373, MWSG-37, 3RD MAW (FW)"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "MWSS-373"
+MessageAddress MessageAddress "MWSS-373"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, FuelSupplyProvider, Level1HealthCareProvider, PackagedPOLSupplyProvider"

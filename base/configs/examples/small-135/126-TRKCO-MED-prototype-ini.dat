@@ -13,7 +13,7 @@ Nomenclature String "126 Medium Truck Company"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "126-TRKCO-MED"
+MessageAddress MessageAddress "126-TRKCO-MED"
 
 [OrganizationPG]
 Roles Collection<Role> "Level1HealthCareProvider"

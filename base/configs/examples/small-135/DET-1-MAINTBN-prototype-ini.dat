@@ -31,7 +31,7 @@ Nomenclature String "DET, 1ST MAINT BN"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "DET-1-MAINTBN"
+MessageAddress MessageAddress "DET-1-MAINTBN"
 
 [OrganizationPG]
 Roles Collection<Role> "DSMaintenanceProvider, Level1HealthCareProvider"

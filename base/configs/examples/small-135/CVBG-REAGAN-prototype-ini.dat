@@ -13,7 +13,7 @@ Nomenclature String "Carrier Battle Group Ronald Reagan"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "CVBG-REAGAN"
+MessageAddress MessageAddress "CVBG-REAGAN"
 
 [OrganizationPG]
 Roles Collection<Role> ""

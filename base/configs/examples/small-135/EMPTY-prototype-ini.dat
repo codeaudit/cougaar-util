@@ -13,7 +13,7 @@ Nomenclature String "Empty Cluster"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "EMPTY"
+MessageAddress MessageAddress "EMPTY"
 
 [OrganizationPG]
 Roles Collection<Role> ""

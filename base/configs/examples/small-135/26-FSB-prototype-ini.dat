@@ -82,7 +82,7 @@ Nomenclature String "26 Fwd Spt Bn (2x1)"
 AlternateTypeIdentification String "SRC/63005L100100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "26-FSB"
+MessageAddress MessageAddress "26-FSB"
 
 [OrganizationPG]
 Roles Collection<Role> "AmmunitionProvider, DSMaintenanceProvider, FoodProvider, FuelSupplyProvider, MedicalSupplyProvider, SparePartsProvider, SubsistenceSupplyProvider, WaterProvider, PackagedPOLSupplyProvider, Level2HealthCareProvider, GSMaintenanceProvider, Level1HealthCareProvider"

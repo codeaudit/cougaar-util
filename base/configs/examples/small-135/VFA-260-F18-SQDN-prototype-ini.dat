@@ -13,7 +13,7 @@ Nomenclature String "VFA-260 F-18 Squadron"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "VFA-260-F18-SQDN"
+MessageAddress MessageAddress "VFA-260-F18-SQDN"
 
 [OrganizationPG]
 Roles Collection<Role> ""

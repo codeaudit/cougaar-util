@@ -13,7 +13,7 @@ Nomenclature String "AOE-10 Bridge"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "AOE-10-BRIDGE"
+MessageAddress MessageAddress "AOE-10-BRIDGE"
 
 [OrganizationPG]
 Roles Collection<Role> ""

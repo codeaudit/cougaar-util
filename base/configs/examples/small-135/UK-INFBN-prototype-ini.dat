@@ -14,7 +14,7 @@ Nomenclature String "UK Infantry BN"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "UK-INFBN"
+MessageAddress MessageAddress "UK-INFBN"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider"

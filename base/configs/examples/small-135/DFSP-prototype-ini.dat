@@ -15,7 +15,7 @@ Nomenclature String "Defense Fuel Supply Point"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "DFSP"
+MessageAddress MessageAddress "DFSP"
 
 [OrganizationPG]
 Roles Collection<Role> "FuelSupplyProvider"

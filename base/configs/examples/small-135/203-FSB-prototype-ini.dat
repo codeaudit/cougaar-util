@@ -81,7 +81,7 @@ Nomenclature String "203 Fwd Spt Bn (2x1)"
 AlternateTypeIdentification String "SRC/63005L300100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "203-FSB"
+MessageAddress MessageAddress "203-FSB"
 
 [OrganizationPG]
 Roles Collection<Role> "AmmunitionProvider, DSMaintenanceProvider, FoodProvider, FuelSupplyProvider, MedicalSupplyProvider, SparePartsProvider, SubsistenceSupplyProvider, WaterProvider, PackagedPOLSupplyProvider, Level2HealthCareProvider, GSMaintenanceProvider, Level1HealthCareProvider"

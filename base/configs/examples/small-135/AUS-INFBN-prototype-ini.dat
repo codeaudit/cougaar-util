@@ -14,7 +14,7 @@ Nomenclature String "Australia Infantry BN"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "AUS-INFBN"
+MessageAddress MessageAddress "AUS-INFBN"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider"

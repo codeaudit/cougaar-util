@@ -13,7 +13,7 @@ Nomenclature String "233 Heavy Truck Company"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "233-TRKCO-HVY"
+MessageAddress MessageAddress "233-TRKCO-HVY"
 
 [OrganizationPG]
 Roles Collection<Role> "Level1HealthCareProvider"

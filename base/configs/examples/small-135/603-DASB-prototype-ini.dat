@@ -48,7 +48,7 @@ Nomenclature String "603 AVN Spt Bn"
 AlternateTypeIdentification String "SRC/63885A2001E0"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "603-DASB"
+MessageAddress MessageAddress "603-DASB"
 
 [OrganizationPG]
 Roles Collection<Role> "AmmunitionProvider, DSMaintenanceProvider, FoodProvider, FuelSupplyProvider, MedicalSupplyProvider, SparePartsProvider, SubsistenceSupplyProvider, WaterProvider, PackagedPOLSupplyProvider, Level2HealthCareProvider, GSMaintenanceProvider, Level1HealthCareProvider"

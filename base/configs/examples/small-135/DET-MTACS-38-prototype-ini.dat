@@ -14,7 +14,7 @@ Nomenclature String "MTACS-38, MACG-38, 3RD MAW"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "DET-MTACS-38"
+MessageAddress MessageAddress "DET-MTACS-38"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider"

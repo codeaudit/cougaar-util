@@ -20,7 +20,7 @@ Nomenclature String "Amphibious Ready Group"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "ARG"
+MessageAddress MessageAddress "ARG"
 
 [OrganizationPG]
 Roles Collection<Role> "AmmunitionProvider, DSMaintenanceProvider, FuelSupplyProvider, SparePartsProvider, StrategicTransportationProvider"

@@ -14,7 +14,7 @@ Nomenclature String "Forces Command"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "FORSCOM"
+MessageAddress MessageAddress "FORSCOM"
 
 [OrganizationPG]
 Roles Collection<Role> "StrategicTransportationProvider, SupportForceProvider"

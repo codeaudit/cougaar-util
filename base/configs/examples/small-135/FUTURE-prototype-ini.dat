@@ -13,7 +13,7 @@ Nomenclature String "Intermediate S9C Supplier"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "FUTURE"
+MessageAddress MessageAddress "FUTURE"
 
 [OrganizationPG]
 Roles Collection<Role> "NonS9CSparePartsProvider"

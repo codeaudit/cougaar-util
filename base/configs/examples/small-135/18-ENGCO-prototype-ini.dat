@@ -14,7 +14,7 @@ Nomenclature String "18 Eng Co"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "18-ENGCO"
+MessageAddress MessageAddress "18-ENGCO"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider"

@@ -14,7 +14,7 @@ Nomenclature String "Construction CBU"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "ConstructionCBU"
+MessageAddress MessageAddress "ConstructionCBU"
 
 [OrganizationPG]
 Roles Collection<Role> "SupplyProvider"

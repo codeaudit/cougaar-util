@@ -13,7 +13,7 @@ Nomenclature String "US Central Command"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "CENTCOM-HHC"
+MessageAddress MessageAddress "CENTCOM-HHC"
 
 [OrganizationPG]
 Roles Collection<Role> ""

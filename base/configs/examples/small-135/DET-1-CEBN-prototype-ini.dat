@@ -14,7 +14,7 @@ Nomenclature String "DET 1ST CEB"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "DET-1-CEBN"
+MessageAddress MessageAddress "DET-1-CEBN"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider"

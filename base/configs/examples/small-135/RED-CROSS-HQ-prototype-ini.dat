@@ -25,7 +25,7 @@ Nomenclature String "Red Cross Headquarters in Pakistan"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "RED-CROSS-HQ"
+MessageAddress MessageAddress "RED-CROSS-HQ"
 
 [OrganizationPG]
 Roles Collection<Role> "Level2HealthCareProvider, Level3HealthCareProvider"

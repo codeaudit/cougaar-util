@@ -14,7 +14,7 @@ Nomenclature String "Industrial Base Supplier"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "INDUSTRIAL-BASE"
+MessageAddress MessageAddress "INDUSTRIAL-BASE"
 
 [OrganizationPG]
 Roles Collection<Role> "NonS9CSparePartsProvider, SparePartsProvider"

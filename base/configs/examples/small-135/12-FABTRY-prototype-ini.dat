@@ -14,7 +14,7 @@ Nomenclature String "13 FA Btry MLRS"
 AlternateTypeIdentification String "SRC/06398L000100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "12-FABTRY"
+MessageAddress MessageAddress "12-FABTRY"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider"

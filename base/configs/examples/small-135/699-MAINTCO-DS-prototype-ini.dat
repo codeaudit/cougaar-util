@@ -13,7 +13,7 @@ Nomenclature String "699 Maintenance Company"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "699-MAINTCO-DS"
+MessageAddress MessageAddress "699-MAINTCO-DS"
 
 [OrganizationPG]
 Roles Collection<Role> "Level1HealthCareProvider"

@@ -14,7 +14,7 @@ Nomenclature String "396 TC Co PLS"
 AlternateTypeIdentification String "SRC/55728L300100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "396-TCCO-PLS"
+MessageAddress MessageAddress "396-TCCO-PLS"
 
 [OrganizationPG]
 Roles Collection<Role> "AmmunitionTransportProvider, Level1HealthCareProvider"

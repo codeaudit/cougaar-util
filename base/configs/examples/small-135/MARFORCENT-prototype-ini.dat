@@ -54,7 +54,7 @@ Nomenclature String "Commander Marine Forces Central"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "MARFORCENT"
+MessageAddress MessageAddress "MARFORCENT"
 
 [OrganizationPG]
 Roles Collection<Role> "PrepoTransportationProvider, Superior"

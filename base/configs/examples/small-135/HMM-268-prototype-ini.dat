@@ -14,7 +14,7 @@ Nomenclature String "HMM-268, MAG-39, 3RD MAW"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "HMM-268"
+MessageAddress MessageAddress "HMM-268"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider"

@@ -13,7 +13,7 @@ Nomenclature String "FFG-46 Rentz"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "FFG-46-RENTZ"
+MessageAddress MessageAddress "FFG-46-RENTZ"
 
 [OrganizationPG]
 Roles Collection<Role> ""

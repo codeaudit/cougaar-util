@@ -49,7 +49,7 @@ Nomenclature String "US Transportation Command"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "TRANSCOM"
+MessageAddress MessageAddress "TRANSCOM"
 
 [OrganizationPG]
 Roles Collection<Role> "StrategicTransportationProvider"

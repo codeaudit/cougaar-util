@@ -14,7 +14,7 @@ Nomenclature String "HHD, 3 ID, ENGBDE"
 AlternateTypeIdentification String "SRC/05332L000100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "ENGBDE-3ID-HHD"
+MessageAddress MessageAddress "ENGBDE-3ID-HHD"
 
 [OrganizationPG]
 Roles Collection<Role> "Level1HealthCareProvider"

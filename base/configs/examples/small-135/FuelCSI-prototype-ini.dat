@@ -14,7 +14,7 @@ Nomenclature String "Fuel CSI"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "FuelCSI"
+MessageAddress MessageAddress "FuelCSI"
 
 [OrganizationPG]
 Roles Collection<Role> "SparePartsProvider"

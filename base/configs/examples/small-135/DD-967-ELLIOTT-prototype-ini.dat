@@ -13,7 +13,7 @@ Nomenclature String "DD-967 Elliott"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "DD-967-ELLIOTT"
+MessageAddress MessageAddress "DD-967-ELLIOTT"
 
 [OrganizationPG]
 Roles Collection<Role> ""

@@ -14,7 +14,7 @@ Nomenclature String "39 FA Btry TgtAcq"
 AlternateTypeIdentification String "SRC/06303L000100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "39-FABTRY"
+MessageAddress MessageAddress "39-FABTRY"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider"

@@ -13,7 +13,7 @@ Nomenclature String "VAQ-128 EA-6B Squadron"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "VAQ-128-EA6B-SQDN"
+MessageAddress MessageAddress "VAQ-128-EA6B-SQDN"
 
 [OrganizationPG]
 Roles Collection<Role> ""

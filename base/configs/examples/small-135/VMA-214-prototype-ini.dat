@@ -14,7 +14,7 @@ Nomenclature String "VMA-214, MAG-13, 3RD MAW"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "VMA-214"
+MessageAddress MessageAddress "VMA-214"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider"

@@ -14,7 +14,7 @@ Nomenclature String "3RD BN 11TH MAR (REIN)"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "3-11-MAR"
+MessageAddress MessageAddress "3-11-MAR"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider"

@@ -14,7 +14,7 @@ Nomenclature String "HHB, 3 ID, DIVARTY"
 AlternateTypeIdentification String "SRC/06302L000100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "DIVARTY-3ID-HHB"
+MessageAddress MessageAddress "DIVARTY-3ID-HHB"
 
 [OrganizationPG]
 Roles Collection<Role> "Superior, Level1HealthCareProvider"

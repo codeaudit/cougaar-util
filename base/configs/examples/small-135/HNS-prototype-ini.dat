@@ -15,7 +15,7 @@ Nomenclature String "Host Nation Support"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "HNS"
+MessageAddress MessageAddress "HNS"
 
 [OrganizationPG]
 Roles Collection<Role> "FuelSupplyProvider, PackagedPOLSupplyProvider"

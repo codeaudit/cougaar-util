@@ -14,7 +14,7 @@ Nomenclature String "DSCC"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "SparePartsICP"
+MessageAddress MessageAddress "SparePartsICP"
 
 [OrganizationPG]
 Roles Collection<Role> "S9CSparePartsProvider"

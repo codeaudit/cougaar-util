@@ -14,7 +14,7 @@ Nomenclature String "209 MI Co"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "209-MICO"
+MessageAddress MessageAddress "209-MICO"
 
 [OrganizationPG]
 Roles Collection<Role> "Level1HealthCareProvider"

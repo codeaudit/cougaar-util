@@ -14,7 +14,7 @@ Nomenclature String "406 TC Det (Transfer PT)"
 AlternateTypeIdentification String "SRC/55540LE00100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "406-TCDET-TPT"
+MessageAddress MessageAddress "406-TCDET-TPT"
 
 [OrganizationPG]
 Roles Collection<Role> "Level1HealthCareProvider"

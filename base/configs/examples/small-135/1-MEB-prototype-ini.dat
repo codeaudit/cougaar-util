@@ -55,7 +55,7 @@ Nomenclature String "CMD EL I MEB"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "1-MEB"
+MessageAddress MessageAddress "1-MEB"
 
 [OrganizationPG]
 Roles Collection<Role> "StrategicTransportationProvider, Superior, WaterSupplier, Level1HealthCareProvider"

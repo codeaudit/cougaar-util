@@ -64,7 +64,7 @@ Nomenclature String "DET 1ST MED BN, 1ST FSSG"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "DET-1-MEDBN"
+MessageAddress MessageAddress "DET-1-MEDBN"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider, Level2HealthCareProvider"

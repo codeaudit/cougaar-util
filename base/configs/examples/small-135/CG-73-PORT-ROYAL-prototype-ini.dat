@@ -13,7 +13,7 @@ Nomenclature String "CG-73 Port Royal"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "CG-73-PORT-ROYAL"
+MessageAddress MessageAddress "CG-73-PORT-ROYAL"
 
 [OrganizationPG]
 Roles Collection<Role> ""

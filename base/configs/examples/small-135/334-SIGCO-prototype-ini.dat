@@ -14,7 +14,7 @@ Nomenclature String "334 Signal Co"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "334-SIGCO"
+MessageAddress MessageAddress "334-SIGCO"
 
 [OrganizationPG]
 Roles Collection<Role> "Level1HealthCareProvider"

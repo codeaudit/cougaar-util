@@ -11,7 +11,7 @@ Nomenclature                String  "1st BDE"
 AlternateTypeIdentification String  "SRC/87042L200"
 
 [ClusterPG]
-ClusterIdentifier	ClusterIdentifier "1BDE"
+MessageAddress	MessageAddress "1BDE"
 
 
 [OrganizationPG]

@@ -13,7 +13,7 @@ Nomenclature String "VMFA-402 Marine F-18 Squadron"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "VMFA-402-F18-SQDN"
+MessageAddress MessageAddress "VMFA-402-F18-SQDN"
 
 [OrganizationPG]
 Roles Collection<Role> ""

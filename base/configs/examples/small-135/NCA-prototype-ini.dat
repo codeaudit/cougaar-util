@@ -13,7 +13,7 @@ Nomenclature String "National Command Authority"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "NCA"
+MessageAddress MessageAddress "NCA"
 
 [OrganizationPG]
 Roles Collection<Role> ""

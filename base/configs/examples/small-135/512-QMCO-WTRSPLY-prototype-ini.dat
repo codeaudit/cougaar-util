@@ -14,7 +14,7 @@ Nomenclature String "512 QM Water Supply Co"
 AlternateTypeIdentification String "SRC/10468L000100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "512-QMCO-WTRSPLY"
+MessageAddress MessageAddress "512-QMCO-WTRSPLY"
 
 [OrganizationPG]
 Roles Collection<Role> "Level1HealthCareProvider"

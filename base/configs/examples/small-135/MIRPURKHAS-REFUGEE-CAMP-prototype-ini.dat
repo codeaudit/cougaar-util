@@ -13,7 +13,7 @@ Nomenclature String "Mirpur Khas Refugee Camp"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "MIRPURKHAS-REFUGEE-CAMP"
+MessageAddress MessageAddress "MIRPURKHAS-REFUGEE-CAMP"
 
 [OrganizationPG]
 Roles Collection<Role> "Level1HealthCareProvider, Level2HealthCareProvider, Level3HealthcareProvider"

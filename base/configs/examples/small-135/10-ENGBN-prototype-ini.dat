@@ -14,7 +14,7 @@ Nomenclature String "10 Eng Bn"
 AlternateTypeIdentification String "SRC/05335L0001E0"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "10-ENGBN"
+MessageAddress MessageAddress "10-ENGBN"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider"

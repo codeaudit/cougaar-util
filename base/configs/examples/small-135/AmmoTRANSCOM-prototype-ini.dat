@@ -14,7 +14,7 @@ Nomenclature String "US Transportation Command"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "AmmoTRANSCOM"
+MessageAddress MessageAddress "AmmoTRANSCOM"
 
 [OrganizationPG]
 Roles Collection<Role> "StrategicTransportationProvider"

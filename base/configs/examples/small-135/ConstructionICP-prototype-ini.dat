@@ -14,7 +14,7 @@ Nomenclature String "Construction ICP"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "ConstructionICP"
+MessageAddress MessageAddress "ConstructionICP"
 
 [OrganizationPG]
 Roles Collection<Role> "ConstructionSupplyProvider"

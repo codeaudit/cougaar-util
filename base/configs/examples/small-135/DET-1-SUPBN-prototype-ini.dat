@@ -178,7 +178,7 @@ Nomenclature String "DET, 1ST SUPPLY BN"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "DET-1-SUPBN"
+MessageAddress MessageAddress "DET-1-SUPBN"
 
 [OrganizationPG]
 Roles Collection<Role> "AmmunitionProvider, Combat, Level1HealthCareProvider, MedicalSupplyProvider, SparePartsProvider, SubsistenceSupplyProvider, PackagedPOLSupplyProvider"

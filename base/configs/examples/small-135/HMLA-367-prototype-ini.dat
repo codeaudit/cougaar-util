@@ -14,7 +14,7 @@ Nomenclature String "HMLA-367, MAG-39, 3RD MAW"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "HMLA-367"
+MessageAddress MessageAddress "HMLA-367"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider"

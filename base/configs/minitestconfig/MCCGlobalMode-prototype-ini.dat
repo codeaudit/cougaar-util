@@ -11,7 +11,7 @@ Nomenclature                    String               "MCCGlobalMode Cluster"
 AlternateTypeIdentification     String               "SRC/87004L100100"
 
 [ClusterPG]
-ClusterIdentifier	ClusterIdentifier "MCCGlobalMode"
+MessageAddress	MessageAddress "MCCGlobalMode"
 
 [OrganizationPG]
 Roles                    Collection<Role>       "TransportationProvider, StrategicTransportationProvider"

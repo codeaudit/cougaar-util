@@ -14,7 +14,7 @@ Nomenclature String "HQ, MAG-39, 3RD MAW"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "MAG-39"
+MessageAddress MessageAddress "MAG-39"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider, Superior"

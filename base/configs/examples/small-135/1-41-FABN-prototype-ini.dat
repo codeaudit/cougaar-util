@@ -14,7 +14,7 @@ Nomenclature String "1/41 FA Bn"
 AlternateTypeIdentification String "SRC/06365A500100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "1-41-FABN"
+MessageAddress MessageAddress "1-41-FABN"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider"

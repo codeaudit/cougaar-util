@@ -13,7 +13,7 @@ Nomenclature String "VRC-30 C-2 Squadron"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "VRC-30-C2-SQDN"
+MessageAddress MessageAddress "VRC-30-C2-SQDN"
 
 [OrganizationPG]
 Roles Collection<Role> ""

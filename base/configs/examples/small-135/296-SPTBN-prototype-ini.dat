@@ -190,7 +190,7 @@ Nomenclature String "296 Spt Bn"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "296-SPTBN"
+MessageAddress MessageAddress "296-SPTBN"
 
 [OrganizationPG]
 Roles Collection<Role> "AmmunitionProvider, DSMaintenanceProvider, FoodProvider, FuelSupplyProvider, MedicalSupplyProvider, SparePartsProvider, SubsistenceSupplyProvider, WaterProvider, PackagedPOLSupplyProvider, Level2HealthCareProvider, GSMaintenanceProvider, Level1HealthCareProvider"

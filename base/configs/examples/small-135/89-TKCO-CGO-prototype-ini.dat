@@ -16,7 +16,7 @@ Nomenclature String "89 MDM Tk Co(CGO)"
 AlternateTypeIdentification String "SRC/55727L100200"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "89-TKCO-CGO"
+MessageAddress MessageAddress "89-TKCO-CGO"
 
 [OrganizationPG]
 Roles Collection<Role> "GroundTransportProvider, MaterielTransportProvider, Level1HealthCareProvider"

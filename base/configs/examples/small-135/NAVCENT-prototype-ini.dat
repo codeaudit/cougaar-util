@@ -14,7 +14,7 @@ Nomenclature String "Commander Navy Forces Central"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "NAVCENT"
+MessageAddress MessageAddress "NAVCENT"
 
 [OrganizationPG]
 Roles Collection<Role> "PrepoTransportationProvider"

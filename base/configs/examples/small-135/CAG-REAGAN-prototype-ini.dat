@@ -21,7 +21,7 @@ Nomenclature String "Carrier Air Group Ronald Reagan"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "CAG-REAGAN"
+MessageAddress MessageAddress "CAG-REAGAN"
 
 [OrganizationPG]
 Roles Collection<Role> "FuelSupplyProvider"

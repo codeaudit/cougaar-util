@@ -20,7 +20,7 @@ Nomenclature String "Industrial Operations Command"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "IOC"
+MessageAddress MessageAddress "IOC"
 
 [OrganizationPG]
 Roles Collection<Role> "AmmunitionProvider"

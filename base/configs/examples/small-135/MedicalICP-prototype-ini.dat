@@ -14,7 +14,7 @@ Nomenclature String "DSCP-Medical"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "MedicalICP"
+MessageAddress MessageAddress "MedicalICP"
 
 [OrganizationPG]
 Roles Collection<Role> "MedicalSupplyProvider"

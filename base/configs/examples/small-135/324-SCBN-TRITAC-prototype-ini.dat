@@ -14,7 +14,7 @@ Nomenclature String "324 SC Bn Area EAC TRITAC"
 AlternateTypeIdentification String "SRC/11635L100100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "324-SCBN-TRITAC"
+MessageAddress MessageAddress "324-SCBN-TRITAC"
 
 [OrganizationPG]
 Roles Collection<Role> "Level1HealthCareProvider"

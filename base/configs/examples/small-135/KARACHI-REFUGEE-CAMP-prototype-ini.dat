@@ -13,7 +13,7 @@ Nomenclature String "Karachi Refugee Camp"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "KARACHI-REFUGEE-CAMP"
+MessageAddress MessageAddress "KARACHI-REFUGEE-CAMP"
 
 [OrganizationPG]
 Roles Collection<Role> "Level1HealthCareProvider, Level2HealthCareProvider, Level3HealthcareProvider"

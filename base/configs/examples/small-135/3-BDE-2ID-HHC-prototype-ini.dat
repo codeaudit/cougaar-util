@@ -14,7 +14,7 @@ Nomenclature String "HHC, 3rd Bde, 2ID"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "3-BDE-2ID-HHC"
+MessageAddress MessageAddress "3-BDE-2ID-HHC"
 
 [OrganizationPG]
 Roles Collection<Role> "Superior, Level1HealthCareProvider"

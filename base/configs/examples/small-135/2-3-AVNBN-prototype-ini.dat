@@ -14,7 +14,7 @@ Nomenclature String "2/3 Avn Bn Gen Spt"
 AlternateTypeIdentification String "SRC/01305A000100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "2-3-AVNBN"
+MessageAddress MessageAddress "2-3-AVNBN"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider"

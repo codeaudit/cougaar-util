@@ -57,7 +57,7 @@ Nomenclature String "703 Main Spt Bn"
 AlternateTypeIdentification String "SRC/63135A000100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "703-MSB"
+MessageAddress MessageAddress "703-MSB"
 
 [OrganizationPG]
 Roles Collection<Role> "AmmunitionProvider, AmmunitionTransportProvider, DSMaintenanceProvider, FuelSupplyProvider, FuelTransportProvider, GroundTransportProvider, GSMaintenanceProvider, HETTransportationProvider, MaterielTransportProvider, MedicalSupplyProvider, SparePartsProvider, SubsistenceSupplyProvider, WaterProvider, FoodProvider, PackagedPOLSupplyProvider, Level2HealthCareProvider, Level1HealthCareProvider"

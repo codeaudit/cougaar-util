@@ -14,7 +14,7 @@ Nomenclature String "186 Water Purification Det"
 AlternateTypeIdentification String "SRC/10469L000100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "186-WTRPURDET"
+MessageAddress MessageAddress "186-WTRPURDET"
 
 [OrganizationPG]
 Roles Collection<Role> "Level1HealthCareProvider"

@@ -14,7 +14,7 @@ Nomenclature String "103 MI BN"
 AlternateTypeIdentification String "SRC/34395A000100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "103-MIBN"
+MessageAddress MessageAddress "103-MIBN"
 
 [OrganizationPG]
 Roles Collection<Role> "Level1HealthCareProvider"

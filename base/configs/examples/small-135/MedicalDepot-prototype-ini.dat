@@ -14,7 +14,7 @@ Nomenclature String "Medical Depot"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "MedicalDepot"
+MessageAddress MessageAddress "MedicalDepot"
 
 [OrganizationPG]
 Roles Collection<Role> "SparePartsProvider"

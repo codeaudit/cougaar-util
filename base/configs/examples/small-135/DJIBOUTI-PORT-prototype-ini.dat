@@ -13,7 +13,7 @@ Nomenclature String "Port of Djibouti"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "DJIBOUTI-PORT"
+MessageAddress MessageAddress "DJIBOUTI-PORT"
 
 [OrganizationPG]
 Roles Collection<Role> ""

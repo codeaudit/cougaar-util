@@ -14,7 +14,7 @@ Nomenclature String "1/14 Cav Sqdrn (RSTA)"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "1-14-CAVSQDN"
+MessageAddress MessageAddress "1-14-CAVSQDN"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider"

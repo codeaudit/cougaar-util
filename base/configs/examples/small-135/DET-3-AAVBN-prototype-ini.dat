@@ -14,7 +14,7 @@ Nomenclature String "DET, 3RD AAV BN"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "DET-3-AAVBN"
+MessageAddress MessageAddress "DET-3-AAVBN"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider"

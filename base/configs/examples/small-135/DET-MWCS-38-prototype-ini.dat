@@ -14,7 +14,7 @@ Nomenclature String "HQ MWCS-38, MACG-38, 3RD MAW"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "DET-MWCS-38"
+MessageAddress MessageAddress "DET-MWCS-38"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider"

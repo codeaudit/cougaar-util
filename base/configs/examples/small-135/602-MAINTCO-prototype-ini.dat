@@ -33,7 +33,7 @@ Nomenclature String "602 Maint Co Non Div"
 AlternateTypeIdentification String "SRC/43209L000100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "602-MAINTCO"
+MessageAddress MessageAddress "602-MAINTCO"
 
 [OrganizationPG]
 Roles Collection<Role> "DSMaintenanceProvider, GSMaintenanceProvider, SparePartsProvider, Level1HealthCareProvider"

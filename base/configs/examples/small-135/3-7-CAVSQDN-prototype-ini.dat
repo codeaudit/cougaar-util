@@ -14,7 +14,7 @@ Nomenclature String "3/7 Cav Sqdrn"
 AlternateTypeIdentification String "SRC/17285L200100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "3-7-CAVSQDN"
+MessageAddress MessageAddress "3-7-CAVSQDN"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider"

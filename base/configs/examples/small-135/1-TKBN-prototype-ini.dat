@@ -14,7 +14,7 @@ Nomenclature String "1ST TANK BN"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "1-TKBN"
+MessageAddress MessageAddress "1-TKBN"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider"

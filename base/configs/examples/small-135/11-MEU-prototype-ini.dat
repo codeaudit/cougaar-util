@@ -14,7 +14,7 @@ Nomenclature String "11TH MEU CE"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "11-MEU"
+MessageAddress MessageAddress "11-MEU"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider, StrategicTransportationProvider"

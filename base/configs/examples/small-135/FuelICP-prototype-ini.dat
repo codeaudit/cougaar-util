@@ -14,7 +14,7 @@ Nomenclature String "DESC"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "FuelICP"
+MessageAddress MessageAddress "FuelICP"
 
 [OrganizationPG]
 Roles Collection<Role> "FuelSupplyProvider"

@@ -14,7 +14,7 @@ Nomenclature String "DSCP-Subsistence"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "SubsistenceICP"
+MessageAddress MessageAddress "SubsistenceICP"
 
 [OrganizationPG]
 Roles Collection<Role> "SubsistenceSupplyProvider"

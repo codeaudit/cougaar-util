@@ -14,7 +14,7 @@ Nomenclature String "HHD 24 Corps Spt Bn"
 AlternateTypeIdentification String "SRC/63426L000100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "24-CSB-HHD"
+MessageAddress MessageAddress "24-CSB-HHD"
 
 [OrganizationPG]
 Roles Collection<Role> "Superior, Level1HealthCareProvider"

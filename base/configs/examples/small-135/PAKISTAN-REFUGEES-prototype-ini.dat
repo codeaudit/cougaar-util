@@ -16,7 +16,7 @@ Nomenclature String "Refugee Camp in Pakistan"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "PAKISTAN-REFUGEES"
+MessageAddress MessageAddress "PAKISTAN-REFUGEES"
 
 [OrganizationPG]
 Roles Collection<Role> "Level1HealthCareProvider, Level2HealthCareProvider, Level3HealthCareProvider"

@@ -52,7 +52,7 @@ Nomenclature String "B Co, 147 Med Log Bn"
 AlternateTypeIdentification String "SRC/08695L000100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "147-MEDLOGBN"
+MessageAddress MessageAddress "147-MEDLOGBN"
 
 [OrganizationPG]
 Roles Collection<Role> "MedicalSupplyProvider, Level1HealthCareProvider"

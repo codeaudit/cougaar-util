@@ -26,7 +26,7 @@ Nomenclature String "HHC 3 DISCOM"
 AlternateTypeIdentification String "SRC/63002L000100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "3-DISCOM-HHC"
+MessageAddress MessageAddress "3-DISCOM-HHC"
 
 [OrganizationPG]
 Roles Collection<Role> "DSMaintenanceProvider, GSMaintenanceProvider, SupportForceProvider, WaterSupplier, FoodProvider, Level1HealthCareProvider"

@@ -16,7 +16,7 @@ Nomenclature String "DET, 1ST TSB, 1ST FSSG"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "DET-1-TSBN"
+MessageAddress MessageAddress "DET-1-TSBN"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, HETTransportationProvider, Level1HealthCareProvider, WaterPoster"

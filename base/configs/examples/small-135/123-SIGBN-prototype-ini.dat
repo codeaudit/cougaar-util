@@ -14,7 +14,7 @@ Nomenclature String "123 Signal Bn"
 AlternateTypeIdentification String "SRC/11065L400100"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "123-SIGBN"
+MessageAddress MessageAddress "123-SIGBN"
 
 [OrganizationPG]
 Roles Collection<Role> "Level1HealthCareProvider"

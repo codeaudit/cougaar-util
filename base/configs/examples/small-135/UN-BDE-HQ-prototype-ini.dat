@@ -14,7 +14,7 @@ Nomenclature String "United Nations Brigade Headquarters"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "UN-BDE-HQ"
+MessageAddress MessageAddress "UN-BDE-HQ"
 
 [OrganizationPG]
 Roles Collection<Role> "Level1HealthCareProvider, Superior"

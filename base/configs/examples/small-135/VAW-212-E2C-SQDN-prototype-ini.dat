@@ -13,7 +13,7 @@ Nomenclature String "VAW-212 E-2C Squadron"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "VAW-212-E2C-SQDN"
+MessageAddress MessageAddress "VAW-212-E2C-SQDN"
 
 [OrganizationPG]
 Roles Collection<Role> ""

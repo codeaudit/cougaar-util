@@ -14,7 +14,7 @@ Nomenclature String "Construction CSI"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "ConstructionCSI"
+MessageAddress MessageAddress "ConstructionCSI"
 
 [OrganizationPG]
 Roles Collection<Role> "SparePartsProvider"

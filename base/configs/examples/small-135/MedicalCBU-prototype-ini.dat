@@ -14,7 +14,7 @@ Nomenclature String "Medical CBU"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "MedicalCBU"
+MessageAddress MessageAddress "MedicalCBU"
 
 [OrganizationPG]
 Roles Collection<Role> "SupplyProvider"

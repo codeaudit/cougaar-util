@@ -15,7 +15,7 @@ Nomenclature String "418 MDM Tk Co (POL)"
 AlternateTypeIdentification String "SRC/55728L200200"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "418-TKCO-POL"
+MessageAddress MessageAddress "418-TKCO-POL"
 
 [OrganizationPG]
 Roles Collection<Role> "FuelTransportProvider, Level1HealthCareProvider"

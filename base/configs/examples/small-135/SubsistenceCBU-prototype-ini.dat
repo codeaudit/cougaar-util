@@ -14,7 +14,7 @@ Nomenclature String "Subsistence CBU"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "SubsistenceCBU"
+MessageAddress MessageAddress "SubsistenceCBU"
 
 [OrganizationPG]
 Roles Collection<Role> "SupplyProvider"

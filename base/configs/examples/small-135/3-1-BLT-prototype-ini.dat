@@ -15,7 +15,7 @@ Nomenclature String "3RD BN 1ST Landing Team"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "3-1-BLT"
+MessageAddress MessageAddress "3-1-BLT"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider, MaterielTransportProvider-LCAC"

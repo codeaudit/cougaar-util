@@ -13,7 +13,7 @@ Nomenclature String "VF-256 F-14 Squadron"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "VF-256-F14-SQDN"
+MessageAddress MessageAddress "VF-256-F14-SQDN"
 
 [OrganizationPG]
 Roles Collection<Role> ""

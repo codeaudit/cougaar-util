@@ -14,7 +14,7 @@ Nomenclature String "HQ, MWSG-37, 3RD MAW"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "MWSG-37"
+MessageAddress MessageAddress "MWSG-37"
 
 [OrganizationPG]
 Roles Collection<Role> "Combat, Level1HealthCareProvider, Superior"

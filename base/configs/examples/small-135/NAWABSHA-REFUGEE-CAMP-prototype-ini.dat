@@ -13,7 +13,7 @@ Nomenclature String "Nawabsha Refugee Camp"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "NAWABSHA-REFUGEE-CAMP"
+MessageAddress MessageAddress "NAWABSHA-REFUGEE-CAMP"
 
 [OrganizationPG]
 Roles Collection<Role> "Level1HealthCareProvider, Level2HealthCareProvider, Level3HealthcareProvider"

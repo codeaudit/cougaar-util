@@ -14,7 +14,7 @@ Nomenclature String "571 Med Det (Ambl)(UH-1)"
 AlternateTypeIdentification String "SRC/"
 
 [ClusterPG]
-ClusterIdentifier ClusterIdentifier "571-MEDDET-AMBL"
+MessageAddress MessageAddress "571-MEDDET-AMBL"
 
 [OrganizationPG]
 Roles Collection<Role> "Level1HealthCareProvider"
