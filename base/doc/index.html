@@ -62,6 +62,72 @@
 <h2>
 <a NAME="overview"></a>Overview of this Release</h2>
 <p>
+Build 9.2 is a point release along COUGAAR 9.0 and with assorted bugs 
+fixes and several infrastructure feature enhancements, specifically to 
+support Ultra*Log defense team development for 2002.
+<ul>
+<li>
+JDK 1.4 is now required, and some 1.4 library features are now in use.
+</li>
+<li>
+<i>Adaptivity Engine</i>
+</li>
+<li>
+Agent mobility has been redesigned to provide a service-based API and
+a blackboard-based "MoveAgent" API, which simplifies plugin usage.  A
+response code is now returned to the requestor, indicating the move
+status (SUCCESS/FAILURE).  An example servlet is provided to initiate 
+agent mobility from a browser.  See the
+<a href="http://www.cougaar.org/documents/pdg.html"
+>Cougaar Developer Guide (CDG)</a> for details.
+</li>
+<li>
+<i>Communities</i>
+</li>
+<li>
+<i>Componentization of domains</i>
+</li>
+<li>
+"Relay" support has been added.  A Relay is a generic interface for a 
+blackboard object, plus a logic provider that is always loaded, that 
+simplifies inter-agent communication.  This API is now used for
+adaptivity engine updates, mobility requests, and policy distribution;
+it will likely be used to define other agent-to-agent(s) protocols.  
+See the CDG for details.
+</li>
+<li>
+<i>Attribute-based message addresses</i>
+</li>
+<li>
+<i>Metrics service</i>
+</li>
+<li>
+<i>Thread service</i>
+</li>
+<li>
+<i>Node-agent</i>
+</li>
+<li>
+<i>Persistence</i>
+</li>
+<li>
+Logging has been adopted in several sections of the infrastructure, 
+in plugins, and some servlets.  The 
+<a href="details/Logging.html">logging documentation</a>
+has been expanded and now contains better end-user instructions.
+</li>
+<li>
+Anonymous change reports have been added, which allows a plugin to
+tell if an object was "publishChange()"'d without specifying a
+ChangeReport.  See the CDG for details.
+</li>
+<li>
+The 
+<a href="details/Servlet.html"
+>Servlet server</a> has been upgraded to Tomcat 4.0.
+</li>
+<p>
+</ul>
 Build 9.1 is an unstable release of COUGAAR. Essential differences
 	    between 9.0 and 9.1 include:
 <ul>
@@ -83,7 +149,7 @@ JDBC 3.0 drivers are now supported.  org.cougaar.util.DBConnectionPool
 <li>The GLM Stimulator Servlet, which allows injection of tasks into an agent, as defined in an xml file. 
 <br><a href="../../glm/doc/StimulatorServlet.html">Click here for details.</a></li>
 <p>
-<ul>
+</ul>
 Build 9.0 is a major release of COUGAAR. Essential differences between
 8.8 and 9.0 include:
 <ul>
