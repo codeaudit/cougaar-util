@@ -68,6 +68,10 @@ In the "mySociety.xml" file the agent would specify the template:
 
   <xsl:import href="util.xsl"/>
 
+  <xsl:param name="servlets">true</xsl:param>
+  <xsl:param name="planning">true</xsl:param>
+  <xsl:param name="communities">true</xsl:param>
+
   <xsl:strip-space elements="*"/>
 
   <xsl:output method="xsl" indent="yes"/>
@@ -263,25 +267,29 @@ In the "mySociety.xml" file the agent would specify the template:
       insertionpoint="Node.AgentManager.Agent.Component"/>
 
     <!-- asset prototypes -->
-    <component
-      name="org.cougaar.planning.ldm.PrototypeRegistryServiceComponent()"
-      class="org.cougaar.planning.ldm.PrototypeRegistryServiceComponent"
-      priority="BINDER"
-      insertionpoint="Node.AgentManager.Agent.Component"/>
+    <xsl:if test="$planning = 'true'">
+      <component
+	 name="org.cougaar.planning.ldm.PrototypeRegistryServiceComponent()"
+	 class="org.cougaar.planning.ldm.PrototypeRegistryServiceComponent"
+	 priority="BINDER"
+	 insertionpoint="Node.AgentManager.Agent.Component"/>
 
-    <!-- planning data types -->
-    <component
-      name="org.cougaar.planning.ldm.LDMServiceComponent()"
-      class="org.cougaar.planning.ldm.LDMServiceComponent"
-      priority="BINDER"
-      insertionpoint="Node.AgentManager.Agent.Component"/>
+      <!-- planning data types -->
+      <component
+	 name="org.cougaar.planning.ldm.LDMServiceComponent()"
+	 class="org.cougaar.planning.ldm.LDMServiceComponent"
+	 priority="BINDER"
+	 insertionpoint="Node.AgentManager.Agent.Component"/>
+    </xsl:if>
 
-    <!-- agent-level servlet manager -->
-    <component
-      name="org.cougaar.lib.web.service.LeafServletServiceComponent()"
-      class="org.cougaar.lib.web.service.LeafServletServiceComponent"
-      priority="BINDER"
-      insertionpoint="Node.AgentManager.Agent.Component"/>
+    <xsl:if test="$servlets = 'true'">
+      <!-- agent-level servlet manager -->
+      <component
+	 name="org.cougaar.lib.web.service.LeafServletServiceComponent()"
+	 class="org.cougaar.lib.web.service.LeafServletServiceComponent"
+	 priority="BINDER"
+	 insertionpoint="Node.AgentManager.Agent.Component"/>
+    </xsl:if>
 
     <!-- domain container -->
     <component
@@ -295,11 +303,13 @@ In the "mySociety.xml" file the agent would specify the template:
     </xsl:call-template>
 
     <!-- communities -->
-    <component
-      name="org.cougaar.community.CommunityServiceComponent()"
-      class="org.cougaar.community.CommunityServiceComponent"
-      priority="BINDER"
-      insertionpoint="Node.AgentManager.Agent.Component"/>
+    <xsl:if test="$communities = 'true'">
+      <component
+	 name="org.cougaar.community.CommunityServiceComponent()"
+	 class="org.cougaar.community.CommunityServiceComponent"
+	 priority="BINDER"
+	 insertionpoint="Node.AgentManager.Agent.Component"/>
+    </xsl:if>
 
     <!-- blackboard -->
     <component

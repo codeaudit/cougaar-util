@@ -34,12 +34,25 @@ XSL Template for NodeAgent, which reuses most of SimpleAgent.
   <!-- optional node-name filter -->
   <xsl:param name="node"/>
 
-  <!-- optional wp server flag -->
+  <!--
+  optional xsl parameters, passed by:
+    -Dorg.cougaar.society.xsl.param.$name=$value
+  -->
+  <xsl:param name="servlets">true</xsl:param>
+  <xsl:param name="metrics">full</xsl:param>
+  <xsl:param name="mts">full</xsl:param>
+  <xsl:param name="planning">true</xsl:param>
+  <xsl:param name="communities">true</xsl:param>
+
+  <!--
+  backwards compatibility for the wp server, passed by:
+    -Dorg.cougaar.core.load.wp.server=true
+  -->
   <xsl:param name="wpserver">true</xsl:param>
 
   <xsl:output method="xsl" indent="yes"/>
 
-  <!-- match 'node' elements -->  
+  <!-- match 'node' elements -->
   <xsl:template match="node[(@template = 'NodeAgent.xsl') or (not(@template) and not(@type))]">
     <xsl:if test="not($node) or ($node = @name)">
       <node name="{@name}" template="">
@@ -115,8 +128,8 @@ XSL Template for NodeAgent, which reuses most of SimpleAgent.
       priority="HIGH"
       insertionpoint="Node.AgentManager.Agent.Component">
       <argument>isRoot=true</argument>
-      <argument>BestEffortAbsCapacity=300</argument>
-      <argument>WillBlockAbsCapacity=30</argument>
+      <argument>BestEffortAbsCapacity=30</argument>
+      <argument>WillBlockAbsCapacity=300</argument>
       <argument>CpuIntenseAbsCapacity=2</argument>
       <argument>WellBehavedAbsCapacity=2</argument>
     </component>
@@ -151,21 +164,27 @@ XSL Template for NodeAgent, which reuses most of SimpleAgent.
     </xsl:if>
 
     <!-- metrics -->
-    <!--
-    <component
-      name="org.cougaar.core.qos.metrics.MetricsServiceProvider()"
-      class="org.cougaar.core.qos.metrics.MetricsServiceProvider"
-      priority="HIGH"
-      insertionpoint="Node.AgentManager.Agent.MetricsServices"/>
-    -->
-    <component
-      name="org.cougaar.core.qos.rss.RSSMetricsServiceProvider()"
-      class="org.cougaar.core.qos.rss.RSSMetricsServiceProvider"
-      priority="HIGH"
-      insertionpoint="Node.AgentManager.Agent.MetricsServices"/>
-    <xsl:call-template name="findAll">
-      <xsl:with-param name="insertionpoint">Node.AgentManager.Agent.MetricsServices.</xsl:with-param>
-    </xsl:call-template>
+    <xsl:choose>
+      <xsl:when test="$metrics = 'trivial'">
+	<!-- use trivial metrics service -->
+	<component
+	   name="org.cougaar.core.qos.metrics.MetricsServiceProvider()"
+	   class="org.cougaar.core.qos.metrics.MetricsServiceProvider"
+	   priority="HIGH"
+	   insertionpoint="Node.AgentManager.Agent.MetricsServices"/>
+      </xsl:when>
+      <xsl:otherwise>
+	<component
+	   name="org.cougaar.core.qos.rss.RSSMetricsServiceProvider()"
+	   class="org.cougaar.core.qos.rss.RSSMetricsServiceProvider"
+	   priority="HIGH"
+	   insertionpoint="Node.AgentManager.Agent.MetricsServices"/>
+	<xsl:call-template name="findAll">
+	  <xsl:with-param name="insertionpoint">Node.AgentManager.Agent.MetricsServices.</xsl:with-param>
+	</xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+
     <component
       name="org.cougaar.core.node.NodeMetrics()"
       class="org.cougaar.core.node.NodeMetrics"
@@ -173,21 +192,26 @@ XSL Template for NodeAgent, which reuses most of SimpleAgent.
       insertionpoint="Node.AgentManager.Agent.Component"/>
 
     <!-- mts -->
-    <!--
-    <component
-      name="org.cougaar.core.mts.singlenode.SingleNodeMTSProvider()"
-      class="org.cougaar.core.mts.singlenode.SingleNodeMTSProvider"
-      priority="HIGH"
-      insertionpoint="Node.AgentManager.Agent.MessageTransport"/>
-    -->
-    <component
-      name="org.cougaar.mts.base.MessageTransportServiceProvider()"
-      class="org.cougaar.mts.base.MessageTransportServiceProvider"
-      priority="HIGH"
-      insertionpoint="Node.AgentManager.Agent.MessageTransport"/>
-    <xsl:call-template name="findAll">
-      <xsl:with-param name="insertionpoint">Node.AgentManager.Agent.MessageTransport.</xsl:with-param>
-    </xsl:call-template>
+    <xsl:choose>
+      <xsl:when test="$mts = 'singlenode'">
+	<!-- use single-node mts -->
+	<component
+	   name="org.cougaar.core.mts.singlenode.SingleNodeMTSProvider()"
+	   class="org.cougaar.core.mts.singlenode.SingleNodeMTSProvider"
+	   priority="HIGH"
+	   insertionpoint="Node.AgentManager.Agent.MessageTransport"/>
+      </xsl:when>
+      <xsl:otherwise>
+	<component
+	   name="org.cougaar.mts.base.MessageTransportServiceProvider()"
+	   class="org.cougaar.mts.base.MessageTransportServiceProvider"
+	   priority="HIGH"
+	   insertionpoint="Node.AgentManager.Agent.MessageTransport"/>
+	<xsl:call-template name="findAll">
+	  <xsl:with-param name="insertionpoint">Node.AgentManager.Agent.MessageTransport.</xsl:with-param>
+	</xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
 
     <!-- alarms -->
     <component
@@ -196,28 +220,35 @@ XSL Template for NodeAgent, which reuses most of SimpleAgent.
       priority="HIGH"
       insertionpoint="Node.AgentManager.Agent.Component"/>
 
-    <!-- servlets -->
-    <component
-      name="org.cougaar.lib.web.service.RootServletServiceComponent()"
-      class="org.cougaar.lib.web.service.RootServletServiceComponent"
-      priority="HIGH"
-      insertionpoint="Node.AgentManager.Agent.Component"/>
+    <xsl:if test="$servlets = 'true'">
+      <!-- servlets -->
+      <component
+	 name="org.cougaar.lib.web.service.RootServletServiceComponent()"
+	 class="org.cougaar.lib.web.service.RootServletServiceComponent"
+	 priority="HIGH"
+	 insertionpoint="Node.AgentManager.Agent.Component"/>
+    </xsl:if>
+
   </xsl:template>
 
   <xsl:template name="BINDER_node_pre0">
     <!-- community config reader -->
-    <component
-      name="org.cougaar.community.init.CommunityInitializerServiceComponent()"
-      class="org.cougaar.community.init.CommunityInitializerServiceComponent"
-      priority="BINDER"
-      insertionpoint="Node.AgentManager.Agent.Component"/>
+    <xsl:if test="$communities = 'true'">
+      <component
+	 name="org.cougaar.community.init.CommunityInitializerServiceComponent()"
+	 class="org.cougaar.community.init.CommunityInitializerServiceComponent"
+	 priority="BINDER"
+	 insertionpoint="Node.AgentManager.Agent.Component"/>
+    </xsl:if>
 
     <!-- asset config reader -->
-    <component
-      name="org.cougaar.planning.ldm.AssetInitializerServiceComponent()"
-      class="org.cougaar.planning.ldm.AssetInitializerServiceComponent"
-      priority="BINDER"
-      insertionpoint="Node.AgentManager.Agent.Component"/>
+    <xsl:if test="$planning = 'true'">
+      <component
+	 name="org.cougaar.planning.ldm.AssetInitializerServiceComponent()"
+	 class="org.cougaar.planning.ldm.AssetInitializerServiceComponent"
+	 priority="BINDER"
+	 insertionpoint="Node.AgentManager.Agent.Component"/>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template name="LOW_node_1b">
