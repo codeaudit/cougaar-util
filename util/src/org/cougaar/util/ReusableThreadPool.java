@@ -220,28 +220,4 @@ public class ReusableThreadPool {
       return t;
     }
   }
-
-  public static void main(String args[]) {
-    TestPool pool = new TestPool(5, 20);
-
-    Runnable sleep5 = new Runnable() {
-      public void run() { 
-        try {
-          Thread.sleep((System.currentTimeMillis())%5000); 
-        } catch (InterruptedException ie) {}
-        System.err.println("Done with "+Thread.currentThread());
-      }};
-
-    for (int i = 0 ; i< 100; i++) {
-      Thread t = pool.getThread(sleep5, "Iteration "+i);
-
-      t.start();
-
-      try {
-        Thread.sleep(100); 
-      } catch (InterruptedException ie) {}
-
-    }
-    System.err.println("Created total of "+TestThread.getCount()+" threads");
-  }
 }

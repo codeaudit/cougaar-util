@@ -1,7 +1,7 @@
 /*
  * <copyright>
  *  
- *  Copyright 2002-2004 BBNT Solutions, LLC
+ *  Copyright 1997-2004 BBNT Solutions, LLC
  *  under sponsorship of the Defense Advanced Research Projects
  *  Agency (DARPA).
  * 
@@ -25,23 +25,29 @@
  */
 
 package org.cougaar.util;
+import java.util.*;
+import java.text.*;
 
 import junit.framework.TestCase;
 import junit.framework.*;
 
-public class UtilTest extends TestCase {
-  public void test1() {
-    assertEquals(1, 1);
+public class TestShortDateFormat extends TestCase {
+  SimpleDateFormat fmt = new SimpleDateFormat("yyyy.MM.dd");
+  ShortDateFormat sdf = new ShortDateFormat();
+  private String df(String s) {
+    Date d = sdf.toDate(s);
+    if (d == null) return null;
+    return fmt.format(d);
   }
-
-  public static Test suite() {
-    TestSuite suite= new TestSuite("Cougaar Utility Class Tests");
-    suite.addTest(new TestSuite(TestCircularQueue.class));
-    suite.addTest(new TestSuite(TestDBProperties.class));
-    suite.addTest(new TestSuite(TestNonOverlappingTimeSpanSet.class));
-    suite.addTest(new TestSuite(TestPropertyTree.class));
-    suite.addTest(new TestSuite(TestShortDateFormat.class));
-    suite.addTest(new TestSuite(TestStateMachine.class));
-    return suite;
+    
+  public void test() {
+    assertNull(sdf.toDate("invalid"));
+    assertEquals("1999.12.30",df("12/30/1999"));
+    assertEquals("2050.01.01",df("1/1/2050"));
+    assertNull(sdf.toDate("//"));
+    assertNull(sdf.toDate("a/b/c"));
+    assertNull(sdf.toDate("1/1/1x050"));
+    assertNull(sdf.toDate(""));
+    assertNull(sdf.toDate(null));
   }
 }

@@ -197,27 +197,5 @@ public class ShortDateFormat {
       return -1;
     return iCurrent;
   }
-
-  public static void main(String[] args) {
-    System.out.println("BEGIN ShortDateFormat test");
-    ShortDateFormat sdf = new ShortDateFormat();
-    String sNow;
-    Date dNow = new Date();
-    System.out.println("Now: "+dNow);
-    sNow = sdf.toString(dNow);
-    System.out.println("toString("+dNow+"): "+sNow);
-    dNow = sdf.toDate(sNow);
-    System.out.println("toDate("+sNow+"): "+dNow);
-    dNow = sdf.toDate(sNow, false);
-    System.out.println("toDate("+sNow+", false): "+dNow);
-    String[] saNow = {
-      "invalid", "12/30/1999", "1/1/2050",
-      "//", "a/b/c", "1/1/1x050", ""
-    };
-    for (int i = 0; i < saNow.length; i++) {
-      dNow = sdf.toDate(saNow[i]);
-      System.out.println("toDate("+saNow[i]+"): "+dNow);
-    }
-    System.out.println("DONE");
-  }
 }
+

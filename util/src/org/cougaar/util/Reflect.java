@@ -116,49 +116,4 @@ public final class Reflect {
       }
     }
   }
-
-  public static void main(String argv[]) {
-    final int max = Integer.parseInt(argv[0]);
-
-    {
-      long t0 = System.currentTimeMillis();
-      Class clazz = String.class; 
-      for (int i = 0; i<max;i++) {
-        getMethods(clazz);
-      }
-      long t1 = System.currentTimeMillis();
-      System.out.println("Reflect.getMethods: "+(t1-t0));
-    }
-
-    {
-      long t0 = System.currentTimeMillis();
-      Class clazz = String.class; 
-      for (int i = 0; i<max;i++) {
-        clazz.getMethods();
-      }
-      long t1 = System.currentTimeMillis();
-      System.out.println("class.getMethods: "+(t1-t0));
-    }
-
-    {
-      long t0 = System.currentTimeMillis();
-      Class clazz = String.class; 
-      for (int i = 0; i<max;i++) {
-        getConstructors(clazz);
-      }
-      long t1 = System.currentTimeMillis();
-      System.out.println("Reflect.getConstructors: "+(t1-t0));
-    }
-
-    {
-      long t0 = System.currentTimeMillis();
-      Class clazz = String.class; 
-      for (int i = 0; i<max;i++) {
-        getConstructors(clazz);
-      }
-      long t1 = System.currentTimeMillis();
-      System.out.println("class.getConstructors: "+(t1-t0));
-    }
-
-  }      
 }

@@ -79,6 +79,7 @@ public class Random extends java.util.Random {
   }
 
   /* Test harness. Generate a set of samples with specified mean */
+  /*
   public static void main(String[] args) {
     double xm = 1.0;
     double nTrials = 100;
@@ -107,4 +108,5 @@ public class Random extends java.util.Random {
       System.out.println(k + "\t" + bin.count);
     }
   }
+  */
 }
