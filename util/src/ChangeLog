@@ -1,3 +1,9 @@
+2003-12-09  Ray Tomlinson  <RTomlinson@bbn.com>
+
+	* org/cougaar/core/component/ContainerSupport.java:
+	Bug #3279 -- plugin binders and persistence
+	Add debug logging to help diagnose this problem.
+
 2003-08-29  Ray Tomlinson  <RTomlinson@bbn.com>
 
 	* org/cougaar/core/component/ContainerSupport.java:
