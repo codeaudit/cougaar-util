@@ -1,8 +1,8 @@
 * 10.0
-AspectValues are now immutable.  This allows dramatic reduction in
-object copying, increased security and some significant performance
-improvements. There are several minor api changes implied by this
-change:
+AspectValues are now immutable (See bug 2430).  This allows dramatic
+reduction in object copying, increased security and some significant
+performance improvements. There are several minor api changes implied
+by this change:
 	AspectValue av = preference.getAV();
 	// av.setValue(47.0); 				// old
 	preference.setAV(av.dupAspectValue(4.70));	// new
