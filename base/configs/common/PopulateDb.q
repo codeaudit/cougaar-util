@@ -20,10 +20,24 @@ queryConfigTrialAssemblies=\
 checkUsedAssembly=\
  SELECT	'1' FROM V4_EXPT_TRIAL_ASSEMBLY R, \
    V4_EXPT_TRIAL_CONFIG_ASSEMBLY C \
-   WHERE (C.ASSEMBLY_ID = ':assembly_id:' \
+   WHERE (C.ASSEMBLY_ID = :assembly_id: \
       and C.TRIAL_ID != ':trial_id:') \
-      OR (R.ASSEMBLY_ID = ':assembly_id:' \
+      OR (R.ASSEMBLY_ID = :assembly_id: \
       and R.TRIAL_ID != ':trial_id:')
+
+# Is this assembly in this trial's config
+checkThisConfigUsesAssembly=\
+ SELECT	'1' FROM \
+   V4_EXPT_TRIAL_CONFIG_ASSEMBLY C \
+   WHERE C.ASSEMBLY_ID = :assembly_id: \
+      and C.TRIAL_ID = ':trial_id:' \
+
+# Is this assembly in this trial's runtime
+checkThisRuntimeUsesAssembly=\
+ SELECT	'1' FROM \
+   V4_EXPT_TRIAL_ASSEMBLY R \
+   WHERE R.ASSEMBLY_ID = :assembly_id: \
+      and R.TRIAL_ID = ':trial_id:' \
 
 queryExptAlibComponents=\
  SELECT H.COMPONENT_ALIB_ID \
@@ -136,6 +150,7 @@ insertRelationship=\
  VALUES \
     (:assembly_id:, :role:, :supporting:, :supported:, :start_date:, :end_date:)
 
+# Add a new PG attribute/value set
 insertAttribute=\
  INSERT INTO V4_ASB_AGENT_PG_ATTR \
     (ASSEMBLY_ID, COMPONENT_ALIB_ID, PG_ATTRIBUTE_LIB_ID, \
@@ -146,6 +161,17 @@ insertAttribute=\
      :attribute_value:, :attribute_order:, \
      :start_date:, :end_date:)
 
+# Check that this PG attribute/value pair is not already
+# in the DB (before trying to insert it)
+checkAttribute=\
+ SELECT '1' FROM V4_ASB_AGENT_PG_ATTR  \
+   WHERE COMPONENT_ALIB_ID = :component_alib_id: AND  \
+         PG_ATTRIBUTE_LIB_ID = :pg_attribute_lib_id: AND  \
+         ATTRIBUTE_VALUE = :attribute_value: AND \
+         ATTRIBUTE_ORDER = :attribute_order: AND \
+         START_DATE = :start_date: AND \
+         ASSEMBLY_ID :assembly_match:
+ 
 queryLibPGAttribute=\
  SELECT PG_NAME, ATTRIBUTE_NAME, PG_ATTRIBUTE_LIB_ID, ATTRIBUTE_TYPE, AGGREGATE_TYPE \
    FROM V4_LIB_PG_ATTRIBUTE \
@@ -200,6 +226,10 @@ insertAssemblyId=\
 updateAssemblyDesc=\
  UPDATE V4_ASB_ASSEMBLY SET DESCRIPTION = ':soc_desc:' \
    WHERE ASSEMBLY_ID = ':assembly_id:'
+
+# Used in PopulateDb to create new assembly with name of old
+queryAssemblyDesc=\
+ SELECT DESCRIPTION FROM V4_ASB_ASSEMBLY WHERE ASSEMBLY_ID = :assembly_id:
 
 # Add new RUNTIME assembly
 insertTrialAssembly=\
@@ -264,6 +294,24 @@ queryAssembliesToClean=\
   WHERE AA.ASSEMBLY_ID = ETA.ASSEMBLY_ID \
     AND ETA.TRIAL_ID = ':trial_id:' \
     AND AA.ASSEMBLY_TYPE != ':cmt_type:'
+
+# Get list of config assemblies of either of 2 types in this trial
+# Used to make sure that only most recent society definition included
+queryOldSocietyConfigAssembliesToClean=\
+ SELECT ETC.ASSEMBLY_ID \
+   FROM V4_EXPT_TRIAL_CONFIG_ASSEMBLY ETC, V4_ASB_ASSEMBLY AA \
+  WHERE ETC.ASSEMBLY_ID = AA.ASSEMBLY_ID \
+    AND AA.ASSEMBLY_TYPE IN (':cmt_type:', ':csa_type:') \
+    AND ETC.TRIAL_ID = ':trial_id:'
+
+# Get list of runtime assemblies of either of 2 types in this trial
+# Used to make sure that only most recent society definition included
+queryOldSocietyRuntimeAssembliesToClean=\
+ SELECT ETC.ASSEMBLY_ID \
+   FROM V4_EXPT_TRIAL_ASSEMBLY ETC, V4_ASB_ASSEMBLY AA \
+  WHERE ETC.ASSEMBLY_ID = AA.ASSEMBLY_ID \
+    AND AA.ASSEMBLY_TYPE IN (':cmt_type:', ':csa_type:') \
+    AND ETC.TRIAL_ID = ':trial_id:'
 
 copyCMTAssembliesQueryNames=copyCMTAssemblies
 
@@ -438,11 +486,12 @@ cleanTrialRecipe=\
  DELETE FROM V4_EXPT_TRIAL_MOD_RECIPE \
   WHERE TRIAL_ID = ':trial_id:'
 
+# Is this agent listed in any of the matching assemblies?
 checkAsbAgent=\
  SELECT '1' \
    FROM V4_ASB_AGENT \
   WHERE COMPONENT_ALIB_ID = :component_alib_id: \
-    AND ASSEMBLY_ID = :assembly_id:
+    AND ASSEMBLY_ID :assembly_match:
 
 insertAsbAgent=\
  INSERT INTO V4_ASB_AGENT \
