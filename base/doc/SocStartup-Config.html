@@ -10,55 +10,43 @@
 
 <center>
 <h2>
-<b>COUGAAR Society Startup and Configuration: COUGAAR 8.6</b></h2></center>
+<b>COUGAAR Society Startup and Configuration: COUGAAR 9.4</b></h2></center>
 
 <h2>
 <b>Overview</b></h2>
-<font size=+0>To install COUGAAR 8.6:</font>
+<font size=+0>To install COUGAAR 9.4:</font>
 <br>Go to the cougaar website (<a href="http://www.cougaar.org">www.cougaar.org</a>)
 to get the latest windows Cougaar installer which will install Cougaar
 as well as a MySQL database.&nbsp; This will allow users to run off of
 a local MySQL database rather than accessing an Oracle database located
 in Cambridge, MA at BBN Technologies.
-<p><font size=+0>Or you may install Cougaar8.6, without mySQL, by unzipping
+<p><font size=+0>Or you may install Cougaar 9.4, without mySQL, by unzipping
 the cougaar.zip and cougaar-support.zip&nbsp; The rest of the zip files
-are extras.&nbsp; Furthermore, the cougaar-support contents do not change
-very often, so you can unzip that once and keep the contents as updates
-occur to cougaar.zip.</font>
+are not required to run Cougaar.&nbsp; </font>
 <p><font size=+0>The zips are designed to be unpacked in the same directory,
 e.g. on</font>
 <br><font size=+0>unix:</font>
 <br><font size=+0>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; mkdir cougaar</font>
 <br><font size=+0>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cd cougaar</font>
 <br><font size=+0>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unzip /tmp/cougaar.zip</font>
-<br><font size=+0>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unzip -o /tmp/cougaar-support.zip</font>
+<br><font size=+0>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unzip /tmp/cougaar-support.zip</font>
 <br><font size=+0>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setenv COUGAAR_INSTALL_PATH
 `pwd`</font>
-<p><font size=+0>Although the zips are intended to be installed in the
-same</font>
-<br><font size=+0>directory, they all have a top-level file "version.txt"
-which contains</font>
-<br><font size=+0>something like:</font>
+<p><font size=+0>The zips are intended to be installed in the 
+same directory. They each have a Manifest directory with a  "zipfile.version" (e.g., cougaar-support.version) which contains something like:</font>
 <br><font size=+0>COMMENT = cougaar thirdparty jars</font>
-<br><font size=+0>REPOSITORY_TAG = V8_6_0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br><font size=+0>REPOSITORY_TAG = V9_4_0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 # branch of repository</font>
-<br><font size=+0>REPOSITORY_TIME = 11/01/2001 13:00:29&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br><font size=+0>REPOSITORY_TIME = 07/01/2002 13:00:29&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 # checkout time of repository</font>
-<br><font size=+0>ARCHIVE_TIME = 11/01/2001 13:11:03&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br><font size=+0>ARCHIVE_TIME = 07/01/2002 13:11:03&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 # zip time</font>
 <br><font size=+0>All your zips should have the same REPOSITORY_TAG and
 REPOSITORY_TIME.</font>
-<br><font size=+0>unzip will ask you if you want to overwrite version.txt
--&nbsp; do what you</font>
-<br><font size=+0>wish.&nbsp; Each generated jar file also gets this information,
-btw.</font>
-<br><font size=+0>You can unpack all the zips into the same directory without
-warnings</font>
-<br><font size=+0>using the right argument to unzip.&nbsp; on unix "unzip
--o" will do the trick.</font>
+
 <p>To verify correct installation of the COUGAAR software, a small but
 non-trivial test society relying only on ALPINE Plugins is included in
-"alpine\configs\minitestconfig." This society is configured to run in a
+"configs/minitestconfig." This society is configured to run in a
 single node on a single computer. This configuration can be modified as
 required for Plugin testing.&nbsp; Minitestconfig features a reduced 4-cluster
 society with GLS initiating at 3ID and flowing down to subordinate clusters.
@@ -70,42 +58,30 @@ solution. Subcontractors are encouraged to bring their Plugins up to full
 compliance with the new infrastructure modifications, possibly using the
 minitestconfig society. A separate document provides a <a href="MiniTestConfig.html">functional
 description of the minitestconfig</a> society.
+
+<p>CSMART - Cougaar Society Monitoring, Analysis and Reporting Tool 
+is the preferred way of running a Cougaar society. See 
+<a href="../csmart/doc/InstallAndTest.html">CSMART Getting Started</a>
+
 <p>The following "jar" files are used in the baseline minitestconfig society
 configuration and are located in the cougaar\lib and cougaar\sys directories:
 <br>&nbsp;&nbsp;&nbsp; cougaar/lib
 <ul>
-<li>
-core.jar: COUGAAR core infrastructure</li>
-
-<li>
-glm.jar: domain infrastructure support and Logistics Model Plugins</li>
-
-<li>
-toolkit.jar: standalone utilities tools</li>
-
-<li>
-build.jar: code generators for COUGAAR software</li>
-
-<li>
-planserver.jar: tools for extracting, entering, and displaying information
-from COUGAAR</li>
+<li>boostrap.jar: COUGAAR bootstrapper classloader</li>
+<li>core.jar: COUGAAR core infrastructure</li>
+<li>glm.jar: domain infrastructure support and Logistics Model Plugins</li>
+<li>toolkit.jar: standalone utilities tools</li>
+<li>build.jar: code generators for COUGAAR software</li>
 </ul>
 &nbsp;&nbsp;&nbsp; cougaar/sys
 <ul>
-<li>
-xerces.jar: XML parser</li>
-
-<li>
-log4j.jar: logging</li>
-
-<li>
-jcchart451K: for some UIs in glm</li>
-
-<li>
-fesi-111.jar: only if using Fesi generic plugin</li>
-
-<li>
-one of the three jdbc drivers: classes12.zip, mm-mysql-2.jar or bbn-postgresql7.1.3.jar</li>
+<li>xerces.jar: XML parser</li>
+<li>log4j.jar: logging</li>
+<li>servlet.jar: java servlet mechanism</li>
+<li>tomcat_40.jar: tomcat webserver</li>
+<li>jcchart451K: for some UIs in glm</li>
+<li>fesi-111.jar: only if using Fesi generic plugin</li>
+<li>one of the three jdbc drivers: classes12.zip, mm-mysql-2.jar or bbn-postgresql7.1.3.jar</li>
 </ul>
 
 <h2>
@@ -118,7 +94,7 @@ the COUGAAR release.
 <br>&nbsp;
 <table BORDER CELLPADDING=2 WIDTH="98%" >
 <tr>
-<td>JDK 1.3</td>
+<td>JDK 1.4</td>
 
 <td><a href="http://java.sun.com/products/index.html">http://java.sun.com/products/index.html</a></td>
 </tr>
@@ -140,7 +116,20 @@ the COUGAAR release.
 <td>Log 4 J (Logging)
 <br>jar file is log4j.jar</td>
 
-<td><a href="http://jakarta.apache.org/log4j/doc/index.html">http://jakarta.apache.org/log4j/doc/index.html</a></td>
+<td><a href="http://jakarta.apache.org/log4j">http://jakarta.apache.org/log4j</a></td>
+</tr>
+<tr>
+<td>Java Servlet Technology
+<br>jar file is servlet.jar</td>
+
+<td><a href="http://java.sun.com/products/servlet">http://java.sun.com/products/servlet</a></td>
+</tr>
+
+<tr>
+<td> Jakarta Tomcat Servlet Engine
+<br>jar file is tomcat_40.jar</td>
+
+<td><a href="http://jakarta.apache.org/tomcat/index.html">http://jakarta.apache.org/tomcat/index.html</a></td>
 </tr>
 
 <tr>
@@ -200,12 +189,6 @@ the COUGAAR release.
 <td><a href="http://www.research.att.com/sw/tools/graphviz/packages/grappa.html">http://www.research.att.com/sw/tools/graphviz/packages/grappa.html</a></td>
 </tr>
 
-<tr>
-<td>Java2 Enterprise Edition v1.3
-<br>jar file is j2ee.jar</td>
-
-<td><a href="http://java.sun.com/j2ee/">http://java.sun.com/j2ee/</a></td>
-</tr>
 
 <tr>
 <td>JPython
@@ -214,12 +197,6 @@ the COUGAAR release.
 <td><a href="http://www.jython.org/">http://www.jython.org/</a></td>
 </tr>
 
-<tr>
-<td>Java Servlet Development kit (now Jakarta Tomcat)
-<br>jar file is jsdk.jar</td>
-
-<td><a href="http://jakarta.apache.org/tomcat/index.html">http://jakarta.apache.org/tomcat/index.html</a></td>
-</tr>
 
 <tr>
 <td>JUnit v3.7
@@ -240,7 +217,7 @@ the COUGAAR release.
 <td>SILK/JScheme
 <br>jar file is silk.jar</td>
 
-<td><a href="http://www.cs.brandeis.edu/silk/jscheme/index.html">http://www.cs.brandeis.edu/silk/jscheme/index.html</a></td>
+<td><a href="http://jscheme.sourceforge.net/jscheme/mainwebpage.html">http://jscheme.sourceforge.net/jscheme/mainwebpage.html</a></td>
 </tr>
 
 <tr>
@@ -251,12 +228,6 @@ the COUGAAR release.
 <br><a href="http://www.eng.auburn.edu/cse/research/research_groups/graph_drawing/graph_drawing.html">graph_drawing/graph_drawing.html</a></td>
 </tr>
 
-<tr>
-<td>Xalan XML Parser v3.1.1
-<br>jar file is xalan.jar</td>
-
-<td><a href="http://xml.apache.org/xalan-j/index.html">http://xml.apache.org/xalan-j/index.html</a></td>
-</tr>
 </table>
 
 <h2>
@@ -270,16 +241,14 @@ libraries.
 directory structure inside the new alp-&lt;builddate> directory:
 <ul>
 <li>
-lib ---------------- "jar" files for the infrastructure, ALPINE Plugins,
-and COTS libraries</li>
+lib ---------------- "jar" files for infrastructure, Plugins,
+and other custom COUGAAR components</li>
 
 <li>
-sys --------------- "jar" and "zip" 3rd party software used by the infrastructure
-and Plugins</li>
+sys --------------- "jar" and "zip" 3rd party software used by the infrastructure and Plugins</li>
 
 <li>
-bin ---------------- "bat" and "csh" scripts for setting environment variables
-and paths</li>
+bin ---------------- "bat", "csh", and "sh"  scripts for setting environment variables and paths and starting applications</li>
 
 <li>
 configs ----------- subdirectories of society configuration files (e.g.,
@@ -293,7 +262,7 @@ doc ------ Release Notes (release_notes_index.html) and other documentation
 for COUGAAR infrastructure.</li>
 
 <li>
-api ------"javadoc" for COUGAAR infrastructure</li>
+api ------"javadoc" for Cougaar infrastructure</li>
 
 <li>
 &lt;product*>------ product specific data files and non-java executables
@@ -310,8 +279,9 @@ system behavior and minimize placing environment variables in the Node.bat
 or Node.csh files.</li>
 
 <li>
-The environment variable COUGAAR_INSTALL_PATH must point to the installation
-directory "cougaar". This is used to set the (java) system property org.cougaar.install.path
+The environment variable COUGAAR_INSTALL_PATH must point to the 
+directory in which the Cougaar software was unzipped . This is 
+used to set the (java) system property org.cougaar.install.path
 which must point to the same directory. These variables will allow the
 infrastructure and Plugins to find the necessary "jar" files (lib and sys)
 and data files (&lt;product-n>).</li>
@@ -323,21 +293,14 @@ system property to true. This feature cannot be used in a multiple node
 scenario and should be false.</li>
 
 <li>
-Please note that the Node.bat/csh files are only present in the cougaar/bin
-directory. They have been removed from all configuration directories to
-encourage use of a single version in a standard location. We suggest adding
-%COUGAAR_INSTALL_PATH%\bin to your PATH environment variable.</li>
-
-<li>
 Although we have not tested all society configurations on all types of
 processing platforms, all COUGAAR infrastructure software is compatible
 with NT, UNIX and LINUX operating systems.</li>
 
 <li>
-The file "setlibpath.bat" in "core\bin" creates the path to all "jar" files
-and "setarguments.bat" defines the command line arguments to&nbsp; java.exe,
-rather than using "node.bat" to perform this function. All "node.bat" files
-should call these files.</li>
+The Cougaar boostrapper will find all classes in jar files in the
+$COUGAAR_INSTALL_PATH/lib and $COUGAAR_INSTALL_PATH/sys directories.
+For your convenience, place additional 3rd party jars in the latter.</li>
 
 <li>
 Execution of "Node.bat" and "Node" (csh) requires passing the "node name"
