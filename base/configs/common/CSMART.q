@@ -235,6 +235,11 @@ queryCommunities = \
   SELECT DISTINCT COMMUNITY_ID \
     FROM community_attribute
 
+queryMyCommunities = \
+  SELECT DISTINCT COMMUNITY_ID \
+    FROM community_attribute \
+   WHERE ASSEMBLY_ID :assembly_match:
+
 queryEntities = \
   SELECT DISTINCT ENTITY_ID \
     FROM community_entity_attribute \
