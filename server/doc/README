@@ -120,7 +120,8 @@ Property files ("*.props)" must follow the "java.util.Properties"
 syntax.  Some characters must be "escaped" -- for example, on
 Windows machines one must write the path "c:\a\b" as 
 "c\:\\a\\b".  Properties must not include whitespace.  See the
-example "win-server-sample.props" and "unix-server-sample.props".
+example "../data/win-server-sample.props" and 
+"../data/unix-server-sample.props".
 
 
 The Node properties follow this format:
