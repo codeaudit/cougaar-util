@@ -312,7 +312,7 @@ sub careful_mkdir {
 	    $madedir{$_}=1;
 	}
 	lprint("mkdir $_");
-	mkdir($_, 777) if $realP;
+	mkdir($_, 0777) if $realP;
     }
 }    
 

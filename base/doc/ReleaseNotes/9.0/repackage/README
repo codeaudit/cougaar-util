@@ -1,27 +1,22 @@
-These scripts assist in porting core and other modules to the new package structure for Cougaar9.0.
+These scripts assist in porting core and other modules to the new package 
+structure for Cougaar9.0.
 
-To port infrastructure modules:
-core:	core-repackage.bat mycougaarcvs/core/src mynewcougaar/core
-**note its best if you specify core/src instead of just core as there are 
-problems with the perl script moving/renaming files with the extra directory level.
+All modules can be ported using:
+module-repackage.bat <top_level_src_dir>  <top_level_new_dir>
+or
+module-repackage <top_level_src_dir>  <top_level_new_dir>
 
-glm:	glm-repackage.bat mycoguaarcvs/glm/src mynewcougaar/glm
-** again note that it is best to specify glm/src (do the rest of the module separately)
-** note that a hand edit is neccessary to compile...
-in org/cougaar/glm/ldm/asset/alpprops.def
-remove domain in the following line
-includedefs=org/cougaar/domain/planning/ldm/asset/properties.def
+Note that these scripts call other scripts within the repackaging directory, 
+so it should be run from the repackaging directory.
+
+Known Issues/Problems:
+1) If your src tree contains org/cougaar/domain as a package structure,
+ you should repackage <my-module>/src separately from the other sub-directories 
+(such as bin, doc, etc).
+
+2) When run on windows machines, the script occasionally corrupts jars, 
+ zips, gifs, jpgs, etc.  So be sure to double check the newly copied versions.
 
 
-All other modules can be ported in total at once (instead of the module/src separately)
-unless they contain org/cougaar/domain as a package structure in src.
 
-scalability: module-repackage.bat mycougaarcvs/scalability mynewcougaar/scalability
-*** note a hand edit is neccessary to compile...
-in org/cougaar/tools/scalability/scalability/scalability/scalabilityassets.def
-remove domain in the following line:
-propertydefs = scalabilityprops.def, org/cougaar/domain/planning/ldm/asset/properties.def
-
-All other modules should work with:
-module-repackage.bat <orig_module> <newmodule>
 
