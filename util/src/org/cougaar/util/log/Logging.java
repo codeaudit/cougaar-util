@@ -137,12 +137,19 @@ public final class Logging
   // private utilities
   // 
 
-  /** Compute the cache key of an object **/
-  private static String getKey(Object x) {
+  /** Compute the Logging Name of the referenced object.
+   * Used by various objects which can create Logger instances.
+   **/
+  public static final String getKey(Object x) {
     if (x instanceof Class) {
       return ((Class)x).getName();
+    } else if (x instanceof String) {
+      return (String) x;
+    } else if (x == null) {
+      return "null";
     } else {
-      return x.toString();
+      return x.getClass().getName();
     }
   }
+
 }

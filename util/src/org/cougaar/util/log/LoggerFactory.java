@@ -67,6 +67,11 @@ public abstract class LoggerFactory {
   public void configure(Map m) {
   }
 
+  /** Create a logger as named by the parameter.
+   * If requestor is a Class, will use the class name.  If it is a String, it will
+   * use it directly.  Anything else will use the name of the class that the 
+   * object is an instance of.
+   **/
   public abstract Logger createLogger(Object requestor);
 
   public abstract LoggerController createLoggerController(String requestor);

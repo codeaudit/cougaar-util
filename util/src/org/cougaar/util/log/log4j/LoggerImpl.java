@@ -39,16 +39,7 @@ class LoggerImpl extends LoggerAdapter
    * @param requestor Object requesting this service.
    */
   public LoggerImpl(Object obj) {
-    String s;
-    if (obj instanceof Class) {
-      s = ((Class) obj).getName();
-    } else if (obj instanceof String) {
-      s = (String) obj;
-    } else if (obj != null) {
-      s = obj.getClass().getName();
-    } else {
-      s = "null";
-    }
+    String s = Logging.getKey(obj);
     cat = Category.getInstance(s);
   }
 
