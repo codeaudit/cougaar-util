@@ -242,6 +242,13 @@ XSL Template for NodeAgent, which reuses most of SimpleAgent.
          insertionpoint="Node.AgentManager.Agent.Component"/>
     </xsl:if>
 
+    <!-- SuicideService -->
+    <component 
+      name="org.cougaar.core.node.SuicideServiceComponent()"
+      class="org.cougaar.core.node.SuicideServiceComponent"
+      priority="HIGH"
+      insertionpoint="Node.AgentManager.Agent.Component"/>
+
   </xsl:template>
 
   <xsl:template name="BINDER_node_pre0">
