@@ -76,9 +76,6 @@ In the "mySociety.xml" file the agent would specify the template:
   <xsl:param name="planning">true</xsl:param>
   <xsl:param name="communities">true</xsl:param>
 
-  <!-- NodeAgent.xsl overrides this -->
-  <xsl:param name="wpserver">false</xsl:param>
-
   <!--
   if an agent "template" attribute is not specified, the "defaultAgent"
   value is assumed, which defaults to this template file.
