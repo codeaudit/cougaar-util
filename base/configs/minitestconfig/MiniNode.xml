@@ -1,4 +1,12 @@
 <?xml version='1.0'?>
+<!-- This file is the configuration file for a simple 4 agent society. -->
+<!-- The current configuration places all 4 agents on a single node (MiniNode). -->
+<!-- If you would like to break the agents up across different nodes, or hosts, -->
+<!-- create a new <node name=name_here> section within the host element.  -->
+<!-- Then remove the desired <agent>'s from the current <node> and place them -->
+<!-- in the new <node>.  -->
+<!-- The same can be done for adding a new <host>:  Add the new <host> to the -->
+<!-- <society>, add a new <node> on the new <host> and then place agents on new node -->
 <society name='ACME-UL-SOCIETY'
   xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
   xsi:noNamespaceSchemaLocation='http://www.cougaar.org/2003/society.xsd'>
