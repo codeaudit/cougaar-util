@@ -53,7 +53,7 @@ public class Random extends java.util.Random {
 	sq = Math.sqrt(2.0 * xm);
 	logXm = Math.log(xm);
 	g = xm * logXm -                // The function gammaLn is
-          MoreMath.gammaLn(xm + 1.0);   // the natural log of the gamma function, as given in §6.2. 
+          MoreMath.gammaLn(xm + 1.0);   // the natural log of the gamma function, as given in 6.2. 
       }
       double y;
       while (true) {
