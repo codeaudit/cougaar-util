@@ -35,6 +35,7 @@ public final class OutputBundle
 implements java.io.Serializable, Cloneable, Comparable
 {
 
+  private String name;
   private long timestamp;
   private boolean created;
   private boolean destroyed;
@@ -55,6 +56,17 @@ implements java.io.Serializable, Cloneable, Comparable
     }
     idleUpdates = new ArrayList(initialIdleUpdatesSize);
     dsb = new DualStreamBuffer(initialDualStreamBufferSize);
+  }
+
+  /**
+   * @return the name of the process that created this output.
+   */
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 
   /**
@@ -132,7 +144,7 @@ implements java.io.Serializable, Cloneable, Comparable
   }
 
   public String toString() {
-    return "OutputBundle "+timestamp;
+    return "OutputBundle "+name+" at time "+timestamp;
   }
 
   private static final long serialVersionUID = 161238047123987677L;

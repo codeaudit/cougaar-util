@@ -238,6 +238,11 @@ implements RemoteProcess {
   //
 
   public void dumpThreads() throws Exception {
+    if (!(isAlive())) {
+      throw new IllegalStateException(
+          "Process "+pd.getName()+" is not running");
+    }
+
     if (sysPid < 0) {
       throw new UnsupportedOperationException(
           "Java Thread-Dump not available"+

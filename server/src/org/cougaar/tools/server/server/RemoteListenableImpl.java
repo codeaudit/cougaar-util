@@ -110,6 +110,7 @@ class RemoteListenableImpl implements RemoteListenable {
 
     // create the output buffer
     ob = new OutputBundle();
+    ob.setName(name);
     ob.setCreated(true);
     ob.setTimeStamp(System.currentTimeMillis());
 
@@ -178,14 +179,15 @@ class RemoteListenableImpl implements RemoteListenable {
   }
 
   public void removeListener(String id) {
+    OutputListener x;
     synchronized (sendLock) {
-      OutputListener x = (OutputListener) listeners.remove(id);
-      if (x instanceof URLOutputListenerAdapter) {
-        try {
-          ((URLOutputListenerAdapter) x).close();
-        } catch (Exception e) {
-          System.err.println(e);
-        }
+      x = (OutputListener) listeners.remove(id);
+    }
+    if (x instanceof URLOutputListenerAdapter) {
+      try {
+        ((URLOutputListenerAdapter) x).close();
+      } catch (Exception e) {
+        System.err.println(e);
       }
     }
   }
@@ -233,6 +235,7 @@ class RemoteListenableImpl implements RemoteListenable {
     flushBuffer(true);
 
     // remove all listeners
+    List urlL = null;
     synchronized (sendLock) {
       for (
           Iterator iter = listeners.values().iterator();
@@ -240,14 +243,27 @@ class RemoteListenableImpl implements RemoteListenable {
           ) {
         OutputListener ol = (OutputListener) iter.next();
         if (ol instanceof URLOutputListenerAdapter) {
-          try {
-            ((URLOutputListenerAdapter) ol).close();
-          } catch (Exception e) {
-            System.err.println(e);
+          if (urlL == null) {
+            urlL = new ArrayList(3);
           }
+          urlL.add(ol);
         }
       }
       listeners.clear();
+    }
+
+    // close any url listeners
+    if (urlL != null) {
+      for (Iterator iter = urlL.iterator(); iter.hasNext(); ) {
+        URLOutputListenerAdapter uol = 
+          (URLOutputListenerAdapter) iter.next();
+        try {
+          uol.close();
+        } catch (Exception e) {
+          System.err.println(
+              "Unable to close URL listener "+uol+": "+e);
+        }
+      }
     }
 
     // wait for the streams to end
@@ -272,6 +288,7 @@ class RemoteListenableImpl implements RemoteListenable {
         ob = null;
       } else {
         ob = new OutputBundle();
+        ob.setName(name);
         ob.setTimeStamp(System.currentTimeMillis());
         stdOut = ob.getDualStreamBuffer().getOutputStream(true);
         stdErr = ob.getDualStreamBuffer().getOutputStream(false);
@@ -400,6 +417,10 @@ class RemoteListenableImpl implements RemoteListenable {
           urlSocket = null;
         }
       }
+    }
+
+    public String toString() {
+      return url.toString();
     }
   }
 

@@ -27,69 +27,80 @@ import java.util.*;
 import org.cougaar.tools.server.*;
 
 /**
- * This implementation of RemoteHost that communicates
+ * This implementation of RemoteProcessManager that communicates
  * with a single "host:port" via RMI.
  *
- * @see RemoteHost
+ * @see RemoteProcessManager
  */
-class RemoteHostStub
-implements RemoteHost {
+class RemoteProcessManagerStub
+implements RemoteProcessManager {
 
-  private RemoteHostDecl rhd;
+  private RemoteProcessManagerDecl rpmd;
 
-  public RemoteHostStub(
-      RemoteHostDecl rhd) {
-    this.rhd = rhd;
-  }
-
-  public RemoteProcessManager getRemoteProcessManager() throws Exception {
-    RemoteProcessManagerDecl rpmd = rhd.getRemoteProcessManager();
-    if (rpmd == null) {
-      return null;
-    }
-    RemoteProcessManager rpm = new RemoteProcessManagerStub(rpmd);
-    return rpm;
-  }
-
-  public RemoteFileSystem getRemoteFileSystem() throws Exception {
-    RemoteFileSystemDecl rfsd = rhd.getRemoteFileSystem();
-    if (rfsd == null) {
-      return null;
-    }
-    RemoteFileSystem rfs = new RemoteFileSystemStub(rfsd);
-    return rfs;
+  public RemoteProcessManagerStub(
+      RemoteProcessManagerDecl rpmd) {
+    this.rpmd = rpmd;
   }
 
   public RemoteProcess createRemoteProcess(
       ProcessDescription pd,
       RemoteListenableConfig rlc) throws Exception {
-    return getRemoteProcessManager().createRemoteProcess(pd, rlc);
+
+    // wrap listener(s)
+    RemoteListenableConfigWrapper rlcw = 
+      new RemoteListenableConfigWrapper(rlc);
+
+    // get reference to remote process on app server
+    RemoteProcessDecl rpd;
+    try {
+      rpd = (RemoteProcessDecl)
+        rpmd.createRemoteProcess(
+          pd, 
+          rlcw);
+    } catch (IOException ioe) {
+      System.out.println("Unable to create RemoteProcess (IO Failure)");
+      throw ioe;
+    } catch (RuntimeException re) {
+      System.out.println("Unable to create RemoteProcess (Runtime Failure)");
+      throw re;
+    }
+    if (rpd == null) {
+      return null;
+    }
+
+    // wrap for client
+    RemoteProcessStub rps = new RemoteProcessStub(rpd, pd);
+    return rps;
   }
+
   public RemoteProcess getRemoteProcess(
       String procName) throws Exception {
-    return getRemoteProcessManager().getRemoteProcess(procName);
+    RemoteProcessDecl rpd = rpmd.getRemoteProcess(procName);
+    if (rpd == null) {
+      return null;
+    }
+    ProcessDescription pd = rpd.getProcessDescription();
+    RemoteProcessStub rps = new RemoteProcessStub(rpd, pd);
+    return rps;
   }
 
   //
   // delegate the rest:
   //
 
-  public long ping() throws Exception {
-    return rhd.ping();
-  }
   public int killRemoteProcess(
       String procName) throws Exception {
-    return rhd.killRemoteProcess(procName);
+    return rpmd.killRemoteProcess(procName);
   }
   public ProcessDescription getProcessDescription(
       String procName) throws Exception {
-    return rhd.getProcessDescription(procName);
+    return rpmd.getProcessDescription(procName);
   }
   public List listProcessDescriptions(
       String procGroup) throws Exception {
-    return rhd.listProcessDescriptions(procGroup);
+    return rpmd.listProcessDescriptions(procGroup);
   }
   public List listProcessDescriptions() throws Exception {
-    return rhd.listProcessDescriptions();
+    return rpmd.listProcessDescriptions();
   }
 }

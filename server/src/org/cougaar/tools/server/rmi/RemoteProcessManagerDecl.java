@@ -28,17 +28,10 @@ import org.cougaar.tools.server.ProcessDescription;
 import org.cougaar.tools.server.RemoteListenableConfig;
 
 /** 
- * @see org.cougaar.tools.server.RemoteHost
+ * @see org.cougaar.tools.server.RemoteProcessManager
  */
-interface RemoteHostDecl 
+interface RemoteProcessManagerDecl 
 extends Remote {
-  long ping() throws Exception, RemoteException;
-  RemoteProcessManagerDecl getRemoteProcessManager(
-      ) throws Exception, RemoteException;
-  RemoteFileSystemDecl getRemoteFileSystem(
-      ) throws Exception, RemoteException;
-
-  //
   RemoteProcessDecl createRemoteProcess(
       ProcessDescription pd,
       RemoteListenableConfigWrapper rlcw) throws Exception, RemoteException;

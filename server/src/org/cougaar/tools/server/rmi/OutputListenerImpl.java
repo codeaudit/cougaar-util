@@ -32,17 +32,25 @@ import org.cougaar.tools.server.OutputListener;
  */
 class OutputListenerImpl 
 extends UnicastRemoteObject 
-implements OutputListenerDecl {
+implements OutputListenerDecl, java.rmi.server.Unreferenced {
 
+  private long ct;
   private OutputListener ol;
 
   public OutputListenerImpl(
       OutputListener ol) throws RemoteException {
+    ct = System.currentTimeMillis();
+    //System.out.println("\n\nCreated <"+ct+"> "+ol);
     this.ol = ol;
   }
 
   public void handleOutputBundle(OutputBundle ob) throws Exception {
     ol.handleOutputBundle(ob);
+  }
+
+  public void unreferenced() {
+    long ut = System.currentTimeMillis();
+    //System.out.println("\n\nUnreferenced <+("+(ut-ct)+") "+ut+"> "+ol);
   }
 
 }

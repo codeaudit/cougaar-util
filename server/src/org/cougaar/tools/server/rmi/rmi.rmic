@@ -5,3 +5,4 @@ org.cougaar.tools.server.rmi.RemoteHostImpl
 org.cougaar.tools.server.rmi.RemoteFileSystemImpl
 org.cougaar.tools.server.rmi.RemoteListenableImpl
 org.cougaar.tools.server.rmi.RemoteProcessImpl
+org.cougaar.tools.server.rmi.RemoteProcessManagerImpl

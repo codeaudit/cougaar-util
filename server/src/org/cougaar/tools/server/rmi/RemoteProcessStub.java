@@ -25,7 +25,10 @@ import java.io.*;
 import java.util.*;
 import java.rmi.*;
 import java.rmi.registry.*;
+import java.net.URL;
 
+import org.cougaar.tools.server.OutputListener;
+import org.cougaar.tools.server.OutputPolicy;
 import org.cougaar.tools.server.RemoteListenable;
 import org.cougaar.tools.server.RemoteProcess;
 import org.cougaar.tools.server.ProcessDescription;
@@ -40,12 +43,21 @@ implements RemoteProcess {
   private ProcessDescription pd;
   private RemoteProcessDecl rpd;
 
-  public RemoteProcessStub(RemoteProcessDecl rpd) {
+  private int exitCode;
+
+  public RemoteProcessStub(
+      RemoteProcessDecl rpd,
+      ProcessDescription pd) {
     this.rpd = rpd;
+    // assert pd == rpd.getProcessDescription();
   }
 
   public RemoteListenable getRemoteListenable(
       ) throws Exception {
+    if (rpd == null) {
+      // "destroy()" was called
+      return new DeadListenable(pd.getName());
+    }
     RemoteListenableDecl rld = rpd.getRemoteListenable();
     if (rld == null) {
       return null;
@@ -59,15 +71,12 @@ implements RemoteProcess {
   //
 
   public ProcessDescription getProcessDescription() throws Exception {
-    // return rpd.getProcessDescription();
-    //
-    // this is faster, and pd shouldn't change!
-    if (pd == null) {
-      pd = rpd.getProcessDescription();
-    }
     return pd; 
   }
   public boolean isAlive() { //throws Exception
+    if (rpd == null) {
+      return false;
+    }
     try {
       return rpd.isAlive();
     } catch (Exception e) {
@@ -75,27 +84,74 @@ implements RemoteProcess {
     }
   }
   public void dumpThreads() throws Exception {
+    if (rpd == null) {
+      throw new IllegalStateException(
+          "Process "+pd.getName()+" has been destroyed");
+    }
     rpd.dumpThreads();
   }
   public ProcessStatus[] listProcesses(boolean showAll) throws Exception {
+    if (rpd == null) {
+      throw new IllegalStateException(
+          "Process "+pd.getName()+" has been destroyed");
+    }
     return rpd.listProcesses(showAll);
   }
   public int exitValue() throws Exception {
+    if (rpd == null) {
+      return exitCode;
+    }
     return rpd.exitValue();
   }
   public int waitFor() throws Exception {
-    return rpd.waitFor();
+    if (rpd != null) {
+      exitCode = rpd.waitFor();
+    }
+    return exitCode;
   }
   public int waitFor(long millis) throws Exception {
-    return rpd.waitFor(millis);
+    if (rpd != null) {
+      exitCode = rpd.waitFor(millis);
+    }
+    return exitCode;
   }
   public int destroy() throws Exception {
-    int ret;
-    try {
-      ret = rpd.destroy();
-    } finally {
+    if (rpd != null) {
+      exitCode = rpd.destroy();
       rpd = null;
     }
-    return ret;
+    return exitCode;
+  }
+
+  private static class DeadListenable implements RemoteListenable {
+    private String name;
+    public DeadListenable(String name) {
+      this.name = name;
+    }
+    public List list() {
+      return Collections.EMPTY_LIST;
+    }
+    public void addListener(URL listenerURL) {
+      throw new IllegalStateException(
+          "Process "+name+" has been destroyed");
+    }
+    public void removeListener(URL listenerURL) {
+    }
+    public void addListener(OutputListener ol, String id) {
+      throw new IllegalStateException(
+          "Process "+name+" has been destroyed");
+    }
+    public void removeListener(String id) {
+    }
+    public OutputPolicy getOutputPolicy() {
+      throw new IllegalStateException(
+          "Process "+name+" has been destroyed");
+    }
+    public void setOutputPolicy(OutputPolicy op) {
+      throw new IllegalStateException(
+          "Process "+name+" has been destroyed");
+    }
+    public void flushOutput() {
+    }
   }
 }

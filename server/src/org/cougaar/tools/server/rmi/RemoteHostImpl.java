@@ -40,6 +40,10 @@ class RemoteHostImpl
 
   private final RemoteHost rh;
 
+  private final Object lock = new Object();
+  private RemoteProcessManagerDecl rpmd;
+  private RemoteFileSystemDecl rfsd;
+
   public RemoteHostImpl(
       RemoteHost rh) throws RemoteException {
     this.rh = rh;
@@ -48,43 +52,40 @@ class RemoteHostImpl
     }
   }
 
-  public RemoteFileSystemDecl getRemoteFileSystem() throws Exception {
-    RemoteFileSystem rfs = rh.getRemoteFileSystem();
-    if (rfs == null) {
-      return null;
+  public RemoteProcessManagerDecl getRemoteProcessManager() throws Exception {
+    synchronized (lock) {
+      if (rpmd == null) {
+        RemoteProcessManager rpm = rh.getRemoteProcessManager();
+        rpmd = 
+          ((rpm != null) ? 
+           (new RemoteProcessManagerImpl(rpm)) :
+           null);
+      }
     }
-    // could cache this
-    RemoteFileSystemDecl rfsd = 
-      new RemoteFileSystemImpl(rfs);
+    return rpmd;
+  }
+
+  public RemoteFileSystemDecl getRemoteFileSystem() throws Exception {
+    synchronized (lock) {
+      if (rfsd == null) {
+        RemoteFileSystem rfs = rh.getRemoteFileSystem();
+        rfsd = 
+          ((rfs != null) ? 
+           (new RemoteFileSystemImpl(rfs)) :
+           null);
+      }
+    }
     return rfsd;
   }
 
   public RemoteProcessDecl createRemoteProcess(
       ProcessDescription pd,
       RemoteListenableConfigWrapper rlcw) throws Exception {
-    // unwrap listener(s)
-    RemoteListenableConfig rlc = 
-      rlcw.toRemoteListenableConfig();
-    // create process
-    RemoteProcess rp = 
-      rh.createRemoteProcess(pd, rlc);
-    if (rp == null) {
-      return null;
-    }
-    // wrap process
-    RemoteProcessDecl rpd = new RemoteProcessImpl(rp);
-    return rpd;
+    return getRemoteProcessManager().createRemoteProcess(pd, rlcw);
   }
-
   public RemoteProcessDecl getRemoteProcess(
       String procName) throws Exception {
-    RemoteProcess rp = rh.getRemoteProcess(procName);
-    if (rp == null) {
-      return null;
-    }
-    // could cache this
-    RemoteProcessDecl rpd = new RemoteProcessImpl(rp);
-    return rpd;
+    return getRemoteProcessManager().getRemoteProcess(procName);
   }
 
   //
@@ -95,17 +96,17 @@ class RemoteHostImpl
     return rh.ping();
   }
   public int killRemoteProcess(String procName) throws Exception {
-    return rh.killRemoteProcess(procName);
+    return getRemoteProcessManager().killRemoteProcess(procName);
   }
   public ProcessDescription getProcessDescription(
       String procName) throws Exception {
-    return rh.getProcessDescription(procName);
+    return getRemoteProcessManager().getProcessDescription(procName);
   }
   public List listProcessDescriptions(
       String procGroup) throws Exception {
-    return rh.listProcessDescriptions(procGroup);
+    return getRemoteProcessManager().listProcessDescriptions(procGroup);
   }
   public List listProcessDescriptions() throws Exception {
-    return rh.listProcessDescriptions();
+    return getRemoteProcessManager().listProcessDescriptions();
   }
 }

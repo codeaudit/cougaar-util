@@ -21,7 +21,6 @@
  
 package org.cougaar.tools.server;
 
-import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -40,64 +39,33 @@ public interface RemoteHost {
   long ping() throws Exception;
 
   /**
+   * Access the remote process manager.
+   */
+  RemoteProcessManager getRemoteProcessManager() throws Exception;
+
+  /**
    * Access the remote file system.
    */
   RemoteFileSystem getRemoteFileSystem() throws Exception;
 
+
+
   /**
-   * Create a new process with the given description and
-   * listener(s) configuration.
-   *
-   * @throws IllegalArgumentException if the description's
-   *    ".getName()" is already in use by another running 
-   *    process.
-   * @throws Exception if unable to create or start the 
-   *    process.
+   * These methods have been moved into the RemoteProcessManager,
+   * but are still provided for now -- they may be deprecated
+   * in the future.
    */
   RemoteProcess createRemoteProcess(
       ProcessDescription pd,
       RemoteListenableConfig rlc) throws Exception;
-
-  /**
-   * Kill the process with the given ProcessDescription 
-   * ".getName()".
-   *
-   * @return the exit value of the process, or
-   *    <tt>Integer.MIN_VALUE</tt> if no such process
-   *    exists.
-   *
-   * @see #getProcessDescription
-   */
   int killRemoteProcess(
       String procName) throws Exception;
-
-  /**
-   * Get the ProcessDescriptions (for a running Process).
-   * 
-   * @return null if the process is not known, or is not
-   *    running.
-   */
   ProcessDescription getProcessDescription(
       String procName) throws Exception;
-
-  /**
-   * Get a running process.
-   */
   RemoteProcess getRemoteProcess(
       String procName) throws Exception;
-
-  /**
-   * Get a List of all ProcessDescriptions (for running
-   * Processes) where the <tt>ProcessDescription.getGroup()</tt>
-   * equals the given <tt>procGroup</tt> String.
-   */
   List listProcessDescriptions(
       String procGroup) throws Exception;
-
-  /**
-   * Get a List of all ProcessDescriptions (for running
-   * Processes).
-   */
   List listProcessDescriptions() throws Exception;
 
 }
