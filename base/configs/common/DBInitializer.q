@@ -80,15 +80,15 @@ queryAgentPGNames = \
     AND H.COMPONENT_NAME = ':agent_name:'
 
 queryAgentPGNames.mysql = \
-    select distinct a.pg_name \
-      from v4_asb_agent h \
-inner join v4_asb_agent_pg_attr b \
-        on h.component_alib_id = b.component_alib_id \
-inner join v4_lib_pg_attribute a \
-        on a.pg_attribute_lib_id = b.pg_attribute_lib_id \
-     where b.assembly_id :assemblyMatch: \
-       and h.assembly_id :assemblyMatch: \
-       and h.component_name = ':agent_name:'
+    SELECT DISTINCT A.PG_NAME \
+      FROM V4_ASB_AGENT H \
+INNER JOIN V4_ASB_AGENT_PG_ATTR B \
+        ON H.COMPONENT_ALIB_ID = B.COMPONENT_ALIB_ID \
+INNER JOIN V4_LIB_PG_ATTRIBUTE A \
+        ON A.PG_ATTRIBUTE_LIB_ID = B.PG_ATTRIBUTE_LIB_ID \
+     WHERE B.ASSEMBLY_ID :assemblyMatch: \
+       AND H.ASSEMBLY_ID :assemblyMatch: \
+       AND H.COMPONENT_NAME = ':agent_name:'
 
 queryLibProperties = \
  SELECT ATTRIBUTE_NAME, ATTRIBUTE_TYPE, AGGREGATE_TYPE, \
@@ -107,16 +107,16 @@ queryAgentProperties = \
     AND A.PG_ATTRIBUTE_LIB_ID = ':pg_attribute_id:'
 
 queryAgentProperties.mysql = \
-    select a.attribute_value \
-      from v4_asb_agent h \
-inner join v4_asb_agent_pg_attr a \
-        on a.component_alib_id = h.component_alib_id \
-inner join v4_alib_component b \
-        on b.component_alib_id = h.component_alib_id \
-     where a.assembly_id :assemblyMatch: \
-       and h.assembly_id :assemblyMatch: \
-       and b.component_name = ':agent_name:' \
-       and a.pg_attribute_lib_id = ':pg_attribute_id:'
+    SELECT A.ATTRIBUTE_VALUE \
+      FROM V4_ASB_AGENT H \
+INNER JOIN V4_ASB_AGENT_PG_ATTR A \
+        ON A.COMPONENT_ALIB_ID = H.COMPONENT_ALIB_ID \
+INNER JOIN V4_ALIB_COMPONENT B \
+        ON B.COMPONENT_ALIB_ID = H.COMPONENT_ALIB_ID \
+     WHERE A.ASSEMBLY_ID :assemblyMatch: \
+       AND H.ASSEMBLY_ID :assemblyMatch: \
+       AND B.COMPONENT_NAME = ':agent_name:' \
+       AND A.PG_ATTRIBUTE_LIB_ID = ':pg_attribute_id:'
 
 queryAgentRelation = \
  SELECT ASB_REL.ROLE, SPTD.COMPONENT_NAME ITEM_IDENTIFICATION, \
@@ -137,22 +137,22 @@ queryAgentRelation = \
     AND SPTG.COMPONENT_NAME = ':agent_name:'
 
 queryAgentRelation.mysql = \
- select asb_rel.role, sptd.component_name item_identification, \
-        asb_pg.attribute_value type_identification, sptd.component_name supported, null, null \
-   from v4_alib_component sptg \
-inner join v4_asb_agent_relation asb_rel \
-        on asb_rel.supporting_component_alib_id = sptg.component_alib_id \
-inner join v4_asb_agent_pg_attr asb_pg \
-        on asb_pg.component_alib_id = asb_rel.supported_component_alib_id \
-inner join v4_lib_pg_attribute lib_pg \
-        on lib_pg.pg_attribute_lib_id = asb_pg.pg_attribute_lib_id \
-inner join v4_alib_component sptd \
-        on asb_rel.supported_component_alib_id = sptd.component_alib_id \
-  where asb_pg.assembly_id :assemblyMatch: \
-    and asb_rel.assembly_id :assemblyMatch: \
-    and lib_pg.pg_name = 'typeidentificationpg' \
-    and lib_pg.attribute_name = 'typeidentification' \
-    and sptg.component_name = ':agent_name:'
+ SELECT ASB_REL.ROLE, SPTD.COMPONENT_NAME ITEM_IDENTIFICATION, \
+        ASB_PG.ATTRIBUTE_VALUE TYPE_IDENTIFICATION, SPTD.COMPONENT_NAME SUPPORTED, NULL, NULL \
+   FROM V4_ALIB_COMPONENT SPTG \
+INNER JOIN V4_ASB_AGENT_RELATION ASB_REL \
+        ON ASB_REL.SUPPORTING_COMPONENT_ALIB_ID = SPTG.COMPONENT_ALIB_ID \
+INNER JOIN V4_ASB_AGENT_PG_ATTR ASB_PG \
+        ON ASB_PG.COMPONENT_ALIB_ID = ASB_REL.SUPPORTED_COMPONENT_ALIB_ID \
+INNER JOIN V4_LIB_PG_ATTRIBUTE LIB_PG \
+        ON LIB_PG.PG_ATTRIBUTE_LIB_ID = ASB_PG.PG_ATTRIBUTE_LIB_ID \
+INNER JOIN V4_ALIB_COMPONENT SPTD \
+        ON ASB_REL.SUPPORTED_COMPONENT_ALIB_ID = SPTD.COMPONENT_ALIB_ID \
+  WHERE ASB_PG.ASSEMBLY_ID :assemblyMatch: \
+    AND ASB_REL.ASSEMBLY_ID :assemblyMatch: \
+    AND LIB_PG.PG_NAME = 'typeidentificationpg' \
+    AND LIB_PG.ATTRIBUTE_NAME = 'typeidentification' \
+    AND SPTG.COMPONENT_NAME = ':agent_name:'
 
 queryGeolocLocation = \
  SELECT 'GeolocLocation', ':key:' \
