@@ -14,7 +14,7 @@
   <td align="Center" width="200"> 
       <h2> <b><font size="+2">Release Notes</font></b></h2>
   
-      <h2> <b><font size="+2">COUGAAR 11.2</font></b></h2>
+      <h2> <b><font size="+2">COUGAAR 11.4</font></b></h2>
  </td>
  </tr>
  
@@ -44,7 +44,7 @@ Components)</a></li>
 
       <h2> <a name="introduction"></a>Introduction</h2>
 
-This file contains the release notes for Cougaar 11.2.
+This file contains the release notes for Cougaar 11.4.
 <p>
 Please see our <a href="FAQ.html">Cougaar FAQ</a>
 (<a href="http://cougaar.org/faq.html">online version</a>) for a high-level
@@ -91,6 +91,17 @@ Please see our website (<a href="http://cougaar.org/errata/">http://cougaar.org/
 that were detected/posted after this Cougaar version was released.
 The errata directory is organized by cougaar release number.  For
 example, the errata page for Cougaar 11.0 is <a href="http://cougaar.org/errata/cougaar1100/errata.html">http://cougaar.org/errata/cougaar1100/errata.html</a>.
+
+
+  <!-- COUGAAR 11.2 COUGAAR 11.2 COUGAAR 11.2 COUGAAR 11.2 COUGAAR 11.2 -->
+<p>
+<b>Build 11.2</b> is a minor release, including a backwards-compatible
+core refactor, performance optimizations, and multiple bug fixes.
+<p>
+<ul>
+<li>uiframework module was obsolete, and has been dropped from
+standard distributions.</li>
+</ul>
 
 
   <!-- COUGAAR 11.2 COUGAAR 11.2 COUGAAR 11.2 COUGAAR 11.2 COUGAAR 11.2 -->
@@ -550,6 +561,8 @@ cougaar.zip do not contain source code or Javadoc, which is available separately
 
      <ul>
       <li>lib/: This directory contains the Cougaar-developed jar files.</li>
+      <li>clib/: This directory contains compile-time requried
+      Cougaar-developed jar files (ie build.jar).</li>
       <li>bin/: This directory contains all the primary Cougaar startup scripts.</li>
       <li>doc/: This is where Cougaar documentation is stored, including this file.
 Note that the Developer's Guide and Javadoc come separately.</li>
@@ -574,18 +587,25 @@ Tool. Use it to configure, run, and monitor large Cougaar societies. See
 and application.</li>
       <li>javaiopatch/: Small JDK over-rides to support persistence.</li>
 application.</li>
+      <li>mtsstd/: Standard Message Transport for Cougaar
+      (RMI-based)</li>
+      <li>ping/: Simple "ping" society support.</li>
+      <li>planning/: Tasks, Assets, and other Planning Domain support.</li>
       <li>qos/: Quality of Service support for Message Transport</li>
       <li>quo/: More Message Transport support</li>
       <li>server/: The AppServer (or Node Server) is a daemon used by CSMART to
 remotely startup and stop Cougaar Nodes.</li>
+      <li>servicediscovery/: Support for dynamically discovering
+      services using WSDL, UDDI, etc </li>
       <li>toolkit/: Various support utilities, particularly to support
       scheduling.</li>
-      <li>uiframework/: Framework for constructing some UIs.</li>
       <li>util/: Cougaar component architecture and utility classes, including
 logging.</li>
       <li>vishnu/: GA based scheduler.</li>
       <li>webserver/: Servlet support.</li>
       <li>webtomcat/: Integration with Apache Tomcat.</li> 
+      <li>yp/: Distributed hierarchical yellow pages application for
+      advertising services.</li>
     </ul>
    </li>
    <li>Cougaar source: The source code for each of the various Cougaar modules,
