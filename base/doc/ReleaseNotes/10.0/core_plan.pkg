@@ -21,6 +21,12 @@ ocp.	=	org.cougaar.planning.
 occ.servlet.ServletService		occ.service.ServletService
 
 #
+# occ.adaptivity
+#
+occ.adaptivity.TaskRateSensorPlugin         ocp.adaptivity.TaskRateSensorPlugin
+occ.adaptivity.TaskSensorPlugin             ocp.adaptivity.TaskSensorPlugin
+
+#
 # occ.agent
 #
 occ.agent.ClusterServesPlugin                                  ocp.ldm.ClusterServesPlugin
@@ -82,7 +88,7 @@ occ.plugin.StateModelAdapter              ocp.plugin.legacy.StateModelAdapter
 occ.plugin.StatelessPluginAdapter         ocp.plugin.legacy.StatelessPluginAdapter
 occ.plugin.ThinPlugin                     ocp.plugin.legacy.ThinPlugin
 occ.plugin.PersistencePlugin              ocp.plugin.legacy.PersistencePlugin
-occ.plugin.completion.TestPlugin          ocp.plugin.completion.TestPlugin
+occ.plugin.completion.                    ocp.plugin.completion.
 occ.plugin.util.                          ocp.plugin.util.
 
 # occ.service
