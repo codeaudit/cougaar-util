@@ -22,7 +22,7 @@ public final class Logging
   // cannot be instantiated
   private Logging() {};
 
-  /** Alias for {@link LoggerFactory@getInstance LoggerFactory.getInstance()} **/
+  /** Alias for {@link LoggerFactory#getInstance()} **/
   public static LoggerFactory getLoggerFactory() {
     return LoggerFactory.getInstance();
   }
@@ -76,7 +76,7 @@ public final class Logging
   /** store for defaultLogger(), guarded by syncing on the class **/
   private static Logger defaultLogger = null;
 
-  /** Returns the default Logger instance - the value returned by {@link #currentLogger() currentLogger()}
+  /** Returns the default Logger instance - the value returned by {@link #currentLogger()}
    * if there is no active context.
    **/
   public synchronized static Logger defaultLogger() {
@@ -91,11 +91,11 @@ public final class Logging
 
 
   /** Call a runnable in the dynamic context of a particular logger.
-   * Anyone within that context can call {@link currentLogger() Logging.currentLogger()}
+   * Anyone within that context can call {@link #currentLogger()}
    * to get access to an appropriate logger instance.
    * If no such instance has been installed, will use a generic 
    * logger with the name "Default".  This value may be retrieved
-   * by calling {@link #defaultLogger() defaultLogger}.
+   * by calling {@link #defaultLogger()}.
    * @note withLogger may be called recursively, as the Logger contexts are
    * allowed to nest.
    * @note Child threads do not inherit Logger contexts.
@@ -111,10 +111,10 @@ public final class Logging
   }
 
   /** Return the Logger currently in-force in the current thread, as set
-   * by {@link #withLogger(Logger,Runnable) withLogger}.
+   * by {@link #withLogger(Logger,Runnable)}.
    * @return the current logger or the value returned by defaultLogger().  This method will
    * never return null.
-   * @see hasLogger
+   * @see #hasLogger()
    * @note Child threads do not inherit Logger contexts.
    **/
   public static Logger currentLogger() {
