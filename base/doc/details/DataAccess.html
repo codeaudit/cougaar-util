@@ -9,7 +9,7 @@
 <body>
 <u><font color="#000066"><font size=+3>Cougaar Database Access&nbsp;
 Information</font></font></u>
-<p><font color="#000066"><font size=+1>Some plugins found in the Cougaar
+<p><font color="#000066"><font size=+1>CSMART and some plugins found in the Cougaar
 infrastructure and the glm/mlm packages require information from a database.&nbsp;
 These plugins are able to query a database to gather necessary information
 using parameters that are set in a file called cougaar.rc or .cougaarrc.
@@ -29,7 +29,11 @@ may be used.&nbsp; For example:</font></font>
 <br><font color="#000066"><font size=+1>jdbc:oracle:thin:@HOST:PORT:SID</font></font>
 <br><font color="#000066"><font size=+1>jdbc:postgresql://HOST:PORT/DBNAME</font></font>
 <p><font color="#000066"><font size=+1>The file should define parameters
-used by various plugins.&nbsp; For example to run a small-135 society you
+used by various plugins.&nbsp; Note that the databases referred to
+here usually point to at most two distinct databases: 1 for the
+Cougaar domain data (from mysqldump.txt) and one for CSMART
+configuration data (see the CSMART Installation instructions). Your
+cougaar.rc file, when running the included societies, 
 would need to define the following information:</font></font>
 <p><font color="#000066"><font size=+1># core database</font></font>
 <br><font color="#000066"><font size=+1>org.cougaar.database=DBConnectionString</font></font>
@@ -56,7 +60,7 @@ would need to define the following information:</font></font>
 <br><font color="#000066"><font size=+1>generic.database.expander.user=User</font></font>
 <br><font color="#000066"><font size=+1>generic.database.expander.password=Password</font></font>
 <br><font color="#000066"><font size=+1>generic.database.expander.expansion_table=construction_expansion</font></font>
-<p><font color="#000066"><font size=+1># configuration database</font></font>
+<p><font color="#000066"><font size=+1># CSMART configuration database</font></font>
 <br><font color="#000066"><font size=+1>org.cougaar.configuration.database=DBConnectionString</font></font>
 <br><font color="#000066"><font size=+1>org.cougaar.configuration.user=User</font></font>
 <br><font color="#000066"><font size=+1>org.cougaar.configuration.password=Password</font></font>
