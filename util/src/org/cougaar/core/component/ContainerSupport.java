@@ -200,65 +200,101 @@ public abstract class ContainerSupport
     }
   }
 
+  /**
+   * Add to the container, returning true if the object 
+   * is added, false if it is already contained, and throw an 
+   * exception in all other cases.
+   */
   public boolean add(Object o) {
-    ComponentDescription cd = null;
-    Object cstate = null;
+    ComponentDescription cd;
+    Object cstate;
     if (o instanceof ComponentDescription) {
+      // typical component description
       cd = (ComponentDescription)o;
+      cstate = null;
     } else if (o instanceof StateTuple) {
+      // description plus initial state
       StateTuple st = (StateTuple)o;
       cd = st.getComponentDescription();
       cstate = st.getState();
-    }
-    if (cd != null) {
-      String ip = cd.getInsertionPoint();
-      if (ip == null) return false;
-      if (ip.startsWith(containmentPrefix)) {
-        // match! - now do we load it here or below - look for any more dots beyond 
-        // the one trailing the prefix...
-        String tail = ip.substring(containmentPrefix.length());
-        if ("Binder".equals(tail) || "BinderFactory".equals(tail)) {
-          // load binder factory, ignore cstate?
-          return loadBinderFactory(cd);
-        } else {
-          int subi = tail.indexOf(".");
-          if (subi == -1) {
-            // no more dots: insert here
-            return loadComponent(cd, cstate);
-          } else {
-            // more dots: try inserting in subcomponents
-            synchronized (boundComponents) {
-              int l = boundComponents.size();
-              for (int i=0; i<l; i++) {
-                Object p = boundComponents.get(i);
-		if (p instanceof BoundComponent) {
-		  Binder b = ((BoundComponent)p).getBinder();
-		  if (b instanceof ContainerBinder) {
-		    if (((ContainerBinder)b).add(o)) {
-		      return true; // child added it
-		    }
-		  }
-		}
-              }
-            }
-          }
-	 
-          return false;
-        }
-      } else {
-        // wrong insertion point!
-        throw new ComponentLoadFailure("Wrong InsertionPoint ("+containmentPrefix+" doesn't prefix "+ip+")",
-                                       cd);
-          //return false;
-      }
     } else if (o instanceof BinderFactory) {
+      // unusual case -- prefer to load from cd
       return attachBinderFactory((BinderFactory)o);
     } else if (o instanceof Component) {
+      // unusual case -- prefer to load from cd
       return loadComponent(o, null);
     } else {
       // not a clue.
-      return false;
+      throw new IllegalArgumentException(
+          "Unsupported container element type: "+
+          ((o != null) ? o.getClass().getName() : "null"));
     }
+
+    // load from a component description
+    String ip = ((cd != null) ? cd.getInsertionPoint() : null);
+    if (ip == null) {
+      // description or insertion point not specified
+      throw new IllegalArgumentException(
+          "ComponentDescription must specify an insertion point");
+    }
+    if (!(ip.startsWith(containmentPrefix))) {
+      // wrong insertion point
+      throw new IncorrectInsertionPointException(
+          "Insertion point "+ip+" doesn't match container's "+
+          containmentPrefix, cd);
+    }
+
+    // match! - now do we load it here or below - look for any more 
+    // dots beyond the one trailing the prefix...
+    String tail = ip.substring(containmentPrefix.length());
+    if ("Binder".equals(tail) || "BinderFactory".equals(tail)) {
+      // load binder factory, ignore cstate?
+      return loadBinderFactory(cd);
+    }
+
+    int subi = tail.indexOf(".");
+    if (subi == -1) {
+      // no more dots: insert here
+      return loadComponent(cd, cstate);
+    }
+
+    // more dots: try inserting in subcomponents
+    synchronized (boundComponents) {
+      int l = boundComponents.size();
+      for (int i=0; i<l; i++) {
+        Object oi = boundComponents.get(i);
+        if (!(oi instanceof BoundComponent)) {
+          continue;
+        }
+        BoundComponent bc = (BoundComponent) oi;
+        Binder b = bc.getBinder();
+        if (!(b instanceof ContainerBinder)) {
+          continue;
+        }
+        Object bcc = bc.getComponent();
+        if (bcc instanceof ComponentDescription) {
+          ComponentDescription bccd = (ComponentDescription) bcc;
+          if (!(ip.startsWith(bccd.getInsertionPoint()))) {
+            continue;
+          }
+        } else {
+          // non-desc child, but okay
+        }
+        try {
+          boolean ret = ((ContainerBinder)b).add(o);
+          // child added it
+          return ret;
+        } catch (IncorrectInsertionPointException ipE) {
+          // wrong insertion point
+        }
+      }
+    }
+
+    // not at this level, and no child accepted it
+    throw new ComponentLoadFailure(
+        "Component not loaded by this container ("+
+        containmentPrefix+") or its children",
+        cd);
   }
 
   public boolean remove(Object o) {
