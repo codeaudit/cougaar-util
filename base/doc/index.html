@@ -95,6 +95,15 @@ further details.</li>
 measures execution time of an agent.  For more information, see the <a
 href="../glm/doc/CompletionWatcherServlet.html">Completion Watcher Servlet User's Guide</a> for
 further details.</li>
+<li>The AEViewerServlet has been added. It shows the values of basic 
+adaptivity objects, i.e., Conditions, OperatingModes, and OperatingModePolicies.
+Users can edit OperatingModePolicies and set the values of OperatingModes with
+this servlet.</li>
+<li>The OperatingModePolicyManager has been altered to set the OperatingModes
+referred to in non-adaptive OperatingModePolicies directly, without using the
+AdaptivityEngine. Non-adaptive OperatingModePolicies are defined as ones that
+have a TRUE ifCondition and instruct OperatingModes to have a single point
+range value.</li>
 </ul>
 
 
