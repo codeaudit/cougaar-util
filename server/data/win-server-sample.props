@@ -17,6 +17,11 @@ env.SYSTEMROOT=C\:\\WINNT
 # Set the Cougaar install path.
 org.cougaar.install.path=D\:\\opt\\cougaar
 
+# Set the Cougaar worskpace. This is the parent directory for all
+#  runtime output by Plugins, etc. It defaults to CIP\workspace
+#  and is usually defined by the environment variable COUGAAR_WORKSPACE
+org.cougaar.workspace=D\:\\opt\\cougaar\\workspace
+
 # Set the cougaar system path, which is used to find third-party jars
 #   (e.g. "log4j.jar").
 #
