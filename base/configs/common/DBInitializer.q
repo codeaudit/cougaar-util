@@ -1,3 +1,8 @@
+# DBInitializer.q
+# Used by core's Node Initialization code
+# to read component definitions from the CSMART configuration
+# database.
+# See org.cougaar.core.node.DBInitializerServiceProvider
 database=${org.cougaar.configuration.database}
 username=${org.cougaar.configuration.user}
 password=${org.cougaar.configuration.password}
@@ -19,16 +24,6 @@ queryAgentPrototype = \
     AND AA.COMPONENT_ALIB_ID = AC.COMPONENT_ALIB_ID \
     AND AC.COMPONENT_NAME = ':agent_name:'
 
-queryAgentPrototype.mysql = \
- SELECT LAO.AGENT_ORG_CLASS \
-   FROM V4_ALIB_COMPONENT AC \
-  INNER JOIN V4_ASB_AGENT AA \
-     ON AA.COMPONENT_ALIB_ID = AC.COMPONENT_ALIB_ID \
-  INNER JOIN V4_LIB_AGENT_ORG LAO \
-     ON AC.COMPONENT_LIB_ID = LAO.COMPONENT_LIB_ID \
-  WHERE AA.ASSEMBLY_ID :assemblyMatch: \
-    AND AC.COMPONENT_NAME = ':agent_name:'
-
 queryComponents = \
  SELECT A.COMPONENT_NAME COMPONENT_NAME, C.COMPONENT_CLASS COMPONENT_CLASS, \
         A.COMPONENT_ALIB_ID COMPONENT_ID, C.INSERTION_POINT, H.INSERTION_ORDER INSERTION_ORDER \
@@ -45,17 +40,18 @@ queryComponents = \
     AND P.COMPONENT_NAME = ':parent_name:' \
 ORDER BY INSERTION_ORDER
 
+# Separate query needed due to SUBSTRING
 queryComponents.mysql = \
     SELECT A.COMPONENT_NAME COMPONENT_NAME, C.COMPONENT_CLASS COMPONENT_CLASS, \
            A.COMPONENT_ALIB_ID COMPONENT_ID, C.INSERTION_POINT, H.INSERTION_ORDER INSERTION_ORDER \
-      FROM V4_ALIB_COMPONENT P \
-INNER JOIN V4_ASB_COMPONENT_HIERARCHY H \
-        ON P.COMPONENT_ALIB_ID = H.PARENT_COMPONENT_ALIB_ID \
-INNER JOIN V4_ALIB_COMPONENT A \
-        ON A.COMPONENT_ALIB_ID = H.COMPONENT_ALIB_ID \
-INNER JOIN V4_LIB_COMPONENT C \
-        ON C.COMPONENT_LIB_ID = A.COMPONENT_LIB_ID \
+      FROM V4_ALIB_COMPONENT P, \
+	   V4_ASB_COMPONENT_HIERARCHY H, \
+	   V4_ALIB_COMPONENT A, \
+	   V4_LIB_COMPONENT C \
      WHERE H.ASSEMBLY_ID :assemblyMatch: \
+       AND A.COMPONENT_ALIB_ID = H.COMPONENT_ALIB_ID \
+       AND P.COMPONENT_ALIB_ID = H.PARENT_COMPONENT_ALIB_ID \
+       AND C.COMPONENT_LIB_ID = A.COMPONENT_LIB_ID \
        AND C.INSERTION_POINT LIKE ':container_insertion_point:%' \
        AND INSTR(SUBSTRING(C.INSERTION_POINT, LENGTH(':container_insertion_point:') + 1), '.') = 0 \
        AND P.COMPONENT_NAME = ':parent_name:' \
@@ -66,7 +62,7 @@ queryComponentParams = \
    FROM V4_ASB_COMPONENT_ARG \
   WHERE ASSEMBLY_ID :assemblyMatch: \
     AND COMPONENT_ALIB_ID = ':component_id:' \
-  ORDER BY ARGUMENT_ORDER
+  ORDER BY ARGUMENT_ORDER, ARGUMENT
 
 queryAgentPGNames = \
  SELECT distinct A.PG_NAME \
@@ -78,17 +74,6 @@ queryAgentPGNames = \
     AND H.ASSEMBLY_ID :assemblyMatch: \
     AND B.ASSEMBLY_ID :assemblyMatch: \
     AND H.COMPONENT_NAME = ':agent_name:'
-
-queryAgentPGNames.mysql = \
-    SELECT DISTINCT A.PG_NAME \
-      FROM V4_ASB_AGENT H \
-INNER JOIN V4_ASB_AGENT_PG_ATTR B \
-        ON H.COMPONENT_ALIB_ID = B.COMPONENT_ALIB_ID \
-INNER JOIN V4_LIB_PG_ATTRIBUTE A \
-        ON A.PG_ATTRIBUTE_LIB_ID = B.PG_ATTRIBUTE_LIB_ID \
-     WHERE B.ASSEMBLY_ID :assemblyMatch: \
-       AND H.ASSEMBLY_ID :assemblyMatch: \
-       AND H.COMPONENT_NAME = ':agent_name:'
 
 queryLibProperties = \
  SELECT ATTRIBUTE_NAME, ATTRIBUTE_TYPE, AGGREGATE_TYPE, \
@@ -105,18 +90,6 @@ queryAgentProperties = \
     AND B.COMPONENT_ALIB_ID = H.COMPONENT_ALIB_ID \
     AND B.COMPONENT_NAME = ':agent_name:' \
     AND A.PG_ATTRIBUTE_LIB_ID = ':pg_attribute_id:'
-
-queryAgentProperties.mysql = \
-    SELECT A.ATTRIBUTE_VALUE \
-      FROM V4_ASB_AGENT H \
-INNER JOIN V4_ASB_AGENT_PG_ATTR A \
-        ON A.COMPONENT_ALIB_ID = H.COMPONENT_ALIB_ID \
-INNER JOIN V4_ALIB_COMPONENT B \
-        ON B.COMPONENT_ALIB_ID = H.COMPONENT_ALIB_ID \
-     WHERE A.ASSEMBLY_ID :assemblyMatch: \
-       AND H.ASSEMBLY_ID :assemblyMatch: \
-       AND B.COMPONENT_NAME = ':agent_name:' \
-       AND A.PG_ATTRIBUTE_LIB_ID = ':pg_attribute_id:'
 
 queryAgentRelation = \
  SELECT ASB_REL.ROLE, SPTD.COMPONENT_NAME ITEM_IDENTIFICATION, \
