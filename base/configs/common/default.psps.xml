@@ -56,6 +56,7 @@ Additional PSPs loaded by PSP Launcher
     <PSPName>alpine/demo/AGENT_MOVER.PSP</PSPName>
     <Comment>Request an Agent to move to another Node</Comment>
   </element>
+<!-- Bug 897: these two "metrics" PSPs are broken:
   <element type="org.cougaar.lib.planserver.NamedPSP">
     <Classname>org.cougaar.lib.planserver.psp.PSP_ClusterMetrics</Classname>
     <PSPName>alpine/demo/CLUSTER_METRICS.PSP</PSPName>
@@ -64,6 +65,7 @@ Additional PSPs loaded by PSP Launcher
     <Classname>org.cougaar.lib.planserver.psp.PSP_SocietyMetrics</Classname>
     <PSPName>alpine/demo/SOCIETY_METRICS.PSP</PSPName>
   </element>
+-->
   <element type="org.cougaar.lib.planserver.NamedPSP">
     <Classname>org.cougaar.lib.planserver.psp.PSP_EditPSPBlackBoard</Classname>
     <PSPName>alpine/demo/EBB.PSP</PSPName>
