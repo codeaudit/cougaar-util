@@ -71,7 +71,7 @@
 <p>
 Build 9.2.1 is a patch release of 9.2 intended to address known issues
 in 9.2, and further stabilize a few of the APIs. APIs that have
-changed include: BlackboardService (and therefore PluginAdapter) & the
+changed include: BlackboardService (and therefore PluginAdapter) and the
 ThreadService.
 
 <ul>
@@ -88,13 +88,13 @@ where all runtime components should do all file output. This includes
 persistence. Future releases may restrict output to this area.</li>
 <li>Most known issues in CSMART have been addressed, including
 performance issues and problems with the Society Monitor and Agent
-Insertion Recipe. See the <a
-href="../csmart/doc/release-notes.txt">CSMART release notes</a> for
-further details.</li>
+Insertion Recipe. See the 
+<a href="../csmart/doc/release-notes.txt">CSMART release notes</a> 
+for further details.</li>
 <li>A new servlet has been added : the Completion Watcher Servlet.  It
-measures execution time of an agent.  For more information, see the <a
-href="../glm/doc/CompletionWatcherServlet.html">Completion Watcher Servlet User's Guide</a> for
-further details.</li>
+measures execution time of an agent.  For more information, see the 
+<a href="../glm/doc/CompletionWatcherServlet.html">Completion Watcher Servlet User's Guide</a> 
+for further details.</li>
 <li>The AEViewerServlet has been added. It shows the values of basic 
 adaptivity objects, i.e., Conditions, OperatingModes, and OperatingModePolicies.
 Users can edit OperatingModePolicies and set the values of OperatingModes with
@@ -110,9 +110,9 @@ mechanism.  The various calling scripts have been cleaned up, and
 bootstrap.jar is now an executable jar file.
 The system property org.cougaar.useBootstrapper is now deprecated: users
 should execute Bootstrapper directly or use classpath rather than
-trying to have it both ways.  See <a href="api/org/cougaar/bootstrap/Bootstrapper.html">
-api/org/cougaar/bootstrap/Bootstrapper.html</a> (if cougaar-api.zip
-has been installed) for details.
+trying to have it both ways.  See 
+<a href="api/org/cougaar/bootstrap/Bootstrapper.html">api/org/cougaar/bootstrap/Bootstrapper.html</a> 
+(if cougaar-api.zip has been installed) for details.
 </li>
 <li>
 Standard Cougaar components now support a number of load-time
@@ -123,13 +123,22 @@ for discussion of the priorities,
 <a href="api/org/cougaar/core/component/ContainerSupport.html">ContainerSupport</a> 
 for information on how the standard Container implementation
 interprets this information, and 
-<a href="api/org/cougaar/core/node/INIParse.html">INIParser</a> for a
-discussion of the <em>.ini</em> file extensions which allow this
+<a href="api/org/cougaar/core/node/INIParser.html">INIParser</a> 
+for a discussion of the <em>.ini</em> file extensions which allow this
 information to be specified. CSMART does not yet support this
 mechanism - until it does, all CSMART-specified components will always be
 loaded at COMPONENT-level priority.  This functionality is fully
 implemented in 9.2.1 for Plugins, and Agent Components (including NodeAgent).
-</li>
+<li>
+The Thread Service API has changed, see
+<a href="ReleaseNotes/9.2.1/threadservice_info.txt">ThreadService Changes</a>.
+<li>
+As of 9.2.1, COUGAAR now provides more fine-grained control 
+over the externalization of AttributedMessages. In particular, a new set of 
+join points has been defined in the interfaces MessageWriter and 
+MessageReader. Attaching Aspect delegates at these interfaces provides the 
+ability to control and/or monitor 
+<a href="ReleaseNotes/9.2.1/MessageExternalizationAspects.htm">message externalization</a>.
 </ul>
 
 
@@ -664,11 +673,14 @@ is online available at <a href="http://www.cougaar.org/bugs">Cougaar website -> 
 
 <ul>
 <li>
+For a list of bugs that were resolved/closed since Cougaar release 9.2.0
+see <a href="ReleaseNotes/9.2.1/ClosedBugs920-921.htm">ClosedBugs920-921.htm</a>.
+<li>
 For a list of bugs that were resolved/closed since Cougaar release 9.0
-see <a href="ReleaseNotes/9.2/ClosedBugs90-92.htm">ClosedBugs90-92.htm</a>.
+see <a href="ReleaseNotes/9.2/ClosedBugs90-92.htm">ClosedBugs90-920.htm</a>.
 </ul>
 
-Both lists are results of Bugzilla queries run on May 1, 2002.
+The lists are results of Bugzilla queries (run on May 15, May 1).
 
 <!-- ---------------------------------------------------------------------- -->
 <!-- ---------------------------------------------------------------------- -->
