@@ -84,7 +84,7 @@ import org.cougaar.util.log.*;
  * Setting this property means that CIP/configs/<value of this property> will be searched before configs/common 
  **/
 public class ConfigFinder {
-  private List configPath = new ArrayList();
+  private List configPath = new ArrayList(11);
   private final  Map properties; // initialized by all constructors
 
   private Logger logger = null; // use getLogger to access
@@ -221,17 +221,16 @@ public class ConfigFinder {
   }
 
   protected final void appendPathElement(URL url) {
-    configPath.add(url);
+    if (!configPath.contains(url)) {
+      configPath.add(url);
+    }
   }
 
   protected final void appendPathElement(String el) {
-    String s = el;
-    s = Configuration.substituteProperties(el,properties);
-    URL u = Configuration.urlify(s);
-    if (u != null) {
-      appendPathElement(u);
-    } else {
-      getLogger().warn("Ignoring unparsable path element \""+el+"\"");
+    try {
+      appendPathElement(resolveName(el));
+    } catch (MalformedURLException mue) {
+      getLogger().warn("Ignoring unparsable path element \""+el+"\"", mue);
     }
   }
 
@@ -257,6 +256,17 @@ public class ConfigFinder {
     }
     traceLog(aFilename, null);
     return null;
+  }
+
+  /**
+   * Resolve a logical reference to a URL, e.g.
+   * will convert "$INSTALL/configs/common/foo.txt" to
+   * "file:/opt/cougaar/20030331/configs/common/foo.txt"
+   * or somesuch.
+   * @returns null if unresolvable.
+   **/
+  public URL resolveName(String logicalName) throws MalformedURLException{
+    return Configuration.urlify(Configuration.substituteProperties(logicalName,properties));
   }
 
   /**

@@ -38,6 +38,12 @@ import org.cougaar.util.log.*;
  * mostly for use by ConfigFinder et al.
  **/
 public final class Configuration {
+  public static final String INSTALL_PATH_PROP = "org.cougaar.install.path";
+  public static final String CONFIG_PATH_PROP = "org.cougaar.config.path";
+  public static final String CONFIG_PROP = "org.cougaar.config";
+  public static final String USER_HOME_PROP = "user.home";
+  public static final String USER_DIR_PROP = "user.dir";
+
   public static final String defaultConfigPath = 
     "$CWD;$HOME/.alp;$INSTALL/configs/$CONFIG;$INSTALL/configs/common";
 
@@ -93,23 +99,30 @@ public final class Configuration {
     return s;
   }
 
-  public static final URL urlify(String s) {
+  public static final URL urlify(String s) throws MalformedURLException {
+    MalformedURLException savedx = null;
     s = s.replace('\\', '/').replace('\\', '/'); // These should be URL-like
     try {
       if (!s.endsWith("/")) s += "/";
       return new URL(s);
-    } catch (MalformedURLException mue) {}
+    } catch (MalformedURLException mue) {
+      savedx = mue;
+    }
 
-    URL u = filenameToURL(s);
-    return u;
+    try {
+      return filenameToURL(s);
+    } catch (MalformedURLException mue) {
+      // would be nice to use savedx, too
+      throw new MalformedURLException("Could not convert \""+s+"\" to a URL");
+    }
   }
     
-  private static final URL filenameToURL(String s) {
+  private static final URL filenameToURL(String s) throws MalformedURLException {
     try {
       File f = new File(s);
       return (new File(s)).getCanonicalFile().toURL();
     } catch (Exception e) {
-      return null;
+      throw new MalformedURLException("Cannot convert string to file URL "+s);
     }
   }    
 
@@ -119,7 +132,7 @@ public final class Configuration {
    * as a relative URL.
    * @note Since this method is static, only the static defaultProperties are used.
    **/
-  public final static URL canonicalizeElement(String el) {
+  public final static URL canonicalizeElement(String el) throws MalformedURLException {
     String rs = substituteProperties(el,defaultProperties);
     try {
       return new URL(installUrl, rs);
@@ -130,28 +143,32 @@ public final class Configuration {
   static {
     Map m = new HashMap();
 
-    File ipf = new File(System.getProperty("org.cougaar.install.path", "."));
+    File ipf = new File(System.getProperty(INSTALL_PATH_PROP, "."));
     try { ipf = ipf.getCanonicalFile(); } catch (IOException ioe) {}
     String ipath = ipf.toString();
     m.put("INSTALL", ipath);
-    installUrl = urlify(ipath);
+    try {
+      installUrl = urlify(ipath);
+    } catch (MalformedURLException e) { e.printStackTrace(); }
 
-    m.put("HOME", System.getProperty("user.home"));
-    m.put("CWD", System.getProperty("user.dir"));
+    m.put("HOME", System.getProperty(USER_HOME_PROP));
+    m.put("CWD", System.getProperty(USER_DIR_PROP));
 
     File csf = new File(ipath, "configs");
     try { csf = csf.getCanonicalFile(); } catch (IOException ioe) {}
     String cspath = csf.toString();
     m.put("CONFIGS", cspath);
-    configUrl = urlify(cspath);
+    try {
+      configUrl = urlify(cspath);
+    } catch (MalformedURLException e) { e.printStackTrace(); }
 
-    String cs = System.getProperty("org.cougaar.config", "common");
+    String cs = System.getProperty(CONFIG_PROP, "common");
     if (cs != null)
       m.put("CONFIG", cs);
 
     defaultProperties = Collections.unmodifiableMap(m);
 
-    String config_path = System.getProperty("org.cougaar.config.path");
+    String config_path = System.getProperty(CONFIG_PATH_PROP);
     if (config_path != null && 
 	config_path.charAt(0) == '"' &&
 	config_path.charAt(config_path.length()-1) == '"') {
