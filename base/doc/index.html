@@ -88,16 +88,51 @@ The standard initializer service implementations will no longer construct
 ComponentDescription with empty lists when no parameter list is
 given.  Component.setParameter will be called IFF 
 the .ini file or CSMART database actually specifies arguments.  The
-implication is that Componentes should not put initialization code in
+implication is that Components should not put initialization code in
 the setParameter method if the Component ever is constructed without
 parameters.
+</li>
+<li>
+New documentation has been added that summarizes
+<a href="details/PersistenceGuidelines.html">persistence and agent mobility</a>.  
+In particular, the document covers:<ul>
+  <li>Basic definitions for "persistence", "mobility", "reconciliation", 
+	    "rehydration", etc.</li>
+	<li>Requirements for Cougaar software (plugins, components, 
+	    services, and agents) to fully support persistence, restarts, 
+			and agent mobility.</li>
+  <li>Failure symptoms if persistence or mobility is not correctly
+      supported, and how developers can track down and fix these 
+			bugs.</li>
+  <li>Tests and expected results.  The tests include JVM-kills and 
+	    the use of agent mobility to both move and restart agents.</li>
+  <li>Detailed notes on how lazy persistence and reconciliation work, 
+	    which will help clear up the mysterious behavior you might 
+			see.</li>
+</ul>
 </li>
 <li>
 The LoggingService is available earlier (during NodeAgent's HIGH
 subcomponent pass).  Furthermore, there is a new class
 <a href="api/org/cougaar/util/log/Logging.html">org.cougaar.util.log.Logging</a>
 which provides a variety of static methods giving access to loggers
-and allowing the set up of thread-specific logging contexts.
+and allowing the set up of thread-specific logging contexts.  Plugins
+and most components are still encouraged to use the existing
+<a href="api/org/cougaar/core/service/LoggingService.html">LoggingService</a>.
+</li>
+<li>
+Several agent mobility bugs have been fixed:<ul>
+  <li>Bug 1218: Move to an unknown node now fails quickly instead of 
+	              waiting forever</li>
+  <li>Bug 1316: Work around for "before Context" bug, the full fix is
+	              planned for 9.4.1</li>
+  <li>Bug 1368: MTS "FlushAspect" warning is no longer generated</li>
+  <li>Bug 1369: Fixed race condition between loading and mobility,
+	              and prevent simultaneous move requests</li>
+  <li>Bug 1382: Don't do state reconciliation when moving agents</li>
+  <li>Bug 1423: Agent binders now support state capture</li>
+  <li>Bug 1549: Fixed memory leak in community services</li>
+</ul>
 </li>
 <li>Minor fix to support running TPFDD Viewer. Avoids necessity for
 workaround described in 9.2.2 - errata.</li>
@@ -175,7 +210,9 @@ NotSerializableException.
 
 <li>
 The Metrics Services are better coupled with the RSS.  Several example
-uses, including servlets and plugins, have been provided.
+uses, including servlets and plugins, have been provided (see 
+<a href=details/MetricServiceRuntimeNotes.html>
+MetricServiceRuntimeNotes</a>).
 </li>
 
 </ul>
