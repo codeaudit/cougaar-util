@@ -98,6 +98,12 @@ public class JarConfigFinder
    */
   private List _configPathList;
 
+  /**
+   * A list of URLs pointing to Jar files that have been released.
+   * This allows JarFiles to be reclaimed by the garbage collector.
+   */
+  private List  _releasedJarFileUrls = new ArrayList();
+
   /** A directory to store files extracted from JAR files, so that we
    *  can return a File reference to the client.
    */
@@ -149,7 +155,7 @@ public class JarConfigFinder
       }
       getLogger().debug("Config path:" + s);
     }
-
+    launchJarInfoCleanupThread();
   }
 
   ////////////////////////////////////////////////////////////////////
@@ -182,7 +188,7 @@ public class JarConfigFinder
       }
       catch (Exception e) {
 	getLogger().warn("Unable to copy to temp directory: " + aFilename
-		     + ". Reason: " + e);
+			 + ". Reason: " + e);
       }
     }
     else {
@@ -248,7 +254,7 @@ public class JarConfigFinder
 
     if (getLogger().isDebugEnabled()) {
       getLogger().debug("Looking up " + aFileName + " in local cache ("
-		    + _file2URLs.size() + " elements)");
+			+ _file2URLs.size() + " elements)");
     }
     // First, search in the cache
     theURL = (URL) _file2URLs.get(aFileName);
@@ -261,15 +267,18 @@ public class JarConfigFinder
       // Second, search the file in the list of JAR files
       if (getLogger().isDebugEnabled()) {
 	getLogger().debug("Looking up " + aFileName + " in Jar file list ("
-		      + _jarFileCache.size() + " jar files)");
+			  + _jarFileCache.size() + " jar files)");
       }
-      ListIterator it = _jarFileCache.listIterator();
-      while (it.hasNext()) {
-	JarFileInfo entry = (JarFileInfo) it.next();
-	theURL = locateFileInJarFile(aFileName, entry);
-	if (theURL != null) {
-	  if (getLogger().isDebugEnabled()) {
-	    getLogger().debug("Found " + aFileName + " in Jar file list");
+      synchronized (_jarFileCache) {
+	refreshJarFileCache();
+	ListIterator it = _jarFileCache.listIterator();
+	while (it.hasNext()) {
+	  JarFileInfo entry = (JarFileInfo) it.next();
+	  theURL = locateFileInJarFile(aFileName, entry);
+	  if (theURL != null) {
+	    if (getLogger().isDebugEnabled()) {
+	      getLogger().debug("Found " + aFileName + " in Jar file list");
+	    }
 	  }
 	}
       }
@@ -287,12 +296,12 @@ public class JarConfigFinder
       }
       if (getLogger().isDebugEnabled()) {
 	getLogger().debug(
-            "Looking up " + aFileName + " in config path (" +
-	    configPath.size() + " elements)");
+			  "Looking up " + aFileName + " in config path (" +
+			  configPath.size() + " elements)");
       }
       for (ListIterator it = configPath.listIterator();
            (it.hasNext() && (theURL == null));
-          ) {
+	   ) {
 	URL base = (URL) it.next();
 	theURL = locateFileInPathElement(base, aFileName);
 	// plan to remove the path, so that we don't look it
@@ -381,14 +390,15 @@ public class JarConfigFinder
    */
   protected String getTmpBaseDirectoryName() {
     /*
-      // for instance, the SecureConfigFinder might define this as:
+    // for instance, the SecureConfigFinder might define this as:
     return System.getProperty("org.cougaar.workspace") + File.separator +
-      "security" + File.separator + 
-      "jarconfig" + File.separator +
-      System.getProperty("org.cougaar.node.name");
+    "security" + File.separator + 
+    "jarconfig" + File.separator +
+    System.getProperty("org.cougaar.node.name");
     */
     // by default, use /tmp or the equivalent
-    return System.getProperty("org.cougaar.workspace");
+    return System.getProperty("org.cougaar.workspace") + File.separator
+      + "jarfiles";
   }
 
   /** create a set of uniquely-named temporary directories for
@@ -471,6 +481,7 @@ public class JarConfigFinder
       File.createTempFile("tmpFile", ".tmp", _tmpDirectory);
     FileOutputStream fos = new FileOutputStream(tempFile);
     JarURLConnection juc = (JarURLConnection)aUrl.openConnection();
+    juc.setUseCaches(false);
     InputStream is = juc.getInputStream();
     int v = 0;
     while ((v = is.read()) != -1) {
@@ -512,8 +523,9 @@ public class JarConfigFinder
       JarFileInfo entry = new JarFileInfo(jarFile);
 
       verifyJarFile(entry.getJarFile());
-     
-      _jarFileCache.add(entry);
+      synchronized (_jarFileCache) {
+	_jarFileCache.add(entry);
+      }
       return entry;
     }
     catch (Exception e) {
@@ -715,7 +727,7 @@ public class JarConfigFinder
     }
     if (getLogger().isDebugEnabled()) {
       getLogger().debug("Searched " + aFileName
-	+ " under " + base.toString() + ". Found: " + theURL);
+			+ " under " + base.toString() + ". Found: " + theURL);
     }
     return theURL;
   }
@@ -725,7 +737,8 @@ public class JarConfigFinder
     // First, try to open the file as a Jar URL connection
     try {
       JarURLConnection juc = (JarURLConnection)base.openConnection();
-//      JarFile jf = juc.getJarFile();
+      juc.setUseCaches(false);
+      JarFile jf = juc.getJarFile();
       // This is a Jar file.
       // Add the new jar file to the list of jar files.
       JarFileInfo entry = appendJarFile(juc.getURL());
@@ -772,5 +785,56 @@ public class JarConfigFinder
    */
   protected boolean acceptAbsoluteFileNames() {
     return true;
+  }
+
+  public static long DELAY_TO_RELEASE_JAR_FILES = 5 * 60 * 1000;
+
+  protected void launchJarInfoCleanupThread() {
+    Runnable r = new Runnable() {
+	public void run() {
+	  while (true) {
+	    try {
+	      Thread.sleep(DELAY_TO_RELEASE_JAR_FILES);
+	    }
+	    catch (Exception e) {}
+	    synchronized (_jarFileCache) {
+	      Iterator it = _jarFileCache.iterator();
+	      while (it.hasNext()) {
+		JarFileInfo entry = (JarFileInfo) it.next();
+		long age = System.currentTimeMillis() - entry.getCreationTime();
+		if (age > DELAY_TO_RELEASE_JAR_FILES) {
+		  synchronized(_releasedJarFileUrls) {
+		    //System.out.println("Releasing " + entry.getJarFileURL());
+		    _releasedJarFileUrls.add(entry.getJarFileURL());
+		  }
+		  it.remove();
+		}
+	      }
+	    }
+            /*
+	      System.out.println("Size of Jar cache: " + _jarFileCache.size()
+	      + " - Size of released files: "
+	      + _releasedJarFileUrls.size());
+            */
+	  }
+	}
+      };
+    Thread t = new Thread(r);
+    t.start();
+  }
+
+  /**
+   * Add Jar files back to the cache of Jar files.
+   */
+  protected void refreshJarFileCache() {
+    synchronized(_releasedJarFileUrls) {
+      Iterator it = _releasedJarFileUrls.iterator();
+      while (it.hasNext()) {
+	URL entry = (URL) it.next();
+	//	System.out.println("Adding " + entry + " back to cache");
+	appendJarFile(entry);
+	it.remove();
+      }
+    }
   }
 }

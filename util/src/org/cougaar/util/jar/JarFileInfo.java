@@ -44,6 +44,8 @@ public class JarFileInfo {
    */
   private boolean _isProcessed;
 
+  private long    _creationTime;
+
   public JarFileInfo(URL aUrl)
     throws java.io.IOException {
     _theJarFileUrl = aUrl;
@@ -51,6 +53,11 @@ public class JarFileInfo {
       (JarURLConnection)_theJarFileUrl.openConnection();
     _theJarFile = juc.getJarFile();
     _isProcessed = false;
+    _creationTime = System.currentTimeMillis();
+  }
+
+  public long getCreationTime() {
+    return _creationTime;
   }
 
   public URL getJarFileURL() {
