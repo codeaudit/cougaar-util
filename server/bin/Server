@@ -31,7 +31,7 @@
 
 # Set the COUGAAR_INSTALL_PATH, which is the base directory for the
 # COUGAAR installation
-#set COUGAAR_INSTALL_PATH=/opt/alp
+#set COUGAAR_INSTALL_PATH=/opt/cougaar
 
 # Specify the host-specific properties file, which defines *all*
 # the Node installation-specific properties.

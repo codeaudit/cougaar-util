@@ -31,7 +31,7 @@ REM working directory.
 
 REM Set the COUGAAR_INSTALL_PATH, which is the base directory for the
 REM COUGAAR installation
-REM  #SET COUGAAR_INSTALL_PATH=C:\opt\alp
+REM  #SET COUGAAR_INSTALL_PATH=C:\opt\cougaar
 
 
 REM Specify the host-specific properties file, which defines *all*
