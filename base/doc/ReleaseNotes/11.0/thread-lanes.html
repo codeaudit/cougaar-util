@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>Thread Lanes</title>
+</head>
+
+<body>
+<h1>Thread Lanes</h1>
+
+<h2>Overview</h2>
+
+<p>Thread lanes are needed to meet two requests: handling CPU
+intensive Threads (load-balancing currently makes its own thread
+because lanes weren't available), and Burst Smoothing (limiting the
+number of threads executing for Agents and MTS, e.g. RearB was
+observed to have 300 outstanding threads).
+
+<p>With thread lanes, threads can be organized into four (currently
+hardwired) categories that have independent thread service policies.
+The choice of lane is done at Scheduleable creation time and for now
+cannot be changed thereafter.
+
+<p>In the initial implementation each lane has its own pool, and each
+pool in turn has its own ThreadGroup. Eventually we might be use this
+to control the Java threads more directly.
+
+<p>For 11.0 the threads lanes are defined as follows:
+<ul>
+  
+  <li>BEST_EFFORT (initial default lane) thread may block or do other
+      nasty things. </li>
+      
+  <li>WILL_BLOCK thread will block at some point, so use policies can
+      take this into account. </li>
+	  
+  <li>CPU_INTENSE thread will take a lot of CPU, but promises to
+      finish some time. </li>
+
+  <li>WELL_BEHAVED thread does not block or take too much CPU. </li>
+
+</ul>
+
+<h2> API additions </h2>
+
+<h3>ThreadService</h3>
+<p> The following methods have been added to ThreadService:
+
+<pre>
+    Schedulable getThread(Object consumer, Runnable runnable, String name,
+			  int lane);
+</pre>
+
+Makes a thread in the given lane.  The older getThread calls use the
+default lane.
+
+<h3>ThreadControlService</h3>
+
+<p> The following methods have been added to ThreadControlService:
+
+<pre>
+    int getDefaultLane();
+    void setDefaultLane(int lane);
+</pre>
+
+These get/set the default lane for the the service.
+
+<pre>
+    void setMaxRunningThreadCount(int count, int lane);
+    void setQueueComparator(Comparator comparator, int lane);
+    void setRightsSelector(RightsSelector selector, int lane);
+    boolean setQualifier(UnaryPredicate predicate, int lane);
+    boolean setChildQualifier(UnaryPredicate predicate, int lane);
+    int runningThreadCount(int lane);
+    int pendingThreadCount(int lane);
+    int activeThreadCount(int lane);
+    int maxRunningThreadCount(int lane);
+</pre>
+
+These operate on the given lane. The older control calls use the
+default lane.
+
+<h3>ThreadListenerService</h3>
+
+<p> The following methods have been added to ThreadListenerService:
+
+<pre>
+    void addListener(ThreadListener listener, int lane);
+    void removeListener(ThreadListener listener, int lane);
+</pre>
+
+This operate on the given lane. The older listener calls use the
+default lane.
+
+<h2> Example usage pattern</h2>
+
+<ol>
+
+  <li>MTS and Persistence could use the WILL_BLOCK lane to make
+threads that will not effect the agent thread. The MTS could have a
+local policy to limit the number of outstanding RMI calls to be one
+per node. </li>
+
+  <li>Agents could be marked as WELL_BEHAVED which changes the local
+    policies for the default thread service. The agent should then be
+    able to run with one thread (or less).</li>
+    
+  <li>CPU intensive threads could be started and not effect the other
+  lanes. Maybe we can find a way to "nice" the underling linux
+  process. In the past, that had to be done with C-code and a JNI
+  class.</li>
+
+</ol>
+
+
+<hr>
+<address><a href="mailto:jzinky@bbn.com>jzinky@bbn.com</a></address>
+<!-- hhmts start -->
+Last modified: Fri Jan 30 16:13:38 EST 2004
+<!-- hhmts end -->
+</body> </html>

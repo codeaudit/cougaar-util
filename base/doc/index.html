@@ -105,6 +105,16 @@ service available at the node level SocketFactoryService which allows
 clients to find an appropriate SocketFactory without needing to 
 know about the MTS implementation which may be supporting it.
 </li>
+
+<li>
+    Lanes have been added to the Thread Services.  This allows finer
+    tuned control over thread policies (max. running, queue ordering,
+    etc).  The service APIs have some new methods in support of
+    this.  Old methods continue to work and simply use the default
+    lane.  For more details see <a
+    href="ReleaseNotes/11.0/thread-lanes.html">Thread Lanes</a>. 
+</li>
+
 <li>Multiple changes to Service Discovery. These make specifying
 matchmaker scoring functions much easier, and provide better support for
 dynamic provider availability changing. AvailabilityChangeMessages can
