@@ -1,9 +1,9 @@
 <prototype name = "NSN/6516013244676">
-  <object class="org.cougaar.domain.glm.ldm.asset.ClassVIIIMedical">
+  <object class="org.cougaar.glm.ldm.asset.ClassVIIIMedical">
 
       <field name="TypeIdentificationPG" type="object">
         <value>
-          <object class="org.cougaar.domain.planning.ldm.asset.NewTypeIdentificationPG">
+          <object class="org.cougaar.planning.ldm.asset.NewTypeIdentificationPG">
           <field name="TypeIdentification" type="String">
             <value> NSN/6516013244676 </value>
           </field>

@@ -3,13 +3,13 @@
 <!DOCTYPE Propagation SYSTEM "Forward.dtd" []>
 
 <Propagations>
-  <TransferablePropagation class="org.cougaar.domain.glm.ldm.policy.StockageLevelPolicy">
+  <TransferablePropagation class="org.cougaar.glm.ldm.policy.StockageLevelPolicy">
 	<role> StrategicTransportationProvider </role>
   </TransferablePropagation>
-  <TransferablePropagation class="org.cougaar.domain.glm.ldm.oplan.OplanCoupon">
+  <TransferablePropagation class="org.cougaar.glm.ldm.oplan.OplanCoupon">
 	<role> Subordinate </role>
   </TransferablePropagation>
-  <TransferablePropagation class="org.cougaar.domain.glm.ldm.oplan.OplanCoupon">
+  <TransferablePropagation class="org.cougaar.glm.ldm.oplan.OplanCoupon">
 	<role> AdministrativeSubordinate </role>
   </TransferablePropagation>
 </Propagations>

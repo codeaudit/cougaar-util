@@ -6,7 +6,7 @@
 
 <Policies>
 
- <Policy name="ClassISubsistenceInventoryPolicy" type="org.cougaar.domain.glm.plugins.inventory.InventoryPolicy">
+ <Policy name="ClassISubsistenceInventoryPolicy" type="org.cougaar.glm.plugins.inventory.InventoryPolicy">
     <RuleParam name="ResourceType">
       	<String value ="ClassISubsistence">
 	</String>
@@ -41,7 +41,7 @@
     </RuleParam>
   </Policy>
 
- <Policy name="ClassVIIIMedicalOnHandPolicy" type="org.cougaar.domain.glm.plugins.inventory.InventoryPolicy">
+ <Policy name="ClassVIIIMedicalOnHandPolicy" type="org.cougaar.glm.plugins.inventory.InventoryPolicy">
     <RuleParam name="ResourceType">
       	<String value ="ClassVIIIMedical">
 	</String>
@@ -76,7 +76,7 @@
     </RuleParam>
   </Policy>
 
- <Policy name="AmmunitionOnHandPolicy" type="org.cougaar.domain.glm.plugins.inventory.InventoryPolicy">
+ <Policy name="AmmunitionOnHandPolicy" type="org.cougaar.glm.plugins.inventory.InventoryPolicy">
     <RuleParam name="ResourceType">
       	<String value ="Ammunition">
 	</String>
@@ -111,7 +111,7 @@
     </RuleParam>
   </Policy>
 
- <Policy name="BulkPOLOnHandPolicy" type="org.cougaar.domain.glm.plugins.inventory.InventoryPolicy">
+ <Policy name="BulkPOLOnHandPolicy" type="org.cougaar.glm.plugins.inventory.InventoryPolicy">
     <RuleParam name="ResourceType">
       	<String value ="BulkPOL">
 	</String>
@@ -146,7 +146,7 @@
     </RuleParam>
   </Policy>
 
- <Policy name="PackagedPOLOnHandPolicy" type="org.cougaar.domain.glm.plugins.inventory.InventoryPolicy">
+ <Policy name="PackagedPOLOnHandPolicy" type="org.cougaar.glm.plugins.inventory.InventoryPolicy">
     <RuleParam name="ResourceType">
       	<String value ="PackagedPOL">
 	</String>
@@ -182,7 +182,7 @@
   </Policy>
 
 
- <Policy name="ConsumableOnHandPolicy" type="org.cougaar.domain.glm.plugins.inventory.InventoryPolicy">
+ <Policy name="ConsumableOnHandPolicy" type="org.cougaar.glm.plugins.inventory.InventoryPolicy">
     <RuleParam name="ResourceType">
       	<String value ="Consumable">
 	</String>

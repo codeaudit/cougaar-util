@@ -1,8 +1,8 @@
 
 helperPack = Packages.org.cougaar.core.plugin.util;
-planPack = Packages.org.cougaar.domain.planning.ldm.plan;
+planPack = Packages.org.cougaar.planning.ldm.plan;
 jglPack = Packages.com.objectspace.jgl;
-genericPack= Packages.org.cougaar.domain.mlm.plugin.generic;
+genericPack= Packages.org.cougaar.mlm.plugin.generic;
 
 waitingForSub = null;
 subOrgAssets = null;

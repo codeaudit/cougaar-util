@@ -43,5 +43,5 @@ ConsumableNavyMEI=select MEI_ID, NSN, OPTEMPO, DCR from NAVY_SPARES_DCR_BY_OPTEM
 ConsumableNavyMDS=select MDS, NSN, OPTEMPO, DEMANDS_PER_DAY from NAVYAIR_SPARES_DCR_BY_OPTEMPO where MDS = :nsn order by DEMANDS_PER_DAY
 # Prototype & Property Provider
 #
-#%org.cougaar.domain.glm.ldm.GLMPrototypeProvider
-#%org.cougaar.domain.glm.ldm.GLMPropertyProvider
+#%org.cougaar.glm.ldm.GLMPrototypeProvider
+#%org.cougaar.glm.ldm.GLMPropertyProvider

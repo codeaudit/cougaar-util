@@ -22,7 +22,7 @@
 
 source $COUGAAR_INSTALL_PATH/bin/setlibpath.csh
 
-set MYCLASSES="org.cougaar.domain.mlm.ui.planviewer.XMLClient"
+set MYCLASSES="org.cougaar.mlm.ui.planviewer.XMLClient"
 
 set osargs=""
 set os=`uname`

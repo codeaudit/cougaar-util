@@ -26,7 +26,7 @@ CALL %COUGAAR_INSTALL_PATH%\bin\setarguments.bat
 
 REM produces the inventory chart display
 set MYCLASSES=org.cougaar.lib.uiframework.ui.inventory.InventoryChartUI
-set BS=org.cougaar.core.society.Bootstrapper
+set BS=org.cougaar.core.node.Bootstrapper
 @ECHO ON
 
 java.exe %MYPROPERTIES% %MYMEMORY% -classpath %LIBPATHS% %BS% %MYCLASSES% %1

@@ -76,8 +76,8 @@ fi
 javaargs="$MYPROPERTIES $MYMEMORY -classpath $LIBPATHS $DEVP"
 
 if [ "$COUGAAR_DEV_PATH" != "" ]; then
-    echo java $javaargs org.cougaar.core.society.Node $args
+    echo java $javaargs org.cougaar.core.node.Node $args
 fi
 
 # exec instead of eval
-exec java $javaargs org.cougaar.core.society.Node $args
+exec java $javaargs org.cougaar.core.node.Node $args

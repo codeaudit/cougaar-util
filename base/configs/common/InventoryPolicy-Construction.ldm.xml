@@ -7,7 +7,7 @@
 <Policies>
 
 
- <Policy name="ClassIVConstructionMaterialInventoryPolicy" type="org.cougaar.domain.glm.plugins.inventory.InventoryPolicy">
+ <Policy name="ClassIVConstructionMaterialInventoryPolicy" type="org.cougaar.glm.plugins.inventory.InventoryPolicy">
     <RuleParam name="ResourceType">
       	<String value ="ClassIVConstructionMaterial">
 	</String>

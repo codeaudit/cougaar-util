@@ -4,9 +4,9 @@
 
 <clusterassets>
   <prototype name="NSN/2350010871095">
-    <object class="org.cougaar.domain.glm.ldm.asset.SelfPropelledGroundWeapon"
+    <object class="org.cougaar.glm.ldm.asset.SelfPropelledGroundWeapon"
       id="proto-001">
-      <property class="org.cougaar.domain.planning.ldm.asset.TypeIdentificationPG"
+      <property class="org.cougaar.planning.ldm.asset.TypeIdentificationPG"
 	id="property-001">
 	<field value="NSN/2350010871095" type="java.lang.String"
 	  name="TypeIdentification"/>

@@ -4,8 +4,8 @@
 
 <clusterassets>
   <prototype name="NSN/H60">
-    <object class="org.cougaar.domain.glm.ldm.asset.RotaryWingAircraftWeapon" id="proto-001">
-      <property class="org.cougaar.domain.planning.ldm.asset.TypeIdentificationPG" id="property-001">
+    <object class="org.cougaar.glm.ldm.asset.RotaryWingAircraftWeapon" id="proto-001">
+      <property class="org.cougaar.planning.ldm.asset.TypeIdentificationPG" id="property-001">
 	<field value="NSN/H60" type="java.lang.String" name="TypeIdentification"/>
 	<field value="H60" type="java.lang.String" name="Nomenclature"/>
       </property>

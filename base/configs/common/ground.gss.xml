@@ -7,7 +7,7 @@
 <schedulingSpecs taskGroupingMode = "unalligned">
 
   <assetFilter>
-    <assetClassMatch className = "org.cougaar.domain.planning.ldm.asset.Truck" />
+    <assetClassMatch className = "org.cougaar.planning.ldm.asset.Truck" />
   </assetFilter>
 
   <taskFilter verb="TransportByGround"

@@ -4,7 +4,7 @@
 
 <Policies>
 
- <Policy name="ConsumableDemandProjectionPolicy" type="org.cougaar.domain.glm.plugins.projection.DemandProjectionPolicy">
+ <Policy name="ConsumableDemandProjectionPolicy" type="org.cougaar.glm.plugins.projection.DemandProjectionPolicy">
     <RuleParam name="ItemConsumed">
       	<String value ="Consumable">
 	</String>
@@ -18,7 +18,7 @@
 	</Integer>
     </RuleParam>
   </Policy>
- <Policy name="BulkPOLDemandProjectionPolicy" type="org.cougaar.domain.glm.plugins.projection.DemandProjectionPolicy">
+ <Policy name="BulkPOLDemandProjectionPolicy" type="org.cougaar.glm.plugins.projection.DemandProjectionPolicy">
     <RuleParam name="ItemConsumed">
       	<String value ="BulkPOL">
 	</String>
@@ -32,7 +32,7 @@
 	</Integer>
     </RuleParam>
   </Policy>
- <Policy name="AmmunitionDemandProjectionPolicy" type="org.cougaar.domain.glm.plugins.projection.DemandProjectionPolicy">
+ <Policy name="AmmunitionDemandProjectionPolicy" type="org.cougaar.glm.plugins.projection.DemandProjectionPolicy">
     <RuleParam name="ItemConsumed">
       	<String value ="Ammunition">
 	</String>

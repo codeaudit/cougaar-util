@@ -25,9 +25,9 @@ REM pass in "admin" to run SANode separately
 
 rem Domains are now usually defined by the config file LDMDomains.ini
 rem But you may still use properties if you wish.
-rem set MYDOMAINS=-Dorg.cougaar.domain.alp=org.cougaar.domain.glm.GLMDomain
+rem set MYDOMAINS=-Dorg.cougaar.domain.alp=org.cougaar.glm.GLMDomain
 set MYDOMAINS=
-set MYCLASSES=org.cougaar.core.society.Node
+set MYCLASSES=org.cougaar.core.node.Node
 
 set TOPS_DEMO_PATH=%COUGAAR_INSTALL_PATH%\tops\configs\demo-config
 set TOPS_TEST_PATH=%COUGAAR_INSTALL_PATH%\tops\configs\test-config

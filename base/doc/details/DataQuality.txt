@@ -1,5 +1,5 @@
 // new basic interface for DataQuality with no specific API:
-package org.cougaar.domain.planning.ldm.dq;
+package org.cougaar.planning.ldm.dq;
 interface DataQuality {}
 interface HasDataQuality {
   DataQuality getDataQuality();
@@ -11,7 +11,7 @@ interface NewHasDataQuality extends HasDataQuality {
 // It is up to each Domain to decide what DataQuality means for
 // its objects.  E.g.:
 
-package org.cougaar.domain.glm.ldm;
+package org.cougaar.glm.ldm;
 interface ALPDataQuality extends DataQuality {
   // all the slots from the DQ proposal
   // ...

@@ -13,11 +13,11 @@
 
 
 <prototype name="WaterTanker3000">
-	 <object class="org.cougaar.domain.glm.ldm.asset.BulkWater">
+	 <object class="org.cougaar.glm.ldm.asset.BulkWater">
 
 		<field name="TypeIdentificationPG" type="object">
 		  <value>
-			 <object class="org.cougaar.domain.planning.ldm.asset.NewTypeIdentificationPG">
+			 <object class="org.cougaar.planning.ldm.asset.NewTypeIdentificationPG">
 
 				<field name="TypeIdentification" type="String">
 				  <value> SMFT3000 </value>
@@ -33,11 +33,11 @@
 
 		<field name="SupplyPG" type="object">
 		  <value>
-			 <object class="org.cougaar.domain.glm.ldm.asset.NewWaterSupplyPG">
+			 <object class="org.cougaar.glm.ldm.asset.NewWaterSupplyPG">
 
 				<field name="IssueVolumePerDay" type="object">
 				  <value>
-					 <object class="org.cougaar.domain.planning.ldm.measure.Volume">
+					 <object class="org.cougaar.planning.ldm.measure.Volume">
 						<field name="Gallons" type="double">
 							<value> 3000.0 </value>
 						</field>
@@ -47,7 +47,7 @@
 
 				<field name="PumpVolumePerMinute" type="object">
 				  <value>
-					 <object class="org.cougaar.domain.planning.ldm.measure.Volume" name="FillRate">
+					 <object class="org.cougaar.planning.ldm.measure.Volume" name="FillRate">
 						<field name="Gallons" type="double">
 							<value> 600.0 </value>
 						</field>
@@ -61,11 +61,11 @@
 
 		<field name="GroundSelfPropulsionPG" type="object">
 			<value>
-				<object class="org.cougaar.domain.glm.ldm.asset.GroundSelfPropulsionPG">
+				<object class="org.cougaar.glm.ldm.asset.GroundSelfPropulsionPG">
 
 					<field name="CruiseSpeed" type="object">
 						<value>
-							<object class="org.cougaar.domain.planning.ldm.measure.Speed" name="AverageSpeed">
+							<object class="org.cougaar.planning.ldm.measure.Speed" name="AverageSpeed">
 								<field name="MilesPerHour" type="double">
 									<value> 30.0 </value>
 								</field>

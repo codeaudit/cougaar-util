@@ -14,13 +14,13 @@
 -->
 
 <prototype name="MOS-QM">
-  <!-- <object class="org.cougaar.domain.glm.ldm.asset.GLMAsset"> -->
-  <object class="org.cougaar.domain.glm.ldm.asset.Capacity"> 
-  <!-- <object class="org.cougaar.domain.planning.ldm.asset.Asset"> -->
+  <!-- <object class="org.cougaar.glm.ldm.asset.GLMAsset"> -->
+  <object class="org.cougaar.glm.ldm.asset.Capacity"> 
+  <!-- <object class="org.cougaar.planning.ldm.asset.Asset"> -->
 
       <field name="TypeIdentificationPG" type="object">
         <value>
-          <object class="org.cougaar.domain.planning.ldm.asset.NewTypeIdentificationPG">
+          <object class="org.cougaar.planning.ldm.asset.NewTypeIdentificationPG">
             <field name="TypeIdentification" type="String">
               <value> MOS/QM </value>
             </field>
@@ -33,10 +33,10 @@
 
       <field name="SupplyPG" type="object">
         <value>
-          <object class="org.cougaar.domain.glm.ldm.asset.NewSupplyPG">
+          <object class="org.cougaar.glm.ldm.asset.NewSupplyPG">
             <field name="Class1HandleMassPerDay" type="object">
               <value>
-                <object class="org.cougaar.domain.planning.ldm.measure.Mass">
+                <object class="org.cougaar.planning.ldm.measure.Mass">
                   <field name="ShortTons" type="double">
                     <value> 8.0 </value>
                   </field>

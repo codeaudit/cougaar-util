@@ -35,7 +35,7 @@ UniqueObjects
 // Note that this package is not built-in, so one must specify it's 
 // full "org.cougaar..." name.
 
-(is:org.cougaar.core.society.UniqueObject)
+(is:org.cougaar.core.util.UniqueObject)
 **********************************************************************
 Non-Tasks
 // One can wrap a "(not ..)" around any predicate to select all items 
@@ -161,7 +161,7 @@ Tasks with a "FROM" Preposition of "HKUZ"
       (is:Not:Null)
       (getIndirectObject
         (and
-          (is:org.cougaar.domain.glm.ldm.plan.GeolocLocation)
+          (is:org.cougaar.glm.ldm.plan.GeolocLocation)
           (getGeolocCode
             (and 
               (is:Not:Null)
@@ -205,7 +205,7 @@ UniqueObjects with UID "xyz/123"
 // String.equals("xyz/123").
 
 (and
-  (is:org.cougaar.core.society.UniqueObject)
+  (is:org.cougaar.core.util.UniqueObject)
   (getUID
     (and
       (is:Not:Null)

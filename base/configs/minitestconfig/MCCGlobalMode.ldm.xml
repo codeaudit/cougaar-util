@@ -4,9 +4,9 @@
 
 <clusterassets>
   <prototype name="NSN/2320013189902">
-    <object class="org.cougaar.domain.glm.ldm.asset.Truck" 
+    <object class="org.cougaar.glm.ldm.asset.Truck" 
       id="proto-001">
-      <property class="org.cougaar.domain.planning.ldm.asset.TypeIdentificationPG"
+      <property class="org.cougaar.planning.ldm.asset.TypeIdentificationPG"
 	id="property-001">
 	<field value="NSN/2320013189902" type="java.lang.String"
 	  name="TypeIdentification"/>
@@ -16,9 +16,9 @@
     </object>
   </prototype>
   <prototype name="MAINTENANCE">
-    <object class="org.cougaar.domain.planning.ldm.asset.AbstractAsset"
+    <object class="org.cougaar.planning.ldm.asset.AbstractAsset"
       id="proto-002">
-      <property class="org.cougaar.domain.planning.ldm.asset.TypeIdentificationPG"
+      <property class="org.cougaar.planning.ldm.asset.TypeIdentificationPG"
         id="property-002">
         <field value="MAINTENANCE" type="java.lang.String"
           name="TypeIdentification"/>

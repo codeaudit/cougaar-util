@@ -5,7 +5,7 @@
   <glquery>
     <keyname>ORG_LOC</keyname>
     <predicate>
-      <instanceof>org.cougaar.domain.glm.ldm.asset.Organization</instanceof>
+      <instanceof>org.cougaar.glm.ldm.asset.Organization</instanceof>
     </predicate>
     <adapter>org.cougaar.lib.uiframework.ui.orglocation.psp.xmlservice.LocationScheduleToXml</adapter>
   </glquery>
@@ -14,7 +14,7 @@
   <glquery>
     <keyname>ORG_RELS</keyname>
     <predicate>
-      <instanceof>org.cougaar.domain.glm.ldm.asset.Organization</instanceof>
+      <instanceof>org.cougaar.glm.ldm.asset.Organization</instanceof>
     </predicate>
     <adapter>org.cougaar.lib.uiframework.ui.orgui.OrgSubAdapter</adapter>
   </glquery>
@@ -23,7 +23,7 @@
   <glquery>
     <keyname>QUERY_DEMAND</keyname>
     <predicate>
-      <instanceof>org.cougaar.domain.planning.ldm.plan.Task</instanceof>
+      <instanceof>org.cougaar.planning.ldm.plan.Task</instanceof>
     </predicate>
     <adapter>mil.darpa.log.alpine.blackjack.assessui.society.DemandQueryAdapter</adapter>
   </glquery>
@@ -32,7 +32,7 @@
   <glquery>
     <keyname>QUERY_INVENTORY</keyname>
     <predicate>
-      <instanceof>org.cougaar.domain.planning.ldm.asset.Asset</instanceof>
+      <instanceof>org.cougaar.planning.ldm.asset.Asset</instanceof>
     </predicate>
     <adapter>mil.darpa.log.alpine.blackjack.assessui.society.InventoryQueryAdapter</adapter>
   </glquery>
@@ -41,7 +41,7 @@
   <glquery>
     <keyname>QUERY_DUEOUT</keyname>
     <predicate>
-      <instanceof>org.cougaar.domain.planning.ldm.asset.Asset</instanceof>
+      <instanceof>org.cougaar.planning.ldm.asset.Asset</instanceof>
     </predicate>
     <adapter>mil.darpa.log.alpine.blackjack.assessui.society.DueOutQueryAdapter</adapter>
   </glquery>
@@ -50,7 +50,7 @@
   <glquery>
     <keyname>QUERY_DUEIN</keyname>
     <predicate>
-      <instanceof>org.cougaar.domain.planning.ldm.plan.Task</instanceof>
+      <instanceof>org.cougaar.planning.ldm.plan.Task</instanceof>
     </predicate>
     <adapter>mil.darpa.log.alpine.blackjack.assessui.society.DueInQueryAdapter</adapter>
   </glquery>
@@ -59,7 +59,7 @@
   <glquery>
     <keyname>QUERY_TARGETLEVEL</keyname>
     <predicate>
-      <instanceof>org.cougaar.domain.planning.ldm.asset.Asset</instanceof>
+      <instanceof>org.cougaar.planning.ldm.asset.Asset</instanceof>
     </predicate>
     <adapter>mil.darpa.log.alpine.blackjack.assessui.society.TargetLevelQueryAdapter</adapter>
   </glquery>
@@ -68,7 +68,7 @@
   <glquery>
     <keyname>QUERY_CRITICALLEVEL</keyname>
     <predicate>
-      <instanceof>org.cougaar.domain.planning.ldm.asset.Asset</instanceof>
+      <instanceof>org.cougaar.planning.ldm.asset.Asset</instanceof>
     </predicate>
     <adapter>mil.darpa.log.alpine.blackjack.assessui.society.CriticalLevelQueryAdapter</adapter>
   </glquery>

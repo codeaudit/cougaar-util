@@ -7,7 +7,7 @@
 <schedulingSpecs taskGroupingMode = "unalligned" >
 
   <assetFilter> 
-    <assetClassMatch className = "org.cougaar.domain.planning.ldm.asset.CargoFixedWingAircraft" />
+    <assetClassMatch className = "org.cougaar.planning.ldm.asset.CargoFixedWingAircraft" />
   </assetFilter>
 
   <taskFilter verb="TransportByAir"

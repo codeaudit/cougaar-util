@@ -35,7 +35,7 @@ public class Launcher {
       System.err.println("Install URL = "+ipath);
       URL[] urls = searchForJars(ipath, "lib");
       URLClassLoader cl = new URLClassLoader(urls);
-      Class c = cl.loadClass("org.cougaar.core.society.Node");
+      Class c = cl.loadClass("org.cougaar.core.node.Node");
       Class[] argts = {String[].class};
       Method m = c.getMethod("main", argts);
       Object[] argl = {args};

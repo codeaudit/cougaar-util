@@ -21,7 +21,7 @@
 
 
 source $COUGAAR_INSTALL_PATH/bin/setlibpath.csh
-set MYDOMAINS="-Dorg.cougaar.domain.alp=org.cougaar.domain.glm.GLMDomain"
+set MYDOMAINS="-Dorg.cougaar.domain.alp=org.cougaar.glm.GLMDomain"
 set MYPROPERTIES="$MYDOMAINS -Dorg.cougaar.install.path=$COUGAAR_INSTALL_PATH -Duser.timezone=GMT"
 set MYMEMORY=""
 

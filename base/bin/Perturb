@@ -22,7 +22,7 @@
 
 source $COUGAAR_INSTALL_PATH/bin/setlibpath.csh
 
-set MYCLASSES="org.cougaar.domain.mlm.ui.perturbation.asset.AssetPerturbationDisplay"
+set MYCLASSES="org.cougaar.mlm.ui.perturbation.asset.AssetPerturbationDisplay"
 
 set osargs=""
 set os=`uname`

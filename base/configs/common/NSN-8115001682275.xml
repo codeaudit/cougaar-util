@@ -1,9 +1,9 @@
 <prototype name = "NSN/8115001682275">
-  <object class="org.cougaar.domain.glm.ldm.asset.Container">
+  <object class="org.cougaar.glm.ldm.asset.Container">
 
       <field name="TypeIdentificationPG" type="object">
         <value>
-          <object class="org.cougaar.domain.planning.ldm.asset.NewTypeIdentificationPG">
+          <object class="org.cougaar.planning.ldm.asset.NewTypeIdentificationPG">
           <field name="TypeIdentification" type="String">
             <value> NSN/8115001682275 </value>
           </field>
@@ -19,10 +19,10 @@
 
     <field name="PhysicalPG" type = "object">
       <value>
-        <object class = "org.cougaar.domain.glm.ldm.asset.NewPhysicalPG">
+        <object class = "org.cougaar.glm.ldm.asset.NewPhysicalPG">
           <field name = "Length" type="object">
             <value>
-              <object class="org.cougaar.domain.planning.ldm.measure.Distance">
+              <object class="org.cougaar.planning.ldm.measure.Distance">
                 <field name="Inches" type="double">
                   <value>239.0</value>
                 </field>
@@ -31,7 +31,7 @@
           </field>
           <field name = "Width" type="object">
             <value>
-              <object class="org.cougaar.domain.planning.ldm.measure.Distance">
+              <object class="org.cougaar.planning.ldm.measure.Distance">
                 <field name="Inches" type="double">
                   <value>96.0</value>
                 </field>
@@ -40,7 +40,7 @@
           </field>
           <field name = "Height" type="object">
             <value>
-              <object class="org.cougaar.domain.planning.ldm.measure.Distance">
+              <object class="org.cougaar.planning.ldm.measure.Distance">
                 <field name="Inches" type="double">
                   <value>96.0</value>
                 </field>
@@ -49,7 +49,7 @@
           </field>
           <field name = "Mass" type="object">
             <value>
-              <object class="org.cougaar.domain.planning.ldm.measure.Mass">
+              <object class="org.cougaar.planning.ldm.measure.Mass">
                 <field name="Pounds" type="double">
                   <value>54710.0</value>
                 </field>
@@ -58,7 +58,7 @@
           </field>
           <field name = "FootprintArea" type="object">
             <value>
-              <object class="org.cougaar.domain.planning.ldm.measure.Area">
+              <object class="org.cougaar.planning.ldm.measure.Area">
                 <field name="SquareFeet" type="double">
                   <value>160.0</value>
                 </field>
@@ -67,7 +67,7 @@
           </field>
           <field name = "Volume" type="object">
             <value>
-              <object class="org.cougaar.domain.planning.ldm.measure.Volume">
+              <object class="org.cougaar.planning.ldm.measure.Volume">
                 <field name="CubicFeet" type="double">
                   <value>1275.0</value>
                 </field>
@@ -80,7 +80,7 @@
 
       <field name="MovabilityPG" type="object">
         <value>
-          <object class="org.cougaar.domain.glm.ldm.asset.NewMovabilityPG">
+          <object class="org.cougaar.glm.ldm.asset.NewMovabilityPG">
             <field name="Moveable" type="boolean">
               <value> True </value>
             </field>
@@ -93,7 +93,7 @@
 
       <field name="ContainPG" type="object">
         <value>
-          <object class="org.cougaar.domain.glm.ldm.asset.NewContainPG">
+          <object class="org.cougaar.glm.ldm.asset.NewContainPG">
             <field name="CargoRestrictions" type="String">
               <value> None </value>
             </field>
@@ -102,7 +102,7 @@
             </field>
             <field name="MaximumLength" type="object">
               <value> 
-                <object class="org.cougaar.domain.planning.ldm.measure.Distance">
+                <object class="org.cougaar.planning.ldm.measure.Distance">
                   <field name="Inches" type="double">
                     <value>225.0</value>
                   </field>
@@ -111,7 +111,7 @@
           </field>
           <field name="MaximumWidth" type="object">
             <value> 
-              <object class="org.cougaar.domain.planning.ldm.measure.Distance">
+              <object class="org.cougaar.planning.ldm.measure.Distance">
                 <field name="Inches" type="double">
                   <value>84.0</value>
                 </field>
@@ -120,7 +120,7 @@
           </field>
           <field name="MaximumHeight" type="object">
             <value> 
-              <object class="org.cougaar.domain.planning.ldm.measure.Distance">
+              <object class="org.cougaar.planning.ldm.measure.Distance">
                 <field name="Inches" type="double">
                   <value>82.0</value>
                 </field>
@@ -129,7 +129,7 @@
           </field>
           <field name="MaximumVolume" type="object">
             <value> 
-              <object class="org.cougaar.domain.planning.ldm.measure.Volume">
+              <object class="org.cougaar.planning.ldm.measure.Volume">
                 <field name="CubicFeet" type="double">
                   <value>1070.0</value>
                 </field>
@@ -138,7 +138,7 @@
           </field>
           <field name="MaximumFootprintArea" type="object">
             <value> 
-              <object class="org.cougaar.domain.planning.ldm.measure.Area">
+              <object class="org.cougaar.planning.ldm.measure.Area">
                 <field name="SquareFeet" type="double">
                   <value>131.25</value>
                 </field>
@@ -147,7 +147,7 @@
           </field>
           <field name="MaximumWeight" type="object">
             <value> 
-              <object class="org.cougaar.domain.planning.ldm.measure.Mass">
+              <object class="org.cougaar.planning.ldm.measure.Mass">
                 <field name="Tons" type="double">
                   <value>25.0</value>
                 </field>

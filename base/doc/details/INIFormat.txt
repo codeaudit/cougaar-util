@@ -41,10 +41,10 @@ The above two examples can be rewritten as:
 cluster = FirstCluster
 
 # new format usage for "SecondCluster":
-Node.AgentManager.Agent = org.cougaar.core.cluster.ClusterImpl(SecondCluster)
+Node.AgentManager.Agent = org.cougaar.core.agent.ClusterImpl(SecondCluster)
 
 # shorthand usage for "AnotherCluster":
-.AgentManager.Agent = org.cougaar.core.cluster.ClusterImpl(AnotherCluster)
+.AgentManager.Agent = org.cougaar.core.agent.ClusterImpl(AnotherCluster)
 ----------------------------
 
 --- new sample "FirstCluster.ini" -----------------

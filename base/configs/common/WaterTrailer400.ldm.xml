@@ -13,11 +13,11 @@
 
 
 <prototype name="WaterTrailer400">
-    <object class="org.cougaar.domain.glm.ldm.asset.BulkWater">
+    <object class="org.cougaar.glm.ldm.asset.BulkWater">
 
       <field name="TypeIdentificationPG" type="object">
         <value>
-          <object class="org.cougaar.domain.planning.ldm.asset.NewTypeIdentificationPG">
+          <object class="org.cougaar.planning.ldm.asset.NewTypeIdentificationPG">
             <field name="TypeIdentification" type="String">
               <value> M149A1 </value>
             </field>
@@ -31,11 +31,11 @@
       <field name="SupplyPG" type="object">
         <value>
 
-          <object class="org.cougaar.domain.glm.ldm.asset.NewWaterSupplyPG">
+          <object class="org.cougaar.glm.ldm.asset.NewWaterSupplyPG">
 
             <field name="IssueVolumePerDay" type="object">
               <value>
-                <object class="org.cougaar.domain.planning.ldm.measure.Volume">
+                <object class="org.cougaar.planning.ldm.measure.Volume">
                   <field name="Gallons" type="double">
                     <value> 400.0 </value>
                   </field>
@@ -45,7 +45,7 @@
 
             <field name="PumpVolumePerMinute" type="object">
               <value>
-                <object class="org.cougaar.domain.planning.ldm.measure.Volume" name="FillRate">
+                <object class="org.cougaar.planning.ldm.measure.Volume" name="FillRate">
                   <field name="Gallons" type="double">
                     <value> 50.0 </value>
                   </field>

@@ -9902,7 +9902,7 @@
 	</forcepackage>
 
 	<Policies>	
- 		<Policy name="StockageLevelPolicy" type="org.cougaar.domain.glm.ldm.policy.StockageLevelPolicy">
+ 		<Policy name="StockageLevelPolicy" type="org.cougaar.glm.ldm.policy.StockageLevelPolicy">
     		<RuleParam name="DaysOfSupply">
 			<Integer value="7" min="0" max="365"> 
 			</Integer>

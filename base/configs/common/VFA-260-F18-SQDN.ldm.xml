@@ -4,8 +4,8 @@
 
 <clusterassets>
   <prototype name="NSN/F18">
-    <object class="org.cougaar.domain.glm.ldm.asset.FixedWingAircraftWeapon" id="proto-001">
-      <property class="org.cougaar.domain.planning.ldm.asset.TypeIdentificationPG" id="property-001">
+    <object class="org.cougaar.glm.ldm.asset.FixedWingAircraftWeapon" id="proto-001">
+      <property class="org.cougaar.planning.ldm.asset.TypeIdentificationPG" id="property-001">
 	<field value="NSN/F18" type="java.lang.String" name="TypeIdentification"/>
 	<field value="F18" type="java.lang.String" name="Nomenclature"/>
       </property>

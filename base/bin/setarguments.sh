@@ -25,11 +25,11 @@
 
 # Domains are now usually defined by the config file LDMDomains.ini
 # But you may still use properties if you wish.
-# set MYDOMAINS=-Dorg.cougaar.domain.alp=org.cougaar.domain.glm.GLMDomain
+# set MYDOMAINS=-Dorg.cougaar.domain.alp=org.cougaar.glm.GLMDomain
 
 MYDOMAINS=""
-BOOTSTRAPPER=org.cougaar.core.society.Bootstrapper
-MYCLASSES=org.cougaar.core.society.Node
+BOOTSTRAPPER=org.cougaar.core.node.Bootstrapper
+MYCLASSES=org.cougaar.core.node.Node
 OS=`uname`
 # No green threads in jdk 1.3.1
 #if [ "$OS" == "Linux" ]; then

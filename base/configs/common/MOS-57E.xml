@@ -3,11 +3,11 @@
 <!DOCTYPE assets SYSTEM "AssetList.ldm.dtd" []>
 
 <prototype name="MOS-57E">
-  <object class="org.cougaar.domain.glm.ldm.asset.MilitaryPerson">
+  <object class="org.cougaar.glm.ldm.asset.MilitaryPerson">
 
       <field name="TypeIdentificationPG" type="object">
         <value>
-          <object class="org.cougaar.domain.planning.ldm.asset.NewTypeIdentificationPG">
+          <object class="org.cougaar.planning.ldm.asset.NewTypeIdentificationPG">
             <field name="TypeIdentification" type="String">
               <value> MOS/57E </value>
             </field>
@@ -20,10 +20,10 @@
 
       <field name="PersonPG" type="object">
         <value>
-          <object class="org.cougaar.domain.glm.ldm.asset.NewPersonPG">
+          <object class="org.cougaar.glm.ldm.asset.NewPersonPG">
             <field name="Skills" type="java.util.ArrayList">
               <value> 
-                <object class="org.cougaar.domain.glm.ldm.plan.Skill">
+                <object class="org.cougaar.glm.ldm.plan.Skill">
                   <field name="Skill" type="String">
                     <value> MOS/57E </value>
                   </field>

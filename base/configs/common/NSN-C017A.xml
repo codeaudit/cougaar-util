@@ -19,11 +19,11 @@
   <!-- :::::::::::::::::::::::::C17::::::::::::::::::::::::::::::::::::::: -->
 
   <prototype name="C017A">
-    <object class="org.cougaar.domain.glm.ldm.asset.CargoFixedWingAircraft">
+    <object class="org.cougaar.glm.ldm.asset.CargoFixedWingAircraft">
 
       <field name="TypeIdentificationPG" type="object">
         <value>
-          <object class="org.cougaar.domain.planning.ldm.asset.TypeIdentificationPG">
+          <object class="org.cougaar.planning.ldm.asset.TypeIdentificationPG">
             <field name="TypeIdentification" type="String">
               <value> C017A  </value>
             </field>
@@ -36,11 +36,11 @@
 
       <field name="ContainPG" type="object">
         <value>
-	  <object class="org.cougaar.domain.glm.ldm.asset.ContainPG">
+	  <object class="org.cougaar.glm.ldm.asset.ContainPG">
 
 	    <field name="MaximumLength" type="object">
 	      <value>
-	        <object class="org.cougaar.domain.planning.ldm.measure.Distance">
+	        <object class="org.cougaar.planning.ldm.measure.Distance">
 		  <field name="Meters" type="double">
 		    <value> 26.82 </value>
 		  </field>
@@ -50,7 +50,7 @@
 
 	    <field name="MaximumWidth" type="object">
 	      <value>
-	        <object class="org.cougaar.domain.planning.ldm.measure.Distance">
+	        <object class="org.cougaar.planning.ldm.measure.Distance">
 		  <field name="Meters" type="double">
 		    <value> 5.48 </value>
 		  </field>
@@ -60,7 +60,7 @@
 
 	    <field name="MaximumHeight" type="object">
 	      <value>
-	        <object class="org.cougaar.domain.planning.ldm.measure.Distance">
+	        <object class="org.cougaar.planning.ldm.measure.Distance">
 		  <field name="Meters" type="double">
 		    <value> 3.76 </value>
 		  </field>
@@ -70,7 +70,7 @@
 
 	    <field name="MaximumWeight" type="object">
 	      <value>
-	        <object class="org.cougaar.domain.planning.ldm.measure.Mass">
+	        <object class="org.cougaar.planning.ldm.measure.Mass">
 		  <field name="Pounds" type="double">
 		    <value> 170900.00 </value>
 		  </field>
@@ -80,7 +80,7 @@
 
 	    <field name="MaximumFootprintArea" type="object">
 	      <value>
-	        <object class="org.cougaar.domain.planning.ldm.measure.Area">
+	        <object class="org.cougaar.planning.ldm.measure.Area">
 		  <field name="SquareMeters" type="double">
 		    <value> 146.97  </value>
 		  </field>
@@ -90,7 +90,7 @@
 
 	    <field name="MaximumVolume" type="object">
 	      <value>
-	        <object class="org.cougaar.domain.planning.ldm.measure.Volume">
+	        <object class="org.cougaar.planning.ldm.measure.Volume">
 		  <field name="CubicMeters" type="double">
 		    <value> 552.62 </value>
 		  </field>
@@ -100,7 +100,7 @@
 
 	    <field name="TimeToLoad" type="object">
 	      <value>
-	        <object class="org.cougaar.domain.planning.ldm.measure.Duration">
+	        <object class="org.cougaar.planning.ldm.measure.Duration">
 		  <field name="Hours" type="double">
 		    <value> 2.25  </value>
 		  </field>
@@ -110,7 +110,7 @@
 
 	    <field name="TimeToRefuel" type="object">
 	      <value>
-	        <object class="org.cougaar.domain.planning.ldm.measure.Duration">
+	        <object class="org.cougaar.planning.ldm.measure.Duration">
 		  <field name="Hours" type="double">
 		    <value> 2.25 </value>
 		  </field>
@@ -120,7 +120,7 @@
 
 	    <field name="TimeToUnload" type="object">
 	      <value>
-	        <object class="org.cougaar.domain.planning.ldm.measure.Duration">
+	        <object class="org.cougaar.planning.ldm.measure.Duration">
 		  <field name="Hours" type="double">
 		    <value> 4.25 </value>
 		  </field>
@@ -138,7 +138,7 @@
 
       <field name="AirLiftPG" type="object">
         <value>
-	  <object class="org.cougaar.domain.glm.ldm.asset.AirLiftPG">
+	  <object class="org.cougaar.glm.ldm.asset.AirLiftPG">
 
 	    <field name="MaximumPallets" type="int">
 	      <value>18 </value>
@@ -146,7 +146,7 @@
 
 	    <field name="MaximumBulkVolume" type="object">
 	      <value>
-	        <object class="org.cougaar.domain.planning.ldm.measure.Volume">  
+	        <object class="org.cougaar.planning.ldm.measure.Volume">  
 		  <field name="CubicMeters" type="double">
 		    <value> 552.62 </value>
 		  </field>
@@ -156,7 +156,7 @@
 
 	    <field name="MaximumBulkWeight" type="object">
 	      <value>
-	        <object class="org.cougaar.domain.planning.ldm.measure.Mass">  
+	        <object class="org.cougaar.planning.ldm.measure.Mass">  
 		  <field name="Pounds" type="double">
 		    <value> 170900.00 </value>
 		  </field>
@@ -170,11 +170,11 @@
 
       <field name="AirVehiclePG" type="object">
         <value>
-	  <object class="org.cougaar.domain.glm.ldm.asset.AirVehiclePG">
+	  <object class="org.cougaar.glm.ldm.asset.AirVehiclePG">
 
 	    <field name="QuickTurnaroundTime" type="object">
 	      <value>
-	        <object class="org.cougaar.domain.planning.ldm.measure.Duration">  
+	        <object class="org.cougaar.planning.ldm.measure.Duration">  
 		  <field name="Hours" type="double">
 		    <value> 2.25 </value>
 		  </field>
@@ -184,7 +184,7 @@
 
 	    <field name="MinimumRunwayLength" type="object">
 	      <value>
-	        <object class="org.cougaar.domain.planning.ldm.measure.Distance">  
+	        <object class="org.cougaar.planning.ldm.measure.Distance">  
 		  <field name="Meters" type="double">
 		    <value> 914.4 </value>
 		  </field>
@@ -198,11 +198,11 @@
 
       <field name="AirSelfPropulsionPG" type="object">
         <value>
-	  <object class="org.cougaar.domain.glm.ldm.asset.AirSelfPropulsionPG">
+	  <object class="org.cougaar.glm.ldm.asset.AirSelfPropulsionPG">
 
 	    <field name="CruiseSpeed" type="object">
 	      <value>
-	        <object class="org.cougaar.domain.planning.ldm.measure.Speed">  
+	        <object class="org.cougaar.planning.ldm.measure.Speed">  
 		  <field name="Knots" type="double">
 		    <value> 420 </value>
 		  </field>

@@ -21,4 +21,4 @@
 
 source $COUGAAR_INSTALL_PATH/bin/setlibpath.csh
 cd $COUGAAR_INSTALL_PATH/alpine/data/orgview
-java -green  -cp $LIBPATHS  org.cougaar.domain.mlm.ui.orgviewServer.NetMapServer
+java -green  -cp $LIBPATHS  org.cougaar.mlm.ui.orgviewServer.NetMapServer

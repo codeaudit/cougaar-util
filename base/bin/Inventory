@@ -43,8 +43,8 @@ endif
 
 set javaargs="$osargs $MYPROPERTIES $MYMEMORY -classpath $LIBPATHS"
 
-set bt="org.cougaar.core.society.Bootstrapper"
-set cl="org.cougaar.domain.mlm.ui.planviewer.inventory.InventoryChartUI"
+set bt="org.cougaar.core.node.Bootstrapper"
+set cl="org.cougaar.mlm.ui.planviewer.inventory.InventoryChartUI"
 
 if ($?COUGAAR_DEV_PATH) then
     echo java $javaargs $bt $cl $*

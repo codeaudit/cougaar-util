@@ -4,7 +4,7 @@
 
 <Policies>
 
- <Policy name="ShipPolicy" type="org.cougaar.domain.glm.ldm.policy.ShipPolicy">
+ <Policy name="ShipPolicy" type="org.cougaar.glm.ldm.policy.ShipPolicy">
     <RuleParam name="ShipDays">
 	<Integer value="3" min="1" max="10"> 
 	</Integer>
@@ -18,7 +18,7 @@
     </RuleParam>
   </Policy>
 
- <Policy name="StockageLevelPolicy" type="org.cougaar.domain.glm.ldm.policy.StockageLevelPolicy">
+ <Policy name="StockageLevelPolicy" type="org.cougaar.glm.ldm.policy.StockageLevelPolicy">
     <RuleParam name="DaysOfSupply">
 	<Integer value="7" min="0" max="365"> 
 	</Integer>

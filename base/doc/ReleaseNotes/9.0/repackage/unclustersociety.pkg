@@ -16,10 +16,10 @@
 #  (abbrev  =  actual)
 
 #get rid of org.cougaar.core.cluster references
-org.cougaar.core.cluster.*;	org.cougaar.core.agent.*;
+org.cougaar.core.agent.*;	org.cougaar.core.agent.*;
 
 # get rid of org.cougaar.core.society references
-org.cougaar.core.society.*;	org.cougaar.core.node.*;
+org.cougaar.core.node.*;	org.cougaar.core.node.*;
 
 
 
