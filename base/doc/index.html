@@ -734,17 +734,19 @@ Older Change details are available in <a href="CHANGES">CIP/doc/CHANGES</a>.
   <li> Cougaar <a href="http://cougaar.cougaar.org/wiki/wiki.pl">WIKI</a>.</li>
   <li> Cougaar Developers' Guide, v11.0 (March 2004), available on
 the Cougaar website see <a href="http://cougaar.org/docman/?group_id=17">http://cougaar.org/docman/?group_id=17</a></li>
-  <li> Cougaar Architecture Document, v11.0 (dated March 2004), available
+  <li> Cougaar Architecture Document, v11.0 (dated March 2004), also available
 on the Cougaar website</li>
   <li> Release Notes for other modules such as:</li> 
      <ul>
        <li> <a href="../csmart/doc/index.html">CSMART docs</a></li>
         <li> <a href="../glm/doc/index.html">GLM Module docs</a></li> 
      </ul>
-  <li> Several ChangeLog files (e.g., core/src/ChangeLog) and files
-under doc/details</li>
-  <li> Core infrastructure javadocs available in api/index.html if the cougaar-api.zip
-archive has been installed</li>
+  <li> Several ChangeLog files (e.g., core/src/ChangeLog) </li>
+  <li>Various manual-type documentation files under <a
+  href="OnlineManual">doc/OnlineManual</a></li>
+  <li> Notes from previous releases at <a href="ReleaseNotes">doc/ReleaseNotes</a>.
+  <li> Per-module javadocs available in module/doc/api/index.html if the cougaar-api.zip
+archive has been installed (see <a href="../core/doc/api">Core Javadoc</a> in particular)</li>
   <li> <a href="api/Parameters.html">Parameters.html</a>
  which is a catalog of System Properties (-D flags) used. The file is generated
 on the basis of @property javadoc tags in the source code. .&nbsp;</li>
@@ -780,86 +782,22 @@ at <a href="http://bugs.cougaar.org/">Cougaar website -&gt; Bug Lists</a>.
   
  <h2> <a name="organization"></a>Organization of a Release&nbsp;</h2>
  When you download a Cougaar release, there are several logical
- pieces. For details, see <a href="Contents.html">Contents</a>.
-  <ul>
-   <li>Cougaar runtime files: these come from the <b>cougaar.zip</b> file and 
-include jar files, startup scripts, and data files. These in turn are spread
-out across several directories or "modules". The directories that come in
-cougaar.zip do not contain source code or Javadoc, which is available separately.<br>
-
-     <ul>
-      <li>lib/: This directory contains the Cougaar-developed jar files.</li>
-      <li>clib/: This directory contains compile-time requried
-      Cougaar-developed jar files (ie build.jar).</li>
-      <li>bin/: This directory contains all the primary Cougaar startup scripts.</li>
-      <li>doc/: This is where Cougaar documentation is stored, including this file.
-Note that the Developer's Guide and Javadoc come separately.</li>
-      <li>configs/: All the basic runtime data and configuration files are stored
-here. In various documents you will often see reference to "configs/common",
-which subdirectory is found here, and includes common data files. Some simple
-flat-file base Cougaar society definitions are also found here.</li>
-      <li>aggagent/: This software module includes the Aggregation Agent architecture
-for collecting data from various Cougaar Agents and summarizing it.</li>
-      <li>bootstrap/: Cougaar classloader that ensures jar files in usual places
-are included, without requiring CLASSPATH modifications.</li>
-      <li>build/: The scripts used to compile and build a Cougaar release.</li>
-      <li>community/: Support for defining communities of Agents and their communitications.</li>
-      <li>contract/: Plugin contracts - not completely supported.</li>
-      <li>core/: The core Cougaar Agent architecture.</li>
-      <li>csmart/: CSMART is the Cougaar Society Management, Analysis, and Reporting
-Tool. Although deprecated, it may be used to configure, run, and monitor large Cougaar societies. See
-<a href="../csmart/doc/index.html">csmart/doc/index.html</a></li>
-      <li>glm/: Defines Plugins and data model for a military logistics domain
-and application.</li>
-      <li>javaiopatch/: Small JDK over-rides to support persistence.</li>
-application.</li>
-      <li>mtsstd/: Robust Message Transport</li>
-      <li>ping/: Simple application that sends pings between agents,
-      for performance testing.</li>
-      <li>planning/: Planning domain, providing Assets, Tasks,
-      Workflows. </li>
-      <li>qos/: Quality of Service support for Message Transport</li>
-      <li>quo/: More Message Transport support</li>
-      <li>server/: The AppServer (or Node Server) is a daemon used by CSMART to
-remotely startup and stop Cougaar Nodes.</li>
-      <li>servicediscovery/: Support for dynamically discovering
-      services using WSDL, UDDI, etc </li>
-      <li>toolkit/: Various support utilities, particularly to support
-      scheduling.</li>
-      <li>util/: Cougaar component architecture and utility classes, including
-logging.</li>
-      <li>vishnu/: GA based scheduler.</li>
-      <li>webserver/: Servlet support.</li>
-      <li>webtomcat/: Integration with Apache Tomcat.</li> 
-      <li>yp/: Distributed hierarchical yellow pages application for
-      advertising services.</li>
-    </ul>
-   </li>
-   <li>Cougaar source: The source code for each of the various Cougaar modules,
-along with Javadoc, is available in <b>&lt;module&gt;-dev.zip</b>. Here you
-will also often find JUnit regression tests (in a sub-directory called "regress"),
-and examples (in the "examples" sub-directory).  Of particular note is
-<b>tutorial-dev.zip</b> which has the sources for a number of simple
-	tutorials for learning Cougaar, plus examples, as used in the
-	periodically offered Cougaar Tutorial classes (from
-	tutorial-dev.zip).
-</li>
-   <li>Consolidated core API: The <b>cougaar-api.zip</b> contains the consolidated
-Javadoc for the "basic" Cougaar modules, for extraction into the top-level
-doc directory.</li>
-   <li>Cougaar third-party support libraries: The <b>cougaar-support.zip</b>
- file contains third-party jar files and libraries, which when extracted
-go in the sys/ directory.</li>
-   <li><b>md5sums.txt</b>:&nbsp; md5 checksums of all the zips.</li>
-   <li><b>build.out</b>: output of the build process</li>
-   <li><b>errors.out</b>: Any errors or warnings encountered by build.</li>
- </ul>
-
+ pieces. For details, see <a href="Contents.html">Contents</a>.<br>
+<br>
   <b>To install Cougaar</b>: <br>
-<p>  Go to the cougaar website (<a href="http://www.cougaar.org">www.cougaar.org</a>) 
-to get the latest Windows or Linux Cougaar installer which will install Cougaar as
-well as a MySQL database.&nbsp; This will allow users to run off of a local
-MySQL database (not required).
+<ol>
+<li>  Go to the cougaar website (<a
+href="http://www.cougaar.org">www.cougaar.org</a>). For standard
+Cougaar, go to <a href="http://cougaar.org/projects/cougaar/">the
+CougaarSE project</a>, where official releases are posted at <a
+href="http://cougaar.org/frs/?group_id=17">http://cougaar.org/frs/?group_id=17</a>.
+</li>
+<li> Download <i>either</i> the ".bin" Linux installer / ".exe"
+Windows installer for an installer that helps with MySQL setup, <i>or</i> the ".zip"
+to install by hand.
+</li>
+<li> To install from the Windows or Linux installers: This will allow
+users to run off of a local MySQL database (not required).
       <p>(<br><b>Note</b> that if you are installing MySQL on Linux or Unix, you must 
 instruct the database to translate all table names to lowercase (which 
 is the default on Windows machines).&nbsp; To do this, you must set the variable
@@ -867,8 +805,9 @@ lower_case_table_names=1 by including the line in /etc/my.cnf: </p>
       <p>[mysqld] <br>
 set-variable&nbsp;&nbsp; =&nbsp;&nbsp; lower_case_table_names=1 </p>
       <p>)</p>
-
-<p>   <b>Alternatively</b> you can follow these instructions. <br>
+      <p>Download the installer an execute it!
+</li>
+<li> <b>Alternative</b>, manual install:
 <ol>
 <li>You'll need cougaar.zip and cougaar-support.zip (the first time) to
 get a runnable system.&nbsp; The rest are extras.&nbsp; Furthermore,
@@ -887,6 +826,8 @@ on unix: <br>
       on cougaar.org). Alternately, try running the <b>Pizza Party</b>
       application. For details, see the <a href="../pizza/doc/index.html">Pizza Readme</a>.</li>
     </ol>
+</li>
+</ol>
       <br>
 For instructions on installing and using CSMART, see the <a href="../csmart/doc/InstallAndTest.html">
 CSMART installation document</a>.<br>
@@ -908,9 +849,9 @@ or distributed across multiple computers.&nbsp;
   <p>Another society, <b> minitestconfig</b> 
 will work "out of the box", but uses many deprecated classes and
  patterns.. Plugin and component developers are encouraged to use
- <p>pizza as their initial starting point, but 
-<b>minitestconfig</b> may also be useful. Minitestconfig can also be run as a multiple 
-node, multiple host society.&nbsp; </p>
+ pizza as their initial starting point, but <b>minitestconfig</b> may
+ also be useful. Minitestconfig can also be run as a multiple node,
+ multiple host society.&nbsp; </p>
   <p>MiniTest is a simple 4 agent planning and logistics
  application. To run it as a single Node:
 <pre>
@@ -971,12 +912,13 @@ File.separatorChar + "myData.dat";</font></font></dt>
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->  
   <h2> <a name="future"></a>Future Releases</h2>
-There will be further releases as we address system enhancements and deficiencies. 
-Please watch the 
-<a href="mailto:cougaar-developers@cougaar.org">developers mailing list</a> and
-<a href="mailto:cougaar-information@cougaar.org">information mailing list</a>
-and carefully read the latest Cougaar Developers Guide (CDG),
-the Cougaar Architecture Document (CAD), and all release notes.&nbsp;  
+There will be further releases as we address system enhancements and
+ deficiencies. Watch the news items on <a
+ href="http://cougaar.org">Cougaarforge</a>, listen for announcements
+ on the <a href="http://cougaar.org/mail/?group_id=17">Cougaar Developers mailing list</a>, and look for the
+ downloads at <a
+ href="http://cougaar.org/frs/?group_id=17">http://cougaar.org/frs/?group_id=17</a>.
+
 Additionally, the <a href="http://cougaar.cougaar.org/wiki/wiki.pl?RoadMap">CougaarSE Wiki</a> has information on planned future releases.
 
  <!-- ---------------------------------------------------------------------- -->
@@ -985,8 +927,20 @@ Additionally, the <a href="http://cougaar.cougaar.org/wiki/wiki.pl?RoadMap">Coug
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- --> 
  <h2> <a name="questions"></a>Questions and Submission of Bug Reports</h2>
-In addition, email infrastructure questions and initiate community discussions 
-through our <a href="mailto:cougaar-developers@cougaar.org">mailing list</a>. Bug and system-enhancement reports 
-can be submitted through the <a href="http://bugs.cougaar.org">Cougaar website</a>.&nbsp; 
+For questions or issues, please watch the <a
+ href="http://cougaar.org/mail/?group_id=17">mailing lists</a> and
+ browse the mailing list archives. 
+Also carefully read the latest Cougaar Developers Guide (CDG),
+the Cougaar Architecture Document (CAD) (see <a
+ href="http://cougaar.org/docman/?group_id=17">http://cougaar.org/docman/?group_id=17</a>),
+ and all release notes.&nbsp;  <br><br>
+If those sources do not address your question or problem, 
+bug and system-enhancement reports 
+can be submitted through the <a href="http://bugs.cougaar.org">Cougaar
+ website</a>.&nbsp; <br>
+<br>
+In addition, we encourage you to email infrastructure questions and initiate community discussions 
+through our <a href="mailto:cougaar-developers@cougaar.org">mailing
+list</a>. <br><br>
 </body>
 </html>
