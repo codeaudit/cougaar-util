@@ -386,19 +386,22 @@ public class ConfigFinder {
     throw new FileNotFoundException(aZIP);
   }
 
-
   public Document parseXMLConfigFile(String xmlfile) throws IOException {
-    DOMParser parser = new DOMParser();
-    parser.setEntityResolver(new ConfigResolver());
-
     InputStream istream = null;
-    InputSource is = null;
-    try {
       istream = open(xmlfile);
       if (istream == null) {
          throw new RuntimeException("Got null InputStream opening file " + xmlfile);
       }
-      is = new InputSource(istream);
+    return parseXMLConfigFile(istream, xmlfile);
+  }
+
+  protected Document parseXMLConfigFile(InputStream isstream, String xmlfile)
+    throws IOException {
+    DOMParser parser = new DOMParser();
+    parser.setEntityResolver(new ConfigResolver());
+    InputSource is = null;
+    try {
+      is = new InputSource(isstream);
       if (is == null) {
          throw new RuntimeException("Got null InputSource from input stream for file " + xmlfile);
       }
@@ -409,6 +412,7 @@ public class ConfigFinder {
 
     return parser.getDocument();
   }
+
 
   // hash of the default module config finders
   private static Map moduleConfigFinders;

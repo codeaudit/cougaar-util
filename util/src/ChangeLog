@@ -1,3 +1,8 @@
+2003-04-17  Michael Thome  <mthome@bbn.com>
+
+	* org/cougaar/util/ConfigFinder, .../jar/*
+	Added contributed configs-from-jar functionality from CSI.
+
 2003-03-14  Ray Tomlinson  <RTomlinson@bbn.com>
 
 	* org/cougaar/core/component/BindingUtility.java:
