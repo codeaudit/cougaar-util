@@ -1,6 +1,7 @@
 package org.cougaar.bootstrap;
 
 import java.io.CharArrayWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -25,7 +26,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
@@ -127,7 +128,7 @@ public final class CommandLine {
 
   public static final String USAGE =
     "Usage: Cougaar [default...] [option...] FILE [override...] [NODE]\n"+
-    "Read XML files to print a Java command line, suitable for starting Cougaar.\n"+
+    "Start a Cougaar Node and Agents specified in an XML file.\n"+
     "\n"+
     "  -a, --application STRING   application XML FILE name\n"+
     "  -s, --system STRING        system XML file name, which defaults to the\n"+
@@ -138,7 +139,7 @@ public final class CommandLine {
     "  --node STRING              NODE name\n"+
     "  -w, --windows              Convert variables to Windows format, for example,\n"+
     "                             \"-Da=$x\" becomes \"-Da=%x%\"\n"+
-    "  -h, --help                 print this help message\n"+
+    "  -h, -?, --help             print this help message\n"+
     "  -v, --verbose              also print the command line to stderr\n"+
     "  -vv, --debug               print debug output to stderr\n"+
     "  -*                         if none of the above, if in a \"--defaults\" or\n"+
@@ -237,7 +238,8 @@ public final class CommandLine {
             break;
           }
         }
-      } else if (s.equals("-h") || s.equals("--help")) {
+      } else if (
+          s.equals("-h") || s.equals("-?") || s.equals("--help")) {
         // force usage
         application_xml = null;
         break;
@@ -319,7 +321,7 @@ public final class CommandLine {
           "org.apache.crimson.parser.XMLReaderImpl");
       xml_reader.setEntityResolver(new MyResolver());
 
-      application_data = 
+      application_data =
         parse(xml_reader, node_name, application_xml);
       if (application_data == null ||
           !application_data.processedNode) {
@@ -550,26 +552,6 @@ public final class CommandLine {
     return buf.toString(); 
   }
 
-  /**
-   * $INSTALL signifies file:<org.cougaar.install.path>
-   * $CONFIG signifies <org.cougaar.config>
-   * $CWD signifies <user.dir>
-   * $HOME signifies <user.home>
-   * $MOD signifies the name of a Cougaar module - a sub-directory of $INSTALL
-  {
-    String s = System.getProperty("org.cougaar.command.path");
-    if (s == null) {
-      s = "$CWD;$INSTALL/bin;$INSTALL/configs/common";
-    }
-    String[] els = s.trim().split("\\s*;\\s*");
-    for (int i = 0; i<els.length; i++) {
-      if (els.equals("$CWD")) {
-      } else if (els.equals("$INSTALL")) {
-      }
-    }
-  }
-   */
-
   /** Parse an XML file, return the contained command data */
   private CommandData parse(
       XMLReader xml_reader,
@@ -577,8 +559,60 @@ public final class CommandLine {
       String filename) throws Exception {
     XMLConfigHandler handler = new XMLConfigHandler(node);
     xml_reader.setContentHandler(handler);
-    xml_reader.parse(filename);
+    try {
+      xml_reader.parse(filename);
+    } catch (Exception e) {
+      // do backwards compatible ".ini" check
+      if (e instanceof FileNotFoundException ||
+          (e instanceof SAXParseException &&
+           "Document root element is missing.".equals(
+             e.getMessage()))) {
+        CommandData iniData = parseINI(filename);
+        if (iniData != null) {
+          return iniData;
+        }
+      }
+      throw e;
+    }
     return handler.getCommandData();
+  }
+
+  /** backwards compatibility for INI files (bug 3881) */
+  private CommandData parseINI(String filename) {
+    try {
+      File f = new File(filename);
+      if (!f.exists()) {
+        f = new File(filename+".ini");
+        if (!f.exists()) {
+          return null;
+        }
+      }
+    } catch (Exception e) {
+      return null;
+    }
+    String node = filename;
+    if (node.regionMatches(
+          true, (node.length() - 4), ".ini", 0, 4)) {
+      node = node.substring(0, node.length() - 4);
+    }
+    int sep = node.lastIndexOf('/');
+    if (sep >= 0) {
+      node = node.substring(sep+1);
+    }
+    sep = node.lastIndexOf('\\');
+    if (sep >= 0) {
+      node = node.substring(sep+1);
+    }
+    List vm_parameters =
+      Collections.singletonList(
+          "-Dorg.cougaar.core.node.InitializationComponent=File");
+    return new CommandData(
+        null,
+        vm_parameters,
+        null,
+        null,
+        node,
+        true);
   }
 
   /** Java command data, including the -Ds */
