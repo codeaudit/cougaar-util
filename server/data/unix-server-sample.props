@@ -64,6 +64,8 @@ csmart.log.severity=PROBLEM
 org.cougaar.planning.ldm.lps.ComplainingLP.level=0
 org.cougaar.message.transport.aspects=org.cougaar.core.mts.StatisticsAspect
 
+org.cougaar.lib.web.https.port=-1
+
 # Default to localhost popups, which also requires that localhost
 #   have "xhost +localhost" for local X authorization.
 #
