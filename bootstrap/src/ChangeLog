@@ -1,3 +1,9 @@
+2003-01-23  Ray Tomlinson  <RTomlinson@bbn.com>
+
+	* org/cougaar/bootstrap/Bootstrapper.java:
+	Use more reliable way of creating a file URL in the case where a
+	classpath element fails to directly specify a URL.
+
 2002-07-01  Michael Thome  <mthome@bbn.com>
 
 	* Added CheckingBootstrapper
