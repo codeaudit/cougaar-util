@@ -234,7 +234,7 @@ queryMaxAssemblyId=\
 
 insertAssemblyId=\
  INSERT INTO v4_asb_assembly (ASSEMBLY_ID, ASSEMBLY_TYPE, DESCRIPTION) \
- VALUES (':assembly_id:', ':assembly_type:', ':assembly_type: assembly')
+ VALUES (':assembly_id:', ':assembly_type:', ':assembly_desc:')
 
 # Used in PopulateDb.java when just added a CSA assembly
 updateAssemblyDesc=\
