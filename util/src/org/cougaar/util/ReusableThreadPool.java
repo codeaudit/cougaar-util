@@ -53,9 +53,7 @@ public class ReusableThreadPool {
    * values.
    */
   static {
-    Properties prop = System.getProperties();
     defaultInitialPoolSize = PropertyParser.getInt("org.cougaar.ReusableThread.initialPoolSize", 32);
-
     defaultMaximumPoolSize = PropertyParser.getInt("org.cougaar.ReusableThread.maximumPoolSize", 64);
 
   }
