@@ -13,12 +13,12 @@ queryGeolocLocation.password=${org.cougaar.database.password}
 
 queryExperiment = \
  SELECT ASSEMBLY_ID \
-   FROM v4_expt_trial_assembly \
+   FROM expt_trial_assembly \
   WHERE TRIAL_ID = ':trial_id:'
 
 queryAgentPrototype = \
  SELECT LAO.AGENT_ORG_CLASS \
-   FROM v4_alib_component AC, v4_lib_agent_org LAO, v4_asb_agent AA \
+   FROM alib_component AC, lib_agent_org LAO, asb_agent AA \
   WHERE AA.ASSEMBLY_ID :assemblyMatch: \
     AND AC.COMPONENT_LIB_ID = LAO.COMPONENT_LIB_ID \
     AND AA.COMPONENT_ALIB_ID = AC.COMPONENT_ALIB_ID \
@@ -27,10 +27,10 @@ queryAgentPrototype = \
 queryComponents = \
  SELECT A.COMPONENT_NAME COMPONENT_NAME, C.COMPONENT_CLASS COMPONENT_CLASS, \
         A.COMPONENT_ALIB_ID COMPONENT_ID, C.INSERTION_POINT, H.PRIORITY, H.INSERTION_ORDER INSERTION_ORDER \
-   FROM v4_alib_component A, \
-        v4_alib_component P, \
-        v4_asb_component_hierarchy H, \
-        v4_lib_component C \
+   FROM alib_component A, \
+        alib_component P, \
+        asb_component_hierarchy H, \
+        lib_component C \
   WHERE H.ASSEMBLY_ID :assemblyMatch: \
     AND A.COMPONENT_ALIB_ID = H.COMPONENT_ALIB_ID \
     AND P.COMPONENT_ALIB_ID = H.PARENT_COMPONENT_ALIB_ID \
@@ -44,10 +44,10 @@ ORDER BY INSERTION_ORDER
 queryComponents.mysql = \
     SELECT A.COMPONENT_NAME COMPONENT_NAME, C.COMPONENT_CLASS COMPONENT_CLASS, \
            A.COMPONENT_ALIB_ID COMPONENT_ID, C.INSERTION_POINT, H.PRIORITY, H.INSERTION_ORDER INSERTION_ORDER \
-      FROM v4_alib_component P, \
-	   v4_asb_component_hierarchy H, \
-	   v4_alib_component A, \
-	   v4_lib_component C \
+      FROM alib_component P, \
+	   asb_component_hierarchy H, \
+	   alib_component A, \
+	   lib_component C \
      WHERE H.ASSEMBLY_ID :assemblyMatch: \
        AND A.COMPONENT_ALIB_ID = H.COMPONENT_ALIB_ID \
        AND P.COMPONENT_ALIB_ID = H.PARENT_COMPONENT_ALIB_ID \
@@ -59,16 +59,16 @@ queryComponents.mysql = \
 
 queryComponentParams = \
  SELECT ARGUMENT \
-   FROM v4_asb_component_arg \
+   FROM asb_component_arg \
   WHERE ASSEMBLY_ID :assemblyMatch: \
     AND COMPONENT_ALIB_ID = ':component_id:' \
   ORDER BY ARGUMENT_ORDER, ARGUMENT
 
 queryAgentPGNames = \
  SELECT distinct A.PG_NAME \
-   FROM v4_asb_agent H, \
-        v4_asb_agent_pg_attr B, \
-        v4_lib_pg_attribute A \
+   FROM asb_agent H, \
+        asb_agent_pg_attr B, \
+        lib_pg_attribute A \
   WHERE H.COMPONENT_ALIB_ID = B.COMPONENT_ALIB_ID \
     AND A.PG_ATTRIBUTE_LIB_ID = B.PG_ATTRIBUTE_LIB_ID \
     AND H.ASSEMBLY_ID :assemblyMatch: \
@@ -78,12 +78,12 @@ queryAgentPGNames = \
 queryLibProperties = \
  SELECT ATTRIBUTE_NAME, ATTRIBUTE_TYPE, AGGREGATE_TYPE, \
         PG_ATTRIBUTE_LIB_ID \
-   FROM v4_lib_pg_attribute \
+   FROM lib_pg_attribute \
   WHERE PG_NAME = ':pg_name:'
 
 queryAgentProperties = \
  SELECT A.ATTRIBUTE_VALUE \
-   FROM v4_asb_agent_pg_attr A, v4_alib_component B, v4_asb_agent H \
+   FROM asb_agent_pg_attr A, alib_component B, asb_agent H \
   WHERE A.ASSEMBLY_ID :assemblyMatch: \
     AND H.ASSEMBLY_ID :assemblyMatch: \
     AND A.COMPONENT_ALIB_ID = H.COMPONENT_ALIB_ID \
@@ -96,11 +96,11 @@ queryAgentRelation.oracle = \
         ASB_PG.ATTRIBUTE_VALUE TYPE_IDENTIFICATION, SPTD.COMPONENT_NAME SUPPORTED, \
         TO_CHAR(ASB_REL.start_date, 'MM/DD/YYYY HH:MI AM'), \
         TO_CHAR(ASB_REL.end_date, 'MM/DD/YYYY HH:MI AM') \
-   FROM v4_asb_agent_relation ASB_REL, \
-        v4_lib_pg_attribute LIB_PG, \
-        v4_asb_agent_pg_attr ASB_PG, \
-        v4_alib_component SPTD, \
-        v4_alib_component SPTG \
+   FROM asb_agent_relation ASB_REL, \
+        lib_pg_attribute LIB_PG, \
+        asb_agent_pg_attr ASB_PG, \
+        alib_component SPTD, \
+        alib_component SPTG \
   WHERE LIB_PG.PG_ATTRIBUTE_LIB_ID = ASB_PG.PG_ATTRIBUTE_LIB_ID \
     AND ASB_PG.COMPONENT_ALIB_ID = ASB_REL.SUPPORTED_COMPONENT_ALIB_ID \
     AND ASB_REL.SUPPORTING_COMPONENT_ALIB_ID = SPTG.COMPONENT_ALIB_ID \
@@ -116,11 +116,11 @@ queryAgentRelation.mysql = \
         ASB_PG.ATTRIBUTE_VALUE TYPE_IDENTIFICATION, SPTD.COMPONENT_NAME SUPPORTED, \
         date_format(ASB_REL.start_date, '%m/%e/%Y %l:%i %p'), \
         date_format(ASB_REL.end_date, '%m/%e/%Y %l:%i %p') \
-   FROM v4_asb_agent_relation ASB_REL, \
-        v4_lib_pg_attribute LIB_PG, \
-        v4_asb_agent_pg_attr ASB_PG, \
-        v4_alib_component SPTD, \
-        v4_alib_component SPTG \
+   FROM asb_agent_relation ASB_REL, \
+        lib_pg_attribute LIB_PG, \
+        asb_agent_pg_attr ASB_PG, \
+        alib_component SPTD, \
+        alib_component SPTG \
   WHERE LIB_PG.PG_ATTRIBUTE_LIB_ID = ASB_PG.PG_ATTRIBUTE_LIB_ID \
     AND ASB_PG.COMPONENT_ALIB_ID = ASB_REL.SUPPORTED_COMPONENT_ALIB_ID \
     AND ASB_REL.SUPPORTING_COMPONENT_ALIB_ID = SPTG.COMPONENT_ALIB_ID \

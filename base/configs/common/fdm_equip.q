@@ -27,7 +27,7 @@ FROM \
     fdm_unit_equipment FUE, \
     fdm_transportable_item FTE, \
     fdm_transportable_item_detail FTED, \
-    v6_lib_organization LIBORG \
+    lib_organization LIBORG \
 WHERE \
 LIBORG.ORG_ID=:agent \
 AND FUE.UNIT_IDENTIFIER = LIBORG.UIC \
@@ -65,7 +65,7 @@ FROM \
     fdm_unit_equipment FUE, \
     fdm_transportable_item FTE, \
     fdm_transportable_item_detail FTED, \
-    v6_lib_organization LIBORG \
+    lib_organization LIBORG \
 WHERE \
 LIBORG.ORG_ID=:agent \
 AND FUE.UNIT_IDENTIFIER = LIBORG.UIC \
@@ -83,7 +83,7 @@ ORDER BY \
 #	from \
 #	fdm_unit_billet billet, \
 #	fdm_unfrmd_srvc_occptn occ, \
-#	v6_lib_organization liborg \
+#	lib_organization liborg \
 #	where \
 #	liborg.org_id=:agent \
 #	and billet.unfrmd_srvc_occptn_cd=occ.unfrmd_srvc_occptn_cd \
@@ -95,7 +95,7 @@ query = select 'MOS/11B' AS MOS_LEVEL, NVL(SUM(TO_STRENGTH),0) AS MOS_QTY, 'MOS/
 	FROM \
 	fdm_unit_billet BILLET, \
 	fdm_unfrmd_srvc_occptn OCC, \
-	v6_lib_organization LIBORG \
+	lib_organization LIBORG \
 	WHERE \
 	LIBORG.ORG_ID=:agent \
 	AND BILLET.UNFRMD_SRVC_OCCPTN_CD=OCC.UNFRMD_SRVC_OCCPTN_CD \
@@ -107,7 +107,7 @@ query = select 'MOS/11B' AS MOS_LEVEL, NVL(SUM(TO_STRENGTH),0) AS MOS_QTY, 'MOS/
 #select concat('MOS/',billet.unfrmd_srvc_occptn_cd) AS MOS_LEVEL, sum(to_strength) AS MOS_QTY, unfrmd_srvc_occptn_tx  \
 #  from \
 #   fdm_unit_billet billet, \
-#   v6_lib_organization liborg \
+#   lib_organization liborg \
 #   left join fdm_unfrmd_srvc_occptn occ on \
 #     (billet.unfrmd_srvc_occptn_cd=occ.unfrmd_srvc_occptn_cd \
 #       and occ.rank_subcategory_code='E') \
@@ -121,7 +121,7 @@ query.mysql = \
 select 'MOS/11B' AS MOS_LEVEL, IFNULL(SUM(TO_STRENGTH),0) AS MOS_QTY,  'MOS/11B/INFANTRYMAN'  \
   FROM \
    fdm_unit_billet BILLET, \
-   v6_lib_organization LIBORG \
+   lib_organization LIBORG \
    LEFT JOIN fdm_unfrmd_srvc_occptn OCC ON \
      (BILLET.UNFRMD_SRVC_OCCPTN_CD=OCC.UNFRMD_SRVC_OCCPTN_CD \
        AND OCC.RANK_SUBCATEGORY_CODE='E') \
@@ -134,7 +134,7 @@ select 'MOS/11B' AS MOS_LEVEL, IFNULL(SUM(TO_STRENGTH),0) AS MOS_QTY,  'MOS/11B/
 query = select '8115001682275' AS NSN, DECODE(CONTAINER_20_FT_QTY,NULL,30,CONTAINER_20_FT_QTY) AS QTY_OH, 'CONTAINER' AS \
 	NOMENCLATURE \
 	FROM ue_summary_mtmc UES, \
-	v6_lib_organization LIBORG \
+	lib_organization LIBORG \
 	WHERE \
 	LIBORG.ORG_ID=:agent \
 	AND UES.UIC(+) = LIBORG.UIC
@@ -144,7 +144,7 @@ query.mysql = select DISTINCT '8115001682275' AS NSN, \
         30 AS QTY_OH, \
 	'CONTAINER' AS 	NOMENCLATURE \
 	FROM \
-	v6_lib_organization LIBORG \
+	lib_organization LIBORG \
 	WHERE \
 	LIBORG.ORG_ID=:agent
 
