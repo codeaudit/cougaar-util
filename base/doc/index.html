@@ -9,14 +9,14 @@
 <table border="0" cellspacing="0" cellpadding="0" width="600">
  <tbody>
     <tr>
- <td align="Center" width="200"><a href="HTTPS://www.alpine.bbn.com/"><img src="alpine-logo-small.gif" border="0" height="83" width="95"></a>
+ <td align="Center" width="200"><a href="HTTPS://www.alpine.bbn.com/"><img src="cougaar_small_left.jpg" border="0" height="83" width="95"></a>
       </td>
   <td align="Center" width="200"> 
       <h2> <b><font size="+2">Release Notes</font></b></h2>
   
       <h2> <b><font size="+2">COUGAAR 9.4.1</font></b></h2>
  </td>
-  <td align="Center" width="200"><a href="http://www.cougaar.org"><img src="cougaar-smalllogo.jpg" border="0"></a>
+  <td align="Center" width="200"><a href="http://www.cougaar.org"><img src="cougaar_small_right.jpg" border="0"></a>
       </td>
  </tr>
  
@@ -56,8 +56,41 @@ the current Cougaar version was released.
  
 <p> <b>Build 9.4.1</b> is an incremental patch release of Cougaar 9.4.1 intended 
 to address known issues in 9.4.0 and add required functionality for the Ultra*Log
-Fall 2002 integration. </p>
+Fall 2002 integration. Note in particular the entirely new database
+and supported sample logistics Plugins. This release is intended to provide the baseline for the Ultra*Log integration activity.</p>
 <ul>
+<li>Several database changes have been made.  Domain data has been expanded for 
+several organizations.  Extranneous v4_/v6_ prefixes have been removed.  It is
+necessary to reload all components of the database, including
+1ADDomainData.sql (which you get by unzipping 1ADDomainData.zip and
+which replaces mysqldump.txt or mysqldump.9.2.txt in dbms/data/mysql) and 
+Domain-MySQL.ZIP as well as re-run the load scripts that load the .csv files.  
+See <a href="../csmart/doc/InstallAndTest.html">the CSMART Install
+instructions</a>.  
+For any previous exports of the database, 
+it is necessary to run the v4_v6_conversion.[bat/sh] script on them before 
+importing.
+</li>
+<li>The small-135 configuration is no longer supported. While it is
+still available in configs/examples/small-135, we no longer guarantee
+that the referenced Plugins run correctly. It may still be useful for
+some testing, or as an example of a large ini based
+configuration. However, users are directed towards CSMART and the
+included large 1AD configurations, which are similar.</li>
+<li>As part of the significant database changes, the basic military
+logistics Plugins included with the Cougaar release have been greatly
+modified and improved, as part of the Ultra*Log program. These new
+plugins are available in two new modules, albbn and alsra.</li>
+<li> 
+For a list of new/changed Adaptive Logistics Plugins, see <a href="ReleaseNotes/9.4.1/ALSubstitutionRules.htm">ALSubstitutionRules</a>.
+</li>
+<li>Also as part of the change to the new Adaptive Logistics Plugins,
+note that the sample AppServer server.props files have changed, to
+reflect the new location for some GLMTrans config files. Users of the
+1AD society should update their local server.props files appropriately.</li>
+<li>A new version (6.0) of JCChart is included.  The file name is now just
+jcchart.jar instead of jcchart451K.jar.  There were no code changes
+required to support the new version, which fixes a number of bugs.</li>
  <li> A new optional bootstrapper class may be used to check the jars found 
 by the Bootstrapper for consistency.  This is not the default because of
 the extra time it takes.  To enable, set
@@ -74,33 +107,89 @@ to do what was expected), we decided to to remove it. This uncovered additional,
 non-functioning, uses. Use the <tt>org.cougaar.core.persist.NotPersistable</tt>
  interface to mark classes whose instances should <i>not</i> be saved in
 persistence snapshots. </li>
- 
-<li>A new version (6.0) of JCChart is included.  The file name is now just
-jcchart.jar instead of jcchart451K.jar.  There were no code changes
-required to support the new version, which fixes a number of bugs.</li>
+<li>A new sample Logging service properties file is now provided,
+under doc/details/sample-logging.props</li>
+<li> The AppServer now supports dynamic add and remove of output listeners for running nodes (Bug 1341). This has been integrated into CSMART as noted below.
+<li>There have been numerous CSMART usability and feature
+enhancements. As always, for the latest changes, see the <a href="../csmart/doc/release-notes.txt">CSMART
+Release Notes</a>. However, highlights include:
+      <ul>
+        <li>Database changes to support new logistics Plugins - reload
+        your database entirely.</li>
+	<li>Updated ER/Studio diagrams of CSMART configuration
+	database available.</li>
+	<li>Fixes to Agent Insertion Recipes.</li>
+	<li>New Complete Agent recipe to specify a new Agent along
+	with all its contents in one easy-to-build recipe.</li>
+	<li>New Component Collection recipe that allows specifying an
+	arbitrary collection of components to add all with one recipe
+	(for example, all the new components required for security
+	management, including Agents and Plugins, could be added with
+	one recipe.)</li>
+	<li>Multiple recipes added to the defaults to support mobility
+	and communities.</li>
+	<li>Several pre-configured recipes added to the database to
+	support logistics adaptivity and OPLAN editing.</li>
+	<li>Adaptivity recipe now supports one plays file for all
+	Agents.</li>
+	<li>Community definitions can be imported from a
+	communities.xml file, and exported when dumping INIs.</li>
+	<li>Enhanced visibility into Node and Agent contents from the
+	Experiment Builder pop-up menus.</li>
+	<li>Significant changes to CSMART's interaction with the
+	Application Server. CSMART can now "attach to" (monitor, then
+	even kill and restart) new Nodes that may
+	start up during a run. You can stop CSMART without killing the
+	society. Multiple instances of CSMART can "attach to" the same society.</li>
+      </ul>
+</li> 
+<li> 
 
-<li>Several database changes have been made.  Domain data has been expanded for 
-several organizations.  Extranneous v4_/v6_ prefixes have been removed.  It is
-necessary to reload all components of the database, including mysqldump.txt and 
-Domain-MySQL.ZIP as well as re-run the load scripts that load the .csv files.  
-See <a href="../csmart/doc/InstallAndTest.html">the CSMART Install instructions</a>.  For any previous exports of the database, 
-it is necessary to run the v4_v6_conversion.[bat/sh] script on them before 
-importing.
+The Message Transport Service API has a new method
+<i>getAgentState()</i>.  The flush aspect has been removed, replaced by
+a new simplified implementation in the base infrastructure.
+Externally interesting MTS components -- Aspects, LinkProtocols, and
+SelectionPolicies -- can now be loaded via CSMART recipes.  For more
+details on these topics, see <a href=ReleaseNotes/9.4.1/MTS.html>MTS
+Release Notes</a>
+
 </li>
-<li>The small-135 configuration is no longer supported. While it is
-still available in configs/examples/small-135, we no longer guarantee
-that the referenced Plugins run correctly. It may still be useful for
-some testing, or as an example of a large ini based
-configuration. However, users are directed towards CSMART and the
-included large 1AD configurations, which are similar.</li>
-<li>As part of the significant database changes, the basic military
-logistics Plugins included with the Cougaar release have been greatly
-modified and improved, as part of the Ultra*Log program. These new
-plugins are available in two new modules, albbn and alsra.</li>
-<li>Also as part of the change to the new Adaptive Logistics Plugins,
-note that the sample AppServer server.props files have changed, to
-reflect the new location for some GLMTrans config files. Users of the
-1AD society should update their local server.props files appropriately.</li>
+
+
+<li>
+
+
+The performance of the Metrics services have been enhanced and new
+sensors and display Servlets have been added. See <a
+href=ReleaseNotes/9.4.1/MetricsServices.html>Metrics Services Release
+Notes</a> for more details.
+
+</li>
+
+
+<li>
+
+The Thread service is now fully componentized, allowing thread
+services to be loaded with ComponentDescriptions. Also Agent CPU Load
+sensors were added to measure the CPU consumption of Agents and
+publish the results to the metric service.
+
+</li> 
+
+<li> The Agent Mobility API has been enhanced to support "add" and "remove" of agents. This replaces the ComponentMessage API.
+<li> Several Agent Mobility bugs have been fixed:
+<ul>
+<li> Bug 1316 "before Context" fixed, i.e., message delivery to moving agents now retries correctly.
+<li> Bug 1630 "agent move with undelivered messages" fixed, i.e., unsent messages are now captured as part of the agent state and resent after the agent has moved.
+</ul>
+</li>
+
+<li>
+A utility class <a href="api/org/cougaar/util/CougaarEvent.html">
+org.cougaar.util.CougaarEvent</a> has been added to make it simpler for
+Defense Thread code to communicate with the experiment controller
+software.
+</li> 
 </ul>
 
   <!-- COUGAAR 9.4.0 COUGAAR 9.4.0 COUGAAR 9.4.0 COUGAAR 9.4.0 COUGAAR 9.4.0 --> 
@@ -117,8 +206,8 @@ the setParameter method if the Component ever is constructed without parameters.
  <li> New documentation has been added that summarizes <a href="details/PersistenceGuidelines.html">
 persistence and agent mobility</a>.   In particular, the document covers:
       <ul>
-        <li>Basic definitions for "persistence", "mobility",
- 	    "reconciliation", "rehydration", etc.</li>
+        <li>Basic definitions for "persistence, mobility,
+ 	    reconciliation, rehydration", etc.</li>
  	<li>Requirements for Cougaar software (plugins, components,
 	services, and agents) to fully support persistence, restarts,
 	and agent mobility.</li>
@@ -152,7 +241,8 @@ LoggingService</a>. </li>
    <li>Bug 1423: Agent binders now support state capture</li>
    <li>Bug 1549: Fixed memory leak in community services</li> 
           </ul>
- </li>
+ </li>ys, for the latest changes, see the <a href="../csmart/doc/release-notes.txt">CSMART
+Release Notes</a>. However, highlights include:
  <li>Minor fix to support running TPFDD Viewer. Avoids necessity for workaround
 described in 9.2.2 - errata.</li>
  <li>CSMART configuration database has changed slightly. You should re-load
@@ -536,7 +626,7 @@ Cougaar Bugzilla site</a>
  
       </ul>
     <!-- COUGAAR 9.1 COUGAAR 9.1 COUGAAR 9.1 COUGAAR 9.1 COUGAAR 9.1 -->  
-      <p> <b>Build 9.1</b> is an unstable release of COUGAAR. Essential differences 
+      <p> <b>Build 9.1</b> is an interim release of COUGAAR. Essential differences 
 	    between 9.0 and 9.1 include: </p>
       <ul>
   <li> JDK version change.  Cougaar 9.1 (and all future versions) requires 
@@ -710,6 +800,8 @@ The Cougaar bug tracker (Bugzilla, the Mozilla bug system) is online available
 at <a href="http://www.cougaar.org/bugs">Cougaar website -&gt; Bug Lists</a>.  
  <ul>
   <li> For a list of bugs that were resolved/closed since Cougaar release
+9.4 see <a href="ReleaseNotes/9.4.1/ClosedBugs94-941.htm">ClosedBugs94-941.htm</a>. </li>
+  <li> For a list of bugs that were resolved/closed since Cougaar release
 9.2.2 see <a href="ReleaseNotes/9.4/ClosedBugs922-94.htm">ClosedBugs922-94.htm</a>. </li>
   <li> For a list of bugs that were resolved/closed since Cougaar release
 9.2.1 see <a href="ReleaseNotes/9.2.2/ClosedBugs921-922.htm">ClosedBugs921-922.htm</a>. </li>
@@ -850,7 +942,7 @@ are available in subdirectories under "configs" in the release. To execute
 these COUGAAR societies, these nodes can be executed on a single computer 
 or distributed across multiple computers.&nbsp; 
   <p>One society, <b><a
-  href="MiniTestConfig.html">minitestconfig</a></b> 
+  href="ReleaseNotes/common/MiniTestConfig.html">minitestconfig</a></b> 
 will work "out of the box". We intend to expand this test society
 in subsequent releases in size and complexity to test new infrastructure
 features and to provide reference examples of components component and service
@@ -858,25 +950,14 @@ design patterns. Plugin and component developers are encouraged to use
 <b>minitestconfig</b> as a starting point for testing their software for compliance
 with the latest infrastructure release. Minitestconfig can be run as a multiple 
 node, multiple host society.&nbsp; </p>
-  <p>There are 2 standard societies derived from the military logistics
-domain that are included in the distribution.<br>
+  <p>Included in the distribution is a standard society derived from the military logistics
+domain.<br>
  </p>
  <ul>
-  <li><b>Small-135</b>: This is an old, un-supported ini file based society where the configuration
-is provided in <code>configs/examples/small-135</code>. It is included
-primarily as an example of a large configuration, but the referenced
-Plugins are not actively supported, and the society is not guaranteed
-to be functional.  The default configuration
-supports running a relatively small but interesting two node society
-distributed across two machines. See the <a href="../configs/examples/small-135/small-135.readme.html">
-small-135.readme.html</a> file in the configuration directory for more
-information. </li>
-
   <li><b>Tiny/Small/Full-1AD</b>: This is a set of database based societies
 where the configuration information is provided through the CSMART
-database. These military logistics supply applications are similar
-in structure and content to the small-135 society. However, they use
-different military units and simulate different operations.  These configurations
+database. They use
+several military units and simulate various operations.  These configurations
 are entirely configured and run through CSMART. These span in size from
 TINY (fits on one machine) through SMALL (best run on 3 or 4 machines)
 through FULL (usually requires at least 6 machines).  Each of these
@@ -919,8 +1000,8 @@ File.separatorChar + "myData.dat";</font></font></dt>
   
   <h3> General Development&nbsp;</h3>  
    <ul>
-    <li> <a href="SocStartup-Config.html">Society Configuration and Startup</a></li>
-    <li> <a href="MiniTestConfig.html">MiniTestConfig Functional
+    <li> <a href="ReleaseNotes/common/SocStartup-Config.html">Society Configuration and Startup</a></li>
+    <li> <a href="ReleaseNotes/common/MiniTestConfig.html">MiniTestConfig Functional
     Description</a></li> 
     <li> For a general description of running a society from CSMART,
     see the <a href="../csmart/doc/InstallAndTest.html">CSMART Install guide</a>.</li>

@@ -94,3 +94,6 @@ java.class.name=org.cougaar.bootstrap.Bootstrapper
 # Note that HTTPS is off by default, and HTTP is on port 8800
 #org.cougaar.lib.web.https.port=-1
 
+# Limits the number of Class 9 parts that are requisitioned by the system
+class9.max.parts=5
+

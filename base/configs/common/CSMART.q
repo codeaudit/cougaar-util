@@ -155,6 +155,12 @@ queryAgentAssetClass = \
     FROM lib_agent_org \
    WHERE AGENT_LIB_NAME = ':agent_name'
 
+queryAgentClass = \
+  SELECT L.COMPONENT_CLASS FROM lib_component L, asb_agent A \
+   WHERE L.COMPONENT_LIB_ID = A.COMPONENT_LIB_ID \
+     AND A.COMPONENT_NAME = ':agent_name' \
+     AND A.ASSEMBLY_ID = ':assembly_id:'
+
 queryAllAgentNames = \
   SELECT DISTINCT C.COMPONENT_NAME \
     FROM alib_component C \

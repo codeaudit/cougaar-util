@@ -220,7 +220,7 @@ updateExptName=\
 
 insertExptId=\
  INSERT INTO expt_experiment (EXPT_ID, DESCRIPTION, NAME, CFW_GROUP_ID) \
- VALUES (':expt_id:', ':description:', ':expt_name:', ':cfw_group_id:')
+ VALUES (':expt_id:', ':description:', :expt_name:, ':cfw_group_id:')
 
 queryMaxTrialId=\
  SELECT MAX(TRIAL_ID) \

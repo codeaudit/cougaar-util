@@ -1,0 +1,19 @@
+The directory ReleaseNotes contains all the
+files that complement the file ../index.html 
+(the top-level release notes file).
+
+In the future, ../index.html should only contain
+links to either the module-specific documentation
+(e.g., csmart/doc) or the ReleaseNotes directory;
+other directories like details, ui, or ComponentModel
+will eventually be removed.
+
+ReleaseNotes/common contains files that will
+be updated/modified with each release (if necessary;
+e.g., startup and config instructions).
+
+ReleaseNotes/[ReleaseNumber] contains the new
+material (e.g., 941/NewMTSEnhancements) that will
+eventually be incorporated in the Cougaar Developers
+Guide / Cougaar Architecture Document (i.e., according
+to the updating cycles of these documents).

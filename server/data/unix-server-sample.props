@@ -91,3 +91,5 @@ java.class.name=org.cougaar.bootstrap.Bootstrapper
 # On some machines you may need to use the full machine name.
 env.DISPLAY=localhost:0.0
 
+# Limits the number of Class 9 parts that are requisitioned by the system
+class9.max.parts=5

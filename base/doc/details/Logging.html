@@ -53,7 +53,7 @@ The system properties are:
   <li>"-Dorg.cougaar.core.logging.config.filename=FILE"<br>
       Specify a log4j property filename, which is found
       using the ConfigFinder.</li><p>
-  <li>"-Dorg.cougaar.core.logging.NAME=VALUE<br>
+  <li>"-Dorg.cougaar.core.logging.NAME=VALUE"<br>
       Pass the given "NAME=VALUE" to override the above FILE
       contents.</li>
 </ul>
@@ -61,6 +61,8 @@ Note that if you use any of the above
 "-Dorg.cougaar.core.logging.*" properties then you <b>must</b> 
 fully specify the logging configuration.
 <p>
+A sample logging properties file is provided at 
+<a href="./sample-logging.props">./sample-logging.props</a>.  
 Here is a minimal log4j property file that matches the Cougaar
 default logging configuration:
 <pre>
