@@ -52,32 +52,37 @@ public abstract class LoggerFactory {
 
   public synchronized static final LoggerFactory getInstance() {
     if (singleton == null) {
-      String lfname = System.getProperty(LF_PROP, LF_DEFAULT_CLASS);
-      try {
-        Class clazz = Class.forName(lfname);
-        singleton = (LoggerFactory) clazz.newInstance();
-      } catch (Exception e) {
-        System.err.println("Could not enable LoggerFactory \""+lfname+"\": will use NullLoggerFactory instead");
-        e.printStackTrace();
-        singleton = new NullLoggerFactory();
-      }
+      singleton = makeInstance();
     }
     return singleton;
   }
+
+  private static final LoggerFactory makeInstance() {
+    String lfname = System.getProperty(LF_PROP, LF_DEFAULT_CLASS);
+    try {
+      Class clazz = Class.forName(lfname);
+      return (LoggerFactory) clazz.newInstance();
+    } catch (Exception e) {
+      System.err.println("Could not enable LoggerFactory \""+lfname+"\": will use NullLoggerFactory instead");
+      e.printStackTrace();
+      return new NullLoggerFactory();
+    }
+  }
+
 
   /** Implementations may override to provide 
    * additional configuration information to the underlying logging facility.
    * The default implementation does nothing.
    **/
   public void configure(Properties props) {
-    (new Throwable()).printStackTrace();
+    getInstance().createLogger(LoggerFactory.class).error("Clients may not configure Loggers", new Throwable());
   }
   /** Implementations may override to provide 
    * additional configuration information to the underlying logging facility.
    * The default implementation does nothing.
    **/
   public void configure(Map m) {
-    (new Throwable()).printStackTrace();
+    getInstance().createLogger(LoggerFactory.class).error("Clients may not configure Loggers", new Throwable());
   }
 
   /** Create a logger as named by the parameter.

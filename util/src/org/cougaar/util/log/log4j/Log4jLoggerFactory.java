@@ -142,6 +142,17 @@ public class Log4jLoggerFactory
     }
   }
 
+  // ugh. bashing of static structure... sigh.
+  public void configure(Properties props) {
+    PropertyConfigurator.configure(props);
+  }
+  // ugh. bashing of static structure... sigh.
+  public void configure(Map m) {
+    Properties p = new Properties();
+    p.putAll(m);
+    PropertyConfigurator.configure(p);
+  }
+
   public Logger createLogger(Object requestor) {
     return new LoggerImpl(requestor);
   }
