@@ -43,7 +43,7 @@ public abstract class SystemAccessFactory {
     // figure out the OS type
     int type;
     String osName = System.getProperty("os.name");
-    if ("Linux".equals(osName)) {
+    if ("Linux".equals(osName) || "Mac OS X".equals(osName)) {
       type = OS_LINUX;
     } else {
       type = OS_OTHER;
