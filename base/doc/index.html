@@ -1,12 +1,7 @@
 <!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
 <html>
 <head>
-    
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-    
-  <meta name="GENERATOR" content="Mozilla/4.77 [en] (Windows NT 5.0; U) [Netscape]">
-    
-  <meta name="Template" content="C:\Program Files\Microsoft Office\Office\html.dot">
   <title>Cougaar Release Notes</title>
 </head>
   <body link="#0000ff" vlink="#800080">
@@ -14,16 +9,14 @@
 <table border="0" cellspacing="0" cellpadding="0" width="600">
  <tbody>
     <tr>
- <td align="Center" width="200"><a href="HTTPS://www.alpine.bbn.com/"><img src="alpine-logo-small.gif" border="0" height="83" width="95">
-      </a>
+ <td align="Center" width="200"><a href="HTTPS://www.alpine.bbn.com/"><img src="alpine-logo-small.gif" border="0" height="83" width="95"></a>
       </td>
   <td align="Center" width="200"> 
       <h2> <b><font size="+2">Release Notes</font></b></h2>
   
       <h2> <b><font size="+2">COUGAAR 9.4.1</font></b></h2>
  </td>
-  <td align="Center" width="200"><a href="http://www.cougaar.org"><img src="cougaar-smalllogo.jpg" border="0">
-      </a>
+  <td align="Center" width="200"><a href="http://www.cougaar.org"><img src="cougaar-smalllogo.jpg" border="0"></a>
       </td>
  </tr>
  
@@ -37,52 +30,42 @@
       <hr> 
       <p>Jump down to:&nbsp; </p>
       <ul>
- <li> <a href="#overview">Overview of this Release</a>
-        </li>
-  <li> <a href="#documentation">Additional Documentation</a>
-        </li>
-  <li> <a href="#bugs">Known bugs and bugs resolved since Cougaar release
-9.0</a>
-        </li>
-  <li> <a href="#organization">Organization of a Release</a>
-        </li>
-  <li> <a href="#example">Example Society Implementations</a>
-        </li>
+ <li> <a href="#overview">Overview of this Release</a></li>
+  <li> <a href="#documentation">Additional Documentation</a></li>
+  <li> <a href="#bugs">Known bugs and bugs resolved since Cougaar
+  release 9.0</a></li>
+  <li> <a href="#organization">Organization of a Release</a></li>
+  <li> <a href="#example">Example Society Implementations</a></li>
   <li> <a href="#delivering">Delivering Software Products (Plugins and other
-Components)</a>
-        </li>
-  <li> <a href="#developing">Developing and Running COUGAAR Societies</a>
-        </li>
-  <li> <a href="#jvm">Java Virtual Machine Requirements</a>
-        </li>
-  <li> <a href="#future">Future Releases</a>
-        </li>
-  <li> <a href="#questions">Questions and Submission of Bug Reports</a>
-        </li>
-  
+Components)</a></li>
+  <li> <a href="#developing">Developing and Running COUGAAR Societies</a></li>
+  <li> <a href="#jvm">Java Virtual Machine Requirements</a></li>
+  <li> <a href="#future">Future Releases</a></li>
+  <li> <a href="#questions">Questions and Submission of Bug Reports</a></li>  
       </ul>
   
       <hr>  
-      <h2> <a name="errata"></a>
-Errata</h2>
+      <h2> <a name="errata"></a>Errata</h2>
   Check the Cougaar website at <a href="www.cougaar.org">www.cougaar.org</a>
  <!-- update hyperlink as soon as errate file is on the website --> for the
-latest information on  problems/workarounds that were detected/posted after 
+latest information on problems/workarounds that were detected/posted after 
 the current Cougaar version was released.  
-      <h2> <a name="overview"></a>
-Overview of this Release</h2>
+
+      <h2> <a name="overview"></a>Overview of this Release</h2>
   <!-- COUGAAR 9.4.1 COUGAAR 9.4.1 COUGAAR 9.4.1 COUGAAR 9.4.1 COUGAAR 9.4.1 -->
  
-      <p> Build 9.4.1 is an incremental patch release of Cougaar 9.4.1 intended 
+<p> Build 9.4.1 is an incremental patch release of Cougaar 9.4.1 intended 
 to address known issues in 9.4.0 and add required functionality for the Ultra*Log
 Fall 2002 integration. </p>
-      <ul>
+<ul>
  <li> A new optional bootstrapper class may be used to check the jars found 
 by the Bootstrapper for consistency.  This is not the default because of
-the extra time it takes.  To enable, set <em>-Dorg.cougaar.bootstrap.class=org.cougaar.bootstrap.CheckingBootstrapper</em>
- Note that since this is implemented as a separate bootstrapper, it (for
+the extra time it takes.  To enable, set
+<em>-Dorg.cougaar.bootstrap.class=org.cougaar.bootstrap.CheckingBootstrapper</em> 
+Note that since this is implemented as a separate bootstrapper, it (for
 instance) cannot be used with NAI's secure bootstrapper package.</li>
-        <li>The <tt>org.cougaar.core.persist.NonPersistable</tt> interface
+
+<li>The <tt>org.cougaar.core.persist.NonPersistable</tt> interface
 has been removed. This interface existed (in various packages) since an early
 implementation of persistence (over four years ago). It managed to survive
 through succeeding development despite that fact that it did nothing. Because
@@ -92,16 +75,13 @@ non-functioning, uses. Use the <tt>org.cougaar.core.persist.NotPersistable</tt>
  interface to mark classes whose instances should <i>not</i> be saved in
 persistence snapshots. </li>
  
-<li>
-A new version (6.0) of JCChart is included.  The file name is now just
+<li>A new version (6.0) of JCChart is included.  The file name is now just
 jcchart.jar instead of jcchart451K.jar.  There were no code changes
-required to support the new version, which fixes a number of bugs.
-</li>
+required to support the new version, which fixes a number of bugs.</li>
+</ul>
 
-      </ul>
-  <!-- COUGAAR 9.4.0 COUGAAR 9.4.0 COUGAAR 9.4.0 COUGAAR 9.4.0 COUGAAR 9.4.0 -->
-  
-      <p> Build 9.4 is a significant release of Cougaar 9 intended to add 
+  <!-- COUGAAR 9.4.0 COUGAAR 9.4.0 COUGAAR 9.4.0 COUGAAR 9.4.0 COUGAAR 9.4.0 --> 
+<p> Build 9.4 is a significant release of Cougaar 9 intended to add 
 additional functionality and address known issues in 9.2, as well as include
 enhancements developed as part of the Ultra*Log integration. </p>
       <ul>
@@ -112,30 +92,30 @@ will be called IFF  the .ini file or CSMART database actually specifies argument
 the setParameter method if the Component ever is constructed without parameters. 
         </li>
  <li> New documentation has been added that summarizes <a href="details/PersistenceGuidelines.html">
-persistence and agent mobility</a>
-.   In particular, the document covers:
-          <ul>
-   <li>Basic definitions for "persistence", "mobility", "reconciliation",
- 	    "rehydration", etc.</li>
- 	<li>Requirements for Cougaar software (plugins, components,  	    services,
-and agents) to fully support persistence, restarts,  			and agent mobility.</li>
-   <li>Failure symptoms if persistence or mobility is not correctly     
- supported, and how developers can track down and fix these  			bugs.</li>
-   <li>Tests and expected results.  The tests include JVM-kills and  	  
- the use of agent mobility to both move and restart agents.</li>
-   <li>Detailed notes on how lazy persistence and reconciliation work,  	
-   which will help clear up the mysterious behavior you might  			see.</li>
- 
-          </ul>
+persistence and agent mobility</a>.   In particular, the document covers:
+      <ul>
+        <li>Basic definitions for "persistence", "mobility",
+ 	    "reconciliation", "rehydration", etc.</li>
+ 	<li>Requirements for Cougaar software (plugins, components,
+	services, and agents) to fully support persistence, restarts,
+	and agent mobility.</li>
+        <li>Failure symptoms if persistence or mobility is not
+         correctly supported, and how developers can track down and fix these
+         bugs.</li>
+        <li>Tests and expected results.  The tests include JVM-kills
+        and the use of agent mobility to both move and restart
+        agents.</li>
+         <li>Detailed notes on how lazy persistence and reconciliation
+   work, which will help clear up the mysterious behavior you might see.</li>
+       </ul>
  </li>
  <li> The LoggingService is available earlier (during NodeAgent's HIGH subcomponent
 pass).  Furthermore, there is a new class <a href="api/org/cougaar/util/log/Logging.html">
-org.cougaar.util.log.Logging</a>
- which provides a variety of static methods giving access to loggers and
-allowing the set up of thread-specific logging contexts.  Plugins and most
-components are still encouraged to use the existing <a href="api/org/cougaar/core/service/LoggingService.html">
-LoggingService</a>
-. </li>
+org.cougaar.util.log.Logging</a> which provides a variety of static
+methods giving access to loggers and allowing the set up of
+thread-specific logging contexts.  Plugins and most components are
+still encouraged to use the existing <a href="api/org/cougaar/core/service/LoggingService.html"> 
+LoggingService</a>. </li>
  <li> Several agent mobility bugs have been fixed:
           <ul>
    <li>Bug 1218: Move to an unknown node now fails quickly instead of  	
@@ -147,8 +127,7 @@ LoggingService</a>
           and prevent simultaneous move requests</li>
    <li>Bug 1382: Don't do state reconciliation when moving agents</li>
    <li>Bug 1423: Agent binders now support state capture</li>
-   <li>Bug 1549: Fixed memory leak in community services</li>
- 
+   <li>Bug 1549: Fixed memory leak in community services</li> 
           </ul>
  </li>
  <li>Minor fix to support running TPFDD Viewer. Avoids necessity for workaround
@@ -175,8 +154,7 @@ Info window.</li>
 notes</a>
  for details.</li>
  <li>Allow arbitrary insertion points in Specific Insertion recipes. This
-solves bug 1387 mentioned in the errata document.</li>
- 
+solves bug 1387 mentioned in the errata document.</li> 
           </ul>
         </li>
  <li>The Community and Mobility Domains are now included by default, using
@@ -192,7 +170,7 @@ database through CSMART or through an xml file (communities.xml).  See community
 to specify a particular community configuration xml file.</li>
  <li>Caching of community information at the CommunityService level has been 
 implemented and is enabled by default.  Caching may be turned off by setting
-the  system parameter org.cougaar.community.caching="off"</li>
+the system parameter org.cougaar.community.caching="off"</li>
  <li> The Bootstrapper now, by default, uses XURLClassLoader rather than BootstrapClassLoader.
  XURLClassLoader is pretty much identical to  URLClassLoader except without
 the same serialization/RMI implications. Unlike BootstrapClassLoader, XURLClassLoader
@@ -216,14 +194,12 @@ simplified.  It now limits Java thread usage much more strictly and reliably.
         </li>
   <li> The MTS will now drop messages if particular classes of Exception
 are thrown during serialization or deserialization.  For this release the 
-relevant exception classes are GeneralSecurityException and NotSerializableException. 
-        </li>
+relevant exception classes are GeneralSecurityException and NotSerializableException. </li>
   <li> The Metrics Services are better coupled with the RSS.  Several example 
-uses, including servlets and plugins, have been provided (see  <a href="details/MetricServiceRuntimeNotes.html">
- MetricServiceRuntimeNotes</a>
-). </li>
-  
+uses, including servlets and plugins, have been provided (see  <a
+href="details/MetricServiceRuntimeNotes.html">MetricServiceRuntimeNotes</a>). </li> 
       </ul>
+
   <!-- COUGAAR 9.2.2 COUGAAR 9.2.2 COUGAAR 9.2.2 COUGAAR 9.2.2 COUGAAR 9.2.2 -->
   
       <p> Build 9.2.2 is a patch release of 9.2 intended to address known
@@ -661,33 +637,28 @@ on these new features.)
  
       </ul>
   <br>
+
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->
-  
-      <h2> <a name="documentation"></a>
-Additional Documentation </h2>
+ <h2> <a name="documentation"></a>Additional Documentation </h2>
   For additional details, please review the following documentation:  
-      <ul>
- <li> Release Notes for other modules such as:</li>
- 
-        <ul>
- <li> csmart/doc/index.html</li>
- <li> glm/doc/index.html</li>
- 
-        </ul>
+ <ul>
+  <li> Release Notes for other modules such as:</li> 
+     <ul>
+       <li> csmart/doc/index.html</li>
+        <li> glm/doc/index.html</li> 
+     </ul>
   <li> Attachments to previous release notes such as: 
-          <ul>
- <li> <a href="ComponentModel/ComponentModel_Index.html">Component Model</a>
- docs</li>
- <li> <a href="ComponentModel/DynamicComponents.html">Dynamic Component </a>
+     <ul>
+      <li> <a href="ComponentModel/ComponentModel_Index.html">Component Model</a> docs</li>
+      <li> <a href="ComponentModel/DynamicComponents.html">Dynamic Component </a>
 docs</li>
- 
-          </ul>
+     </ul>
   </li>
-        <li> Several ChangeLog files (e.g., core/src/ChangeLog) and files
+  <li> Several ChangeLog files (e.g., core/src/ChangeLog) and files
 under doc/details</li>
   <li> Core infrastructure javadocs available in api/index.html if the cougaar-api.zip
 archive has been installed</li>
@@ -703,117 +674,111 @@ Ultra*Log website</a>
 )</li>
   <li> <a href="details/JSSE-Keystore-Instructions.txt">Installing JSSE and
 creating keystores</a>
- for use with SSL enabled Cougaar functionality.</li>
- 
+ for use with SSL enabled Cougaar functionality.</li> 
       </ul>
-  <!-- ---------------------------------------------------------------------- -->
+
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->
-  
-      <h2> <a name="bugs"></a>
-Known bugs and bugs resolved/closed since Cougaar release 9.0</h2>
-  The Cougaar bug tracker (Bugzilla, the Mozilla bug system) is online available
-at <a href="http://www.cougaar.org/bugs">Cougaar website -&gt; Bug Lists</a>
-.  
-      <ul>
- <li> For a list of bugs that were resolved/closed since Cougaar release
-9.2.2 see <a href="ReleaseNotes/9.4/ClosedBugs922-94.htm">ClosedBugs922-94.htm</a>
-. </li>
-        <li> For a list of bugs that were resolved/closed since Cougaar release
-9.2.1 see <a href="ReleaseNotes/9.2.2/ClosedBugs921-922.htm">ClosedBugs921-922.htm</a>
-. </li>
-        <li> For a list of bugs that were resolved/closed since Cougaar release
-9.2.0 see <a href="ReleaseNotes/9.2.1/ClosedBugs920-921.htm">ClosedBugs920-921.htm</a>
-. </li>
-        <li> For a list of bugs that were resolved/closed since Cougaar release
-9.0 see <a href="ReleaseNotes/9.2/ClosedBugs90-92.htm">ClosedBugs90-920.htm</a>
-. </li>
-      </ul>
+ <!-- ---------------------------------------------------------------------- -->  
+ <h2> <a name="bugs"></a>Known bugs and bugs resolved/closed since Cougaar release 9.0</h2>
+The Cougaar bug tracker (Bugzilla, the Mozilla bug system) is online available
+at <a href="http://www.cougaar.org/bugs">Cougaar website -&gt; Bug Lists</a>.  
+ <ul>
+  <li> For a list of bugs that were resolved/closed since Cougaar release
+9.2.2 see <a href="ReleaseNotes/9.4/ClosedBugs922-94.htm">ClosedBugs922-94.htm</a>. </li>
+  <li> For a list of bugs that were resolved/closed since Cougaar release
+9.2.1 see <a href="ReleaseNotes/9.2.2/ClosedBugs921-922.htm">ClosedBugs921-922.htm</a>. </li>
+  <li> For a list of bugs that were resolved/closed since Cougaar release
+9.2.0 see <a href="ReleaseNotes/9.2.1/ClosedBugs920-921.htm">ClosedBugs920-921.htm</a>. </li>
+  <li> For a list of bugs that were resolved/closed since Cougaar release
+9.0 see <a href="ReleaseNotes/9.2/ClosedBugs90-92.htm">ClosedBugs90-920.htm</a>. </li>
+ </ul>
   The lists are results of Bugzilla queries (run on May 1, 15, 29, ..., resp.). 
+
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->
   
-      <h2> <a name="organization"></a>
-Organization of a Release&nbsp;</h2>
+ <h2> <a name="organization"></a>Organization of a Release&nbsp;</h2>
  When you download a Cougaar release, there are several logical pieces. 
-      <ul>
- <li>Cougaar runtime files: these come from the <b>cougaar.zip</b> file and 
+  <ul>
+   <li>Cougaar runtime files: these come from the <b>cougaar.zip</b> file and 
 include jar files, startup scripts, and data files. These in turn are spread
 out across several directories or "modules". The directories that come in
 cougaar.zip do not contain source code or Javadoc, which is available separately.<br>
- 
-          <ul>
- <li>lib/: This directory contains the Cougaar-developed jar files.</li>
- <li>bin/: This directory contains all the primary Cougaar startup scripts.</li>
- <li>doc/: This is where Cougaar documentation is stored, including this file.
+
+     <ul>
+      <li>lib/: This directory contains the Cougaar-developed jar files.</li>
+      <li>bin/: This directory contains all the primary Cougaar startup scripts.</li>
+      <li>doc/: This is where Cougaar documentation is stored, including this file.
 Note that the Developer's Guide and Javadoc come separately.</li>
- <li>configs/: All the basic runtime data and configuration files are stored
+      <li>configs/: All the basic runtime data and configuration files are stored
 here. In various documents you will often see reference to "configs/common",
 which subdirectory is found here, and includes common data files. Some simple
 flat-file base Cougaar society definitions are also found here.</li>
- <li>aggagent/: This software module includes the Aggregation Agent architecture
+      <li>aggagent/: This software module includes the Aggregation Agent architecture
 for collecting data from various Cougaar Agents and summarizing it.</li>
- <li>blackjack/: This software module defines some military logistics supply-chain
+      <li>blackjack/: This software module defines some military logistics supply-chain
 Plugins and related classes and data files.</li>
- <li>bootstrap/: Cougaar classloader that ensures jar files in usual places
+      <li>bootstrap/: Cougaar classloader that ensures jar files in usual places
 are included, without requiring CLASSPATH modifications.</li>
- <li>bol/: The Books Online Cougaar example application.</li>
- <li>build/: The scripts used to compile and build a Cougaar release.</li>
- <li>community/: Support for defining communities of Agents and their communitications.</li>
- <li>contract/: </li>
- <li>core/: The core Cougaar Agent architecture.</li>
- <li>csmart/: CSMART is the Cougaar Society Management, Analysis, and Reporting
+      <li>bol/: The Books Online Cougaar example application.</li>
+      <li>build/: The scripts used to compile and build a Cougaar release.</li>
+      <li>community/: Support for defining communities of Agents and their communitications.</li>
+      <li>contract/: Plugin contracts - not completely supported.</li>
+      <li>core/: The core Cougaar Agent architecture.</li>
+      <li>csmart/: CSMART is the Cougaar Society Management, Analysis, and Reporting
 Tool. Use it to configure, run, and monitor large Cougaar societies. See
 csmart/doc/index.html</li>
- <li>datagrabber/: </li>
- <li>glm/: Defines Plugins and data model for a military logistics domain
+      <li>datagrabber/: For collecting and displaying plan results, in
+      particular TPFDD (military logistics) displays.</li>
+      <li>glm/: Defines Plugins and data model for a military logistics domain
 and application.</li>
- <li>glmtrans/: Transportation Plugins to support a military logistics application.</li>
- <li>javaiopatch/: Small JDK over-rides.</li>
- <li>manager/: Support for management Agents to monitor the health of a Cougaar
+      <li>glmtrans/: Transportation Plugins to support a military logistics application.</li>
+      <li>javaiopatch/: Small JDK over-rides to support persistence.</li>
+      <li>manager/: Support for management Agents to monitor the health of a Cougaar
 application.</li>
- <li>planserver/: Deprecated interface support - use servlets instead.</li>
- <li>qos/: </li>
- <li>quo/: </li>
- <li>scalability/: Testing society for evaluating the scalability of the
+      <li>planserver/: Deprecated interface support - use servlets instead.</li>
+      <li>qos/: Quality of Service support for Message Transport</li>
+      <li>quo/: More Message Transport support</li>
+      <li>scalability/: Testing society for evaluating the scalability of the
 Cougaar architecture.</li>
- <li>server/: The AppServer (or Node Server) is a daemon used by CSMART to
+      <li>server/: The AppServer (or Node Server) is a daemon used by CSMART to
 remotely startup and stop Cougaar Nodes.</li>
- <li>toolkit/: </li>
- <li>tutorial/: Simple tutorials for learning Cougaar, plus examples, as
+      <li>toolkit/: Various support utilities, particularly to support
+      scheduling.</li>
+      <li>tutorial/: Simple tutorials for learning Cougaar, plus examples, as
 used in the periodically offered Cougaar Tutorial classes.</li>
- <li>uiframework/: Framework for constructing some UIs.</li>
- <li>util/: Cougaar component architecture and utility classes, including
+      <li>uiframework/: Framework for constructing some UIs.</li>
+      <li>util/: Cougaar component architecture and utility classes, including
 logging.</li>
- <li>vishnu/: GA based scheduler.</li>
- <li>webserver/: Servlet support.</li>
- <li>webtomcat/: Integration with Apache Tomcat.</li>
- 
-          </ul>
-        </li>
- <li>Cougaar source: The source code for each of the various Cougaar modules,
+      <li>vishnu/: GA based scheduler.</li>
+      <li>webserver/: Servlet support.</li>
+      <li>webtomcat/: Integration with Apache Tomcat.</li> 
+    </ul>
+   </li>
+   <li>Cougaar source: The source code for each of the various Cougaar modules,
 along with Javadoc, is available in <b>&lt;module&gt;-dev.zip</b>. Here you
 will also often find JUnit regression tests (in a sub-directory called "regress"),
 and examples (in the "examples" sub-directory).</li>
- <li>Consolidated core API: The <b>cougaar-api.zip</b> contains the consolidated
+   <li>Consolidated core API: The <b>cougaar-api.zip</b> contains the consolidated
 Javadoc for the "basic" Cougaar modules, for extraction into the top-level
 doc directory.</li>
- <li>Cougaar third-party support libraries: The <b>cougaar-support.zip</b>
+   <li>Cougaar third-party support libraries: The <b>cougaar-support.zip</b>
  file contains third-party jar files and libraries, which when extracted
 go in the sys/ directory.</li>
- <li><b>md5sums.txt</b>:&nbsp; md5 checksums of all the zips.</li>
- <li><b>build.out</b>: output of the build process</li>
- <li><b>errors.out</b>: Any errors or warnings encountered by build.</li>
- 
-      </ul>
+   <li><b>md5sums.txt</b>:&nbsp; md5 checksums of all the zips.</li>
+   <li><b>build.out</b>: output of the build process</li>
+   <li><b>errors.out</b>: Any errors or warnings encountered by build.</li>
+ </ul>
+
   <b>To install Cougaar</b>: <br>
-Go to the cougaar website (<a href="http://www.cougaar.org">www.cougaar.org</a>
-) to get the latest windows Cougaar installer which will install Cougaar as
+Go to the cougaar website (<a href="http://www.cougaar.org">www.cougaar.org</a>) 
+to get the latest windows Cougaar installer which will install Cougaar as
 well as a MySQL database.&nbsp; This will allow users to run off of a local
 MySQL database rather than accessing an Oracle database located in Cambridge,
 MA at BBN Technologies. 
@@ -824,166 +789,146 @@ lower_case_table_names=1 by including the line in /etc/my.cnf: </p>
       <p>[mysqld] <br>
 set-variable&nbsp;&nbsp; =&nbsp;&nbsp; lower_case_table_names=1 </p>
       <p>Alternatively you can follow these instructions. <br>
-1. You'll need cougaar.zip and cougaar-support.zip (the first time) to get
-a <br>
-runnable system.&nbsp; The rest are extras.&nbsp; Furthermore, the cougaar-support 
-      <br>
-contents do not change very often. </p>
-      <p>2. the zips are designed to be unpacked in the same directory, e.g. 
-on <br>
-unix: <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; mkdir cougaar <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cd cougaar <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unzip /tmp/cougaar.zip <br>
+<ol>
+<li>You'll need cougaar.zip and cougaar-support.zip (the first time) to
+get a runnable system.&nbsp; The rest are extras.&nbsp; Furthermore,
+the cougaar-support contents do not change very often.
+<li> The zips are designed to be unpacked in the same directory, e.g. 
+on unix: <br>
+<pre>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; mkdir cougaar 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cd cougaar 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unzip /tmp/cougaar.zip 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unzip -o /tmp/cougaar-support.zip 
-      <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setenv COUGAAR_INSTALL_PATH `pwd` 
-      </p>
+</pre>
+      </li>
+    </ol>
       <p>Note that $COUGAAR_INSTALL_PATH/bin/Node and setarguments.bat set
 the Cougaar start time with the following Node argument: <br>
 -Dorg.cougaar.core.cluster.startTime=08/010/2005 <br>
 This start time is optimal for the Oplan used with the small-135 society.&nbsp; 
       <br>
 For instructions on installing and using CSMART, see the <a href="../csmart/doc/InstallAndTest.html">
-CSMART installation document</a>
-.<br>
-  <!-- ---------------------------------------------------------------------- -->
+CSMART installation document</a>.<br>
+
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->
-  </p>
-      <h2> <a name="example"></a>
-Test Harness Example Implementations</h2>
- We only maintain society configurations that we are currently using for testing
+ <!-- ---------------------------------------------------------------------- -->
+ <h2> <a name="example"></a>Test Harness Example Implementations</h2>
+We only maintain society configurations that we are currently using for testing
 purposes and for&nbsp; COUGAAR demonstrations. These society configurations 
 are available in subdirectories under "configs" in the release. To execute 
 these COUGAAR societies, these nodes can be executed on a single computer 
 or distributed across multiple computers.&nbsp; 
-      <p>One society, <b><a href="MiniTestConfig.html">minitestconfig</a>
-      </b> will work "out of the box". We intend to expand this test society
+  <p>One society, <b><a
+  href="MiniTestConfig.html">minitestconfig</a></b> 
+will work "out of the box". We intend to expand this test society
 in subsequent releases in size and complexity to test new infrastructure
 features and to provide reference examples of components component and service
-design patterns. Plugin and component developers are encouraged to use <b>
-minitestconfig</b> as a starting point for testing their software for compliance
+design patterns. Plugin and component developers are encouraged to use 
+<b>minitestconfig</b> as a starting point for testing their software for compliance
 with the latest infrastructure release. Minitestconfig can be run as a multiple 
 node, multiple host society.&nbsp; </p>
-      <p>There are 2 standard societies derived from the military logistics
+  <p>There are 2 standard societies derived from the military logistics
 domain that are included in the distribution.<br>
  </p>
-      <ul>
- <li><b>Small-135</b>: This is an ini file based society where the      configuration
-is provided in <code>configs/small-135</code>. The      default configuration
-supports running a relatively small but      interesting two node society
-distributed across two machines. See      the <a href="../configs/small-134/small-135.readme.html">
-small-135.readme.html</a>
- file in the configuration directory for more information. </li>
- <li><b>Tiny/Small/Full-1AD</b>: This is a set of database based societies
-where the      configuration information is provided through the CSMART 
-    database. These military logistics supply applications are      similar
-in structure and content to the small-135      society. However, they use
-different military units and simulate      different operations.  These configurations
-are entirely configured and run      through CSMART. These span in size from
-TINY (fits on one      machine) through SMALL (best run on 3 or 4 machines)
-through FULL      (usually requires at least 6 machines).  Each of these
-may      include the full-fledged TRANSCOM transportation scheduler (more 
-     compute intensive) or just a Stub scheduler (those with the -STUB  
-   suffix).  For details on configuring and running these CSMART      societies,
-see the <a href="../csmart/doc/InstallAndTest.html">CSMART Installation instructions</a>
-.</li>
- 
-      </ul>
-  <!-- ---------------------------------------------------------------------- -->
+ <ul>
+  <li><b>Small-135</b>: This is an ini file based society where the configuration
+is provided in <code>configs/small-135</code>. The default configuration
+supports running a relatively small but interesting two node society
+distributed across two machines. See the <a href="../configs/small-134/small-135.readme.html">
+small-135.readme.html</a> file in the configuration directory for more
+information. </li>
+
+  <li><b>Tiny/Small/Full-1AD</b>: This is a set of database based societies
+where the configuration information is provided through the CSMART
+database. These military logistics supply applications are similar
+in structure and content to the small-135 society. However, they use
+different military units and simulate different operations.  These configurations
+are entirely configured and run through CSMART. These span in size from
+TINY (fits on one machine) through SMALL (best run on 3 or 4 machines)
+through FULL (usually requires at least 6 machines).  Each of these
+may include the full-fledged TRANSCOM transportation scheduler (more 
+compute intensive) or just a Stub scheduler (those with the -STUB  
+suffix).  For details on configuring and running these CSMART societies,
+see the <a href="../csmart/doc/InstallAndTest.html">CSMART
+Installation instructions</a>.</li> 
+  </ul>
+
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->
-  
-      <h2> <a name="delivering"></a>
-Delivering Software Products&nbsp;</h2>
+ <!-- ---------------------------------------------------------------------- -->
+  <h2> <a name="delivering"></a>Delivering Software Products&nbsp;</h2>
  Please see the Integration Information Area that can be found on the <a href="http://www.ultralog.net">
-UltraLog</a>
- web site. 
-      <p>All Plugin software must use the Java system parameter "org.cougaar.install.path" 
+UltraLog</a> web site. 
+  <p>All Plugin software must use the Java system parameter "org.cougaar.install.path" 
 or the environment variable COUGAAR_INSTALL_PATH to find data files, scripts, 
 and external programs. For example, if your product is "tops," your classes 
 will be in:&nbsp; </p>
-      <blockquote>"$COUGAAR_INSTALL_PATH\lib\tops.jar"</blockquote>
+   <blockquote>"$COUGAAR_INSTALL_PATH\lib\tops.jar"</blockquote>
  and your java code could find your data files with:&nbsp; 
-        <dir> 
-        <dl>
-        <dt> <font face="Courier New"><font size="-1">Properties props =
+   <dir> 
+     <dl>
+       <dt> <font face="Courier New"><font size="-1">Properties props =
 System.getProperties();</font></font></dt>
-          <dt> <font face="Courier New"><font size="-1">String path = props.getProperty("org.cougaar.install.path") 
-+</font></font></dt>
-            <dt> <font face="Courier New"><font size="-1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+       <dt> <font face="Courier New"><font size="-1">String path = props.getProperty("org.cougaar.install.path") +</font></font></dt>
+       <dt> <font face="Courier New"><font size="-1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
 props.getProperty("file.separator") + "tops" +</font></font></dt>
-              <dt> <font face="Courier New"><font size="-1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+       <dt> <font face="Courier New"><font size="-1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
 props.getProperty("file.separator") + "myData.dat";</font></font></dt>
-                </dl>
- </dir>
-  <!-- ---------------------------------------------------------------------- -->
+     </dl>
+  </dir>
+
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->
+ <!-- ---------------------------------------------------------------------- -->  
+ <h2> <a name="developing"></a>Developing and Running COUGAAR Societies</h2>
   
-                <h2> <a name="developing"></a>
-Developing and Running COUGAAR Societies</h2>
+  <h3> General Development&nbsp;</h3>  
+   <ul>
+    <li> <a href="SocStartup-Config.html">Society Configuration and Startup</a></li>
+    <li> <a href="MiniTestConfig.html">MiniTestConfig Functional Description</a></li> 
+   </ul>
   
-                <h3> General Development&nbsp;</h3>
-  
-                <ul>
- <li> <a href="SocStartup-Config.html">Society Configuration and Startup</a>
-                  </li>
-  <li> <a href="MiniTestConfig.html">MiniTestConfig Functional Description</a>
-                  </li>
- 
-                </ul>
-  
-                <h3> <a name="jvm"></a>
-Java Virtual Machine Requirements&nbsp;</h3>
- Cougaar requires the 1.4 release of <a href="http://java.sun.com/j2se/1.4">
-JDK</a>
-.   Cougaar uses the JSSE Java extension, which now comes with the  default
+  <h3> <a name="jvm"></a>Java Virtual Machine Requirements&nbsp;</h3>
+Cougaar requires the 1.4 release of <a href="http://java.sun.com/j2se/1.4">
+JDK</a>.  Cougaar uses the JSSE Java extension, which now comes with the  default
 JDK 1.4 installation.  For details, see: 
-                <ul>
- <li> <a href="http://java.sun.com/products/jsse/">Java Secure Socket Extension 
-(JSSE)</a>
-                  </li>
- 
-                </ul>
-  <!-- ---------------------------------------------------------------------- -->
+   <ul>
+    <li> <a href="http://java.sun.com/products/jsse/">Java Secure Socket Extension 
+(JSSE)</a></li>
+   </ul>
+
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->
-  
-                <h2> <a name="future"></a>
-Future Releases</h2>
- There will be further releases as we address system enhancements and deficiencies. 
+ <!-- ---------------------------------------------------------------------- -->  
+  <h2> <a name="future"></a>Future Releases</h2>
+There will be further releases as we address system enhancements and deficiencies. 
 Please watch the cougaar-developers@cougaar.org and cougaar-information@cougaar.org 
 email lists and carefully read the latest Cougaar Developers Guide (CDG),
-the Cougaar Architecture Document (CAD), and all release notes.&nbsp;  <!-- ---------------------------------------------------------------------- -->
+the Cougaar Architecture Document (CAD), and all release notes.&nbsp;  
+
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->
  <!-- ---------------------------------------------------------------------- -->
-  
-                <h2> <a name="questions"></a>
-Questions and Submission of Bug Reports</h2>
- In addition, email infrastructure questions and initiate community discussions 
+ <!-- ---------------------------------------------------------------------- --> 
+ <h2> <a name="questions"></a>Questions and Submission of Bug Reports</h2>
+In addition, email infrastructure questions and initiate community discussions 
 through cougaar-developers@cougaar.org. Bug and system-enhancement reports 
-can be submitted through the <a href="http://www.cougaar.org">COUGAAR</a>
- website.&nbsp;  </td>
- </tr>
-  <tr>
- <td><br>
-                </td>
- </tr>
- 
-            </tbody>
-          </table>
-  
-          </body>
-          </html>
+can be submitted through the <a href="http://www.cougaar.org">COUGAAR</a> 
+website.&nbsp;  </td>
+       </tr>
+  </tbody>
+ </table> 
+</body>
+</html>
