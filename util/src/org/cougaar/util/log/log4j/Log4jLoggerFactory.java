@@ -89,7 +89,7 @@ public class Log4jLoggerFactory
    * A client with name "x.y.z" that calls:<pre>
    *   log.warn("test message");
    * </pre>
-   * will generate a standard-output message similar to:</pre>
+   * will generate a standard-output message similar to:<pre>
    *   2002-03-08 22:26:08,980 WARN [z] - test message
    * </pre>.
    * <p>
