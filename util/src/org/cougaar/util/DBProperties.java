@@ -104,14 +104,29 @@ public class DBProperties extends java.util.Properties {
   public static DBProperties readQueryFile(String qfile)
     throws IOException
   {
+    return DBProperties.readQueryFile(qfile, null);
+  }
+
+  /**
+   * Read and parse a .q file. If the file was previously parsed, do not
+   * re-read. If the .q file contains value for
+   * "database" (case-sensitive) the default database type is set accordingly. The
+   * default database type may be set or changed manually with the
+   * setDefaultDatabase method.
+   * @param qfile the name of the query file
+   * @param module the name of the module to search first for the query file
+   **/
+  public static DBProperties readQueryFile(String qfile, String module)
+    throws IOException
+  {
     // Only create a DBProperties if we dont have one yet for this file
     DBProperties dbp = DBProperties.getCachedInstance(qfile);
     if (dbp == null) {
-      dbp = createDBProperties(qfile, ConfigFinder.getInstance().open(qfile));
+      dbp = createDBProperties(qfile, ConfigFinder.getInstance(module).open(qfile));
       if (dbp != null)
 	DBProperties.addCachedInstance(dbp, qfile);
     }
-    return dbp;
+    return dbp;    
   }
 
   /**
@@ -124,8 +139,22 @@ public class DBProperties extends java.util.Properties {
   public static DBProperties reReadQueryFile(String qfile)
     throws IOException
   {
+    return DBProperties.reReadQueryFile(qfile, null);
+  }
+
+  /**
+   * Force Re-Read and parse a .q file. If the .q file contains value for
+   * "database" (case-sensitive) the default database type is set accordingly. The
+   * default database type may be set or changed manually with the
+   * setDefaultDatabase method.
+   * @param qfile the name of the query file
+   * @param module the name of the module to search first for the query file
+   **/
+  public static DBProperties reReadQueryFile(String qfile, String module)
+    throws IOException
+  {
     // Force re-reading the q file, and cache it.
-    DBProperties dbp = createDBProperties(qfile, ConfigFinder.getInstance().open(qfile));
+    DBProperties dbp = createDBProperties(qfile, ConfigFinder.getInstance(module).open(qfile));
     if (dbp != null)
       DBProperties.setCachedInstance(dbp, qfile);
     return dbp;
@@ -180,7 +209,18 @@ public class DBProperties extends java.util.Properties {
    * @exception IOException if an error occurs
    */
   public void addQueryFile(String qfile) throws IOException {
-    InputStream i = new BufferedInputStream(ConfigFinder.getInstance().open(qfile));
+    addQueryFile(qfile, null);
+  }
+
+  /**
+   * Add the queries from the given query file to this instance's collection.
+   *
+   * @param qfile a <code>String</code> query file to parse
+   * @param module the name of the module to search first for the query file
+   * @exception IOException if an error occurs
+   */
+  public void addQueryFile(String qfile, String module) throws IOException {
+    InputStream i = new BufferedInputStream(ConfigFinder.getInstance(module).open(qfile));
     try {
       load(i);
     } finally {
