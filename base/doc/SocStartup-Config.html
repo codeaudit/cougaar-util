@@ -61,13 +61,17 @@ description of the minitestconfig</a> society.
 
 <p>CSMART - Cougaar Society Monitoring, Analysis and Reporting Tool 
 is the preferred way of running a Cougaar society. See 
-<a href="../csmart/doc/InstallAndTest.html">CSMART Getting Started</a>
+<a href="../csmart/doc/InstallAndTest.html">CSMART Getting
+Started</a>. In particular, this document also gives a thorough
+step-by-step instruction for installing Cougaar and getting started
+running Cougaar.
 
 <p>The following "jar" files are used in the baseline minitestconfig society
 configuration and are located in the cougaar\lib and cougaar\sys directories:
 <br>&nbsp;&nbsp;&nbsp; cougaar/lib
 <ul>
-<li>boostrap.jar: COUGAAR bootstrapper classloader</li>
+<li>bootstrap.jar: COUGAAR bootstrapper classloader</li>
+<li>util.jar: Cougaar component architecture</li>
 <li>core.jar: COUGAAR core infrastructure</li>
 <li>glm.jar: domain infrastructure support and Logistics Model Plugins</li>
 <li>toolkit.jar: standalone utilities tools</li>
@@ -100,12 +104,6 @@ the COUGAAR release.
 </tr>
 
 <tr>
-<td>Java Secure Socket Extension (JSSE)</td>
-
-<td><a href="http://java.sun.com/products/jsse/">http://java.sun.com/products/jsse/</a></td>
-</tr>
-
-<tr>
 <td>Xerces XML Parser
 <br>jar file is xerces.jar</td>
 
@@ -134,7 +132,7 @@ the COUGAAR release.
 
 <tr>
 <td>Oracle JDBC Thin Drivers&nbsp;
-<br>any version compatable with jdk1.2/1.3
+<br>any version compatable with jdk1.2 or better
 <br>we use oracle12.zip
 <br>jar file is classes12.zip</td>
 
@@ -151,7 +149,7 @@ the COUGAAR release.
 </tr>
 
 <tr>
-<td>MySQL v2.0.3 JDBC Driver
+<td>MySQL v2.0.14 JDBC Driver
 <br>jar file is mm-mysql-2.jar&nbsp;</td>
 
 <td><a href="http://sourceforge.net/projects/mmmysql/">http://sourceforge.net/projects/mmmysql/</a></td>
@@ -175,16 +173,8 @@ the COUGAAR release.
 </tr>
 
 <tr>
-<td>
-<br><b>Additional Jars necessary to run Small-135 society using CSMART</b></td>
-
-<td></td>
-</tr>
-
-<tr>
 <td>Grappa v1.2
-<br>note this is a patched version
-<br>jar file is grappa1_2_bbn.jar</td>
+<br>jar file is grappa1_2.jar</td>
 
 <td><a href="http://www.research.att.com/sw/tools/graphviz/packages/grappa.html">http://www.research.att.com/sw/tools/graphviz/packages/grappa.html</a></td>
 </tr>
@@ -232,13 +222,9 @@ the COUGAAR release.
 
 <h2>
 <b>Installation and Configuration</b></h2>
-Please read the following information carefully. The following information
-describes the current organization of "jar" and data files and system parameters.
-In addition, this information describes the organization of Plugin software
-submissions and how Plugins must reference private data files and software
-libraries.
+Please read the following information carefully. 
 <p>Unpacking the release packages (zip files) should produce the following
-directory structure inside the new alp-&lt;builddate> directory:
+directory structure inside your Cougaar installation directory:
 <ul>
 <li>
 lib ---------------- "jar" files for infrastructure, Plugins,
@@ -255,19 +241,18 @@ configs ----------- subdirectories of society configuration files (e.g.,
 minitestconfig)</li>
 
 <li>
-src --------------- infrastructure source code (in zip files)</li>
-
-<li>
-doc ------ Release Notes (release_notes_index.html) and other documentation
+doc ------ Release Notes (index.html) and other documentation
 for COUGAAR infrastructure.</li>
 
 <li>
-api ------"javadoc" for Cougaar infrastructure</li>
-
-<li>
-&lt;product*>------ product specific data files and non-java executables
-(each Plugin or COUGAAR participant will have a corresponding subdirectory)</li>
+&lt;product&gt;------ product specific data files and non-java executables
+(each Plugin or COUGAAR participant will have a corresponding
+subdirectory). These include the basic Cougaar modules such as core,
+glm, aggagent, webtomcat, and csmart.</li>
 </ul>
+
+For further details see the corresponding section in the Release Notes.<br>
+
 The following information describes the configuration scheme for Cougaar
 software distributions. Please note the new organization of release software
 and data files for Plugin software and society configuration directories.
@@ -281,10 +266,18 @@ or Node.csh files.</li>
 <li>
 The environment variable COUGAAR_INSTALL_PATH must point to the 
 directory in which the Cougaar software was unzipped . This is 
-used to set the (java) system property org.cougaar.install.path
+used to set the (java) system property <code>org.cougaar.install.path</code>
 which must point to the same directory. These variables will allow the
 infrastructure and Plugins to find the necessary "jar" files (lib and sys)
-and data files (&lt;product-n>).</li>
+and data files (&lt;product&gt;).</li>
+
+<li>The environment variable COUGAAR_DEV_PATH may optionally be set to
+point to a directory or jar file of custom developed components which
+you wish to be available at runtime.</li>
+
+<li>You may also optionally set the environment variable
+COUGAAR_WORKSPACE to point to the directory in your installation where
+runtime components should write output. This defaults to COUGAAR_INSTALL_PATH/workspace.</li>
 
 <li>
 For system testing in a single node configuration, "serialization" of COUGAAR
@@ -298,7 +291,7 @@ processing platforms, all COUGAAR infrastructure software is compatible
 with NT, UNIX and LINUX operating systems.</li>
 
 <li>
-The Cougaar boostrapper will find all classes in jar files in the
+The Cougaar bootstrapper will find all classes in jar files in the
 $COUGAAR_INSTALL_PATH/lib and $COUGAAR_INSTALL_PATH/sys directories.
 For your convenience, place additional 3rd party jars in the latter.</li>
 
@@ -311,7 +304,7 @@ file.</li>
 <li>
 To find initialization files (e.g., clustername-prototype-ini.dat and OPlan.ini),
 the infrastructure will first look in the local directory and then look
-in the {$COUGAAR_INSTALL_PATH}\configs\common.</li>
+in the ${COUGAAR_INSTALL_PATH}\configs\common.</li>
 </ol>
 
 <p><br><b>Table 1: Environment variables and system properties used to
@@ -334,7 +327,7 @@ control COUGAAR system behavior</b>
 
 <td VALIGN=TOP WIDTH="20%">Environment Variable</td>
 
-<td VALIGN=TOP WIDTH="22%">&lt;drive>:\alp-&lt;builddate></td>
+<td VALIGN=TOP WIDTH="22%">&lt;drive>:\cougaar-&lt;builddate></td>
 
 <td VALIGN=TOP WIDTH="36%">Top-level location of COUGAAR software&nbsp;</td>
 </tr>
@@ -344,7 +337,7 @@ control COUGAAR system behavior</b>
 
 <td VALIGN=TOP WIDTH="20%">Java System Property</td>
 
-<td VALIGN=TOP WIDTH="22%">&lt;drive>:\alp-&lt;builddate></td>
+<td VALIGN=TOP WIDTH="22%">&lt;drive>:\cougaar-&lt;builddate></td>
 
 <td VALIGN=TOP WIDTH="36%">Top-level location of COUGAAR software&nbsp;</td>
 </tr>
@@ -392,7 +385,7 @@ transaction boundaries&nbsp;</td>
 </tr>
 
 <tr>
-<td VALIGN=TOP WIDTH="22%">org.cougaar.foo</td>
+<td VALIGN=TOP WIDTH="22%">org.cougaar.domain.foo</td>
 
 <td VALIGN=TOP WIDTH="20%">Java System Property</td>
 
@@ -403,7 +396,7 @@ package where the domain corresponds with "foo"</td>
 </tr>
 
 <tr>
-<td VALIGN=TOP WIDTH="22%">org.cougaar.cluster.startTime</td>
+<td VALIGN=TOP WIDTH="22%">org.cougaar.agent.startTime</td>
 
 <td VALIGN=TOP WIDTH="20%">Java System Property</td>
 
@@ -415,12 +408,11 @@ default for optimal use of the small-135 society and Oplan.</td>
 </table>
 
 <h2>
-<b>Populating Clusters with Assets</b></h2>
+<b>Populating Agents with Assets</b></h2>
 The initial population of assets for a particular organization is handled
 by Data Plugins, specifically the LDMXMLPlugin&nbsp; that reads assets
 from an XML formated file. Also included in the release is an LDMSQLPlugin
-that reads assets from the JTAV snapshot database on eiger. Examples can
-be found in the alpine.plugin package. On start-up, the XML Plugins query
+that reads assets from Cougaar domain database. On start-up, the XML Plugins query
 the XML files and create the specified LDM objects.
 <p>The JDBC drivers required for the LDMSQLPlugins are freely available.&nbsp;
 Please refer to the <a href="details/HeterogeneousDatabase.html">Heterogeneous
