@@ -53,7 +53,7 @@ class ServerHostControllerImpl
    * defined at the end of this class.
    */
   private final Map procs = new HashMap();
-    
+
   public ServerHostControllerImpl(
       boolean verbose,
       String tempPath,
@@ -64,15 +64,15 @@ class ServerHostControllerImpl
 
     this.defaultJavaProps = new Properties();
     loadApplicationProperties(
-      defaultJavaProps,
-      loadDefaultProps,
-      args);
+        defaultJavaProps,
+        loadDefaultProps,
+        args);
     if (verbose) {
       System.out.println(
           "Default properties["+defaultJavaProps.size()+"]:");
       for (Iterator iter = defaultJavaProps.entrySet().iterator();
-           iter.hasNext();
-           ) {
+          iter.hasNext();
+          ) {
         System.out.println("  "+iter.next());
       }
     }
@@ -98,100 +98,100 @@ class ServerHostControllerImpl
       NodeEventFilter nef,
       ConfigurationWriter cw)
     throws Exception
-  {
-    // null-check
-    if (desc == null) {
-      throw new NullPointerException("Description is null");
-    } else if (cnel == null) {
-      throw new NullPointerException("NodeEvent listener is null");
-    } else if (nef == null) {
-      throw new NullPointerException("NodeEvent filter is null");
-    }
-
-    final String procName = desc.getName();
-
-    // register the process name
-    final ProcessEntry pe;
-    synchronized (procs) {
-      ProcessEntry origPE = (ProcessEntry) procs.get(procName);
-      if (origPE != null) {
-        throw new RuntimeException(
-            "Process name \""+procName+"\" is already in"+
-            " use by another (running) process");
+    {
+      // null-check
+      if (desc == null) {
+        throw new NullPointerException("Description is null");
+      } else if (cnel == null) {
+        throw new NullPointerException("NodeEvent listener is null");
+      } else if (nef == null) {
+        throw new NullPointerException("NodeEvent filter is null");
       }
-      pe = new ProcessEntry(desc);
-      pe.state = ProcessEntry.LOADING;
-      procs.put(procName, pe);
-    }
 
-    ServerNodeController snc;
-    synchronized (pe) {
-      try {
-        // write config files
-        if (cw != null) {
-          if (verbose) {
-            System.out.println("Writing configuration files");
-          }
-          cw.writeConfigFiles(new File(tempPath));
+      final String procName = desc.getName();
+
+      // register the process name
+      final ProcessEntry pe;
+      synchronized (procs) {
+        ProcessEntry origPE = (ProcessEntry) procs.get(procName);
+        if (origPE != null) {
+          throw new RuntimeException(
+              "Process name \""+procName+"\" is already in"+
+              " use by another (running) process");
         }
+        pe = new ProcessEntry(desc);
+        pe.state = ProcessEntry.LOADING;
+        procs.put(procName, pe);
+      }
 
-        if (verbose) {
-          System.out.println("Parsing the process description: "+desc);
-        }
-
-        // assemble the command-line and environment-variables
-        String[][] tmp = parseProcessDescription(desc);
-        String[] cmdLine = tmp[0];
-        String[] envVars = tmp[1];
-
-        // debugging...
-        if (verbose) {
-          System.out.println("\nCreate Node Controller:");
-          System.out.println("Process: "+desc);
-          System.out.println("Command line["+cmdLine.length+"]:");
-          for (int i = 0; i < cmdLine.length; i++) {
-            System.err.println("  "+cmdLine[i]);
-          }
-          System.err.println("Environment["+envVars.length+"]:");
-          for (int i = 0; i < envVars.length; i++) {
-            System.err.println("  "+envVars[i]);
-          }
-          System.out.println();
-        } 
-
-        // create a callback for destroy-watching
-        ServerNodeDestroyedCallback sndc = 
-          new ServerNodeDestroyedCallback() {
-            public void nodeDestroyed(int exitVal) {
-              ServerHostControllerImpl.this.nodeDestroyed(pe, exitVal);
+      ServerNodeController snc;
+      synchronized (pe) {
+        try {
+          // write config files
+          if (cw != null) {
+            if (verbose) {
+              System.out.println("Writing configuration files");
             }
-          };
+            cw.writeConfigFiles(new File(tempPath));
+          }
 
-        // spawn the process
-        snc = 
-          new ServerNodeControllerImpl(
-              desc,
-              cmdLine, 
-              envVars,
-              sndc,
-              cnel,
-              nef);
-      } catch (Exception e) {
-        if (verbose) {
-          System.out.println("Unable to create Node:");
-          e.printStackTrace();
+          if (verbose) {
+            System.out.println("Parsing the process description: "+desc);
+          }
+
+          // assemble the command-line and environment-variables
+          String[][] tmp = parseProcessDescription(desc);
+          String[] cmdLine = tmp[0];
+          String[] envVars = tmp[1];
+
+          // debugging...
+          if (verbose) {
+            System.out.println("\nCreate Node Controller:");
+            System.out.println("Process: "+desc);
+            System.out.println("Command line["+cmdLine.length+"]:");
+            for (int i = 0; i < cmdLine.length; i++) {
+              System.err.println("  "+cmdLine[i]);
+            }
+            System.err.println("Environment["+envVars.length+"]:");
+            for (int i = 0; i < envVars.length; i++) {
+              System.err.println("  "+envVars[i]);
+            }
+            System.out.println();
+          } 
+
+          // create a callback for destroy-watching
+          ServerNodeDestroyedCallback sndc = 
+            new ServerNodeDestroyedCallback() {
+              public void nodeDestroyed(int exitVal) {
+                ServerHostControllerImpl.this.nodeDestroyed(pe, exitVal);
+              }
+            };
+
+          // spawn the process
+          snc = 
+            new ServerNodeControllerImpl(
+                desc,
+                cmdLine, 
+                envVars,
+                sndc,
+                cnel,
+                nef);
+        } catch (Exception e) {
+          if (verbose) {
+            System.out.println("Unable to create Node:");
+            e.printStackTrace();
+          }
+          killNode(procName);
+          throw e;
         }
-        killNode(procName);
-        throw e;
+
+        // update the proc-entry to "running"
+        pe.snc = snc;
+        pe.state = ProcessEntry.RUNNING;
       }
 
-      // update the proc-entry to "running"
-      pe.snc = snc;
-      pe.state = ProcessEntry.RUNNING;
+      return snc;
     }
-
-    return snc;
-  }
 
   /**
    * Kill the process with the given ProcessDescription 
@@ -212,7 +212,7 @@ class ServerHostControllerImpl
         return Integer.MIN_VALUE;
       } 
     }
-    
+
     synchronized (pe) {
       // if loading, wait until running/killing/dead
       while (pe.state == ProcessEntry.LOADING) {
@@ -223,19 +223,14 @@ class ServerHostControllerImpl
       }
       // kill
       switch (pe.state) {
+        default:
         case ProcessEntry.LOADING:
           throw new InternalError();
         case ProcessEntry.RUNNING:
           pe.state = ProcessEntry.KILLING;
-          try {
-            pe.exitValue = pe.snc.destroy();
-          } catch (Exception e) {
-            // never
-          }
-          pe.state = ProcessEntry.DEAD;
-          pe.notifyAll();
           break;
         case ProcessEntry.KILLING:
+          // wait for kill
           do {
             try {
               pe.wait();
@@ -244,15 +239,25 @@ class ServerHostControllerImpl
           } while (pe.state != ProcessEntry.DEAD);
           return pe.exitValue;
         case ProcessEntry.DEAD:
-          return Integer.MIN_VALUE;
+          return pe.exitValue;
       }
     }
 
-    // dead, now remove from listings
+    // only the former-RUNNING gets here...
+    try {
+      pe.exitValue = pe.snc.destroy();
+    } catch (Exception e) {
+      // never
+    }
+    // dead, remove from listings
     synchronized (procs) {
       procs.remove(procName);
     }
-
+    // notify any kill-waiters
+    synchronized (pe) {
+      pe.state = ProcessEntry.DEAD;
+      pe.notifyAll();
+    }
     return pe.exitValue;
   }
 
@@ -262,7 +267,7 @@ class ServerHostControllerImpl
     if (pe == null) {
       throw new InternalError();
     }
-    
+
     boolean remove = false;
     synchronized (pe) {
       if (pe.state != ProcessEntry.DEAD) {
@@ -298,15 +303,9 @@ class ServerHostControllerImpl
         return null;
       }
     }
-    // check if it's running
-    synchronized (pe) {
-      if (pe.state != ProcessEntry.RUNNING) {
-        return null;
-      }
-      return pe.desc;
-    }
+    return pe.desc;
   }
-  
+
   /**
    * Get the Process Controller (for a running Process).
    * 
@@ -329,6 +328,13 @@ class ServerHostControllerImpl
     }
     // check if it's running
     synchronized (pe) {
+      // if loading, wait until running/killing/dead
+      while (pe.state == ProcessEntry.LOADING) {
+        try {
+          pe.wait();
+        } catch (InterruptedException ie) {
+        }
+      }
       if (pe.state != ProcessEntry.RUNNING) {
         return null;
       }
@@ -350,11 +356,7 @@ class ServerHostControllerImpl
       Iterator iter = procs.values().iterator();
       while (iter.hasNext()) {
         ProcessEntry pe = (ProcessEntry) iter.next();
-        synchronized (pe) {
-          if (pe.state != ProcessEntry.RUNNING) {
-            continue;
-          }
-        }
+        // accept all pe states (LOADING, RUNNING, KILLING)
         ProcessDescription desc = pe.desc;
         String descGroup = desc.getGroup();
         if ((procGroup != null) ? 
@@ -380,11 +382,7 @@ class ServerHostControllerImpl
       Iterator iter = procs.values().iterator();
       while (iter.hasNext()) {
         ProcessEntry pe = (ProcessEntry) iter.next();
-        synchronized (pe) {
-          if (pe.state != ProcessEntry.RUNNING) {
-            continue;
-          }
-        }
+        // accept all pe states (LOADING, RUNNING, KILLING)
         ProcessDescription desc = pe.desc;
         l.add(desc);
       }
@@ -541,7 +539,7 @@ class ServerHostControllerImpl
 
     // open the file
     File f = new File(sysFilename);
-    
+
     // make sure that the file is not a directory, etc
     if (!(f.exists())) {
       throw new IllegalArgumentException(
@@ -575,7 +573,7 @@ class ServerHostControllerImpl
       throw new IllegalArgumentException(
           "Unable to wrap file stream for \""+filename+"\": "+e);
     }
-    
+
     // return the wrapped stream!
     return sin;
   }
