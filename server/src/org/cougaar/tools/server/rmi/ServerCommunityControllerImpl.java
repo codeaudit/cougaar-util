@@ -67,7 +67,11 @@ class ServerCommunityControllerImpl
       Properties props, 
       String[] args,
       ClientNodeEventListener cnel,
-      NodeEventFilter nef) throws IOException {
+      NodeEventFilter nef,
+      ConfigurationWriter cw)
+    throws IOException
+  {
+    if (cw != null) cw.writeConfigFiles(new File("."));
 
     // p is a merge of server-set properties and passed-in props
     Properties p = new Properties(commonProperties);

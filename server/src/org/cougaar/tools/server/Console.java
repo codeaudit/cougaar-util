@@ -352,7 +352,8 @@ public class Console {
               c_props,
               args,
               nel,
-              nef);
+              nef,
+              null);
       } catch (Exception e) {
         System.err.println(
             "Unable to create node \""+name+"\" on host \""+hostname+"\"");

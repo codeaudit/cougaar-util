@@ -17,6 +17,7 @@ import java.rmi.*;
 import java.rmi.registry.*;
 
 import org.cougaar.tools.server.NodeEventFilter;
+import org.cougaar.tools.server.ConfigurationWriter;
 
 /** 
  * Server-side API to create and control Nodes on a single machine.
@@ -30,7 +31,8 @@ extends Remote {
       Properties props, 
       String[] args,
       ClientNodeEventListener cListener,
-      NodeEventFilter nef)
+      NodeEventFilter nef,
+      ConfigurationWriter cf)
     throws IOException, RemoteException;
 
   /** Kill the named Node **/

@@ -44,7 +44,8 @@ public interface CommunityServesClient {
       Properties nodeProperties,
       String[] commandLineArgs,
       NodeEventListener nel,
-      NodeEventFilter nef) throws Exception;
+      NodeEventFilter nef,
+      ConfigurationWriter cw) throws Exception;
 
   //
   // could add lookup features here

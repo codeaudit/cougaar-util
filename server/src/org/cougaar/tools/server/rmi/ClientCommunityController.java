@@ -19,6 +19,7 @@ import org.cougaar.tools.server.NodeEventListener;
 import org.cougaar.tools.server.NodeEventFilter;
 import org.cougaar.tools.server.NodeServesClient;
 import org.cougaar.tools.server.CommunityServesClient;
+import org.cougaar.tools.server.ConfigurationWriter;
 
 /**
  * This implementation of <code>CommunityServesClient</code> communicates
@@ -38,7 +39,10 @@ implements CommunityServesClient {
       Properties nodeProperties,
       String[] commandLineArgs,
       NodeEventListener nel,
-      NodeEventFilter nef) throws Exception {
+      NodeEventFilter nef,
+      ConfigurationWriter cw)
+    throws Exception
+  {
 
     // locate registry at <hostname, port>
     Registry reg = LocateRegistry.getRegistry(hostName, hostPort);
@@ -59,7 +63,8 @@ implements CommunityServesClient {
           nodeProperties, 
           commandLineArgs, 
           cnel,
-          nef);
+          nef,
+          cw);
 
     // wrap for client
     //
