@@ -132,12 +132,15 @@ queryAllAgentNames = \
     WHERE C.COMPONENT_TYPE = 'agent' \
     ORDER BY C.COMPONENT_NAME
 
-# Get all experiments that have the given Recipe
-# This version gets recipes by ID - should it be name?    
+# Get all experiments that have the given Recipe 
+# where Recipe is specified by name
+
 queryExptsWithRecipe = \
   SELECT DISTINCT E.NAME \
-    FROM V4_EXPT_EXPERIMENT E, V4_EXPT_TRIAL_MOD_RECIPE R, V4_EXPT_TRIAL T \
-    WHERE E.EXPT_ID = T.EXPT_ID \
-       AND T.TRIAL_ID = R.TRIAL_ID \
-       AND R.MOD_RECIPE_LIB_ID = ':recipeID'
-# or join with v4_lib_mod_recipe on id to get to the column NAME
+    FROM V4_EXPT_EXPERIMENT E, V4_EXPT_TRIAL_MOD_RECIPE R, V4_EXPT_TRIAL T, V4_LIB_MOD_RECIPE M \
+	WHERE E.EXPT_ID = T.EXPT_ID \
+        AND T.TRIAL_ID = R.TRIAL_ID \
+	AND M.MOD_RECIPE_LIB_ID = R.MOD_RECIPE_LIB_ID \
+	AND M.NAME = ':recipeName'
+
+
