@@ -36,7 +36,7 @@ public abstract class TimeSpans {
   private TimeSpans() {}
 
   /** construct a TimeSpan at a specific point for minimum duration **/
-  public TimeSpan getPoint(long t) {
+  public static TimeSpan getPoint(long t) {
     return new TimeSpan.Point(t);
   }
   /** construct a TimeSpan object using the specified times.
@@ -44,47 +44,47 @@ public abstract class TimeSpans {
    * t0 is in the span and t1 is not.  This is the preferred method as
    * it allows for cleaner temporal arithmetic.
    **/
-  public TimeSpan getSpan(long t0, long t1) {
+  public static TimeSpan getSpan(long t0, long t1) {
     return new TimeSpan.Span(t0, t1);
   }
   /** construct the smalled TimeSpan which includes
    * both time points. This span will be one millisecond longer
    * than what #getSpan(long, long) would have returned.
    **/
-  public TimeSpan getClosedSpan(long t0, long t1) {
+  public static TimeSpan getClosedSpan(long t0, long t1) {
     return new TimeSpan.Span(t0, t1+TimeSpan.EPSILON);
   }
   /** construct a TimeSpan which begins at the dawn of time and ends just before the
    * specified time (the specified time is <b>not</b> in the span)..
    **/
-  public TimeSpan getBeforeSpan(long t) {
+  public static TimeSpan getBeforeSpan(long t) {
     return new TimeSpan.Span(TimeSpan.MIN_VALUE, t);
   }
   /** construct a TimeSpan which begins at the dawn of time and ends at the
    * specified time (the specified time <b>is</b> in the span).
    **/
-  public TimeSpan getEndsAtSpan(long t) {
+  public static TimeSpan getEndsAtSpan(long t) {
     return new TimeSpan.Span(TimeSpan.MIN_VALUE, t+TimeSpan.EPSILON);
   }
 
   /** construct a TimeSpan which starts after the specified time and lasts
    * until the heat death of the universe (the specified time is <b>not</b> in the span).
    **/
-  public TimeSpan getAfterSpan(long t) {
+  public static TimeSpan getAfterSpan(long t) {
     return new TimeSpan.Span(t+TimeSpan.EPSILON, TimeSpan.MAX_VALUE);
   }
 
   /** construct a TimeSpan which starts after the specified time and lasts
    * until the heat death of the universe (the specified time <b>is</b> in the span).
    **/
-  public TimeSpan getStartsAtSpan(long t) {
+  public static TimeSpan getStartsAtSpan(long t) {
     return new TimeSpan.Span(t, TimeSpan.MAX_VALUE);
   }
 
   /** return a TimeSpan which starts at the big bang and ends at the heat death
    * of the universe.
    **/
-  public TimeSpan getForever() {
+  public static TimeSpan getForever() {
     return TimeSpan.FOREVER;
   }
 
