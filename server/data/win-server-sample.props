@@ -13,32 +13,33 @@
 #   to the windows install directory.
 env.SYSTEMROOT=C\:\\WINNT
 
-# Set the cougaag install path.
-org.cougaar.install.path=D\:\\opt\\alp
+# Set the Cougaar install path.
+org.cougaar.install.path=D\:\\opt\\cougaar
 
 # Set the cougaar system path, which is used to find third-party jars
 #   (e.g. "log4j.jar").
 #
 # This defaults to "{org.cougaar.install.path} + \\sys", but one can
-#   use a different directory.
-#
-# Here we explicitly select "D:\\opt\\sys", since these system jars can
-# usually be shared across multiple build versions.
-org.cougaar.system.path=D\:\\opt\\sys
+#   use a different directory by setting this property.
+#org.cougaar.system.path=D\:\\opt\\cougaar\\sys
 
 # Set the classpath for starting the Node, which uses ";" separators.
 #
 # Typically only core.jar needs to be in here.
-java.class.path=D\:\\opt\\alp\\lib\\core.jar
+java.class.path=D\:\\opt\\cougaar\\lib\\core.jar
 
 # Set the config path, which uses ";" separators.
+#
+# Note that this should end with an (escaped) semi-colon to indicate
+# that the path specified here should be searched in addition to and 
+# before the default search path.
 #
 # This path must contain your "cougaar.rc", database files ("*.q"), 
 #   "default.psps.xml", and other configuration files.
 #
 # Here we override the default configuration path to include both
 # the "common" directory and "GLMTrans" directory.
-org.cougaar.config.path="D\:\\opt\\alp\\configs\\common\;D\:\\opt\\alp\\glmtrans\\configs\\demo-config\\config"
+org.cougaar.config.path="D\:\\opt\\cougaar\\configs\\common\;D\:\\opt\\cougaar\\glmtrans\\configs\\demo-config\\config\;"
 
 # Set some standard JVM memory settings.
 #
