@@ -83,7 +83,7 @@ addClonedASBAgents = \
       OGOM.ORG_ID AS COMPONENT_LIB_ID, \
       CS.CLONE_SET_ID AS CLONE_SET_ID, \
       AC.COMPONENT_NAME AS COMPONENT_NAME \
-    FROM v6_cfw_org_group_ORG_MEMBER OGOM, \
+    FROM v6_cfw_org_group_org_member OGOM, \
          v4_alib_component AC, \
 	 v4_lib_clone_set CS \
     WHERE OGOM.ORG_GROUP_ID= ':org_group_id'
@@ -105,7 +105,7 @@ addClonedASBAgentsCreateTable.mysql = \
     OGOM.ORG_ID AS COMPONENT_LIB_ID, \
     CS.CLONE_SET_ID AS CLONE_SET_ID, \
     AC.COMPONENT_NAME AS COMPONENT_NAME \
-  FROM v6_cfw_org_group_ORG_MEMBER OGOM, \
+  FROM v6_cfw_org_group_org_member OGOM, \
        v4_alib_component AC, \
        v4_lib_clone_set CS \
        LEFT JOIN v4_asb_agent AA ON \
