@@ -121,6 +121,13 @@ XSL Template for NodeAgent, which reuses most of SimpleAgent.
       priority="HIGH"
       insertionpoint="Node.AgentManager.Agent.Component"/>
 
+    <!-- ConfigurationService -->
+    <component
+      name="org.cougaar.core.node.ConfigurationServiceComponent()"
+      class="org.cougaar.core.node.ConfigurationServiceComponent"
+      priority="HIGH"
+      insertionpoint="Node.AgentManager.Agent.Component"/>
+
     <!-- thread service -->
     <component
       name="org.cougaar.core.thread.ThreadServiceProvider()"
