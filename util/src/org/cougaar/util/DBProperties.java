@@ -1,6 +1,6 @@
 /*
  * <copyright>
- *  Copyright 1997-2001 BBNT Solutions, LLC
+ *  Copyright 1997-2002 BBNT Solutions, LLC
  *  under sponsorship of the Defense Advanced Research Projects Agency (DARPA).
  * 
  *  This program is free software; you can redistribute it and/or modify
@@ -37,6 +37,7 @@ import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.Properties;
 
 /**
@@ -50,6 +51,36 @@ public class DBProperties extends java.util.Properties {
     private boolean debug = false;
     private String name;
 
+  // Stash away DBProperties by .q file name as we create them
+  private static Map dbProps = new HashMap();
+
+  /**
+   * Get the cached DBProperties instance for this file, if any
+   *
+   * @param qFile a <code>String</code> query file to look up
+   * @return a <code>DBProperties</code> for that file, possibly null
+   */
+  private static DBProperties getCachedInstance(String qFile) {
+    synchronized (dbProps) {
+      if (qFile == null)
+	return null;
+      return ((DBProperties)dbProps.get(qFile));
+    }
+  }
+
+  /**
+   * Stash away DBProperties as they are created by q file name
+   *
+   * @param instance a <code>DBProperties</code> instance to reuse
+   * @param qFile a <code>String</code> query file name
+   */
+  private static void addCachedInstance(DBProperties instance, String qFile) {
+    synchronized (dbProps) {
+      if (qFile != null && instance != null && !dbProps.containsKey(qFile))
+	dbProps.put(qFile, instance);
+    }
+  }
+
     /**
      * Read and parse a .q file. If the .q file contains value for
      * "database" the default database type is set accordingly. The
@@ -60,7 +91,14 @@ public class DBProperties extends java.util.Properties {
     public static DBProperties readQueryFile(String qfile)
         throws IOException
     {
-        return createDBProperties(qfile, ConfigFinder.getInstance().open(qfile));
+      // Only create a DBProperties if we dont have one yet for this file
+      DBProperties dbp = DBProperties.getCachedInstance(qfile);
+      if (dbp == null) {
+	dbp = createDBProperties(qfile, ConfigFinder.getInstance().open(qfile));
+	if (dbp != null)
+	  DBProperties.addCachedInstance(dbp, qfile);
+      }
+      return dbp;
     }
 
     /**
@@ -74,7 +112,15 @@ public class DBProperties extends java.util.Properties {
     public static DBProperties readQueryFile(URL url)
     throws IOException
     {
-        return createDBProperties(url.toString(), url.openStream());
+      // Only create a DBProperties if we dont have one yet for this file
+      String qfile = url.toString();
+      DBProperties dbp = DBProperties.getCachedInstance(qfile);
+      if (dbp == null) {
+	dbp = createDBProperties(qfile, url.openStream());
+	if (dbp != null)
+	  DBProperties.addCachedInstance(dbp, qfile);
+      }
+      return dbp;
     }
 
     public void addQueryFile(String qfile) throws IOException {
@@ -198,6 +244,7 @@ public class DBProperties extends java.util.Properties {
      * Does the actual work. Called twice for each query.
      **/
     private String getQuery1(String queryName, Map substitutions) {
+      // FIXME: Use Stringbuffers, not Strings
         String query = getProperty(queryName);
         if (query != null && substitutions != null &&
             !substitutions.isEmpty()) {
