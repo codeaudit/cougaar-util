@@ -45,4 +45,8 @@ public class LoggerProxy
       int level, String message, Throwable t) { 
     l.log(level, message, t);
   }
+
+  public void printDot(String dot) {
+    l.printDot(dot);
+  }
 }

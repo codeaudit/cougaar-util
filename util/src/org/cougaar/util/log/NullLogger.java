@@ -50,6 +50,8 @@ public class NullLogger
 
   public void log(int level, String message, Throwable t) { }
 
+  public void printDot(String dot) { }
+
   public String toString() {
     return "null-logger";
   }

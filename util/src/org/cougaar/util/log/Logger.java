@@ -191,4 +191,6 @@ public interface Logger {
    */
   void fatal(String message);
   void fatal(String message, Throwable t);
+
+  void printDot(String dot);
 }

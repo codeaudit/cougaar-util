@@ -21,6 +21,11 @@
 
 package org.cougaar.util.log.log4j;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Enumeration;
+import org.apache.log4j.Category;
+import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.cougaar.util.log.*;
@@ -40,8 +45,30 @@ import org.cougaar.util.log.*;
  */
 class LoggerImpl extends LoggerAdapter
 {
+  private static final int MAXDOTS = 50;
+  private static int ndots = 0;
+  private static Object dotsLock = new Object();
+  private static SimpleDateFormat dateFormat =
+    new SimpleDateFormat("yyyy-MM-dd hh:mm:ss,SSS");
+
   // log4j logger, which does the real work...
   private final Logger cat;
+
+  private boolean checkDots = false;
+
+  private static boolean hasConsoleAppender(Category cat) {
+    for (Enumeration e = cat.getAllAppenders(); e.hasMoreElements(); ) {
+      Object o = e.nextElement();
+      if (o instanceof ConsoleAppender) {
+        return true;
+      }
+    }
+    if (cat.getAdditivity()) {
+      Category parent = cat.getParent();
+      if (parent != null) return hasConsoleAppender(parent);
+    }
+    return false;
+  }
 
   /**
    * Constructor which uses the specified name to form a 
@@ -52,6 +79,7 @@ class LoggerImpl extends LoggerAdapter
   public LoggerImpl(Object obj) {
     String s = Logging.getKey(obj);
     cat = Logger.getLogger(s);
+    checkDots = hasConsoleAppender(cat);
   }
 
   /**
@@ -68,7 +96,49 @@ class LoggerImpl extends LoggerAdapter
 
   public void log(int level, String message, Throwable t) {
     Level p = Util.convertIntToLevel(level);
-    cat.log(p, message, t);
+    if (checkDots && cat.isEnabledFor(p)) {
+      // synchronize to prevent any dots between dumpDots and logging.
+      synchronized (dotsLock) {
+        dumpDots();
+        cat.log(p, message, t);
+      }
+    } else {
+      cat.log(p, message, t);
+    }
+  }
+
+  // Must be called in a synchronized(dotsLock)
+  private static void dumpDots() {
+    if (ndots > 0) {
+      System.err.println();
+      ndots = 0;
+    }
+  }
+
+  /**
+   * Print a dot or other string to System.out such that it is nicely
+   * interleaved with log output to any ConsoleAppenders to
+   * System.out. Such output is always preceded with a standard format
+   * time of the first such output and terminated with a eol before
+   * any logging output or if such output exceeds a certain length. In
+   * theory, we could pipe any output to stderr or stdout through (a
+   * static version of) this method and thereby interleave such
+   * spontaneous output with logging output, but doing so would
+   * require adjusting all ConsoleAppenders to use the original
+   * stdout/stderr to avoid.
+   **/
+
+  public void printDot(String dot) {
+    synchronized (dotsLock) {
+      if (ndots == 0) {
+        System.out.print(dateFormat.format(new Date()) + " SHOUT [DOTS] - ");
+      }
+      System.out.print(dot);
+      ndots += dot.length();
+      if (ndots >= MAXDOTS) {
+        dumpDots();
+      }
+    }
   }
 
   public String toString() {

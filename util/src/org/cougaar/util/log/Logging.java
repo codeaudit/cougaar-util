@@ -30,6 +30,8 @@ import java.util.*;
  */
 public final class Logging 
 {
+  private static Logger dotLogger = null;
+
   // cannot be instantiated
   private Logging() {}
 
@@ -59,6 +61,15 @@ public final class Logging
       }
       return l;
     }
+  }
+
+  public static void printDot(String dot) {
+    synchronized (Logging.class) {
+      if (dotLogger == null) {
+        dotLogger = getLogger("DOTS");
+      }
+    }
+    dotLogger.printDot(dot);
   }
 
   /** The cache for getLoggerController() **/
