@@ -302,16 +302,39 @@ class ServerHostControllerImpl
           "Unable to read from path: \""+path+"\"");
     }
 
-    // get a directory listing of file names
-    String[] ret = d.list();
-    if (ret == null) {
+    // get a directory listing of the files
+    File[] files = d.listFiles();
+    if (files == null) {
       throw new IllegalArgumentException(
           "Unable to get a directory listing for path: \""+path+"\"");
     }
+    int nfiles = files.length;
 
-    // fix to be relative paths to all start with the dotPath
-    for (int i = 0; i < ret.length; i++) {
-      ret[i] = path + ret[i];
+    // make an array of file names
+    String[] ret = new String[nfiles];
+
+    // get the file names and fix them to 
+    //  - only list readable, non-hidden files
+    //  - all start with the "path" (i.e. start with "./")
+    //  - have directory names end in "/"
+    int nret = 0;
+    for (int i = 0; i < nfiles; i++) {
+      File fi = files[i];
+      if (fi.canRead() &&
+          (!(fi.isHidden()))) {
+        String si = path + fi.getName();
+        if (fi.isDirectory()) {
+          si += "/";
+        }
+        ret[nret++] = si;
+      }
+    }
+
+    // trim the array if necessary
+    if (nret < nfiles) {
+      String[] trimmedRet = new String[nret];
+      System.arraycopy(ret, 0, trimmedRet, 0, nret);
+      ret = trimmedRet;
     }
 
     // return the list of file names
