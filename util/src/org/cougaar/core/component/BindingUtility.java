@@ -88,7 +88,6 @@ public abstract class BindingUtility {
             
             if (s.endsWith(pname)) { 
               // ok: m is a "public setX(X)" method where X is a Service.
-
               // create the revocation listener
               final Method fm = m;
               final Object fc = child;
@@ -103,12 +102,15 @@ public abstract class BindingUtility {
                     }
                   }
                 };
-
               // Let's try getting the service...
               Object service = servicebroker.getService(child, p, srl);
-              Object[] args = new Object[] { service };
+              Object[] args = new Object[] { null };
               try {
                 m.invoke(child, args);
+                if (service != null) {
+                  args[0] = service;
+                  m.invoke(child, args);
+                }
               } catch (InvocationTargetException ite) {
                 if (service != null) {
                   servicebroker.releaseService(child,p,service);
