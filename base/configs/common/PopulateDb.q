@@ -88,7 +88,7 @@ insertComponentHierarchy=\
 queryComponentArgs=\
  SELECT ARGUMENT, ARGUMENT_ORDER \
    FROM V4_ASB_COMPONENT_ARG \
-  WHERE ASSEMBLY_ID :assembly_match: \
+  WHERE ASSEMBLY_ID = :assembly_id: \
     AND COMPONENT_ALIB_ID = :component_alib_id: \
   ORDER BY ARGUMENT_ORDER, ARGUMENT
  
@@ -155,7 +155,7 @@ insertLibPGAttribute=\
  INSERT INTO V4_LIB_PG_ATTRIBUTE \
    (PG_ATTRIBUTE_LIB_ID, PG_NAME, ATTRIBUTE_NAME, ATTRIBUTE_TYPE, AGGREGATE_TYPE) \
   VALUES \
-     (:attribute_lib_id:, :pg_name:, :attribute_name:, 
+     (:attribute_lib_id:, :pg_name:, :attribute_name:, \
       :attribute_type:, :aggregate_type:)
 
 queryMaxExptId=\
@@ -204,7 +204,7 @@ updateAssemblyDesc=\
 # Add new RUNTIME assembly
 insertTrialAssembly=\
  INSERT INTO V4_EXPT_TRIAL_ASSEMBLY (EXPT_ID, TRIAL_ID, ASSEMBLY_ID, DESCRIPTION) \
- VALUES (':expt_id:', ':trial_id:', :assembly_id:, ':assembly_type: assembly')
+ VALUES (':expt_id:', ':trial_id:', ':assembly_id:', ':assembly_type: assembly')
 
 # Delete runtime assembly from trial
 cleanTrialAssembly=\
@@ -442,7 +442,7 @@ checkAsbAgent=\
  SELECT '1' \
    FROM V4_ASB_AGENT \
   WHERE COMPONENT_ALIB_ID = :component_alib_id: \
-    AND ASSEMBLY_ID :assembly_match:
+    AND ASSEMBLY_ID = :assembly_id:
 
 insertAsbAgent=\
  INSERT INTO V4_ASB_AGENT \
