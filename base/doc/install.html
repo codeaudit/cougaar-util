@@ -1,0 +1,66 @@
+<html><head><title>Installing Cougaar</title></head>
+<body>
+<h1>Installing Cougaar</h1>
+
+<h3>Download</h3>
+
+<p>The latest version of Cougaar can be obtained at <a
+href="http://cougaar.org/frs/?group_id=17">http://cougaar.org/projects/cougaar/</a>.
+Cougaar can be installed both manually (ZIP files) and
+for older versions, through the use of a Windows or LINUX based installer. Both
+installation methods are described below.</p>
+
+<h3>Requirements</h3>
+<ol>
+<li>Java 1.4.2+ installed and on the system path (see <a
+href="http://java.sun.com/">http://java.sun.com</a> )</li>
+<li>Optional: (required for some applications): MySQL version 3.23+
+(see <a href="http://dev.mysql.org/">http://dev.mysql.org</a> )</li>
+</ol>
+
+<h3>Installer based Installation</h3>
+
+<p>Ensure all the requirements above are satisfied, run the
+installer.  Once Cougaar has been
+installed, you must define an environment variable: COUGAAR_INSTALL_PATH to
+point to the install location and ensure that COUGAAR_INSTALL_PATH/bin is on
+your system path.</p>
+
+<p><i>Note: On Windows, the above steps are handled by the
+installer.</i></p>
+
+<h3>Normal Installation</h3>
+
+<p>This document outlines a basic custom installation. For a more detailed custom installation, see the CSMART install guide
+(COUGAAR_INSTALL_PATH/csmart/doc/InstallAndTest.html or <a href="http://cougaar.cougaar.org/software/latest/javadoc/csmart/doc/InstallAndTest.html">online</a>): </p>
+<ol>
+<li>Ensure that you meet the JDK requirements above.</li>
+<li>If you plan on using some CSMART functionality or the
+“logistics” project, then you will need to also install MySQL,
+as specified above.  You can use the Installer, or
+install MySQL as described in the CSMART install guide.</li>
+<li>Create a Cougaar directory (ie "C:/Cougaar") and set a "COUGAAR_INSTALL_PATH"
+environment variable to point to this directory.</li>
+<li>Recommended: Put COUGAAR_INSTALL_PATH/bin on your PATH
+environment variable, for easy access to the "cougaar" startup script.</li>
+<li>Unzip the desired zip files into COUGAAR_INSTALL_PATH. <br>
+(<i>The following two are required</i>.)<br>
+<ul>
+<li><b><i>cougaar.zip</i></b>, this contains the core
+cougaar infrastructure.</li>
+<li><b><i>cougaar-support.zip</i></b>, this contains all
+required 3<sup>rd</sup> party support jars.</li>
+</ul>
+<i>(The other jars, such as cougaar-src.zip
+and cougaar-api.zip are optional.)</i>
+<p></li>
+<li>You should now be able to run the pizza application (see
+COUGAAR_INSTALL_PATH/pizza/doc/Readme.html or <a href="http://tutorials.cougaar.org/pizza">online</a>), the
+<a href="http://tutorials.cougaar.org">tutorials</a>, or develop your
+own configurations.</li>
+<li>You might look at the <a href="getting_started.html">Getting
+Started Guide</a>.</li>
+<ol>
+<p><br>
+</body>
+</html>
