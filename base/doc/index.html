@@ -105,6 +105,13 @@ service available at the node level SocketFactoryService which allows
 clients to find an appropriate SocketFactory without needing to 
 know about the MTS implementation which may be supporting it.
 </li>
+<li>Multiple changes to Service Discovery. These make specifying
+matchmaker scoring functions much easier, and provide better support for
+dynamic provider availability changing. AvailabilityChangeMessages can
+come in, causing the SD plugins to work to ensure they have contracts
+covering the required intervals.</li>
+<li>Refactored the DeletionPlugin to make it a generic BBoard object
+deletion API. See org.cougaar.core.plugin.deletion package. </li>
 <li>The uiframework no longer requires the non-open source
 datagrabber module for compilation. Actual usage of some pieces will
 likely still require that software.</li>
@@ -116,6 +123,22 @@ setarguments and setlibpath are gone, fully replaced by the boost
 script (now used by the rest of the scripts).  Node now fully
 subsumes the functionality of the now deleted XMLNode and PNode scripts.
 </li>
+<li>Most DOS scripts now support directories with a space (" ") in the
+name. This does _not_ currently include the DB load
+scripts. Additionally, the bash / csh scripts are not covered.</li>
+<li>Changed default agent start time in the scripts to be 12:05am on
+8/10/05</li>
+<li>Multiple other minor bugs fixed (3323, 3423, 3424, 3438, 3448, 3420,
+3431, 3221, 3223, 3224, 3181, 3440, 3403, 3427...)</li>
+<li>Dropped very old files from various modules.</li>
+<li>Various caching, interning, & other modifications to reduce memory usage.</li>
+<li>Refactored & cleaned up the tutorials, dropping the old
+"faststart" tutorials, which were broken.</li>
+<li>Various toolkit module enhancements to reduce memory usage.</li>
+<li>Do not use the Verb object constructor - it is now protected. (bug
+2661).</li>
+<li>Multiple changes to clean up code, remove unused variables, sort
+imports, etc. </li>
 </ul>
 <p>
   <!-- COUGAAR 10.4.6 COUGAAR 10.4.6 COUGAAR 10.4.6 COUGAAR 10.4.6 COUGAAR 10.4.6 -->
