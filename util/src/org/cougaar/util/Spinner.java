@@ -267,7 +267,7 @@ public class Spinner extends JPanel {
    **/
   public Spinner(int min, int max, int value) {
     super(new GridBagLayout());
-    entry.setHorizontalAlignment(entry.RIGHT);
+    entry.setHorizontalAlignment(JTextField.RIGHT);
     entry.addFocusListener(new FocusListener() {
       public void focusLost(FocusEvent e) {
         doIncrement(0);
@@ -284,11 +284,11 @@ public class Spinner extends JPanel {
     gbc.gridy = 0;
     gbc.gridheight = 2;
     gbc.weightx = 1.0;
-    gbc.fill = gbc.HORIZONTAL;
+    gbc.fill = GridBagConstraints.HORIZONTAL;
     add(entry, gbc);
     gbc.gridx = 1;
     gbc.gridheight = 1;
-    gbc.fill = gbc.NONE;
+    gbc.fill = GridBagConstraints.NONE;
     gbc.weightx = 0.0;
     add(plusButton, gbc);
     gbc.gridy = 1;

@@ -74,10 +74,10 @@ public abstract class MinMaxPanel extends JPanel {
   public MinMaxPanel() {
     super(new GridBagLayout());
     GridBagConstraints gbc = new GridBagConstraints();
-    gbc.fill = gbc.HORIZONTAL;
+    gbc.fill = GridBagConstraints.HORIZONTAL;
     gbc.weightx = 1.0;
     add(enable, gbc);
-    gbc.fill = gbc.NONE;
+    gbc.fill = GridBagConstraints.NONE;
     gbc.weightx = 0.0;
     add(minSpinner, gbc);
     add(maxSpinner, gbc);

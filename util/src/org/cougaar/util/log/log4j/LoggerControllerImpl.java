@@ -84,7 +84,7 @@ class LoggerControllerImpl implements LoggerController {
         if (appenders.hasMoreElements()) {
           s.add(c.getName());
         }
-        Logger rootC = c.getRootLogger();
+        Logger rootC = Logger.getRootLogger();
         if (c == rootC) {
           c = null;
         } else {
