@@ -206,6 +206,7 @@ public class Parameters {
     return findParameter(param, null);
   }
 
+  /*
   public static void main(String argv[]) {
     for (int i = 0; i <argv.length; i++) {
       String arg = argv[i];
@@ -217,4 +218,5 @@ public class Parameters {
       }
     }
   }
+  */
 }

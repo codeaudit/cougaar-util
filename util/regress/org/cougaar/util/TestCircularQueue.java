@@ -1,6 +1,6 @@
 /*
  * <copyright>
- *  Copyright 2002 BBNT Solutions, LLC
+ *  Copyright 1997-2001 BBNT Solutions, LLC
  *  under sponsorship of the Defense Advanced Research Projects Agency (DARPA).
  * 
  *  This program is free software; you can redistribute it and/or modify
@@ -20,18 +20,36 @@
  */
 
 package org.cougaar.util;
+import java.util.*;
 
 import junit.framework.TestCase;
 import junit.framework.*;
 
-public class UtilTest extends TestCase {
-  public void test1() {
-    assertEquals(1, 1);
+public class TestCircularQueue extends TestCase {
+  public void test_toString0() {
+    assertEquals(new CircularQueue(2).toString(), "{CircularQueue 0/2}");
+  }
+  public void test_toString1() {
+    CircularQueue q = new CircularQueue(2);
+    q.add(new Integer(1));
+    q.add(new Integer(2));
+    q.add(new Integer(3));
+    q.add(new Integer(4));
+    // 8 because the queue algorithm needs an extra slot
+    assertEquals("{CircularQueue 4/8}", q.toString());
   }
 
-  public static Test suite() {
-    TestSuite suite= new TestSuite("Cougaar Utility Class Tests");
-    suite.addTest(new TestSuite(TestCircularQueue.class));
-    return suite;
+  public void test_add_next0() {
+    CircularQueue q = new CircularQueue(2);
+    q.add(new Integer(1));
+    q.add(new Integer(2));
+    q.add(new Integer(3));
+    q.add(new Integer(4));
+    assertEquals(q.next(), new Integer(1));
+    assertEquals(q.next(), new Integer(2));
+    assertEquals(q.next(), new Integer(3));
+    assertEquals(q.next(), new Integer(4));
+    assertEquals(q.next(), null);
   }
 }
+

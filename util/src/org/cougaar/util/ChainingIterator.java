@@ -78,47 +78,5 @@ public class ChainingIterator
   public final void remove() {
     throw new UnsupportedOperationException();
   }
-
-  /*
-  public static void main(String[] args) {
-    List a = new ArrayList();
-    a.add("A");
-    a.add("B");
-
-    List b = new ArrayList();
-    b.add("C");
-    b.add("D");
-    
-    List c = new ArrayList();
-
-    {
-      Iterator x = new ChainingIterator(new Iterator[] { a.iterator(), b.iterator()});
-      System.out.print("Test1: ");
-      while (x.hasNext()) {
-        System.out.print(" "+x.next());
-      }
-      System.out.println();
-    }
-
-    {
-      Iterator x = new ChainingIterator(new Iterator[] { null, a.iterator(), null, b.iterator(), null, new ArrayList().iterator(), null});
-      System.out.print("Test2: ");
-      while (x.hasNext()) {
-        System.out.print(" "+x.next());
-      }
-      System.out.println();
-    }
-
-    {
-      Iterator x = new ChainingIterator(new Iterator[] {});
-      System.out.print("Test3: ");
-      while (x.hasNext()) {
-        System.out.print(" "+x.next());
-      }
-      System.out.println();
-    }
-  }
-  */
-
 }
       

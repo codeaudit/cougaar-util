@@ -206,24 +206,5 @@ public class CircularQueue extends AbstractCollection
     }
     return s+"}";
   }
-
-  public static void main(String args[]) {
-    CircularQueue q = new CircularQueue(2);
-    for (int i = 0; i < 25; i++) {
-      Integer o = new Integer(i);
-      q.add(o);
-      System.out.println("add i="+i+" q="+q);
-    }
-
-    for (int i = 0; i< 12;i++) {
-      Object o = q.next();
-      System.out.println("next i="+i+" o="+o+" q="+q);
-    }
-    
-    for (int i = 0; i< 12;i++) {
-      q.add(new Integer(i+25));
-      System.out.println("re-add i="+i+" q="+q);
-    }
-  }
 }
 
