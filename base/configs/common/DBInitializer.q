@@ -4,8 +4,8 @@ password=${org.cougaar.configuration.password}
 
 queryExperiment = \
  SELECT ASSEMBLY_ID \
-   FROM V3_EXPT_ASSEMBLY \
-  WHERE EXPT_ID = ':expt_id'
+   FROM V3_EXPT_TRIAL_ASSEMBLY \
+  WHERE EXPT_ID = ':trial_id'
 
 queryAgentPrototype = \
  SELECT A.AGENT_ORG_PROTOTYPE \
@@ -27,7 +27,8 @@ queryAgentNames = \
     AND B.NODE_ID = ':node_name'
 
 queryComponents = \
- SELECT A.COMPONENT_NAME, C.COMPONENT_CLASS, A.COMPONENT_ID \
+ SELECT A.COMPONENT_NAME COMPONENT_NAME, C.COMPONENT_CLASS COMPONENT_CLASS, \
+        A.COMPONENT_ID COMPONENT_ID, A.INSERTION_ORDER INSERTION_ORDER \
    FROM V3_ASB_COMPONENT A, \
         V3_LIB_COMPONENT C, \
         V3_ASB_COMPONENT P \
@@ -38,7 +39,8 @@ queryComponents = \
     AND A.PARENT_COMPONENT_ID = P.COMPONENT_ID \
     AND P.COMPONENT_NAME = ':parent_name' \
 UNION ALL \
- SELECT A.COMPONENT_NAME, C.COMPONENT_CLASS, A.COMPONENT_ID \
+ SELECT A.COMPONENT_NAME COMPONENT_NAME, C.COMPONENT_CLASS COMPONENT_CLASS, \
+        A.COMPONENT_ID COMPONENT_ID, A.INSERTION_ORDER INSERTION_ORDER \
    FROM V3_ASB_COMPONENT A, \
         V3_ASB_COMPONENT_NODE B, \
         V3_ASB_NODE D, \
@@ -51,29 +53,14 @@ UNION ALL \
     AND B.NODE_ID = D.NODE_ID \
     AND C.INSERTION_POINT = ':insertion_point' \
     AND A.PARENT_COMPONENT_ID is NULL \
-    AND D.NODE_NAME = ':parent_name'
+    AND D.NODE_NAME = ':parent_name' \
+ORDER BY INSERTION_ORDER
 
 queryComponentParams = \
  SELECT ARGUMENT \
    FROM V3_ASB_COMPONENT_ARG \
   WHERE ASSEMBLY_ID :assemblyMatch \
     AND COMPONENT_ID = ':component_id' \
-  ORDER BY ARGUMENT_ORDER
-
-queryPluginNames = \
- SELECT C.COMPONENT_CLASS, A.COMPONENT_ID \
-   FROM V3_ASB_COMPONENT A, \
-        V3_LIB_COMPONENT C \
-  WHERE A.ASSEMBLY_ID :assemblyMatch \
-    AND C.COMPONENT_LIB_ID = A.COMPONENT_LIB_ID \
-    AND C.INSERTION_POINT = 'Node.AgentManager.Agent.PluginManager.Plugin' \
-    AND A.PARENT_COMPONENT_ID = ':agent_name'
-
-queryPluginParams = \
- SELECT ARGUMENT \
-   FROM V3_ASB_COMPONENT_ARG \
-  WHERE ASSEMBLY_ID :assemblyMatch \
-    AND COMPONENT_ID = ':agent_component_id' \
   ORDER BY ARGUMENT_ORDER
 
 queryAgentPGNames = \
