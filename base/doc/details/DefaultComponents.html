@@ -7,17 +7,40 @@ and standard agents.
 See <a
 href="https://www.alpine.bbn.com/bugzilla/show_bug.cgi?id=2522"
 >bug 2522</a> for Cougaar 10.2 cleanup ideas.  This list was created
-for Cougaar 10.0, and is current as of 12/16/2002.
+for Cougaar 10.0 (2/1/2003).
 <p>
-Here is the hard-coded loading sequence for SimpleAgent, which
-is the base class of all "cluster=" agents:
+All components build upon this simple loading template:
+<hr><pre>
+  <b>initialize:</b>
+
+  <b>load(PRIORITY_HIGH):</b>
+            <i>&lt; ".ini" PRIORITY_HIGH &gt;</i>
+
+  <b>load(PRIORITY_INTERNAL):</b>
+            <i>&lt; ".ini" PRIORITY_INTERNAL &gt;</i>
+
+  <b>load(PRIORITY_BINDER):</b>
+            <i>&lt; ".ini" PRIORITY_BINDER &gt;</i>
+
+  <b>load(PRIORITY_COMPONENT):</b>
+            <i>&lt; ".ini" PRIORITY_COMPONENT &gt;</i>
+
+  <b>load(PRIORITY_LOW):</b>
+            <i>&lt; ".ini" PRIORITY_LOW &gt;</i>
+
+  <b>start:</b>
+</pre><hr>
+<p>
+SimpleAgent, the base class of all "cluster=" agents, extends the above component skeleton.
+<p>
+Here is the hard-coded loading sequence for SimpleAgent:
 <hr><pre>
   <b>initialize:</b>
         <i>&lt; setupMessageHandlers &gt;</i>
 
   <b>load(PRIORITY_HIGH):</b>
         AgentIdentificationService
-        <i>&lt; ".ini" PRIORITY_HIGH &gt;</i>
+            <i>&lt; ".ini" PRIORITY_HIGH &gt;</i>
 
   <b>load(PRIORITY_INTERNAL):</b>
         <i>&lt; acquire agent identity &gt;</i>
@@ -25,14 +48,14 @@ is the base class of all "cluster=" agents:
         <i>&lt; register in mts &gt;</i>
         AlarmService
         DemoControlService
-        <i>&lt; ".ini" PRIORITY_INTERNAL &gt;</i>
+        MessageSwitchService
+            <i>&lt; ".ini" PRIORITY_INTERNAL &gt;</i>
 
   <b>load(PRIORITY_BINDER):</b>
-        <i>&lt; ".ini" PRIORITY_BINDER &gt;</i>
+            <i>&lt; ".ini" PRIORITY_BINDER &gt;</i>
 
   <b>load(PRIORITY_COMPONENT):</b>
         AgentContainmentService
-        IntraAgentMessageTransportService  (rename MessageHandlerService?)
         UIDService
         ThreadService  (as non-root)
         SchedulerService
@@ -47,11 +70,11 @@ is the base class of all "cluster=" agents:
         BlackboardService        (from blackboard)
         BlackboardMetricsService (from blackboard)
         BlackboardQueryService   (from blackboard)
-        <i>&lt; ".ini" PRIORITY_COMPONENT &gt;</i>
+            <i>&lt; ".ini" PRIORITY_COMPONENT &gt;</i>
         <i>&lt; obtain BlackboardForAgent, for message handling &gt;</i>
 
   <b>load(PRIORITY_LOW):</b>
-        <i>&lt; ".ini" PRIORITY_LOW &gt;</i>
+            <i>&lt; ".ini" PRIORITY_LOW &gt;</i>
         PluginManager  (loads all "plugin=" components)
 
   <b>start:</b>
@@ -80,13 +103,13 @@ loading sequence.
     NodeControlService
     LoggingService
         AgentIdentificationService
-        <i>&lt; ".ini" PRIORITY_HIGH &gt;</i>
+            <i>&lt; ".ini" PRIORITY_HIGH &gt;</i>
     AgentIdentityService  (default impl)
 
   <b>load(PRIORITY_INTERNAL):</b>
     ThreadService  (as root)
     NamingService
-    WhitePagesService   (proposed spot)
+    WhitePagesService
     TopologyWriterService
     TopologyReaderService
     MetricsUpdateService  (from qos)
@@ -106,16 +129,16 @@ loading sequence.
         <i>&lt; register in mts &gt;</i>
         AlarmService
         DemoControlService
-        <i>&lt; ".ini" PRIORITY_INTERNAL &gt;</i>
+        MessageSwitchService
+            <i>&lt; ".ini" PRIORITY_INTERNAL &gt;</i>
 
   <b>load(PRIORITY_BINDER):</b>
-        <i>&lt; ".ini" PRIORITY_BINDER &gt;</i>
+            <i>&lt; ".ini" PRIORITY_BINDER &gt;</i>
 
   <b>load(PRIORITY_COMPONENT):</b>
     CommunityInitializerService
     AssetInitializerService
         AgentContainmentService
-        IntraAgentMessageTransportService  (rename MessageHandlerService?)
         UIDService
         ThreadService  (as non-root)
         SchedulerService
@@ -130,11 +153,11 @@ loading sequence.
         BlackboardService        (from blackboard)
         BlackboardMetricsService (from blackboard)
         BlackboardQueryService   (from blackboard)
-        <i>&lt; ".ini" PRIORITY_COMPONENT &gt;</i>
+            <i>&lt; ".ini" PRIORITY_COMPONENT &gt;</i>
         <i>&lt; obtain BlackboardForAgent, for message handling &gt;</i>
 
   <b>load(PRIORITY_LOW):</b>
-        <i>&lt; ".ini" PRIORITY_LOW &gt;</i>
+            <i>&lt; ".ini" PRIORITY_LOW &gt;</i>
         PluginManager  (loads all "plugin=" components)
 
   <b>load(end):</b>
