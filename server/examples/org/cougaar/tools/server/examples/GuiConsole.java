@@ -25,6 +25,7 @@ import java.util.*;
 import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.event.*;
+import java.net.URL;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -36,28 +37,14 @@ import javax.swing.event.*;
 import org.cougaar.tools.server.*;
 import org.cougaar.tools.server.system.ProcessStatus;
 
+// import org.cougaar.tools.server.examples.DocumentOutputStream;
+
 /**
  * Sample GUI console for community control.
  * <p>
  * See "MinConsole" for a trimmed-down (no-UI) example.
  */
 public class GuiConsole {
-
-  /**
-   * Name of the <code>CommunityServesClient</code> class.
-   * <p>
-   * Note that this keeps the console/community API clean!
-   */
-  public static final String DEFAULT_SERVER_CLASS =
-    "org.cougaar.tools.server.rmi.ClientCommunityController";
-
-  /** 
-   * Name of the remote registry that contains the runtime information.
-   */
-  public static final String DEFAULT_SERVER_NAME = 
-    "ServerHook";
-
-
 
   private NodePanel nodePanel;         // for one main panel
   private JPanel content;              // for main pane
@@ -91,7 +78,7 @@ public class GuiConsole {
     JScrollPane configscroll;
 
     private JButton runButton;
-    private JButton flushNodeEventsButton;
+    private JButton flushButton;
     private JButton dumpThreadsButton;
     private JButton listNodeProcessesButton;
     private JButton listAllProcessesButton;
@@ -108,11 +95,12 @@ public class GuiConsole {
     //   nameserver runs.
     private String firstHost;
 
-    CommunityServesClient communitySupport;
+    RemoteHostRegistry remoteHostReg;
     Map myNodes;
+    URLListener ul;
 
     public NodePanel(
-        CommunityServesClient communitySupport) throws IOException {
+        RemoteHostRegistry remoteHostReg) throws IOException {
 
       stdoutArea = new JTextArea();
       stdoutPane = new JScrollPane(stdoutArea);
@@ -142,7 +130,7 @@ public class GuiConsole {
       readFileButton = new JButton("Read-\"./dir/test.txt\"");
       writeFileButton = new JButton("Write-\"./dir/test.txt\"");
       listFilesButton = new JButton("List-Files");
-      flushNodeEventsButton = new JButton("Flush-Output");
+      flushButton = new JButton("Flush-Output");
       stopButton = new JButton("Stop");
 
 
@@ -154,7 +142,7 @@ public class GuiConsole {
 
 
       // save the community controller
-      this.communitySupport = communitySupport;
+      this.remoteHostReg = remoteHostReg;
 
       // configure list select 
       configList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -163,8 +151,8 @@ public class GuiConsole {
       configList.addListSelectionListener(
           new ListSelectionListener() {
           public void valueChanged(ListSelectionEvent e) {
-          JList source = (JList)e.getSource();
-          selectedNodeName = (String)source.getSelectedValue();
+          JList source = (JList) e.getSource();
+          selectedNodeName = (String) source.getSelectedValue();
           }
           });
 
@@ -172,8 +160,8 @@ public class GuiConsole {
       hostList.addListSelectionListener(
           new ListSelectionListener() {
           public void valueChanged(ListSelectionEvent e) {
-          JList source = (JList)e.getSource();
-          selectedHostName = (String)source.getSelectedValue();
+          JList source = (JList) e.getSource();
+          selectedHostName = (String) source.getSelectedValue();
           }
           });
 
@@ -183,9 +171,12 @@ public class GuiConsole {
             // createNode() which spawns remote nodes
             public void actionPerformed(ActionEvent e) {
             int port = 8484;
-            if (selectedHostName == null) {
-              hostList.setSelectedIndex(0);
-              selectedHostName = (String) hostList.getSelectedValue();
+            if ((selectedHostName == null) ||
+                (selectedNodeName == null)) {
+              System.err.println("Must select a node and host");
+              //hostList.setSelectedIndex(0);
+              //selectedHostName = (String) hostList.getSelectedValue();
+              return;
             }
             createNode(
                 selectedHostName, 
@@ -195,10 +186,10 @@ public class GuiConsole {
           });
 
       // handle the "Flush-Output" button
-      flushNodeEventsButton.addActionListener(
+      flushButton.addActionListener(
           new ActionListener() {    
             public void actionPerformed(ActionEvent e) {
-              flushNodeEvents(selectedNodeName);
+              flushOutput(selectedNodeName);
             }
           });
 
@@ -225,7 +216,6 @@ public class GuiConsole {
               listProcesses(selectedNodeName, true);
             }
           });
-
 
       // handle "Read-File" button
       readFileButton.addActionListener(
@@ -303,7 +293,7 @@ public class GuiConsole {
 
       buttons2.add(runButton);
       buttons2.add(stopButton);
-      buttons2.add(flushNodeEventsButton);
+      buttons2.add(flushButton);
 
       buttons2.add(dumpThreadsButton);
       buttons2.add(listNodeProcessesButton);
@@ -314,6 +304,19 @@ public class GuiConsole {
       buttons2.add(listFilesButton);
       // empty slot
     }  
+
+    public void start() {
+      if (ul == null) {
+        ul = new URLListener(9999);
+        ul.start();
+      }
+    }
+
+    public void stop() {
+      if (ul != null) {
+        ul.stop();
+      }
+    }
 
     /**
      * Get all the hostname specified in the given file.
@@ -340,7 +343,7 @@ public class GuiConsole {
       } 
 
       // convert List to a String[]
-      return (String[])hosts.toArray(new String[hosts.size()]);
+      return (String[]) hosts.toArray(new String[hosts.size()]);
     }
 
     /**
@@ -373,9 +376,6 @@ public class GuiConsole {
       c_props.putAll(
           GuiConsole.this.properties);
       c_props.put("org.cougaar.node.name", nodeName);
-      c_props.put(
-          "org.cougaar.control.port", 
-          Integer.toString(controlPort));
 
       String nsps = 
         GuiConsole.this.properties.getProperty(
@@ -383,14 +383,9 @@ public class GuiConsole {
             "8888:5555");
       c_props.put("org.cougaar.name.server", this.firstHost+":"+nsps);
 
-      String regName = 
-        GuiConsole.this.properties.getProperty(
-            "org.cougaar.tools.server.name", 
-            DEFAULT_SERVER_NAME);
-
-      NodeEventListener nel;
+      OutputListener ol;
       try {
-        nel = 
+        ol = 
           new MyListener(
               getLogFileName(nodeName), 
               doc);
@@ -402,24 +397,29 @@ public class GuiConsole {
         return;
       }
 
-      NodeEventFilter nef = 
-        new NodeEventFilter(20);
+      URL url = ul.addListener(nodeName, ol);
 
-      NodeServesClient newNode;
+      OutputPolicy op = 
+        new OutputPolicy(20);
+
+      RemoteProcess remoteProc;
       try {
-        HostServesClient hostSupport =
-          communitySupport.getHost(
+        RemoteHost remoteHost =
+          remoteHostReg.lookupRemoteHost(
               hostName,
-              controlPort);
+              controlPort,
+              true);
         ProcessDescription desc =
           new ProcessDescription(
               nodeName, null, c_props, null);
-        newNode = 
-          hostSupport.createNode(
+        RemoteListenableConfig conf =
+          new RemoteListenableConfig(
+              url, //ol, 
+              op);
+        remoteProc = 
+          remoteHost.createRemoteProcess(
               desc,
-              nel,
-              nef,
-              null);
+              conf);
       } catch (Exception e) {
         System.err.println(
             "Unable to create node \""+nodeName+"\" on host \""+hostName+"\"");
@@ -428,36 +428,37 @@ public class GuiConsole {
         return;
       }
 
-      myNodes.put(nodeName, newNode);
+      myNodes.put(nodeName, remoteProc);
     }
 
-    private void flushNodeEvents(String name) {
-      NodeServesClient nsc = (NodeServesClient)myNodes.get(name);
-      if (nsc == null) {
+    private void flushOutput(String name) {
+      RemoteProcess remoteProc = (RemoteProcess) myNodes.get(name);
+      if (remoteProc == null) {
         System.err.println(
             "Unknown node name: "+name);
         return;
       }
 
       try {
-        nsc.flushNodeEvents();
+        RemoteListenable rl = remoteProc.getRemoteListenable();
+        rl.flushOutput();
       } catch (Exception e) {
         System.err.println(
-            "Unable to flush events");
+            "Unable to flush output");
         e.printStackTrace();
       }
     }
 
     private void dumpThreads(String name) {
-      NodeServesClient nsc = (NodeServesClient)myNodes.get(name);
-      if (nsc == null) {
+      RemoteProcess remoteProc = (RemoteProcess) myNodes.get(name);
+      if (remoteProc == null) {
         System.err.println(
             "Unknown node name: "+name);
         return;
       }
 
       try {
-        nsc.dumpThreads();
+        remoteProc.dumpThreads();
       } catch (Exception e) {
         System.err.println(
             "Unable to trigger a stack dump for node: "+name);
@@ -470,8 +471,8 @@ public class GuiConsole {
     }
 
     private void listProcesses(String name, boolean showAll) {
-      NodeServesClient nsc = (NodeServesClient)myNodes.get(name);
-      if (nsc == null) {
+      RemoteProcess remoteProc = (RemoteProcess) myNodes.get(name);
+      if (remoteProc == null) {
         System.err.println(
             "Unknown node name: "+name);
         return;
@@ -479,7 +480,7 @@ public class GuiConsole {
 
       ProcessStatus[] psa;
       try {
-        psa = nsc.listProcesses(showAll);
+        psa = remoteProc.listProcesses(showAll);
       } catch (Exception e) {
         System.err.println(
             "Unable to list processes for node: "+name);
@@ -504,11 +505,13 @@ public class GuiConsole {
       System.out.println(
           "Test -- read file \"./dir/test.txt\" from \"localhost:8484\"");
       try {
-        HostServesClient hsc =
-          communitySupport.getHost(
+        RemoteHost remoteHost =
+          remoteHostReg.lookupRemoteHost(
               "localhost",
-              8484);
-        InputStream in = hsc.open("./dir/test.txt");
+              8484,
+              true);
+        RemoteFileSystem rfs = remoteHost.getRemoteFileSystem();
+        InputStream in = rfs.read("./dir/test.txt");
         BufferedReader r = new BufferedReader(new InputStreamReader(in));
         for (int i = 0; ; ) {
           String s = r.readLine();
@@ -528,11 +531,13 @@ public class GuiConsole {
       System.out.println(
           "Test -- write file \"./dir/test.txt\" from \"localhost:8484\"");
       try {
-        HostServesClient hsc =
-          communitySupport.getHost(
+        RemoteHost remoteHost =
+          remoteHostReg.lookupRemoteHost(
               "localhost",
-              8484);
-        OutputStream os = hsc.write("./dir/test.txt", false);
+              8484,
+              true);
+        RemoteFileSystem rfs = remoteHost.getRemoteFileSystem();
+        OutputStream os = rfs.write("./dir/test.txt");
         os.write("test foo\ncontents".getBytes());
         os.close();
       } catch (Exception e) {
@@ -546,11 +551,13 @@ public class GuiConsole {
       System.out.println(
           "Test -- list files in \"./dir/\" from \"localhost:8484\"");
       try {
-        HostServesClient hsc =
-          communitySupport.getHost(
+        RemoteHost remoteHost =
+          remoteHostReg.lookupRemoteHost(
               "localhost",
-              8484);
-        String[] ret = hsc.list("./dir/");
+              8484,
+              true);
+        RemoteFileSystem rfs = remoteHost.getRemoteFileSystem();
+        String[] ret = rfs.list("./dir/");
         int nret = ((ret != null) ? ret.length : 0);
         System.out.println("listing["+nret+"]:");
         for (int i = 0; i < nret; i++) {
@@ -563,8 +570,8 @@ public class GuiConsole {
     }
 
     private void stopNode(String name) {
-      NodeServesClient nsc = (NodeServesClient)myNodes.get(name);
-      if (nsc == null) {
+      RemoteProcess remoteProc = (RemoteProcess) myNodes.get(name);
+      if (remoteProc == null) {
         System.err.println(
             "Unknown node name: "+name);
         return;
@@ -572,10 +579,11 @@ public class GuiConsole {
 
       try {
         // should flush first!
-        nsc.flushNodeEvents();
+        RemoteListenable rl = remoteProc.getRemoteListenable();
+        rl.flushOutput();
 
         // now destroy
-        nsc.destroy();
+        remoteProc.destroy();
       } catch (Exception e) {
         System.err.println(
             "Unable to destroy node \""+name+"\"");
@@ -601,202 +609,70 @@ public class GuiConsole {
       return new Dimension(850, 350);
     }
 
-    public void start() {
-    }
-
-    public void stop() {
-    }
-
-
     /**
      * Listener for "pushed" Node activities.
      */
-    protected class MyListener implements NodeEventListener {
+    protected class MyListener implements OutputListener {
 
-      private Writer toFile;
+      private OutputStream toFile;
 
-      private StyledDocument toText;
-      private SimpleAttributeSet[] atts;
+      private OutputStream toGuiOut;
+      private OutputStream toGuiErr;
+      private OutputStream toGuiOther;
 
       private MyListener(
           String toFileName,
-          StyledDocument toText) throws IOException {
+          Document toText) throws IOException {
 
-        // wrap and capture to a log
-        this.toFile = 
-          new BufferedWriter(
-              new FileWriter(
+        // create file stream
+        toFile = 
+          new BufferedOutputStream(
+              new FileOutputStream(
                 toFileName));
 
-        // save the GUI output
-        this.toText = toText;
-
-        // create our attributes
-        atts = new SimpleAttributeSet[4];
-        atts[0] = new SimpleAttributeSet();
-        StyleConstants.setForeground(atts[0], Color.black);
-        atts[1] = new SimpleAttributeSet();
-        StyleConstants.setForeground(atts[1], Color.red);
-        atts[2] = new SimpleAttributeSet();
-        StyleConstants.setForeground(atts[2], Color.green);
-        atts[3] = new SimpleAttributeSet();
-        StyleConstants.setForeground(atts[3], Color.blue);
+        // create gui streams
+        toGuiOut   = new DocumentOutputStream(toText, Color.black);
+        toGuiErr   = new DocumentOutputStream(toText, Color.red);
+        toGuiOther = new DocumentOutputStream(toText, Color.blue);
       }
 
-      public void handle(
-          NodeServesClient nsc,
-          NodeEvent ne) {
+      public void handleOutputBundle(final OutputBundle ob) {
+        // append to file
+        fileWrite(ob);
 
-        // get node's name
-        /*
-        String nodeName;
-        try {
-          nodeName = nsc.getName();
-        } catch (Exception e) {
-          nodeName = "???";
-        }
-        */
-
-        final String toUI;
-        int attIndex;
-        switch (ne.getType()) {
-          case NodeEvent.STANDARD_OUT:
-            attIndex = 0;
-            toUI = ne.getMessage();
-            break;
-          case NodeEvent.STANDARD_ERR:
-            attIndex = 1;
-            toUI = ne.getMessage();
-            break;
-          default:
-            attIndex = 2;
-            toUI = ne.toString();
-            break;
-        }
-        final SimpleAttributeSet att = atts[attIndex];
-        
-        try {
-          toFile.write(toUI);
-        } catch (Exception e) {
-        }
-
-        // 
-        // bug here if "toText" is destroyed
-        //
-
-        try {
-          // must use swing "invokeLater" to be thread-safe
-          SwingUtilities.invokeLater(
-              new Runnable() {
-                public void run() {
-                  try {
-                    toText.insertString(
-                      toText.getLength(), 
-                      toUI, 
-                      att);
-                  } catch (Exception e) {
-                  }
-                }
-              });
-        } catch (RuntimeException e) {
-        }
+        // append to text-area
+        // must use swing "invokeLater" to be thread-safe
+        Runnable r = new Runnable() {
+          public void run() {
+            guiWrite(ob);
+          }
+        };
+        SwingUtilities.invokeLater(r);
       }
 
-      public void handleAll(
-          final NodeServesClient nsc,
-          final java.util.List l) {
-
-        final int n = l.size();
-        if (n <= 0) {
-          return;
-        }
-
-        // get node's name
-        /*
-        String nodeName;
+      private void fileWrite(OutputBundle ob) {
+        // just write std-out and std-err
         try {
-          nodeName = nsc.getName();
-        } catch (Exception e) {
-          nodeName = "???";
-        }
-        */
-
-        try {
-          int i = 0;
-          do {
-            NodeEvent ne = (NodeEvent)l.get(i);
-            toFile.write(getString(ne));
-          } while (++i < n);
+          ob.getDualStreamBuffer().writeTo(toFile);
         } catch (Exception e) {
           // file dead?
         }
+      }
 
-        // 
-        // bug here if "toText" is destroyed
-        //
-
+      private void guiWrite(OutputBundle ob) {
         try {
-          // must use swing "invokeLater" to be thread-safe
-          SwingUtilities.invokeLater(
-              new Runnable() {
-                public void run() {
-                  NodeEvent n0 = (NodeEvent)l.get(0);
-                  int prevType = n0.getType();
-                  String prevSi = getString(n0);
-                  for (int i = 1; i < n; i++) {
-                    NodeEvent ni = (NodeEvent)l.get(i);
-                    int type = ni.getType();
-                    String si = getString(ni);
-                    if (type == prevType) {
-                      prevSi += si;
-                    } else {
-                      try {
-                        toText.insertString(
-                            toText.getLength(), 
-                            prevSi, 
-                            getStyle(prevType));
-                      } catch (Exception e) {
-                        break;
-                      }
-                      prevSi = si;
-                      prevType = type;
-                    }
-                  }
-                  try {
-                    toText.insertString(
-                        toText.getLength(), 
-                        prevSi, 
-                        getStyle(prevType));
-                  } catch (Exception e) {
-                  }
-                }
-              });
-        } catch (RuntimeException e) {
-        }
-      }
-
-      private final String getString(final NodeEvent ne) {
-        switch (ne.getType()) {
-          case NodeEvent.STANDARD_OUT:
-          case NodeEvent.STANDARD_ERR:
-            return ne.getMessage();
-          case NodeEvent.HEARTBEAT:
-            return "@";
-          default:
-            return ne.toString();
-        }
-      }
-
-      private final SimpleAttributeSet getStyle(final int type) {
-        switch (type) {
-          case NodeEvent.STANDARD_OUT:
-            return atts[0];
-          case NodeEvent.STANDARD_ERR:
-            return atts[1];
-          case NodeEvent.HEARTBEAT:
-            return atts[2];
-          default:
-            return atts[3];
+          if (ob.getCreated()) {
+            toGuiOther.write("<created>".getBytes());
+          }
+          ob.getDualStreamBuffer().writeTo(toGuiOut, toGuiErr);
+          if (ob.getDestroyed()) {
+            toGuiOther.write("<destroyed>".getBytes());
+          }
+        } catch (IOException ioe) {
+          System.err.println("GUI IO failure: ");
+          ioe.printStackTrace();
+        } catch (Exception e) {
+          // gui dead?
         }
       }
     }
@@ -807,7 +683,7 @@ public class GuiConsole {
   }
 
   public Component init(
-      CommunityServesClient communitySupport,
+      RemoteHostRegistry remoteHostReg,
       String args[]) throws IOException {
     int l = args.length;
     if (l < 2) {
@@ -835,7 +711,7 @@ public class GuiConsole {
     content = new JPanel(new BorderLayout());
     //content.setPreferredSize(new Dimension(800, 400));
 
-    nodePanel = new NodePanel(communitySupport);
+    nodePanel = new NodePanel(remoteHostReg);
     content.add(nodePanel); 
 
     return content;
@@ -849,23 +725,6 @@ public class GuiConsole {
     nodePanel.stop();
   }
 
-  public static CommunityServesClient createCommunitySupport() 
-  throws Exception {
-    // get the classname
-    String classname = DEFAULT_SERVER_CLASS;
-
-    // load the class
-    Class cl = Class.forName(classname);
-    if (!(CommunityServesClient.class.isAssignableFrom(cl))) {
-      throw new IllegalArgumentException(
-          "Class \""+classname+"\" is not a \"CommunityServesClient\": "+
-          ((cl != null) ? cl.getName() : "null"));
-    }
-
-    // create an instance
-    return (CommunityServesClient)cl.newInstance();
-  }
-
   // --------------------------------------------
   // main() creates a GuiConsole instance and fires up the gui
   // --------------------------------------------
@@ -873,11 +732,12 @@ public class GuiConsole {
   public static void main(String[] args) {
     try {
       // create the support hook
-      CommunityServesClient communitySupport = createCommunitySupport();
+      RemoteHostRegistry remoteHostReg = 
+        RemoteHostRegistry.getInstance();
 
       // create the console
       final GuiConsole guiconsole = new GuiConsole();
-      Component component = guiconsole.init(communitySupport, args);
+      Component component = guiconsole.init(remoteHostReg, args);
 
       // wrap in a GUI frame
       JFrame frame = new JFrame("GuiConsole");
@@ -899,5 +759,4 @@ public class GuiConsole {
       System.exit(-1);
     }
   }
-
 }

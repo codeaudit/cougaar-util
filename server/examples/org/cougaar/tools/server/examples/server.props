@@ -1,19 +1,10 @@
-#java.class.path=file:///home/twright/opt/latest/classes:file:///home/twright/opt/sys/jsse.jar:file:///home/twright/opt/sys/jnet.jar
 
-#java.Xbootclasspath/a=/home/twright/opt/latest/sys/servlet.jar
+#see "node.props", which is the preferred file name
 
+java.class.name=org.cougaar.core.node.Node
 java.class.path=/home/twright/opt/latest/lib/core.jar
-
-#org.cougaar.core.util.ConfigFinder.verbose=true
-
-#org.cougaar.system.path=/home/twright/opt/sys
-
-#org.cougaar.system.path=/home/twright/opt/sys
-
-#org.cougaar.install.path=file://home/twright/opt/latest
-
 org.cougaar.install.path=/home/twright/opt/latest
-
 org.cougaar.config=minitestconfig
-
 env.DISPLAY=localhost:0.0
+java.heap.min=100m
+java.heap.max=300m

@@ -41,9 +41,6 @@ import org.cougaar.tools.server.system.ProcessStatus;
  */
 public class MinConsole {
 
-  public static final String DEFAULT_SERVER_CLASS =
-    "org.cougaar.tools.server.rmi.ClientCommunityController";
-
   public static void main(String[] args) throws Exception {
 
     long killMillis = 20*1000;
@@ -85,32 +82,32 @@ public class MinConsole {
         "\n  procId: "+procId+
         "\n}");
 
-    // create a community-support instance
-    CommunityServesClient communitySupport =
-      contactCommunity();
+    // create a remote-host-registry instance
+    RemoteHostRegistry hostReg = 
+      RemoteHostRegistry.getInstance();
 
     // contact the host
-    HostServesClient hostSupport = 
-      communitySupport.getHost(hostName, controlPort);
+    RemoteHost rhost = 
+      hostReg.lookupRemoteHost(hostName, controlPort, true);
 
     // just to test, let's try a "ping()"
-    ping(hostSupport);
+    ping(rhost);
 
     // list the running processes on the server
-    listProcs(hostSupport);
+    listProcs(rhost);
 
     // define the process
     ProcessDescription desc = 
       createProcessDescription(procId, nodeName, namingAddr);
 
     // launch process
-    NodeServesClient proc = createProcess(hostSupport, desc);
+    RemoteProcess proc = createProcess(rhost, desc);
 
     // wait a couple seconds
     Thread.sleep(2*1000);
 
     // list the processes on the server
-    listProcs(hostSupport);
+    listProcs(rhost);
 
     // let it run for a while
     System.out.println(
@@ -130,10 +127,10 @@ public class MinConsole {
       System.out.println(
           "****************************************************\n"+
           "Kill process \""+procId+"\"");
-      hostSupport.killNode(desc.getName());
+      rhost.killRemoteProcess(desc.getName());
 
       // list the processes on the server
-      listProcs(hostSupport);
+      listProcs(rhost);
 
       Thread.sleep(2*1000);
 
@@ -141,7 +138,7 @@ public class MinConsole {
       System.out.println(
           "****************************************************\n"+
           "Re-launch process \""+procId+"\"");
-      NodeServesClient proc2 = createProcess(hostSupport, desc);
+      RemoteProcess proc2 = createProcess(rhost, desc);
 
       System.out.println(
           "****************************************************\n"+
@@ -155,22 +152,10 @@ public class MinConsole {
     }
   }
 
-  private static CommunityServesClient contactCommunity(
-      ) throws Exception {
-    String classname = DEFAULT_SERVER_CLASS;
-    Class cl = Class.forName(classname);
-    if (!(CommunityServesClient.class.isAssignableFrom(cl))) {
-      throw new IllegalArgumentException(
-          "Class \""+classname+"\" is not a \"CommunityServesClient\": "+
-          ((cl != null) ? cl.getName() : "null"));
-    }
-    return (CommunityServesClient) cl.newInstance();
-  }
-
   private static void ping(
-      HostServesClient hostSupport) throws Exception {
+      RemoteHost rhost) throws Exception {
     long t1 = System.currentTimeMillis();
-    long t2 = hostSupport.ping();
+    long t2 = rhost.ping();
     long t3 = System.currentTimeMillis();
     System.out.println(
         "Ping (millis): "+
@@ -181,10 +166,10 @@ public class MinConsole {
   }
 
   private static void listProcs(
-      HostServesClient hostSupport) throws Exception {
+      RemoteHost rhost) throws Exception {
     // list the running processes on the server
     List runningProcs = 
-      hostSupport.listProcessDescriptions();
+      rhost.listProcessDescriptions();
     int nRunningProcs = 
       ((runningProcs != null) ? runningProcs.size() : 0);
     System.out.println(
@@ -213,38 +198,43 @@ public class MinConsole {
           null);
   }
 
-  private static NodeServesClient createProcess(
-      HostServesClient hostSupport,
+  private static RemoteProcess createProcess(
+      RemoteHost rhost,
       final ProcessDescription desc) throws Exception {
     // create an output listener
-    NodeEventListener nel = 
-      new NodeEventListener() {
-        public void handle(
-            NodeServesClient nsc,
-            NodeEvent ne) {
-          System.out.println(ne);
-        }
-        public void handleAll(
-            final NodeServesClient nsc,
-            final java.util.List l) {
-          int n = ((l != null) ? l.size() : 0);
-          for (int i = 0; i < n; i++) {
-            NodeEvent nei = (NodeEvent) l.get(i);
-            System.out.println(nei);
+    OutputListener ol = 
+      new OutputListener() {
+        public void handleOutputBundle(
+            OutputBundle ob) {
+          // just write std-out and std-err
+          DualStreamBuffer dsb = ob.getDualStreamBuffer();
+          try {
+            dsb.writeTo(System.out, System.err);
+          } catch (IOException ioe) {
+            ioe.printStackTrace();
           }
         }
       };
 
     // create the output filter/buffer config
-    NodeEventFilter nef = 
-      new NodeEventFilter(20);
+    OutputPolicy op = new OutputPolicy(20);
+
+    // create a listener config
+    RemoteListenableConfig rlc = 
+      new RemoteListenableConfig(ol, op);
 
     // create the node
-    return hostSupport.createNode(desc, nel, nef, null);
+    try {
+      return rhost.createRemoteProcess(desc, rlc);
+    } catch (Exception e) {
+      System.err.println("Unable to create process:");
+      e.printStackTrace();
+      throw e;
+    }
   }
 
   private static void listProcessStatus(
-      NodeServesClient proc,
+      RemoteProcess proc,
       boolean showAll) throws Exception {
     // query
     ProcessStatus[] psa = proc.listProcesses(showAll);
