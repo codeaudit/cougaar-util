@@ -11,24 +11,22 @@ Servlet API.
 <p>
 <ol>
 <li>
-The standard Servlet API is used by the "ServletService".  Here
-are some tutorials and documentation:
+The standard Servlet API is used by the "ServletService".  You <i>don't</i>
+need to be an expert at the Servlet API to begin writing Cougaar Servlets,
+but here are some tutorials and documentation:
 <ul>
   <li><a href=
   "http://java.sun.com/docs/books/tutorial/servlets"
-  >http://java.sun.com/docs/books/tutorial/servlets</a></li>
+  >Sun's Servlet tutorial</a></li>
   <li><a href=
   "http://www.apl.jhu.edu/~hall/java/Servlet-Tutorial"
-  >http://www.apl.jhu.edu/~hall/java/Servlet-Tutorial</a></li>
+  >Tutorial based upon the "Core Servlets" book</a></li>
   <li><a href=
   "http://www.novocode.com/doc/servlet-essentials"
-  >http://www.novocode.com/doc/servlet-essentials</a></li>
-  <li><a href=
-  "http://www.servlets.com/jservlet2/examples"
-  >http://www.servlets.com/jservlet2/examples</a></li>
+  >Another good tutorial</a></li>
 </ul>
 Most of the API is very similar to the existing PSP API -- there 
-are methods for parsing URL parameters, reading POST data,
+are methods for parsing URL parameters, reading passed data,
 and writing to the response output (text or data).
 </li><p>
 
@@ -44,18 +42,20 @@ It will walk you through:
       <a href="#planview">ported TASKS.PSP</a>)</li>
   <li>running and testing the Servlets</li>
 </ul>
+I recommend trying the example Servlets listed in the above "install.html"
+before you start writing your own Servlets.
 </li><p>
 
 <li>
 The default port for the Servlet server is HTTP on port 8800 and HTTPS 
 on port 8400.  These and other server properties can be configured
-with system properties -- see the properties list in "Parameters.html"
-for details.
+with system properties -- see the "install.html" document and the 
+properties list in "Parameters.html" for details.
 </li><p>
 
 <li>
 <a name="ini">
-All Servlets are loaded by INI "plugin = " lines, *not* from
+All Servlets are loaded by ".ini"-style "plugin = " lines, *not* from
 a "default.psps.xml" file.  There's a corresponding CSMART recipe
 that can be used.
 <p>
@@ -65,76 +65,127 @@ ported to Servlets.
 </li><p>
 
 <li>
-There's one important browser/client API change for PSP porters to
-note:<br>
-The URL parameter separator is <b>fixed</b> from:<br>
+There are two important browser/client API change for PSP porters to
+note:  
+<ol>
+<li>The first is that the URL parameter separator has been 
+<b>fixed</b> from:<br>
   url?arg1=val1?arg2=val2?arg3=val3<br>
-to<br>
+to the HTTP/1.1 compliant:<br>
   url?arg1=val1&amp;arg2=val2&amp;arg3=val3<br>
 See 
 <a href=
 "https://www.alpine.bbn.com/bugzilla/show_bug.cgi?id=20">
-bug 20</a>.  The old "&amp;" usage didn't match the HTTP specs.
+bug 20</a>.  In both the client code and the ported PSP this URL 
+parameter-passing must be modified to match.  Typically this can
+be done by skimming the client code for uses of "?".
+</li>
 <p>
-In both the client code and the ported PSP this URL parameter-passing 
-must be modified to match.  Other than that, the existing browser/user 
-API is the same for both PSPs and Servlets.
+<li>
+The second change is in the use of "GET v.s. POST v.s. PUT" as the 
+HTTP request method.  HTML-generating Servlets should only use 
+"doGet(..)", where HTML "&lt;a hrefs=..&gt;" are the same as before, 
+but HTML FORMs should look like: <pre>
+  &lt;form method="GET" .. /&gt;  <i>not POST!</i>
+  ... <i>various "input" and "select" statements</i>
+  &lt;/form&gt;
+</pre> Java clients that need to upload binary data to the Servlet, 
+such as serialized Java Objects, should use "PUT" instead of the 
+default "POST" method: <pre>
+   UrlConnection uc = ...;
+   ((HttpUrlConnection) uc).setRequestMethod("PUT");  <i>//new line!</i>
+   OutputStream os = uc.getOutputStream();
+   ...  <i>//usual "upload-data" code</i>
+</pre> and the Servlet should support the "doPut(..)" method.
+<p>
+The reason for the above "use GET &amp; use PUT instead of POST" 
+nonsense is that POST requests will not be redirected between Nodes 
+(typically the POST data is lost), whereas GET and PUT will be correctly 
+redirected.  The exact redirection rules are in the HTTP specification 
+and implemented in the browser/URLConnection code itself:
+<ul>
+  <li><a href=
+  "http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html"
+  >HTTP/1.1 spec on request methods</a></li>
+  <li><a href=
+  "http://ppewww.ph.gla.ac.uk/~flavell/www/post-redirect.html"
+  >Further notes on POST redirection</a></li>
+</ul>
+</li>
+</ol>
+<p>
+Other than those two changes, the existing browser/user API is the 
+same for both PSPs and Servlets.  You can pass the same URL parameters
+and/or data-structures as before, and the internal logic can remain 
+the same.
 </li><p>
 
 <li>
+<a name="api">
 The ServletService API (with lots of javadocs) is in:
 <br><tt>
-core/src/org/cougaar/core/servlet/ServletService.java
+&nbsp; core/src/org/cougaar/core/servlet/ServletService.java
 </tt><br>
 This defines the basic "register(servlet, path)" API.
 </li><p>
 
 <li>
+<a name="helloComp">
 See the example "HelloComponent" for a "raw" use of the 
 "ServletService" API:
 <br><tt>
-  core/examples/org/cougaar/core/examples/servlet/HelloComponent.java
+&nbsp;  core/examples/org/cougaar/core/examples/servlet/HelloComponent.java
 </tt><br>
 This illustrates the use of a ServiceBroker to obtain the
 ServletService and the registration of a Servlet within the
-"Component.load()".  
+"Component.load()" method.
 <p>
 In general any Component can obtain and use the ServletService, 
 including existing subscription-based Plugins and even the Agent 
-or Blackboard itself.  All existing PSPs follow the more simple
-Plugin-like usage of the ServletService that's described here.
+or Blackboard itself.  Most existing PSPs follow the more simple
+Plugin-like usage of the ServletService that's described below.
 </li><p>
 
 <li>
-Most developers will use the simple loader that's in core:
+Most Servlet developers will use the simple Servlet loader that's 
+in core:
 <br><tt>
-  core/src/org/cougaar/core/servlet/SimpleServletComponent.java
+&nbsp;  core/src/org/cougaar/core/servlet/SimpleServletComponent.java
 </tt><br>
+A quick glance at the code will show that this 
+"SimpleServletComponent" is strongly based upon the "HelloComponent",
+which is just another user of the <a href="#api">"ServletService"</a>.  
+There's nothing special about this simple loader...
+<p>
 The loader takes two args:  (classname, path), and will pass a
 "SimpleServletSupport" API to the created Servlet instance:
 <br><tt>
-  core/src/org/cougaar/core/servlet/SimpleServletSupport.java
+&nbsp;  core/src/org/cougaar/core/servlet/SimpleServletSupport.java
 </tt><br>
 <p>
 This loader is ideal for either "pure-Servlets" (i.e. Servlets
-with no need to access Cougaar Services) or Servlets that only 
-need to:
+with no need to access Cougaar Services) or Servlets that 
+<b>ONLY</b> need to:
 <ul>
-  <li>know the agent's ID</li>
+  <li>know the agent's name</li>
   <li>query the blackboard</li>
   <li>know the names of all the agents in the society</li>
 </ul>
-Since most PSPs are simple data-gatherers and data-formatters,
-most PSPs can be ported by using the simple loader.  See the 
-ported "PlanViewServlet" as an example:
+Since most PSPs are relatively simple data-gatherers and 
+data-formatters, most PSPs can be ported by using the simple 
+loader.  See the ported "PlanViewServlet" as an example:
 <br><tt>
   <a name="planview">
-  core/src/org/cougaar/planning/servlet/PlanViewServlet.java
+&nbsp;  core/src/org/cougaar/planning/servlet/PlanViewServlet.java
 </tt><br>
 <p>
-More complicated PSPs, such as those that need access to need 
-blackboard publishAdd access or other Services, can not be based
-of the existing loader.  See the loader source for details.
+More complicated Servlets, such as those that need access to 
+need blackboard publishAdd access or other Services, should 
+<b>NOT</b> be based of the existing loader.  These are valid 
+operations for a Servlet to do, but this would clutter the 
+<i>simple</i> loader and waste resources.  Instead, you should use 
+the ServletService directly -- see the 
+<a href="#helloComp">example "HelloComponent"</a> for details.
 </li><p>
 
 <li>
@@ -154,9 +205,9 @@ public class HelloServlet extends HttpServlet {
      this.support = support;
   }
   public void doGet(
-      HttpServletRequest req,
-      HttpServletResponse res) throws IOException {
-    PrintWriter out = req.getWriter();
+      HttpServletRequest request,
+      HttpServletResponse response) throws IOException {
+    PrintWriter out = response.getWriter();
     out.print("Hello from agent "+support.getEncodedAgentName());
   }
 }
@@ -190,15 +241,6 @@ extends HttpServlet
     yw.execute(request, response);  
   }
 
-  public void doPost(
-      HttpServletRequest request,
-      HttpServletResponse response) throws IOException, ServletException
-  {
-    // create a new "<i>YourWorker</i>" context per request
-    <i>YourWorker</i> yw = new <i>YourWorker</i>(support);
-    yw.execute(request, response);  
-  }
-
   /**
    * This inner class does all the work.
    * 
@@ -222,7 +264,7 @@ extends HttpServlet
         HttpServletRequest request, 
         HttpServletResponse response) throws IOException, ServletException 
     {
-      <i>set your-variables based upon URL-params / POST-data</i>
+      <i>set your-variables based upon URL-params</i>
       <i>handle the request!</i>
     }
   }
