@@ -20,12 +20,12 @@ queryConfigTrialAssemblies=\
 checkUsedAssembly=\
  SELECT	'1' FROM expt_trial_assembly R, \
    expt_trial_config_assembly C \
-   lib_mod_recipe_arf N \
+   lib_mod_recipe_arg N \
    WHERE (C.ASSEMBLY_ID = :assembly_id: \
       and C.TRIAL_ID != ':trial_id:') \
       OR (R.ASSEMBLY_ID = :assembly_id: \
       and R.TRIAL_ID != ':trial_id:') \
-      OR N.ARG_VALUE != :assembly_id:
+      OR N.ARG_VALUE = :assembly_id:
 
 # Is this assembly in this trial's config
 checkThisConfigUsesAssembly=\
