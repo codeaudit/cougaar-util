@@ -124,6 +124,41 @@ final class Util {
       default:                       return 0;
     }
   }
+  
+  public static final int convertStringToInt(String s) {
+    if (s == null) {
+      return -1;
+    } else if (s.equalsIgnoreCase("DETAIL")) {
+      return Logger.DETAIL;
+    } else if (s.equalsIgnoreCase("DEBUG")) {
+      return Logger.DEBUG;
+    } else if (s.equalsIgnoreCase("INFO")) {
+      return Logger.INFO;
+    } else if (s.equalsIgnoreCase("WARN")) {
+      return Logger.WARN;
+    } else if (s.equalsIgnoreCase("ERROR")) {
+      return Logger.ERROR;
+    } else if (s.equalsIgnoreCase("SHOUT")) {
+      return Logger.SHOUT;
+    } else if (s.equalsIgnoreCase("FATAL")) {
+      return Logger.FATAL;
+    } else {
+      return -1;
+    }
+  }
+
+  public static final String convertIntToString(int level) {
+    switch (level) {
+      case Logger.DETAIL: return "DETAIL";
+      case Logger.DEBUG: return "DEBUG";
+      case Logger.INFO:  return "INFO";
+      case Logger.WARN:  return "WARN";
+      case Logger.ERROR: return "ERROR";
+      case Logger.SHOUT: return "SHOUT";
+      case Logger.FATAL: return "FATAL";
+      default: return null;
+    }
+  }
 
   /**
    * Helper function to convert the interfaces outputType (See 
