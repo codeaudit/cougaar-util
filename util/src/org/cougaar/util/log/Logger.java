@@ -52,15 +52,16 @@ public interface Logger {
    * without notice.  For example, "DEBUG" may be changed from
    * "1" to some other integer constant.  However, the ordering 
    * of:<pre>
-   *   DEBUG &lt; INFO &lt; WARN &lt; ERROR &lt; SHOUT &lt; FATAL
+   *   DETAIL &lt; DEBUG &lt; INFO &lt; WARN &lt; ERROR &lt; SHOUT &lt; FATAL
    * </pre><br> is guaranteed.
    */
-  int DEBUG   = 1;
-  int INFO    = 2;
-  int WARN    = 3;
-  int ERROR   = 4;
-  int SHOUT   = 5;
-  int FATAL   = 6;
+  int DETAIL  = 1;
+  int DEBUG   = 2;
+  int INFO    = 3;
+  int WARN    = 4;
+  int ERROR   = 5;
+  int SHOUT   = 6;
+  int FATAL   = 7;
 
   /**
    * Logger users should check "isEnabledFor(..)" before requesting 
@@ -137,6 +138,7 @@ public interface Logger {
   // specific "isEnabledFor(..)" shorthand methods:
   //
 
+  boolean isDetailEnabled();
   boolean isDebugEnabled();
   boolean isInfoEnabled();
   boolean isWarnEnabled();
@@ -147,6 +149,12 @@ public interface Logger {
   //
   // specific "level" shorthand methods:
   //
+
+  /**
+   * Equivalent to "log(DETAIL, ..)".
+   */
+  void detail(String message);
+  void detail(String message, Throwable t);
 
   /**
    * Equivalent to "log(DEBUG, ..)".

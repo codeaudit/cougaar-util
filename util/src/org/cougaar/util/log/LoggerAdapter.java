@@ -33,13 +33,16 @@ public abstract class LoggerAdapter
 
   public final void log(int level, String message) { log(level,message,null); }
 
-  public final boolean isDebugEnabled() { return isEnabledFor(DEBUG); }
-  public final boolean isInfoEnabled()  { return isEnabledFor(INFO); }
-  public final boolean isWarnEnabled()  { return isEnabledFor(WARN); }
-  public final boolean isErrorEnabled() { return isEnabledFor(ERROR); }
-  public final boolean isShoutEnabled() { return isEnabledFor(SHOUT); }
-  public final boolean isFatalEnabled() { return isEnabledFor(FATAL); }
+  public final boolean isDetailEnabled() { return isEnabledFor(DETAIL); }
+  public final boolean isDebugEnabled()  { return isEnabledFor(DEBUG); }
+  public final boolean isInfoEnabled()   { return isEnabledFor(INFO); }
+  public final boolean isWarnEnabled()   { return isEnabledFor(WARN); }
+  public final boolean isErrorEnabled()  { return isEnabledFor(ERROR); }
+  public final boolean isShoutEnabled()  { return isEnabledFor(SHOUT); }
+  public final boolean isFatalEnabled()  { return isEnabledFor(FATAL); }
 
+  public final void detail(String message) { log(DETAIL, message, null); }
+  public final void detail(String message, Throwable t) { log(DETAIL, message, t); }
   public final void debug(String message) { log(DEBUG, message, null); }
   public final void debug(String message, Throwable t) { log(DEBUG, message, t); }
   public final void info(String message) { log(INFO, message, null); }
