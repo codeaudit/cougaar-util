@@ -73,21 +73,19 @@ import org.cougaar.util.log.*;
  * </ul>
  * <br>
  *
- * Set org.cougaar.core.util.ConfigFinder.verbose=true to enable 
- * additional debugging logs.
+ * Enable INFO level logging on org.cougaar.core.util.ConfigFinder to turn on
+ * additional information on usage of ConfigFinder.
  * @property org.cougaar.install.path Used as the base path for config file finding.
  * @property org.cougaar.config.path The search path for config files.  See the class
  * documentation for details.
  * @property org.cougaar.core.util.ConfigFinder.verbose When set to <em>true</em>, report
  * progress while finding each config file.
- * @property org.cougaar.config The configuration being run, for example minitestconfig or small-135. Setting this property means that CIP/configs/<value of this property> will be searched before configs/common
+ * @property org.cougaar.config The configuration being run, for example minitestconfig or small-135.
+ * Setting this property means that CIP/configs/<value of this property> will be searched before configs/common 
  **/
 public final class ConfigFinder {
   private List configPath = new ArrayList();
   private Map properties = null;
-
-  private boolean verbose = false;
-  public void setVerbose(boolean b) { verbose = b; }
 
   private Logger logger = null;
 
@@ -143,9 +141,6 @@ public final class ConfigFinder {
    * </ul>
    **/
   public ConfigFinder(String module, String s, Map props) {
-    if ("true".equals(System.getProperty("org.cougaar.core.util.ConfigFinder.verbose", "false")))
-      setVerbose(true);
-
     properties = new HashMap();
     if (props != null) properties.putAll(props);
 
@@ -184,6 +179,15 @@ public final class ConfigFinder {
     }
 
     configPath = Collections.unmodifiableList(configPath); //  make it unmodifiable
+    if (getLogger().isInfoEnabled()) {
+      StringBuffer sb = new StringBuffer("ConfigPath = ");
+      for (Iterator it = configPath.iterator(); it.hasNext();) {
+        String se = it.next().toString();
+        sb.append(se);
+        if (it.hasNext()) sb.append(", ");
+      }
+      getLogger().info(sb.toString());
+    }
   }
 
   /** get the config path as an unmodifiable List of URL instances
@@ -204,9 +208,6 @@ public final class ConfigFinder {
   public URL getConfigURL() { return Configuration.getConfigURL(); }
 
   private void appendPathElement(URL url) {
-    if (getLogger().isInfoEnabled()) {
-      getLogger().info("Adding Path Element "+url);
-    }
     configPath.add(url);
   }
 
@@ -235,13 +236,7 @@ public final class ConfigFinder {
           URL fileURL = new URL(url, aFilename);
           File result = new File(fileURL.getFile());
           if (result.exists()) {
-            if (getLogger().isInfoEnabled()) {
-              getLogger().info("Found "+aFilename+" as " +fileURL);
-            }
-	    // If the URL contains configs/common....
-// 	    if (url.toString().indexOf("configs/common") != -1 || url.toString().indexOf("configs\\common") != -1) {
-// 	      getLogger().warn("configs/common file: " + aFilename, new Throwable());
-// 	    }
+            traceLog(aFilename, url);
             return result;
           }
         } catch (MalformedURLException mue) {
@@ -249,9 +244,7 @@ public final class ConfigFinder {
         }
       }
     }
-    if (getLogger().isInfoEnabled()) {
-      getLogger().info("Couldn't find "+aFilename);
-    }
+    traceLog(aFilename, null);
     return null;
   }
 
@@ -267,13 +260,7 @@ public final class ConfigFinder {
         URL url = new URL(base, aURL);
         InputStream is = url.openStream();
         if (is == null) continue; // Don't return null
-        if (getLogger().isInfoEnabled()) {
-          getLogger().info("Found "+aURL+" as "+url);
-        }
-	// If the URL contains configs/common....
-// 	if (url.toString().indexOf("configs/common") != -1 || url.toString().indexOf("configs\\common") != -1) {
-// 	  getLogger().warn("configs/common file: " + aURL, new Throwable());
-// 	}
+        traceLog(aURL, base);
         return is;
       } 
       catch (MalformedURLException mue) {
@@ -290,6 +277,8 @@ public final class ConfigFinder {
       }
     }
 
+    traceLog(aURL, null);
+    /*
     StringTokenizer st = new StringTokenizer (aURL, "-.");
     String sb = st.nextToken() + ".zip";
     try {
@@ -306,10 +295,7 @@ public final class ConfigFinder {
         getLogger().debug("Exception while looking for "+aURL+" in zip "+sb, npe);
       }
     }
-
-    if (getLogger().isInfoEnabled()) {
-      getLogger().info("Couldn't find "+aURL);
-    }
+    */
 
     throw new FileNotFoundException(aURL);
   }
@@ -327,13 +313,7 @@ public final class ConfigFinder {
         InputStream is = url.openStream();
         if (is == null) continue; // Don't return null
         is.close();
-        if (getLogger().isInfoEnabled()) {
-          getLogger().info("Found "+aURL+" as "+url);
-        }
-	// If the URL contains configs/common....
-// 	if (url.toString().indexOf("configs/common") != -1 || url.toString().indexOf("configs\\common") != -1) {
-// 	  getLogger().warn("configs/common file: " + aURL, new Throwable());
-// 	}
+        traceLog(aURL, base);
         return url;
       }
       catch (MalformedURLException mue) {
@@ -348,9 +328,10 @@ public final class ConfigFinder {
       // it isn't really an error, but I think we'd like to see these.
       getLogger().warn("Failed to find "+aURL);
     }
+    traceLog(aURL, null);
+
     return null;
   }
-
 
   public InputStream openZip (String aURL, String aZIP) 
     throws IOException
@@ -479,4 +460,31 @@ public final class ConfigFinder {
       return is;
    } 
   }
+
+  /** Hack for logging nice messages when tracing is enabled.
+   * Looks back up the stack for method and origin points.
+   **/
+  // this could be static except that the logger isn't static right now.
+  private void traceLog(Object name, Object value) {
+    if (getLogger().isInfoEnabled()) {
+      Throwable t = new Throwable();
+      StackTraceElement[] st = t.getStackTrace();
+      String frame = "unknown";
+      String method = "unknown";
+      for (int i = 0; i<st.length; i++) {
+        StackTraceElement se = st[i];
+        if (i == 1) {
+          method = se.getMethodName();
+        }
+        String cn = se.getClassName();
+        if ((!cn.startsWith("org.cougaar.util.")) &&
+            (!cn.startsWith("org.apache."))) {
+          frame = se.toString();
+          break;
+        }
+      }
+      getLogger().info(method+"("+name.toString()+")="+value+" from "+frame);
+    }
+  }
+
 }
