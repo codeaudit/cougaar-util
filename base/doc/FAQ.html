@@ -123,7 +123,7 @@ Cougaar is an <a href="#license">open source</a> project.  Release builds and so
 <b>Q: Does Cougaar have a project site?</b>
 <p/>
 <b>A:</b>
-Yes, Cougaar has a SourceForge-style project site that is open to Cougaar developers: <a href="http://cougaarforge.cougaar.org">http://cougaarforge.cougaar.org</a>.  Cougaar projects have their own bug tracking system, mailing list, and CVS repository.
+Yes, Cougaar has a SourceForge-style project site that is open to Cougaar developers: <a href="http://cougaar.org">http://cougaar.org</a>.  Cougaar projects have their own bug tracking system, mailing list, and CVS repository.
 <p>
 All Cougaar projects hosted on "cougaar.org" are subject to the <a href="#license">Cougaar Open Source License</a>.
 <p/>
@@ -132,7 +132,7 @@ All Cougaar projects hosted on "cougaar.org" are subject to the <a href="#licens
 <b>Q: How can I get involved in Cougaar?</b>
 <p/>
 <b>A:</b>
-Our mailing list (<a href="mailto:cougaar-developers@cougaar.org">cougaar-developers@cougaar.org</a>) is an open forum for general questions and specific technical discussion.  <a href="http://cougaarforge.cougaar.org">CougaarForge</a>, our project management site, hosts Cougaar projects.
+Our mailing list (<a href="mailto:cougaar-developers@cougaar.org">cougaar-developers@cougaar.org</a>) is an open forum for general questions and specific technical discussion.  <a href="http://cougaar.org">CougaarForge</a>, our project management site, hosts Cougaar projects.
 <p/>
 
 <a name="faq"/>
@@ -152,7 +152,7 @@ Please send email to <a href="mailto:cougaar@cougaar.org">cougaar@cougaar.org</a
 <b>Q: How do I install Cougaar?</b>
 <p/>
 <b>A:</b>
-Release builds can be found on our <a href="http://www.cougaar.org">website</a>.  As of October 2003, the current release is Cougaar 10.4.6.  Builds are available as either a single ZIP file or a wizard-based installer.
+Release builds can be found on our <a href="http://www.cougaar.org">website</a>.  As of March 2004, the current release is Cougaar 11.0.  Builds are available as either a single ZIP file or a wizard-based installer.
 <p/>
 Installation and configuration documentation is included in the <a href="#docs">Cougaar Developers' Guide</a>.
 <p/>
@@ -161,9 +161,9 @@ Installation and configuration documentation is included in the <a href="#docs">
 <b>Q: What are the system requirements to run Cougaar?</b>
 <p/>
 <b>A:</b>
-Cougaar requires <a href="http://java.sun.com/j2se/1.4">Java 1.4</a> or later.  Any machine capable of running Java 1.4 should suffice.  The Cougaar architecture team develops on Windows 98/NT/XP, Linux, Mac OS X, and Java-1.4-capable PDAs.
+Cougaar requires <a href="http://java.sun.com/j2se/1.4.2">Java 1.4.2</a> or later.  Any machine capable of running Java 1.4.2 should suffice.  The Cougaar architecture team develops on Windows 98/NT/XP, Linux, Mac OS X, and Java-1.4-capable PDAs.
 <p/>
-There's also a micro-edition of Cougaar that runs on a Java KVM (<a href="http://www.cougaar.org/projects/cougaarme.html">CougaarME</a>).  This FAQ covers the JavaSE version of Cougaar.
+There's also a micro-edition of Cougaar that runs on a Java KVM (<a href="http://micro.cougaar.org">CougaarME</a>).  This FAQ covers the JavaSE version of Cougaar.
 <p/>
 Cougaar can be configured as a non-distributed system, so network connectivity is not required.
 <p/>
@@ -188,7 +188,7 @@ You can also ask our <a href="mailto:cougaar-developers@cougaar.org">mailing lis
 <b>Q: Where can I find tutorials on writing Cougaar applications?</b>
 <p/>
 <b>A:</b>
-Tutorials and code examples are available on our website's <a href="http://tutorials.cougaarforge.cougaar.org">tutorial project</a>.  We also conduct Cougaar training classes -- see the website for a schedule and registration details.
+Tutorials and code examples are available on our website's <a href="http://tutorials.cougaar.org">tutorial project</a>.  We also conduct Cougaar training classes -- see the website for a schedule and registration details.
 <p/>
 
 <hr/>
@@ -419,7 +419,7 @@ Cougaar also supports agent mobility, primarily for load balancing, but this isn
 <b>Q: How does Cougaar compare with FIPA and JSR 87?</b>
 <p/>
 <b>A:</b>
-<a href="http://www.fipa.org/">FIPA</a> defines an interaction standard for heterogeneous agent systems.  <a href="http://jcp.org/en/jsr/detail?id=087">JSR 87</a> is the Java Specification Request to define a "javax.agent" API that corresponds to the FIPA specification.
+<a href="http://www.fipa.org/">FIPA</a> defines an interaction standard for heterogeneous agent systems.  <a href="http://jcp.org/en/jsr/detail?id=087">JSR 87</a> is the Java Specification Request to define a "javax.agent" API that corresponds to the FIPA specification.  Popular FIPA-compliant architectures include <a href="http://fipa-os.sourceforge.net">FIPA-OS</a> and <a href="http://jade.cselt.it">Jade</a>.
 <p/>
 Cougaar currently implements neither API, although this could be implemented if there was sufficient demand.  The "javax.agent" API is fairly simple.  To date, Cougaar developers have been content to stay within the bounds of Cougaar agents and non-agent systems (e.g. JDBC).  Discussion is welcome on our <a href="mailto:cougaar-developers@cougaar.org">mailing list</a>.
 <p/>
@@ -518,14 +518,16 @@ The <a href="#docs">Cougaar Technical FAQ</a> covers additional trouble-shooting
 <b>Q: What is the license model for Cougaar?</b>
 <p/>
 <b>A:</b>
-Cougaar has an open source license model.  The license can be found on the web at <a href="http://www.cougaar.org/documents/license.html">http://www.cougaar.org/documents/license.html</a> and in the release at <code>doc/License.txt</code>.  Questions can be sent to <a href="mailto:cougaar@cougaar.org">cougaar@cougaar.org</a>.
+Cougaar has an open source license modeled after the
+<a href="http://www.opensource.org/licenses/bsd-license.php">OSI approved BSD License</a>.  The Cougaar License can be found in this release as <a href="License.txt">doc/License.txt</a> and on the web at <a href="http://cougaar.org/docman/view.php/17/58/license.html">http://cougaar.org/docman/view.php/17/58/license.html</a>.  Questions can be sent to <a href="mailto:cougaar@cougaar.org">cougaar@cougaar.org</a>.
 <p/>
 
 <a name="gpl"/>
 <b>Q: Is the Cougaar license model compatible other open source licenses?</b>
 <p/>
 <b>A:</b>
-No, the Cougaar license is similar but not identical to the GPL and other open source licenses, primarily due to DARPA open-source guidelines.  There shouldn't be any surprises in there, but if you (or your lawyer) have any questions please feel free to send email to <a href="mailto:cougaar@cougaar.org">cougaar@cougaar.org</a>.
+The Cougaar license was updated in Cougaar release 11.0 to closely mirror the 
+<a href="http://www.opensource.org/licenses/bsd-license.php">OSI approved BSD License</a>.  The primary difference between the BSD License and the Cougaar License is the addition a DARPA acknowledgement and endorsement restriction.  If you have any questions, please send an email to <a href="mailto:cougaar@cougaar.org">cougaar@cougaar.org</a>.
 <p/>
 
 <a name="cost"/>
