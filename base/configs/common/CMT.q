@@ -1271,7 +1271,7 @@ addNodeAssignments = \
  INSERT INTO V4_ASB_COMPONENT_HIERARCHY \
     (ASSEMBLY_ID, COMPONENT_ALIB_ID, PARENT_COMPONENT_ALIB_ID, INSERTION_ORDER) \
   SELECT DISTINCT \
-   ':assembly_id', \	
+   ':assembly_id', \
    AGENT.COMPONENT_ALIB_ID, \
    NODE.COMPONENT_ALIB_ID, \
    0 \
@@ -1372,7 +1372,7 @@ setGroupNotSelected = \
   WHERE TRIAL_ID=':trial_id' \
   AND ORG_GROUP_ID =':group_id'
 
-setGroupSelected = \   
+setGroupSelected = \
  INSERT INTO V4_EXPT_TRIAL_ORG_MULT \
    (TRIAL_ID, CFW_ID , ORG_GROUP_ID, EXPT_ID, MULTIPLIER, DESCRIPTION) \
    SELECT DISTINCT \

@@ -589,7 +589,7 @@ recipeQueryNodesWithSpecificAgents =\
    AND H.PARENT_COMPONENT_ALIB_ID = N.COMPONENT_ALIB_ID \
    AND N.COMPONENT_TYPE='node' \
    AND H.ASSEMBLY_ID :assembly_match: \
-   AND A.COMPONENT_NAME='Agent Name' \
+   AND A.COMPONENT_NAME='Agent Name'
 
 ### Now, queries to get the component to insert
 # These examples dont actually get the data from the DB,
