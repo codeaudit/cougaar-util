@@ -55,8 +55,19 @@ REM
 REM Also see the Server documentation ("server\doc\README") for 
 REM further details.
 
+IF "%1" == "" GOTO USE_DEFAULT_PROPS
+SET NODE_PROPS_FILE=%1
+ECHO Using properties file : %1
+GOTO CHECK_PROPS_EXISTS
+:USE_DEFAULT_PROPS
 SET NODE_PROPS_FILE=server.props
-
+ECHO Using default properties file: server.props
+GOTO CHECK_PROPS_EXISTS
+:CHECK_PROPS_EXISTS
+IF EXIST %NODE_PROPS_FILE% GOTO PROPS_EXISTS
+ECHO ERROR : properties file [%NODE_PROPS_FILE%] does not exist
+GOTO END
+:PROPS_EXISTS
 
 REM
 REM The remaining settings should not require modifications
@@ -105,3 +116,4 @@ java ^
   org.cougaar.tools.server.NodeServer ^
   %NODE_PROPS_FILE%
 
+:END
