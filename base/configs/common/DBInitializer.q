@@ -131,6 +131,12 @@ queryAgentRelation.mysql = \
     AND LIB_PG.ATTRIBUTE_NAME = 'TypeIdentification' \
     AND SPTG.COMPONENT_NAME = ':agent_name:'
 
+# This query used for MilitaryOrgPG.HomeLocation when creating
+# OrgAssets when running from the DB. This happens
+# because in the lib_pg table in the DB this query name
+# is listed.
+# Sometimes units are listed as at 'fake' GEOLOCs, ALPLOCs
+# So union with the ALPLOC table
 queryGeolocLocation = \
  SELECT 'GeolocLocation', ':key:' \
       ||', InstallationTypeCode=' || INSTALLATION_TYPE_CODE \
@@ -140,8 +146,20 @@ queryGeolocLocation = \
       ||', Latitude=Latitude '    || LATITUDE || 'degrees' \
       ||', Longitude=Longitude '  || LONGITUDE || 'degrees' \
    FROM GEOLOC \
-  WHERE GEOLOC_CODE = SUBSTR(':key:', 12)
+  WHERE GEOLOC_CODE = SUBSTR(':key:', 12) \
+      UNION \
+ SELECT 'GeolocLocation', ':key:' \
+      ||', InstallationTypeCode=' \
+      ||', CountryStateCode='     \
+      ||', CountryStateName='     \
+      ||', Name='                 || REPLACE(LOCATION_NAME, ' ', '_') \
+      ||', Latitude=Latitude '    || LATITUDE || 'degrees' \
+      ||', Longitude=Longitude '  || LONGITUDE || 'degrees' \
+   FROM ALPLOC \
+  WHERE ALPLOC_CODE = SUBSTR(':key:', 12)
 
+# FIXME: This needs to be unioned with the ALPLOC table, like above, 
+# but MySQL won't support that until v4 is out of alpha
 queryGeolocLocation.mysql = \
  SELECT 'GeolocLocation', concat(':key:' \
       ,', InstallationTypeCode=' , INSTALLATION_TYPE_CODE \
