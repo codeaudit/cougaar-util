@@ -87,8 +87,8 @@ queryAllTableColumns=\
   WHERE TABLE_NAME LIKE 'V4_%' \
   ORDER BY TABLE_NAME
 
-deleteFromTableInitial=DELETE FROM :table WHERE :column like '%REGRESSION%'
-deleteFromTableMore=\ OR :column like '%REGRESSION%'
+deleteFromTableInitial=DELETE FROM :table WHERE :column like '%:clean_type%'
+deleteFromTableMore=\ OR :column like ':clean_type%'
 
 deleteAssembly=\
  DELETE FROM V4_EXPT_TRIAL_ASSEMBLY \
@@ -104,24 +104,24 @@ deleteExpt=\
 
 deleteAllFromTableWithAssemblyId=\
  DELETE FROM :table \
-  WHERE ASSEMBLY_ID like 'REGRESSION_%'
+  WHERE ASSEMBLY_ID like ':clean_type_%'
 
 deleteAllFromTableWithTrialId=\
  DELETE FROM :table \
-  WHERE TRIAL_ID like 'REGRESSION_%'
+  WHERE TRIAL_ID like ':clean_type_%'
 
 deleteAllFromTableWithExptId=\
  DELETE FROM :table \
-  WHERE EXPT_ID like 'REGRESSION_%'
+  WHERE EXPT_ID like ':clean_type_%'
 
 deleteAllAssembly=\
  DELETE FROM V4_EXPT_TRIAL_ASSEMBLY \
-  WHERE ASSEMBLY_ID like 'REGRESSION_%'
+  WHERE ASSEMBLY_ID like ':clean_type_%'
 
 deleteAllTrial=\
  DELETE FROM V4_EXPT_TRIAL \
-  WHERE TRIAL_ID like 'REGRESSION_%'
+  WHERE TRIAL_ID like ':clean_type_%'
 
 deleteAllExpt=\
   DELETE FROM V4_EXPT_EXPERIMENT \
-   WHERE EXPT_ID like 'REGRESSION_%'
+   WHERE EXPT_ID like ':clean_type_%'
