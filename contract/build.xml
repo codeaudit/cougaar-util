@@ -136,16 +136,16 @@
     
     <!-- jarfiles required by this module, relative to various other paths -->
     <!-- WARNING: Only relative paths work here. -->
-    <property name="compile.jarlist" value="${target.lib}/core.jar,${target.lib}/util.jar,${target.sys}/xerces.jar"/>
+    <property name="compile.jarlist" value="${target.lib}/util.jar,${target.sys}/xerces.jar"/>
     <!-- Put absolute paths on this list, in the form of a path. -->
     <property name="compile.abs.jarlist" value=""/>
 
     <!-- javadoc package spec for building javadocs -->
-    <property name="javadoc.packages" value="org.cougaar.lib.contract.lang,org.cougaar.lib.contract.lang.cache,org.cougaar.lib.contract.lang.compare,org.cougaar.lib.contract.lang.op,org.cougaar.lib.contract.lang.op.constant,org.cougaar.lib.contract.lang.op.list,org.cougaar.lib.contract.lang.op.logical,org.cougaar.lib.contract.lang.op.reflect,org.cougaar.lib.contract.lang.parser,org.cougaar.lib.contract.lang.type"/>
+    <property name="javadoc.packages" value="org.cougaar.lib.contract,org.cougaar.lib.contract.lang,org.cougaar.lib.contract.lang.cache,org.cougaar.lib.contract.lang.compare,org.cougaar.lib.contract.lang.op,org.cougaar.lib.contract.lang.op.constant,org.cougaar.lib.contract.lang.op.list,org.cougaar.lib.contract.lang.op.logical,org.cougaar.lib.contract.lang.op.reflect,org.cougaar.lib.contract.lang.parser,org.cougaar.lib.contract.lang.type"/>
 
     <!-- Extra jars needed at run / unit-test time. -->
     <!-- WARNING: Only relative paths work here. -->
-    <property name="run.jarlist" value="${target.lib}/core.jar,${target.lib}/util.jar,${target.sys}/xerces.jar"/>
+    <property name="run.jarlist" value="${target.lib}/util.jar,${target.sys}/xerces.jar"/>
     <!-- Put absolute paths on this list, in the form of a path. -->
     <property name="run.abs.jarlist" value=""/>
     
