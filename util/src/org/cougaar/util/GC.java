@@ -56,6 +56,9 @@ public class GC {
    * e.g. if it has been at least minGCInterval since
    * the last gc call completed.
    *
+   * At INFO logging level, will log when gcs are deferred and allowed.
+   * At DEBUG logging lovel, will log how long allowed GCs run for.
+   *
    * @property org.cougaar.util.GC.minGCInterval
    * Minimum number of milliseconds between IdentityTable-directed gcs.
    * Defaults to 3000000 (5 minutes).  Garbage Collections not invoked
@@ -68,15 +71,19 @@ public class GC {
     synchronized (gcLock) {
       if ((gcTime != 0L) &&
           ((now-gcTime)<minGCInterval)) {
+        if (log.isInfoEnabled()) {
+          log.info("deferred explicit GC");
+        }
         return;
       } 
 
       System.gc();
 
+      if (log.isInfoEnabled()) { log.info("explicit GC"); }
       long tend = System.currentTimeMillis();
       gcTime = tend;
-      if (log.isInfoEnabled()) {
-        log.info("GC.gc() ran for "+(tend-now)+" millis");
+      if (log.isDebugEnabled()) {
+        log.debug("GC.gc() ran for "+(tend-now)+" millis");
       }
     }
   }
