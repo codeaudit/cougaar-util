@@ -94,7 +94,7 @@ set SERVERCONFIG = ""
 # *not* the Node's codebase.  The ".props" file must be
 # modified to alter the Node's configuration.
 set LIBPATHS = \
-  "${COUGAAR_INSTALL_PATH}/lib/server.jar:${COUGAAR_INSTALL_PATH}/lib/csmart.jar"
+  "${COUGAAR_INSTALL_PATH}/lib/server.jar:"
 
 #if ($?COUGAAR_DEV_PATH) then
 #    set LIBPATHS = "${COUGAAR_DEV_PATH}:${LIBPATHS}"

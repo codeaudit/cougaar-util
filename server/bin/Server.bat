@@ -98,8 +98,8 @@ REM *not* the Node's codebase.  The ".props" file must be
 REM modified to alter the Node's configuration.
 
 SET LIBPATHS=^
-%COUGAAR_INSTALL_PATH%\lib\server.jar;^
-%COUGAAR_INSTALL_PATH%\lib\csmart.jar
+%COUGAAR_INSTALL_PATH%\lib\server.jar
+
 
 IF NOT ("%COUGAAR_DEV_PATH%" == "") SET LIBPATHS=%COUGAAR_DEV_PATH%;%LIBPATHS%
 
