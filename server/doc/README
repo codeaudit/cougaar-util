@@ -60,7 +60,7 @@ where:
   
   <appProps> are either ".props" file names, such as the example
     "unix-server-sample.props", or "-D" properties for the Node,
-    such as "-Dorg.cougaar.install.path=/opt/alp".  See below for 
+    such as "-Dorg.cougaar.install.path=/opt/cougaar".  See below for 
     details.
 
 The AppServer may be started at a system prompt or as part of
