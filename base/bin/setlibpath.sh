@@ -29,11 +29,13 @@ if [ -z "$COUGAAR_INSTALL_PATH" ]; then
     export COUGAAR_INSTALL_PATH
 fi
 
+# Set SEP to the class path separator for this os.
+os=`uname`
+SEP=";"
+if [ $os = "Linux" -o $os = "SunOS" ]; then SEP=":"; fi
+
 LIBPATHS=$COUGAAR_INSTALL_PATH/lib/core.jar
 if [ "$COUGAAR_DEV_PATH" != "" ]; then
-    os=`uname`
-    SEP=";"
-    if [ $os = "Linux" -o $os = "SunOS" ]; then SEP=":"; fi
     LIBPATHS="${COUGAAR_DEV_PATH}${SEP}${LIBPATHS}"
 fi
 BOOTPATH=$COUGAAR_INSTALL_PATH/lib/javaiopatch.jar
