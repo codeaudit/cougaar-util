@@ -122,12 +122,14 @@ href="../csmart/doc/release-notes.txt">notes</a> for details.</li>
 <li>Allow arbitrary insertion points in Specific Insertion
 recipes. This solves bug 1387 mentioned in the errata document.</li>
 </ul></li>
-<li>The Community Domain is now included by default, using the
-LDMDomain.ini file, and need not be included specially. In addition,
+<li>The Community and Mobility Domains are now included by default, using the
+LDMDomains.ini file, and need not be included specially. In addition,
 CSMART 1AD societies (from the CSMART database) include the Community
 Plugin in all domain Agents. However, if you wish to use Communities
 from a Node Agent, or add new Agents, you must still include the
-Community Plugin via a recipe.</li>
+Community Plugin via a recipe. The required Mobility components are
+automatically included via the default CSMART recipes included in a
+1AD society.</li>
 <li>Community configuration can now be loaded from either the configuation
 database through CSMART or through an xml file (communities.xml).  See
 community/doc/README.  A system property org.cougaar.community.configfile="filename"
@@ -157,6 +159,25 @@ OperatingMode. It should be possible to use the servlet to set the value
 of any OM that has a String constructor.  </li>
 <li> The objects listed in the AEViewer servlet are now sorted 
 alphabetically  (enhancement bug 1490) </li>
+
+<li>
+The Thread service Scheduler has been significantly rewritten and
+greatly simplified.  It now limits Java thread usage much more
+strictly and reliably.
+</li>
+
+<li>
+The MTS will now drop messages if particular classes of Exception are
+thrown during serialization or deserialization.  For this release the
+relevant exception classes are GeneralSecurityException and
+NotSerializableException.
+</li>
+
+<li>
+The Metrics Services are better coupled with the RSS.  Several example
+uses, including servlets and plugins, have been provided.
+</li>
+
 </ul>
 
 <!-- COUGAAR 9.2.2 COUGAAR 9.2.2 COUGAAR 9.2.2 COUGAAR 9.2.2 COUGAAR 9.2.2 -->
@@ -834,7 +855,7 @@ docs</li>
 <li> <a href="ComponentModel/DynamicComponents.html">Dynamic Component </a>docs</li>
 </ul>
 
-<li> several ChangeLog files (e.g., core/src/ChangeLog) and files under doc/details</li>
+<li> Several ChangeLog files (e.g., core/src/ChangeLog) and files under doc/details</li>
 
 <li> Core infrastructure javadocs available in
 api/index.html if the cougaar-api.zip archive has been installed</li>
@@ -844,9 +865,9 @@ api/index.html if the cougaar-api.zip archive has been installed</li>
 System Properties (-D flags) used. The file is generated on the basis of
 @property javadoc tags in the source code. .&nbsp;</li>
 
-<li> Cougaar Developers' Guide, v9.2 (dated 1-May-2002), available on the Cougaar website</li>
+<li> Cougaar Developers' Guide, v9.4 (dated 1-July-2002), available on the Cougaar website</li>
 
-<li> Cougaar Architecture Document, v9.2 (dated 1-May-2002), available on the Cougaar website</li>
+<li> Cougaar Architecture Document, v9.4 (dated 1-July-2002), available on the Cougaar website</li>
 
 <li>
 Ultra*Log Developer Workshop presentations (on the <a href="http://www.ultralog.net">Ultra*Log
@@ -894,8 +915,8 @@ The lists are results of Bugzilla queries (run on May 1, 15, 29, ..., resp.).
 
 <h2>
 <a NAME="organization"></a>Organization of a Release&nbsp;</h2>
-The files in an COUGAAR release fall into the following organizational
-areas:
+The files in a COUGAAR release fall into several organizational
+areas. These include:
 
 <ul>
 <li>
@@ -964,7 +985,10 @@ on
 <p>Note that $COUGAAR_INSTALL_PATH/bin/Node and setarguments.bat set the
 Cougaar start time with the following Node argument:
 <br>-Dorg.cougaar.core.cluster.startTime=08/010/2005
-<br>This start time is optimal for the Oplan used with the small-135 society.&nbsp;
+<br>This start time is optimal for the Oplan used with the small-135
+society.&nbsp;
+<br>For instructions on installing and using CSMART, see the <a
+href="../csmart/doc/InstallAndTest.html">CSMART installation document</a>.<br>
 
 <!-- ---------------------------------------------------------------------- -->
 <!-- ---------------------------------------------------------------------- -->
