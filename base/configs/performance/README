@@ -24,7 +24,9 @@ DEBUG:
 	 may be set there are raw System.out. statements at several 
 	places that once converted  into debug format will make this 
 	parameter applicable.
-
+LOG:
+	Prints out the statistics messages if DEBUG LOG is set to true
+	
 BURST_TIME: 
 	time for which the Management sleeps once it 
 	receives the Allocation Results and sends a new task.
@@ -52,6 +54,9 @@ MESSGAESIZE:
 	the length of task sent accross or the allocation result
 	sent back will be altered by this size.
 
+FILENAME:
+	Name of the file where logging or debug messages will go
+	if not the std out
 
 3. Different society configurations
 	There are several set of plugins and that can be 
