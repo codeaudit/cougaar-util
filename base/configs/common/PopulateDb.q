@@ -19,7 +19,7 @@ queryConfigTrialAssemblies=\
 # See if Assembly is used anywhere. Return nothing if not
 checkUsedAssembly=\
  SELECT	'1' FROM expt_trial_assembly R, \
-   expt_trial_config_assembly C \
+   expt_trial_config_assembly C, \
    lib_mod_recipe_arg N \
    WHERE (C.ASSEMBLY_ID = :assembly_id: \
       and C.TRIAL_ID != ':trial_id:') \
