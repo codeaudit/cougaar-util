@@ -25,27 +25,17 @@
  */
 package org.cougaar.core.component;
 
-import java.util.List;
-
 /**
- * Binder for a child that is a Container.
+ * This service allows a component to see its {@link
+ * ComponentDescription}, the services it has obtained, and
+ * additional component model information.
  * <p>
- * Allows the parent Container to pass "add(o)" requests
- * to it's children, based on the insertion point.
+ * This is primarily a user interface service.  Components should
+ * not rely on this service to control their behavior (for example,
+ * to modify behavior based on the existence of another component).
+ * Also, in secured configurations this service will likely be
+ * blocked by service {@link Binder}s.
  */
-public interface ContainerBinder
-  extends Binder
-{
-  boolean add(Object o);
-
-  boolean remove(Object o);
-
-  boolean contains(Object o);
-
-  // ContainerSupport binds all components with ContainerBinders,
-  // so we need to ask the binder to see if it's really a container.
-  boolean isContainer();
-
-  List getChildViews();
+public interface ViewService extends Service {
+  ComponentView getComponentView();
 }
-

@@ -147,27 +147,65 @@ public class PropagatingServiceBroker
   /** get an instance of the requested service from a service provider associated
    * with this context.
    **/
-  public Object getService(Object requestor, final Class serviceClass, final ServiceRevokedListener srl) {
-    Object service = getServiceAllowNull(requestor, serviceClass, srl);
+  public ServiceResult getService(
+      int requestorId, ComponentDescription requestorDesc,
+      Object requestor, Class serviceClass, ServiceRevokedListener srl,
+      boolean recordInView) {
+    ServiceResult sr = getServiceAllowNull(
+        requestorId, requestorDesc,
+        requestor, serviceClass, srl,
+        recordInView);
+    Object service = (sr == null ? null : sr.getService());
     if (service != null) {
       if (service instanceof NullService) {
-        service = null; // blocked
+        // blocked
+        sr = new ServiceResult(
+            sr.getProviderId(),
+            sr.getProviderComponentDescription(),
+            null); 
       }
     } else {
-      service = delegate.getService(requestor, serviceClass, srl);
+      // propagate
+      if (delegate instanceof ExtendedServiceBroker) {
+        ExtendedServiceBroker esb = 
+          (ExtendedServiceBroker) delegate;
+        sr =
+          esb.getService(
+              requestorId, requestorDesc,
+              requestor, serviceClass, srl,
+              false); // propagation sets recordInView to false!
+      } else {
+        service = delegate.getService(requestor, serviceClass, srl);
+        sr = new ServiceResult(0, null, service);
+      }
     }
-    return service;
+    return sr;
   }
 
-  public void releaseService(Object requestor, Class serviceClass, Object service) {
+  public void releaseService(
+      int requestorId, ComponentDescription requestorDesc,
+      Object requestor, Class serviceClass, Object service,
+      boolean recordInView) {
     synchronized (servicesLock) {
       if (super.hasService(serviceClass)) {
-        super.releaseService(requestor, serviceClass, service);
+        super.releaseService(
+            requestorId, requestorDesc,
+            requestor, serviceClass, service,
+            recordInView);
         return;
       }
     }
-    // else
-    delegate.releaseService(requestor, serviceClass, service);
+    // else propagate
+    if (delegate instanceof ExtendedServiceBroker) {
+      ExtendedServiceBroker esb = 
+        (ExtendedServiceBroker) delegate;
+      esb.releaseService(
+          requestorId, requestorDesc,
+          requestor, serviceClass, service,
+          false); // propagation stops recordInView!
+    } else {
+      delegate.releaseService(requestor, serviceClass, service);
+    }
   }
 
   public void revokeService(Class serviceClass, ServiceProvider serviceProvider) {
@@ -177,7 +215,10 @@ public class PropagatingServiceBroker
         return;
       }
     }
-    // else
+    // else propagate
+    //
+    // FIXME looks like a bug; we didn't propagate the advertisement,
+    // so why are we propagating the revocation?
     delegate.revokeService(serviceClass, serviceProvider);
   }
 

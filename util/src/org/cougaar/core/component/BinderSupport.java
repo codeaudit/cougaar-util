@@ -80,6 +80,9 @@ public abstract class BinderSupport
   }
 
   protected final Component getComponent() {
+    if (child == null) {
+      child = constructChild();
+    }
     return child;
   }
 

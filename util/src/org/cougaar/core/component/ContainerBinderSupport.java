@@ -25,6 +25,9 @@
  */
 package org.cougaar.core.component;
 
+import java.util.List;
+import java.util.Collections;
+
 /** 
  * A Shell implementation of a ContainerBinder based upon
  * BinderSupport.
@@ -65,6 +68,26 @@ implements ContainerBinder
       return ((Container)c).contains(o);
     } else {
       return false;
+    }
+  }
+
+  public boolean isContainer() {
+    Object c = getComponent();
+    if (c instanceof ContainerBinder) {
+      return ((ContainerBinder) c).isContainer();
+    } else {
+      return (c instanceof ContainerSupport);
+    }
+  }
+
+  public List getChildViews() {
+    Object c = getComponent();
+    if (c instanceof ContainerBinder) {
+      return ((ContainerBinder) c).getChildViews();
+    } else if (c instanceof ContainerSupport) {
+      return ((ContainerSupport) c).getChildViews();
+    } else {
+      return Collections.EMPTY_LIST;
     }
   }
 

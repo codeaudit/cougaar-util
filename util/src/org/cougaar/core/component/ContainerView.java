@@ -1,4 +1,5 @@
 /*
+ *
  * <copyright>
  *  
  *  Copyright 1997-2004 BBNT Solutions, LLC
@@ -28,24 +29,13 @@ package org.cougaar.core.component;
 import java.util.List;
 
 /**
- * Binder for a child that is a Container.
- * <p>
- * Allows the parent Container to pass "add(o)" requests
- * to it's children, based on the insertion point.
+ * A {@link ViewService} view of a container component, which extends
+ * {@link ComponentView} by adding child views.
  */
-public interface ContainerBinder
-  extends Binder
-{
-  boolean add(Object o);
+public interface ContainerView extends ComponentView {
 
-  boolean remove(Object o);
-
-  boolean contains(Object o);
-
-  // ContainerSupport binds all components with ContainerBinders,
-  // so we need to ask the binder to see if it's really a container.
-  boolean isContainer();
-
+  /**
+   * @return a List of {@link ComponentView}s.
+   */
   List getChildViews();
 }
-

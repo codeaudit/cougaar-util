@@ -35,7 +35,7 @@ import java.util.Iterator;
  **/
 
 public class ServiceBrokerSupport 
-  implements ServiceBroker 
+  implements ExtendedServiceBroker 
 {
   /** the current set of Listeners.  Elements are of type ServiceListener **/
   private ArrayList listeners = new ArrayList();
@@ -98,6 +98,11 @@ public class ServiceBrokerSupport
 
   /** add a Service to this ServiceBroker Context **/
   public boolean addService(Class serviceClass, ServiceProvider serviceProvider) {
+    return addService(serviceClass, serviceProvider, 0, null);
+  }
+  public boolean addService(
+      Class serviceClass, ServiceProvider serviceProvider,
+      int providerId, ComponentDescription providerDesc) {
     if (serviceClass == null)
       throw new IllegalArgumentException("serviceClass null");
     if(serviceProvider == null)
@@ -108,7 +113,9 @@ public class ServiceBrokerSupport
       if (old != null) {
         return false;
       } else {
-        services.put(serviceClass, serviceProvider);
+        Entry e = 
+          new Entry(providerId, providerDesc, serviceProvider);
+        services.put(serviceClass, e);
         // fall through
       }
     }
@@ -121,6 +128,11 @@ public class ServiceBrokerSupport
 
   /** remoke or remove an existing service **/
   public void revokeService(Class serviceClass, ServiceProvider serviceProvider) {
+    revokeService(serviceClass, serviceProvider, 0, null);
+  }
+  public void revokeService(
+      Class serviceClass, ServiceProvider serviceProvider,
+      int providerId, ComponentDescription providerDesc) {
     if (serviceClass == null)
       throw new IllegalArgumentException("serviceClass null");
     if(serviceProvider == null)
@@ -162,34 +174,56 @@ public class ServiceBrokerSupport
    * with this context.
    **/
   public Object getService(
-      Object requestor,
-      Class serviceClass,
-      ServiceRevokedListener srl) {
-    Object service = 
-      getServiceAllowNull(requestor, serviceClass, srl);
+      Object requestor, Class serviceClass, ServiceRevokedListener srl) {
+    ServiceResult sr = getService(
+        0, null,
+        requestor, serviceClass, srl,
+        true);
+    return (sr == null ? null : sr.getService());
+  }
+  public ServiceResult getService(
+      int requestorId, ComponentDescription requestorDesc,
+      Object requestor, Class serviceClass, ServiceRevokedListener srl,
+      boolean recordInView) {
+    ServiceResult sr = 
+      getServiceAllowNull(
+          requestorId, requestorDesc,
+          requestor, serviceClass, srl,
+          recordInView);
+    Object service = (sr == null ? null : sr.getService());
     if (service instanceof NullService) {
-      service = null; // blocked
+      // blocked
+      sr =
+        new ServiceResult(
+          sr.getProviderId(),
+          sr.getProviderComponentDescription(),
+          null);
     }
-    return service;
+    return sr;
   }
 
   /**
    * get the service and allow a NullService result, which the
    * usual "getService(..)" replaces with null.
    */ 
-  protected Object getServiceAllowNull(
+  protected ServiceResult getServiceAllowNull(
+      int requestorId, ComponentDescription requestorDesc,
       Object requestor,
       final Class serviceClass,
-      final ServiceRevokedListener srl) {
+      final ServiceRevokedListener srl,
+      boolean recordInView) {
     if (requestor == null) throw new IllegalArgumentException("null requestor");
     if (serviceClass == null) throw new IllegalArgumentException("null serviceClass");
 
     Object service;
+    Entry e;
     ServiceProvider sp;
     synchronized (servicesLock) {
-      sp = (ServiceProvider) services.get(serviceClass);
-      if (sp == null) return null; // bail
+      e = (Entry) services.get(serviceClass);
+      if (e == null) return null; // bail
+      sp = e.getServiceProvider();
     }
+    // ugh, not sure about this "sp" lock!
     synchronized (sp) {
       service = sp.getService(this, requestor, serviceClass);
       if (service != null && !(service instanceof NullService)) {
@@ -209,21 +243,53 @@ public class ServiceBrokerSupport
           });
       }
     }
-    return service;
+    return new ServiceResult(
+        e.getId(),
+        e.getComponentDescription(),
+        service);
   }
 
   public void releaseService(Object requestor, Class serviceClass, Object service) {
+    releaseService(
+        0, null,
+        requestor, serviceClass, service,
+        true);
+  }
+  public void releaseService(
+      int requestorId, ComponentDescription requestorDesc,
+      Object requestor, Class serviceClass, Object service,
+      boolean recordInView) {
     if (requestor == null) throw new IllegalArgumentException("null requestor");
     if (serviceClass == null) throw new IllegalArgumentException("null serviceClass");
 
     ServiceProvider sp;
     synchronized (servicesLock) {
-      sp = (ServiceProvider) services.get(serviceClass);
+      Entry e = (Entry) services.get(serviceClass);
+      sp = (e == null ? null : e.getServiceProvider());
     }
     if (sp != null) {
       synchronized (sp) {
         sp.releaseService(this, requestor, serviceClass, service);
       }
     }
+  }
+
+  private static final class Entry {
+    private final int id;
+    private final ComponentDescription desc;
+    private final ServiceProvider sp;
+    public Entry(
+        int id,
+        ComponentDescription desc,
+        ServiceProvider sp) {
+      this.id = id;
+      this.desc = desc;
+      this.sp = sp;
+    }
+    public int getId() { return id; }
+    public ComponentDescription getComponentDescription() {
+      return desc;
+    }
+    public ServiceProvider getServiceProvider() { return sp; }
   }
 }

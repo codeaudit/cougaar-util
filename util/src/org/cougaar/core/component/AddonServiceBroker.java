@@ -38,7 +38,7 @@ import org.cougaar.util.ChainingIterator;
  **/
 
 public class AddonServiceBroker
-  implements ServiceBroker 
+  implements ExtendedServiceBroker 
 {
   public AddonServiceBroker(ServiceBroker delegate) {
     if (delegate == null) throw new IllegalArgumentException("Delegate must be non-null");
@@ -60,11 +60,35 @@ public class AddonServiceBroker
   }
   
   public final boolean addService(Class serviceClass, ServiceProvider serviceProvider) {
-    return delegate.addService(serviceClass, serviceProvider);
+    return addService(serviceClass, serviceProvider, 0, null);
+  }
+  public final boolean addService(
+      Class serviceClass, ServiceProvider serviceProvider,
+      int providerId, ComponentDescription providerDesc) {
+    if (delegate instanceof ExtendedServiceBroker) {
+      ExtendedServiceBroker esb = (ExtendedServiceBroker) delegate;
+      return esb.addService(
+          serviceClass, serviceProvider,
+          providerId, providerDesc);
+    } else {
+      return delegate.addService(serviceClass, serviceProvider);
+    }
   }
 
   public final void revokeService(Class serviceClass, ServiceProvider serviceProvider) {
     delegate.revokeService(serviceClass, serviceProvider);
+  }
+  public final void revokeService(
+      Class serviceClass, ServiceProvider serviceProvider,
+      int providerId, ComponentDescription providerDesc) {
+    if (delegate instanceof ExtendedServiceBroker) {
+      ExtendedServiceBroker esb = (ExtendedServiceBroker) delegate;
+      esb.revokeService(
+          serviceClass, serviceProvider,
+          providerId, providerDesc);
+    } else {
+      delegate.revokeService(serviceClass, serviceProvider);
+    }
   }
 
   public final boolean hasService(Class serviceClass) {
@@ -77,21 +101,59 @@ public class AddonServiceBroker
   }
 
   public final Object getService(Object requestor, final Class serviceClass, final ServiceRevokedListener srl) {
+    ServiceResult sr = getService(
+        0, null, requestor, serviceClass, srl, true);
+    return (sr == null ? null : sr.getService());
+  }
+  public final ServiceResult getService(
+      int requestorId, ComponentDescription requestorDesc,
+      Object requestor, Class serviceClass, ServiceRevokedListener srl,
+      boolean recordInView) {
     Object s = getLocalService(requestor, serviceClass, srl);
     if (s != null) {
       if (s instanceof NullService) {
         s = null;
       }
-      return s;
+    } else if (delegate instanceof ExtendedServiceBroker) {
+      ExtendedServiceBroker esb = (ExtendedServiceBroker) delegate;
+      ServiceResult sr = esb.getService(
+          requestorId, requestorDesc,
+          requestor, serviceClass, srl,
+          recordInView);
+      if (sr != null) {
+        if (sr.getService() instanceof NullService) {
+          sr = new ServiceResult(
+              sr.getProviderId(),
+              sr.getProviderComponentDescription(),
+              null);
+        }
+        return sr;
+      }
+      s = null;
     } else {
-      return delegate.getService(requestor, serviceClass, srl);
+      s = delegate.getService(requestor, serviceClass, srl);
     }
+    return (s == null ? null : new ServiceResult(0, null, s));
   }
 
   public final void releaseService(Object requestor, Class serviceClass, Object service) {
+    releaseService(0, null, requestor, serviceClass, service, true);
+  }
+  public final void releaseService(
+      int requestorId, ComponentDescription requestorDesc,
+      Object requestor, Class serviceClass, Object service,
+      boolean recordInView) {
     boolean wasReleased = releaseLocalService(requestor, serviceClass, service);
     if (!wasReleased) {
-      delegate.releaseService(requestor, serviceClass, service);
+      if (delegate instanceof ExtendedServiceBroker) {
+        ExtendedServiceBroker esb = (ExtendedServiceBroker) delegate;
+        esb.releaseService(
+            requestorId, requestorDesc,
+            requestor, serviceClass, service,
+            recordInView);
+      } else {
+        delegate.releaseService(requestor, serviceClass, service);
+      }
     }
   }
 

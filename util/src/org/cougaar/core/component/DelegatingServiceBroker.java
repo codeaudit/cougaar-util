@@ -35,7 +35,7 @@ import java.util.Iterator;
  **/
 
 public class DelegatingServiceBroker
-  implements ServiceBroker 
+  implements ExtendedServiceBroker 
 {
   public DelegatingServiceBroker(ServiceBroker delegate) {
     if (delegate == null) {
@@ -101,12 +101,36 @@ public class DelegatingServiceBroker
   
   /** add a Service to this ServiceBroker Context **/
   public boolean addService(Class serviceClass, ServiceProvider serviceProvider) {
-    return delegate.addService(serviceClass, serviceProvider);
+    return addService(serviceClass, serviceProvider, 0, null);
+  }
+  public boolean addService(
+      Class serviceClass, ServiceProvider serviceProvider,
+      int providerId, ComponentDescription providerDesc) {
+    if (delegate instanceof ExtendedServiceBroker) {
+      ExtendedServiceBroker esb = (ExtendedServiceBroker) delegate;
+      return esb.addService(
+          serviceClass, serviceProvider,
+          providerId, providerDesc);
+    } else {
+      return delegate.addService(serviceClass, serviceProvider);
+    }
   }
 
   /** remoke or remove an existing service **/
   public void revokeService(Class serviceClass, ServiceProvider serviceProvider) {
-    delegate.revokeService(serviceClass, serviceProvider);
+    revokeService(serviceClass, serviceProvider, 0, null);
+  }
+  public void revokeService(
+      Class serviceClass, ServiceProvider serviceProvider,
+      int providerId, ComponentDescription providerDesc) {
+    if (delegate instanceof ExtendedServiceBroker) {
+      ExtendedServiceBroker esb = (ExtendedServiceBroker) delegate;
+      esb.revokeService(
+          serviceClass, serviceProvider,
+          providerId, providerDesc);
+    } else {
+      delegate.revokeService(serviceClass, serviceProvider);
+    }
   }
 
   /** is the service currently available? **/
@@ -128,7 +152,42 @@ public class DelegatingServiceBroker
     return delegate.getService(requestor, serviceClass, srl);
   }
 
+  public ServiceResult getService(
+      int requestorId, ComponentDescription requestorDesc,
+      Object requestor, Class serviceClass, ServiceRevokedListener srl,
+      boolean recordInView) {
+    if (delegate instanceof ExtendedServiceBroker) {
+      ExtendedServiceBroker esb = (ExtendedServiceBroker) delegate;
+      return esb.getService(
+          requestorId, requestorDesc,
+          requestor, serviceClass, srl,
+          recordInView);
+    } else {
+      Object service =
+        delegate.getService(requestor, serviceClass, srl);
+      return 
+        (service == null ?
+         (null) : 
+         new ServiceResult(0, null, service));
+    }
+  }
+
   public void releaseService(Object requestor, Class serviceClass, Object service) {
     delegate.releaseService(requestor, serviceClass, service);
+  }
+
+  public void releaseService(
+      int requestorId, ComponentDescription requestorDesc,
+      Object requestor, Class serviceClass, Object service,
+      boolean recordInView) {
+    if (delegate instanceof ExtendedServiceBroker) {
+      ExtendedServiceBroker esb = (ExtendedServiceBroker) delegate;
+      esb.releaseService(
+          requestorId, requestorDesc,
+          requestor, serviceClass, service,
+          recordInView);
+    } else {
+      delegate.releaseService(requestor, serviceClass, service);
+    }
   }
 }

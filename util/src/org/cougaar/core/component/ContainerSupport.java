@@ -30,6 +30,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.beans.beancontext.*; /*make @see reference work*/
 
 import org.cougaar.util.GenericStateModel;
@@ -42,12 +43,48 @@ import org.cougaar.util.UnaryPredicate;
 import org.cougaar.util.log.Logger;
 import org.cougaar.util.log.Logging;
 
-/** A basic implementation of a Container.
- **/
+/**
+ * The standard implementation of a Container.
+ * <p>
+ * Although this implementation defines many protected methods,
+ * it is long overdue for a major refactor, so developers should avoid
+ * complex subclassing to allow for future ContainerSupport cleanup.
+ * A simple ContainerSupport subclass, such as this example in
+ * core:<br>
+ * <code>org.cougaar.core.wp.resolver.ResolverContainer</code><br>
+ * will only define the two required abstract methods and allow
+ * child components to advertise any necessary services.
+ * <p>
+ * Future refactor ideas include:<ul>
+ *   <li>Obvious overall code cleanup into smaller classes and
+ *       cleaner code.</li>
+ *   <li>Remove last remnants of component proprity (HIGH/BINDER/etc),
+ *       since the core no longer uses it (bug 2522).</li>
+ *   <li>Replace "*.Binder" and ".BinderFactory" insertion point
+ *       extension and "attachBinderFactory" with a new
+ *       "BinderFactoryService" advertised by this container,
+ *       and fix BinderFactories/Binders to use the new service.</li>
+ *   <li>Make a clearer distinction between binders that instantiate
+ *       components v.s. binders that monitor service access.
+ *       Create a new ComponentFactoryService for the former.</li>
+ *   <li>Extract state model actions (load/start/etc) to a
+ *       binder or StateModelService, to make it easier for binders
+ *       to intercept these calls and allow custom state model
+ *       implementations (e.g. better threading, new states,
+ *       etc).</li>
+ *   <li>With the above changes, limit Binders to ServiceBroker
+ *       interactions and remove "ContainerProxy" and literal
+ *       binder chaining -- to support service-focused binders,
+ *       all we need to do is intercept ServiceBroker calls!</li>
+ *   <li>Plenty more to do..</li>
+ * </ul> 
+ */
 public abstract class ContainerSupport
 extends GenericStateModelAdapter
 implements Container, StateObject
 {
+  private static final boolean ENABLE_VIEW_SERVICE = true;
+
   protected final ComponentFactory componentFactory = specifyComponentFactory();
   /** this is the prefix that all subcomponents must have as a prefix **/
   protected final String containmentPrefix = specifyContainmentPoint()+".";
@@ -156,8 +193,28 @@ implements Container, StateObject
     childServiceBroker = sb;
   }
 
+  /**
+   * For subclass use, get the service broker shared by the child
+   * components, which the container subclass can use to directly
+   * add services.
+   * <p>
+   * Subclassing container is messy, and there are only a few
+   * examples in Cougaar where it is done, and even those should
+   * probably be refactored away.
+   * <p> 
+   * Here we return a throw-away ViewedServiceBroker to intercept
+   * "addService" calls, otherwise the ViewService for the service
+   * clients will lack the provider "id" and component description.
+   */ 
   protected ServiceBroker getChildServiceBroker() {
-    return childServiceBroker;
+    ServiceBroker csb = childServiceBroker;
+    if (!ENABLE_VIEW_SERVICE) {
+      return csb;
+    }
+    ComponentView cv = getContainerView();
+    final int id = cv.getId();
+    final ComponentDescription cd = cv.getComponentDescription();
+    return new ViewedServiceBroker(csb, id, cd, null, null);
   }
 
   /** Return (or construct) a serviceBroker instance for 
@@ -168,8 +225,75 @@ implements Container, StateObject
    * as a simpler option than adding an additional high-priority wrapping binder.
    * See also getChildContainerProxy.
    **/
-  protected ServiceBroker getChildServiceBroker(Object child) {
-    return getChildServiceBroker();
+  protected ServiceBroker getChildServiceBroker(
+      Binder b, Object child) {
+    ServiceBroker csb = childServiceBroker;
+    if (!ENABLE_VIEW_SERVICE) {
+      return csb;
+    }
+    int id = ViewedServiceBroker.nextId();
+    ComponentDescription cd = 
+      (child instanceof ComponentDescription ? 
+       ((ComponentDescription) child) :
+       null);
+    ContainerView parentView = getContainerView();
+    return new ViewedServiceBroker(csb, id, cd, parentView, b);
+  }
+
+  // package-private for ContainerBinderSupport access
+  List getChildViews() {
+    if (!ENABLE_VIEW_SERVICE) {
+      return Collections.EMPTY_LIST;
+    }
+    int nbf = binderFactoryDescriptions.size();
+    List ret = new ArrayList(nbf + boundComponents.size());
+    // ugly hack for binders, since they're not created like
+    // normal components, but at least we know the compDesc.
+    // See above RFE for BinderFactoryService!
+    for (int i = 0; i < nbf; i++) {
+      Object o = binderFactoryDescriptions.get(i);
+      if (o instanceof ComponentDescription) {
+        final ComponentDescription cd = (ComponentDescription) o;
+        // better to have a throw-away id that none at all?
+        final int id = ViewedServiceBroker.nextId();
+        ComponentView cv = new ComponentView() {
+          public int getId() {return id;}
+          public long getTimestamp() {return 0;}
+          public ComponentDescription getComponentDescription() {
+            return cd;
+          }
+          public ContainerView getParentView() {return null;}
+          public Map getAdvertisedServices() {return null;}
+          public Map getObtainedServices() {return null;}
+        };
+        ret.add(cv);
+      }
+    }
+    for (Iterator it = boundComponents.iterator(); it.hasNext(); ) {
+      BoundComponent bc = (BoundComponent) it.next();
+      ret.add(bc.getComponentView());
+    }
+    return Collections.unmodifiableList(ret);
+  }
+
+  private boolean gotContainerView; 
+  private ContainerView containerView; 
+  private ContainerView getContainerView() {
+    if (!ENABLE_VIEW_SERVICE) {
+      return null;
+    }
+    if (!gotContainerView) {
+      ViewService vs = (ViewService)
+        serviceBroker.getService(this, ViewService.class, null);
+      if (vs != null) {
+        ComponentView pv = vs.getComponentView();
+        if (pv instanceof ContainerView) {
+          containerView = (ContainerView) pv;
+        }
+      }
+      gotContainerView = true;
+    }
+    return containerView;
   }
 
   protected BinderFactory createBinderFactory() {
@@ -544,12 +668,17 @@ implements Container, StateObject
     if (b == null) {
       throw new ComponentLoadFailure("No binder found", c);
     }
-    BindingUtility.setBindingSite(b, getChildContainerProxy(c));
-    BindingUtility.setServices(b, getChildServiceBroker(c));
+    ServiceBroker sb = getChildServiceBroker(b, c);
+    BindingUtility.setBindingSite(b, getChildContainerProxy(c, sb));
+    BindingUtility.setServices(b, sb);
     if (cstate != null) {
       b.setState(cstate);
     }
-    BoundComponent bc = new BoundComponent(b, c);
+    ComponentView cv = 
+      (ENABLE_VIEW_SERVICE && (sb instanceof ViewedServiceBroker) ?
+       ((ViewedServiceBroker) sb).getComponentView() :
+       null);
+    BoundComponent bc = new BoundComponent(b, c, cv);
     boundComponents.add(bc);
 
     // transition state to match our container's state
@@ -646,19 +775,10 @@ implements Container, StateObject
       binderFactories.add(c);
       Collections.sort(binderFactories, BinderFactory.comparator);
     }
+    // FIXME this should be a ViewedServiceBroker!
+    ServiceBroker sb = childServiceBroker;
     return BindingUtility.activate(
-        c, getChildContainerProxy(c), getChildServiceBroker());
-  }
-
-  /** Specifies an object to use as the "parent" proxy object
-   * for otherwise unbound BinderFactory instances.
-   * This will be either be the Container itself (this) or a
-   * simple proxy for the container so that BinderFactory instances
-   * cannot downcast the object to get additional privileges.
-   * @note Most uses should use/override getChildContainerProxy instead.
-   **/
-  protected ContainerAPI getContainerProxy() {
-    return new DefaultProxy();
+        c, getChildContainerProxy(c, sb), sb);
   }
 
   /** Specifies an object to use as the "parent" proxy object
@@ -667,8 +787,9 @@ implements Container, StateObject
    * simple proxy for the container so that BinderFactory instances
    * cannot downcast the object to get additional privileges.
    **/
-  protected ContainerAPI getChildContainerProxy(Object o) {
-    return getContainerProxy();
+  protected ContainerAPI getChildContainerProxy(
+      Object o, ServiceBroker sb) {
+    return new DefaultProxy(sb);
   }
 
   /** Matching setter for getExternalComponentDescriptions **/
@@ -957,8 +1078,12 @@ implements Container, StateObject
 
   private class DefaultProxy
     implements ContainerAPI {
+      private final ServiceBroker sb;
+      public DefaultProxy(ServiceBroker sb) {
+        this.sb = sb;
+      }
       public ServiceBroker getServiceBroker() {
-        return ContainerSupport.this.getChildServiceBroker();
+        return sb;
       }
       public boolean remove(Object childComponent) {
         return ContainerSupport.this.remove(childComponent);

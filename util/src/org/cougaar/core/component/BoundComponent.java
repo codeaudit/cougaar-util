@@ -33,12 +33,15 @@ class BoundComponent
 {
   private final Binder b;
   private final Object c;
+  private final ComponentView cv;
 
-  public BoundComponent(Binder b, Object c) {
+  public BoundComponent(Binder b, Object c, ComponentView cv) {
     this.b = b;
     this.c = c;
+    this.cv = cv;
   }
 
   public final Binder getBinder() { return b; }
   public final Object getComponent() { return c; }
+  public final ComponentView getComponentView() { return cv; }
 }
