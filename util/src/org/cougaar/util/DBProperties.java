@@ -352,8 +352,8 @@ public abstract class DBProperties extends java.util.Properties {
    **/
   public void load(InputStream i) throws IOException {
     super.load(i);
-    for (Enumeration enum = propertyNames(); enum.hasMoreElements(); ) {
-      String name = (String) enum.nextElement();
+    for (Enumeration e = propertyNames(); e.hasMoreElements(); ) {
+      String name = (String) e.nextElement();
       String rawValue = getProperty(name);
       String cookedValue = Parameters.replaceParameters(rawValue, this);
       setProperty(name, cookedValue);

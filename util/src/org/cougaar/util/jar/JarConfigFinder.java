@@ -551,9 +551,9 @@ public class JarConfigFinder
       return null;
     }
     JarFile jarFile = entry.getJarFile();
-    Enumeration enum = jarFile.entries();
-    while (enum.hasMoreElements()) {
-      JarEntry jarEntry = (JarEntry) enum.nextElement();
+    Enumeration e = jarFile.entries();
+    while (e.hasMoreElements()) {
+      JarEntry jarEntry = (JarEntry) e.nextElement();
       if (jarEntry.isDirectory()) {
 	continue;
       }
@@ -569,8 +569,8 @@ public class JarConfigFinder
 	  theURL = aURL;
 	}
       }
-      catch (Exception e) {
-	getLogger().warn("Unexpected exception: ", e);
+      catch (Exception ex) {
+	getLogger().warn("Unexpected exception: ", ex);
       }
     }
     entry.setJarFileProcessed(true);

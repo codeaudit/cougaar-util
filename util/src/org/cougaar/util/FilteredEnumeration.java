@@ -35,8 +35,8 @@ public class FilteredEnumeration implements Enumeration {
   private Enumeration base;
   private Object next = null;
 
-  public FilteredEnumeration(Enumeration enum, UnaryPredicate pred) {
-    base = enum;
+  public FilteredEnumeration(Enumeration e, UnaryPredicate pred) {
+    base = e;
     predicate = pred;
   }
 
