@@ -18,7 +18,7 @@ unless they contain org/cougaar/domain as a package structure in src.
 
 scalability: module-repackage.bat mycougaarcvs/scalability mynewcougaar/scalability
 *** note a hand edit is neccessary to compile...
-in org/cougaar/tools/scalability/scalability/scalability/assets.def
+in org/cougaar/tools/scalability/scalability/scalability/scalabilityassets.def
 remove domain in the following line:
 propertydefs = scalabilityprops.def, org/cougaar/domain/planning/ldm/asset/properties.def
 
