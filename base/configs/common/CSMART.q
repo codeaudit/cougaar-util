@@ -221,3 +221,9 @@ queryCMTAssembly = \
 	WHERE A.EXPT_ID = ':expt_id:' \
 	AND A.TRIAL_ID = B.TRIAL_ID \
 	AND ASSEMBLY_ID LIKE 'CMT%'
+
+queryAgentAssetData = \
+        SELECT '1' \
+        FROM V4_ASB_AGENT \
+        WHERE ASSEMBLY_ID = ':assembly_id' \
+        AND COMPONENT_ALIB_ID = ':agent:'
