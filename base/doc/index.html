@@ -70,6 +70,20 @@ that were detected/posted after this Cougaar version was released.
   pieces of functionality.
 <p>
 <ul>
+<li>Updated Jena to version 2.0 and Xerces to 2.6.0: <ul>
+  <li>The new Jena jar required an update to icu4j.jar, and the addition
+of antlr.jar, jakarta-oro-2.0.5, and rdf-api-2001-01-19</li>
+  <li>The updated Xerces changed names to xercesImpl and xml-apis.jar
+(split implementation from APIs).</li>
+  <li>Servicediscovery code was changed to support the new
+  Jena. Additionally, we use the built-in Jena file-caching. We still
+  list the cached files in proxyTable.txt, but this is not just
+  documentation. We no longer use custom caching. Additionally,
+  Time.daml was added to the set of cached files.</li>
+  <li>Jena2 now uses log4j. To turn down Jena WARNings, in particular
+  from the RDFDefaultErrorHandler, specify the log4j property
+  "log4j.category.com.hp.hpl.jena=ERROR".</li>
+</ul></li>
 <li>GLS tasks may no longer be rescinded. For each Oplan stage, the
 GLSInitServlet now sends a new GLS task with the additional oplan
 stage - leaving the old tasks behind. It is generally bad usage to
