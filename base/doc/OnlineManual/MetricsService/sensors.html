@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>Metric Sensors Design</title>
+</head>
+
+<body>
+<h1>Metrics Sensors Design</h1>
+<p>
+The Metrics Package has helper classes for collecting raw sensor
+values, converting them into metrics, adding them into the path
+model, and displaying them in a servlet.
+
+<h3> Metrics Producers </h3>
+<h4>Sensor </h4>
+ <p> Gauge
+ <p> Counter
+ <p> Integrator
+<p>
+ <p> Snapshot
+ <p> sensor service
+
+<h4>Rate Conversion </h4>
+ <p> Decaying History
+  <p>Record Processing
+  <p>Key generation
+
+<h3> Metrics Service </h3>
+
+<h4>Metrics Service Models</h4>
+  <p>Resource Context
+  <p>Formula
+  <p>IntegatorDS
+
+<h4>Constants</h4>
+  <p>Metrics Name
+  <p>Averaging intervals
+
+<h3> Metrics Consumers </h3>
+ <h4>Sensor Servlet</h4>
+
+<h4> Metrics Servlet</h4>
+ <p>query
+ <p> Value
+ <p> Credibility
+ <p>threshold
+
+ <h4>QoS Adaptation Components</h4>
+  <p> subscription
+   <p>call back
+   <p>metrics qualifier
+
+<p>
+<table>
+  <caption align=bottom><i>Sensor Dataflow </i></caption>
+  <tr><td>
+      <img src="gifs/SensorDataflow.gif">
+  </td></tr>
+</table>
+
+<h2>Processing Trace </h2>
+
+<p> The following example trace shows how Sensor instrumentation in a
+Cougaar component is converted into a rate-Metric, published in the Metric
+Service, integrated into the Society Model and displayed by a Servlet.
+
+<ol>
+  <li>
+</ol>
+<hr>
+<address></address>
+<!-- hhmts start -->
+Last modified: Wed Nov  3 10:11:18 EST 2004
+<!-- hhmts end -->
+</body> </html>
