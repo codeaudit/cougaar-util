@@ -3,20 +3,17 @@ Username = ${org.cougaar.database.user}
 Password = ${org.cougaar.database.password} 
 # First, get the personnel and generate an aggregate asset
 %SQLAggregateAssetCreator
-query = select 'Personnel' NSN, personnel QTY_OH, 'MilitaryPersonnel' NOMENCLATURE \
-	from ue_summary_mtmc \
-    	where uic = :uic
+query = select 'Personnel' AS NSN, personnel AS QTY_OH, 'MilitaryPersonnel' AS \
+	NOMENCLATURE from ue_summary_mtmc where uic = :uic
 
 # Then, get the containers and generate an aggregate asset
 %SQLAggregateAssetCreator
-query = select '8115001682275' NSN, container_20_ft_qty QTY_OH, 'Container' NOMENCLATURE \
-	from ue_summary_mtmc \
-	where uic = :uic
-
+query = select '8115001682275' AS NSN, container_20_ft_qty AS QTY_OH, 'Container' AS \
+	NOMENCLATURE from ue_summary_mtmc where uic = :uic
 
 # Now, get the assets from jtav
 %SQLAssetCreator
-query.oracle = select NSN, SUM(QTY_OH), NOMENCLATURE from jtav_equipment \
+query = select NSN, SUM(QTY_OH) AS "SUM(QTY_OH)", NOMENCLATURE from jtav_equipment \
 where  UIC4 = substr(:uic, 1, 4) and \
   NSN in ('1025010266648', \
           '1055011920357', \
@@ -107,3 +104,6 @@ where  UIC4 = substring(:uic, 1, 4) and \
           '2350014059886', \
           '3990013077676') \
 	group by NSN, NOMENCLATURE
+
+
+

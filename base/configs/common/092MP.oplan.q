@@ -10,13 +10,14 @@ AlpLocQuery = select alploc_code, location_name, latitude, longitude from alploc
 # get GeoLoc info
 %GeoLocQueryHandler
 GeoLocQuery.oracle = select geoloc_code, location_name, installation_type_code, civil_aviation_code, latitude, longitude, country_state_code, country_state_long_name  from geoloc where geoloc_code in (select relates_to from drop_relationship where relation_name = 'LOCATION')
+
 GeoLocQuery.mysql = select distinct g.geoloc_code, g.location_name, g.installation_type_code, g.civil_aviation_code, g.latitude, g.longitude, g.country_state_code, g.country_state_long_name from geoloc g, drop_relationship dr where g.geoloc_code = dr.relates_to and dr.relation_name = 'LOCATION'
 
+GeoLocQuery.postgresql = select distinct g.geoloc_code, g.location_name, g.installation_type_code, g.civil_aviation_code, g.latitude, g.longitude, g.country_state_code, g.country_state_long_name from geoloc g, drop_relationship dr where g.geoloc_code = dr.relates_to\:\:char(4) and dr.relation_name = 'LOCATION'
 
 # get Oplan info
 %OplanQueryHandler
 OplanInfoQuery = select operation_name, priority, c0_date from oplan where oplan_id = ':oplanid'
-
 
 #get OrgActivities
 %OrgActivityQueryHandler

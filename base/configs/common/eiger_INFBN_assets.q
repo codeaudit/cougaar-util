@@ -12,20 +12,18 @@ pacing = '2350014059886'
 
 # Next, get the MOS levels and generate an aggregate asset
 %SQLAggregateAssetCreator
-query = select CAPABILITY MOS_LEVEL, PERSONNEL MOS_QTY, 'Dummy Nomenclature' \
-	from ORG_MOS \
-	where UIC = :uic
+query = select CAPABILITY AS MOS_LEVEL, PERSONNEL AS MOS_QTY, 'Dummy Nomenclature' AS \
+	"Dummy Nomenclature" from ORG_MOS where UIC = :uic
 
 # Then, get the containers and generate an aggregate asset
 %SQLAggregateAssetCreator
-query = select '8115001682275' NSN, container_20_ft_qty QTY_OH, 'Container' NOMENCLATURE \
+query = select '8115001682275' AS NSN, container_20_ft_qty AS QTY_OH, 'Container' AS NOMENCLATURE \
 	from ue_summary_mtmc \
 	where uic = :uic
 
-
 # Now, get 'eaches' for all 'pacing' assets from JTAV
 %SQLAssetCreator
-query.oracle = select NSN, SUM(QTY_OH), NOMENCLATURE from jtav_equipment \
+query = select NSN, SUM(QTY_OH) AS "SUM(QTY_OH)", NOMENCLATURE from jtav_equipment \
 where  UIC4 = substr(:uic, 1, 4) and \
   NSN in (:pacing) \
   group by NSN, NOMENCLATURE
@@ -37,7 +35,7 @@ where  UIC4 = substring(:uic, 1, 4) and \
 
 # Now, get all 'non-pacing' assets as aggregates from JTAV
 %SQLAggregateAssetCreator
-query.oracle = select NSN, SUM(QTY_OH), NOMENCLATURE from jtav_equipment \
+query  = select NSN, SUM(QTY_OH)AS "SUM(QTY_OH)", NOMENCLATURE from jtav_equipment \
 where  UIC4 = substr(:uic, 1, 4) and \
   NSN not in (:pacing) and \
   NSN in ('1025010266648', \
@@ -130,4 +128,5 @@ where  UIC4 = substring(:uic, 1, 4) and \
           '2350014059886', \
           '3990013077676') \
 	group by NSN, NOMENCLATURE
+
 
