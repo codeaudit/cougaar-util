@@ -1,0 +1,71 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.77 [en] (Windows NT 5.0; U) [Netscape]">
+   <title>Example Metrics Query Client</title>
+</head>
+<body>
+/*
+<br>&nbsp;* Stand alone java client that opens up a URL connection, reads
+an object stream and
+<br>&nbsp;* outputs the result (will be a java ArrayList of 'Path|Metric's
+)
+<br>&nbsp;* Usage: java -cp . ExampleMetricQueryClient "http://localhost:8800/\$3-69-ARBN/metrics/query?format=java&amp;paths=Agent(3-69-ARBN):SpokeTime|IpFlow(blatz,stout):CapacityMax"
+<br>&nbsp;* Must specify 'format=java' as the default is a string of xml
+printed out to browser
+<br>&nbsp;*/
+<br>package org.cougaar.core.examples.metrics;
+<p>import java.net.URL;
+<br>import java.io.IOException;
+<br>import java.io.InputStream;
+<br>import java.io.ObjectInputStream;
+<br>import java.io.ByteArrayInputStream;
+<br>import java.util.HashMap;
+<br>import java.util.Iterator;
+<br>import java.util.Map;
+<p>// This example requires quoSumo.jar, qos.jar and core.jar
+<br>public class ExampleMetricQueryClient
+<br>{
+<br>&nbsp; // One arg here - the query string "http://host..." see usage
+above
+<br>&nbsp; public static void main( String args[] ) throws IOException
+<br>&nbsp; {
+<br>&nbsp;&nbsp;&nbsp; String url = null;
+<br>&nbsp;&nbsp;&nbsp; try {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; url=args[0];
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; URL servlet_url = new URL(url);
+<br>&nbsp;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // open up input stream and read object
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; try {
+<br>&nbsp;// open url connection from string url
+<br>&nbsp;InputStream in = servlet_url.openStream();
+<br>&nbsp;ObjectInputStream ois = new ObjectInputStream(in);
+<br>&nbsp;
+<br>&nbsp;// read in java object - this a java client only
+<br>&nbsp;HashMap propertylist = (HashMap)ois.readObject();
+<br>&nbsp;ois.close();
+<p>&nbsp;if (propertylist == null) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp; System.out.println("Null Property List returned");
+<br>&nbsp;&nbsp;&nbsp;&nbsp; return;
+<br>&nbsp;}
+<br>&nbsp;// can do anything with it here, we just print it out for now
+<br>&nbsp;Iterator itr = propertylist.entrySet().iterator();
+<br>&nbsp;while (itr.hasNext()) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp; Map.Entry entry = (Map.Entry) itr.next();
+<br>&nbsp;&nbsp;&nbsp;&nbsp; System.out.println(entry.getKey() +"->"+ entry.getValue());
+<br>&nbsp;}
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } catch (Exception e) {
+<br>&nbsp;System.out.println("Error reading input stream for url " + url
++ " Make sure the stream is open. " + e);
+<br>&nbsp;e.printStackTrace();
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+<br>&nbsp;&nbsp;&nbsp; } catch(Exception e){
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; System.out.println("Unable to acquire
+URL, Exception: " + e);
+<br>&nbsp;&nbsp;&nbsp; }
+<br>&nbsp; }
+<br>}
+<br>&nbsp;
+</body>
+</html>
