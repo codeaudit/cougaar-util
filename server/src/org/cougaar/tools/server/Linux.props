@@ -1,4 +1,0 @@
-# Linux-specific COUGAAR property file
-
-# use green threads under linux
-#java.jvm.green=true
