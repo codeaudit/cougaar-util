@@ -110,7 +110,7 @@ class LoggerImpl extends LoggerAdapter
   // Must be called in a synchronized(dotsLock)
   private static void dumpDots() {
     if (ndots > 0) {
-      System.err.println();
+      System.out.println();
       ndots = 0;
     }
   }
