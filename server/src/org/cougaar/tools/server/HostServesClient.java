@@ -70,8 +70,10 @@ public interface HostServesClient {
   /**
    * Create a new process with the given description.
    * <p>
-   * The "NodeEventListener" is a callback for the
-   * caller to handle "NodeEvent"s, such as standard-out.
+   * The "URL" is used to write NodeEvents back to a listener socket at the 
+   * specified host and port. Listener should expect output in the following
+   * sequence - Header (use NodeEventURLListener to parse), NodeEvent(s), null.
+   * <p>
    * The "NodeEventFilter" configures the filtering and
    * buffering policy for sending the NodeEvents.
    * <p>
