@@ -36,24 +36,21 @@
 #  -Dorg.cougaar.system.path=$COUGAAR3RDPARTY
 #  $COUGAAR_INSTALL_PATH/sys/*
 #
-
-# set COUGAAR_INSTALL_PATH=/alpine/demo98
 if (! $?COUGAAR3RDPARTY) then
     setenv COUGAAR3RDPARTY /opt/cougaar-jars
 endif
 
 set LIBPATHS=$COUGAAR_INSTALL_PATH/lib/bootstrap.jar
-set devp = ""
+set devp=""
 if ($?COUGAAR_DEV_PATH) then
-    set devp "-Dorg.cougaar.class.path=${COUGAAR_DEV_PATH}"
+    set devp="-Dorg.cougaar.class.path=${COUGAAR_DEV_PATH}"
 endif
 
 # domains are now usually defined by the config file LDMDomains.ini.
 # But you may still use properties if you wish.
 #set MYDOMAINS="-Dorg.cougaar.domain.alp=org.cougaar.glm.GLMDomain"
 set MYDOMAINS=""
-set MYPROPERTIES="$MYDOMAINS  -Dorg.cougaar.system.path=$COUGAAR3RDPARTY -Dorg.cougaar.install.path=$COUGAAR_INSTALL_PATH -Duser.timezone=GMT"
-
+set MYPROPERTIES="$MYDOMAINS -Dorg.cougaar.system.path=$COUGAAR3RDPARTY -Dorg.cougaar.install.path=$COUGAAR_INSTALL_PATH -Duser.timezone=GMT -Dorg.cougaar.core.agent.startTime=08/10/2005 -Dorg.cougaar.planning.ldm.lps.ComplainingLP.level=0"
 set MYMEMORY=""
 
 set node = $argv[1]
@@ -75,15 +72,15 @@ else
     # -Xmaxe4m        # max heap expansion increment
     # -Xmine1m	      # min heap expansion increment
     # -Xoss400k       # per-thread *java* stack size
-    set MYMEMORY="-Xmx768m -Xms64m -Xmaxf0.9 -Xminf0.1 -Xmaxe16m -Xoss128k"
+    set MYMEMORY="-Xmx768m -Xms64m -Xmaxf0.9 -Xminf0.1 -Xoss128k"
     #set MYMEMORY="-Xmx300m -Xms100m"
 endif
 
 set osargs=""
 set os=`uname`
 if ("$os" == "Linux") then
-    # only run with green threads, since SMP is still rare
-    set osargs="-green"
+    # No green threads in jdk 1.3.1
+    # set osargs="-green"
     # set some system runtime limits
     limit stacksize 16m    #up from 8m
     limit coredumpsize 0   #down from 1g
@@ -91,13 +88,7 @@ if ("$os" == "Linux") then
     #setenv JAVA_COMPILER javacomp
 endif
 
-if ( ! $?JDK_INSTALL_PATH ) then
-  echo "JDK_INSTALL_PATH must be set to directory where the JDK is installed"
-  exit;
-endif
-
-set javaargs="$osargs $devp -Dorg.cougaar.core.persistence.enable=true -Xbootclasspath/p:$COUGAAR_INSTALL_PATH/lib/javaiopatch.jar $MYPROPERTIES $MYMEMORY -classpath $LIBPATHS"
-
+set javaargs="$osargs $devp -Dorg.cougaar.core.persistence.enable=true -Xbootclasspath/p:$COUGAAR_INSTALL_PATH/lib/javaiopatch.jar $MYPROPERTIES $MYMEMORY -classpath $LIBPATHS org.cougaar.bootstrap.Bootstrapper org.cougaar.core.node.Node"
 
 if ($?COUGAAR_DEV_PATH) then
     echo java $javaargs org.cougaar.core.node.Node $args
