@@ -28,6 +28,10 @@ import org.cougaar.util.*;
 /**
  * A utility class for manipulating sets of ComponentDescription
  * objects.
+ * <p>
+ * Contains both ComponentDescriptions and StateTuples.  StateTuples
+ * are simply ComponentDescription wrappers with an addition 
+ * "Object state".  These two concepts may be merged in the future...
  **/
 public class ComponentDescriptions {
   /** Storage for the ComponentDescriptions.
@@ -57,7 +61,7 @@ public class ComponentDescriptions {
    * @return the (now sorted) original list object.
    **/
   public static List sort(List cds) {
-    Collections.sort(cds, ComponentDescription.PRIORITY_Comparator);
+    Collections.sort(cds, STATE_TUPLE_PRIORITY_Comparator);
     return cds;
   }
 
@@ -75,12 +79,16 @@ public class ComponentDescriptions {
 
     List l = new ArrayList();
     for (Iterator it = cds.iterator(); it.hasNext(); ) {
-      ComponentDescription cd = (ComponentDescription) it.next();
+      Object o = it.next();
+      ComponentDescription cd =
+        ((o instanceof StateTuple) ?
+         (((StateTuple) o).getComponentDescription()) :
+         ((ComponentDescription) o));
       String ip = cd.getInsertionPoint();
       if (ip.startsWith(prefix) &&  	// is prefix a prefix and
           ip.indexOf(".", prefixl+1) == -1   // there are no more '.'s?
           ) {
-        l.add(cd);
+        l.add(o);
       } else {
         //System.err.println("Rejecting "+cd);
       }
@@ -95,10 +103,14 @@ public class ComponentDescriptions {
   public List extractInsertionPointComponent(String dip) {
     List l = new ArrayList();
     for (Iterator it = cds.iterator(); it.hasNext(); ) {
-      ComponentDescription cd = (ComponentDescription) it.next();
+      Object o = it.next();
+      ComponentDescription cd =
+        ((o instanceof StateTuple) ?
+         (((StateTuple) o).getComponentDescription()) :
+         ((ComponentDescription) o));
       String ip = cd.getInsertionPoint();
       if (dip.equals(ip)) {
-        l.add(cd);
+        l.add(o);
       }
     }
     sort(l);
@@ -110,13 +122,35 @@ public class ComponentDescriptions {
   public List selectComponentDescriptions(int priority) {
     List l = new ArrayList();
     for (Iterator it = cds.iterator(); it.hasNext(); ) {
-      ComponentDescription cd = (ComponentDescription) it.next();
+      Object o = it.next();
+      ComponentDescription cd =
+        ((o instanceof StateTuple) ?
+         (((StateTuple) o).getComponentDescription()) :
+         ((ComponentDescription) o));
       String ip = cd.getInsertionPoint();
       if (priority == cd.getPriority()) {
-        l.add(cd);
+        l.add(o);
       }
     }
     return l;
   }
+
+  /** 
+   * A comparator which may be used for sorting a mixed set of
+   * StateTuples and ComponentDescriptions by priority 
+   */
+  public final static Comparator STATE_TUPLE_PRIORITY_Comparator = new Comparator() {
+    public final int compare(Object a, Object b) {
+      ComponentDescription acd =
+        ((a instanceof StateTuple) ?
+         (((StateTuple) a).getComponentDescription()) :
+         ((ComponentDescription) a));
+      ComponentDescription bcd =
+        ((b instanceof StateTuple) ?
+         (((StateTuple) b).getComponentDescription()) :
+         ((ComponentDescription) b));
+      return acd.getPriority() - bcd.getPriority();
+    }
+  };
 }
 

@@ -594,12 +594,18 @@ public abstract class ContainerSupport
    * of the ContainmentPoint.  The basic component model only calls
    * this method during the default load() methods - e.g. only
    * to load components specified by getExternalComponentDescriptions().
+   *
+   * @param o either a StateTuple or ComponentDescription
    * @return true iff the specified ComponentDescription should be loaded.
    **/
-  protected boolean isSubComponentLoadable(ComponentDescription cd) {
+  protected boolean isSubComponentLoadable(Object o) {
     String cpr = containmentPrefix;
     int cprl = cpr.length();
     
+    ComponentDescription cd =
+      ((o instanceof StateTuple) ?
+       (((StateTuple) o).getComponentDescription()) :
+       ((ComponentDescription) o));
     String ip = cd.getInsertionPoint();
     return (ip.startsWith(cpr) && // starts with the containment point+'.'
             ip.indexOf(".", cprl+1) == -1 // no more '.'
@@ -653,9 +659,9 @@ public abstract class ContainerSupport
     if (pcd == null) return;
     
     for (Iterator it = pcd.iterator(); it.hasNext(); ) {
-      ComponentDescription cd = (ComponentDescription) it.next();
-      if (isSubComponentLoadable(cd)) {
-        add(cd);
+      Object o = it.next();
+      if (isSubComponentLoadable(o)) {
+        add(o);
       }
     }
   }
