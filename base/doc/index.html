@@ -128,6 +128,13 @@ CSMART 1AD societies (from the CSMART database) include the Community
 Plugin in all domain Agents. However, if you wish to use Communities
 from a Node Agent, or add new Agents, you must still include the
 Community Plugin via a recipe.</li>
+<li>Community configuration can now be loaded from either the configuation
+database through CSMART or through an xml file (communities.xml).  See
+community/doc/README.  A system property org.cougaar.community.configfile="filename"
+can be used to specify a particular community configuration xml file.</li>
+<li>Caching of community information at the CommunityService level has been
+implemented and is enabled by default.  Caching may be turned off by setting the 
+system parameter org.cougaar.community.caching="off"</li>
 <li>
 The Bootstrapper now, by default, uses XURLClassLoader rather than
 BootstrapClassLoader.  XURLClassLoader is pretty much identical to 
