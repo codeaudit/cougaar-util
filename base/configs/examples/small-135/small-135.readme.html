@@ -6,15 +6,22 @@
    <title>small-135 Read Me</title>
 </head>
 <body>
-The directory, configs/small-135, has been included to
-allow some small tests of this release. Its name reflects the scope of
+The directory, configs/examples/small-135, has been included to
+allow some examples of configuring a large Cougaar application using
+"ini" files. Note that this configuration is _not_ actively
+supported. In particular, while the installation requires the use of a
+domain database, which is included, that database is now used to
+support our newer military logistics configuration, available through
+CSMART. No serious effort has been made to keep those changes
+backwards compatible to support this configuration.<br>
+With that initial caveat, this file explains the small-135 application (society). Its name reflects the scope of
 the tests it is designed to support: Classes 1, 3, 4, and 5 (Subsistence,
 Fuel, Construction Materiel, and Ammunition) as well as Strategic
 Transportation.
 <p>Change for release 9.2: The home location for the Bela Refugees
 camp has been changed from BELA-PAK (at 25.9, 67) to a real Geoloc,
 LYSY (Karachi, at 24.87, 67.08). This permits use of small-135 with CSMART.
-<p>This config directory includes a node file, configs/small-135/SMALL-135-TRANS-NODE.ini,
+<p>This config directory includes a node file, configs/examples/small-135/SMALL-135-TRANS-NODE.ini,
 which can be run on a single machine. This node includes 26 clusters, which
 fall into the several logical groups.
 <p>Here is a <a href="images/SMALL-135-NODE-descrip.jpg">diagram</a> and
@@ -103,7 +110,7 @@ and GetLogSupport Tasks to its subordinates.
 of the 110-QMCO-POLSPLY Company.
 <p><b>110-QMCO-POLSPLY</b> is the Bulk POL (Fuel) and Packaged POL Supply
 provider for 703-MSB
-<p><b>553-CSB-HHD</b> is a Corps SUpport Battalion, and is a major inventory
+<p><b>553-CSB-HHD</b> is a Corps Support Battalion, and is a major inventory
 manager for the society. In this subset, it is the SubsistenceSupplyProvider
 for 703-MSB.
 <p><b>10-TCBN-HHC</b> is another major inventory manager for the society.
@@ -196,7 +203,7 @@ Make sure that COUGAAR_INSTALL_PATH is set properly to the top release
 directory</li>
 
 <li>
-cd to $COUGAAR_INSTALL_PATH/configs/small-135/</li>
+cd to $COUGAAR_INSTALL_PATH/configs/examples/small-135/</li>
 
 <li>
 Type $COUGAAR_INSTALL_PATH/bin/Node SMALL-135-TRANS-NODE</li>
@@ -216,7 +223,7 @@ Make sure that COUGAAR_INSTALL_PATH is set properly to the top release
 directory</li>
 
 <li>
-cd to $COUGAAR_INSTALL_PATH/configs/small-135/</li>
+cd to $COUGAAR_INSTALL_PATH/configs/examples/small-135/</li>
 
 <li>
 Type Node SMALL-135-NODE</li>

@@ -11,10 +11,10 @@
 <br>Below are directions for Running the SMALL-135 Society across one or
 two hosts:
 <p><b><font size=+1>Get the build</font></b>
-<p>Download the latest build of the Cougaar software off the Alpine website(www.alpine.bbn.com)
+<p>Download the latest build of the Cougaar software off the Cougaar website(www.cougaar.org)
 on two machines in your network.
 <br>2 .zip files you need to run the Small-135 society:
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # cougar.zip
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # cougaar.zip
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # cougar-support.zip
 <br>&nbsp;
 <p><b><font size=+1>Unzip and install</font></b>
@@ -31,7 +31,7 @@ to make Demand host common - (set to localhost for one host society, else
 choose one machine's full address)
 <br>&nbsp;&nbsp;&nbsp; # check the MYPROPERTIES environment variable in
 $COUGAAR_INSTALL_PATH/bin/Node (for linux) or setarguments.bat(for windows)
-to make sure it contains "-Dorg.cougaar.core.cluster.startTime=08/10/2005"
+to make sure it contains "-Dorg.cougaar.core.agent.startTime=08/10/2005"
 <p>
 <hr WIDTH="100%">
 <p><b><font size=+1>Run Society</font></b>
@@ -42,7 +42,7 @@ Make sure that COUGAAR_INSTALL_PATH is set properly to the top release
 directory</li>
 
 <li>
-cd to $COUGAAR_INSTALL_PATH/configs/small-135/</li>
+cd to $COUGAAR_INSTALL_PATH/configs/examples/small-135/</li>
 
 <li>
 Type Node SMALL-135-NODE</li>
@@ -110,7 +110,7 @@ TPFFDShell.csh
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #&nbsp; Change these 4 varaibles
 - 'somehost' is your specific Demand host:
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
--Dorg.cougaar.domain.mlm.ui.newtpfdd.producer.ClusterCache.deaultHostName=somehost
+-Dorg.cougaar.mlm.ui.newtpfdd.producer.ClusterCache.deaultHostName=somehost
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 "...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; .DataGrabberProducer.database=grabber
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
