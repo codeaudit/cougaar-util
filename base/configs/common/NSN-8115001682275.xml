@@ -51,7 +51,7 @@
             <value>
               <object class="org.cougaar.planning.ldm.measure.Mass">
                 <field name="Pounds" type="double">
-                  <value>54710.0</value>
+                  <value>4710.0</value>
                 </field>
               </object>
             </value>
