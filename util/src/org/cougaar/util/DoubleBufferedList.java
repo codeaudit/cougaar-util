@@ -60,10 +60,27 @@ public class DoubleBufferedList
     back = Collections.EMPTY_LIST;
   }
 
+  /** make a mutable copy of the backing list.
+   * @note callers must synchronize on this.
+   **/
   protected final List copy() {
     // must be externally synchronized
     return new ArrayList(back);
   }
+  /** make a mutable copy of the backing list with extra space for adds.
+   * @note callers must synchronize on this.
+   **/
+  protected final List copy(int extra) {
+    // must be externally synchronized
+    List l = new ArrayList(back.size()+extra);
+    l.addAll(back);
+    return l;
+  }
+
+  /** make the backing list an unmodifiable version of the passed
+   * list.
+   * @note callers must synchronize on this.
+   */
   protected final List freeze(List l) {
     // must be externally synchronized
     back = Collections.unmodifiableList(l);
@@ -78,24 +95,24 @@ public class DoubleBufferedList
   }
 
   public synchronized void add(int index, Object element) {
-    List l = copy();
+    List l = copy(1);
     l.add(index, element);
     freeze(l);
   }
   public synchronized boolean add(Object o) {
-    List l = copy();
+    List l = copy(1);
     boolean b = l.add(o);
     freeze(l);
     return b;
   } 
   public synchronized boolean addAll(Collection c) {
-    List l = copy();
+    List l = copy(c.size());
     boolean b = l.addAll(c);
     freeze(l);
     return b;
   }
   public synchronized boolean addAll(int i, Collection c) {
-    List l = copy();
+    List l = copy(c.size());
     boolean b = l.addAll(i, c);
     freeze(l);
     return b;
