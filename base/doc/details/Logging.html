@@ -119,6 +119,9 @@ The system properties are:
       Pass the given "NAME=VALUE" to override the above FILE
       contents.</li>
 </ul>
+Note that if you use any of the above 
+"-Dorg.cougaar.core.logging.*" properties then you must fully
+specify the logging configuration.
 <p>
 Here is a minimal log4j property file that matches the Cougaar
 default logging configuration:
@@ -126,11 +129,36 @@ default logging configuration:
   log4j.rootCategory=WARN,A1
   log4j.appender.A1=org.apache.log4j.ConsoleAppender
   log4j.appender.A1.layout=org.apache.log4j.PatternLayout
-  log4j.appender.A1.layout.ConversionPattern=%d{ISO8601} %-5p [%c{1}] - %m%n
+  log4j.appender.A1.layout.ConversionPattern==%d{ABSOLUTE} %-5p - %c{1} - %m%n
 </pre>
-Additional examples are provided in 
+<p>
+The logging level is set to a default level with the 
+"log4j.rootCategory=.." line.  The level for individual packages can 
+changed by adding "log4j.category.PACKAGE=LEVEL" lines, such as:
+<pre>
+  ...
+  # set the level to "info" for all "org.cougaar.core.*" subpackages:
+  log4j.category.org.cougaar.core=INFO
+</pre>
+This can be used to turn the level up or down from the root level.  As
+noted above, logging levels are "inherited" down the package hierarchy.
+The level can also be set for a specific class, which must be the
+"service-requestor" that obtained the logging service:
+<pre>
+  ...
+  # debug your "com.foo.MyPlugin":
+  log4j.category.com.foo.MyPlugin=DEBUG
+</pre>
+In some cases you may need to specify the category name:
+<pre>
+  log4j.category.org.cougaar.core=INFO,A1
+</pre>
+<p>
+Additional documentation on log4j configuration is provided in
 <a href="http://jakarta.apache.org/log4j/docs/manual.html"
->the log4j manual</a>.
+>the log4j manual</a> and 
+<a href="http://www.javaworld.com/javaworld/jw-11-2000/jw-1122-log4j_p.html"
+>this additional overview</a>.
 <p>
 Log4j supports many open-source log appenders and log 
 visualizers.  For example, log4j can be configured to stream
