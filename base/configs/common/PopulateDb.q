@@ -260,7 +260,8 @@ queryLibRecipeByName=\
 queryLibRecipeProps=\
  SELECT ARG_NAME, ARG_VALUE \
    FROM V4_LIB_MOD_RECIPE_ARG \
-  WHERE MOD_RECIPE_LIB_ID = ':recipe_id:'
+  WHERE MOD_RECIPE_LIB_ID = ':recipe_id:' \
+  ORDER BY ARG_ORDER
 
 queryMaxRecipeId=\
  SELECT MAX(MOD_RECIPE_LIB_ID) \
