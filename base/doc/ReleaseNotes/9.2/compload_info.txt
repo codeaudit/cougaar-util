@@ -1,0 +1,30 @@
+Added new "AgentContainmentService" for the servlet to use.  Modified "/load"
+servlet to use this new service instead of sending a ComponentMessage.  The
+Servlet requests now block until the action is performed (or fails).
+
+Added new "?action=VALUE" URL parameter.  Here's the relevant javadocs:
+       --------------------------------------------------------
+       Required action for container operation; this should 
+       be either "add", "remove", or "contains", where the 
+       default is "add".
+       
+       Important Note:
+       
+       "add" acts as an "ensure-is-loaded"; if the component 
+       is already loaded then the action is ignored (success).  
+       
+       "remove" similarily acts as an "ensure-is-not-loaded", 
+       where a remove of a non-loaded component is ignored 
+       (success).
+
+       "contains" will only return with a success status code 
+       if the component is loaded ("assert-is-loaded").  If
+       the component is not loaded then an error response
+       is returned.
+       --------------------------------------------------------
+
+Loading into the node (e.g. add an agent) is now temporarily disabled, pending
+the node-agent implementation.  Under node-agent the node itself will have a
+"/load" servlet that will allow load/unload of agents.
+
+Cf. bugs 1122 (assigned), 1112, 1106 (resolved/closed).
