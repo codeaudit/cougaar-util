@@ -2,57 +2,160 @@
 <body>
 <h2>PSPs ported to Servlets</h2>
 <p>
-<a name="x">
-In the table below, 
-<table border=2 bgcolor="white">
-<tr>
-  <td>..</td>
-  <td>..</td>
-  <td>/test</td>
-  <td> <font size=+2><a href="#x">*</a></font> testClass</td>
-</tr>
-</table>
-is short for:
-<table border=2 bgcolor="white">
-<tr>
-  <td>..</td>
-  <td>..</td>
-  <td>/test</td>
-  <td>plugin = org.cougaar.core.servlet.SimpleServletComponent(testClass, /test)</td>
-</tr>
-</table>
 <p>
-<h2>Table:</h2>
 <p>
-<table border=2 bgcolor="white">
+<table cellpadding=2 border=2 bgcolor="white">
 <tr>
+  <th colspan=3><font size=+2>Servlet</font></th>
   <th colspan=2><font size=+2>PSP</font></th>
-  <th colspan=2><font size=+2>Servlet</font></th>
 </tr>
 <tr>
+  <th><font size=+2>path</font></th>
+  <th><font size=+2>description</font></th>
+  <th><font size=+2>INI <i>"plugin = "</i> loading line</font></th>
   <th><font size=+2>path</font></th>
   <th><font size=+2>classname</font></th>
-  <th><font size=+2>path</font></th>
-  <th><font size=+2>INI <i>"plugin = "</i> loading line</font></th>
 </tr>
 
 <tr>
+  <td>/</td>
+  <td>Help page</td>
+  <td align=center> <i>(built-in)</i> </td>
+  <td colspan=2 align=center><i>new server capability</i></td>
+</tr>
+
+<tr>
+  <td>/agents</td>
+  <td>List agents in the node or society</td>
+  <td align=center> <i>(built-in)</i> </td>
+  <td colspan=2 align=center><i>new server capability</i></td>
+</tr>
+
+<tr>
+  <td>/list</td>
+  <td>List servlet paths within an agent</td>
+  <td align=center> <i>(built-in)</i> </td>
+  <td colspan=2 align=center><i>was "?LIST"</i></td>
+</tr>
+
+<tr>
+  <td>/tasks</td>
+  <td>View the contents of the blackboard</td>
+  <td> <a href="#x">*</a> org.cougaar.planning.servlet.PlanViewServlet</td>
   <td>/alpine/demo/TASKS.PSP</td>
   <td>org.cougaar.lib.planserver.psp.PSP_PlanView</td>
-  <td>/tasks</td>
-  <td> <a href="#x">*</a> org.cougaar.planning.servlet.PlanViewServlet</td>
 </tr>
 
 <tr>
+  <td>/completion</td>
+  <td>Get task completion statistics (success, confidence, etc)</td>
+  <td> <a href="#x">*</a> org.cougaar.planning.servlet.CompletionServlet</td>
   <td>/alpine/demo/COMPLETION.PSP</td>
   <td>org.cougaar.glm.trans.ui.psp.transit.PSP_Completion</td>
-  <td>/completion</td>
-  <td> <a href="#x">*</a> org.cougaar.planning.servlet.CompletionServlet</td>
+</tr>
+
+<tr>
+  <td>/hierarchy</td>
+  <td>View agent relationships</td>
+  <td> <a href="#x">*</a> org.cougaar.planning.servlet.HierarchyServlet</td>
+  <td>/alpine/demo/NEW_HIERARCHY.PSP<br>
+      <i>(and "/alpine/demo/CLUSTERS_R.PSP")</i></td>
+  <td>org.cougaar.mlm.ui.psp.transit.PSP_Hierarchy</td>
+</tr>
+
+<tr>
+  <td>/datagatherer</td>
+  <td>For the TPFDD data grabber</td>
+  <td> <a href="#x">*</a> org.cougaar.mlm.ui.servlet.DataGathererServlet</td>
+  <td>/alpine/demo/DATA_GRABBER.PSP</td>
+  <td>org.cougaar.mlm.ui.psp.transit.PSP_DataGatherer</td>
+</tr>
+
+<tr>
+  <td>/inventory</td>
+  <td>Used by the Inventory UIs</td>
+  <td> <a href="#x">*</a> org.cougaar.mlm.ui.psp.xmlservice.InventoryServlet</td>
+  <td>/alpine/demo/INVENTORY.PSP</td>
+  <td>org.cougaar.mlm.ui.psp.plan.PSP_Inventory</td>
+</tr>
+
+<tr>
+  <td>/load</td>
+  <td>Allows loading arbitrary components</td>
+  <td>plugin = org.cougaar.planning.servlet.LoaderServletComponent</td>
+  <td>/alpine/demo/PLUGIN_LOADER.PSP<br>
+      <i>(and "?LOAD")</i></td>
+  <td>org.cougaar.lib.planserver.psp.PSP_PluginLoader</td>
+</tr>
+
+<tr>
+  <td>/CSMART_AgentInfoServlet</td>
+  <td>CSMART access to agent details (roles, etc)</td>
+  <td> <a href="#x">*</a> org.cougaar.tools.csmart.ui.servlet.AgentInfoServlet</td>
+  <td>/csmart/monitor/PSP_ClusterInfo.PSP</td>
+  <td>org.cougaar.tools.csmart.ui.psp.PSP_ClusterInfo</td>
+</tr>
+
+<tr>
+  <td>/CSMART_CommunityProviderServlet</td>
+  <td>CSMART access to community details</td>
+  <td> <a href="#x">*</a> org.cougaar.tools.csmart.ui.servlet.CommunityProviderServlet</td>
+  <td>/csmart/monitor/PSP_CommunityProvider.PSP</td>
+  <td>org.cougaar.tools.csmart.ui.psp.PSP_CommunityProvider</td>
+</tr>
+
+<tr>
+  <td>/CSMART_MetricsServlet</td>
+  <td>CSMART metrics</td>
+  <td> <a href="#x">*</a> org.cougaar.tools.csmart.ui.servlet.MetricsServlet</td>
+  <td>/csmart/monitor/PSP_Metrics.PSP</td>
+  <td>org.cougaar.tools.csmart.ui.psp.PSP_Metrics</td>
+</tr>
+
+<tr>
+  <td>/CSMART_SearchServlet</td>
+  <td>CSMART thread-searcher</td>
+  <td> <a href="#x">*</a> org.cougaar.tools.csmart.ui.servlet.SearchServlet</td>
+  <td>/csmart/monitor/THREADS.PSP</td>
+  <td>org.cougaar.tools.csmart.ui.psp.PSP_Search</td>
+</tr>
+
+<tr>
+  <td>/CSMART_PlanServlet</td>
+  <td>CSMART blackboard viewer</td>
+  <td> <a href="#x">*</a> org.cougaar.tools.csmart.ui.servlet.PlanServlet</td>
+  <td>/csmart/monitor/PSP_Plan.PSP</td>
+  <td>org.cougaar.tools.csmart.ui.psp.PSP_Plan</td>
 </tr>
 
 <!-- add new TR entries here! -->
 
 </table>
 
+<p>
+<p>
+<p>
+
+<a name="x">
+In the table above, 
+<table border=2 bgcolor="white">
+<tr>
+  <td>/test</td>
+  <td> <font size=+2><a href="#x">*</a></font> testClass</td>
+  <td>..</td>
+  <td>..</td>
+  <td>..</td>
+</tr>
+</table>
+is short for:
+<table border=2 bgcolor="white">
+<tr>
+  <td>/test</td>
+  <td>plugin = org.cougaar.core.servlet.SimpleServletComponent(testClass, /test)</td>
+  <td>..</td>
+  <td>..</td>
+  <td>..</td>
+</tr>
+</table>
 </body>
 </html>
