@@ -754,3 +754,7 @@ recipeQueryNCAAgent=\
 
 recipeQuery47FSBAgent=\
  SELECT COMPONENT_ALIB_ID FROM alib_component WHERE COMPONENT_TYPE = 'agent' AND COMPONENT_NAME='47-FSB'
+
+# For Adding UniversalAllocator or AmmoPacker to OSC
+recipeQueryOSCAgent=\
+ SELECT COMPONENT_ALIB_ID FROM alib_component WHERE COMPONENT_TYPE = 'agent' AND COMPONENT_NAME='OSC'
