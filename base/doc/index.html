@@ -96,7 +96,11 @@ example, the errata page for Cougaar 11.0 is <a href="http://cougaar.org/errata/
   <!-- COUGAAR 11.4 COUGAAR 11.4 COUGAAR 11.4 COUGAAR 11.4 COUGAAR 11.4 -->
 <p>
 <b>Build 11.4</b> is a minor release, including 
-performance optimizations, and multiple bug fixes.
+performance optimizations, and multiple bug fixes. Key changes include
+a new "Cougaar" run script, a new "pizza" sample application /
+regression test / tutorial, a runtime Component Model Viewer to see
+what components are running where, ServiceDiscovery support for OWL,
+and an HTTP Message Transport Protocol. 
 <p>
 <ul>
 <li>Created new "bin/Cougaar[.bat]" scripts that replace the older
@@ -223,13 +227,13 @@ verses old INI/DB configurations (
   <ul>
     <li>uiframework module was obsolete, and has been dropped from
     standard distributions.</li>
-    <li>Dropped the GLMDebug in favor of LoggingSrevice.</li>
+    <li>Dropped the GLMDebug in favor of LoggingService.</li>
     <li>Dropped obsolete XMLPrototypeProvider, LDMXMLPlugin, XMLAssetCreator</li>
-    <li>Dropped obsolete AE configuration</li>
+    <li>Dropped obsolete AE configuration.</li>
     <li>Dropped unused HysteresisSubscription and SortedSubscription.</li>
-    <li>Dropped unused servicediscovery servlets</li>
-    <li>Deprecate Freeze plugins in favor of FreezeServlet.</li>
-    <li>Drop agent and long deprecated MetricsSnapshot</li>
+    <li>Dropped unused servicediscovery servlets.</li>
+    <li>Deprecated Freeze plugins in favor of FreezeServlet.</li>
+    <li>Dropped agent and long deprecated MetricsSnapshot</li>
   </ul>
 </li>
 <li>Some SD refactor / cleanup to allow other SD implementations,
