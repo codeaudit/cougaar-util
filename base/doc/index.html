@@ -14,7 +14,7 @@
   <td align="Center" width="200"> 
       <h2> <b><font size="+2">Release Notes</font></b></h2>
   
-      <h2> <b><font size="+2">COUGAAR 10.0</font></b></h2>
+      <h2> <b><font size="+2">COUGAAR 10.2</font></b></h2>
  </td>
   <td align="Center" width="200"><a href="http://www.cougaar.org"><img src="cougaar_small_right.jpg" border="0"></a>
       </td>
@@ -49,7 +49,7 @@ Components)</a></li>
 
       <h2> <a name="introduction"></a>Introduction</h2>
 
-This file contains the release notes for Cougaar 10.0.
+This file contains the release notes for Cougaar 10.2.
 <p>
 Please see our <a href="FAQ.html">Cougaar FAQ</a> for a high-level
 introduction to the Cougaar agent architecture, system requirements,
@@ -65,6 +65,29 @@ Please see our website for updated information on problems/workarounds
 that were detected/posted after this Cougaar version was released.
 
       <h2> <a name="overview"></a>Overview of this Release</h2>
+
+  <!-- COUGAAR 10.2 COUGAAR 10.2 COUGAAR 10.2 COUGAAR 10.2 COUGAAR 10.2 -->
+
+<p> <b>Build 10.2</b> is a minor release, including a few new features
+and deprecations.
+<p>
+<ul>
+<li>ComponentDevelopers should not try to put runtime data or
+configuration files in configs/common. Instead, these files should be
+stored in the local module for that Component. Additionally,
+configuration files should be kept separate from data files. To
+encourage this, the ConfigFinder may now be created with an optional
+"module" argument, as in:
+<code>ConfigFinder.getInstance("albbn");</code>. This argument refers
+to the name of a directory under Cougaar_Install_Path. When supplied,
+the ConfigFinder will add 4 directories local to that module to the
+front of the search path:
+$CIP/$MOD/configs/$CONFIG;$CIP/$MOD/configs;$CIP/$MOD/data/$CONFIG;$CIP/$MOD/data.
+See the class JavaDoc for details.</li>
+<li>Used the new above methods, and moved CSMART related .q files to
+csmart/data/common. The preferred location for recipeQueries.q is now
+csmart/data/common, <em>however</em> the old location will still work.</li>
+</ul>
 
   <!-- COUGAAR 10.0 COUGAAR 10.0 COUGAAR 10.0 COUGAAR 10.0 COUGAAR 10.0 -->
 
@@ -141,12 +164,12 @@ servlets).  Most of the MLM-UI code, which depended upon PSPs, was also
 removed (<code>org.cougaar.mlm.ui.*</code>) except for the TPFDD data
 grabber.</li>
 <li>The initial WhitePagesService, which will replace the current
-NamingService, has been defined and a JDNI-based implementation has
+NamingService, has been defined and a JNDI-based implementation has
 been implemented.  Please see the Cougaar Developers' Guide for
 details.
 </li>
 <li>The servlet server has been updated to use the new white pages
-service instead of the JDNI naming service.  A new "/wp" servlet
+service instead of the JNDI naming service.  A new "/wp" servlet
 (<code>org.cougaar.core.util.WhitePagesServlet</code>) has been added
 to view the contents of the white pages.  The built-in "/agents"
 servlet has been enhanced to traverse the naming hierarchy instead of
