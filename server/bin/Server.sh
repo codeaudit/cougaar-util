@@ -84,21 +84,8 @@ fi
 #SERVERCONFIG="-Dorg.cougaar.tools.server.verbose=true"
 SERVERCONFIG=""
 
-# Specify the classpath for loading the Server.
-#
-# Below we set the AppServer's classpath to:
-#  $COUGAAR_DEV_PATH	if defined
-#  $COUGAAR_INSTALL_PATH/lib/server.jar
-#  $COUGAAR_INSTALL_PATH/lib/csmart.jar
-#
-# This is only useful to altering the Server's codebase,
-# *not* the Node's codebase.  The ".props" file must be
-# modified to alter the Node's configuration.
-LIBPATHS="$COUGAAR_INSTALL_PATH/lib/server.jar"
-
-if [ "$COUGAAR_DEV_PATH" != "" ]; then
-    LIBPATHS="$COUGAAR_DEV_PATH:$LIBPATHS"
-fi
+# Only the "server.jar" should be in the classpath:
+LIBPATHS="${COUGAAR_INSTALL_PATH}/lib/server.jar"
 
 if [ "$OS" = "Linux" ]; then
     # set some system runtime limits
@@ -113,7 +100,7 @@ if [ "$COUGAAR_DEV_PATH" != "" ]; then
     java \
     $JAVA_ARGS \
     $SERVERCONFIG \
-    org.cougaar.tools.server.NodeServer \
+    org.cougaar.tools.server.AppServer \
     $NODE_PROPS_FILE
 fi
 
@@ -122,6 +109,6 @@ exec \
   java \
   $JAVA_ARGS \
   $SERVERCONFIG \
-  org.cougaar.tools.server.NodeServer \
+  org.cougaar.tools.server.AppServer \
   $NODE_PROPS_FILE
 

@@ -85,23 +85,9 @@ REM #SET SERVERCONFIG = "-Dorg.cougaar.tools.server.verbose=true"
 
 SET SERVERCONFIG=
 
-
-REM Specify the classpath for loading the Server.
-REM
-REM Below we set the AppServer's classpath to:
-REM  %COUGAAR_DEV_PATH%	if defined
-REM  %COUGAAR_INSTALL_PATH%\lib\server.jar
-REM  %COUGAAR_INSTALL_PATH%\lib\csmart.jar
-REM
-REM This is only useful to altering the Server's codebase,
-REM *not* the Node's codebase.  The ".props" file must be
-REM modified to alter the Node's configuration.
-
+REM Only the "server.jar" should be in the classpath:
 SET LIBPATHS=^
 %COUGAAR_INSTALL_PATH%\lib\server.jar
-
-
-IF NOT ("%COUGAAR_DEV_PATH%" == "") SET LIBPATHS=%COUGAAR_DEV_PATH%;%LIBPATHS%
 
 SET JAVA_ARGS=^
   -classpath %LIBPATHS%
@@ -113,7 +99,7 @@ REM start the server
 java ^
   %JAVA_ARGS% ^
   %SERVERCONFIG% ^
-  org.cougaar.tools.server.NodeServer ^
+  org.cougaar.tools.server.AppServer ^
   %NODE_PROPS_FILE%
 
 :END
