@@ -230,14 +230,7 @@ class RemoteListenableImpl implements RemoteListenable {
 
   public void close() throws Exception {
 
-    synchronized (obLock) {
-      if (ob == null) {
-        return;
-      }
-      ob.setCreated(false);
-      flushBuffer(true);
-      ob = null;
-    }
+    flushBuffer(true);
 
     // remove all listeners
     synchronized (sendLock) {
@@ -274,10 +267,15 @@ class RemoteListenableImpl implements RemoteListenable {
         return false;
       }
       t = ob;
-      ob = new OutputBundle();
-      ob.setTimeStamp(System.currentTimeMillis());
-      stdOut = ob.getDualStreamBuffer().getOutputStream(true);
-      stdErr = ob.getDualStreamBuffer().getOutputStream(false);
+      if (isClosing) {
+        t.setDestroyed(true);
+        ob = null;
+      } else {
+        ob = new OutputBundle();
+        ob.setTimeStamp(System.currentTimeMillis());
+        stdOut = ob.getDualStreamBuffer().getOutputStream(true);
+        stdErr = ob.getDualStreamBuffer().getOutputStream(false);
+      }
     }
 
     // send the buffered output
