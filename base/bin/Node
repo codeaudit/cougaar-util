@@ -43,9 +43,9 @@ if (! $?COUGAAR3RDPARTY) then
 endif
 
 set LIBPATHS=$COUGAAR_INSTALL_PATH/lib/core.jar
-set devp = ""
+set devp=""
 if ($?COUGAAR_DEV_PATH) then
-    set devp "-Dorg.cougaar.class.path=${COUGAAR_DEV_PATH}"
+    set devp="-Dorg.cougaar.class.path=${COUGAAR_DEV_PATH}"
 endif
 
 # domains are now usually defined by the config file LDMDomains.ini.
