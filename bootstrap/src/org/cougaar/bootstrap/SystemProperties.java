@@ -50,10 +50,23 @@ public class SystemProperties {
   
   /**
    * A Pattern used to expand System properties.
+   * <p>
+   * When the value of a system property contains a sub-string with the
+   * following format:
+   * <pre>${property_name}</pre>
+   * Then that sub-string will be expanded to the value of the property
+   * named "property_name".
    */
   private static final Pattern expandPattern =
     Pattern.compile("\\$\\{([^\\$\\{\\}]*)\\}");
   
+  /**
+   * A Pattern used to prevent system property expansion.
+   * <p>
+   * When property expansion is enabled, but the user wants to disable
+   * property expansion locally, the following pattern should be used:
+   * <pre>\$\{property_name\}</pre>
+   */
   private static final Pattern escapePattern =
     Pattern.compile("\\\\\\$\\\\\\{([^\\$\\{\\}]*)\\\\\\}");
   
@@ -94,6 +107,18 @@ public class SystemProperties {
     return props;
   }
   
+  /**
+   * Return a Map of system properties.
+   * <p>
+   * 
+   * This method return a Map of all properties that start with the specified
+   * prefix.
+   * Unlike the System.getProperties() method, this method does not require
+   * "write property" privileges.
+   * 
+   * @param prefix Used to return property names that start with this specified prefix. 
+   * @return A Map of system properties.
+   */
   public static Properties getSystemPropertiesWithPrefix(String prefix) {
     Properties props = new Properties();
     if (debug) {
@@ -165,6 +190,15 @@ public class SystemProperties {
     }
   }  
 
+  /**
+   * Expand a system property using variable substitution.
+   * <p>
+   * 
+   * @param props A Map of system properties.
+   * @param key The name of the property that should be expanded.
+   * @param references A Set used to deal with forward and circular references.
+   * @return the value of the expanded property.
+   */
   private static String expandProperty(Properties props, String key, Set references) {
     String value = props.getProperty(key);
     boolean done = false;
