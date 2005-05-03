@@ -477,7 +477,11 @@
     <!-- Compare to the dist-module target -->
     <target name="jar.build" depends="compile, clean-tests, clean-examples" if="has.src">
       <!-- create the jarfile -->
-      <jar jarfile="${module.jar}" basedir="${module.classes}" />
+      <jar jarfile="${module.jar}" basedir="${module.classes}">
+        <manifest>
+          <attribute name="Main-Class" value="org.cougaar.bootstrap.Bootstrapper"/>
+        </manifest>
+      </jar>
     </target>
       
 
@@ -576,7 +580,11 @@
     <!-- Create a Jar for the module     				          -->
     <!-- ====================================================================== -->	
     <target name="dist-module" depends="compile, clean-tests, clean-examples" description="Jars the module" if="has.build">
-      <jar jarfile="${target.lib}/${module}-${DSTAMP}.jar" basedir="${module.classes}" />
+      <jar jarfile="${target.lib}/${module}-${DSTAMP}.jar" basedir="${module.classes}">
+        <manifest>
+          <attribute name="Main-Class" value="org.cougaar.bootstrap.Bootstrapper"/>
+        </manifest>
+      </jar>
       <exec dir="${target.lib}" executable="ln" os="Linux">
 	<arg line=" -s ${module}-${DSTAMP}.jar ${module.jar}" />
       </exec>

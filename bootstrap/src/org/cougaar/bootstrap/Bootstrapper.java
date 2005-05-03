@@ -59,6 +59,13 @@ import java.util.Properties;
  * </pre>
  * one can write:<pre>
  *   java 
+ *     -Dorg.cougaar.class.path=/tmp/classes
+ *     -Dorg.cougaar.install.path=/jars
+ *     -jar bootstrap.jar 
+ *     MyClass
+ * </pre>
+ * or the equivalent:<pre>
+ *   java 
  *     -classpath bootstrap.jar 
  *     -Dorg.cougaar.class.path=/tmp/classes
  *     -Dorg.cougaar.install.path=/jars
