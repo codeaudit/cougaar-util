@@ -524,16 +524,23 @@ public class Bootstrapper
 
   /** Gather jar files found in the directory specified by the argument **/
   protected List findJarsInDirectory(File f) {
-    List l = new ArrayList();
-    File[] files = f.listFiles(new FilenameFilter() {
+    File[] files;
+    if (f.isDirectory()) {
+      files = f.listFiles(new FilenameFilter() {
         public boolean accept(File dir, String name) {
           return isJar(name);
         }
       });
-
-    if (files == null) return l;
-
-    for (int i=0; i<files.length; i++) {
+    } else if (f.isFile() && isJar(f.getName())) {
+      files = new File[1];
+      files[0] = f;
+    } else {
+      files = null;
+    }
+    if (files == null || files.length == 0)
+      return Collections.EMPTY_LIST;
+    List l = new ArrayList(files.length);
+    for (int i = 0; i < files.length; i++) {
       try {
         l.add(newURL("file:"+files[i].getCanonicalPath()));
       } catch (Exception e) {
