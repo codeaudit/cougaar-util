@@ -144,7 +144,7 @@ public final class ReflectOp
     List knownTypes = sharedTypeList.getKnownTypes();
     int nTypes = knownTypes.size();
     for (int i = 0; i < nTypes; i++) {
-      Type ti = (Type)knownTypes.get(i);
+      org.cougaar.lib.contract.lang.Type ti = (org.cougaar.lib.contract.lang.Type)knownTypes.get(i);
       if (!(ti.isNot())) {
         op = tryRef(ti.getClazz(), false, p);
         if (op != null) {
