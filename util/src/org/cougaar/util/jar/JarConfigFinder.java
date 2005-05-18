@@ -783,7 +783,7 @@ extends ConfigFinder
               if (isValidUrl(confFile.toURL())) {
                 addFileEntryToCache(confFile.getName(), confFile.toURL());
                 // Is there a match?
-                if (confFile.getPath().equals(aFileName)) {
+                if (confFile.getName().equals(aFileName)) {
                   theURL = confFile.toURL();
                 }
               }
