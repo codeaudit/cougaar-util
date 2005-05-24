@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+
+<html>
+  <head>
+  </head>
+
+  <h2>The Cougaar Frame Infrastructure: Overview</h2>
+
+  <body>
+
+    <p>The Cougaar Frame Infrastructure provides a lightweight and
+      efficiently distributed form of knowledge representation
+      supporting two independent inheritance hierarchies, path
+      following, and code generation.  The specification of a given
+      set of frame definitions (prototypes) includes not only
+      conceptual information for whatever domain the frames are being
+      used to represent, but also implementation hints to maximize
+      efficiency.  This allows the designer to fine-tune the
+      definitions in a way that's not generally available in other
+      frame systems.
+    </p>
+
+    <p>Frames are Blackboard objects: new Frames and changes to Frames
+      are published to a Blackboard associated with the FrameSet.
+      Frames are also Java Beans, and can therefore be used by some
+      rule engines (eg Jess, the Java Expert System Shell) in the
+      pattern matching of the left-hand-side of a rule.  Much of the
+      power of the Cougaar Frame infrastructure comes from this
+      unification between Frames in a knowedge base, entities on a
+      Blackboard and facts in a rule engine.
+    </p>
+
+    <p>For increased efficiency, Frames are organized into collectons
+      called FrameSets.  FrameSets are used to cache relationships
+      between Frames, in particular the containment relation. FrameSets
+      also provide an implicit namespace of types.
+    </p>
+
+  </body>
+</html>

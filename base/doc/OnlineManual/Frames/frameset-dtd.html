@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>Frameset DTD</title>
+</head>
+
+<body>
+
+<verbatim>
+<pre>
+&lt;!ELEMENT frameset (prototypes)&gt;
+&lt;!ATTLIST frameset frame-inheritance CDATA "single"
+	           package CDATA #REQUIRED
+	           container-relation CDATA #REQUIRED
+	           domain CDATA #REQUIRED&gt;
+&lt;!ELEMENT prototypes (prototype | relation-prototype | path)*&gt;
+&lt;!ELEMENT prototype (slot*)&gt;
+&lt;!ATTLIST prototype name CDATA #REQUIRED
+	            prototype CDATA #IMPLIED
+	            container CDATA #IMPLIED
+	            doc CDATA #IMPLIED&gt;
+&lt;!ELEMENT relation-prototype (slot*)&gt;
+&lt;!ATTLIST relation-prototype name CDATA #REQUIRED
+	                     prototype CDATA #IMPLIED
+	                     container CDATA #IMPLIED
+	                     parent-prototype CDATA #IMPLIED
+	                     parent-slot CDATA #IMPLIED
+	                     child-prototype CDATA #IMPLIED
+	                     child-slot CDATA #IMPLIED
+	                     doc CDATA #IMPLIED&gt;
+&lt;!ELEMENT path (fork*, slot-reference?)&gt;
+&lt;!ATTLIST path name CDATA #REQUIRED&gt;
+&lt;!ELEMENT slot EMPTY&gt;
+&lt;!ATTLIST slot name CDATA #REQUIRED
+	       type CDATA #IMPLIED
+	       default-value CDATA #IMPLIED
+	       units CDATA #IMPLIED
+	       path CDATA #IMPLIED
+	       doc CDATA #IMPLIED
+	       member (true | false) "true"
+	       warn (true | false) "true"
+	       immutable (true | false) "false"
+	       notify-blackboard (true | false) "true"
+	       notify-listeners (true | false) "true"
+	       transient (true | false) "false"&gt;
+&lt;!ELEMENT fork EMPTY&gt;
+&lt;!ATTLIST fork relation CDATA #REQUIRED
+	       role CDATA #REQUIRED&gt;
+&lt;!ELEMENT slot-reference EMPTY&gt;
+&lt;!ATTLIST slot-reference name CDATA #REQUIRED&gt;
+
+</pre>
+</verbatim>
+
+</body> </html>

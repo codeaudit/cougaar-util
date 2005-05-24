@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+
+</head>
+
+<body>
+
+<h2>The Cougaar Frame Infrastructure: Code Generation</h2>
+
+<p>Code generation for the Frame Infrastructure is handle by the class
+  FrameGen. It reads an xml file in frameset.dtd format and generates
+  a Java class for each prototype.  In addition it generates a dtd for
+  the domain, and optionally a Jess clp file for the shadow classes.
+</p>
+
+<p>Several features of frameset.dtd are specifically there for the
+  code generator, generally for efficiency but in some cases simply as
+  useful information.  In the former category are most of the
+  attributes on a <code>slot</code> element: type, default-value,
+  member, immutable, notify-blackboard, notify-listeners, transient.
+  Semantic details can be found the Frameset XML section.  In the
+  latter category are the package and domain attributes of
+  the <code>frameset</code> entity.
+</p>
+
+<p>The code generator could be extended to generate other things as
+  well, including domain-specific runtime parsers for data frame xml
+  files and domain-specific FrameSet classes.
+</p>
+
+</body> </html>

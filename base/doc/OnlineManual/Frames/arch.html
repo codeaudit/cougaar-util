@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+  </head>
+
+  <body>
+    <h2>The Cougaar Frame Infrastructure: Architecture</h2>
+
+
+
+    <p>A <i>Frame</i> is a basic unit of knowledge, consisting of a
+      collection of named <i>slots</i>, each of which can have a
+      value.  A <i>FrameSet</i> is an organized collection of Frames.
+      The organization of any particular FrameSet is itself defined by
+      a special subset of the Frames it contains.  These metadata
+      Frames are known as <i>PrototypeFrames</i>, while ordinary data
+      in the FrameSet takes the form of <i>DataFrames</i>. Each
+      DataFrame is an instance of a exactly one prototype, and can
+      represent either a logical entity, or to binary relationships
+      between entities.  The importance of this distinction will
+      become clear later.
+    </p>
+
+    <p>PrototypeFrames define the slots that are included in
+      DataFrames of the corresponding prototype (or of a descendent of
+      that prototype).  The definition of a slot has a number of
+      dimensions, some of which are conceptual (eg the value type) and
+      some of which are more like implementation pragmas (eg whether
+      or not the slot should be represented as a data member in a Java
+      class).
+    </p>
+
+    <p>One somewhat unusual feature of slots is that their value can
+      be specified as a <i>path</i> through the FrameSet.  A Path is a
+      first-class object in the specification of a FrameSet, and
+      describes an ordered series of relative steps a given Frame
+      should follow in order to find the current value of a
+      path-valued slot.
+
+    <p>The PrototypeFrames in any given FrameSet are arranged as
+      single-inheritance hierarchy, much like the class hierarchy in
+      Java.  In addition, the Cougaar Frame System supports a second,
+      independent hierarchy, known as <i>containment</i>, which for
+      each FrameSet is defined a particular relation prototype.  These
+      two hierarchies can be thought of very loosely as "is a" and "is
+      contained in", though the doesn't necessarily represent physical
+      containment.  Slots are fully inherited through the prototype
+      hierarchy and inherited read-only through the containment
+      hierarchy.
+    </p>
+
+</body> </html>

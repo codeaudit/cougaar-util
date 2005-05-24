@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+
+<html>
+<head>
+</head>
+
+<body>
+
+<h2>The Cougaar Frame Infrastructure: Design</h2>
+
+<p>A FrameSet in the Cougaar Frame Infrastructure is specified by a
+  set of <i>PrototypeFrames</i>, which define the data types; and
+  prototype inheritance specification; and a containment
+  specification, which indicates which of the relation prototypes
+  should define the containment hierarchy.  A FrameSet, in other
+  words, is defines a <i>domain</i> in the form of a dual hierarchy of
+  types. It also implicitly defines a <i>namespace</i> of types. For
+  now we support only single-inheritance along both hierarchies.  The
+  FrameSet has the responsiblity for handling per-prototype frame
+  instantiation, as well as caching for efficient handling of
+  relationship frames.
+</p>
+
+<p>To facilitate instantiation, and also to increase the run time
+  efficiency of slot lookups, a code generator generates a Java class
+  for each PrototypeFrame.  It is these classes that are instantiated
+  for the <i>DataFrames</i>.  Most generated classes extend another
+  generated class: its parent in the prototype hierarchy.  There are
+  also two root prototypes in each domain, with no explicit parent:
+  the root entity prototype, which is generated such that it directly
+  extends DataFrame, and the root relation prototype, which extends
+  the predefined class RelationFrame (in turn an extension of
+  DataFrame).
+</p>
+
+<p>The PrototypeFrame instances are kept at runtime in the FrameSet,
+  along with the DataFrames.  Although in principle all the necessary
+  information could be generated in advance, thereby avoiding any need
+  to represent Prototypes directly at runtime, in practice it's useful
+  to keep this meta-data available in the form of first-class
+  Objects. On the other hand, PrototypeFrame instances are completely
+  fixed at runtime: nothing about them can change.  DataFrames are
+  fixed only to the extent that their prototype can't change.
+  Otherwise they're fully dynamic objects.
+</p>
+
+<p>FrameSets can be created and populated via xml using the
+  <b>FrameSetService</b>, which can also be used to find existing
+  FrameSets.  See xxx.
+</p>
+
+<p> <a name="containment"></a> One of the novel features of the
+  Cougaar frame system is that it supports two independent
+  hierarchies. In addition to the prototype hierarchy, the Cougaar
+  frame system a second single-inheritance hierarchy known as
+  <i>containment</i>. Containment is a special relationship used to
+  augment slot value lookup at runtime.  As one might expect,
+  DataFrames can include a frame-specific value for any given slot.
+  If it does, no further work is required.  If it doesn't, the
+  prototype hierarchy is searched for a default value or for a path
+  specification (see <a href="#paths">below</a> for more on paths).
+  If this fails as well, the containment hierarchy can then be
+  searched.  This allows a DataFrame to have virtual access to slots
+  defined by its logical container.  The containment relation is
+  defined as part of FrameSet and fixed when the FrameSet is created.
+  This relation is an example of caching handled by the FrameSet. 
+</p>
+
+<a name="paths"></a> 
+<p>Another novel features of the Cougaar frame system is
+  the <i>Path</i> specification.  The description of any given slot in
+  a prototype can indicate that the value of that slot for some frame
+  F is determined by following a particular path from F a runtime.  A
+  Path represents a kind of encapsulated visitor pattern.  It consists
+  of an ordered series of <i>Forks</i> and a slot.  Each Fork refers
+  to a relation and a role.  This allows any given frame to follow a
+  path, one relationship at a time, to any related frame, arbitrarily
+  far away.  When the final frame in the path is reached, the given
+  slot value is returned as the value of the original slot
+  reference. NB: Although DataFrames generally act like beans,
+  including property-change support, Path-valued slots are an
+  exception at the moment: if the value of Path-valued slot changes,
+  listeners will not be notified. We hope to deal with this in a
+  future release.
+<p>
+
+
+</body>
+</html>
