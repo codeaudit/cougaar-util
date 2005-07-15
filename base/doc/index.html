@@ -14,7 +14,7 @@
   <td align="Center" width="200"> 
       <h2> <b><font size="+2">Release Notes</font></b></h2>
   
-      <h2> <b><font size="+2">COUGAAR 12.0</font></b></h2>
+      <h2> <b><font size="+2">COUGAAR 12.2</font></b></h2>
  </td>
  </tr>
  
@@ -45,7 +45,7 @@ Components)</a></li>
 
       <h2> <a name="introduction"></a>Introduction</h2>
 
-This file contains the release notes for Cougaar 12.0.
+This file contains the release notes for Cougaar 12.2.
 <p>
 Please see our <a href="FAQ.html">Cougaar FAQ</a>
 (<a href="http://cougaar.org/faq.html">online version</a>) for a high-level
@@ -63,13 +63,10 @@ Cougaar is available the Cougaar Open Source
 
       <h2> <a name="requirements"></a>Requirements</h2>
 <ul>
-<li><b>Java 2 SDK, version 1.4.2 or version 5.0</b>:  Cougaar I/O is very closely tied to
+<li><b>Java 2 SDK, version 5.0</b>:  Cougaar I/O is very closely tied to
 the specific java implementation, so usually depends on a particular
 release of the jdk. We have not observed any compatibility problems 
-across service releases (e.g. "_01" versus "_03"). Other 1.4 versions,
-while not supported, are likely to be possible with a small amount of
-effort. Two releases are available for Cougaar 12.0.  One for Java 1.4.2 and one for Java 5.0.  
-Future Cougaar releases will require Java 5.0.
+across service releases (e.g. "_01" versus "_03"). 
 </li>
 <li><b>Third-party libraries</b>:  Detailed requirements and jarfile versions are discussed in
 <a href="../sys/index.html">sys/index.html</a>.  When a package
@@ -93,22 +90,44 @@ The errata directory is organized by cougaar release number.  For
 example, the errata page for Cougaar 11.0 is <a href="http://cougaar.org/errata/cougaar1100/errata.html">http://cougaar.org/errata/cougaar1100/errata.html</a>.
 
 
-  <!-- COUGAAR 11.4 COUGAAR 11.4 COUGAAR 11.4 COUGAAR 11.4 COUGAAR 11.4 -->
+ <!-- COUGAAR 12.2 COUGAAR 12.2 COUGAAR 12.2 COUGAAR 12.2 COUGAAR 12.2 -->
 <p>
-<b>Build 12.0</b> is a major release....
+<b>Build 12.2</b> is a minor release. 
 <p>
 <ul>
+<li></li>
+</ul>
+
+
+ <!-- COUGAAR 12.0 COUGAAR 12.0 COUGAAR 12.0 COUGAAR 12.0 COUGAAR 12.0 -->
+<p>
+<b>Build 12.0</b> is a major release. The primary changes were JDK1.5
+support (see above though), and a new concept called coordination artifacts.
+<p>
+<ul>
+<li>There is a new CoordinationArtifacts concept. See <a
+href="OnlineManual/Frames">The Frame Online Manual</a>.</li>
 <li>RFE 3923: Changed PlanningDomain, some fields, to protected access
 so it can be easily extended. IE, just over-ride loadLPs, specify this
 domain as "planning", and specify org.cougaar.core.load.planning=false
 in all nodes. Then you can change the set of LPs running in the PlanningDomain.</li>
 <li><a href="http://bugs.cougaar.org/show_bug.cgi?id=3906">bug 3906</a> and <a href="http://bugs.cougaar.org/show_bug.cgi?id=3934">bug 3934</a>Fixed a timing issue related to creating new communities dynamically. Corrected issues regarding multiple attributes for community entities.</li>
 <li><a href="http://bugs.cougaar.org/show_bug.cgi?id=3909">bug 3909</a> Added accessors for planning and servicediscovery factories</li>
-<li><a href="http://bugs.cougaar.org/show_bug.cgi?id=3930">bug 3930</a> Added a component to exit on any logged error for testing purposes</li>
+<li><a href="http://bugs.cougaar.org/show_bug.cgi?id=3930">bug
+3930</a> Added a component to exit on any logged error for testing
+purposes (DieOnErrorComponent)</li>
 <li><a href="http://bugs.cougaar.org/show_bug.cgi?id=3933">bug 3933</a> <a href="http://bugs.cougaar.org/show_bug.cgi?id=3922">bug 3922</a> and <a href="http://bugs.cougaar.org/show_bug.cgi?id=3941">bug 3931</a>Updated the Java IO patch to work with Java 5.0</li>
 <li><a href="http://bugs.cougaar.org/show_bug.cgi?id=3937">bug 3937</a> Updated the CommunityService to be compliant with DirContext interface</li>
 <li><a href="http://bugs.cougaar.org/show_bug.cgi?id=3820">bug 3820</a> Resolved validation issues with XSL files</li>
-<li><a href="http://bugs.cougaar.org/show_bug.cgi?id=3846">bug 3846</a> Corrected syncronization issues regarding access to Workflow tasks</li>
+<li><a href="http://bugs.cougaar.org/show_bug.cgi?id=3846">bug
+3846</a> Corrected syncronization issues regarding access to Workflow
+tasks</li>
+<li><a href="http://bugs.cougaar.org/show_bug.cgi?id=3936">bug
+3936</a> Split SimpleRelay into separate source & target
+implementations.<li>
+<li>Bootstrap.jar is now optionally executable. It also allows simpler
+addition of jars to org.cougaar.jar.path. See the Javadoc.</li>
+<li>For other bug fixes, see the <a href="http://bugs.cougaar.org">Cougaar bugs web site</a>.</li>
 </ul>
 
 
