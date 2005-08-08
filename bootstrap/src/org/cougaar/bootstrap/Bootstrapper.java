@@ -247,25 +247,8 @@ public class Bootstrapper
    **/
   public final static int getLoudness() {return loudness;}
 
-  /**
-   * The list of jar files to be ignored by bootstrapper, which
-   * typically includes javaiopatch and boostrap itself.
-   * @todo Replace this with something which examines the
-   * jars for dont-bootstrap-me flags.
-   **/
-  protected final static List excludedJars = new ArrayList();
-  static {
-    String s = System.getProperty("org.cougaar.bootstrap.excludeJars");
-    if (s == null) {
-      s = "javaiopatch.jar:bootstrap.jar";
-    }
-    if (s.length() > 0) {
-      String files[] = s.split(":");
-      for (int i=0; i < files.length; i++) {
-        excludedJars.add(files[i]);
-      }
-    }
-  }
+  // cache of getExcludedJars
+  private List excludedJars;
 
   private static boolean isBootstrapped = false;
   /** @return true iff a bootstrapper has run in the current VM **/
@@ -364,8 +347,8 @@ public class Bootstrapper
   protected ClassLoader createClassLoader(List l) {
     URL urls[] = (URL[]) l.toArray(new URL[l.size()]);
 
-    String clname = System.getProperty("org.cougaar.bootstrap.classloader.class", 
-                                       "org.cougaar.bootstrap.XURLClassLoader");
+    String clname = getProperty("org.cougaar.bootstrap.classloader.class", 
+                                "org.cougaar.bootstrap.XURLClassLoader");
     try {
       Class clclazz = Class.forName(clname);
       Constructor clconst = clclazz.getConstructor(new Class[] { URL[].class });
@@ -430,17 +413,17 @@ public class Bootstrapper
     Map props = new HashMap();
     props.put(
         "CLASSPATH",
-        System.getProperty("org.cougaar.class.path", ""));
-    String base = System.getProperty("org.cougaar.install.path", "");
+        getProperty("org.cougaar.class.path", ""));
+    String base = getProperty("org.cougaar.install.path", "");
     props.put("INSTALL", base);
     props.put("CIP", base);        // alias for INSTALL
     props.put("COUGAAR_INSTALL_PATH", base); // for completeness
-    props.put("HOME", System.getProperty("user.home"));
-    props.put("CWD", System.getProperty("user.dir"));
-    props.put("SYS", System.getProperty("org.cougaar.system.path", ""));
+    props.put("HOME", getProperty("user.home"));
+    props.put("CWD", getProperty("user.dir"));
+    props.put("SYS", getProperty("org.cougaar.system.path", ""));
 
     // jar path
-    String jar_path = System.getProperty("org.cougaar.jar.path");
+    String jar_path = getProperty("org.cougaar.jar.path");
     if (jar_path != null && 
 	jar_path.charAt(0) == '"' &&
 	jar_path.charAt(jar_path.length()-1) == '"') {
@@ -620,20 +603,63 @@ public class Bootstrapper
    **/
   protected boolean checkURL(URL url) {
     String u = url.toString();
-    int l = excludedJars.size();
-    for (int i = 0; i<l; i++) {
-      String tail = (String) excludedJars.get(i);
+    List l = getExcludedJars();
+    for (int i = 0; i < l.size(); i++) {
+      String tail = (String) l.get(i);
       if (u.endsWith(tail)) return false;
     }
     return true;
   }
 
   /**
+   * Get the list of jar files to be ignored by bootstrapper, which
+   * typically includes javaiopatch and boostrap itself.
+   * @todo Replace this with something which examines the
+   * jars for dont-bootstrap-me flags.
+   **/
+  protected List getExcludedJars() {
+    if (excludedJars == null) {
+      excludedJars = new ArrayList();
+      String s = getProperty("org.cougaar.bootstrap.excludeJars");
+      if (s == null) {
+        s = "javaiopatch.jar:bootstrap.jar";
+      }
+      if (s.length() > 0) {
+        String files[] = s.split(":");
+        for (int i=0; i < files.length; i++) {
+          excludedJars.add(files[i]);
+        }
+      }
+    }
+    return excludedJars;
+  }
+
+  protected String getProperty(String key) {
+    return System.getProperty(key);
+  }
+  protected String getProperty(String key, String def) {
+    return System.getProperty(key, def);
+  }
+  protected Properties getProperties() {
+    return System.getProperties();
+  }
+
+  /**
    * Reads the properties from specified url
    **/
-  public static void readProperties(String propertiesURL){
+  public static void readProperties(String propertiesURL) {
     if (propertiesURL != null) {
-      Properties props = System.getProperties();
+      readPropertiesFromURL(System.getProperties(), propertiesURL);
+    }
+  }
+  protected void readPropertiesFromURL(String propertiesURL) {
+    if (propertiesURL != null) {
+      readPropertiesFromURL(getProperties(), propertiesURL);
+    }
+  }
+  private static void readPropertiesFromURL(
+      Properties props, String propertiesURL) {
+    if (propertiesURL != null) {
       try {    // open url, load into props
         URL url = new URL(propertiesURL);
         InputStream stream = url.openStream();

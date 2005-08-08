@@ -1,14 +1,14 @@
-/* 
+/*
  * <copyright>
- * 
+ *
  *  Copyright 2004 BBNT Solutions, LLC
  *  under sponsorship of the Defense Advanced Research Projects
  *  Agency (DARPA).
- * 
+ *
  *  You can redistribute this software and/or modify it under the
  *  terms of the Cougaar Open Source License as published on the
  *  Cougaar Open Source Website (www.cougaar.org).
- * 
+ *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -20,7 +20,7 @@
  *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  *  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * </copyright>
  */
 package org.cougaar.bootstrap;
@@ -29,8 +29,10 @@ import java.io.CharArrayWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.InputStream;
 import java.io.IOException;
+import java.io.LineNumberReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,6 +41,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -67,8 +70,8 @@ import org.xml.sax.helpers.XMLReaderFactory;
  *   $COUGAAR_INSTALL_PATH/bin/cougaar --help
  * </pre>
  * The typical usage is:<pre>
- *   # <i>start node X specified in "mySociety.xml":</i> 
- *   cd <i>your_config_directory</i> 
+ *   # <i>start node X specified in "mySociety.xml":</i>
+ *   cd <i>your_config_directory</i>
  *   $COUGAAR_INSTALL_PATH/bin/cougaar mySociety.xml X
  * </pre>
  * <p>
@@ -92,7 +95,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  *       &lt;vm_parameter&gt;-Dx=z&lt;/vm_parameter&gt;
  *     &lt;/node&gt;
  *   &lt;/society&gt;
- * </pre> 
+ * </pre>
  * <i>command line:</i><pre>
  *   $COUGAAR_INSTALL_PATH/bin/cougaar \
  *     --system my_system.xml\
@@ -101,10 +104,10 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * </pre>
  * would print a command line output similar to:<pre>
  *   java -Dx=z -Dfoo=$bar ...
- * </pre> 
+ * </pre>
  * and on Windows (based on the 'os.name' property) this would be:<pre>
  *   java -Dx=z -Dfoo=%bar% ...
- * </pre> 
+ * </pre>
  * <p>
  * This parser also adds several standard Cougaar defaults, which
  * add the minimal -Ds and options required to run a Cougaar node:
@@ -138,15 +141,15 @@ import org.xml.sax.helpers.XMLReaderFactory;
  *       is used.</li>
  *   <li>If a "-Xbootclasspath.." is not specified, then
  *       "-Xbootclasspath/p:$COUGAAR_INSTALL_PATH/lib/javaiopatch.jar"
- *       is used.</li> 
- *   <li>If 
+ *       is used.</li>
+ *   <li>If
  *       "-Dorg.cougaar.core.node.InitializationComponent=<i>type</i>"
  *       is not specified,
  *       "-Dorg.cougaar.core.node.InitializationComponent=XML"
  *       is used.</li>
  *   <li>If "-Djava.class.path=<i>jars</i>" is not specified,
  *       "-Djava.class.path=$COUGAAR_INSTALL_PATH/lib/bootstrap.jar"
- *       is used.</li> 
+ *       is used.</li>
  * </ul>
  */
 public final class CommandLine {
@@ -204,6 +207,11 @@ public final class CommandLine {
     null, // use ParserFactory, which uses -Dorg.xml.sax.parser
   };
 
+  // optional -D specified *in the xml* to expand the bootstrapper
+  // jar path.
+  private static final String EXPAND_JAR_PATH_PROP =
+    "org.cougaar.bootstrap.commandLine.expandJarPath";
+
   // args
   private final String[] args;
 
@@ -223,14 +231,17 @@ public final class CommandLine {
 
   // from application xml file (e.g. "mySociety.xml")
   private CommandData application_data;
-  
+
   // from command-line args "--overrides"
   private CommandData override_data;
+
+  // cached envirnoment variables, if expandJarPath is enabled
+  private Map env;
 
   public static void main(String[] args) throws Exception {
     (new CommandLine(args)).run();
   }
-  
+
   public CommandLine(String[] args) {
     this.args = args;
   }
@@ -333,11 +344,11 @@ public final class CommandLine {
       return false;
     }
     if (default_vm_parameters != null) {
-      default_data = 
+      default_data =
         new CommandData(default_vm_parameters, node_name);
     }
     if (override_vm_parameters != null) {
-      override_data = 
+      override_data =
         new CommandData(override_vm_parameters, node_name);
     }
     return true;
@@ -365,7 +376,7 @@ public final class CommandLine {
       }
 
       if (system_xml != null && !system_xml.equals(application_xml)) {
-        String sys_node_name = 
+        String sys_node_name =
           (node_name != null ? node_name :
            application_data != null ? application_data.node :
            null);
@@ -405,7 +416,7 @@ public final class CommandLine {
    *   <li>--defaults "-Ds"</li>
    *   <li>system.xml</li>
    *   <li>cougaar default (if "&lt;class&gt;" == Bootstrapper)</li>
-   * </ol> 
+   * </ol>
    */
   private CommandData merge_data() {
 
@@ -417,7 +428,7 @@ public final class CommandLine {
     boolean hasBootpath = false;
     String node = node_name;
     for (int x = 0; x < 4; x++) {
-      CommandData cd = 
+      CommandData cd =
         (x == 0 ? system_data :
          x == 1 ? default_data :
          x == 2 ? application_data :
@@ -516,6 +527,22 @@ public final class CommandLine {
       }
     }
 
+    // optionally remove bootstrapper & jar path
+    if (clazz.equals("org.cougaar.bootstrap.Bootstrapper") &&
+        "true".equals(m.get("-D"+EXPAND_JAR_PATH_PROP))) {
+      try {
+        expandJarPath(m);
+        // success
+        m.remove("-D"+EXPAND_JAR_PATH_PROP);
+        clazz = (String) m.remove("-Dorg.cougaar.bootstrap.application");
+      } catch (Exception e) {
+        System.err.println(
+            "Warning: Unable to remove bootstrapper, ignoring -D"+
+            EXPAND_JAR_PATH_PROP);
+        e.printStackTrace();
+      }
+    }
+
     // flatten map to list
     List vm_parameters = new ArrayList(m.size());
     for (Iterator iter = m.entrySet().iterator();
@@ -539,6 +566,247 @@ public final class CommandLine {
         node_name,
         true);
   }
+
+  /**
+   * Rewrite the -Ds to remove the bootstrapper, expand the jar path,
+   * and resolve all system properties that contain "\${<i>name</i>}"
+   * expansions (see {@link SystemProperties.expandProperties()}.
+   */
+  private void expandJarPath(Map m) {
+    // Build a properties table containing all our map properties,
+    // resolving environment variables as necessary.
+    //
+    // For example, suppose we have:
+    //   -Dorg.cougaar.install.path=$COUGAAR_INSTALL_PATH
+    // The jar finder will use this to find jars, e.g.
+    //   <cip>/lib:<cip>/sys
+    // Since we're bypassing the shell, we must resolve the
+    // $COUGAAR_INSTALL_PATH here, otherwise the jar finder will
+    // see:
+    //   $COUGAAR_INSTALL_PATH/lib:$COUGAAR_INSTALL_PATH/sys
+    // instead of real filesystem paths.
+    //
+    // Note that we only save the resolved -Ds that are set back
+    // in the properties table.  The above example's -D won't be
+    // saved in our "m" map, since the Bootstrapper won't call
+    // "props.setProperty(..)" on it.  Currently only "\${name}"
+    // properties will be copied back, due to the SystemProperties
+    // "expandProperties(props)" method.
+    if (debug) {
+      System.err.println("rewriting command to remove bootstrapper");
+    }
+    Properties p = new Properties(System.getProperties());
+    for (Iterator iter = m.entrySet().iterator(); iter.hasNext(); ) {
+      Map.Entry me = (Map.Entry) iter.next();
+      String key = (String) me.getKey();
+      if (!key.startsWith("-D")) {
+        continue;
+      }
+      key = key.substring(2);
+      String originalValue = (String) me.getValue();
+      String value = resolveProperty(originalValue);
+      if (debug &&
+          originalValue != null && !originalValue.equals(value)) {
+        System.err.println("resolved -D"+key+"="+value);
+      }
+      p.setProperty(key, value);
+    }
+    // record any "setProperty(..)" changes
+    final Map m2 = m;
+    final Properties props = new Properties(p) {
+      public Object put(Object key, Object value) {
+        Object ret = super.put(key, value);
+        if (debug) {
+          System.err.println("overriding -D"+key+"="+value);
+        }
+        m2.put("-D"+key, value);
+        return ret;
+      }
+    };
+    // wrap the bootstrapper to use our props
+    Bootstrapper b = new Bootstrapper() {
+      protected String getProperty(String key) {
+        if ("org.cougaar.bootstrap.excludeJars".equals(key)) {
+          return "javaiopatch.jar";
+        }
+        return props.getProperty(key);
+      }
+      protected String getProperty(String key, String def) {
+        return props.getProperty(key, def);
+      }
+      protected Properties getProperties() {
+        return props;
+      }
+    };
+    // use the bootstrapper to compute the jar url list
+    b.readPropertiesFromURL(
+        props.getProperty("org.cougaar.properties.url"));
+    SystemProperties.expandProperties(props);
+    List l = b.computeURLs();
+    if (debug) {
+      System.err.println("found jars["+l.size()+"]="+l);
+    }
+    // replace the java -classpath with the jars
+    StringBuffer buf = new StringBuffer();
+    for (int i = 0; i < l.size(); i++) {
+      URL url = (URL) l.get(i);
+      if (i > 0) {
+        buf.append(File.pathSeparator);
+      }
+      buf.append(url);
+    }
+    m.put("-Djava.class.path", buf.toString());
+    // remove other bootstrapper -Ds
+    m.put("-Dorg.cougaar.useBootstrapper", "false");
+    m.remove("-Dorg.cougaar.class.path");
+    m.remove("-Dorg.cougaar.jar.path");
+    // the caller should use the bootstrap.application
+  }
+
+  /**
+   * Resolve a string like the shell would resolve it.
+   * <p>
+   * This is a decent approximation that handles the common
+   * cases, but it doesn't handle all the oddities..
+   */
+  private String resolveProperty(String value) {
+    if (value == null) {
+      return "";
+    }
+    // unquote
+    if (value.startsWith("\'") && value.endsWith("\'")) {
+      return value.substring(1, value.length() - 1);
+    }
+    if (value.startsWith("\"") && value.endsWith("\"")) {
+      value = value.substring(1, value.length() - 1);
+    }
+    char varCh = windows ? '%' : '$';
+    if (value.indexOf(varCh) >= 0) {
+      // expand environment variable(s), e.g.:
+      //   a/$USER/b --> a/root/b
+      StringBuffer buf = new StringBuffer();
+      int i = 0;
+      while (true) {
+        int j = value.indexOf(varCh, i);
+        if (j < 0) {
+          buf.append(value.substring(i));
+          break;
+        }
+        buf.append(value.substring(i, j));
+        i = j;
+        if (!windows && i > 0 && value.charAt(i-1) == '\\') {
+          buf.append(varCh);
+          i++;
+          continue;
+        }
+        boolean keepLastChar = false;
+        if (windows) {
+          j = value.indexOf('%', i+1);
+        } else if (value.charAt(i+1) == '{') {
+          i++;
+          j = value.indexOf('}', i+1);
+        } else {
+          keepLastChar = true;
+          for (j = i + 1; j < value.length(); j++) {
+            char ch = value.charAt(j);
+            if (!Character.isLetterOrDigit(ch) &&
+                ch != '_' && ch != '-') {
+              break;
+            }
+          }
+        }
+        String envKey = value.substring(i+1, j);
+        String envValue = getenv(envKey);
+        if (envValue == null) {
+          envValue = "";
+        }
+        buf.append(envValue);
+        if (keepLastChar && j < value.length()) {
+          buf.append(value.charAt(j));
+        }
+        i = j + 1;
+        if (i > value.length()) {
+          break;
+        }
+      }
+      value = buf.toString();
+    }
+    if (!windows && value.indexOf('\\') >= 0) {
+      // remove "\"s, e.g.:
+      //   a\\b\c --> a\bc
+      // it's important to do this after the variable expansion,
+      // to support:
+      //   \$x --> $x
+      StringBuffer buf = new StringBuffer();
+      for (int i = 0; i < value.length(); i++) {
+        char ch = value.charAt(i);
+        if (ch == '\\') {
+          if (++i > value.length()) {
+            break;
+          }
+          ch = value.charAt(i);
+        }
+        buf.append(ch);
+      }
+      value = buf.toString();
+    }
+    return value;
+  }
+
+  private String getenv(String name) {
+    if (env != null) {
+      return (String) env.get(name);
+    }
+    try {
+      return System.getenv(name); // not deprecated in JDK 1.5!
+    } catch (Error e) {
+      String s = e.getMessage();
+      if (s == null || !s.startsWith("getenv no longer supported")) {
+        throw new RuntimeException("getenv("+name+") failed?", e);
+      }
+    }
+    env = new HashMap();
+    // build table of environment variables
+    //
+    // JDK 1.4 dropped "System.getenv" but it'll be back in JDK 1.5
+    // (bug 4199068).  For now, we use this Linux-only approach
+    // instead of JNI.  The following code is from:
+    //   http://intgat.tigress.co.uk/rmy/java/getenv/pure.html
+    // Windows users will need 1.5 or, as a workaround, they can
+    // create a dummy "/proc/self/environ" file.
+    LineNumberReader reader = null;
+    try {
+      reader = new LineNumberReader(new FileReader("/proc/self/environ"));
+      while (true) {
+        String s = reader.readLine();
+        if (s == null) break;
+        String[] lines = s.split("\000");
+        for (int i = 0; i < lines.length; i++) {
+          String line = lines[i];
+          int n = line.indexOf('=');
+          if (n >= 0)
+            env.put(line.substring(0, n), line.substring(n+1));
+        }
+      }
+    } catch (Exception e) {
+      String os = System.getProperty("os.name");
+      if (!"Linux".equals(os))  {
+        throw new UnsupportedOperationException(
+            "Unable to read environment variables in "+os);
+      }
+      throw new RuntimeException(
+          "I/O exception reading environment variables", e);
+    } finally {
+      try {
+        if (reader != null)
+          reader.close();
+      } catch (IOException ioe) {
+        // ignore
+      }
+    }
+    return (String) env.get(name);
+  }
+
 
   /** Convert "$x" to "%x%". */
   private static final String toWindows(String s) {
@@ -581,7 +849,7 @@ public final class CommandLine {
         break;
       }
     }
-    return buf.toString(); 
+    return buf.toString();
   }
 
   /** Parse an XML file, return the contained command data */
@@ -671,12 +939,12 @@ public final class CommandLine {
         String node,
         boolean processedNode) {
       this.command = command;
-      this.vm_parameters = 
+      this.vm_parameters =
         (vm_parameters == null ?
          Collections.EMPTY_LIST :
          vm_parameters);
       this.clazz = clazz;
-      this.prog_parameters = 
+      this.prog_parameters =
         (prog_parameters == null ?
          Collections.EMPTY_LIST :
          prog_parameters);
@@ -715,7 +983,7 @@ public final class CommandLine {
       }
       XMLReader ret;
       try {
-        ret = 
+        ret =
           (classname == null ?
            XMLReaderFactory.createXMLReader() :
            XMLReaderFactory.createXMLReader(classname));
@@ -890,13 +1158,13 @@ public final class CommandLine {
       String name = atts.getValue("name");
       boolean anyName = (name == null || name.equals("*"));
       boolean anyNode = (node_name == null || node_name.equals("*"));
-      thisNode = 
+      thisNode =
         (anyName ||
          anyNode ||
          node_name.equals(name));
       if (thisNode) {
-        node = 
-          (anyName ? 
+        node =
+          (anyName ?
            (anyNode ? null : node_name) :
            name);
         processedNode = true;

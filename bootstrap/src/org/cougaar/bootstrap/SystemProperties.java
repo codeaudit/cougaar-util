@@ -175,12 +175,15 @@ public class SystemProperties {
    * </pre>
    */
   public static void expandProperties() {
+    expandProperties(System.getProperties());
+  }
+  /** @see #expandProperties() */
+  public static void expandProperties(Properties props) {
     boolean expandProperties =
-      Boolean.valueOf(System.getProperty("org.cougaar.properties.expand",
+      Boolean.valueOf(props.getProperty("org.cougaar.properties.expand",
       "true")).booleanValue();
     
     if (expandProperties) {
-      Properties props = System.getProperties();
       Enumeration en = props.propertyNames();
       while (en.hasMoreElements()) {
         String key = (String)en.nextElement();
@@ -200,7 +203,8 @@ public class SystemProperties {
    * @return the value of the expanded property.
    */
   private static String expandProperty(Properties props, String key, Set references) {
-    String value = props.getProperty(key);
+    String originalValue = props.getProperty(key);
+    String value = originalValue;
     boolean done = false;
     while (!done) {
       Matcher m = expandPattern.matcher(value);
@@ -213,7 +217,7 @@ public class SystemProperties {
          * in directory names, e.g. c:\cougaar
          * Otherwise the resulting string would be "c:cougaar"
          */
-        String pVal = System.getProperty(pKey);
+        String pVal = props.getProperty(pKey);
         if (pVal == null) {
           throw new IllegalArgumentException("Unresolved property: " + pKey);
         }
@@ -234,7 +238,9 @@ public class SystemProperties {
       value = sb.toString();
     }
     value = escapePattern.matcher(value).replaceAll("\\$\\{$1\\}");
-    props.setProperty(key, value);
+    if (!value.equals(originalValue)) {
+      props.setProperty(key, value);
+    }
     return value;
   }
   
