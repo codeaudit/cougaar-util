@@ -240,9 +240,8 @@ implements Container, StateObject
        ((ComponentDescription) child) :
        null);
     ContainerView parentView = getContainerView();
-    if (parentView == null) {
-      return csb;
-    }
+    // note that the parentView can be null, which occurs in the root
+    // container or if a binder blocks access.  This is fine.
     return new ViewedServiceBroker(csb, id, cd, parentView, b);
   }
 
