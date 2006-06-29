@@ -38,6 +38,12 @@
 
   </dd>
 
+  <dt><b>copyright</b></dt>
+
+  <dd>If a <code>copyright</code> element is present, its text is inserted at the top of
+    of every generated .java file for this FrameSet.<p>
+  </dd>
+
   <dt><b>prototypes</b></dt>
 
   <dd> A <code>prototypes</code> element can be used to group
@@ -84,6 +90,7 @@
     <p>
 
   </dd>
+
 
   <dt><b>fork</b></dt>
 
@@ -168,6 +175,19 @@
 	value of the attribute is the name of path.  If a
 	<code>path</code> attribute is present, the slot cannot be a
 	<code>member</code>.  <p>
+
+      </dd>
+
+      <dt><code>metric-path</code></dt>
+
+      <dd> The presence of this attribute indicates that the
+	value comes from the Metric Service dynamically.  The
+	value of the attribute is a Metric Service path.  If a
+	<code>metric-path</code> attribute is present, it implies
+        that the slot is <code>read-only</code>, <code>member</code>
+        and <code>transient</code>, and has <code>type</code>
+        "Metric".
+        <p>
 
       </dd>
 
