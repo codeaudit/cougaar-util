@@ -96,9 +96,10 @@ import java.util.Properties;
  *   $COUGAAR_INSTALL_PATH/sys/*.jar
  * </pre>
  * <p>
- * The exact list of jars is controlled by "-Dorg.cougaar.jar.path",
- * which is a ":" separated string (";" on Windows) that defaults to
- * the {@link #DEFAULT_JAR_PATH} value of:<pre>
+ * The exact list of jars is controlled by "-Dorg.cougaar.jar.path".
+ * The separator character is ":" on Linux, ";" on Windows, and ","
+ * on both.  The jar path defaults to the {@link #DEFAULT_JAR_PATH}
+ * value of:<pre>
  *   -Dorg.cougaar.jar.path=classpath($CLASSPATH):$INSTALL/lib:$INSTALL/plugins:$SYS:$INSTALL/sys
  * </pre> 
  * where:<pre>
@@ -121,10 +122,9 @@ import java.util.Properties;
  *   /jars/b.jar 
  *   /jars/c.jar 
  * </pre>
- * If the "-Dorg.cougaar.jar.path" value ends in ":" (";" on
- * Windows), thenthe {@link #DEFAULT_JAR_PATH} is appended to the
- * end of the specified value; this can be used to easily prefix
- * the jar path.
+ * If the "-Dorg.cougaar.jar.path" value ends in the separator character,
+ * then the {@link #DEFAULT_JAR_PATH} is appended to the end of the specified
+ * value.  This can be used to easily prefix the jar path.
  * <p> 
  * Note that the above "$" strings must be escaped to avoid Unix
  * shell expansion, for example:<pre>
@@ -217,6 +217,15 @@ import java.util.Properties;
  */
 public class Bootstrapper
 {
+
+  /** Operating specific path separator */
+  private static final char OS_SEP_CHAR = File.pathSeparatorChar;
+  private static final String OS_SEP = File.pathSeparator;
+
+  /** Standardized path separator, which works on both Linux and Windows */
+  private static final char STD_SEP_CHAR = ',';
+  private static final String STD_SEP = ""+STD_SEP_CHAR;
+
   /**
    * The default value for the "org.cougaar.jar.path" system
    * property.
@@ -224,10 +233,10 @@ public class Bootstrapper
    * See the above class-level javadoc for details. 
    */
   public static final String DEFAULT_JAR_PATH =
-    "classpath($CLASSPATH)"+File.pathSeparator+
-    "$INSTALL/lib"+File.pathSeparator+
-    "$INSTALL/plugins"+File.pathSeparator+
-    "$SYS"+File.pathSeparator+
+    "classpath($CLASSPATH)"+STD_SEP+
+    "$INSTALL/lib"+STD_SEP+
+    "$INSTALL/plugins"+STD_SEP+
+    "$SYS"+STD_SEP+
     "$INSTALL/sys";
 
   protected final static int loudness;
@@ -433,7 +442,8 @@ public class Bootstrapper
       jar_path = DEFAULT_JAR_PATH;
     } else {
       jar_path = jar_path.replace('\\', '/'); // Make sure its a URL and not a file path
-      if (jar_path.endsWith(File.pathSeparator)) {
+      char lastChar = jar_path.charAt(jar_path.length()-1);
+      if (lastChar == STD_SEP_CHAR || lastChar == OS_SEP_CHAR) {
         jar_path += DEFAULT_JAR_PATH;
       }
     }
@@ -451,7 +461,11 @@ public class Bootstrapper
         j = s.indexOf(')', i);
         k = j+1;
       } else {
-        j = s.indexOf(File.pathSeparatorChar, i);
+        j = s.indexOf(STD_SEP_CHAR, i);
+        if (STD_SEP_CHAR != OS_SEP_CHAR) {
+          int c = s.indexOf(OS_SEP_CHAR, i);
+          j = ((j >= 0 && c >= 0) ? Math.min(j, c) : Math.max(j, c));
+        }
         k = j;
       }
       if (j < 0) {
@@ -537,7 +551,9 @@ public class Bootstrapper
   protected List findJarsInClasspath(String path) {
     List l = new ArrayList();
     if (path == null) return l;
-    String files[] = path.split(File.pathSeparator);
+    String regex = 
+      (STD_SEP.equals(OS_SEP) ? STD_SEP : "("+STD_SEP+"|"+OS_SEP+")");
+    String files[] = path.split(regex);
     for (int i=0; i<files.length; i++) {
       try {
         String n = files[i];
