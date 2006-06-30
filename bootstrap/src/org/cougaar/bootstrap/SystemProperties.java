@@ -27,8 +27,13 @@
 
 package org.cougaar.bootstrap;
 
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.LineNumberReader;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -70,6 +75,8 @@ public class SystemProperties {
   private static final Pattern escapePattern =
     Pattern.compile("\\\\\\$\\\\\\{([^\\$\\{\\}]*)\\\\\\}");
   
+  private static Map env = null;
+
   /**
    * Returns standard Java properies without the need for write privileges.
    * <p>
@@ -243,5 +250,153 @@ public class SystemProperties {
     }
     return value;
   }
-  
+
+  /**
+   * Get an environment variable.
+   * <p>
+   * This is easy in JDK 1.5, but in JDK 1.4 we need this workaround.
+   */
+  public static synchronized String getenv(String name) {
+    if (env != null) {
+      return (String) env.get(name);
+    }
+    try {
+      return System.getenv(name); // not deprecated in JDK 1.5!
+    } catch (Error e) {
+      String s = e.getMessage();
+      if (s == null || !s.startsWith("getenv no longer supported")) {
+        throw new RuntimeException("getenv("+name+") failed?", e);
+      }
+    }
+    env = new HashMap();
+    // build table of environment variables
+    //
+    // JDK 1.4 dropped "System.getenv" but it'll be back in JDK 1.5
+    // (bug 4199068).  For now, we use this Linux-only approach
+    // instead of JNI.  The following code is from:
+    //   http://intgat.tigress.co.uk/rmy/java/getenv/pure.html
+    // Windows users will need 1.5 or, as a workaround, they can
+    // create a dummy "/proc/self/environ" file.
+    LineNumberReader reader = null;
+    try {
+      reader = new LineNumberReader(new FileReader("/proc/self/environ"));
+      while (true) {
+        String s = reader.readLine();
+        if (s == null) break;
+        String[] lines = s.split("\000");
+        for (int i = 0; i < lines.length; i++) {
+          String line = lines[i];
+          int n = line.indexOf('=');
+          if (n >= 0)
+            env.put(line.substring(0, n), line.substring(n+1));
+        }
+      }
+    } catch (Exception e) {
+      String os = System.getProperty("os.name");
+      if (!"Linux".equals(os))  {
+        throw new UnsupportedOperationException(
+            "Unable to read environment variables in "+os);
+      }
+      throw new RuntimeException(
+          "I/O exception reading environment variables", e);
+    } finally {
+      try {
+        if (reader != null)
+          reader.close();
+      } catch (IOException ioe) {
+        // ignore
+      }
+    }
+    return (String) env.get(name);
+  }
+
+  /**
+   * Resolve a string like the shell would resolve it.
+   * <p>
+   * This is a decent approximation that handles the common
+   * cases, but it doesn't handle all the oddities..
+   */
+  public static String resolveEnv(String value, boolean windows) {
+    if (value == null) {
+      return "";
+    }
+    // unquote
+    if (value.startsWith("\'") && value.endsWith("\'")) {
+      return value.substring(1, value.length() - 1);
+    }
+    if (value.startsWith("\"") && value.endsWith("\"")) {
+      value = value.substring(1, value.length() - 1);
+    }
+    char varCh = windows ? '%' : '$';
+    if (value.indexOf(varCh) >= 0) {
+      // expand environment variable(s), e.g.:
+      //   a/$USER/b --> a/root/b
+      StringBuffer buf = new StringBuffer();
+      int i = 0;
+      while (true) {
+        int j = value.indexOf(varCh, i);
+        if (j < 0) {
+          buf.append(value.substring(i));
+          break;
+        }
+        buf.append(value.substring(i, j));
+        i = j;
+        if (!windows && i > 0 && value.charAt(i-1) == '\\') {
+          buf.append(varCh);
+          i++;
+          continue;
+        }
+        boolean keepLastChar = false;
+        if (windows) {
+          j = value.indexOf('%', i+1);
+        } else if (value.charAt(i+1) == '{') {
+          i++;
+          j = value.indexOf('}', i+1);
+        } else {
+          keepLastChar = true;
+          for (j = i + 1; j < value.length(); j++) {
+            char ch = value.charAt(j);
+            if (!Character.isLetterOrDigit(ch) &&
+                ch != '_' && ch != '-') {
+              break;
+            }
+          }
+        }
+        String envKey = value.substring(i+1, j);
+        String envValue = getenv(envKey);
+        if (envValue == null) {
+          envValue = "";
+        }
+        buf.append(envValue);
+        if (keepLastChar && j < value.length()) {
+          buf.append(value.charAt(j));
+        }
+        i = j + 1;
+        if (i > value.length()) {
+          break;
+        }
+      }
+      value = buf.toString();
+    }
+    if (!windows && value.indexOf('\\') >= 0) {
+      // remove "\"s, e.g.:
+      //   a\\b\c --> a\bc
+      // it's important to do this after the variable expansion,
+      // to support:
+      //   \$x --> $x
+      StringBuffer buf = new StringBuffer();
+      for (int i = 0; i < value.length(); i++) {
+        char ch = value.charAt(i);
+        if (ch == '\\') {
+          if (++i > value.length()) {
+            break;
+          }
+          ch = value.charAt(i);
+        }
+        buf.append(ch);
+      }
+      value = buf.toString();
+    }
+    return value;
+  }
 }
