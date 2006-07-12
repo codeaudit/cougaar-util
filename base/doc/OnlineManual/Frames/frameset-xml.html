@@ -103,13 +103,33 @@
 
   </dd>
   
+  <a name="dependency"></a><dt><b>dependency</b></dt>
   
+  <dd>A <code>dependency</code> element is used to specify
+	  that a slot value depends on a aggregate calculation
+	  applied to a set of related entities.  The required attributes
+	  are <code>relation</code> (the name of the relation prototype),
+	  <code>child-prototype</code> (the name of the prototype of the
+	  related entities), and <code>updater</code> (the fully qualified
+	  name of a class that does the calculation and which must implement
+	  <code>org.cougaar.core.qos.frame.SlotUpdater</code>).  If any 
+	  entities of the given type are added or deleted, the updater
+	  is rerun automatically on the related slot.  Similarly, if the
+	  <code>child-slot</code> attribute is given and if that slot
+	  is modified on an entity of the given type, the updater
+	  is rerun automatically on the related slot. <p></dd>
+	  
+	  
   <a name="slot"></a><dt><b>slot</b></dt>
 
   <dd> A <code>slot</code> element is used within
     <code>prototype</code> element to define one of the prototype's
-    named fields. It has one required attribute, <code>name</code>, which
-    is the name of the slot, and a range of optional attributes:
+    named fields. <code>Slot</code> elements have one required attribute, 
+	  <code>name</code>, which
+    is the name of the slot, and a range of optional attributes (see below).
+	  They may also have zero or more 
+	  <a href="#dependency"><code>dependency</code></a> subelements,
+	  though in almost all cases there should be at most one.
     <p>
     <dl>
 
