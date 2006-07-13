@@ -108,14 +108,13 @@
   <dd>A <code>dependency</code> element is used to specify
 	  that a slot value depends on a aggregate calculation
 	  applied to a set of related entities.  The required attributes
-	  are <code>relation</code> (the name of the relation prototype),
-	  <code>child-prototype</code> (the name of the prototype of the
-	  related entities), and <code>updater</code> (the fully qualified
+	  are <code>relation</code> (the name of the relation prototype)
+	  and <code>updater</code> (the fully qualified
 	  name of a class that does the calculation and which must implement
 	  <code>org.cougaar.core.qos.frame.SlotUpdater</code>).  If any 
 	  entities of the given type are added or deleted, the updater
 	  is rerun automatically on the related slot.  Similarly, if the
-	  <code>child-slot</code> attribute is given and if that slot
+	  optional <code>child-slot</code> attribute is given and if that slot
 	  is modified on an entity of the given type, the updater
 	  is rerun automatically on the related slot. <p></dd>
 	  
