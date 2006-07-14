@@ -30,7 +30,7 @@
 	                     doc CDATA #IMPLIED&gt;
 &lt;!ELEMENT path (fork*, slot-reference?)&gt;
 &lt;!ATTLIST path name CDATA #REQUIRED&gt;
-&lt;!ELEMENT slot (dependency)*&gt;
+&lt;!ELEMENT slot (aggregate-by)?&gt;
 &lt;!ATTLIST slot name CDATA #REQUIRED
 	       type CDATA #IMPLIED
 	       default-value CDATA #IMPLIED
@@ -49,9 +49,9 @@
 	       role CDATA #REQUIRED&gt;
 &lt;!ELEMENT slot-reference EMPTY&gt;
 &lt;!ATTLIST slot-reference name CDATA #REQUIRED&gt;
-&lt;!ELEMENT dependency EMPTY&gt;
-&lt;!ATTLIST dependency relation CDATA #REQUIRED
-          updater CDATA #REQUIRED
+&lt;!ELEMENT aggregate-by EMPTY&gt;
+&lt;!ATTLIST aggregate-by relation CDATA #REQUIRED
+          aggregator CDATA #REQUIRED
           child-slot CDATA #IMPLIED&gt;
 
 </pre>
