@@ -31,7 +31,15 @@
     code generator: the classes generated for this frameset's
     prototypes will be put in the given package and the files will be
     written to the corresponding directory stucture, following
-    standard Java conventions.  Finally, the <code>domain</code>
+    standard Java conventions.  The optional <code>index-slot</code>
+    attribute can be used to specify a primary index for fast reverse
+    lookup (ie, finding a frame by slot value).  The values of the given slot 
+    within the frames of any given prototype should be unique, and for now
+    the slot should be declared <code>immutable</code> (the latter
+    restriction will probably be relaxed in a later release).  Providing
+    an index slot will improve efficiency dramatically in large framesets
+    particularly when the index is on the value slot of the frameset's container
+    relation. Finally, the <code>domain</code>
     attribute specifies a name for whatever logical domain the
     framset's prototypes are describing.  This name should be the root
     element in xml data files for this domain.<p>
