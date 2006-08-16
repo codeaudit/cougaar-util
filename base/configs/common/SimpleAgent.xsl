@@ -77,6 +77,12 @@ In the "mySociety.xml" file the agent would specify the template:
   <xsl:param name="communities">true</xsl:param>
 
   <!--
+  backwards compatibility for the wp server, passed by:
+    -Dorg.cougaar.core.load.wp.server=true
+  -->
+  <xsl:param name="wpserver">true</xsl:param>
+
+  <!--
   if an agent "template" attribute is not specified, the "defaultAgent"
   value is assumed, which defaults to this template file.
   -->
@@ -340,7 +346,8 @@ In the "mySociety.xml" file the agent would specify the template:
     For backwards compatibility we also support a "wpserver" XSL
     parameter to disable the default server.
     -->
-    <xsl:if test="component[@class='org.cougaar.core.wp.server.Server'] or ($wpserver = 'true' and ../node)">
+    <xsl:if test="component[@class='org.cougaar.core.wp.server.Server'] or (../node and ($wpserver='true' or $wpserver='full'))">
+      <!-- full wp -->
       <component
         name="org.cougaar.core.wp.server.ServerContainer()"
         class="org.cougaar.core.wp.server.ServerContainer"

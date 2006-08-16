@@ -41,18 +41,14 @@ XSL Template for NodeAgent, which reuses most of SimpleAgent.
   <xsl:param name="metrics">full</xsl:param>
   <xsl:param name="mts">full</xsl:param>
   <xsl:param name="pluginThreadPool">30</xsl:param>
+  <xsl:param name="socketFactory">true</xsl:param>
   <!--
   these xsl parameters are already defined in SimpleAgent.xsl:
   <xsl:param name="servlets">true</xsl:param>
   <xsl:param name="planning">true</xsl:param>
   <xsl:param name="communities">true</xsl:param>
-  -->
-
-  <!--
-  backwards compatibility for the wp server, passed by:
-    -Dorg.cougaar.core.load.wp.server=true
-  -->
   <xsl:param name="wpserver">true</xsl:param>
+  -->
 
   <!--
   if a node "template" attribute is not specified, the "defaultNode"
@@ -157,81 +153,95 @@ XSL Template for NodeAgent, which reuses most of SimpleAgent.
     </component>
 
     <!-- wp and mts socket factory -->
-    <component
-      name="org.cougaar.mts.base.SocketFactorySPC()"
-      class="org.cougaar.mts.base.SocketFactorySPC"
-      priority="HIGH"
-      insertionpoint="Node.AgentManager.Agent.Component"/>
+    <xsl:if test="$socketFactory = 'true'">
+      <component
+        name="org.cougaar.mts.base.SocketFactorySPC()"
+        class="org.cougaar.mts.base.SocketFactorySPC"
+        priority="HIGH"
+        insertionpoint="Node.AgentManager.Agent.Component"/>
+    </xsl:if>
 
-    <!-- wp cache -->
-    <component
-      name="org.cougaar.core.wp.resolver.ResolverContainer()"
-      class="org.cougaar.core.wp.resolver.ResolverContainer"
-      priority="HIGH"
-      insertionpoint="Node.AgentManager.Agent.WPClient"/>
-    <component
-      name="org.cougaar.core.wp.bootstrap.ConfigManager()"
-      class="org.cougaar.core.wp.bootstrap.ConfigManager"
-      priority="HIGH"
-      insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
-    <component
-      name="org.cougaar.core.wp.resolver.SelectManager()"
-      class="org.cougaar.core.wp.resolver.SelectManager"
-      priority="HIGH"
-      insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
-    <component
-      name="org.cougaar.core.wp.resolver.ClientTransport()"
-      class="org.cougaar.core.wp.resolver.ClientTransport"
-      priority="HIGH"
-      insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
-    <component
-      name="org.cougaar.core.wp.resolver.LeaseManager()"
-      class="org.cougaar.core.wp.resolver.LeaseManager"
-      priority="HIGH"
-      insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
-    <component
-      name="org.cougaar.core.wp.resolver.CacheManager()"
-      class="org.cougaar.core.wp.resolver.CacheManager"
-      priority="HIGH"
-      insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
-    <component
-      name="org.cougaar.core.wp.resolver.Resolver()"
-      class="org.cougaar.core.wp.resolver.Resolver"
-      priority="HIGH"
-      insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
-    <component
-      name="org.cougaar.core.wp.bootstrap.DiscoveryManager()"
-      class="org.cougaar.core.wp.bootstrap.DiscoveryManager"
-      priority="HIGH"
-      insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
-    <component
-      name="org.cougaar.core.wp.bootstrap.config.ConfigDiscovery()"
-      class="org.cougaar.core.wp.bootstrap.config.ConfigDiscovery"
-      priority="HIGH"
-      insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
-    <component
-      name="org.cougaar.core.wp.bootstrap.multicast.MulticastDiscovery()"
-      class="org.cougaar.core.wp.bootstrap.multicast.MulticastDiscovery"
-      priority="HIGH"
-      insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
-    <component
-      name="org.cougaar.core.wp.bootstrap.http.HttpDiscovery()"
-      class="org.cougaar.core.wp.bootstrap.http.HttpDiscovery"
-      priority="HIGH"
-      insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
-    <component
-      name="org.cougaar.core.wp.bootstrap.rmi.RMIDiscovery()"
-      class="org.cougaar.core.wp.bootstrap.rmi.RMIDiscovery"
-      priority="HIGH"
-      insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
-    <component
-      name="org.cougaar.core.wp.bootstrap.EnsureIsFoundManager()"
-      class="org.cougaar.core.wp.bootstrap.EnsureIsFoundManager"
-      priority="HIGH"
-      insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
-    <xsl:call-template name="findAll">
-      <xsl:with-param name="insertionpoint">Node.AgentManager.Agent.WPClient.</xsl:with-param>
-    </xsl:call-template>
+    <xsl:choose>
+      <xsl:when test="$wpserver='singlenode'">
+        <!-- loopback wp server-->
+        <component
+          name="org.cougaar.core.wp.LoopbackWhitePages()"
+          class="org.cougaar.core.wp.LoopbackWhitePages"
+          priority="HIGH"
+          insertionpoint="Node.AgentManager.Agent.Component"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- wp cache -->
+        <component
+          name="org.cougaar.core.wp.resolver.ResolverContainer()"
+          class="org.cougaar.core.wp.resolver.ResolverContainer"
+          priority="HIGH"
+          insertionpoint="Node.AgentManager.Agent.WPClient"/>
+        <component
+          name="org.cougaar.core.wp.bootstrap.ConfigManager()"
+          class="org.cougaar.core.wp.bootstrap.ConfigManager"
+          priority="HIGH"
+          insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
+        <component
+          name="org.cougaar.core.wp.resolver.SelectManager()"
+          class="org.cougaar.core.wp.resolver.SelectManager"
+          priority="HIGH"
+          insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
+        <component
+          name="org.cougaar.core.wp.resolver.ClientTransport()"
+          class="org.cougaar.core.wp.resolver.ClientTransport"
+          priority="HIGH"
+          insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
+        <component
+          name="org.cougaar.core.wp.resolver.LeaseManager()"
+          class="org.cougaar.core.wp.resolver.LeaseManager"
+          priority="HIGH"
+          insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
+        <component
+          name="org.cougaar.core.wp.resolver.CacheManager()"
+          class="org.cougaar.core.wp.resolver.CacheManager"
+          priority="HIGH"
+          insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
+        <component
+          name="org.cougaar.core.wp.resolver.Resolver()"
+          class="org.cougaar.core.wp.resolver.Resolver"
+          priority="HIGH"
+          insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
+        <component
+          name="org.cougaar.core.wp.bootstrap.DiscoveryManager()"
+          class="org.cougaar.core.wp.bootstrap.DiscoveryManager"
+          priority="HIGH"
+          insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
+        <component
+          name="org.cougaar.core.wp.bootstrap.config.ConfigDiscovery()"
+          class="org.cougaar.core.wp.bootstrap.config.ConfigDiscovery"
+          priority="HIGH"
+          insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
+        <component
+          name="org.cougaar.core.wp.bootstrap.multicast.MulticastDiscovery()"
+          class="org.cougaar.core.wp.bootstrap.multicast.MulticastDiscovery"
+          priority="HIGH"
+          insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
+        <component
+          name="org.cougaar.core.wp.bootstrap.http.HttpDiscovery()"
+          class="org.cougaar.core.wp.bootstrap.http.HttpDiscovery"
+          priority="HIGH"
+          insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
+        <component
+          name="org.cougaar.core.wp.bootstrap.rmi.RMIDiscovery()"
+          class="org.cougaar.core.wp.bootstrap.rmi.RMIDiscovery"
+          priority="HIGH"
+          insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
+        <component
+          name="org.cougaar.core.wp.bootstrap.EnsureIsFoundManager()"
+          class="org.cougaar.core.wp.bootstrap.EnsureIsFoundManager"
+          priority="HIGH"
+          insertionpoint="Node.AgentManager.Agent.WPClient.Component"/>
+        <xsl:call-template name="findAll">
+          <xsl:with-param name="insertionpoint">Node.AgentManager.Agent.WPClient.</xsl:with-param>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
 
     <!-- metrics -->
     <xsl:choose>
