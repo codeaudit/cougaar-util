@@ -95,6 +95,23 @@ example, the errata page for Cougaar 11.0 is <a href="http://cougaar.org/errata/
 <b>Build 12.2</b> is a minor release. 
 <p>
 <ul>
+<li>System property access has been modified to allow Cougaar to run in environments where
+property access is restricted, such as:
+<ul>
+<li>An Applet, where the browser JVM security settings block access to most System 
+properties.</li>
+<li>A container engine such as Tomcat or WebLogic, where multiple Nodes can run in the same JVM,
+and would otherwise have property conflicts if they shared the same System properties table.</li>
+</ul>
+The code change was a replacement of calls to "java.lang.System.getProperty(..)" with
+a similar "org.cougaar.bootstrap.SystemProperties.getProperty(..)" method, along with
+similar changes for calls to Java's primitive wrapper classes (e.g. "Boolean.getBoolean(..)").
+Developers are encouraged to use the new "SystemProperties" methods.</li>
+<li>Implemented a new "NodeApplet" to run Cougaar in a browser JVM.</li>
+<li>Added Node "shutdown()" support for use in container environments, such as JBoss.</li>
+<li>Modified "-Dorg.cougaar.jar.path" parser to support comma separators, in addition to
+the standard OS-specific path separator (":" on Linux and ";" on Windows).  This makes
+it easier to write cross-platform XML society files.</li>
 <li></li>
 </ul>
 
