@@ -29,9 +29,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.AccessControlException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import org.cougaar.bootstrap.SystemProperties;
 
 /**
  * Configuration is a holder of a collection of static configuration utility methods,
@@ -121,6 +123,28 @@ public final class Configuration {
     }
   }
     
+  private static final String getCanonicalPath(String s) {
+    File f = new File(s);
+    try { 
+      f = f.getCanonicalFile();
+    } catch (IOException ioe) {
+      // okay
+    } catch (AccessControlException ace) {
+      String msg = ace.getMessage();
+      if (msg != null && 
+          msg.equals("access denied (java.util.PropertyPermission user.dir read)")) {
+        // okay, must be in sandbox
+        //
+        // Usually we'd return f, but for some reason the file wrapper
+        // turns "http://x" into "http:/x", which is broken.
+        return s;
+      } else {
+        throw new RuntimeException("Security exception", ace);
+      }
+    }
+    return f.toString();
+  }
+
   private static final URL filenameToURL(String s) throws MalformedURLException {
     try {
       File f = new File(s);
@@ -154,9 +178,7 @@ public final class Configuration {
   static {
     Map m = new HashMap();
 
-    File ipf = new File(System.getProperty(INSTALL_PATH_PROP, "."));
-    try { ipf = ipf.getCanonicalFile(); } catch (IOException ioe) {}
-    String ipath = ipf.toString();
+    String ipath = getCanonicalPath(SystemProperties.getProperty(INSTALL_PATH_PROP, "."));
     m.put("INSTALL", ipath);
     m.put("CIP", ipath);        // alias for INSTALL
     m.put("COUGAAR_INSTALL_PATH", ipath); // for completeness
@@ -164,30 +186,28 @@ public final class Configuration {
       installUrl = urlify(ipath);
     } catch (MalformedURLException e) { e.printStackTrace(); }
 
-    String ws = System.getProperty(WORKSPACE_PROP, ipath+"/workspace");
+    String ws = SystemProperties.getProperty(WORKSPACE_PROP, ipath+"/workspace");
     m.put("WORKSPACE",ws);
     try {
       workspaceUrl = urlify(ws);
     } catch (MalformedURLException e) { e.printStackTrace(); }
 
-    m.put("HOME", System.getProperty(USER_HOME_PROP));
-    m.put("CWD", System.getProperty(USER_DIR_PROP));
+    m.put("HOME", SystemProperties.getProperty(USER_HOME_PROP));
+    m.put("CWD", SystemProperties.getProperty(USER_DIR_PROP));
 
-    File csf = new File(ipath, "configs");
-    try { csf = csf.getCanonicalFile(); } catch (IOException ioe) {}
-    String cspath = csf.toString();
+    String cspath = getCanonicalPath(ipath+"/configs");
     m.put("CONFIGS", cspath);
     try {
       configUrl = urlify(cspath);
     } catch (MalformedURLException e) { e.printStackTrace(); }
 
-    String cs = System.getProperty(CONFIG_PROP, "common");
+    String cs = SystemProperties.getProperty(CONFIG_PROP, "common");
     if (cs != null)
       m.put("CONFIG", cs);
 
     defaultProperties = Collections.unmodifiableMap(m);
 
-    String config_path = System.getProperty(CONFIG_PATH_PROP);
+    String config_path = SystemProperties.getProperty(CONFIG_PATH_PROP);
     if (config_path != null && 
 	config_path.charAt(0) == '"' &&
 	config_path.charAt(config_path.length()-1) == '"') {

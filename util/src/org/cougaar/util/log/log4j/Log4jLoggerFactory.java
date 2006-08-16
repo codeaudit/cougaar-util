@@ -204,10 +204,10 @@ public class Log4jLoggerFactory
    * @return String pointing to a file to configure Log4J from (possibly null)
    **/
   public static final String getConfigFileName() {
-    String configFileName = System.getProperty(LF_CONFIG_PROP);
-    if (configFileName == null) configFileName = System.getProperty(LF_PREFIX + ".config.filename");
-    if (configFileName == null) configFileName = System.getProperty(FILE_NAME_PROPERTY);
-    if (configFileName == null) configFileName = System.getProperty(LOG4JCONF);
+    String configFileName = SystemProperties.getProperty(LF_CONFIG_PROP);
+    if (configFileName == null) configFileName = SystemProperties.getProperty(LF_PREFIX + ".config.filename");
+    if (configFileName == null) configFileName = SystemProperties.getProperty(FILE_NAME_PROPERTY);
+    if (configFileName == null) configFileName = SystemProperties.getProperty(LOG4JCONF);
     return configFileName;
   }
 

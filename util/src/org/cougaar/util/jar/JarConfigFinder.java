@@ -48,6 +48,7 @@ import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import org.cougaar.bootstrap.SystemProperties;
 import org.cougaar.util.ConfigFinder;
 import org.cougaar.util.Configuration;
 
@@ -181,9 +182,7 @@ extends ConfigFinder
     _configPathList.addAll(getConfigPath());
     
     // Allow locating files in all files by default
-    _jarFilesOnly = Boolean.valueOf
-    (System.getProperty
-        (JAR_FILES_ONLY, "false")).booleanValue();
+    _jarFilesOnly = SystemProperties.getBoolean(JAR_FILES_ONLY);
     
     if (getLogger().isDebugEnabled()) {
       getLogger().debug("jar Files only: " + jarFilesOnly());
@@ -452,13 +451,13 @@ extends ConfigFinder
   protected String getTmpBaseDirectoryName() {
     /*
      // for instance, the SecureConfigFinder might define this as:
-      return System.getProperty("org.cougaar.workspace") + File.separator +
+      return SystemProperties.getProperty("org.cougaar.workspace") + File.separator +
       "security" + File.separator + 
       "jarconfig" + File.separator +
-      System.getProperty("org.cougaar.node.name");
+      SystemProperties.getProperty("org.cougaar.node.name");
       */
     // by default, use /tmp or the equivalent
-    return System.getProperty(ORG_COUGAAR_WORKSPACE) + File.separator
+    return SystemProperties.getProperty(ORG_COUGAAR_WORKSPACE) + File.separator
     + "jarfiles";
   }
   

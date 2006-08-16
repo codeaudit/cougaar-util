@@ -26,6 +26,7 @@
 package org.cougaar.util;
 
 import java.lang.ref.SoftReference;
+import org.cougaar.bootstrap.SystemProperties;
 
 /** A hack for computing a complex object's toString as needed,
  * but without keeping it around for ever.
@@ -34,7 +35,7 @@ import java.lang.ref.SoftReference;
  * profiling code to have visibility into the toString process.
  **/
 public abstract class ToStringMemo {
-  protected static final boolean isCaching = PropertyParser.getBoolean("org.cougaar.util.ToStringMemo.cache", true);
+  protected static final boolean isCaching = SystemProperties.getBoolean("org.cougaar.util.ToStringMemo.cache", true);
 
   /** Implement this to be the actual toString implementation **/
   protected abstract String generate();

@@ -242,7 +242,7 @@ public class Bootstrapper
   protected final static int loudness;
   static {
     String s =
-      System.getProperty("org.cougaar.bootstrap.Bootstrapper.loud");
+      SystemProperties.getProperty("org.cougaar.bootstrap.Bootstrapper.loud");
     if ("true".equals(s)) {
       loudness = 1;
     } else if ("shout".equals(s)) {
@@ -282,7 +282,7 @@ public class Bootstrapper
    * when Bootstrap is being invoked as an application.
    **/
   public static void main(String[] args) {
-    String m = System.getProperty("org.cougaar.bootstrap.application");
+    String m = SystemProperties.getProperty("org.cougaar.bootstrap.application");
     if (m != null) {
       launch(m,args);
     } else {
@@ -298,7 +298,7 @@ public class Bootstrapper
    **/
   public static void launch(String classname, String[] args){
     setIsBootstrapped();
-    readProperties(System.getProperty("org.cougaar.properties.url"));
+    readProperties(SystemProperties.getProperty("org.cougaar.properties.url"));
     SystemProperties.expandProperties();
     
     getBootstrapper().launchApplication(classname, args);
@@ -306,7 +306,7 @@ public class Bootstrapper
   
   /** Construct a bootstrapper instance **/
   private final static Bootstrapper getBootstrapper() {
-    String s = System.getProperty("org.cougaar.bootstrap.class", "org.cougaar.bootstrap.Bootstrapper");
+    String s = SystemProperties.getProperty("org.cougaar.bootstrap.class", "org.cougaar.bootstrap.Bootstrapper");
     try {
       Class c = Class.forName(s);
       return (Bootstrapper) c.newInstance();
@@ -651,13 +651,13 @@ public class Bootstrapper
   }
 
   protected String getProperty(String key) {
-    return System.getProperty(key);
+    return SystemProperties.getProperty(key);
   }
   protected String getProperty(String key, String def) {
-    return System.getProperty(key, def);
+    return SystemProperties.getProperty(key, def);
   }
   protected Properties getProperties() {
-    return System.getProperties();
+    return SystemProperties.getProperties();
   }
 
   /**
@@ -665,7 +665,7 @@ public class Bootstrapper
    **/
   public static void readProperties(String propertiesURL) {
     if (propertiesURL != null) {
-      readPropertiesFromURL(System.getProperties(), propertiesURL);
+      readPropertiesFromURL(SystemProperties.getProperties(), propertiesURL);
     }
   }
   protected void readPropertiesFromURL(String propertiesURL) {

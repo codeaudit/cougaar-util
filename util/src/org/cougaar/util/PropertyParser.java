@@ -26,18 +26,19 @@
 package org.cougaar.util;
 
 import java.util.Properties;
+import org.cougaar.bootstrap.SystemProperties;
 
 /**
  * Utility for parsing Properties values of various types with defaults
- **/
-
+ * @see SystemProperties
+ */
 public abstract class PropertyParser {
   public static final boolean getBoolean(Properties props, String prop, boolean def) {
     return (Boolean.valueOf(props.getProperty(prop, String.valueOf(def)))).booleanValue();
   }
 
   public static final boolean getBoolean(String prop, boolean def) {
-    return (Boolean.valueOf(System.getProperty(prop, String.valueOf(def)))).booleanValue();
+    return SystemProperties.getBoolean(prop, def);
   }
 
   public static final int getInt(Properties props, String prop, int def) {
@@ -48,11 +49,7 @@ public abstract class PropertyParser {
     }
   }
   public static final int getInt(String prop, int def) {
-    try {
-      return Integer.parseInt(System.getProperty(prop, String.valueOf(def)));
-    } catch (NumberFormatException e) {
-      return def;
-    }
+    return SystemProperties.getInt(prop, def, true);
   }
 
   public static final long getLong(Properties props, String prop, long def) {
@@ -64,11 +61,7 @@ public abstract class PropertyParser {
 
   }
   public static final long getLong(String prop, long def) {
-    try {
-      return Long.parseLong(System.getProperty(prop, String.valueOf(def)));
-    } catch (NumberFormatException e) {
-      return def;
-    }
+    return SystemProperties.getLong(prop, def, true);
   }
 
   public static final float getFloat(Properties props, String prop, float def) {
@@ -79,11 +72,7 @@ public abstract class PropertyParser {
     }
   }
   public static final float getFloat(String prop, float def) {
-    try {
-      return Float.parseFloat(System.getProperty(prop, String.valueOf(def)));
-    } catch (NumberFormatException e) {
-      return def;
-    }
+    return SystemProperties.getFloat(prop, def, true);
   }
 
   public static final double getDouble(Properties props, String prop, double def) {
@@ -94,10 +83,6 @@ public abstract class PropertyParser {
     }
   }
   public static final double getDouble(String prop, double def) {
-    try {
-      return Double.parseDouble(System.getProperty(prop, String.valueOf(def)));
-    } catch (NumberFormatException e) {
-      return def;
-    }
+    return SystemProperties.getDouble(prop, def, true);
   }
 }

@@ -26,6 +26,7 @@
 
 package org.cougaar.util;
 
+import org.cougaar.bootstrap.SystemProperties;
 
 /**
  * Provide a pool of reusable threads to reduce the overhead of 
@@ -57,9 +58,8 @@ public class ReusableThreadPool {
    * values.
    */
   static {
-    defaultInitialPoolSize = PropertyParser.getInt("org.cougaar.ReusableThread.initialPoolSize", 32);
-    defaultMaximumPoolSize = PropertyParser.getInt("org.cougaar.ReusableThread.maximumPoolSize", 64);
-
+    defaultInitialPoolSize = SystemProperties.getInt("org.cougaar.ReusableThread.initialPoolSize", 32);
+    defaultMaximumPoolSize = SystemProperties.getInt("org.cougaar.ReusableThread.maximumPoolSize", 64);
   }
 
   /** The ThreadGroup of the pool - all threads in the pool must be

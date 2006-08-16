@@ -33,6 +33,8 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Category;
 import org.apache.log4j.Level;
 
+import org.cougaar.bootstrap.SystemProperties;
+
 /**
  * This class is used by the {@link SocketAppender} to redirect
  * stdout/stdout the logger stream.
@@ -188,7 +190,7 @@ public final class StreamCapture extends PrintStream {
     String def =
       (isStdOut ? "WARN" : "ERROR");
     String s =
-      System.getProperty(prop, def);
+      SystemProperties.getProperty(prop, def);
     int i = Util.convertStringToInt(s);
     if (i < 0) {
       System.err.println(

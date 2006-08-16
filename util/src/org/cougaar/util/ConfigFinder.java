@@ -45,6 +45,7 @@ import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
 import org.apache.xerces.parsers.DOMParser;
+import org.cougaar.bootstrap.SystemProperties;
 import org.cougaar.util.log.Logger;
 import org.cougaar.util.log.Logging;
 import org.w3c.dom.Document;
@@ -429,7 +430,7 @@ public class ConfigFinder {
 
   private static Class getConfigFinderClass() {
     String configFinderClassName = 
-      System.getProperty("org.cougaar.util.ConfigFinder.ClassName");
+      SystemProperties.getProperty("org.cougaar.util.ConfigFinder.ClassName");
     Class theClass = ConfigFinder.class;
     if (configFinderClassName != null) {
       try {
@@ -496,7 +497,7 @@ public class ConfigFinder {
       return getDefaultConfigFinder();
     }
     
-    String config_path = System.getProperty("org.cougaar.config.path");
+    String config_path = SystemProperties.getProperty("org.cougaar.config.path");
     if (config_path != null && 
 	config_path.charAt(0) == '"' &&
 	config_path.charAt(config_path.length()-1) == '"')	

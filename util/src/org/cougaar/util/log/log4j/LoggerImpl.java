@@ -30,6 +30,7 @@ import org.apache.log4j.Category;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.cougaar.bootstrap.SystemProperties;
 import org.cougaar.util.StackElements;
 import org.cougaar.util.log.LoggerAdapter;
 import org.cougaar.util.log.Logging;
@@ -66,7 +67,7 @@ class LoggerImpl extends LoggerAdapter {
 
   private boolean checkDots = false;
 
-  private static boolean checkForWrappers = Boolean.getBoolean("org.cougaar.util.log.checkwrappers");
+  private static boolean checkForWrappers = SystemProperties.getBoolean("org.cougaar.util.log.checkwrappers");
 
   private static final HashSet throwables = new HashSet();
 

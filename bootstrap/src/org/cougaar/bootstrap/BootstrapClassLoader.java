@@ -44,7 +44,7 @@ public class BootstrapClassLoader extends XURLClassLoader {
  
   static {
     exclusions.add("java.");  // avoids javaiopatch.jar
-    String s = System.getProperty(PROP_EXCLUSIONS);
+    String s = SystemProperties.getProperty(PROP_EXCLUSIONS);
     if (s != null) {
       String extras[] = s.split(":");
       for (int i = 0; i<extras.length; i++) {

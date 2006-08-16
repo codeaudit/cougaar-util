@@ -241,7 +241,7 @@ implements Container, StateObject
        null);
     ContainerView parentView = getContainerView();
     // note that the parentView can be null, which occurs in the root
-    // container or if a binder blocks access.  This is fine.
+    // container or if a binder blocks access.  This is fine.   
     return new ViewedServiceBroker(csb, id, cd, parentView, b);
   }
 

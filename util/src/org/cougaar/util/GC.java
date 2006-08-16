@@ -26,9 +26,9 @@
 
 package org.cougaar.util;
 
+import org.cougaar.bootstrap.SystemProperties;
 import org.cougaar.util.log.Logger;
 import org.cougaar.util.log.Logging;
-import org.cougaar.util.PropertyParser;
 
 /**
  * A utility for requesting a GC in various ways.
@@ -50,7 +50,7 @@ public class GC {
   public static final String minGCInterval_DEFPROP = "org.cougaar.core.persistence.lazyInterval";
   public static final String minGCInterval_PROP = "org.cougaar.util.GC.minGCInterval";
   private static final long minGCInterval = 
-    PropertyParser.getLong(minGCInterval_PROP, PropertyParser.getLong(minGCInterval_DEFPROP, minGCInterval_DEFAULT));
+    SystemProperties.getLong(minGCInterval_PROP, SystemProperties.getLong(minGCInterval_DEFPROP, minGCInterval_DEFAULT));
 
   /** Invoke System.gc(), subject to policy constraints:
    * e.g. if it has been at least minGCInterval since

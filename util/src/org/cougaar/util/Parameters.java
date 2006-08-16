@@ -34,6 +34,7 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.cougaar.bootstrap.SystemProperties;
 import org.cougaar.util.log.Logging;
 import org.cougaar.util.log.Logger;
 
@@ -52,7 +53,7 @@ public class Parameters {
     // initialize parameter map from 
     // "$HOME/.cougaarrc" and "./cougaar.rc"
     
-    String home = System.getProperty("user.home");
+    String home = SystemProperties.getProperty("user.home");
     boolean found = false;
 
     try {
@@ -198,7 +199,7 @@ public class Parameters {
     }
 
     // check the System properties
-    String v = System.getProperty(param);
+    String v = SystemProperties.getProperty(param);
     if (v != null && v.length()>0) return v;
 
     // check our parameter map

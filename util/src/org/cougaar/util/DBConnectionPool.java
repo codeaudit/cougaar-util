@@ -62,6 +62,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
+import org.cougaar.bootstrap.SystemProperties;
 import org.cougaar.util.log.Logger;
 import org.cougaar.util.log.Logging;
 
@@ -132,13 +133,9 @@ public class DBConnectionPool {
   static {
     String prefix = "org.cougaar.util.DBConnectionPool.";
 
-    TIMEOUT_CHECK_INTERVAL = (Long.valueOf(System.getProperty(prefix+"timeoutCheckInterval", 
-                                                              String.valueOf(TIMEOUT_CHECK_INTERVAL)))).longValue();
-    TIMEOUT = (Long.valueOf(System.getProperty(prefix+"timeout", 
-                                               String.valueOf(TIMEOUT)))).longValue();
-    MAX_CONNECTIONS = (Integer.valueOf(System.getProperty(prefix+"maxConnections", 
-                                                          String.valueOf(MAX_CONNECTIONS)))).intValue();
-
+    TIMEOUT_CHECK_INTERVAL = SystemProperties.getLong(prefix+"timeoutCheckInterval", TIMEOUT_CHECK_INTERVAL);
+    TIMEOUT = SystemProperties.getLong(prefix+"timeout", TIMEOUT);
+    MAX_CONNECTIONS = SystemProperties.getInt(prefix+"maxConnections", MAX_CONNECTIONS);
   }
 
   /**

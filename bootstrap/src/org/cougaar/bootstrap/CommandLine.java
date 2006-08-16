@@ -590,7 +590,7 @@ public final class CommandLine {
     if (debug) {
       System.err.println("rewriting command to remove bootstrapper");
     }
-    Properties p = new Properties(System.getProperties());
+    Properties p = new Properties(SystemProperties.getProperties());
     for (Iterator iter = m.entrySet().iterator(); iter.hasNext(); ) {
       Map.Entry me = (Map.Entry) iter.next();
       String key = (String) me.getKey();
@@ -827,7 +827,7 @@ public final class CommandLine {
     for (int i = 0; i < XML_READERS.length; i++) {
       String classname = XML_READERS[i];
       if (classname != null && classname.startsWith("-D")) {
-        classname = System.getProperty(classname);
+        classname = SystemProperties.getProperty(classname);
         if (classname == null) {
           continue;
         }
@@ -856,7 +856,7 @@ public final class CommandLine {
       }
       buf.append("\n  ");
       if (s.startsWith("-D")) {
-        buf.append(System.getProperty(s)).append(
+        buf.append(SystemProperties.getProperty(s)).append(
             " (from \"").append(s).append("\")");
       } else {
         buf.append(s);

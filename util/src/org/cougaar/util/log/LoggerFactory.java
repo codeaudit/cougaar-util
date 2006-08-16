@@ -28,6 +28,7 @@ package org.cougaar.util.log;
 
 import java.util.Map;
 import java.util.Properties;
+import org.cougaar.bootstrap.SystemProperties;
 
 /** 
  * Factory to create Logger and LoggerController instances.
@@ -63,7 +64,7 @@ public abstract class LoggerFactory {
   }
 
   private static final LoggerFactory makeInstance() {
-    String lfname = System.getProperty(LF_PROP, LF_DEFAULT_CLASS);
+    String lfname = SystemProperties.getProperty(LF_PROP, LF_DEFAULT_CLASS);
     try {
       Class clazz = Class.forName(lfname);
       return (LoggerFactory) clazz.newInstance();

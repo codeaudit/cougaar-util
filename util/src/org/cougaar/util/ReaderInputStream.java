@@ -21,6 +21,7 @@ package org.cougaar.util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import org.cougaar.bootstrap.SystemProperties;
 
 /**
  * Adapts a <code>Reader</code> as an <code>InputStream</code>.
@@ -32,7 +33,7 @@ public class ReaderInputStream extends InputStream {
   /** Source Reader */
   private Reader in;
 
-  private String encoding = System.getProperty("file.encoding");
+  private String encoding = SystemProperties.getProperty("file.encoding");
 
   private byte[] slack;
 

@@ -34,6 +34,8 @@ import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Priority;
 import org.apache.log4j.spi.LoggingEvent;
 
+import org.cougaar.bootstrap.SystemProperties;
+
 /**
  * A log4j appender that sends "EVENT.*" logs (representing Cougaar
  * EventService operations) to a remote socket, typically where
@@ -94,8 +96,8 @@ public class SocketAppender extends AppenderSkeleton {
 
     String host = null;
     int port = 0;
-    String sysHost = System.getProperty("org.cougaar.event.host");
-    String sysPort = System.getProperty("org.cougaar.event.port");
+    String sysHost = SystemProperties.getProperty("org.cougaar.event.host");
+    String sysPort = SystemProperties.getProperty("org.cougaar.event.port");
     if (sysHost != null && sysPort != null) {
       host = sysHost;
       try {
@@ -121,8 +123,7 @@ public class SocketAppender extends AppenderSkeleton {
     }
 
     //capture the StdOut and StdErr streams to Log4J
-    String stdio = System.getProperty("org.cougaar.event.stdio", "True");
-    boolean eatStdio = Boolean.valueOf(stdio).booleanValue();
+    boolean eatStdio = SystemProperties.getBoolean("org.cougaar.event.stdio", true);
     SecurityException se = null;
     if (eatStdio) {
       try {
@@ -163,10 +164,10 @@ public class SocketAppender extends AppenderSkeleton {
     try {
       pw = new PrintWriter(connection.getOutputStream());
 
-      String nodeName = System.getProperty("org.cougaar.node.name");
+      String nodeName = SystemProperties.getProperty("org.cougaar.node.name");
 
       String experimentName = 
-        System.getProperty("org.cougaar.event.experiment");
+        SystemProperties.getProperty("org.cougaar.event.experiment");
       if (experimentName == null) {
         experimentName = "";
       }
