@@ -325,12 +325,6 @@ For additional notes, see "SimpleAgent.xsl".
             insertionpoint='Node.AgentManager.Agent.MetricsServices.Component'>
           </component>
           <component
-            name='org.cougaar.lib.mquo.SyscondFactory()'
-            class='org.cougaar.lib.mquo.SyscondFactory'
-            priority='COMPONENT'
-            insertionpoint='Node.AgentManager.Agent.MetricsServices.Component'>
-          </component>
-          <component
             name='org.cougaar.core.qos.gossip.GossipFeedComponent()'
             class='org.cougaar.core.qos.gossip.GossipFeedComponent'
             priority='COMPONENT'
