@@ -479,7 +479,7 @@ section titled "XSL Agent Templates".
     For backwards compatibility we also support a "wpserver" XSL
     parameter to disable the default server.
     -->
-    <xsl:if test="component[@class='org.cougaar.core.wp.server.Server'] or ($wpserver = 'true' and ../node)">
+    <xsl:if test="($wpserver = 'full' or $wpserver = 'true' or $wpserver = 'false') and (component[@class='org.cougaar.core.wp.server.Server'] or ($wpserver = 'true' and ../node))">
       <component
         name="org.cougaar.core.wp.server.ServerContainer()"
         class="org.cougaar.core.wp.server.ServerContainer"
