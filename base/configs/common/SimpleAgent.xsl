@@ -2,7 +2,7 @@
 
 <!--
 <copyright>
- Copyright 2001-2004 BBNT Solutions, LLC
+ Copyright 2001-2006 BBNT Solutions, LLC
  under sponsorship of the Defense Advanced Research Projects Agency (DARPA).
 
  This program is free software; you can redistribute it and/or modify
@@ -22,45 +22,25 @@
 -->
 
 <!--
-XSL Template for SimpleAgent.
+The standard agent template, which defines which infrastructure
+components to load into every agent.
 
-This template finds all agent elements that either specify a
-"template='SimpleAgent.xsl'" attribute or lack both "template"
-and "type" attributes.  The components in the matching agent
-elements are merged with hard-coded component elements to create
-the agent's full list of components.
+This file tells the agent to load a blackboard, message listener, etc.
+It also tells the agent to load any components specified in the XML
+file, and to load them in the appropriate order and insertion point.
+The sequencing is very precise to ensure that services are advertised
+and enabled in the correct dependency order.
 
-Developers can modify the contents of this file to add/change/remove
-the default components loaded into an agent.  For example, the
-servlet server components can be commented out to disable servlets.
-
-This file can also be reused to create new agent templates, e.g.
-a custom "MyAgent.xsl":
-  <xsl:stylesheet
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    version="1.0">
-  
-    <xsl:import href="SimpleAgent.xsl"/>
-    <xsl:output method="xml" indent="yes"/>
-  
-    <xsl:template match="agent[@template = 'MyAgent.xsl']">
-      <agent name="{@name}" template="">
-        <xsl:apply-templates/>
-        <xsl:call-template name="MyAgent_run"/>
-      </agent>
-    </xsl:template>
-
-    <xsl:template name="MyAgent_run">
-      // maybe call some or all of the SimpleAgent templates here
-      //
-      // see NodeAgent.xsl for an example
-    </xsl:template>
-  </xsl:stylesheet>
-In the "mySociety.xml" file the agent would specify the template:
-  ...
-  <agent name="Foo" template="MyAgent.xsl">
-    ...
+A developer can create an alternate template and specify it in the society
+XML file with an optional "template" parameter:
+  <agent name="X" template="MyAgent.xsl">
+     ..
   </agent>
+Or, a developer can modify this template to add custom components and/or
+define parameters to enable/disable components.
+
+The XSL template design is documented in the Cougaar Developers' Guide's
+section titled "XSL Agent Templates".
 -->
 <xsl:stylesheet
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -69,18 +49,151 @@ In the "mySociety.xml" file the agent would specify the template:
   <xsl:import href="util.xsl"/>
 
   <!--
-  optional xsl parameters, passed by:
-    -Dorg.cougaar.society.xsl.param.$name=$value
+  The 'template' parameter is a high-level parameter which enables/disables
+  several parameters:
+    -Dorg.cougaar.society.xsl.param.template=$value
+
+  The supported values are:
+
+    embedded     = applets and other embedded environments.
+
+    single_node  = adds standard plugins and servlets (e.g. "/tasks" servlet)
+
+    single_debug = distributed mts, loopback wp, added metrics aspects,
+                   adds standard plugins and servlets (e.g. "/tasks" servlet)
+
+    legacy       = backwards-compatible with prior Cougaar releases.
+                   distributed mts/wp, adds planning and communities.
+
+    lan          = distributed mts/wp, added metrics aspects,
+                   adds standard plugins and servlets (e.g. "/wp" servlet)
+
+    wan          = LAN plus communities and JMS
+
   -->
-  <xsl:param name="servlets">true</xsl:param>
-  <xsl:param name="planning">true</xsl:param>
-  <xsl:param name="communities">true</xsl:param>
+  <xsl:param name="template">legacy</xsl:param>
 
   <!--
-  backwards compatibility for the wp server, passed by:
-    -Dorg.cougaar.core.load.wp.server=true
+  Our template definitions.
+
+  Note that each line must be formatted as
+    $name=$value,
+  with no whitespace between the = and , characters.
+
+  Boolean parameters that default to 'false' have been omitted, since all of
+  our xsl:if tests check for
+    $value = 'true'
   -->
-  <xsl:param name="wpserver">true</xsl:param>
+  <xsl:param name="matrix">
+    <xsl:choose>
+      <xsl:when test="$template = 'embedded'">
+        threadService=trivial,
+        mts=single_node,
+        wpserver=single_node,
+        metrics=trivial,
+      </xsl:when>
+      <xsl:when test="$template = 'single_node'">
+        threadService=full,
+        pluginThreadPool=30,
+        mts=single_node,
+        wpserver=single_node,
+        metrics=trivial,
+        servlets=true,
+        standard_agent_servlets=true,
+        standard_node_servlets=true,
+      </xsl:when>
+      <xsl:when test="$template = 'single_debug'">
+        threadService=full,
+        pluginThreadPool=30,
+        socketFactory=true,
+        mts=full,
+        link_protocol.loopback=true,
+        wpserver=single_node,
+        metrics=full,
+        sensors=true,
+        servlets=true,
+        standard_agent_servlets=true,
+        standard_node_servlets=true,
+        standard_aspects=true,
+      </xsl:when>
+      <xsl:when test="$template = 'legacy'">
+        threadService=full,
+        pluginThreadPool=30,
+        socketFactory=true,
+        mts=full,
+        wpserver=true,
+        metrics=full,
+        servlets=true,
+        planning=true,
+        domain_ini=true,
+        communities=true,
+      </xsl:when>
+      <xsl:when test="$template = 'lan'">
+        threadService=full,
+        pluginThreadPool=30,
+        socketFactory=true,
+        mts=full,
+        wpserver=full,
+        metrics=full,
+        sensors=true,
+        servlets=true,
+        mobility=true,
+        standard_agent_servlets=true,
+        standard_node_servlets=true,
+        standard_aspects=true,
+      </xsl:when>
+      <xsl:when test="$template = 'wan'">
+        threadService=full,
+        pluginThreadPool=30,
+        socketFactory=true,
+        mts=full,
+        link_protocol.loopback=true,
+        link_protocol.rmi=true,
+        link_protocol.jms=true,
+        wpserver=full,
+        metrics=full,
+        sensors=true,
+        servlets=true,
+        mobility=true,
+        communities=true,
+        standard_agent_servlets=true,
+        standard_node_servlets=true,
+        standard_aspects=true,
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="logBadParameter">
+          <xsl:with-param name="name" select="'template'"/>
+          <xsl:with-param name="value" select="$template"/>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+
+  <!--
+  The following parameters are based on the above "matrix" table.
+
+  They can be overwritten by setting:
+    -Dorg.cougaar.society.xsl.param.$name=$value
+
+  For backwards compatibility, the following parameter:
+    -Dorg.cougaar.core.load.wp.server=$value
+  is translated into:
+    -Dorg.cougaar.society.xsl.param.wpserver=$value
+
+  XSLT 1.0 lacks xsl:function support, so the select= expressions are identical
+  except for the parameter name.
+  -->
+  <xsl:param name="threadService" select="substring-before(substring-after($matrix, concat('threadService', '=')), ',')"/>
+  <xsl:param name="wpserver" select="substring-before(substring-after($matrix, concat('wpserver', '=')), ',')"/>
+  <xsl:param name="metrics" select="substring-before(substring-after($matrix, concat('metrics', '=')), ',')"/>
+  <xsl:param name="sensors" select="substring-before(substring-after($matrix, concat('sensors', '=')), ',')"/>
+  <xsl:param name="servlets" select="substring-before(substring-after($matrix, concat('servlets', '=')), ',')"/>
+  <xsl:param name="planning" select="substring-before(substring-after($matrix, concat('planning', '=')), ',')"/>
+  <xsl:param name="domain_ini" select="substring-before(substring-after($matrix, concat('domain_ini', '=')), ',')"/>
+  <xsl:param name="communities" select="substring-before(substring-after($matrix, concat('communities', '=')), ',')"/>
+  <xsl:param name="mobility" select="substring-before(substring-after($matrix, concat('mobility', '=')), ',')"/>
+  <xsl:param name="standard_agent_servlets" select="substring-before(substring-after($matrix, concat('standard_agent_servlets', '=')), ',')"/>
+  <xsl:param name="fast_startup" select="substring-before(substring-after($matrix, concat('fast_startup', '=')), ',')"/>
 
   <!--
   if an agent "template" attribute is not specified, the "defaultAgent"
@@ -133,7 +246,8 @@ In the "mySociety.xml" file the agent would specify the template:
 
     <xsl:call-template name="COMPONENT_config"/>
 
-    <xsl:call-template name="LOW_agent_0"/>
+    <xsl:call-template name="LOW_agent_plugins_0"/>
+    <xsl:call-template name="LOW_agent_plugins_1"/>
     <xsl:call-template name="LOW_config"/>
     <xsl:call-template name="LOW_agent_1"/>
   </xsl:template>
@@ -159,7 +273,7 @@ In the "mySociety.xml" file the agent would specify the template:
   <xsl:template name="HIGH_config">
     <!-- all agent-level components with "priority='HIGH'" -->
     <xsl:call-template name="find">
-      <xsl:with-param name="priority">HIGH</xsl:with-param>
+      <xsl:with-param name="priority" select="'HIGH'"/>
     </xsl:call-template>
   </xsl:template>
 
@@ -258,24 +372,26 @@ In the "mySociety.xml" file the agent would specify the template:
   <xsl:template name="INTERNAL_config">
     <!-- all agent-level components with "priority='INTERNAL'" -->
     <xsl:call-template name="find">
-      <xsl:with-param name="priority">INTERNAL</xsl:with-param>
+      <xsl:with-param name="priority" select="'INTERNAL'"/>
     </xsl:call-template>
   </xsl:template>
 
   <xsl:template name="BINDER_config">
     <!-- all agent-level components with "priority='BINDER'" -->
     <xsl:call-template name="find">
-      <xsl:with-param name="priority">BINDER</xsl:with-param>
+      <xsl:with-param name="priority" select="'BINDER'"/>
     </xsl:call-template>
   </xsl:template>
 
   <xsl:template name="BINDER_agent_0">
-    <!-- agent-level thread service -->
-    <component
-      name="org.cougaar.core.thread.ThreadServiceProvider()"
-      class="org.cougaar.core.thread.ThreadServiceProvider"
-      priority="BINDER"
-      insertionpoint="Node.AgentManager.Agent.Component"/>
+    <xsl:if test="$threadService = 'full'">
+      <!-- agent-level thread service -->
+      <component
+        name="org.cougaar.core.thread.ThreadServiceProvider()"
+        class="org.cougaar.core.thread.ThreadServiceProvider"
+        priority="BINDER"
+        insertionpoint="Node.AgentManager.Agent.Component"/>
+    </xsl:if>
 
     <!-- backwards compatible thread service wrapper -->
     <component
@@ -314,10 +430,27 @@ In the "mySociety.xml" file the agent would specify the template:
       name="org.cougaar.core.domain.DomainManager()"
       class="org.cougaar.core.domain.DomainManager"
       priority="BINDER"
-      insertionpoint="Node.AgentManager.Agent.DomainManager"/>
+      insertionpoint="Node.AgentManager.Agent.DomainManager">
+      <argument>load_planning=<xsl:value-of select="$planning"/></argument>
+      <argument>read_config_file=<xsl:value-of select="$domain_ini"/></argument>
+      <argument>filename=LDMDomains.ini</argument>
+    </component>
     <!-- domains -->
-    <xsl:call-template name="findAll">
-      <xsl:with-param name="insertionpoint">Node.AgentManager.Agent.DomainManager.</xsl:with-param>
+    <xsl:call-template name="find_HIGH_through_BINDER">
+      <xsl:with-param name="insertionpoint" select="'Node.AgentManager.Agent.DomainManager.'"/>
+    </xsl:call-template>
+    <xsl:if test="$mobility = 'true'">
+      <!-- agent mobility support -->
+      <component
+        name='org.cougaar.core.mobility.ldm.MobilityDomain(mobility)'
+        class='org.cougaar.core.mobility.ldm.MobilityDomain'
+        priority='COMPONENT'
+        insertionpoint='Node.AgentManager.Agent.DomainManager.Domain'>
+        <argument>mobility</argument>
+      </component>
+    </xsl:if>
+    <xsl:call-template name="find_COMPONENT_through_LOW">
+      <xsl:with-param name="insertionpoint" select="'Node.AgentManager.Agent.DomainManager.'"/>
     </xsl:call-template>
 
     <!-- communities -->
@@ -346,8 +479,7 @@ In the "mySociety.xml" file the agent would specify the template:
     For backwards compatibility we also support a "wpserver" XSL
     parameter to disable the default server.
     -->
-    <xsl:if test="component[@class='org.cougaar.core.wp.server.Server'] or (../node and ($wpserver='true' or $wpserver='full'))">
-      <!-- full wp -->
+    <xsl:if test="component[@class='org.cougaar.core.wp.server.Server'] or ($wpserver = 'true' and ../node)">
       <component
         name="org.cougaar.core.wp.server.ServerContainer()"
         class="org.cougaar.core.wp.server.ServerContainer"
@@ -373,7 +505,12 @@ In the "mySociety.xml" file the agent would specify the template:
         name="org.cougaar.core.wp.server.RootAuthority()"
         class="org.cougaar.core.wp.server.RootAuthority"
         priority="COMPONENT"
-        insertionpoint="Node.AgentManager.Agent.WPServer.Component"/>
+        insertionpoint="Node.AgentManager.Agent.WPServer.Component">
+        <xsl:if test="$fast_startup = 'true'">
+          <argument>successTTD=90000</argument>
+          <argument>failTTD=1000</argument>
+        </xsl:if>
+      </component>
       <!-- bootstrap advertise -->
       <component
         name="org.cougaar.core.wp.bootstrap.AdvertiseManager()"
@@ -385,11 +522,13 @@ In the "mySociety.xml" file the agent would specify the template:
         class="org.cougaar.core.wp.bootstrap.multicast.MulticastAdvertise"
         priority="COMPONENT"
         insertionpoint="Node.AgentManager.Agent.WPServer.Component"/>
-      <component
-        name="org.cougaar.core.wp.bootstrap.http.HttpAdvertise()"
-        class="org.cougaar.core.wp.bootstrap.http.HttpAdvertise"
-        priority="COMPONENT"
-        insertionpoint="Node.AgentManager.Agent.WPServer.Component"/>
+      <xsl:if test="$servlets = 'true'">
+        <component
+          name="org.cougaar.core.wp.bootstrap.http.HttpAdvertise()"
+          class="org.cougaar.core.wp.bootstrap.http.HttpAdvertise"
+          priority="COMPONENT"
+          insertionpoint="Node.AgentManager.Agent.WPServer.Component"/>
+      </xsl:if>
       <component
         name="org.cougaar.core.wp.bootstrap.rmi.RMIAdvertise()"
         class="org.cougaar.core.wp.bootstrap.rmi.RMIAdvertise"
@@ -401,27 +540,72 @@ In the "mySociety.xml" file the agent would specify the template:
   <xsl:template name="COMPONENT_config">
     <!-- all agent-level components with "priority='COMPONENT'" -->
     <xsl:call-template name="find">
-      <xsl:with-param name="priority">COMPONENT</xsl:with-param>
+      <xsl:with-param name="priority" select="'COMPONENT'"/>
     </xsl:call-template>
   </xsl:template>
 
-  <xsl:template name="LOW_agent_0">
+  <xsl:template name="LOW_agent_plugins_0">
     <!-- plugin container -->
     <component
       name="org.cougaar.core.plugin.PluginManager()"
       class="org.cougaar.core.plugin.PluginManager"
       priority="LOW"
       insertionpoint="Node.AgentManager.Agent.PluginManager"/>
-    <!-- plugins -->
-    <xsl:call-template name="findAll">
-      <xsl:with-param name="insertionpoint">Node.AgentManager.Agent.PluginManager.</xsl:with-param>
+
+    <!--load high-priority plugins, e.g. security -->
+    <xsl:call-template name="find_HIGH_through_BINDER">
+      <xsl:with-param name="insertionpoint" select="'Node.AgentManager.Agent.PluginManager.'"/>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template name="LOW_agent_plugins_1">
+    <xsl:if test="$sensors = 'true' and $metrics = 'full'">
+      <component
+        name='org.cougaar.core.qos.metrics.PersistenceAdapterPlugin()'
+        class='org.cougaar.core.qos.metrics.PersistenceAdapterPlugin'
+        priority='COMPONENT'
+        insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+      </component>
+    </xsl:if>
+
+    <xsl:if test="$mobility = 'true'">
+      <!-- agent mobility support -->
+      <component
+        name='org.cougaar.core.mobility.service.RedirectMovePlugin()'
+        class='org.cougaar.core.mobility.service.RedirectMovePlugin'
+        priority='COMPONENT'
+        insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'/>
+      <xsl:if test="$servlets = 'true'">
+        <component
+          name='org.cougaar.core.mobility.servlet.MoveAgentServlet()'
+          class='org.cougaar.core.mobility.servlet.MoveAgentServlet'
+          priority='COMPONENT'
+          insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'/>
+      </xsl:if>
+    </xsl:if>
+
+    <xsl:if test="$standard_agent_servlets = 'true' and $servlets = 'true' and $planning = 'true'">
+      <!-- blackboard view -->
+      <component
+        name='org.cougaar.core.servlet.SimpleServletComponent(org.cougaar.planning.servlet.PlanViewServlet,/tasks)'
+        class='org.cougaar.core.servlet.SimpleServletComponent'
+        priority='COMPONENT'
+        insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        <argument>org.cougaar.planning.servlet.PlanViewServlet</argument>
+        <argument>/tasks</argument>
+      </component>
+    </xsl:if>
+
+    <!--load any remaining plugins -->
+    <xsl:call-template name="find_COMPONENT_through_LOW">
+      <xsl:with-param name="insertionpoint" select="'Node.AgentManager.Agent.PluginManager.'"/>
     </xsl:call-template>
   </xsl:template>
 
   <xsl:template name="LOW_config">
     <!-- all agent-level components with "priority='LOW'" -->
     <xsl:call-template name="find">
-      <xsl:with-param name="priority">LOW</xsl:with-param>
+      <xsl:with-param name="priority" select="'LOW'"/>
     </xsl:call-template>
   </xsl:template>
 

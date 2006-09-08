@@ -33,6 +33,21 @@ This stylesheet is imported by agent templates, such as
 
   <!-- utility methods: -->
 
+  <xsl:template name="logBadParameter">
+    <xsl:param name="name"/>
+    <xsl:param name="value"/>
+    <xsl:message>
+      <xsl:text>
+        ERROR: Invalid template parameter:
+          -Dorg.cougaar.society.xsl.param.</xsl:text>
+      <xsl:value-of select="$name"/>
+      <xsl:text>=</xsl:text>
+      <xsl:value-of select="$value"/>
+      <xsl:text>
+      </xsl:text>
+    </xsl:message>
+  </xsl:template>
+
   <!--
   Find components at the specified priority and insertion point, where
   the default insertion point selects agent-level components.
@@ -113,25 +128,39 @@ This stylesheet is imported by agent templates, such as
   -->
   <xsl:template name="findAll">
     <xsl:param name="insertionpoint">Node.AgentManager.Agent.</xsl:param>
+    <xsl:call-template name="find_HIGH_through_BINDER">
+      <xsl:with-param name="insertionpoint" select="$insertionpoint"/>
+    </xsl:call-template>
+    <xsl:call-template name="find_COMPONENT_through_LOW">
+      <xsl:with-param name="insertionpoint" select="$insertionpoint"/>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template name="find_HIGH_through_BINDER">
+    <xsl:param name="insertionpoint">Node.AgentManager.Agent.</xsl:param>
     <xsl:call-template name="find">
-      <xsl:with-param name="priority">HIGH</xsl:with-param>
-      <xsl:with-param name="insertionpoint"><xsl:value-of select="$insertionpoint"/></xsl:with-param>
+      <xsl:with-param name="priority" select="'HIGH'"/>
+      <xsl:with-param name="insertionpoint" select="$insertionpoint"/>
     </xsl:call-template>
     <xsl:call-template name="find">
-      <xsl:with-param name="priority">INTERNAL</xsl:with-param>
-      <xsl:with-param name="insertionpoint"><xsl:value-of select="$insertionpoint"/></xsl:with-param>
+      <xsl:with-param name="priority" select="'INTERNAL'"/>
+      <xsl:with-param name="insertionpoint" select="$insertionpoint"/>
     </xsl:call-template>
     <xsl:call-template name="find">
-      <xsl:with-param name="priority">BINDER</xsl:with-param>
-      <xsl:with-param name="insertionpoint"><xsl:value-of select="$insertionpoint"/></xsl:with-param>
+      <xsl:with-param name="priority" select="'BINDER'"/>
+      <xsl:with-param name="insertionpoint" select="$insertionpoint"/>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template name="find_COMPONENT_through_LOW">
+    <xsl:param name="insertionpoint">Node.AgentManager.Agent.</xsl:param>
+    <xsl:call-template name="find">
+      <xsl:with-param name="priority" select="'COMPONENT'"/>
+      <xsl:with-param name="insertionpoint" select="$insertionpoint"/>
     </xsl:call-template>
     <xsl:call-template name="find">
-      <xsl:with-param name="priority">COMPONENT</xsl:with-param>
-      <xsl:with-param name="insertionpoint"><xsl:value-of select="$insertionpoint"/></xsl:with-param>
-    </xsl:call-template>
-    <xsl:call-template name="find">
-      <xsl:with-param name="priority">LOW</xsl:with-param>
-      <xsl:with-param name="insertionpoint"><xsl:value-of select="$insertionpoint"/></xsl:with-param>
+      <xsl:with-param name="priority" select="'LOW'"/>
+      <xsl:with-param name="insertionpoint" select="$insertionpoint"/>
     </xsl:call-template>
   </xsl:template>
 
