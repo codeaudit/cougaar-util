@@ -276,6 +276,13 @@ public class SystemProperties {
         buf.append("}");
         return buf.toString();
       }
+      public Enumeration keys() {
+        return propertyNames();
+      }
+      public Object get(Object o) {
+        String s = (o instanceof String ? ((String) o) : null);
+        return getProperty(s);
+      }
 
       // these methods are currently not supported, simply because none of
       // our clients need them at this time
@@ -287,10 +294,8 @@ public class SystemProperties {
       public Enumeration elements() { die(); return null; }
       public Set entrySet() { die(); return null; }
       public boolean equals(Object o) { die(); return false; }
-      public Object get(Object o) { die(); return null; }
       public int hashCode() { die(); return 0; }
       public boolean isEmpty() { die(); return false; }
-      public Enumeration keys() { die(); return null; }
       public Set keySet() { die(); return null; }
       public void list(PrintStream o) { die(); }
       public void list(PrintWriter o) { die(); }
