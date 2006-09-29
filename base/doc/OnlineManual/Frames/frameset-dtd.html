@@ -54,7 +54,7 @@
 &lt;!ATTLIST slot-reference name CDATA #REQUIRED&gt;
 &lt;!ELEMENT aggregate-by EMPTY&gt;
 &lt;!ATTLIST aggregate-by relation CDATA #REQUIRED
-          role CDATA "PARENT"
+          role (parent | PARENT | child | CHILD) "parent"
           aggregator CDATA #REQUIRED
           related-slot CDATA #IMPLIED&gt;
 
