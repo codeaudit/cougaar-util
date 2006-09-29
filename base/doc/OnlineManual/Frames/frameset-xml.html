@@ -122,9 +122,12 @@
 	  <code>org.cougaar.core.qos.frame.SlotAggregator</code>.  If the 
 	  aggregator is not qualified with a package, it is assumed to be
 	  in the same package as the frameset.
+	  <p>By default the frame is assumed to play the PARENT role in the relationship.
+	  This can be overridden with the <code>role</code> attribute.
+	  </p>
 	  <p>If any related entities are added or deleted, the aggregator
 	  is rerun automatically to compute a new value for the slot.  Similarly, if the
-	  optional <code>child-slot</code> attribute is given and if that slot
+	  optional <code>related-slot</code> attribute is given and if that slot
 	  is modified in a related entity, the aggregator
 	  is rerun automatically on the related slot. <p></dd>
 	  
