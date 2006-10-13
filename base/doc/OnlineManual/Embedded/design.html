@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+
+<html> <head>
+<title>Embedded Cougaar Design and Architecture</title>
+</head>
+
+<body>
+<h2>Design and Architecture</h2>
+
+<p>The design of embedded Cougaar either removes or replaces (with a
+trivial implementation) the standard Node-level services. Services
+depend on jar files and sometimes config files. So the Embedded
+Couggar installation will need all the files that will be used by the
+society configuration. 
+
+<p>The following subsystems can be reduced or eliminated:
+<ul>
+
+  <li> HTTP Logistics/Planning
+
+  <li> HTTP Servlets
+
+  <li> Communities
+
+  <li> Yellow Pages
+
+  <li> Message Transport Service
+
+  <li> Metrics Service
+
+  <li> Thread Service
+
+  <li> Blackboard
+
+  <li> Persistence
+      
+</ul>
+
+<p> This writeup will use three example Embedded configurtions:
+<ul>
+  <li> Minimum Configuration: Replaces or removes all
+      the standard services.
+  <li> Standard Configuration: All standard services, without
+      metrics, planning, and communities.
+  <li> Metrics Configuration: Standard configuration with
+      addition of Metrics service. 
+</ul>
+
+
+</body>
+</html>
+
+
+</body> </html>
