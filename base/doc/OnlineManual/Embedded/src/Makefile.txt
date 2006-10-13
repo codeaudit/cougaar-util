@@ -1,0 +1,104 @@
+# Example makefile for pruning Cougaar B11_2 release
+# to the minimum files 
+# assumes that  COUGAAR_INSTALL_PATH is set
+
+.SUFFIXES : .jar .xml .txt .xsl .sh
+node=bin/Node
+boost=bin/boost
+minnode=ping/bin/Node-min
+pingnode=ping/bin/Node
+
+
+minfiles := lib/core.jar
+minfiles += lib/util.jar
+minfiles += lib/javaiopatch.jar
+minfiles += lib/bootstrap.jar
+minfiles += lib/mtsstd.jar
+minfiles += sys/log4j.jar
+minfiles += lib/ping.jar
+minfiles += configs/common/NodeAgent.xsl
+minfiles += configs/common/SimpleAgent.xsl
+minfiles += configs/common/society.xsl
+minfiles += configs/common/util.xsl
+minfiles += configs/common/make_society.xsl
+minfiles += ping/configs/ping/MiniPing-minimum.xml
+minfiles += ping/bin/jips.sh
+minfiles += ping/bin/test.sh
+
+stdfiles := $(minfiles)
+stdfiles += lib/mtsstd.jar
+stdfiles += lib/webtomcat.jar
+stdfiles += sys/xercesImpl.jar
+stdfiles += sys/xml-apis.jar
+stdfiles += sys/servlet.jar
+stdfiles += sys/tomcat_40.jar
+stdfiles += webtomcat/data/conf/tomcat-users.xml
+stdfiles += webtomcat/data/conf/modules.xml
+stdfiles += webtomcat/data/conf/server.xml
+stdfiles += webtomcat/data/webapps/ROOT/WEB-INF/web.xml
+stdfiles += lib/webserver.jar
+
+qosfiles := $(stdfiles)
+qosfiles += lib/qos.jar
+qosfiles += sys/quoSumo.jar
+qosfiles += lib/quo.jar
+qosfiles += ping/configs/ping/MiniPing-Metrics.xml
+
+allfiles := $(qosfiles)
+allfiles += configs/common/communities.xml
+allfiles += lib/community.jar
+allfiles += lib/yp.jar
+allfiles += lib/planning.jar
+allfiles += lib/glm.jar
+allfiles += ping/configs/ping/MiniPing.xml
+
+%.jar:
+	mkdir -p `dirname $@`
+	cp -f ${COUGAAR_INSTALL_PATH}/$@ $@
+
+%.xml:
+	mkdir -p `dirname $@`
+	cp -f ${COUGAAR_INSTALL_PATH}/$@ $@
+
+%.txt:
+	mkdir -p `dirname $@`
+	cp -f ${COUGAAR_INSTALL_PATH}/$@ $@
+
+%.xsl:
+	mkdir -p `dirname $@`
+	cp -f ${COUGAAR_INSTALL_PATH}/$@ $@
+
+%.sh:
+	mkdir -p `dirname $@`
+	cp -f ${COUGAAR_INSTALL_PATH}/$@ $@
+
+updatemin: clean $(minfiles) $(node) $(minnode) $(boost)
+
+updatestd: clean $(stdfiles) $(node) $(minnode) $(boost)
+	mkdir -p  webtomcat/data/work
+
+updateqos: clean $(qosfiles) $(node) $(minnode) $(pingnode) $(boost)
+	mkdir -p  webtomcat/data/work
+
+updateall:  clean $(allfiles) $(node) $(minnode) $(pingnode) $(boost)
+	mkdir -p  webtomcat/data/work
+
+$(node):
+	mkdir -p `dirname $@`
+	cp -f ${COUGAAR_INSTALL_PATH}/$@ $@
+
+$(boost):
+	mkdir -p `dirname $@`
+	cp -f ${COUGAAR_INSTALL_PATH}/$@ $@
+
+$(minnode):
+	mkdir -p `dirname $@`
+	cp -f ${COUGAAR_INSTALL_PATH}/$@ $@
+
+$(pingnode):
+	mkdir -p `dirname $@`
+	cp -f ${COUGAAR_INSTALL_PATH}/$@ $@
+
+
+clean:
+	rm -rf core lib sys webtomcat configs bin webserver ping
