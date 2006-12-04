@@ -547,18 +547,20 @@ For additional notes, see "SimpleAgent.xsl".
         priority='COMPONENT'
         insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
       </component>
-      <component
-        name='org.cougaar.core.qos.gossip.GossipStatisticsPlugin()'
-        class='org.cougaar.core.qos.gossip.GossipStatisticsPlugin'
-        priority='COMPONENT'
-        insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
-      </component>
-      <component
-        name='org.cougaar.mts.std.StatisticsPlugin()'
-        class='org.cougaar.mts.std.StatisticsPlugin'
-        priority='COMPONENT'
-        insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
-      </component>
+      <xsl:if test="$servlets = 'true'">
+        <component
+          name='org.cougaar.core.qos.gossip.GossipStatisticsPlugin()'
+          class='org.cougaar.core.qos.gossip.GossipStatisticsPlugin'
+          priority='COMPONENT'
+          insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        </component>
+        <component
+          name='org.cougaar.mts.std.StatisticsPlugin()'
+          class='org.cougaar.mts.std.StatisticsPlugin'
+          priority='COMPONENT'
+          insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+        </component>
+      </xsl:if>
     </xsl:if>
 
     <xsl:if test="$mobility = 'true'">
