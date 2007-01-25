@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
@@ -282,21 +283,29 @@ public class Bootstrapper
    * when Bootstrap is being invoked as an application.
    **/
   public static void main(String[] args) {
-    String m = SystemProperties.getProperty("org.cougaar.bootstrap.application");
-    if (m != null) {
-      launch(m,args);
-    } else {
-      String[] launchArgs = new String[args.length - 1];
+    launch(args);
+  }
+
+  public static void launch(Object[] args) {
+    String classname = SystemProperties.getProperty("org.cougaar.bootstrap.application");
+    Object[] launchArgs = args;
+    if (classname == null) {
+      classname = (String) args[0];
+      launchArgs = (Object[]) Array.newInstance(
+          args.getClass().getComponentType(), args.length - 1);
       System.arraycopy(args, 1, launchArgs, 0, launchArgs.length);
-      launch(args[0], launchArgs);
     }
+    launch(classname, launchArgs);
   }
 
   /** Make a note that the application is being bootstrapped,
    * construct a Bootstrapper instance, and pass control to the instance.
-   * @see #launchApplication(String, String[])
+   * @param args the args are typically a String[], but an Object[] is
+   *   supported to pass more complex data structures from a container into
+   *   the application
+   * @see #launchApplication(String, Object[])
    **/
-  public static void launch(String classname, String[] args){
+  public static void launch(String classname, Object[] args){
     setIsBootstrapped();
     readProperties(SystemProperties.getProperty("org.cougaar.properties.url"));
     SystemProperties.expandProperties();
@@ -317,14 +326,14 @@ public class Bootstrapper
 
 
   protected String applicationClassname;
-  protected String[] applicationArguments;
+  protected Object[] applicationArguments;
   protected ClassLoader applicationClassLoader;
 
   /** Primary instance entry point for bootstrapper.  
    * Essentially finds the right list of URLs to use,
    * creates a Classloader, and then calls launchMain.
    **/
-  protected void launchApplication(String classname, String[] args) {
+  protected void launchApplication(String classname, Object[] args) {
     applicationClassname = classname;
     applicationArguments = args;
 
@@ -337,7 +346,7 @@ public class Bootstrapper
   /** Called to prepare the VM environment for running the application.
    * @return A ClassLoader instance to be used to load the application.
    **/
-  protected ClassLoader prepareVM(String classname, String[] args) {
+  protected ClassLoader prepareVM(String classname, Object[] args) {
     List l = computeURLs();
     return createClassLoader(l);
   }
@@ -373,27 +382,34 @@ public class Bootstrapper
    * static void main(String[]).
    * This method contains all the reflection code for invoking the application.
    **/
-  protected void launchMain(ClassLoader cl, String classname, String[] args) {
+  protected void launchMain(ClassLoader cl, String classname, Object[] args) {
     try {
       Class appClass = cl.loadClass(classname);
 
-      Method main;
-
-      Class argl[] = new Class[1];
-      argl[0] = String[].class;
-      try {
-        main = appClass.getMethod("launch", argl);
-      } catch (NoSuchMethodException nsm) {
-        main = appClass.getMethod("main", argl);
+      Method main = null;
+      for (int i = 0; main == null && i < 2; i++) {
+        String method_name = (i == 0 ? "launch" : "main");
+        for (Class argcl = args.getClass().getComponentType();
+            argcl != null;
+            argcl = argcl.getSuperclass()) {
+          try {
+            Class argscl = Array.newInstance(argcl, 0).getClass();
+            main = appClass.getMethod(method_name, new Class[] { argscl });
+            break;
+          } catch (NoSuchMethodException nsm) {
+            // okay
+          }
+        }
+      }
+      if (main == null) {
+        throw new RuntimeException(
+            "Unable to find \"launch\" or \"main\" method");
       }
 
-      Object[] argv = new Object[1];
-      argv[0] = args;
-      main.invoke(null,argv);
+      main.invoke(null, new Object[] { args });
     } catch (Exception e) {
       throw new Error("Failed to launch "+classname, e);
     }
-
   }
 
   /** Entry point for computing the list of URLs to pass to our classloader.
