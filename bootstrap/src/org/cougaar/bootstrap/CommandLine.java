@@ -31,6 +31,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -233,8 +234,23 @@ public final class CommandLine {
   // from command-line args "--overrides"
   private CommandData override_data;
 
+  /**
+   * Parse an XML file and print the Java command line.
+   */
   public static void main(String[] args) throws Exception {
     (new CommandLine(args)).run();
+  }
+
+  /**
+   * @param args see {@link #USAGE}.
+   * @return the parsed command line data structure.
+   */
+  public static CommandData parse(String[] args) {
+    CommandLine cl = new CommandLine(args);
+    if (!cl.parse_arguments()) {
+      return null;
+    }
+    return cl.generate_command();
   }
 
   public CommandLine(String[] args) {
@@ -367,7 +383,7 @@ public final class CommandLine {
             "Unable to find "+
             (node_name == null ? "any nodes" : "node "+node_name)+
             " in file "+application_xml);
-        System.exit(-1);
+        return null;
       }
 
       if (system_xml != null && !system_xml.equals(application_xml)) {
@@ -669,28 +685,36 @@ public final class CommandLine {
     StringBuffer buf = new StringBuffer(n+4);
     int i = 0;
     while (true) {
+      boolean escape = false;
+      for (int k = j-1; k >= i && s.charAt(k) == '\\'; k--) {
+        escape = !escape;
+      }
       buf.append(s.substring(i, j));
-      buf.append('%');
       i = j+1;
-      boolean paren = (s.charAt(i) == '{');
-      if (paren) {
-        i++;
-      }
-      j = i;
-      for (j = i; j < n; j++) {
-        char ch = s.charAt(j);
-        if (!((ch >= 'a' && ch <= 'z') ||
-              (ch >= 'A' && ch <= 'Z') ||
-              (ch >= '0' && ch <= '9') ||
-              (ch == '_'))) {
-          break;
+      if (escape) {
+        buf.append('$');
+      } else {
+        buf.append('%');
+        boolean paren = (s.charAt(i) == '{');
+        if (paren) {
+          i++;
         }
-      }
-      buf.append(s.substring(i, j));
-      buf.append('%');
-      i = j;
-      if (paren && s.charAt(i) == '}') {
-        i++;
+        j = i;
+        for (j = i; j < n; j++) {
+          char ch = s.charAt(j);
+          if (!((ch >= 'a' && ch <= 'z') ||
+                (ch >= 'A' && ch <= 'Z') ||
+                (ch >= '0' && ch <= '9') ||
+                (ch == '_'))) {
+            break;
+          }
+        }
+        buf.append(s.substring(i, j));
+        buf.append('%');
+        i = j;
+        if (paren && s.charAt(i) == '}') {
+          i++;
+        }
       }
       j = s.indexOf('$', i);
       if (j < 0) {
@@ -767,14 +791,14 @@ public final class CommandLine {
   }
 
   /** Java command data, including the -Ds */
-  private static class CommandData {
+  public static final class CommandData implements Serializable {
 
-    public final String command;
-    public final List vm_parameters;
-    public final String clazz;
-    public final List prog_parameters;
-    public final String node;
-    public final boolean processedNode;
+    private final String command;
+    private final List vm_parameters;
+    private final String clazz;
+    private final List prog_parameters;
+    private final String node;
+    private final boolean processedNode;
 
     public CommandData(
         List vm_parameters,
@@ -791,17 +815,29 @@ public final class CommandLine {
         boolean processedNode) {
       this.command = command;
       this.vm_parameters =
-        (vm_parameters == null ?
+        (vm_parameters == null || vm_parameters.isEmpty() ?
          Collections.EMPTY_LIST :
-         vm_parameters);
+         Collections.unmodifiableList(vm_parameters));
       this.clazz = clazz;
       this.prog_parameters =
-        (prog_parameters == null ?
+        (prog_parameters == null || prog_parameters.isEmpty() ?
          Collections.EMPTY_LIST :
-         prog_parameters);
+         Collections.unmodifiableList(prog_parameters));
       this.node = node;
       this.processedNode = processedNode;
     }
+
+    /** The command, which is usually "java" */
+    public String getCommand() { return command; }
+
+    /** The -Ds and -Xs in the order specified by the XML file */
+    public List getProperties() { return vm_parameters; }
+
+    /** The classname, which is null if "-jar" is used */
+    public String getClassname() { return clazz; }
+
+    /** The arguments after the classname */
+    public List getArguments() { return prog_parameters; }
 
     public String toString() {
       StringBuffer buf = new StringBuffer();
