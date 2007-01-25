@@ -34,10 +34,13 @@ import java.io.LineNumberReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -241,74 +244,7 @@ public class SystemProperties {
    * @see #overrideProperties
    */
   public static Properties getProperties() {
-    return new Properties() {
-      // these methods are supported:
-      public String getProperty(String name) {
-        return getProperty(name, null);
-      }
-      public String getProperty(String name, String deflt) {
-        return SystemProperties.getProperty(name, deflt);
-      }
-      public Object setProperty(String name, String value) {
-        return put(name, value);
-      }
-      public Object put(String name, String value) {
-        return SystemProperties.setProperty(name, value);
-      }
-      public Enumeration propertyNames() {
-        return SystemProperties.getPropertyNames();
-      }
-      public void load(InputStream inStream) throws IOException {
-        super.load(inStream); // this only calls the above methods
-      }
-      public String toString() {
-        boolean first = true;
-        StringBuffer buf = new StringBuffer("{");
-        for (Enumeration en = getPropertyNames(); en.hasMoreElements(); ) {
-          String key = (String) en.nextElement();
-          String value = getProperty(key);
-          if (first) {
-            first = false;
-            buf.append(", ");
-          }
-          buf.append(key).append("=").append(value);
-        }
-        buf.append("}");
-        return buf.toString();
-      }
-      public Enumeration keys() {
-        return propertyNames();
-      }
-      public Object get(Object o) {
-        String s = (o instanceof String ? ((String) o) : null);
-        return getProperty(s);
-      }
-
-      // these methods are currently not supported, simply because none of
-      // our clients need them at this time
-      public void clear() { die(); }
-      public Object clone() { die(); return null; }
-      public boolean containsKey(Object o) { die(); return false; }
-      public boolean contains(Object o) { die(); return false; }
-      public boolean containsValue(Object o) { die(); return false; }
-      public Enumeration elements() { die(); return null; }
-      public Set entrySet() { die(); return null; }
-      public boolean equals(Object o) { die(); return false; }
-      public int hashCode() { die(); return 0; }
-      public boolean isEmpty() { die(); return false; }
-      public Set keySet() { die(); return null; }
-      public void list(PrintStream o) { die(); }
-      public void list(PrintWriter o) { die(); }
-      public void putAll(Map o) { die(); }
-      public Object remove(Object o) { die(); return null; }
-      // save calls "store()".  Here we comment-out this method to avoid a
-      // compile-time deprecation warning.
-      //public void save(OutputStream o, String s) { die(); }
-      public int size() { die(); return 0; }
-      public void store(OutputStream o, String s) throws IOException { die(); }
-      public Collection values() { die(); return null; }
-      private void die() { throw new UnsupportedOperationException(); }
-    };
+    return PropertiesImpl.INSTANCE;
   }
 
   /**
@@ -524,12 +460,14 @@ public class SystemProperties {
   }
 
   /**
-   * Resolve a string like the shell would resolve it.
+   * Resolve a string like the shell would resolve it, which includes
+   * {@link #resolveVariables} and Linux "\" removal.
    * <p>
-   * This is a decent approximation that handles the common
-   * cases, but it doesn't handle all the oddities..
+   * This is a decent approximation that handles the common cases, but it
+   * doesn't handle all the oddities..
    */
-  public static String resolveEnv(String value, boolean windows) {
+  public static String resolveEnv(String orig_value, boolean windows) {
+    String value = orig_value;
     if (value == null) {
       return "";
     }
@@ -540,57 +478,7 @@ public class SystemProperties {
     if (value.startsWith("\"") && value.endsWith("\"")) {
       value = value.substring(1, value.length() - 1);
     }
-    char varCh = windows ? '%' : '$';
-    if (value.indexOf(varCh) >= 0) {
-      // expand environment variable(s), e.g.:
-      //   a/$USER/b --> a/root/b
-      StringBuffer buf = new StringBuffer();
-      int i = 0;
-      while (true) {
-        int j = value.indexOf(varCh, i);
-        if (j < 0) {
-          buf.append(value.substring(i));
-          break;
-        }
-        buf.append(value.substring(i, j));
-        i = j;
-        if (!windows && i > 0 && value.charAt(i-1) == '\\') {
-          buf.append(varCh);
-          i++;
-          continue;
-        }
-        boolean keepLastChar = false;
-        if (windows) {
-          j = value.indexOf('%', i+1);
-        } else if (value.charAt(i+1) == '{') {
-          i++;
-          j = value.indexOf('}', i+1);
-        } else {
-          keepLastChar = true;
-          for (j = i + 1; j < value.length(); j++) {
-            char ch = value.charAt(j);
-            if (!Character.isLetterOrDigit(ch) &&
-                ch != '_' && ch != '-') {
-              break;
-            }
-          }
-        }
-        String envKey = value.substring(i+1, j);
-        String envValue = getenv(envKey);
-        if (envValue == null) {
-          envValue = "";
-        }
-        buf.append(envValue);
-        if (keepLastChar && j < value.length()) {
-          buf.append(value.charAt(j));
-        }
-        i = j + 1;
-        if (i > value.length()) {
-          break;
-        }
-      }
-      value = buf.toString();
-    }
+    value = resolveVariables(value, windows, null, true);
     if (!windows && value.indexOf('\\') >= 0) {
       // remove "\"s, e.g.:
       //   a\\b\c --> a\bc
@@ -611,5 +499,268 @@ public class SystemProperties {
       value = buf.toString();
     }
     return value;
+  }
+
+  /**
+   * Resolve environment variables.
+   * <p>
+   * For example, on Linux, this will resolve:<br>
+   * &nbsp;&nbsp;<code>a/$USER/b</code><br>
+   * to (say):<br>
+   * &nbsp;&nbsp;<code>a/root/b</code><br>
+   *
+   * @param env_override optional {@link #getenv} override map, which can
+   * be null
+   * @param default_to_getenv if a variable is not found in the "env_override"
+   * and this parameter is set to true, then look in {@link #getenv}
+   */
+  public static String resolveVariables(
+      String value, boolean windows,
+      Map env_override, boolean default_to_getenv) {
+    if (value == null) {
+      return "";
+    }
+    char varCh = (windows ? '%' : '$');
+    if (value.indexOf(varCh) < 0) {
+      return value;
+    }
+    StringBuffer buf = new StringBuffer();
+    int i = 0;
+    while (true) {
+      int j = value.indexOf(varCh, i);
+      if (j < 0) {
+        buf.append(value.substring(i));
+        break;
+      }
+      boolean escape = false;
+      if (!windows) {
+        for (int k = j-1; k >= i && value.charAt(k) == '\\'; k--) {
+          escape = !escape;
+        }
+      }
+      buf.append(value.substring(i, j));
+      i = j;
+      if (escape) {
+        buf.append(varCh);
+        i++;
+        continue;
+      }
+      boolean keepLastChar = false;
+      if (windows) {
+        j = value.indexOf('%', i+1);
+      } else if (value.charAt(i+1) == '{') {
+        i++;
+        j = value.indexOf('}', i+1);
+      } else {
+        keepLastChar = true;
+        for (j = i + 1; j < value.length(); j++) {
+          char ch = value.charAt(j);
+          if (!Character.isLetterOrDigit(ch) &&
+              ch != '_' && ch != '-') {
+            break;
+          }
+        }
+      }
+      String envKey = value.substring(i+1, j);
+      String envValue = null;
+      if (env_override != null) {
+        envValue = (String) env_override.get(envKey);
+      }
+      if (envValue == null && default_to_getenv) {
+        envValue = getenv(envKey);
+      }
+      if (envValue == null) {
+        envValue = "";
+      }
+      buf.append(envValue);
+      if (keepLastChar && j < value.length()) {
+        buf.append(value.charAt(j));
+      }
+      i = j + 1;
+      if (i > value.length()) {
+        break;
+      }
+    }
+    return buf.toString();
+  }
+
+  private static final class PropertiesImpl extends Properties {
+
+    // use a singleton
+    private static final PropertiesImpl INSTANCE = new PropertiesImpl();
+    private PropertiesImpl() {}
+
+    // these methods do all the work:
+    public String getProperty(String name, String deflt) {
+      return SystemProperties.getProperty(name, deflt);
+    }
+    public Object setProperty(String name, String value) {
+      return SystemProperties.setProperty(name, value);
+    }
+    public Enumeration propertyNames() {
+      return SystemProperties.getPropertyNames();
+    }
+
+    //
+    // the remaining methods are entirely based on the above methods
+    //
+
+    // from Properties:
+    public void load(InputStream inStream) throws IOException {
+      super.load(inStream); // this only calls our methods
+    }
+    // save calls "store()".  Here we comment-out this method to avoid a
+    // compile-time deprecation warning.
+    //public void save(OutputStream o, String s) { super.save(o, s); }
+    public void store(OutputStream out, String header) throws IOException {
+      super.store(out, header); // this only calls our methods
+    }
+    public String getProperty(String name) { return getProperty(name, null); }
+    public void list(PrintStream out) {
+      out.println("-- listing properties --");
+      for (Iterator iter = entrySet().iterator(); iter.hasNext(); ) {
+        Map.Entry me = (Map.Entry) iter.next();
+        String key = (String) me.getKey();
+        String val = (String) me.getValue();
+        if (val.length() > 40) {
+          val = val.substring(0, 37) + "...";
+        }
+        out.println(key + "=" + val);
+      }
+    }
+    public void list(PrintWriter out) {
+      out.println("-- listing properties --");
+      for (Iterator iter = entrySet().iterator(); iter.hasNext(); ) {
+        Map.Entry me = (Map.Entry) iter.next();
+        String key = (String) me.getKey();
+        String val = (String) me.getValue();
+        if (val.length() > 40) {
+          val = val.substring(0, 37) + "...";
+        }
+        out.println(key + "=" + val);
+      }
+    }
+
+    // from Hashtable:
+    public int size() {
+      int ret = 0;
+      for (Enumeration en  = propertyNames(); en.hasMoreElements(); ) {
+        ret++;
+      }
+      return ret;
+    }
+    public boolean isEmpty() { return propertyNames().hasMoreElements(); }
+    public Enumeration keys() { return propertyNames(); }
+    public Enumeration elements() {
+      final Iterator iter = values().iterator();
+      return new Enumeration() {
+        public boolean hasMoreElements() { return iter.hasNext(); }
+        public Object nextElement() { return iter.next(); }
+      };
+    }
+    public boolean contains(Object o) {
+      for (Enumeration en  = propertyNames(); en.hasMoreElements(); ) {
+        String key = (String) en.nextElement();
+        String value = getProperty(key);
+        if (value.equals(o)) return true;
+      }
+      return false;
+    }
+    public boolean containsValue(Object o) { return contains(o); }
+    public boolean containsKey(Object o) { return (get(o) != null); }
+    public Object get(Object o) {
+      String s = (o instanceof String ? ((String) o) : null);
+      return getProperty(s);
+    }
+    public Object put(Object name, Object value) {
+      return setProperty((String) name, (String) value);
+    }
+    public Object remove(Object o) { die(); return null; }
+    public void putAll(Map m) {
+      for (Iterator iter = m.entrySet().iterator(); iter.hasNext(); ) {
+        Map.Entry me = (Map.Entry) iter.next();
+        put(me.getKey(), me.getValue());
+      }
+    }
+    public void clear() {
+      for (Iterator iter = keySet().iterator(); iter.hasNext(); ) {
+        remove(iter.next());
+      }
+    }
+    public Object clone() { die(); return null; }
+    public String toString() {
+      boolean first = true;
+      StringBuffer buf = new StringBuffer("{");
+      for (Enumeration en = getPropertyNames(); en.hasMoreElements(); ) {
+        String key = (String) en.nextElement();
+        String value = getProperty(key);
+        if (first) {
+          first = false;
+          buf.append(", ");
+        }
+        buf.append(key).append("=").append(value);
+      }
+      buf.append("}");
+      return buf.toString();
+    }
+    public Set keySet() {
+      Set ret = new HashSet();
+      for (Enumeration en  = propertyNames(); en.hasMoreElements(); ) {
+        ret.add(en.nextElement());
+      }
+      return ret;
+    }
+    public Set entrySet() {
+      Set ret = new HashSet();
+      for (Enumeration en  = propertyNames(); en.hasMoreElements(); ) {
+        final String key = (String) en.nextElement();
+        final String val = getProperty(key);
+        Map.Entry me = new Map.Entry() {
+          private String value = val;
+          public Object getKey() { return key; }
+          public Object getValue() { return value; }
+          public Object setValue(Object value) {
+            Object oldValue = this.value;
+            this.value = (String) value;
+            setProperty(key, this.value);
+            return oldValue;
+          }
+          public boolean equals(Object o) {
+            if (!(o instanceof Map.Entry)) return false;
+            Map.Entry e = (Map.Entry) o;
+            return eq(key, e.getKey()) && eq(value, e.getValue());
+          }
+          public int hashCode() {
+            return 
+              ((key   == null) ? 0 :   key.hashCode()) ^
+              ((value == null) ? 0 : value.hashCode());
+          }
+          public String toString() {
+            return key + "=" + value;
+          }
+          private boolean eq(Object o1, Object o2) {
+            return (o1 == null ? o2 == null : o1.equals(o2));
+          }
+        };
+        ret.add(me);
+      }
+      return ret;
+    }
+    public Collection values() {
+      List ret = new ArrayList();
+      for (Enumeration en  = propertyNames(); en.hasMoreElements(); ) {
+        ret.add(getProperty((String) en.nextElement()));
+      }
+      return ret;
+    }
+    public boolean equals(Object o) { die(); return false; }
+    public int hashCode() { die(); return 0; }
+
+    // block serialization
+    private void writeObject(java.io.ObjectOutputStream s) { die(); }
+    private void readObject(java.io.ObjectInputStream s) { die(); }
+
+    // some methods are currently not supported
+    private void die() { throw new UnsupportedOperationException(); }
   }
 }
