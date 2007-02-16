@@ -38,8 +38,6 @@ import org.cougaar.util.log.Logging;
 
 public abstract class BindingUtility {
 
-  private final static Logger logger = Logging.getLogger(BindingUtility.class);
-
   public static boolean activate(Object child, BindingSite bindingSite, ServiceBroker serviceBroker) {
     setBindingSite(child, bindingSite);
     setServices(child, serviceBroker);
@@ -150,6 +148,7 @@ public abstract class BindingUtility {
                     try {
                       fm.invoke(fc, args);
                     } catch (Throwable e) {
+                      Logger logger = Logging.getLogger(BindingUtility.class);
                       logger.error("Component "+fc+" service setter "+fm+" fails on null argument", e);
                     }
                   }
@@ -186,6 +185,7 @@ public abstract class BindingUtility {
       
       // if we've got any failures, report on them
       if (failures.size() > 0) {
+        Logger logger = Logging.getLogger(BindingUtility.class);
         logger.error("Component "+child+" could not be provided with all required services");
         for (Iterator it = failures.iterator(); it.hasNext(); ){
           Object[] fail = (Object[]) it.next();
