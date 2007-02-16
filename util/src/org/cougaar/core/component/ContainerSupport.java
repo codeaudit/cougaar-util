@@ -116,8 +116,6 @@ implements Container, StateObject
    **/
   protected final ArrayList binderFactoryDescriptions = new ArrayList();
 
-  private Logger log = Logging.getLogger(ContainerSupport.class.getName());
-
   protected ContainerSupport() {
     // child service broker
     ServiceBroker csb = specifyChildServiceBroker();
@@ -446,10 +444,6 @@ implements Container, StateObject
   public boolean add(Object o) {
     ComponentDescription cd;
     Object cstate;
-    if (log.isDebugEnabled()) {
-      log.debug("add " + o);
-    }
-
     if (o instanceof ComponentDescription) {
       // typical component description
       cd = (ComponentDescription)o;
@@ -461,9 +455,6 @@ implements Container, StateObject
       cstate = st.getState();
     } else if (o instanceof BinderFactory) {
       // unusual case -- prefer to load from cd
-      if (log.isDebugEnabled()) {
-        log.debug("add BinderFactory " + o);
-      }
       return attachBinderFactory((BinderFactory)o);
     } else if (o instanceof Component) {
       // unusual case -- prefer to load from cd
@@ -755,9 +746,6 @@ implements Container, StateObject
     if (checkBinderFactory(cd)) {
       Component bfc = componentFactory.createComponent(cd);
       if (bfc instanceof BinderFactory) {
-        if (log.isDebugEnabled()) {
-          log.debug("loadBinderFactory " + cd);
-        }
         binderFactoryDescriptions.add(cd);
         return attachBinderFactory((BinderFactory)bfc);
       } else {
@@ -799,9 +787,6 @@ implements Container, StateObject
 
   /** Matching setter for getExternalComponentDescriptions **/
   protected final void setExternalComponentDescriptions(ComponentDescriptions cds) {
-    if (log.isDebugEnabled()) {
-      log.debug("setExternalComponentDescriptions = " + cds);
-    }
     externalComponentDescriptions = cds;
   }
 
