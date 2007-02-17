@@ -411,9 +411,11 @@ public class SystemProperties {
     }
     try {
       return System.getenv(name); // not deprecated in JDK 1.5!
-    } catch (Error e) {
+    } catch (Throwable e) {
       String s = e.getMessage();
-      if (s == null || !s.startsWith("getenv no longer supported")) {
+      if (s == null ||
+          (!s.startsWith("getenv no longer supported") &&
+           !s.startsWith("access denied"))) {
         throw new RuntimeException("getenv("+name+") failed?", e);
       }
     }
@@ -440,14 +442,17 @@ public class SystemProperties {
             env.put(line.substring(0, n), line.substring(n+1));
         }
       }
-    } catch (Exception e) {
-      String os = getProperty("os.name");
-      if (!"Linux".equals(os))  {
-        throw new UnsupportedOperationException(
-            "Unable to read environment variables in "+os);
+    } catch (Throwable e) {
+      String s = e.getMessage();
+      if (s == null || !s.startsWith("access denied")) {
+        String os = getProperty("os.name");
+        if (!"Linux".equals(os))  {
+          throw new UnsupportedOperationException(
+              "Unable to read environment variables in "+os);
+        }
+        throw new RuntimeException(
+            "I/O exception reading environment variables", e);
       }
-      throw new RuntimeException(
-          "I/O exception reading environment variables", e);
     } finally {
       try {
         if (reader != null)
