@@ -56,7 +56,6 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
  * This class is used by
@@ -197,14 +196,6 @@ public final class CommandLine {
     "  cougaar -s sys.xml -a mySoc.xml -Da=b\n"+
     "\n"+
     "Report bugs to <bugs@cougaar.org>.";
-
-  // preferred XML readers
-  private static final String[] XML_READERS = new String[] {
-    "-Dorg.xml.sax.driver", // optional system property
-    "org.apache.crimson.parser.XMLReaderImpl", // JDK 1.4
-    "com.sun.org.apache.xerces.internal.parsers.SAXParser", // JDK 1.5
-    null, // use ParserFactory, which uses -Dorg.xml.sax.parser
-  };
 
   // optional -D specified *in the xml* to expand the bootstrapper
   // jar path.
@@ -372,7 +363,7 @@ public final class CommandLine {
   private CommandData generate_command() {
     CommandData ret = null;
     try {
-      XMLReader xml_reader = createXMLReader();
+      XMLReader xml_reader = XMLReaderUtils.createXMLReader();
       xml_reader.setEntityResolver(new MyResolver());
 
       application_data =
@@ -857,48 +848,6 @@ public final class CommandLine {
         buf.append(" ").append(l.get(i));
       }
     }
-  }
-
-  private static XMLReader createXMLReader() {
-    for (int i = 0; i < XML_READERS.length; i++) {
-      String classname = XML_READERS[i];
-      if (classname != null && classname.startsWith("-D")) {
-        classname = SystemProperties.getProperty(classname);
-        if (classname == null) {
-          continue;
-        }
-      }
-      XMLReader ret;
-      try {
-        ret =
-          (classname == null ?
-           XMLReaderFactory.createXMLReader() :
-           XMLReaderFactory.createXMLReader(classname));
-      } catch (Exception e) {
-        ret = null;
-      }
-      if (ret != null) {
-        // success!
-        return ret;
-      }
-    }
-    // failed
-    StringBuffer buf = new StringBuffer();
-    buf.append("Unable to create XMLReader, attempted:");
-    for (int i = 0; i < XML_READERS.length; i++) {
-      String s = XML_READERS[i];
-      if (s == null) {
-        s = "(default XMLFactory.createXMLReader())";
-      }
-      buf.append("\n  ");
-      if (s.startsWith("-D")) {
-        buf.append(SystemProperties.getProperty(s)).append(
-            " (from \"").append(s).append("\")");
-      } else {
-        buf.append(s);
-      }
-    }
-    throw new RuntimeException(buf.toString());
   }
 
   /** An XML resolver API */
