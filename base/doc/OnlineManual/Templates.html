@@ -52,7 +52,6 @@ servlets by setting:
 </pre>
 <h1>Matrix of enabled/disabled features</h1>
 
-For ease of reading, all 'lan' features have been colored <b>light green</b>, and all 'embedded' features have been colored <b>light red</b>.  This makes it easy to see where the same values are used in the other configurations.
 <p>
 
 <table border=1>
@@ -83,17 +82,17 @@ For ease of reading, all 'lan' features have been colored <b>light green</b>, an
 
   <tr><td><b>standard_agent_servlets</b> e.g. "/tasks"</td><td bgcolor=pink>false</td><td bgcolor=lightgreen>true</td><td bgcolor=lightgreen>true</td><td bgcolor=pink>false</td><td bgcolor=lightgreen>true</td><td bgcolor=lightgreen>true</td></tr>
 
-  <tr><td><b>communities</b></td><td bgcolor=lightgreen>false</td><td bgcolor=lightgreen>false</td><td bgcolor=lightgreen>false</td><td>true <a href="#communities"><i>note</i></a></td><td bgcolor=lightgreen>false</td><td bgcolor=lightgreen>false</td></tr>
+  <tr><td><b>communities</b></td><td bgcolor=pink>false</td><td bgcolor=pink>false</td><td bgcolor=pink>false</td><td bgcolor="lightgreen">true <a href="#communities"><i>note</i></a></td><td bgcolor=pink>false</td><td bgcolor=lightgreen>true</td></tr>
 
-  <tr><td>assume <b>planning</b> domain should be loaded</td><td bgcolor=lightgreen>false</td><td bgcolor=lightgreen>false</td><td bgcolor=lightgreen>false</td><td>true <a href="#planning"><i>note</i></a></td><td bgcolor=lightgreen>false</td><td bgcolor=lightgreen>false</td></tr>
+  <tr><td>assume <b>planning</b> domain should be loaded</td><td bgcolor=pink>false</td><td bgcolor=pink>false</td><td bgcolor=pink>false</td><td bgcolor=lightgreen>true <a href="#planning"><i>note</i></a></td><td bgcolor=pink>false</td><td bgcolor=pink>false</td></tr>
 
-  <tr><td>read <b>domain_ini</b> file</td><td bgcolor=lightgreen>false</td><td bgcolor=lightgreen>false</td><td bgcolor=lightgreen>false</td><td>true <a href="#domain_ini"><i>note</i></a></td><td bgcolor=lightgreen>false</td><td bgcolor=lightgreen>false</td></tr>
+  <tr><td>read <b>domain_ini</b> file</td><td bgcolor=pink>false</td><td bgcolor=pink>false</td><td bgcolor=pink>false</td><td bgcolor=lightgreen>true <a href="#domain_ini"><i>note</i></a></td><td bgcolor=pink>false</td><td bgcolor=pink>false</td></tr>
 
-  <tr><td><b>link_protocol.loopback</b></td><td bgcolor=lightgreen>default</td><td bgcolor=lightgreen>default</td><td>true <a href="#link_protocol"><i>note</i></a></td><td bgcolor=lightgreen>default</td><td bgcolor=lightgreen>default</td><td>true</td></tr>
+  <tr><td><b>link_protocol.loopback</b></td><td bgcolor=pink>default</td><td bgcolor=pink>default</td><td bgcolor=lightgreen>true <a href="#link_protocol"><i>note</i></a></td><td bgcolor=pink>default</td><td bgcolor=pink>default</td><td bgcolor=pink>default</td></tr>
 
-  <tr><td><b>link_protocol.rmi</b></td><td bgcolor=lightgreen>default</td><td bgcolor=lightgreen>default</td><td bgcolor=lightgreen>default</td><td bgcolor=lightgreen>default</td><td bgcolor=lightgreen>default</td><td>true</td></tr>
+  <tr><td><b>link_protocol.rmi</b></td><td bgcolor=pink>default</td><td bgcolor=pink>default</td><td bgcolor=pink>default</td><td bgcolor=pink>default</td><td bgcolor=pink>default</td><td bgcolor=pink>default</td></tr>
 
-  <tr><td><b>link_protocol.jms</b></td><td bgcolor=lightgreen>default</td><td bgcolor=lightgreen>default</td><td bgcolor=lightgreen>default</td><td bgcolor=lightgreen>default</td><td bgcolor=lightgreen>default</td><td>true</td></tr>
+  <tr><td><b>link_protocol.jms</b></td><td bgcolor=pink>default</td><td bgcolor=pink>default</td><td bgcolor=pink>default</td><td bgcolor=pink>default</td><td bgcolor=pink>default</td><td bgcolor=pink>default</td></tr>
 
 </table>
 <p>
@@ -152,7 +151,7 @@ Similar to the above planning issue, the legacy configuration reads a
 <h4>link_protocol:</h4>
 </dt><dd>
 By default, the RMI and Loopback link protocols are loaded.  In the 'single_debug'
-configuration we only want loopback.  In 'wan' we load loopback, RMI, and JMS.
+configuration we only want loopback.
 </dd>
 <p>
 
