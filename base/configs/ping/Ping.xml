@@ -1,0 +1,62 @@
+<?xml version='1.0'?>
+
+<!--
+Sample single-node "ping" application.
+
+Usage:
+
+  1) Verify that Java 1.5 or 1.6 is installed and on the PATH, by running:
+       java -version
+
+  2) Set your $COUGAAR_INSTALL_PATH environment variable to the base
+     Cougaar install path, e.g. "~/cougaar".  This file is:
+       $COUGAAR_INSTALL_PATH/configs/ping/Ping.xml
+
+  3) Run:
+       $COUGAAR_INSTALL_PATH/bin/cougaar Ping.xml
+
+  4) Output should look like:
+       [PingSender] - A: Sending ping 0 to B
+       [DOTS] - +-
+       [PingReceiver] - B: Responding to ping 0 from A
+       [DOTS] - +-
+       [PingSender] - A: Received response 0 from B
+       [PingSender] - A: Will send ping 1 to B in 5 seconds
+       [DOTS] - .
+
+  5) Optionally view the servlet at
+       http://localhost:8800/$A/ping
+
+  6) Press CTRL-C to stop the run
+
+For additional notes and a Cougaar architecture overview, see:
+  http://tutorials.cougaar.org/CougaarOverview.ppt
+-->
+<society>
+
+  <node name="Node1">
+
+    <agent name="A">
+      <!-- This plugin sends the ping to agent “B” -->
+      <component class="org.cougaar.core.relay.PingSender">
+        <argument>target=B</argument>
+        <argument>delayMillis=5000</argument>
+        <argument>verbose=true</argument>
+      </component>
+
+      <!-- Our servlet to view the blackboard -->
+      <component class="org.cougaar.core.relay.PingServlet">
+        <argument>/ping</argument>
+      </component>
+    </agent>
+
+    <agent name="B">
+      <!-- This plugin replies to pings from any sender -->
+      <component class="org.cougaar.core.relay.PingReceiver">
+        <argument>verbose=true</argument>
+      </component>
+    </agent>
+
+  </node>
+
+</society>
