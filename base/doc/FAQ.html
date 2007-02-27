@@ -84,6 +84,8 @@ issues with the Cougaar web site?</a></li>
 <p/>
 <b>A:</b>
 Cougaar is a Java-based architecture for the construction of highly scalable distributed <a href="#agent">agent</a>-based applications.  Cougaar is the product of a multi-year <a href="http://www.darpa.mil">DARPA</a> research project to develop an <a href="#license">open-source</a> agent-based architecture that supports applications ranging from small-scale systems to large-scale highly-survivable distributed systems.  Cougaar includes an advanced core architecture and a variety of of components that simplify the development, visualization, and management of complex distributed applications.
+<p>
+For additional details, please see our <a href="http://tutorials.cougaar.org/CougaarOverview.ppt">overview slides</a>.
 <p/>
 
 <a name="standfor"/>
@@ -129,7 +131,8 @@ Please see our <a href="#project">project site</a> for the latest news on open s
 <b>Q: Where can I find Cougaar source code?</b>
 <p/>
 <b>A:</b>
-Cougaar is an <a href="#license">open source</a> project.  Release builds and source code are available on our website: <a href="http://www.cougaar.org">http://www.cougaar.org</a>.  A CVS tree, <a href="http://jakarta.apache.org/ant">ANT</a> compilation scripts, and nightly builds are also available on the same site.
+Cougaar is an <a href="#license">open source</a> project.  Release builds and source code are available on our website: <a href="http://www.cougaar.org">http://www.cougaar.org</a>.  A 
+<a href="http://cougaar.org/cgi-bin/viewcvs.cgi/?cvsroot=core">CVS tree</a>, <a href="http://jakarta.apache.org/ant">ANT</a> compilation scripts, and <a href="http://build.cougaar.org/auto/HEAD/latest_success/">nightly builds</a> are also available on the same site.
 <p/>
 
 <a name="project"/>
@@ -166,20 +169,14 @@ Please send email to <a href="mailto:support-csc-info@cougaar.org">support-csc-i
 <b>Q: How do I install Cougaar?</b>
 <p/>
 <b>A:</b>
-Release builds can be found on our <a href="http://www.cougaar.org">website</a>.  As of July 2005, the current release is Cougaar 12.0.  Builds are available as either a single ZIP file or a wizard-based installer.
-<p/>
-Basic Getting Started guidelines are availabe in our <a
-href="http://cougaar.cougaar.org/software/latest/doc/getting_started.html">Getting
-Started</a> guide.
-<p>
-Installation and configuration documentation is included in the <a href="#docs">Cougaar Developers' Guide</a>.
+Please see our <a href="http://cougaar.cougaar.org/software/latest/doc/getting_started.html">Installation Guide</a>.
 <p/>
 
 <a name="reqs"/>
 <b>Q: What are the system requirements to run Cougaar?</b>
 <p/>
 <b>A:</b>
-Cougaar requires <a href="http://java.sun.com/j2se/1.4.2">Java 1.4.2</a> or later.  Any machine capable of running Java 1.4.2 should suffice.  The Cougaar architecture team develops on Windows 98/NT/XP, Linux, Mac OS X, and Java-1.4-capable PDAs.
+Cougaar requires <a href="http://java.sun.com/">Java 1.5</a> or later.  Any machine capable of running Java 1.5 or 1.6 should suffice.  The Cougaar architecture team develops on Windows 98/NT/XP, Linux, Mac OS X, and Java-1.4-capable PDAs.
 <p/>
 There's also a micro-edition of Cougaar that runs on a Java KVM (<a href="http://micro.cougaar.org">CougaarME</a>).  This FAQ covers the JavaSE version of Cougaar.
 <p/>
@@ -268,6 +265,7 @@ The Cougaar architecture includes a Message Transport with pluggable "Link Proto
   <li>CORBA</li>
   <li>HTTP</li>
   <li>SOAP</li>
+  <li>JMS</li>
 </ul>
 Additional Ultra*Log protocols include plain TCP Sockets, UDP, SMTP, and NNTP.  Third-party developers can write new link protocols and plugin them into Cougaar.
 <p/>
@@ -384,7 +382,7 @@ Cougaar is a highly configurable architecture with many capabilities, which make
 <p/>
 The Cougaar Component Model allows a Cougaar agent to be tailored from minimal single-host embedded applications to highly distributed heavy-weight applications.  The service-based framework allows developers to add new components without altering the architecture APIs.
 <p/>
-Cougaar is a stable architecture that is currently on version 12.0.
+Cougaar is a stable architecture that is currently on version 12.2.
 <p/>
 The Cougaar architecture is built with scalability in mind.  Under the Ultra*Log project, Cougaar agent societies of over 200 agents running on 30 machines have coordinated to develop complex military logistics plans.
 <p/>

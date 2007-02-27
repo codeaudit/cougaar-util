@@ -1,998 +1,208 @@
 <!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
 <html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <title>Cougaar Release Notes</title>
-</head>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <title>Cougaar Release Notes</title>
+  </head>
   <body link="#0000ff" vlink="#800080">
- &nbsp; 
-<table border="0" cellspacing="0" cellpadding="0" width="600">
- <tbody>
-    <tr>
- <td align="Center" width="200"><a href="http://www.cougaar.org/"><img src="cougaar.png" border="0"></a>
-      </td>
-  <td align="Center" width="200"> 
-      <h2> <b><font size="+2">Release Notes</font></b></h2>
-  
-      <h2> <b><font size="+2">COUGAAR 12.2</font></b></h2>
- </td>
- </tr>
- 
-  </tbody>
-</table>
-  
-      <hr> 
-      <p>Jump down to:&nbsp; </p>
+    &nbsp; 
+    <table border="0" cellspacing="0" cellpadding="0" width="600">
+      <tbody>
+        <tr>
+          <td align="Center" width="200"><a href="http://www.cougaar.org/"><img src="cougaar.png" border="0"></a>
+          </td>
+          <td align="Center" width="200"> 
+            <h2> <b><font size="+2">Release Notes</font></b></h2>
+
+            <h2> <b><font size="+2">COUGAAR 12.2</font></b></h2>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+
+    <hr> 
+    <p>Jump down to:&nbsp; </p>
+    <ul>
+      <li> <a href="#introduction">Introduction</a></li>
+      <li> <a href="#license">License</a></li>
+      <li> <a href="#contents">Contents</a></li>
+      <li> <a href="#what_is_new">What's New in this Release?</a></li>
+      <li> <a href="#requirements">Requirements</a></li>
+      <li> <a href="#installation">Installation</a></li>
+      <li> <a href="#documentation">Documentation</a></li>
+      <li> <a href="#support">Support</a></li>  
+    </ul>
+
+    <hr>  
+
+    <!-- INTRODUCTION -->
+    <h2> <a name="introduction"></a>Introduction</h2>
+    This file contains the release notes for Cougaar 12.2.
+    <p>
+    Cougaar is an open-source, Java-based architecture that supports distributed,
+    agent-based applications.
+    <p>
+    Please visit the <a href="http://www.cougaar.org">Cougaar Website</a>
+    for <a href="http://tutorials.cougaar.org/CougaarOverview.ppt">overview slides</a>,
+    <a href="#documentation">documentation</a>, news, and releases.
+    <p>
+
+    <!-- LICENSE -->
+    <h2> <a name="license"></a>License</h2>
+    Cougaar uses the BSD-style "Cougaar Open Source License" (COSL).
+    Please see the <a href="License.txt">License.txt</a> (<a href="http://cougaar.org/license.html">online version</a>).
+    <p>
+
+    <!-- CONTENTS -->
+    <h2> <a name="contents"></a>Contents</h2>
+    For documentation on the various zip, jar, and config files included in this release,
+    please see the <a href="Contents.html">Contents File</a>.
+    <p>
+
+    <!-- WHAT_IS_NEW -->
+    <h2> <a name="what_is_new"></a>What's New in this Release?</h2>
+
+    Cougar 12.2 is a minor release.
+    <p>
+
+    <b>Changes:</b>
+    <ul>
+
+      <li>Defined new standard node/agent "template" parameters, which making it easy to
+      enable/disable many related infrastructure services using a single "-D" system property.
+      For details and examples, see the <a href="OnlineManual/Templates.html">Cougaar Template Documentation</a>.</li>
+      <p>
+
+      <li>Added a new "ping" sample application, which is now included in the "core" jar.
+      The example is comprised of:<ul>
+        <li>A "ping sender" (<a
+          href="http://cougaar.cougaar.org/software/12.2/javadoc/core/doc/api/org/cougaar/core/relay/PingSender.html"
+          >javadoc</a>, <a
+          href="http://cougaar.org/cgi-bin/viewcvs.cgi/*checkout*/core/src/org/cougaar/core/relay/PingSender.java?rev=HEAD&cvsroot=core"
+          >code</a>)</li>
+        <li>A "ping receiver" (<a
+          href="http://cougaar.cougaar.org/software/12.2/javadoc/core/doc/api/org/cougaar/core/relay/PingReceiver.html"
+          >javadoc</a>, <a
+          href="http://cougaar.org/cgi-bin/viewcvs.cgi/*checkout*/core/src/org/cougaar/core/relay/PingReceiver.java?rev=HEAD&cvsroot=core"
+          >code</a>)</li>
+        <li>A "ping servlet" (<a
+          href="http://cougaar.cougaar.org/software/12.2/javadoc/core/doc/api/org/cougaar/core/relay/PingServlet.html"
+          >javadoc</a>, <a
+          href="http://cougaar.org/cgi-bin/viewcvs.cgi/*checkout*/core/src/org/cougaar/core/relay/PingServlet.java?rev=HEAD&cvsroot=core"
+          >code</a>)</li>
+      </ul>
+      This example is discussed in the <a href="http://tutorials.cougaar.org/CougaarOverview.ppt">Overview Slides</a>
+      as both a code tutorial and system benchmark.</li>
+      </li>
+      <p>
+
+      <li>Modified access to system properties, to allow Cougaar to run in environments
+      where property access is restricted, such as:
       <ul>
-  <li> <a href="#introduction">Introduction</a></li>
-  <li> <a href="#license">License</a></li>
-  <li> <a href="#requirements">Requirements</a></li>
-  <li> <a href="#overview">Overview of this Release</a></li>
-  <li> <a href="#documentation">Additional Documentation</a></li>
-  <li> <a href="#bugs">Known bugs and bugs resolved since Cougaar
-  release 9.4.1</a></li>
-  <li> <a href="#organization">Organization of a Release</a></li>
-  <li> <a href="#install">Installing Cougaar</a></li>
-  <li> <a href="#example">Example Society Implementations</a></li>
-  <li> <a href="#delivering">Delivering Software Products (Plugins and other
-Components)</a></li>
-  <li> <a href="#developing">Developing and Running Cougaar Societies</a></li>
-  <li> <a href="#future">Future Releases</a></li>
-  <li> <a href="#questions">Questions and Submission of Bug Reports</a></li>  
+        <li>An Applet, where the browser JVM security settings block access to most System 
+        properties.</li>
+        <li>A container engine such as Tomcat or WebLogic, where multiple Nodes can run in the same JVM,
+        and would otherwise have property conflicts if they shared the same System properties table.</li>
       </ul>
-  
-      <hr>  
+      The code change was a replacement of all calls to "java.lang.System.getProperty(..)" with
+      equivalent "org.cougaar.bootstrap.SystemProperties.getProperty(..)" methods, along with
+      similar changes for calls to Java's primitive wrapper classes (e.g. "Boolean.getBoolean(..)").
+      Developers are encouraged to use the new "SystemProperties" methods.</li>
+      <p>
 
-      <h2> <a name="introduction"></a>Introduction</h2>
+      <li>Added a "loopback" naming service implementation, for use in single-node environments.
+      To enable, set the "wpserver" <a href="OnlineManual/Templates.html">template parameter</a>.</li>
+      <p>
 
-This file contains the release notes for Cougaar 12.2.
-<p>
-Please see our <a href="FAQ.html">Cougaar FAQ</a>
-(<a href="http://cougaar.org/faq.html">online version</a>) for a high-level
-introduction to the Cougaar agent architecture, system requirements, 3rd party software,
-and pointers to additional documentation.
-<p>
-Please also visit our
-<a href="http://www.cougaar.org">Cougaar Website</a> for the latest
-news, documentation, and Cougaar builds. 
+      <li>Implemented a new "NodeApplet" to run Cougaar in a browser JVM.  For a demonstration,
+      see the <a href="http://cougaar.org/forum/forum.php?forum_id=233">online example</a>.</li>
+      <p>
 
-      <h2> <a name="license"></a>License</h2>
-Cougaar is available the Cougaar Open Source
-    License (COSL).  See <a href="License.txt">License.txt</a> or
-<a href="http://cougaar.org/license.html">cougaar.org/license.html</a>.
+      <li>Added Node "shutdown()" support for use in container environments, such as JBoss.</li>
+      <p>
 
-      <h2> <a name="requirements"></a>Requirements</h2>
-<ul>
-<li><b>Java 2 SDK, version 5.0</b>:  Cougaar I/O is very closely tied to
-the specific java implementation, so usually depends on a particular
-release of the jdk. We have not observed any compatibility problems 
-across service releases (e.g. "_01" versus "_03"). 
-</li>
-<li><b>Third-party libraries</b>:  Detailed requirements and jarfile versions are discussed in
-<a href="../sys/index.html">sys/index.html</a>.  When a package
-allows redistribution, we have included it in <a href="../sys">the
-sys subdirectory</a> as part of the cougaar-support.zip package. 
-</li>
-<li><b>No OS requirement</b>:  Cougaar developers use a variety of operating
-systems, including Linux, Windows and Mac OSX. There are no particular
-known compatibility issues across platforms.
-</li>
-<li><b>No special hardware requirement</b>:  Cougaar can be used on hardware ranging
-from very small(See the CougaarME project) through large machines.
-SMP and HyperThreading are fully supported.  
-</li>
-</ul>
+      <li>Added a message transport JMS link prototocol.</li>
+      <p>
 
-      <h2> <a name="overview"></a>Overview of this Release</h2>
-Please see our website (<a href="http://cougaar.org/errata/">http://cougaar.org/errata/</a>) for updated information on problems/workarounds
-that were detected/posted after this Cougaar version was released.
-The errata directory is organized by cougaar release number.  For
-example, the errata page for Cougaar 11.0 is <a href="http://cougaar.org/errata/cougaar1100/errata.html">http://cougaar.org/errata/cougaar1100/errata.html</a>.
+      <li>Added CommandLine "parse()" method to allow an external "exec(..)" application to
+      extract the -Ds from a Cougaar society XML file.  We expect to use this feature for
+      better container and IDE integration, e.g. in Eclipse.</li>
+      <p>
 
+      <li>Modified "-Dorg.cougaar.jar.path" parser to support comma separators, in addition to
+      the standard OS-specific path separator (":" on Linux and ";" on Windows).  This makes
+      it easier to write cross-platform XML society files.</li>
+      <p>
 
- <!-- COUGAAR 12.2 COUGAAR 12.2 COUGAAR 12.2 COUGAAR 12.2 COUGAAR 12.2 -->
-<p>
-<b>Build 12.2</b> is a minor release. 
-<p>
-<ul>
-<li>Standard node/agent templates have been defined.  For details, see the
-<a href="OnlineManual/Templates.html">Cougaar Template Documentation</a>.</li>
-<li>System property access has been modified to allow Cougaar to run in environments where
-property access is restricted, such as:
-<ul>
-<li>An Applet, where the browser JVM security settings block access to most System 
-properties.</li>
-<li>A container engine such as Tomcat or WebLogic, where multiple Nodes can run in the same JVM,
-and would otherwise have property conflicts if they shared the same System properties table.</li>
-</ul>
-The code change was a replacement of calls to "java.lang.System.getProperty(..)" with
-a similar "org.cougaar.bootstrap.SystemProperties.getProperty(..)" method, along with
-similar changes for calls to Java's primitive wrapper classes (e.g. "Boolean.getBoolean(..)").
-Developers are encouraged to use the new "SystemProperties" methods.</li>
-<li>Implemented a new "NodeApplet" to run Cougaar in a browser JVM.</li>
-<li>Added Node "shutdown()" support for use in container environments, such as JBoss.</li>
-<li>Modified "-Dorg.cougaar.jar.path" parser to support comma separators, in addition to
-the standard OS-specific path separator (":" on Linux and ";" on Windows).  This makes
-it easier to write cross-platform XML society files.</li>
-<li></li>
-</ul>
+    </ul>
 
+    Release notes for older Cougaar revisions can be found in the 
+    <a href="http://cougaar.cougaar.org/software/12.0/doc/index.html">Cougaar 12.0 Release Notes</a>.
 
- <!-- COUGAAR 12.0 COUGAAR 12.0 COUGAAR 12.0 COUGAAR 12.0 COUGAAR 12.0 -->
-<p>
-<b>Build 12.0</b> is a major release. The primary changes were JDK1.5
-support (see above though), and a new concept called coordination artifacts.
-<p>
-<ul>
-<li>There is a new CoordinationArtifacts concept. See <a
-href="OnlineManual/Frames">The Frame Online Manual</a>.</li>
-<li>RFE 3923: Changed PlanningDomain, some fields, to protected access
-so it can be easily extended. IE, just over-ride loadLPs, specify this
-domain as "planning", and specify org.cougaar.core.load.planning=false
-in all nodes. Then you can change the set of LPs running in the PlanningDomain.</li>
-<li><a href="http://bugs.cougaar.org/show_bug.cgi?id=3906">bug 3906</a> and <a href="http://bugs.cougaar.org/show_bug.cgi?id=3934">bug 3934</a>Fixed a timing issue related to creating new communities dynamically. Corrected issues regarding multiple attributes for community entities.</li>
-<li><a href="http://bugs.cougaar.org/show_bug.cgi?id=3909">bug 3909</a> Added accessors for planning and servicediscovery factories</li>
-<li><a href="http://bugs.cougaar.org/show_bug.cgi?id=3930">bug
-3930</a> Added a component to exit on any logged error for testing
-purposes (DieOnErrorComponent)</li>
-<li><a href="http://bugs.cougaar.org/show_bug.cgi?id=3933">bug 3933</a> <a href="http://bugs.cougaar.org/show_bug.cgi?id=3922">bug 3922</a> and <a href="http://bugs.cougaar.org/show_bug.cgi?id=3941">bug 3931</a>Updated the Java IO patch to work with Java 5.0</li>
-<li><a href="http://bugs.cougaar.org/show_bug.cgi?id=3937">bug 3937</a> Updated the CommunityService to be compliant with DirContext interface</li>
-<li><a href="http://bugs.cougaar.org/show_bug.cgi?id=3820">bug 3820</a> Resolved validation issues with XSL files</li>
-<li><a href="http://bugs.cougaar.org/show_bug.cgi?id=3846">bug
-3846</a> Corrected syncronization issues regarding access to Workflow
-tasks</li>
-<li><a href="http://bugs.cougaar.org/show_bug.cgi?id=3936">bug
-3936</a> Split SimpleRelay into separate source & target
-implementations.<li>
-<li>Bootstrap.jar is now optionally executable. It also allows simpler
-addition of jars to org.cougaar.jar.path. See the Javadoc.</li>
-<li>For other bug fixes, see the <a href="http://bugs.cougaar.org">Cougaar bugs web site</a>.</li>
-</ul>
+    <!-- REQUIREMENTS -->
+    <h2> <a name="requirements"></a>Requirements</h2>
+    Cougaar requires Java version 1.5 or 1.6.  For details, please see the 
+    <a href="install.html">Installation Guide</a>.
+    <p>
 
+    <!-- INSTALLATION -->
+    <h2> <a name="installation"></a>Installation</h2>
+    Please see the <a href="install.html">Installation Guide</a> and
+    <a href="http://tutorials.cougaar.org/CougaarOverview.ppt">Overview Slides</a>.
+    <p>
 
-  <!-- COUGAAR 11.4 COUGAAR 11.4 COUGAAR 11.4 COUGAAR 11.4 COUGAAR 11.4 -->
-<p>
-<b>Build 11.4</b> is a minor release, including 
-performance optimizations, and multiple bug fixes. Key changes include
-a new "cougaar" run script, a new "pizza" sample application /
-regression test / tutorial, a runtime Component Model Viewer to see
-what components are running where, ServiceDiscovery support for OWL,
-and an HTTP Message Transport Protocol. 
-<p>
-<ul>
-<li>Created new "bin/cougaar[.bat]" scripts that replace the older
-"bin/*Node*" scripts:<br>
-&nbsp;&nbsp;<code>Node, Node.bat, XMLNode, XSLNode, XSLNode.bat</code><br>
-For example, if "MyNode.xml" contains only node "MyNode", then
-instead of the old usage:<br>
-&nbsp;&nbsp;<code>$COUGAAR_INSTALL_PATH/bin/Node MyNode.xml MyNode</code><br>
-now use:<br><code>
-&nbsp;&nbsp;<code>$COUGAAR_INSTALL_PATH/bin/cougaar MyNode.xml</code><br>
-The new scripts are similar to ACME and the removed XSLNode, which
-read the Java system properties from the XML file, for example:<code><br>
-&nbsp;&nbsp;&lt;node name='MyNode'&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;vm_parameter&gt;-Dx=y&lt;/vm_parameter&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;..</code><br>
-These "-D"s can be specified in a separate "system" XML file and
-run using:<br>
-&nbsp;&nbsp;<code>$COUGAAR_INSTALL_PATH/bin/cougaar --system mySystem.xml MyNode.xml</code><br>
-INI files are supported for this release, but are scheduled for
-removal in the 12.0 release (
-<a href="http://bugs.cougaar.org/show_bug.cgi?id=3881">bug 3881</a>
-)
-For more details, run:<br>
-&nbsp;&nbsp;<code>$COUGAAR_INSTALL_PATH/bin/cougaar --help</code><br>
-or see
-<a href="http://bugs.cougaar.org/show_bug.cgi?id=3447#c7">bug 3447</a>
-.</li>
-<li>Added a new "pizza" application suite.  These applications are
-good examples of how to use relays, communities, service discovery, etc.
-The pizza applications also replace "minitestconfig" as the standard
-regression application.  See the "pizza" module's documentation for
-details.</li>
-<li>Added a runtime component model viewer, to see which components
-are loaded and which services they have advertised/obtained.  This
-includes a "/components" servlet that generates XML views (
-<a href="http://bugs.cougaar.org/show_bug.cgi?id=1113#c5">bug 1113</a>
-).</li>
-<li>Blackboard now complains about possible performance hits (like use
-of DynamicUnaryPredicates). To quiet these, set the -D 
-org.cougaar.blackboard.pedantic=false</li>
-<li>Code cleanup to remove deprecated method calls and fix many
-<a href="http://pmd.sourceforge.net/">PMD</a> style warnings.</li>
-<li>Lots of javadoc cleanup, including a major rewrite of the
-class-level javadoc in core (
-<a href="http://bugs.cougaar.org/show_bug.cgi?id=3736">bug 3736</a>
-) and message transport (
-<a href="http://bugs.cougaar.org/show_bug.cgi?id=3738">bug 3738</a>
-).</li>
-</li>
-<li>The LoggingService now prepends the agent name to all log messages.
-For example, in agent "X", the code:<br><code>
-&nbsp;&nbsp;loggingService.info("test");<br>
-</code>will be logged as:<br><code>
-&nbsp;&nbsp;12:34:56,789 INFO - MyPlugin - X: test<br>
-</code>This can be disabled with:<br><code>
-&nbsp;&nbsp;-Dorg.cougaar.core.logging.addAgentPrefix=false<br>
-</code>(
-<a href="http://bugs.cougaar.org/show_bug.cgi?id=3829">bug 3829</a>
-).</li>
-<li>Added AssetDataParamPlugin, allowing creation of Entity objects
-solely from XML parameters.  This is used in the "pizza" applications
-and is planned to be used in a future cleanup of the tutorial
-exercises.</li>
-<li>Converted ServiceDiscovery from DAML to OWL (
-<a href="http://bugs.cougaar.org/show_bug.cgi?id=3753">bug 3753</a>
-).</li>
-<li>Added an HTTP message transport link protocol (contributed by
-CSI) that uses Servlets and URLConnections instead of RMI.  To
-support this new link protocol, a new generic "RPC" link protocol
-base class was created.  The RMI and Corba link protocol have
-been refactored to use the new base class.</li>
-<li>A servlet path that lacks a "/$" prefix is now handled by
-by the node-agent instead of redirecting to a random local agent's
-servlet (
-<a href="http://bugs.cougaar.org/show_bug.cgi?id=3843">bug 3843</a>
-).</li>
-<li>If a component defines a "setServiceBroker(ServiceBroker sb)"
-method, the component model will find it through reflection and
-call it (
-<a href="http://bugs.cougaar.org/show_bug.cgi?id=3562">bug 3562</a>
-).  This is intended to phase out the existing
-"setBindingSite(BindingSite bs)" API.  The core has been modified to
-use the new API (
-<a href="http://bugs.cougaar.org/show_bug.cgi?id=3724">bug 3724</a>
-).</li>
-<li>Added new "-Dorg.cougaar.jar.path" system property to change the
-Bootstrapper jar finder path, which was previously hard-coded to look
-for jars in "-Dorg.cougaar.class.path" and in the
-"-Dorg.cougaar.install.path"'s "lib/" and "sys/" directories.
-The new system property makes it easier to create a shared read-only
-Cougaar install with per-user read/write overlays (
-<a href="http://bugs.cougaar.org/show_bug.cgi?id=3717#c8">bug 3717</a>
-).</li>
-<li>Added a simple component parameter parser for parameters of the
-form name=value.  See org.cougaar.util.Arguments (
-<a href="http://bugs.cougaar.org/show_bug.cgi?id=3830">bug 3830</a>
-).</li>
-<li>Several community service enhancements:
-  <ul>
-    <li>The community service can now get a non-local Agent's
-    parent communities (
-<a href="http://bugs.cougaar.org/show_bug.cgi?id=3669">bug 3669</a>
-).</li>
-    <li>Community servlet can now show any community in society,
-    not just local.</li>
-    <li>Community requests now support timeouts</li>
-  </ul>
-</li>
-<li>Refactored DemoControlService to avoid MTS multicast and provide
-better progress feedback (
-<a href="http://bugs.cougaar.org/show_bug.cgi?id=3720#c11">bug 3720</a>
-)</li>
-<li>Copied ACME log4j SocketAppender for EventService logging from
-the ACME
-<a href="http://cougaar.org/cgi-bin/viewcvs.cgi/acme/cougaar/socketappender.jar?cvsroot=acme">socketappender.jar</a> to the standard util module,
-which simplifies the use of ACME.  The util version also includes
-an enhancement to use STDOUT/STDERR log4j categories instead of
-the "root" category, which simplifies log4j filtering (
-<a href="http://bugs.cougaar.org/show_bug.cgi?id=3899">bug 3899</a>
-)</li>
-<li>Fixed WP RMI-based bootstrap where two nodes on the same host
-specify "-Dorg.cougaar.name.server=SomeAgent@localhost:8800" to 
-correctly use the specified agent.</li>
-<li>Modified ComponentInitializerService to add an
-"includesDefaultComponents()" method, to distinguish between XML
-template-based configurations (which include default components,
-<a href="http://bugs.cougaar.org/show_bug.cgi?id=2522">bug 2522</a>)
-verses old INI/DB configurations (
-<a href="http://bugs.cougaar.org/show_bug.cgi?id=3828">bug 3828</a>
-)</li>
-<li>Dropped unused and obsolete code:
-  <ul>
-    <li>uiframework module was obsolete, and has been dropped from
-    standard distributions.</li>
-    <li>Dropped the GLMDebug in favor of LoggingService.</li>
-    <li>Dropped obsolete XMLPrototypeProvider, LDMXMLPlugin, XMLAssetCreator</li>
-    <li>Dropped obsolete AE configuration.</li>
-    <li>Dropped unused HysteresisSubscription and SortedSubscription.</li>
-    <li>Dropped unused servicediscovery servlets.</li>
-    <li>Deprecated Freeze plugins in favor of FreezeServlet.</li>
-    <li>Dropped agent and long deprecated MetricsSnapshot</li>
-  </ul>
-</li>
-<li>Some SD refactor / cleanup to allow other SD implementations,
-data directories</li>
-<li>Various metrics improvements</li>
-<li>Reimplemented MessageStatusService for efficiency</li>
-<li>Fixed a bug in agent XML templates, which were creating duplicate
-component descriptions that filtered out at runtime, but binders
-were duplicated (bug 3862).</li>
-<li>Do getPrimary on MessageAddresses before doing .equals to avoid
-comparing attributes.</li>
-<li>Tutorials' TakeVacationServlet is now part of the exercises.</li>
-<li>Persistence SequenceNumbers now public for extensions of
-persistence</li>
-<li>Refactored Asset serialization (
-<a href="http://bugs.cougaar.org/show_bug.cgi?id=3693">bug 3693</a>
-)</li>
-<li>Assets now use getPrimaryClass and isAssignableFrom to ensure
-correct .equals and PG locating (
-<a href="http://bugs.cougaar.org/show_bug.cgi?id=3810">bug 3810</a>
-)</li>
-<li>Note that &lt; and &gt; symbols in plugin arguments may be
-mis-interpreted by XSLNode unless escaped</li>
-<li>Reduced use of cached hashcodes (
-<a href="http://bugs.cougaar.org/show_bug.cgi?id=3705">bug 3705</a>
-)</li>
-</ul>
+    <!-- DOCUMENTATION -->
+    <h2> <a name="documentation"></a>Documentation</h2>
 
+    For additional details, please review the following documentation:  
+    <ul>
+      <li>The <a href="FAQ.html"><b>Cougaar FAQ</b></a> (<a href="http://cougaar.org/faq.html">online version</a>)</li>
+      <li><a name="tutorials"></a>The <a href="http://tutorials.cougaar.org/">Cougaar Tutorials Page</a> contains:<ul>
+        <li>The <a href="http://tutorials.cougaar.org/CougaarOverview.ppt"><b>Overview Slides</b></a>
+        of the Cougaar architecture, programming model, and installation.  We recommend that new users and
+        developers read these slides first.</li>
+        <li>The <a href="http://tutorials.cougaar.org/">Tutorial Slides</a> on how to implement
+        planning applications using Task/Allocation agent interactions.</li>
+        <li>The <a href="http://tutorials.cougaar.org/pizza">"Pizza Party"</a> planning application
+        and related <a href="getting_started.html">Getting Started Guide</a>.</li>
+      </ul></li>
+      <li> The <a href="http://docs.cougaar.org">Documentation Page</a> contains:<ul>
+        <li>The <a href="http://cougaar.org/docman/view.php/17/136/cougaar-bbn-0617-submitted.pdf">Cougaar "Hague" Conference Paper</a></li>
+        <li><a name="cdg"></a> The <a href="http://cougaar.org/docman/?group_id=17">Cougaar Developers' Guide v11.4</a></li>
+        <li><a name="cad"></a> The <a href="http://cougaar.org/docman/view.php/17/170/CAD_11_4.pdf">Cougaar Architecture Document v11.4</a></li>
+        <li>Many additional <a href="http://docs.cougaar.org">Conference Papers</a>.</li>
+      </ul></li>
+      <li>The included <a href="OnlineManual">Manual</a> provides detailed documentation on several
+      core services, such as the ThreadPool and Metrics services.</li>
+      <li>Javadoc is available:<ul>
+        <li>In the "cougaar-api.zip" as "<a href="../javadoc">javadoc</a>/<i>module</i>/doc/api" files, such as the
+        <a href="../javadoc/core/doc/api">Core Javadoc</a>.</li>
+        <li>Online in the <a href="http://cougaar.cougaar.org/software/12.2/javadoc">12.2 Javadoc Directory</a>.</li>
+      </ul></li>
+      <li>The <a href="http://cougaar.cougaar.org/wiki/wiki.pl">Cougaar Wiki</a>.</li>
+      <li>Old <a href="ReleaseNotes">ReleaseNotes</a> and ChangeLog files (e.g., core/src/ChangeLog).</li>
+      <li><a href="../javadoc/api/Parameters.html">Parameters.html</a>,
+      which is a catalog of System Properties (-D flags) as specified by "@property" javadoc tags
+      in the source code.  Note that often this is split in per-module Parameters
+      files, such as the <a href="../javadoc/core/doc/api/Parameters.html">Core Parameters File</a>.</li>
+    </ul>
 
-  <!-- COUGAAR 11.2.2 COUGAAR 11.2.2 COUGAAR 11.2.2 COUGAAR 11.2.2 COUGAAR 11.2.2 -->
-<p>
-<b>Build 11.2.2</b> is a minor release, including performance
-optimizations, and multiple bug fixes. It represents the final state
-of the B11_2 branch and the prototype for the Ultralog program.
-<p>
-<ul>
-<li>Added new agent suicide service, to allow Cougaar to kill off a
-node or agent that is dying or dead (in particular, if a plugin throws an
-exception, or if the JVM is about to run out of memory).
-See org.cougaar.core.node.SuicideServiceComponent (
-<a href="http://bugs.cougaar.org/show_bug.cgi?id=3691">bug 3691</a>
-).</li>
-<li>Added new WP bootstrap mechanism to replace old RMI registry
-implementation.  The new "discovery" mechanism supports HTTP, RMI,
-multicast, and config-file-based bootstrap of nameserver addresses.
-Once servers have been found and "ping"ed, the bootstrap process
-is stopped, and restarted if the servers become unresponsive.  The
-new bootstrap passes the full WP record instead of just the "-RMI"
-address (
-<a href="http://bugs.cougaar.org/show_bug.cgi?id=3756">bug 3756</a>,
-).</li>
-<li>Added Node-level incarnation service for coordinated agent
-incarnation tracking between Agents, WP, and MTS.  The MTS also
-detects duplicate agents and selects the newest agent version (
-<a href="http://bugs.cougaar.org/show_bug.cgi?id=3756">bug 3756</a>,
-<a href="http://bugs.cougaar.org/show_bug.cgi?id=3727">bug 3727</a>
-).</li>
-<li>Fixed several bugs related to the ThreadService silently catching
-OutOfMemoryErrors, which were caused by excessively large thread
-client "toString()"s.  The ThreadService was modified to log
-exceptions, and the CommunityCache detailed toString was moved to a
-new toXML method (
-<a href="http://bugs.cougaar.org/show_bug.cgi?id=3804">bug 3804</a>,
-bug 3805, bug 3811, bug 3812, bug 3813, bug 3814).</li>
-<li>The RescindLP is much more aggressive in removing orphaned
-objects.  Whenever a Task is added or changed or a PlanElement is added or
-removed, the links among Tasks and PEs are checked to ensure they
-are "consistent" -- ensuring references point to Objects that exist on 
-the blackboard, for example.</li>
-<li>Added new "/consistency" servlet
-(org.cougaar.planning.servlet.ConsistencyCheckServlet) to show
-inconsistent tasks, which uses the same methods as the RescindLP.</li>
-<li>Implemented ThreadService pooled thread continuation, to reduce
-thread context switching overhead (bug 3629).</li>
-<li>Remove old -D flags for MTS aspects, protocols, and link
-selection (bug 3240)</li>
-<li>Clean up initializing AssetInitializer service,
-particularly when not using a database (bug 3699).</li>
-<li>Allow per-agent XML file (bug 3632)</li>
-<li>Added system properties to change the default agent and node
-template files.  The default behavior is:<br>
-&nbsp;-Dorg.cougaar.society.xsl.param.defaultAgent=SimpleAgent.xsl<br>
-&nbsp;-Dorg.cougaar.society.xsl.param.defaultNode=NodeAgent.xsl</li>
-<li>Use an empty "DefaultAgent.xml" if the XML parser can't find
- an agent's configuration in the node or per-agent XML files.
- This is primarily used for rehydrating an agent on a remote
-node (bug 3713).</li>
-<li>Allow host addresses to change at runtime (bug 3575)</li>
-<li>Do not publish Compositions.</li>
-<li>AspectValue subclass fields are now final.</li>
-<li>Added org.cougaar.util.ToStringMemo to help in caching toStrings
-(bug 3692)</li>
-<li>Bug 3695: Added version of
-RelationshipSchedule.getMatchingRelationships that takes a single
-time.</li>
-<li>Bug 3667: Added system properties to WP SelectManager to allow
-favoring a local WP</li>
-<li>Added org.cougaar.util.TimeSpans for factories, canonical
-implementations</li>
-<li>Turned off Blackboard pedantic mode by default (bug 3674) </li>
-<li>Bug 3680: Preserve backpointers in Tasks and Expansions.</li>
-<li>Bug 3685: OplanReaderPlugin's MyStages serializable.</li>
-<li>Bug 3678: Aggregations made to match bug
-3663's API change</li>
-<li>Bug 3688: Ensure myAgentAddr is initialized in OrgDataPlugin</li>
-<li>Bug 3696: Fix Subscriber support for multiple watchers</li>
-<li>Remove DataGathererServlet from MiniTest</li>
-<li>Bug 3722: Avoid publishAdd'ing a Task with a null verb</li>
-<li>Bug 3725: The node-level servlet server now advertises a
-RootServletService, to avoid confusion by service listeners</li>
-<li>YPServer drops unused database connections. Default to 10
-minutes. Set via -Dorg.cougaar.yp.UnusedDBConnectionInterval</li>
-<li>Moved TrafficMatrix and AgentFlowAspect out of core.</li>
-<li>Bug 3757: Do not make local changes when an incoming Task is past its
-commitment date (logged at INFO).</li>
-<li>Bug 3760: The /agentQuiescentState servlet now shows which
-quiescence clients are blocking quiescence. Also logged at
-detail.</li>
-<li>Added org.cougaar.core.persist.RehydrateTest for printing the
-contents of a blackboard persistence snapshot. Bug 3381.</li>
-<li>Dropped org.cougaar.mts.std.MulticastMessageAddress</li>
-<li>Bug 3798: Added Agent incarnation # to Agent Lifecycle
-events.</li>
-<li>Added StateDumpService in org.cougaar.core.node, for use when an
-agent is about to suicide, to do a post-mortem. Implementation is in
-mts/org.cougaar.mts.std.StateDumpServiceComponent</li>
-<li>Added MTS DetectBigMessageAspect</li>
-<li>ClusterOPlan.updateOPlanTimes made accessible from
-subclasses.</li>
-<li>Turn down some RescindLP WARNs</li>
-<li>Bug 3635: name YP databases with a system time, allowing 2 agents
-with the same name on the same host to avoid dying due to YP database
-name </li>
-<li>Bug 3698 fixed in service discovery</li>
-<li>Various changes and additions to the metrics service.</li>
-<li>Various small changes to support minimal agent configurations (no
-Blackboard?)</li>
-<li>Avoid calling postRehydration on inActive objects in
-PersistenceServiceComponent (bug 3588)</li>
-<li>Optimize Blackboard handling of MessageAddresses with attributes
-(bug 3796) </li>
-</ul>
+    <!-- SUPPORT -->
+    <h2> <a name="support"></a>Support</h2>
+    For information on problems that were detected after this Cougaar version was released,
+    please see the <a href="http://cougaar.org/errata/cougaar1220/errata.html">Online 12.2 Errata File</a>.
+    Errata for older releases can be found in the <a href="http://cougaar.org/errata">Online Errata Directory</a>.
+    <p>
 
-  <!-- COUGAAR 11.2 COUGAAR 11.2 COUGAAR 11.2 COUGAAR 11.2 COUGAAR 11.2 -->
-<p>
-<b>Build 11.2</b> is a minor release, including a backwards-compatible
-core refactor, performance optimizations, and multiple bug fixes.
-<p>
-<ul>
-<li>
-Applied updated &amp; simplified BSD-derived 
-<a href="http://cougaar.org/license.html">copyright notice</a>.
-</li>
-<li>
-Converted minitestconfig and tutorials to run completely from XML.
-Running of MiniNode does not require the database.  All "*.INI" files
-have been removed as they are no longer supported.
-</li>
-<li>
-Refactored core to support node and agent templates, moving most
-formerly hard-coded components to new XSL style sheets.  For
-example, a developer can modify the "configs/common/NodeAgent.xsl"
-to replace the MTS, disable the blackboard, etc.  See the Cougaar 
-Developers' Guide version 11.2 for details.
-</li>
-<li>
-New XML Node startup scripts (bin/XSLNode) to use -D system
-properties ("&lt;vm_parameter&gt;") specified in XML files.
-For most developers, this simplifies configuration management,
-since per-node system properties can be maintained in the same
-XML file as the node and agent configurations.
-</li>
-<li>
-The RescindLP now does many sanity checks on the addition and
-removal of objects. In particular, it enforces that Tasks are added
-before PlanElements that handle them, and child tasks after the
-PlanElements. Typically the result is that many tasks without a parent
-task (because an infrastructure rescind is in progress) are
-removed. System properties permit disabling this behavior.
-</li>
-<li>
-Multiple fixes to minimize persistence overhead.  Disabled
-persistence now has nearly zero overhead, since the agents no
-longer do trivial "P" persists or hold onto change tuples.
-When persistence is enabled, redundant tuples are now consolidated 
-between persists, allowing early GC; for example, an object
-publishAdded and publishRemoved between persist cycles can now be
-GC'ed before the next persist.
-</li>
-<li>
-Drop explicit GC before persistence. This means persistence
-may temporarily store removed objects, but the new design is more
-efficient if a node contains many agents.</li>
-<li>
-New component model load order of "initialize()", "load()", and
-"start()": now all components are initialized before any are loaded,
-etc.  In particular, all plugins are now loaded before any are
-started, where start schedules the "setupSubscriptions()".  This
-should be transparent to most developers.
-</li>
-<li>
-Many fewer native threads created directly - more use of the Cougaar
-ThreadService (bug 3542).  For example, JVM thread dumps will no
-longer show per-agent "RQ" message handler threads.
-</li>
-<li>
-Alarms now use the ThreadService for scheduling.
-</li>
-<li>
-Multiple enhancements in initializers to reduce String consing,
-LoggingService instances, and other memory enhancements. In particular,
-community file is only parsed once per Node.
-</li>
-<li>
-Do not propogate add/change of Allocations of Tasks that are not
-on the blackboard (have just been rescinded).
-</li>
-<li>
-Added a SimpleRelayExample to core/relay package.
-</li>
-<li>
-Support running plugins in a mode where only a single transaction may
-be open at one time (default is off: that is, fully parallel plugin
-operation). See cougaar bug 3664.
-</li>
-<li>
-org.cougaar.planning.plugin.PluginSanityBinder is an optional new
-binder for use with plugins.  When inserted, it will complain whenever
-a bound object (e.g. plugin) publish adds/changes a task which did not
-originate in the agent.  As an added extra bonus, this is a moderately
-good example of a simple but functional Binder.
-</li>
-<li>
-There is a service alternative to ConfigFinder in the form of
-ConfigurationService. The service is provided by 
-org.cougaar.core.node.ConfigurationServiceComponent
-which is loaded by default only in XML configurations. 
-See cougaar bug (RFE) 2569.
-</li>
-<li>
-Multiple planning object tweaks: synchronize access to key members,
-avoid serializing un-necessary members, and add debug logging on acess
-to other members.
-</li>
-<li>
-ActiveSubscriptionObject actions may now be delayed from immediate
-(upon object publish) to LogicProvider time.  This is more correct,
-but breaks a fair amount of old code. In particular, new code should
-avoid expecting that objects change immediately at publish time - the
-most common problems are dependence on Task.getPlanElement() and
-immediate updates to Assets RoleSchedules after allocation or
-reassignment.  See ActiveSubscriptionObject for more information.
-This new option defaults to the old behavior, but will probably switch
-to the more correct semantics in a future release.  When enabled,
-turns on extensive debugging code which notes problematic usage. (see
-cougaar bug 3663)
-</li>
-<li>
-GLSExpanderPlugin supports a -D argument which forces a
-persistence after the GLS task has been propogated. See the source for
-that plugin.
-</li>
-<li>
-Added new method to PluginHelper which plugins should use when 
-removing a task from its workflow, to recalculate the aggregated 
-Allocation Result if necessary.
-</li>
-<li>
-Further work for propogating Allocation Result changes up to a
-task that was Expanded. In particular support a change to
-undefined. See bug 3462.
-</li>
-<li>
-New OperationalSuperior concept.
-</li>
-<li>
-Restore prototype cache on rehydration.
-</li>
-<li>
-Improve algorithm efficiency for detecting Node-level queiscence.
-</li>
-<li>
-New optional core servlet, QuiescenceStateServlet, which shows the
-quiescence status of individual Nodes and the agents within those
-nodes.
-</li>
-<li>
-Added components to restrict the number of threads per node or
-per agent.
-</li>
-<li>
-Added multiple utilities.
-</li>
-<li>
-Added new generic BlackboardAlert object for indicating a problem 
-on the local blackboard for higher-level application resolution. 
-</li>
-<li>
-MessageTransportClient API change: added getIncarnationNumber, to
-avoid WP lookup for the incarnation numbers of local agents.
-</li>
-<li>
-Added DestinationLink validity support.
-</li>
-<li>
-Added MTS OldIncarnationAspect to ignore messages from an old
-instance of an agent that has restarted elsewhere.
-</li>
-<li>
-Added more regression tests.
-</li>
-<li>
-Multiple fixes to avoid locking agent when persistence is
-slow.
-</li>
-<li>
-Reduce usage of deprecated blocking WP calls.
-</li>
-<li>
-Modified API for PluginAlarm to take an absolute time instead of
-a delay, allowing for consistent usage between base classes.
-</li>
-<li>
-Moved Ping society and configuration from core to new ping module.
-</li>
-<li>
-Shortened Node quiescence announcement delay to 20 seconds, and
-added -D argument to configure this value.
-</li>
-<li>
-Suppress some YP errors that may be transient while component
-re-tries.
-</li>
-<li>
-Updated Vishnu server 3rd party jar to include a performance
-improvement.
-</li>
-<li>
-Support community service access control.
-</li>
-<li>
-Added new -D argument to suppress reconciliation
-(org.cougaar.core.node.SkipReconciliation).
-</li>
-<li>
-Added trivial single-node MTS implementation.  See
-"configs/common/NodeAgent.xsl" for details.
-</li>
-<li>
-Require reasonable AspectScorePoints in ScoringFunctions.
-</li>
-<li>
-Multi-threading fixes to GLM's ClusterOPlan fix to ensure start &amp;
-end times are consistent.
-</li>
-<li>
-Suppress resending the self Organization if only LocalPG changes
-have happened (as in OPlanWatcherLP).
-</li>
-<li>
-Javadoc cleanup.
-</li>
-</ul>
+    For questions or issues, please subscribe to the
+    <a href="http://cougaar.org/mail/?group_id=17">cougaar-developers mailing list</a> and
+    browse the <a href="http://www.cougaar.org/pipermail/cougaar-developers">mailing list archives</a>.
+    Subscribers can post emails to the mailing list at 
+    <a href="mailto:cougaar-developers@cougaar.org">cougaar-developers@cougaar.org</a>
+    <p>
 
-  <!-- COUGAAR 11.0 COUGAAR 11.0 COUGAAR 11.0 COUGAAR 11.0 COUGAAR 11.0 -->
-
-<p> <b>Build 11.0</b> is a major release, including multiple new
-  pieces of functionality.
-<p>
-<ul>
-<li>Updated Jena to version 2.0 and Xerces to 2.6.0: <ul>
-  <li>The new Jena jar required an update to icu4j.jar, and the addition
-of antlr.jar, jakarta-oro-2.0.5, and rdf-api-2001-01-19</li>
-  <li>The updated Xerces changed names to xercesImpl and xml-apis.jar
-(split implementation from APIs).</li>
-  <li>Servicediscovery code was changed to support the new
-  Jena. Additionally, we use the built-in Jena file-caching. We still
-  list the cached files in proxyTable.txt, but this is not just
-  documentation. We no longer use custom caching. Additionally,
-  Time.daml was added to the set of cached files.</li>
-  <li>Jena2 now uses log4j. To turn down Jena WARNings, in particular
-  from the RDFDefaultErrorHandler, specify the log4j property
-  "log4j.category.com.hp.hpl.jena=ERROR".</li>
-</ul></li>
-<li>GLS tasks may no longer be rescinded. For each Oplan stage, the
-GLSInitServlet now sends a new GLS task with the additional oplan
-stage - leaving the old tasks behind. It is generally bad usage to
-modify a task in place to have entirely different meaning. In this
-case, it appeared to cause confusion about the meaning of the
-allocation results. See bug 3407.</li>
-<li>The MTS implementation has been factored into a separate 
-module and project.  In CougaarForge, it is now the "std" module of
-the "mts" project. Cougaar builds package it as "mtsstd.jar". 
-The major effect of this refactoring is that most of the classes 
-previously in org.cougaar.core.mts are now in org.cougaar.mts.std 
-(e.g. those which <em>implement</em> the MTS interface have changed
-packages, while those which <em>define</em> the interface have not.
-See <a href="ReleaseNotes/11.0/mts-refactor.txt">ReleaseNotes/11.0/mts-refactor.txt</a> for
-details.  Also see the perl script <a href="ReleaseNotes/11.0/mts-refactor.pl">ReleaseNotes/11.0/mts-refactor.pl</a>
-which will do most of the substitutions requires to port 10.0 code to
-11.0.  As a side effect of the refactoring, there is a new 
-service available at the node level SocketFactoryService which allows
-clients to find an appropriate SocketFactory without needing to 
-know about the MTS implementation which may be supporting it.
-</li>
-
-<li>
-    Lanes have been added to the Thread Services.  This allows finer
-    tuned control over thread policies (max. running, queue ordering,
-    etc).  The service APIs have some new methods in support of
-    this.  Old methods continue to work and simply use the default
-    lane.  For more details see <a
-    href="ReleaseNotes/11.0/thread-lanes.html">Thread Lanes</a>. 
-</li>
-
-<li> Minimal MTS and Thread Services have been defined.  For more
-    details see <a
-    href="ReleaseNotes/11.0/minimal-services.html">Minimal
-    Services</a></li>
-
-<li>Multiple changes to Service Discovery. These make specifying
-matchmaker scoring functions much easier, and provide better support for
-dynamic provider availability changing. AvailabilityChangeMessages can
-come in, causing the SD plugins to work to ensure they have contracts
-covering the required intervals.</li>
-<li>Refactored the DeletionPlugin to make it a generic BBoard object
-deletion API. See org.cougaar.core.plugin.deletion package. </li>
-<li>Added a new GLM Plugin: <code>org.cougaar.mlm.plugin.organization.ReportChainDetectorPlugin</code> to notice when a Superior/Subordinate hierarchy is complete.</li>
-<li>The uiframework no longer requires the non-open source
-datagrabber module for compilation. Actual usage of some pieces will
-likely still require that software.</li>
-<li>Reworked quiescence detection mechanism to avoid logic
-problems. Quiescence detection is now more sensitive. (Bug 3359)</li>
-<li>Task.getPreferredValue now returns Double.NaN instead of -1.0 when
-the value is undefined (cbug 2919).
-</li>
-<li>The base unix shell scripts have been greatly simplified.
-setarguments and setlibpath are gone, fully replaced by the boost
-script (now used by the rest of the scripts).  Node now fully
-subsumes the functionality of the now deleted XMLNode and PNode scripts.
-</li>
-<li>The initialization services now create ComponentDescription
-parameters as unmodifiable List objects, rather than as (mutable)
-Vectors.  This means that plugins and other components with a 
-setParameter method will get called with a List rather than a Vector
-(which is, after all, also instanceof List). This closes a security hole
-(cougaar bug 3263) and drops one more use of Vector.  Note that legacy
-plugins (extending PluginAdapter) continue to see a Vector if they
-call getParameters() -- while the returned value is mutable, the 
-security exploit cannot be used in this case.
-</li>
-<li>Most DOS scripts now support directories with a space (" ") in the
-name. This does _not_ currently include the DB load
-scripts. Additionally, the bash / csh scripts are not covered.</li>
-<li>Changed default agent start time in the scripts to be 12:05am on
-8/10/05</li>
-<li>Multiple other minor bugs fixed (3323, 3423, 3424, 3438, 3448, 3420,
-3431, 3221, 3223, 3224, 3181, 3440, 3403, 3427...)</li>
-<li>Dropped very old files from various modules.</li>
-<li>Various caching, interning, & other modifications to reduce memory usage.</li>
-<li>Refactored & cleaned up the tutorials, dropping the old
-"faststart" tutorials, which were broken.</li>
-<li>Various toolkit module enhancements to reduce memory usage.</li>
-<li>Do not use the Verb object constructor - it is now protected. (bug
-2661).</li>
-<li>Multiple changes to clean up code, remove unused variables, sort
-imports, etc. </li>
-</ul>
-<p>
-  <!-- COUGAAR 10.4.6 COUGAAR 10.4.6 COUGAAR 10.4.6 COUGAAR 10.4.6 COUGAAR 10.4.6 -->
-
-<p> <b>Build 10.4.6</b> is a minor release, including minor improvements
-in a number of services and multiple bug fixes.  It also adds support for
-distributed hierarchical yellow pages, and service discovery through those.
-<p>
-<ul>
-<li>Bug 3315: Fix up specification of agentStartTime. Now uses the full hours,
-minutes, seconds of system GMT time for the specified day. Allows
-specification of the hours and minutes, and an offset for more
-accuracy. See the bug report for details.</li>
-<li>Added support for service discovery using distributed YPServers. The 
-default behaviour is unchanged, i.e.  a single YPServer. For the distributed 
-case, each agent belongs to a YPCommunity which is served by a YPServer. The 
-YP communities are organized along the same lines as the command hierarchy. 
-Service discovery uses the community service to traverse the hierarchy of 
-YPServers to find the providers which most closely match the client's 
-specification.
-</li>
-<li>Modified GLS task generation. A separate GLS task is created for each 
-oplan stage. Each task has the set of oplan stages which were valid at the 
-time it was created
-</li>
-<li>RFE 3162: ServiceDiscovery ClientPlugin forces a persist after FindProviders
-is complete - killing an agent before that point when using
-ServiceDiscovery is not supported.</li>
-<li>Bug 3324: Suppress RDF startup warnings from ServiceDiscovery</li>
-<li>Bug 3313: Fix problem of MTS holding messages forever</li>
-<li>Bug 3330: Ensure first metric on queue is processed.</li>
-<li>Bug 3331: In MTS, only drop due to timeout on receiver if enabled
-by a -D flag.</li>
-<li>Bug 3340: In MTS Gossip stuff, move WP calls out of a
-synchronize.</li>
-<li>Bug 3343: Fix a QuO gui synchronization issue.</li>
-<li>Bug 3345: Various Gossip scalability improvements.</li>
-<li>Bug 3346: Filter metrics Gossip to send only credible info.</li>
-<li>Bug 3348: Drop log level for DeliveryVerification and RogueThread
-to WARN after 100 seconds.</li>
-<li>Bug 3351: Expose the Contract API to allow using servlets instead
-of pop-up windows.</li>
-<li>Bug 3357: Run QoS schedulables in serial instead of parallel.</li>
-<li>Bug 3358: Add a synchronization in QuO jar.</li>
-<li>Bugs 3316, 3317, 3318: WP performance improvements</li>
-<li>Bug 3341: Fix a WP replication forwarding bug.</li>
-<li>Fix AdaptivityEngine servlet to be able to change OpMode
-settings</li>
-<li>Implement Serializable in a ServiceDiscovery object.</li>
-<li>SDRegistrationPlugin, matchmaker plugin: small changes to support
-proper quiescence.</li>
-<li>Bug 3332: UniversalAllocatorPlugin now restores its sink asset
-from the blackboard on rehydration.</li>
-<li>Bug 3334: GenericTablePlugin avoids publishChanging PlanElement if
-the ReportedAR.isEqual(EstimatedAR) already.</li>
-<li>Bug 3337: Fix .equals method for TwoPointScoringFunction.</li>
-<li>Bug 3333: ReceiveNotificationLP: Suppress un-necessary
-publishChange of PlanElements if ReceivedAR is already .isEqual the
-ReportedAR.</li>
-</li>Bug 3352: Fix ExpansionImpl to properly re-wire the workflow of
-subtasks, avoiding later illegal publishRemove warnings.</li>
-<li>Tweak local Juddi jar to support closing DB connections.</li>
-<li>Community caches are now per-Node (bug 3354)</li>
-<li>Bug 3094: Fully account for possible GCing of objects during both
-full and incremental persistence.</li>
-</ul>
-
-Older Change details are available in <a href="CHANGES">CIP/doc/CHANGES</a>.
- <!-- ---------------------------------------------------------------------- -->
- <!-- ---------------------------------------------------------------------- -->
- <!-- ---------------------------------------------------------------------- -->
- <!-- ---------------------------------------------------------------------- -->
- <!-- ---------------------------------------------------------------------- -->
- <h2> <a name="documentation"></a>Additional Documentation </h2>
-  For additional details, please review the following documentation:  
- <ul>
-  <li> Cougaar <a href="http://cougaar.org/faq.html">FAQ</a></li>
-  <li> Cougaar <a href="http://cougaar.cougaar.org/wiki/wiki.pl">WIKI</a>.</li>
-  <li> Cougaar Developers' Guide, v11.4 (December 2004), available on
-the Cougaar website (see <a href="http://cougaar.org/docman/?group_id=17">http://cougaar.org/docman/?group_id=17</a>)</li>
-  <li> Cougaar Architecture Document, v11.4 (dated December 2004), also available
-on the Cougaar website</li>
-  <li> Release Notes for other modules such as:</li> 
-     <ul>
-       <li> <a href="../csmart/doc/index.html">CSMART docs</a></li>
-        <li> <a href="../glm/doc/index.html">GLM Module docs</a></li> 
-     </ul>
-  <li> Several ChangeLog files (e.g., core/src/ChangeLog) </li>
-  <li>Various manual-type documentation files under <a
-  href="OnlineManual">doc/OnlineManual</a></li>
-  <li> Notes from previous releases at <a href="ReleaseNotes">doc/ReleaseNotes</a>.
-  <li> Per-module javadocs available in module/doc/api/index.html if the cougaar-api.zip
-archive has been installed (see <a href="../core/doc/api">Core Javadoc</a> in particular)</li>
-  <li> <a href="api/Parameters.html">Parameters.html</a>
- which is a catalog of System Properties (-D flags) used. The file is generated
-on the basis of @property javadoc tags in the source code. Note that
-  often this is split in per-module Parameters files. Start with <a href="../core/doc/api/Parameters.html">core</a>.&nbsp;</li>
-  <li> <a href="http://tutorials.cougaar.org/pizza">Pizza sample
-  application</a> serves as a good learning tool.</li>
-  <li> Try the <a href="http://tutorials.cougaar.org/">Cougaar Tutorials</a>.</li>
-      </ul>
-
- <!-- ---------------------------------------------------------------------- -->
- <!-- ---------------------------------------------------------------------- -->
- <!-- ---------------------------------------------------------------------- -->
- <!-- ---------------------------------------------------------------------- -->
- <!-- ---------------------------------------------------------------------- -->  
- <h2> <a name="bugs"></a>Known bugs and bugs resolved/closed since Cougaar release 10.2</h2>
-The Cougaar bug tracker (Bugzilla, the Mozilla bug system) is online available
-at <a href="http://bugs.cougaar.org/">Cougaar website -&gt; Bug Lists</a>.  
- <ul>
-<li> For a list of bugs that were resolved/closed since Cougaar release
-10.4 see <a href="ReleaseNotes/10.4/ClosedBugs103-104.htm">ClosedBugs103-104.htm</a>.</li>
-<li> For a list of bugs that were resolved/closed since Cougaar release
-10.3 see <a href="ReleaseNotes/10.3/ClosedBugs102-103.htm">ClosedBugs102-103.htm</a>.</li>
-<li> For a list of bugs that were resolved/closed since Cougaar release
-10.0 see <a href="ReleaseNotes/10.2/ClosedBugs100-102.htm">ClosedBugs100-102.htm</a>.</li>
-  <li> For a list of bugs that were resolved/closed since Cougaar release
-9.6 see <a href="ReleaseNotes/10.0/ClosedBugs96-100.htm">ClosedBugs96-100.htm</a>. </li>
-  <li> For a list of bugs that were resolved/closed since Cougaar release
-9.4.1 see <a href="ReleaseNotes/9.6/ClosedBugs941-96.htm">ClosedBugs941-96.htm</a>. </li>
- </ul>
-  The lists are results of Bugzilla queries (run on May 1, 15, 29, ..., resp.). 
-
- <!-- ---------------------------------------------------------------------- -->
- <!-- ---------------------------------------------------------------------- -->
- <!-- ---------------------------------------------------------------------- -->
- <!-- ---------------------------------------------------------------------- -->
- <!-- ---------------------------------------------------------------------- -->
-  
- <h2> <a name="organization"></a>Organization of a Release&nbsp;</h2>
- When you download a Cougaar release, there are several logical
- pieces. For details, see <a href="Contents.html">Contents</a>.<br>
-<br>
- <h2> <a name="install"/>Installing Cougaar</h2>
-To (download and) install Cougaar, see the <a
-href="install.html">Install Instructions</a>.
-      <br>
-For instructions on installing and using CSMART, see the <a
-href="../csmart/doc/InstallAndTest.html"> CSMART installation document</a>.<br>
-      <p>You are now ready to run. Try the tutorials (see the slides
-      on cougaar.org). Alternately, try running the <b>Pizza Party</b>
-      application. For details, see the <a
-      href="../pizza/doc/Readme.html">Pizza Readme</a>.
-<p>
-
- <!-- ---------------------------------------------------------------------- -->
- <!-- ---------------------------------------------------------------------- -->
- <!-- ---------------------------------------------------------------------- -->
- <!-- ---------------------------------------------------------------------- -->
- <!-- ---------------------------------------------------------------------- -->
- <h2> <a name="example"></a>Test Harness Example Implementations</h2>
-We only maintain society configurations that we are currently using for testing
-purposes and for&nbsp; Cougaar demonstrations. These society configurations 
-are usually available in subdirectories under "configs" in the release. To execute 
-these Cougaar societies, these nodes can be executed on a single computer 
-or distributed across multiple computers.&nbsp; 
-  <p>The primary example society for testing an installation, and core
- changes, is the <p>Pizza Party</b> application, available in the
- "pizza" module. Use this for testing your installation. See the <a href="../pizza/doc/Readme.html">Pizza Readme</a>.</p>
-
-  <p>Another society, <b> minitestconfig</b> 
-will work "out of the box", but uses many deprecated classes and
- patterns. Plugin and component developers are encouraged to use
- pizza as their initial starting point, but <b>minitestconfig</b> may
- also be useful. For details on MiniTest, see <a
- href="../configs/minitestconfig/Readme.txt">Minitestconfig Readme</a>.
-<p>
-<p>An alternate test society is the "ping" society. See for starting
-instructions, the simple Ping <a href="../ping/configs/ping/README">README</a>.</p>
-
- <!-- ---------------------------------------------------------------------- -->
- <!-- ---------------------------------------------------------------------- -->
- <!-- ---------------------------------------------------------------------- -->
- <!-- ---------------------------------------------------------------------- -->
- <!-- ---------------------------------------------------------------------- -->
-  <h2> <a name="delivering"></a>Delivering Software Products&nbsp;</h2>
-  <p>All Plugin software must use the Java system parameter
-  "org.cougaar.install.path" as the basis for all searches, data
-  files, etc. For writing output, use "org.cougaar.workspace". For example, if your product is "tops," your classes will be in:&nbsp; </p>
-   <blockquote>"$COUGAAR_INSTALL_PATH\lib\tops.jar"</blockquote>
- and your java code could find your data files with:&nbsp; 
-   <dir> 
-     <dl>
-       <dt> <font face="Courier New"><font size="-1">String path = System.getProperty("org.cougaar.install.path") +</font></font></dt>
-       <dt> <font face="Courier New"><font size="-1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-File.separatorChar + "tops" +</font></font></dt>
-       <dt> <font face="Courier New"><font size="-1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-File.separatorChar + "myData.dat";</font></font></dt>
-     </dl>
-  </dir>
-
- <!-- ---------------------------------------------------------------------- -->
- <!-- ---------------------------------------------------------------------- -->
- <!-- ---------------------------------------------------------------------- -->
- <!-- ---------------------------------------------------------------------- -->
- <!-- ---------------------------------------------------------------------- -->  
-  <h2> <a name="future"></a>Future Releases</h2>
-There will be further releases as we address system enhancements and
- deficiencies. Watch the news items on <a
- href="http://cougaar.org">Cougaarforge</a>, listen for announcements
- on the <a href="http://cougaar.org/mail/?group_id=17">Cougaar Developers mailing list</a>, and look for the
- downloads at <a
- href="http://cougaar.org/frs/?group_id=17">http://cougaar.org/frs/?group_id=17</a>.
-
-Additionally, the <a href="http://cougaar.cougaar.org/wiki/wiki.pl?RoadMap">CougaarSE Wiki</a> has information on planned future releases.
-
- <!-- ---------------------------------------------------------------------- -->
- <!-- ---------------------------------------------------------------------- -->
- <!-- ---------------------------------------------------------------------- -->
- <!-- ---------------------------------------------------------------------- -->
- <!-- ---------------------------------------------------------------------- --> 
- <h2> <a name="questions"></a>Questions and Submission of Bug Reports</h2>
-For questions or issues, please watch the <a
- href="http://cougaar.org/mail/?group_id=17">mailing lists</a> and
- browse the mailing list archives. 
-Also carefully read the latest Cougaar Developers Guide (CDG),
-the Cougaar Architecture Document (CAD) (see <a
- href="http://cougaar.org/docman/?group_id=17">http://cougaar.org/docman/?group_id=17</a>),
- and all release notes.&nbsp;  <br><br>
-If those sources do not address your question or problem, 
-bug and system-enhancement reports 
-can be submitted through the <a href="http://bugs.cougaar.org">Cougaar
- website</a>.&nbsp; <br>
-<br>
-In addition, we encourage you to email infrastructure questions and initiate community discussions 
-through our <a href="mailto:cougaar-developers@cougaar.org">mailing
-list</a>. <br><br>
-</body>
+    If the above sources do not address your question or problem, please submit a bug report or
+    enhancement request to the <a href="http://bugs.cougaar.org">Cougaar Bugzilla Website</a>.
+  </body>
 </html>
