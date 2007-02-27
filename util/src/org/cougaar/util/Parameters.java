@@ -79,7 +79,12 @@ public class Parameters {
     }
     if (!found) {
       Logger log = Logging.getLogger(Parameters.class);
-      log.shout("Found no source for (Database) Parameters - looked for ~/.cougaarrc or [ConfigPath]/cougaar.rc (see doc/OnlineManual/DataAccess.html)");
+      if (log.isInfoEnabled()) {
+        log.info(
+            "Found no source for (Database) Parameters"+
+            " - looked for ~/.cougaarrc or [ConfigPath]/cougaar.rc"+
+            " (see doc/OnlineManual/DataAccess.html)");
+      }
     }
   }
 
