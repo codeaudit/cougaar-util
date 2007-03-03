@@ -71,7 +71,17 @@
 
       <li>Defined new standard node/agent "template" parameters, which making it easy to
       enable/disable many related infrastructure services using a single "-D" system property.
-      For details and examples, see the <a href="OnlineManual/Templates.html">Cougaar Template Documentation</a>.</Li>
+      For details and examples, see the <a href="OnlineManual/Templates.html">Cougaar Template Documentation</a>.</li>
+      <p>
+
+      <li>Added support for optional $COUGAAR_RUNTIME_PATH and $COUGAAR_SOCIETY_PATH
+      environment variables.  The bin/cougaar script sets these as -Dorg.cougaar.runtime.path
+      and -Dorg.cougaar.society.path, respectively.  These environment variables can be used
+      to separate the install directories into a shared, read-only $COUGAAR_INSTALL_PATH
+      (e.g. in /usr/local/cougaar) and a private, read-write $COUGAAR_SOCIETY_PATH overlay
+      path (e.g. in ~/my_app).  The -Dorg.cougaar.jar.path and -Dorg.cougaar.config.path have
+      been modified to search the additionally search the above directories.  For an example,
+      see the updated <a href="http://tutorials.cougaar.org">"hello world" and "ping" tutorials</a>.</li>
       <p>
 
       <li>Added a new "ping" sample application, which is now included in the "core" jar.
@@ -135,7 +145,15 @@
       it easier to write cross-platform XML society files.</li>
       <p>
 
-<li> Prototyped a new kind of knowledge representation for Cougaar blackboard objects, called FrameSets. FrameSets are designed to create realtime models of physical systems on the Cougaar Blackboard. The models are updated in realtime and the FrameSet can infer additional updates. The FrameSet capability is purely experimental (i.e. expect sporadic support) , but will have its own module for Cougaar v13.Currently, FrameSets are in the org.cougaar.core.qos.frameset package of the qos module. Minimal documentation can be found in: <a href="OnlineManual/Frames/index.html"> Cougaar Frames Documentation</a>
+      <li> Prototyped a new kind of knowledge representation for Cougaar
+      blackboard objects, called FrameSets. FrameSets are designed to create realtime
+      models of physical systems on the Cougaar Blackboard. The models are updated
+      in realtime and the FrameSet can infer additional updates. The FrameSet
+      capability is purely experimental (i.e. expect sporadic support), but will
+      have its own module for Cougaar v13. Currently, FrameSets are in the
+      org.cougaar.core.qos.frameset package of the qos module. Minimal documentation
+      can be found in the <a href="OnlineManual/Frames/index.html">Cougaar Frames Documentation</a>.</li>
+      <p>
 
     </ul>
 
