@@ -36,9 +36,9 @@ public final class XMLReaderUtils {
   // preferred XML readers
   private static final String[] XML_READERS = new String[] {
     "-Dorg.xml.sax.driver", // optional system property
-    "org.apache.crimson.parser.XMLReaderImpl", // JDK 1.4
-    "com.sun.org.apache.xerces.internal.parsers.SAXParser", // JDK 1.5
-    null, // use ParserFactory, which uses -Dorg.xml.sax.parser
+      "com.sun.org.apache.xerces.internal.parsers.SAXParser", // JDK 1.5
+      "org.apache.crimson.parser.XMLReaderImpl", // JDK 1.4
+      null, // use ParserFactory, which uses -Dorg.xml.sax.parser
   };
 
   private XMLReaderUtils() { }
@@ -47,7 +47,7 @@ public final class XMLReaderUtils {
     for (int i = 0; i < XML_READERS.length; i++) {
       String classname = XML_READERS[i];
       if (classname != null && classname.startsWith("-D")) {
-        classname = SystemProperties.getProperty(classname);
+        classname = SystemProperties.getProperty(classname.substring(2));
         if (classname == null) {
           continue;
         }
