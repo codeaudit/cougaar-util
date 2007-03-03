@@ -57,39 +57,55 @@ import org.xml.sax.SAXException;
  * ConfigFinder provides utilitites to search for a named file in
  * several specified locations, returning the first location where a
  * file by that name is found.
- *
+ * <p>
  * Files are found and opened by the open() method. open() tries to
  * find the file using each of the elements of org.cougaar.config.path. The
  * elements of org.cougaar.config.path are separated by semicolons and
  * interpreted as URLs. The URLs in org.cougaar.config.path are interpreted
  * relative to the directory specified by org.cougaar.install.path. Several
  * special tokens may appear in these URLs:
- *
- * $INSTALL signifies file:<org.cougaar.install.path>
- * $CONFIG signifies <org.cougaar.config>
- * $CWD signifies <user.dir>
- * $HOME signifies <user.home>
- * $MOD signifies the name of a Cougaar module - a sub-directory of $INSTALL
- *
+ * <pre>
+ *   $RUNTIME signifies &lt;org.cougaar.runtime.path&gt;
+ *   $SOCIETY signifies &lt;org.cougaar.society.path&gt;
+ *   $INSTALL signifies &lt;org.cougaar.install.path&gt;
+ *   $CONFIG signifies &lt;org.cougaar.config&gt;
+ *   $CWD signifies &lt;user.dir&gt;
+ *   $HOME signifies &lt;user.home&gt;
+ *   $MOD signifies the name of a Cougaar module - a sub-directory of $INSTALL
+ * </pre>
  * The default value for org.cougaar.config.path is defined in the static
- * variable defaultConfigPath:
- *   $CWD;$INSTALL/configs/$CONFIG;$INSTALL/configs/common
- *
+ * variable DEFAULT_CONFIG_PATH:
+ *   $CWD;\
+ *   $RUNTIME/configs/$CONFIG;\
+ *   $RUNTIME/configs/common;\
+ *   $SOCIETY/configs/$CONFIG;\
+ *   $SOCIETY/configs/common;\
+ *   $INSTALL/configs/$CONFIG;\
+ *   $INSTALL/configs/common
+ * <p>
  * If a value is specified for org.cougaar.config.path that ends with a
  * semicolon, the above default is appended to the specified
  * value. The URLs in org.cougaar.config.path are interpreted relative to
  * $INSTALL. URLs may be absolute in which case some or all of the
  * base URL may be ignored.
- *
+ * <p>
  * By default, $MOD is not set. However, when an object requests
  * a ConfigFinder, it may specify a String value for $MOD. If specified,
- * the search path used is augmented, adding 4 directories to the start
+ * the search path used is augmented, adding 9 directories to the start
  * of the search path:
  * <ul>
- * <li>$INSTALL/$MOD/configs/$CONFIG</li>
- * <li>$INSTALL/$MOD/configs</li>
- * <li>$INSTALL/$MOD/data/$CONFIG</li>
- * <li>$INSTALL/$MOD/data</li>
+ *   <li>$RUNTIME/$MOD/configs/$CONFIG</li>
+ *   <li>$RUNTIME/$MOD/configs</li>
+ *   <li>$RUNTIME/$MOD/data/$CONFIG</li>
+ *   <li>$RUNTIME/$MOD/data</li>
+ *   <li>$SOCIETY/$MOD/configs/$CONFIG</li>
+ *   <li>$SOCIETY/$MOD/configs</li>
+ *   <li>$SOCIETY/$MOD/data/$CONFIG</li>
+ *   <li>$SOCIETY/$MOD/data</li>
+ *   <li>$INSTALL/$MOD/configs/$CONFIG</li>
+ *   <li>$INSTALL/$MOD/configs</li>
+ *   <li>$INSTALL/$MOD/data/$CONFIG</li>
+ *   <li>$INSTALL/$MOD/data</li>
  * </ul>
  * <br>
  *
@@ -156,13 +172,21 @@ public class ConfigFinder {
    * the specified module, and then in the directories on the 
    * given search path, using the given Property substitutions.<br>
    *
-   * When searching the given module, we search the following 4
+   * When searching the given module, we search the following 8
    * directories (if defined) before any other directories:
    * <ul>
-   * <li>$INSTALL/$module/configs/$CONFIG</li>
-   * <li>$INSTALL/$module/configs</li>
-   * <li>$INSTALL/$module/data/$CONFIG</li>
-   * <li>$INSTALL/$module/data</li>
+   *   <li>$RUNTIME/$module/configs/$CONFIG</li>
+   *   <li>$RUNTIME/$module/configs</li>
+   *   <li>$RUNTIME/$module/data/$CONFIG</li>
+   *   <li>$RUNTIME/$module/data</li>
+   *   <li>$SOCIETY/$module/configs/$CONFIG</li>
+   *   <li>$SOCIETY/$module/configs</li>
+   *   <li>$SOCIETY/$module/data/$CONFIG</li>
+   *   <li>$SOCIETY/$module/data</li>
+   *   <li>$INSTALL/$module/configs/$CONFIG</li>
+   *   <li>$INSTALL/$module/configs</li>
+   *   <li>$INSTALL/$module/data/$CONFIG</li>
+   *   <li>$INSTALL/$module/data</li>
    * </ul>
    *
    * @param module name of the module to use for module-specific configs.  If null, 
@@ -190,18 +214,26 @@ public class ConfigFinder {
       if (s.endsWith(";")) s += Configuration.getConfigPath();
     }
 
-    ArrayList v = new ArrayList();
+    List v = new ArrayList();
 
     // add module paths
     if (module != null) {
       properties.put("MOD", module);
       properties.put("MODULE", module);
-      // Tack on to the front of the search path CIP/module/configs/$CONFIG
-      // CIP/module/configs, CIP/module/data/CONFIG, CIP/module/data
-      v.add("$INSTALL/$MOD/configs/$CONFIG");
-      v.add("$INSTALL/$MOD/configs");
-      v.add("$INSTALL/$MOD/data/$CONFIG");
-      v.add("$INSTALL/$MOD/data");
+      // tack on to the front of the search path
+      for (int i = 0; i < 3; i++) {
+        String base = (i == 0 ? "RUNTIME" : i == 1 ? "SOCIETY" : "INSTALL");
+        if (!properties.containsKey(base)) continue;
+        boolean has_config = properties.containsKey("CONFIG");
+        if (has_config) {
+          v.add("$"+base+"/$MOD/configs/$CONFIG");
+        }
+        v.add("$"+base+"/$MOD/configs");
+        if (has_config) {
+          v.add("$"+base+"/$MOD/data/$CONFIG");
+        }
+        v.add("$"+base+"/$MOD/data");
+      }
     }
 
     // split the specified path up
@@ -212,30 +244,31 @@ public class ConfigFinder {
       }
     }
 
-    // make sure the configPath is only URLs
-    configPath = Collections.unmodifiableList((List) Mappings.mapcan(new Mapping() {
-        public Object map(Object o) {
-          if (o instanceof String) {
-            try {
-              return resolveName((String) o);
-            } catch (MalformedURLException mue) {
-              getLogger().error("Bad ConfigPath element \""+o+"\"", mue);
-            }
-          } else if (o instanceof URL) {
-            return o;
-          }
-          return null;
-        }
-      },
-                                                              v));
-    if (getLogger().isInfoEnabled()) {
-      StringBuffer sb = new StringBuffer("ConfigPath = ");
-      for (Iterator it = configPath.iterator(); it.hasNext();) {
-        String se = it.next().toString();
-        sb.append(se);
-        if (it.hasNext()) sb.append(", ");
+    // resolve and remove duplicates
+    List expanded = new ArrayList(v.size());
+    List resolved = new ArrayList(v.size());
+    for (int i = 0; i < v.size(); i++) {
+      String vi = (String) v.get(i);
+      String ei = Configuration.substituteProperties(vi, properties);
+      if (expanded.contains(ei)) {
+        continue;
       }
-      getLogger().info(sb.toString());
+      URL ui;
+      try {
+        ui = Configuration.urlify(ei);
+      } catch (MalformedURLException mue) {
+        getLogger().error("Bad ConfigPath element \""+vi+"\" -> \""+ei+"\"", mue);
+        continue;
+      }
+      resolved.add(ui);
+    }
+
+    // save
+    configPath = Collections.unmodifiableList(resolved);
+
+    if (getLogger().isInfoEnabled()) {
+      String tmp = configPath.toString();
+      getLogger().info("ConfigPath = "+tmp.substring(1, tmp.length()-1));
     }
   }
 

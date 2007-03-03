@@ -101,13 +101,31 @@ import java.util.Properties;
  * The separator character is ":" on Linux, ";" on Windows, and ","
  * on both.  The jar path defaults to the {@link #DEFAULT_JAR_PATH}
  * value of:<pre>
- *   -Dorg.cougaar.jar.path=classpath($CLASSPATH):$INSTALL/lib:$INSTALL/plugins:$SYS:$INSTALL/sys
+ *   -Dorg.cougaar.jar.path=\
+ *      classpath($CLASSPATH):\
+ *      $RUNTIME/lib:\
+ *      $RUNTIME/sys:\
+ *      $SOCIETY/lib:\
+ *      $SOCIETY/sys:\
+ *      $INSTALL/lib:\
+ *      $INSTALL/plugins:\
+ *      $SYS:\
+ *      $INSTALL/sys
  * </pre> 
  * where:<pre>
- *   $CLASSPATH is -Dorg.cougaar.class.path (typically not set)
- *   $INSTALL is -Dorg.cougaar.install.path (<b>required</b>)
- *   $SYS is -Dorg.cougaar.system.path  (typically not set)
+ *   $CLASSPATH    is the optional -Dorg.cougaar.class.path
+ *   $RUNTIME      is the optional -Dorg.cougaar.runtime.path
+ *   $SOCIETY      is the optional -Dorg.cougaar.society.path
+ *   $INSTALL      is the optional -Dorg.cougaar.install.path
+ *   $SYS          is the optional -Dorg.cougaar.system.path
  * </pre>
+ * If any of the above "$VARIABLE" system properties is not set, then the
+ * corresponding paths in the default jar path will be excluded.  For example,
+ * if only the "-Dorg.cougaar.install.path" is set, then the default jar path
+ * will be:<pre>
+ *   -Dorg.cougaar.jar.path=$INSTALL/lib:$INSTALL/plugins:$INSTALL/sys
+ * </pre>
+ * <p>
  * The "classpath(..)" path wrapper is used to list jars and
  * directories containing classes, similar to Java's CLASSPATH.
  * For example:<pre>
@@ -184,6 +202,16 @@ import java.util.Properties;
  *   Bootstrapper jar and class path, which defaults to the
  *   {@link #DEFAULT_JAR_PATH} documented in the Bootstrapper class.
  *
+ * @property org.cougaar.runtime.path
+ *   Optional directory where runtime-specific jars are installed
+ *   in "lib/" and "sys/", which is usually supplied via the optional
+ *   $COUGAAR_RUNTIME_PATH environment variable.
+ *
+ * @property org.cougaar.society.path
+ *   Optional directory where application-specific jars are installed
+ *   in "lib/" and "sys/", which is usually supplied via the optional
+ *   $COUGAAR_SOCIETY_PATH environment variable.
+ *
  * @property org.cougaar.install.path
  *   The directory where this Cougaar instance is installed, usually
  *   supplied by the $COUGAAR_INSTALL_PATH/bin/cougaar from the
@@ -228,16 +256,19 @@ public class Bootstrapper
   private static final String STD_SEP = ""+STD_SEP_CHAR;
 
   /**
-   * The default value for the "org.cougaar.jar.path" system
-   * property.
+   * The default value for the "org.cougaar.jar.path" system property.
    * <p>
    * See the above class-level javadoc for details. 
    */
   public static final String DEFAULT_JAR_PATH =
-    "classpath($CLASSPATH)"+STD_SEP+
-    "$INSTALL/lib"+STD_SEP+
-    "$INSTALL/plugins"+STD_SEP+
-    "$SYS"+STD_SEP+
+    "classpath($CLASSPATH)"+ STD_SEP+
+    "$RUNTIME/lib"+          STD_SEP+
+    "$RUNTIME/sys"+          STD_SEP+
+    "$SOCIETY/lib"+          STD_SEP+
+    "$SOCIETY/sys"+          STD_SEP+
+    "$INSTALL/lib"+          STD_SEP+
+    "$INSTALL/plugins"+      STD_SEP+
+    "$SYS"+                  STD_SEP+
     "$INSTALL/sys";
 
   protected final static int loudness;
@@ -436,38 +467,78 @@ public class Bootstrapper
 
     // symbolic names
     Map props = new HashMap();
-    props.put(
-        "CLASSPATH",
-        getProperty("org.cougaar.class.path", ""));
-    String base = getProperty("org.cougaar.install.path", "");
-    props.put("INSTALL", base);
-    props.put("CIP", base);        // alias for INSTALL
-    props.put("COUGAAR_INSTALL_PATH", base); // for completeness
+    String cp = getProperty("org.cougaar.class.path");
+    if (cp != null && cp.length() > 0) {
+      props.put("CLASSPATH", cp);
+    }
+    String runtime_path = getProperty("org.cougaar.runtime.path");
+    if (runtime_path != null && runtime_path.length() > 0) {
+      props.put("RUNTIME", runtime_path);
+      props.put("CRP", runtime_path);        // alias for RUNTIME
+      props.put("COUGAAR_RUNTIME_PATH", runtime_path); // for completeness
+    }
+    String society_path = getProperty("org.cougaar.society.path");
+    if (society_path != null && society_path.length() > 0) {
+      props.put("SOCIETY", society_path);
+      props.put("CSP", society_path);        // alias for SOCIETY
+      props.put("COUGAAR_SOCIETY_PATH", society_path); // for completeness
+    }
+    String install_path = getProperty("org.cougaar.install.path");
+    if (install_path != null && install_path.length() > 0) {
+      props.put("INSTALL", install_path);
+      props.put("CIP", install_path);        // alias for INSTALL
+      props.put("COUGAAR_INSTALL_PATH", install_path); // for completeness
+    }
     props.put("HOME", getProperty("user.home"));
     props.put("CWD", getProperty("user.dir"));
-    props.put("SYS", getProperty("org.cougaar.system.path", ""));
+    String sys = getProperty("org.cougaar.system.path");
+    if (sys != null && sys.length() > 0) {
+      props.put("SYS", sys);
+    }
 
     // jar path
     String jar_path = getProperty("org.cougaar.jar.path");
     if (jar_path != null && 
+        jar_path.length() > 0 &&
 	jar_path.charAt(0) == '"' &&
 	jar_path.charAt(jar_path.length()-1) == '"') {
       jar_path = jar_path.substring(1, jar_path.length()-1);
     }
+    boolean append_default = false;
     if (jar_path == null) {
-      jar_path = DEFAULT_JAR_PATH;
-    } else {
+      append_default = true;
+      jar_path = "";
+    } else if (jar_path.length() > 0) {
       jar_path = jar_path.replace('\\', '/'); // Make sure its a URL and not a file path
       char lastChar = jar_path.charAt(jar_path.length()-1);
-      if (lastChar == STD_SEP_CHAR || lastChar == OS_SEP_CHAR) {
-        jar_path += DEFAULT_JAR_PATH;
+      append_default = (lastChar == STD_SEP_CHAR || lastChar == OS_SEP_CHAR);
+    }
+    if (append_default) {
+      // append default path, but only include paths that contain known keys.
+      //
+      // For example, ignore "$RUNTIME/lib" if "$RUNTIME" is not set.
+      boolean needs_sep = true;
+      List l = tokenizeJarPath(DEFAULT_JAR_PATH);
+      for (int i = 0; i < l.size(); i++) {
+        String s = (String) l.get(i);
+        if (!canSubstituteProperties(s, props)) continue;
+        if (needs_sep) {
+          jar_path += STD_SEP;
+        } else {
+          needs_sep = true;
+        }
+        jar_path += s;
       }
     }
 
     // resolve symbols
     String s = substituteProperties(jar_path, props);
 
-    // tokenize
+    // tokenize the path and remove duplicates
+    return tokenizeJarPath(s);
+  }
+
+  private static List tokenizeJarPath(String s) {
     List l = new ArrayList();
     for (int i = 0; ; ) {
       int j;
@@ -485,17 +556,20 @@ public class Bootstrapper
         k = j;
       }
       if (j < 0) {
-        if (i < s.length()) {
-          l.add(s.substring(i));
-        }
+        k = s.length();
+      }
+      String path = s.substring(i, k);
+      if (path.length() > 0 && !l.contains(path)) {
+        l.add(path);
+      }
+      if (j < 0) {
         break;
       }
-      l.add(s.substring(i, k));
       i = j+1;
     }
-
     return l;
   }
+
   private static int indexOfNonAlpha(String s, int i) {
     int l = s.length();
     for (int j = i; j<l; j++) {
@@ -504,18 +578,34 @@ public class Bootstrapper
     }
     return -1;
   }
+  private static boolean canSubstituteProperties(String s, Map props) {
+    return (s == null || (substituteProperties(s, props, false) != null));
+  }
   private static String substituteProperties(String s, Map props) {
-    int i = s.indexOf('$');
-    if (i >= 0) {
-      int j = indexOfNonAlpha(s,i+1);
-      String s0 = s.substring(0,i);
-      String s2 = (j<0)?"":s.substring(j);
-      String k = s.substring(i+1,(j<0)?s.length():j);
-      Object o = props.get(k);
-      if (o == null) {
-        throw new IllegalArgumentException("No such path property \""+k+"\"");
+    return substituteProperties(s, props, false);
+  }
+  private static String substituteProperties(
+      String orig_s, Map props, boolean failOnUnknownProperty) {
+    String s = orig_s;
+    while (true) {
+      int i = (s == null ? -1 : s.indexOf('$'));
+      if (i < 0) {
+        break;
       }
-      return substituteProperties(s0+o.toString()+s2, props);
+      int j = indexOfNonAlpha(s, i+1);
+      String s0 = s.substring(0, i);
+      String s2 = (j < 0 ? "" : s.substring(j));
+      String key = s.substring(i+1, (j < 0 ? s.length() : j));
+      Object val = props.get(key);
+      if (val == null) {
+        if (failOnUnknownProperty) {
+          throw new IllegalArgumentException(
+              "Unknown property \""+key+"\" in path: "+orig_s);
+        }
+        s = null;
+        break;
+      }
+      s = s0 + val + s2;
     }
     return s;
   }

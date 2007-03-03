@@ -78,26 +78,26 @@ import org.xml.sax.helpers.DefaultHandler;
  * The behavior is backwards-compatible with XSLNode.
  * <p>
  * For example, the input files and command line:<br>
- * <i>my_system.xml:</i><pre>
- *   &lt;?xml version='1.0'?&gt;
- *   &lt;vm_parameters&gt;
- *     &lt;vm_parameter&gt;-Dx=y&lt;/vm_parameter&gt;
- *     &lt;vm_parameter&gt;-Dfoo=$bar&lt;/vm_parameter&gt;
- *     ..
- *   &lt;/vm_parameters&gt;
- * </pre>
- * <i>my_application.xml:</i><pre>
+ * <i>mySociety.xml:</i><pre>
  *   &lt;?xml version='1.0'?&gt;
  *   &lt;society name='MinPing' ..&gt;
  *     &lt;node name='NodeA'&gt;
- *       &lt;vm_parameter&gt;-Dx=z&lt;/vm_parameter&gt;
+ *       &lt;vm_parameter&gt;-Dx=y&lt;/vm_parameter&gt;
+ *       &lt;vm_parameter&gt;-Dfoo=$bar&lt;/vm_parameter&gt;
  *     &lt;/node&gt;
  *   &lt;/society&gt;
  * </pre>
+ * <i>myRuntime.xml:</i><pre>
+ *   &lt;?xml version='1.0'?&gt;
+ *   &lt;vm_parameters&gt;
+ *     &lt;vm_parameter&gt;-Dx=z&lt;/vm_parameter&gt;
+ *     ..
+ *   &lt;/vm_parameters&gt;
+ * </pre>
  * <i>command line:</i><pre>
  *   $COUGAAR_INSTALL_PATH/bin/cougaar \
- *     --system my_system.xml\
- *     --application my_application.xml\
+ *     --society mySociety.xml\
+ *     --runtime myRuntime.xml\
  *     NodeA
  * </pre>
  * would print a command line output similar to:<pre>
@@ -111,7 +111,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * add the minimal -Ds and options required to run a Cougaar node:
  * <ul>
  *   <li>If the &lt;command&gt; is not specified in either the
- *       application_xml or optional system_xml, "java" is used.</li>
+ *       society_xml or optional runtime_xml, "java" is used.</li>
  *   <li>If the &lt;class&gt; is not specified in either xml,
  *      "org.cougaar.bootstrap.Bootstrapper" is used.  The
  *      following "-Ds" rules are only executed if the "Bootstrapper"
@@ -124,14 +124,26 @@ import org.xml.sax.helpers.DefaultHandler;
  *       is used.  The following "-D" rules are only executed if
  *       the "Node" bootstrapped class is specified (plus the above
  *       "Bootstrapper" class requirement):</li>
+ *   <li>If "-Dorg.cougaar.runtime.file=<i>filename</i>" is not
+ *       specified, and a runtime_xml was specified on the command line, then
+ *       "-Dorg.cougaar.runtime.file=<i>runtime_xml</i>
+ *       is used.</li>
  *   <li>If "-Dorg.cougaar.society.file=<i>filename</i>" is not
  *       specified,
- *       "-Dorg.cougaar.society.file=<i>application_xml</i>
+ *       "-Dorg.cougaar.society.file=<i>society_xml</i>
  *       is used.</li>
  *   <li>If "-Dorg.cougaar.node.name=<i>node_name</i> is not
  *       specified, then the &lt;node name='..'&gt; of the
  *       <b><u>first node</u></b> listed in the aplication_xml is
- *       used, otherwise the first node name listed in the system_xml
+ *       used, otherwise the first node name listed in the runtime_xml
+ *       is used.</li>
+ *   <li>If the "-Dorg.cougaar.runtime.path=<i>directory</i> is not
+ *       specified, then
+ *       "-Dorg.cougaar.runtime.path=$COUGAAR_RUNTIME_PATH"
+ *       is used.</li>
+ *   <li>If the "-Dorg.cougaar.society.path=<i>directory</i> is not
+ *       specified, then
+ *       "-Dorg.cougaar.society.path=$COUGAAR_SOCIETY_PATH"
  *       is used.</li>
  *   <li>If the "-Dorg.cougaar.install.path=<i>directory</i> is not
  *       specified, then
@@ -156,9 +168,9 @@ public final class CommandLine {
     "Usage: cougaar [default...] [option...] FILE [override...] [NODE]\n"+
     "Start a Cougaar Node and Agents specified in an XML file.\n"+
     "\n"+
-    "  -a, --application STRING   application XML FILE name\n"+
-    "  -s, --system STRING        system XML file name, which defaults to the\n"+
-    "                             application FILE\n"+
+    "  -s, --society STRING       society XML FILE name\n"+
+    "  -r, --runtime STRING       runtime XML file name, which defaults to the\n"+
+    "                             society FILE\n"+
     "  -n, --nameserver STRING    equivalent to -Dorg.cougaar.name.server=STRING\n"+
     "  -d, --defaults .. \\;       default \"-D\" system properties until the \\;\n"+
     "  -o, --overrides .. \\;      override \"-D\" system properties until the \\;\n"+
@@ -169,17 +181,17 @@ public final class CommandLine {
     "  -v, --verbose              also print the command line to stderr\n"+
     "  -vv, --debug               print debug output to stderr\n"+
     "  -*                         if none of the above, if in a \"--defaults\" or\n"+
-    "                             the application FILE is not set, add a default\n"+
+    "                             the society FILE is not set, add a default\n"+
     "                             \"-D\", otherwise add an override \"-D\"\n"+
-    "  *                          if none of the above, set the application FILE if\n"+
+    "  *                          if none of the above, set the society FILE if\n"+
     "                              it has not been set, otherwise set the NODE if it\n"+
     "                             has not been set\n"+
     "\n"+
     "Java system properties are preferred in the following order:\n"+
     "  1) The \"--overrides\" from the command line, else\n"+
-    "  2) The \"--application\" XML file's \"<vm_parameter>\"s, else\n"+
-    "  3) The \"--defaults\" from the command line, else\n"+
-    "  4) The \"--system\" XML file's \"<vm_parameter>\"s, else\n"+
+    "  2) The \"--runtime\" XML file's \"<vm_parameter>\"s, else\n"+
+    "  3) The \"--society\" XML file's \"<vm_parameter>\"s, else\n"+
+    "  4) The \"--defaults\" from the command line, else\n"+
     "  5) Standard Cougaar default \"-Ds\", such as:\n"+
     "       \"-Dorg.cougaar.install.path=$COUGAAR_INSTALL_PATH\"\n"+
     "       as documented in the "+CommandLine.class.getName()+" javadocs.\n"+
@@ -192,8 +204,8 @@ public final class CommandLine {
     "  # start the first node listed in the XML:\n"+
     "  cougaar mySociety.xml\n"+
     "\n"+
-    "  # read \"-D\"s from sys.xml, override -D's from mySoc.xml, force -Da=b:\n"+
-    "  cougaar -s sys.xml -a mySoc.xml -Da=b\n"+
+    "  # read -D's from soc.xml, override with -D's from rt.xml, force -Da=b:\n"+
+    "  cougaar soc.xml rt.xml -Da=b\n"+
     "\n"+
     "Report bugs to <bugs@cougaar.org>.";
 
@@ -209,21 +221,21 @@ public final class CommandLine {
   private boolean verbose;
   private boolean debug;
   private boolean windows;
-  private String system_xml;
-  private String application_xml;
+  private String society_xml;
+  private String runtime_xml;
   private String node_name;
-
-  // from system xml file (e.g. "system.xml")
-  private CommandData system_data;
-
-  // from command-line args "--defaults"
-  private CommandData default_data;
-
-  // from application xml file (e.g. "mySociety.xml")
-  private CommandData application_data;
 
   // from command-line args "--overrides"
   private CommandData override_data;
+
+  // from runtime xml file (e.g. "myRuntime.xml")
+  private CommandData runtime_data;
+
+  // from society xml file (e.g. "mySociety.xml")
+  private CommandData society_data;
+
+  // from command-line args "--defaults"
+  private CommandData default_data;
 
   /**
    * Parse an XML file and print the Java command line.
@@ -274,20 +286,23 @@ public final class CommandLine {
         inDefaults = false;
         inOverrides = false;
         if (!s.equals(";") && !s.equals("\\;")) {
-          if (application_xml == null) {
-            application_xml = s;
+          if (society_xml == null) {
+            society_xml = s;
           } else if (node_name == null) {
+            node_name = s;
+          } else if (runtime_xml == null) {
+            runtime_xml = node_name;
             node_name = s;
           } else {
             // force usage
-            application_xml = null;
+            society_xml = null;
             break;
           }
         }
       } else if (
           s.equals("-h") || s.equals("-?") || s.equals("--help")) {
         // force usage
-        application_xml = null;
+        society_xml = null;
         break;
       } else if (s.equals("-v") || s.equals("--verbose")) {
         inDefaults = false;
@@ -301,14 +316,14 @@ public final class CommandLine {
         inDefaults = false;
         inOverrides = false;
         windows = true;
-      } else if (s.equals("-a") || s.equals("--application")) {
+      } else if (s.equals("-s") || s.equals("--society")) {
         inDefaults = false;
         inOverrides = false;
-        application_xml = args[++i];
-      } else if (s.equals("-s") || s.equals("--system")) {
+        society_xml = args[++i];
+      } else if (s.equals("-r") || s.equals("--runtime")) {
         inDefaults = false;
         inOverrides = false;
-        system_xml = args[++i];
+        runtime_xml = args[++i];
       } else if (s.equals("--node")) {
         inDefaults = false;
         inOverrides = false;
@@ -328,7 +343,7 @@ public final class CommandLine {
             x;
         }
         if (inDefaults ||
-            (!inOverrides && application_xml == null)) {
+            (!inOverrides && society_xml == null)) {
           if (default_vm_parameters == null) {
             default_vm_parameters = new ArrayList();
           }
@@ -341,17 +356,15 @@ public final class CommandLine {
         }
       }
     }
-    if (application_xml == null) {
+    if (society_xml == null) {
       System.err.println(USAGE);
       return false;
     }
     if (default_vm_parameters != null) {
-      default_data =
-        new CommandData(default_vm_parameters, node_name);
+      default_data = new CommandData(default_vm_parameters, null);
     }
     if (override_vm_parameters != null) {
-      override_data =
-        new CommandData(override_vm_parameters, node_name);
+      override_data = new CommandData(override_vm_parameters, null);
     }
     return true;
   }
@@ -366,31 +379,44 @@ public final class CommandLine {
       XMLReader xml_reader = XMLReaderUtils.createXMLReader();
       xml_reader.setEntityResolver(new MyResolver());
 
-      application_data =
-        parse(xml_reader, node_name, application_xml);
-      if (application_data == null ||
-          !application_data.processedNode) {
+      // if only node_name is set then this is ambiguous, since it might be:
+      //    bin/cougaar mySociety.xml myRuntime.xml
+      // so we check to see if the node_name is a file, and prefer that file
+      // over possible "mySociety.xml" entry for "<node name='myRuntime.xml'/>"
+      if (node_name != null && runtime_xml == null &&
+          (new File(node_name)).isFile()) {
+        if (debug) {
+         System.err.println("changing node_name to runtime_xml: "+node_name);
+        }
+        runtime_xml = node_name;
+        node_name = null;
+      }
+
+      society_data =
+        parse(xml_reader, node_name, society_xml);
+      if (society_data == null ||
+          !society_data.processedNode) {
         System.err.println(
             "Unable to find "+
             (node_name == null ? "any nodes" : "node "+node_name)+
-            " in file "+application_xml);
+            " in file "+society_xml);
         return null;
       }
 
-      if (system_xml != null && !system_xml.equals(application_xml)) {
+      if (runtime_xml != null && !runtime_xml.equals(society_xml)) {
         String sys_node_name =
           (node_name != null ? node_name :
-           application_data != null ? application_data.node :
+           society_data != null ? society_data.node :
            null);
-        system_data = parse(xml_reader, sys_node_name, system_xml);
+        runtime_data = parse(xml_reader, sys_node_name, runtime_xml);
       }
 
       if (debug) {
         // okay to print to stderr
-        System.err.println("system: "+system_data);
-        System.err.println("default: "+default_data);
-        System.err.println("application: "+application_data);
         System.err.println("override: "+override_data);
+        System.err.println("runtime: "+runtime_data);
+        System.err.println("society: "+society_data);
+        System.err.println("default: "+default_data);
       }
 
       ret = merge_data();
@@ -414,9 +440,9 @@ public final class CommandLine {
    * The preference order is:
    * <ol>
    *   <li>--overrides "-Ds"</li>
-   *   <li>application.xml</li>
+   *   <li>society_xml</li>
+   *   <li>runtime_xml</li>
    *   <li>--defaults "-Ds"</li>
-   *   <li>system.xml</li>
    *   <li>cougaar default (if "&lt;class&gt;" == Bootstrapper)</li>
    * </ol>
    */
@@ -431,9 +457,9 @@ public final class CommandLine {
     String node = node_name;
     for (int x = 0; x < 4; x++) {
       CommandData cd =
-        (x == 0 ? system_data :
-         x == 1 ? default_data :
-         x == 2 ? application_data :
+        (x == 0 ? default_data :
+         x == 1 ? society_data :
+         x == 2 ? runtime_data :
          x == 3 ? override_data :
          null);
       if (cd == null) {
@@ -499,23 +525,43 @@ public final class CommandLine {
       }
       if ("org.cougaar.core.node.Node".equals(p0)) {
         if (!m.containsKey("-Dorg.cougaar.society.file") &&
-            application_xml != null) {
-          m.put("-Dorg.cougaar.society.file", application_xml);
+            society_xml != null) {
+          m.put("-Dorg.cougaar.society.file", society_xml);
+        }
+        if (!m.containsKey("-Dorg.cougaar.runtime.file") &&
+            runtime_xml != null) {
+          m.put("-Dorg.cougaar.runtime.file", runtime_xml);
         }
         if (!m.containsKey("-Dorg.cougaar.node.name") &&
             node != null) {
           m.put("-Dorg.cougaar.node.name", node);
         }
-        String cip = (String) m.get("-Dorg.cougaar.install.path");
-        if (cip == null) {
-          cip = "$COUGAAR_INSTALL_PATH";
+        String runtime_path = (String) m.get("-Dorg.cougaar.runtime.path");
+        if (runtime_path == null) {
+          runtime_path = "$COUGAAR_RUNTIME_PATH";
           if (windows) {
-            cip = toWindows(cip);
+            runtime_path = toWindows(runtime_path);
           }
-          m.put("-Dorg.cougaar.install.path", cip);
+          m.put("-Dorg.cougaar.runtime.path", runtime_path);
+        }
+        String society_path = (String) m.get("-Dorg.cougaar.society.path");
+        if (society_path == null) {
+          society_path = "$COUGAAR_SOCIETY_PATH";
+          if (windows) {
+            society_path = toWindows(society_path);
+          }
+          m.put("-Dorg.cougaar.society.path", society_path);
+        }
+        String install_path = (String) m.get("-Dorg.cougaar.install.path");
+        if (install_path == null) {
+          install_path = "$COUGAAR_INSTALL_PATH";
+          if (windows) {
+            install_path = toWindows(install_path);
+          }
+          m.put("-Dorg.cougaar.install.path", install_path);
         }
         if (!hasBootpath) {
-          m.put("-Xbootclasspath/p:"+cip+"/lib/javaiopatch.jar", null);
+          m.put("-Xbootclasspath/p:"+install_path+"/lib/javaiopatch.jar", null);
         }
         if (!m.containsKey(
               "-Dorg.cougaar.core.node.InitializationComponent")) {
@@ -524,7 +570,7 @@ public final class CommandLine {
               "XML");
         }
         if (!m.containsKey("-Djava.class.path")) {
-          m.put("-Djava.class.path", cip+"/lib/bootstrap.jar");
+          m.put("-Djava.class.path", install_path+"/lib/bootstrap.jar");
         }
       }
     }
@@ -881,7 +927,7 @@ public final class CommandLine {
   }
 
   /**
-   * SAX XML parser for the "mySociety.xml" and "system.xml".
+   * SAX XML parser for the "mySociety.xml" and "myRuntime.xml".
    * <p>
    * The two XML files use the same content format.  See the
    * top-level class javadocs for example XML files.

@@ -40,6 +40,12 @@ import org.cougaar.bootstrap.SystemProperties;
  * mostly for use by ConfigFinder et al.
  **/
 public final class Configuration {
+
+  public static final char SEP_CHAR = ';';
+  public static final String SEP = ""+SEP_CHAR;
+
+  public static final String RUNTIME_PATH_PROP = "org.cougaar.runtime.path";
+  public static final String SOCIETY_PATH_PROP = "org.cougaar.society.path";
   public static final String INSTALL_PATH_PROP = "org.cougaar.install.path";
   public static final String CONFIG_PATH_PROP = "org.cougaar.config.path";
   public static final String WORKSPACE_PROP = "org.cougaar.workspace";
@@ -47,8 +53,14 @@ public final class Configuration {
   public static final String USER_HOME_PROP = "user.home";
   public static final String USER_DIR_PROP = "user.dir";
 
-  public static final String defaultConfigPath = 
-    "$CWD;$INSTALL/configs/$CONFIG;$INSTALL/configs/common";
+  public static final String DEFAULT_CONFIG_PATH =
+    "$CWD"+                     SEP+
+    "$RUNTIME/configs/$CONFIG"+ SEP+
+    "$RUNTIME/configs/common"+  SEP+
+    "$SOCIETY/configs/$CONFIG"+ SEP+
+    "$SOCIETY/configs/common"+  SEP+
+    "$INSTALL/configs/$CONFIG"+ SEP+
+    "$INSTALL/configs/common";
 
   // these are initialized at the end
   private static Map defaultProperties;
@@ -178,47 +190,121 @@ public final class Configuration {
   static {
     Map m = new HashMap();
 
-    String ipath = getCanonicalPath(SystemProperties.getProperty(INSTALL_PATH_PROP, "."));
-    m.put("INSTALL", ipath);
-    m.put("CIP", ipath);        // alias for INSTALL
-    m.put("COUGAAR_INSTALL_PATH", ipath); // for completeness
-    try {
-      installUrl = urlify(ipath);
-    } catch (MalformedURLException e) { e.printStackTrace(); }
+    String runtime_path = SystemProperties.getProperty(RUNTIME_PATH_PROP);
+    if (runtime_path != null && runtime_path.length() > 0) {
+      runtime_path = getCanonicalPath(runtime_path);
+      m.put("RUNTIME", runtime_path);
+      m.put("CRP", runtime_path);        // alias for RUNTIME
+      m.put("COUGAAR_RUNTIME_PATH", runtime_path); // for completeness
+    }
 
-    String ws = SystemProperties.getProperty(WORKSPACE_PROP, ipath+"/workspace");
-    m.put("WORKSPACE",ws);
-    try {
-      workspaceUrl = urlify(ws);
-    } catch (MalformedURLException e) { e.printStackTrace(); }
+    String society_path = SystemProperties.getProperty(SOCIETY_PATH_PROP);
+    if (society_path != null && society_path.length() > 0) {
+      society_path = getCanonicalPath(society_path);
+      m.put("SOCIETY", society_path);
+      m.put("CSP", society_path);        // alias for SOCIETY
+      m.put("COUGAAR_SOCIETY_PATH", society_path); // for completeness
+    }
+
+    String install_path = SystemProperties.getProperty(INSTALL_PATH_PROP);
+    if (install_path != null && install_path.length() > 0) {
+      install_path = getCanonicalPath(install_path);
+      m.put("INSTALL", install_path);
+      m.put("CIP", install_path);        // alias for INSTALL
+      m.put("COUGAAR_INSTALL_PATH", install_path); // for completeness
+      try {
+        installUrl = urlify(install_path);
+      } catch (MalformedURLException e) { e.printStackTrace(); }
+    }
+
+    String workspace = SystemProperties.getProperty(WORKSPACE_PROP);
+    if (workspace == null || workspace.length() <= 0) {
+      for (int i = 0; i < 3; i++) {
+        String key = (i == 0 ? "RUNTIME" : i == 1 ? "SOCIETY" : "INSTALL");
+        String base = (String) m.get(key);
+        if (base != null) {
+          workspace = base+"/workspace";
+          break;
+        }
+      }
+    }
+    if (workspace != null) {
+      m.put("WORKSPACE", workspace);
+      try {
+        workspaceUrl = urlify(workspace);
+      } catch (MalformedURLException e) { e.printStackTrace(); }
+    }
 
     m.put("HOME", SystemProperties.getProperty(USER_HOME_PROP));
     m.put("CWD", SystemProperties.getProperty(USER_DIR_PROP));
 
-    String cspath = getCanonicalPath(ipath+"/configs");
-    m.put("CONFIGS", cspath);
-    try {
-      configUrl = urlify(cspath);
-    } catch (MalformedURLException e) { e.printStackTrace(); }
+    String configs_path = null;
+    for (int i = 0; i < 3; i++) {
+      String key = (i == 0 ? "RUNTIME" : i == 1 ? "SOCIETY" : "INSTALL");
+      String base = (String) m.get(key);
+      if (base != null) {
+        configs_path = base+"/configs";
+        break;
+      }
+    }
+    if (configs_path != null) {
+      configs_path = getCanonicalPath(configs_path);
+      m.put("CONFIGS", configs_path);
+      try {
+        configUrl = urlify(configs_path);
+      } catch (MalformedURLException e) { e.printStackTrace(); }
+    }
 
-    String cs = SystemProperties.getProperty(CONFIG_PROP, "common");
-    if (cs != null)
-      m.put("CONFIG", cs);
+    m.put("CONFIG", SystemProperties.getProperty(CONFIG_PROP, "common"));
 
     defaultProperties = Collections.unmodifiableMap(m);
 
     String config_path = SystemProperties.getProperty(CONFIG_PATH_PROP);
     if (config_path != null && 
+        config_path.length() > 0 &&
 	config_path.charAt(0) == '"' &&
 	config_path.charAt(config_path.length()-1) == '"') {
       config_path = config_path.substring(1, config_path.length()-1);
     }
+    boolean append_default = false;
     if (config_path == null) {
-      config_path = defaultConfigPath;
-    } else {
+      config_path = "";
+      append_default = true;
+    } else if (config_path.length() > 0) {
       config_path = config_path.replace('\\', '/'); // Make sure its a URL and not a file path
-      if (config_path.endsWith(";")) config_path += defaultConfigPath;
+      append_default = config_path.endsWith(SEP);
     }
-    configPath=config_path;
+    if (append_default) {
+      // append default path, but only path elements that contain known keys.
+      //
+      // For example, ignore "$RUNTIME/configs/common" if "$RUNTIME" is not set.
+      String[] sa = DEFAULT_CONFIG_PATH.split("\\s*"+SEP+"\\s*");
+      boolean needs_sep = false;
+loop:
+      for (int i = 0; i < sa.length; i++) {
+        String path = sa[i].trim();
+        if (path.length() <= 0) {
+          continue;
+        }
+        String[] sai = path.split("/");
+        for (int j = 0; j < sai.length; j++) {
+          String sj = sai[j];
+          if (sj.length() > 0 && sj.charAt(0) == '$') {
+            String key = sj.substring(1);
+            if (!defaultProperties.containsKey(key)) {
+              continue loop;
+            }
+          }
+        }
+        if (needs_sep) {
+          config_path += SEP;
+        } else {
+          needs_sep = true;
+        }
+        config_path += path;
+      }
+    }
+
+    configPath = config_path;
   }
 }
