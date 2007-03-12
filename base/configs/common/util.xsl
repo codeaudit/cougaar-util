@@ -105,6 +105,7 @@ This stylesheet is imported by agent templates, such as
             </xsl:if>
             <xsl:for-each select="argument">
               <xsl:element name="{name(.)}" namespace="{namespace-uri()}">
+                <xsl:copy-of select="@*"/>
                 <xsl:value-of select="normalize-space(.)"/>
               </xsl:element>
             </xsl:for-each>
