@@ -975,6 +975,7 @@ public final class CommandLine {
       throws SAXException {
 
         if (localName.equals("node") ||
+            localName.equals("runtime") ||
             localName.equals("vm_parameters")) {
           startNode(atts);
         }
@@ -1008,7 +1009,8 @@ public final class CommandLine {
         String namespaceURI, String localName, String qName
         ) throws SAXException {
       if (localName.equals("node") ||
-         localName.equals("vm_parameters")) {
+          localName.equals("runtime") ||
+          localName.equals("vm_parameters")) {
         endNode();
         return;
       }
@@ -1084,6 +1086,19 @@ public final class CommandLine {
 
     private void startVmParameter(Attributes atts) {
       startString();
+
+      String name = atts.getValue("name");
+      if (name != null) {
+        if (name.indexOf('=') >= 0) {
+          throw new RuntimeException("Invalid '=' in attribute name: "+name);
+        }
+        argValueBuffer.append(name.trim());
+        argValueBuffer.append("=");
+      }
+      String value = atts.getValue("value");
+      if (value != null) {
+        argValueBuffer.append(value.trim());
+      }
     }
     private void endVmParameter() {
       String s = endString();
