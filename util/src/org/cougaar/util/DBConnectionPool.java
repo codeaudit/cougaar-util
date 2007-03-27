@@ -2111,63 +2111,84 @@ public class DBConnectionPool {
     throws SQLException {
     String key = dbURL + SEP + user;
     DBConnectionPool pool;
+    boolean createdPool = false;
 
     synchronized (dbConnectionPools) {
       pool = (DBConnectionPool) dbConnectionPools.get(key);
       if (pool == null) {
 	pool = new DBConnectionPool(key);
 	dbConnectionPools.put(key, pool);
+        createdPool = true;
       }
+    }
+
+    if (createdPool) {
+      ensureTimer();
     }
 
     return pool.findConnection(dbURL, user, passwd);
   }
 
-  private static Thread timer = new Thread() {
-      public void run() {
+  private static final Object timer_lock = new Object();
+  private static Thread timer;
+
+  private static void ensureTimer() {
+    synchronized (timer_lock) {
+      if (timer != null) return;
+      Runnable r = new Runnable() {
+        public void run() {
+          timerRun();
+        }
+      };
+      timer = new Thread(r, "DBConnectionPool Timer");
+      timer.setDaemon(true);
+      timer.start();
+    }
+  }
+
+  private static void timerRun() {
+    while (true) {
+      // pause
+      try {
+        Thread.sleep(TIMEOUT_CHECK_INTERVAL);
+      } catch (InterruptedException e) {
+      }
+
+      // check timeouts
+      try {
+        checkAllTimeouts();
+      } catch (Throwable t) {
+        // Emergency measures to keep thread from dying.
+        System.err.println(
+            "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n"+
+            "Uncaught Exception or Error in DBConnectionPool:");
+        t.printStackTrace();
+        System.err.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+      }
+    }
+  }
+
+  private static void checkAllTimeouts() {
+    synchronized (dbConnectionPools) {
+      // get pools as array
+      int n = dbConnectionPools.size();
+      if (n <= 0) return;
+      DBConnectionPool[] pools = new DBConnectionPool[n];
+      Iterator iter = dbConnectionPools.values().iterator();
+      for (int i = 0; i < n; i++) {
+        pools[i++] = (DBConnectionPool) iter.next();
+      }
+
+      // call "checkTimeout" on each pool
+      long now = System.currentTimeMillis();
+      for (int i = 0; i < pools.length; i++) {
         try {
-          while (true) {		// Never ceases
-            try {
-              Thread.sleep(TIMEOUT_CHECK_INTERVAL);
-            } 
-            catch (InterruptedException e) { } // Pro forma catch
-            DBConnectionPool[] pools;
-            synchronized (dbConnectionPools) {
-              int l = dbConnectionPools.size();
-              if (l != 0) {
-                pools = new DBConnectionPool[l];
-                {
-                  int i = 0;
-                  for (Iterator e = dbConnectionPools.values().iterator(); e.hasNext(); ) {
-                    pools[i++] = (DBConnectionPool) e.next();
-                  }
-                }
-                long now = System.currentTimeMillis();
-                for (int i = 0; i < pools.length; i++) {
-                  try {
-                    pools[i].checkTimeout(now);
-                  }
-                  catch (Exception e) {
-                    e.printStackTrace();
-                  }
-                }
-              }
-            }
-          }
-        } 
-        catch (Throwable t) {
-          // Emergency measures to keep thread from dying.
-          System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\nUncaught Exception or Error in DBConnectionPool:");
-          t.printStackTrace();
-          System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+          pools[i].checkTimeout(now);
+        } catch (Exception e) {
+          e.printStackTrace();
         }
       }
-    };
-
-  static {
-    timer.setName("DBConnectionPool Timer");
-    timer.setDaemon(true);
-    timer.start();
+    }
   }
 
   /**
