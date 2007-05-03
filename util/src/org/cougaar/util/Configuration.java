@@ -120,6 +120,9 @@ public final class Configuration {
   public static final URL urlify(String s) throws MalformedURLException {
 //    MalformedURLException savedx = null;
     s = s.replace('\\', '/').replace('\\', '/'); // These should be URL-like
+    if (s.startsWith("resource://")) {
+      s = "file:/IN_COUGAAR_JARS/"+s.substring("resource://".length());
+    }
     try {
       if (!s.endsWith("/")) s += "/";
       return new URL(s);

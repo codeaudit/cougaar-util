@@ -44,7 +44,10 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
-import org.apache.xerces.parsers.DOMParser;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.cougaar.bootstrap.SystemProperties;
 import org.cougaar.util.log.Logger;
 import org.cougaar.util.log.Logging;
@@ -301,21 +304,19 @@ public class ConfigFinder {
     }
 
     for (int i = 0 ; i < configPath.size() ; i++) {
-      URL url = (URL) configPath.get(i);
-      if (url.getProtocol().equals("file")) {
-        try {
-          URL fileURL = new URL(url, aFilename);
-          File result = new File(fileURL.getFile());
-          if (result.exists()) {
-            traceLog(aFilename, url);
-            synchronized (urlCache) {
-              urlCache.put(aFilename, fileURL);
-            }
-            return result;
-          }
-        } catch (MalformedURLException mue) {
-          continue;
+      URL base = (URL) configPath.get(i);
+      try {
+        URL url = newURL(base, aFilename);
+        if (url == null) continue;
+        File result = new File(url.getFile());
+        if (!result.exists()) continue;
+        traceLog(aFilename, base);
+        synchronized (urlCache) {
+          urlCache.put(aFilename, url);
         }
+        return result;
+      } catch (MalformedURLException mue) {
+        continue;
       }
     }
     traceLog(aFilename, null);
@@ -349,7 +350,8 @@ public class ConfigFinder {
     for (int i = 0, l=configPath.size(); i < l; i++) {
       URL base = (URL) configPath.get(i);
       try {
-        URL url = new URL(base, aURL);
+        URL url = newURL(base, aURL);
+        if (url == null) continue;
         InputStream is = url.openStream();
         if (is == null) continue; // Don't return null
         traceLog(aURL, base);
@@ -398,7 +400,8 @@ public class ConfigFinder {
     for (int i = 0 ; i < configPath.size() ; i++) {
       URL base = (URL) configPath.get(i);
       try {
-        URL url = new URL(base, aURL);
+        URL url = newURL(base, aURL);
+        if (url == null) continue;
         InputStream is = url.openStream();
         if (is == null) continue; // Don't return null
         is.close();
@@ -425,6 +428,20 @@ public class ConfigFinder {
     return null;
   }
 
+  private URL newURL(URL base, String s) throws MalformedURLException {
+    if (base == null || s == null) {
+      return null;
+    }
+    if (!"file".equals(base.getProtocol()) ||
+        !base.getPath().startsWith("/IN_COUGAAR_JARS/")) {
+      return new URL(base, s);
+    }
+    String path =
+      (s.startsWith("/") ? s :
+       (base.getPath().substring("/IN_COUGAAR_JARS/".length()-1) + s));
+    return getClass().getResource(path);
+  }
+
   /** Read and parse an XML file somewhere in the configpath **/
   public Document parseXMLConfigFile(String xmlfile) throws IOException {
     InputStream istream = null;
@@ -442,22 +459,16 @@ public class ConfigFinder {
    * This means that embedded references to relative XML objects must be resolved
    * via the configfinder rather than the stream itself.
    **/
-  protected Document parseXMLConfigFile(InputStream isstream, String xmlfile)
-    throws IOException {
-    DOMParser parser = new DOMParser();
-    parser.setEntityResolver(getConfigResolver());
-    InputSource is = null;
+  protected Document parseXMLConfigFile(InputStream isstream, String xmlfile) {
     try {
-      is = new InputSource(isstream);
-      if (is == null) {
-         throw new RuntimeException("Got null InputSource from input stream for file " + xmlfile);
-      }
-      parser.parse(is);
-    } catch (SAXException e) {
-      getLogger().error("Exception parsing XML file \""+xmlfile+"\"", e);
-    }    
-
-    return parser.getDocument();
+      DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+      DocumentBuilder parser = dbf.newDocumentBuilder();
+      parser.setEntityResolver(getConfigResolver());
+      InputSource is = new InputSource(isstream);
+      return parser.parse(is);
+    } catch (Exception e) {
+      throw new RuntimeException("Unable to parse XML file \""+xmlfile+"\"", e);
+    }
   }
 
 
