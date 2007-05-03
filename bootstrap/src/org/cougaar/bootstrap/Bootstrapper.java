@@ -26,10 +26,12 @@
 
 package org.cougaar.bootstrap;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -42,6 +44,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A <b>main(String[] args)</b> class that searches for classes and
@@ -549,7 +553,8 @@ public class Bootstrapper
         k = j+1;
       } else {
         j = s.indexOf(STD_SEP_CHAR, i);
-        if (STD_SEP_CHAR != OS_SEP_CHAR) {
+        if (STD_SEP_CHAR != OS_SEP_CHAR &&
+            !(OS_SEP_CHAR == ':' && isURL(s, i))) {
           int c = s.indexOf(OS_SEP_CHAR, i);
           j = ((j >= 0 && c >= 0) ? Math.min(j, c) : Math.max(j, c));
         }
@@ -570,6 +575,24 @@ public class Bootstrapper
     return l;
   }
 
+  private static boolean isURL(String s, int i) {
+    int c = s.indexOf(':', i);
+    return
+      (((c-i) >= 2) &&
+       (c == indexOfNonLetter(s, i)) &&
+       ((c+1) < s.length()) &&
+       (s.charAt(c+1) == '/' ||
+        ("jar".equals(s.substring(i,c)) &&
+         s.indexOf(':', c+2) > 0)));
+  }
+  private static int indexOfNonLetter(String s, int i) {
+    int l = s.length();
+    for (int j = i; j<l; j++) {
+      char c = s.charAt(j);
+      if (c < 'a' || c > 'z') return j;
+    }
+    return -1;
+  }
   private static int indexOfNonAlpha(String s, int i) {
     int l = s.length();
     for (int j = i; j<l; j++) {
@@ -622,7 +645,15 @@ public class Bootstrapper
     if (isClasspath) {
       return findJarsInClasspath(s);
     }
-    return findJarsInDirectory(new File(s));
+    return findJarsInDirectory(s);
+  }
+
+  protected List findJarsInDirectory(String s) {
+    if (s.startsWith("file:/") || !isURL(s, 0)) {
+      return findJarsInDirectory(new File(s));
+    } else {
+      return findJarsInDirectoryURL(s);
+    }
   }
 
   /** Gather jar files found in the directory specified by the argument **/
@@ -653,33 +684,80 @@ public class Bootstrapper
     return l;
   }
 
+  protected List findJarsInDirectoryURL(String s) {
+    InputStream in = null;
+    List ret = null;
+    try {
+      URL url = new URL(s);
+      in = url.openStream();
+      if (isJar(s)) {
+        in.close();
+        return Collections.singletonList(url);
+      }
+      // <a href="foo.jar">
+      Pattern p = Pattern.compile(
+          "^.*<\\s*a\\s+href\\s*=\\s*\"\\s*"+
+          "([a-z0-9_:/~\\.-]+\\.(jar|zip|plugin))\\s*"+
+          "\"\\s*>.*$",
+          Pattern.CASE_INSENSITIVE);
+      ret = new ArrayList();
+      BufferedReader br = new BufferedReader(new InputStreamReader(in));
+      while (true) {
+        String line = br.readLine();
+        if (line == null) break;
+        line = line.trim();
+        if (line.length() == 0) continue;
+        Matcher m = p.matcher(line);
+        if (!m.matches()) continue;
+        String si = m.group(1);
+        if (si.indexOf(":/") < 0) {
+          if (!s.endsWith("/") && !si.startsWith("/")) {
+            si = "/" + si;
+          }
+          si = s + si;
+        }
+        ret.add(newURL(si));
+      }
+      br.close();
+      in = null;
+    } catch (Exception e) {
+      ret = Collections.EMPTY_LIST;
+    } finally {
+      if (in != null) {
+        try {
+          in.close();
+        } catch (Exception x) {
+        }
+      }
+    }
+    return ret;
+  }
+
   /** gather jar files listed in the classpath-like specification **/
   protected List findJarsInClasspath(String path) {
-    List l = new ArrayList();
-    if (path == null) return l;
-    String regex = 
-      (STD_SEP.equals(OS_SEP) ? STD_SEP : "("+STD_SEP+"|"+OS_SEP+")");
-    String files[] = path.split(regex);
-    for (int i=0; i<files.length; i++) {
+    if (path == null) return Collections.EMPTY_LIST;
+    List l = tokenizeJarPath(path);
+    List ret = new ArrayList(l.size());
+    for (int i = 0; i < l.size(); i++) {
       try {
-        String n = files[i];
-        if (!isJar(n) && !n.endsWith(File.separator)) {
-          n = n+File.separator;
-          n = canonicalPath(n); // Convert n to a canonical path, if possible
+        String si = (String) l.get(i);
+        if (!isJar(si) && !si.endsWith(File.separator)) {
+          si += File.separator;
+          si = canonicalPath(si); // Convert to a canonical path, if possible
         }
-        l.add(newURL(n));
+        ret.add(newURL(si));
       } catch (Exception e) {
         e.printStackTrace();
       }
     }
-    return l;
+    return ret;
   }
 
   /** convert a directory name to a canonical path **/
   protected final String canonicalPath(String filename) {
     String ret = filename;
-    if (!filename.startsWith("file:")) {
-      File f = new File (filename);
+    if (!filename.startsWith("file:") && !isURL(filename, 0)) {
+      File f = new File(filename);
       try {
         ret = f.getCanonicalPath() + File.separator;
       } catch (IOException ioe) {
@@ -691,7 +769,7 @@ public class Bootstrapper
 
   /** @return true iff the argument appears to name a jar file **/
   protected boolean isJar(String n) {
-    return (n.endsWith(".jar") ||n.endsWith(".zip") ||n.endsWith(".plugin"));
+    return (n.endsWith(".jar") || n.endsWith(".zip") || n.endsWith(".plugin"));
   }
 
   /** Convert the argument into a URL **/
@@ -700,7 +778,7 @@ public class Bootstrapper
       URL u = new URL(p);
       return u;
     } catch (MalformedURLException ex) {
-      return new File(p).toURL();
+      return new File(p).toURI().toURL();
     }
   }
 
