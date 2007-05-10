@@ -27,22 +27,29 @@ package org.cougaar.core.component;
 
 import org.cougaar.util.GenericStateModelAdapter;
 
-/** ComponentSupport is a shell of a ComponentImplementation
- * which is not actually instantiable, but may be useful
- * as a base class for simple component implementations.
+/**
+ * A base class for component implementations.
  **/
-public class ComponentSupport 
+public abstract class ComponentSupport 
   extends GenericStateModelAdapter
   implements Component
 {
-  private BindingSite _bindingSite = null;
-  public void setBindingSite(BindingSite bs) {
-    _bindingSite = bs;
+
+  protected ServiceBroker sb;
+
+  public void setServiceBroker(ServiceBroker sb) {
+    this.sb = sb;
   }
-  protected final BindingSite getBindingSite() {
-    return _bindingSite;
+
+  protected ServiceBroker getServiceBroker() {
+    return sb;
   }
-  protected final ServiceBroker getServiceBroker() {
-    return getBindingSite().getServiceBroker();
+
+  /** @deprecated */
+  protected BindingSite getBindingSite() {
+    return new BindingSite() {
+      public ServiceBroker getServiceBroker() { return sb; }
+      public void requestStop() { throw new UnsupportedOperationException(); }
+    };
   }
 }
