@@ -1,7 +1,7 @@
 /*
  * <copyright>
  *  
- *  Copyright 2002-2004 BBNT Solutions, LLC
+ *  Copyright 2002-2007 BBNT Solutions, LLC
  *  under sponsorship of the Defense Advanced Research Projects
  *  Agency (DARPA).
  * 
@@ -27,102 +27,958 @@
 package org.cougaar.util;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.AbstractMap;
+import java.util.AbstractSet;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.cougaar.bootstrap.SystemProperties;
 
 /**
- * A utility class to parse a List of "name=value" Strings into
- * a Map with helper methods, for example "int getInt(name, deflt)".
+ * A "name=value" parser.
+ * <p>
+ * Note that Arguments instances are unmodifiable, like Strings.
  * <p>
  * Example use:<pre>
- *   public class MyPlugin .. {
- *     // initialize args to the empty instance
- *     private Arguments args = Arguments.EMPTY_INSTANCE;
- *     // "setParameter" is only called if a plugin has parameters
- *     public void setParameter(Object o) {
- *       args = new Arguments(o);
- *     }
+ *   Arguments args = new Arguments("x=y, q=one, q=two, z=99");
+ *
+ *   String x = args.getString("x");
+ *   assert "y".equals(x);
+ *
+ *   int z = args.getInt("z", 1234);
+ *   assert z == 99;
+ *
+ *   List&lt;String&gt; q = args.getStrings("q");
+ *   assert q != null &amp;&amp; q.size() == 2;
+ * </pre>
+ * <p>
+ * The Cougaar component model includes built-in support to invoke an optional
+ * "setArguments" method.  Here's an example:<pre>
+ *   package org;
+ *   public class MyPlugin ... {
+ *     private Arguments args;
+ *
+ *     // The "setArguments" method is special -- it's an optional method
+ *     // that's found by the component model via reflection.  The passed-in
+ *     // arguments instance is created via:
+ *     //    new Arguments(listOfStrings, classname+".");
+ *     public void setArguments(Arguments args) { this.args = args; }
+ *
  *     public void load() {
  *       super.load();
- *       int foo = args.getInt("foo", 123);
+ *
+ *       // Get the value of our "foo" argument
+ *       //
+ *       // First looks for a plugin XML argument named "foo",
+ *       // next looks for a "-Dorg.MyPlugin.foo=" system property,
+ *       // otherwise the value will be the 1234 default.
+ *       int foo = args.getInt("foo", 1234);
+ *
+ *       System.out.println("foo is "+foo);
+ *     }
+ *   }
+ * </pre>
+ * <p>
+ * The {@link #callSetters} method supports "setter" reflection,
+ * for example:<pre>
+ *   package org;
+ *   public class MyPlugin ... {
+ *     private int foo = 1234;
+ *     public void setArguments(Arguments args) { args.callSetters(this); }
+ *
+ *     // This "set<i>NAME</i>(<i>TYPE</i>)" method is found by reflection.
+ *     // The args class will only invoke the setters for which it has values.
+ *     public void setFoo(int i) { this.foo = i; }
+ *
+ *     public void load() {
+ *       super.load();
+ *       System.out.println("foo is "+foo);
  *     }
  *   }
  * </pre>
  */
-public class Arguments implements Serializable {
+public final class Arguments
+extends AbstractMap<String,List<String>>
+implements Serializable {
 
-  /** A singleton instance for an empty map */
+  /** A singleton instance for an empty arguments */
   public static final Arguments EMPTY_INSTANCE = new Arguments(null);
 
-  private final Map m;
+  /** @see toString(String,String) */
+  private static final Pattern PATTERN = 
+    Pattern.compile("\\$(key|value|vals|veach|vlist)");
+
+  private static final int OPTIMIZE_SIZE = 5;
+
+  private final Map<String,List<String>> m;
 
   public Arguments(Object o) {
-    m = parseMap(o);
+    this(o, null);
+  }
+  public Arguments(Object o, String propertyPrefix) {
+    this(o, propertyPrefix, null);
+  }
+  public Arguments(Object o, String propertyPrefix, Object deflt) {
+    this(o, propertyPrefix, deflt, null);
+  }
+  /**
+   * @param o the optional input object, e.g. a List of name=value Strings,
+   *   or another Arguments instance.
+   * @param propertyPrefix the optional SystemProperties property prefix, e.g.
+   *   "org.MyPlugin", for "-Dorg.MyPlugin.name=value" lookups.
+   * @param deflt the optional default values, e.g. a List of name=value
+   *   Strings, or another Arguments instance.
+   * @param keys the optional filter on which keys are allowed, e.g. only
+   *   allow (A, B, C)
+   */
+  public Arguments(
+      Object o,
+      String propertyPrefix,
+      Object deflt,
+      Object keys) {
+    try {
+      Map<String,List<String>> m2 = parseMap(o);
+      Map<String,List<String>> def = parseMap(deflt);
+      Set<String> ks = parseSet(keys);
+      this.m = parse(m2, propertyPrefix, def, ks);
+    } catch (Exception e) {
+      throw new IllegalArgumentException(
+          "Unable to create new Arguments("+
+          "\n  o = "+o+
+          (propertyPrefix == null && deflt == null && keys == null ? "" :
+           (",\n  propertyPrefix = "+propertyPrefix+
+            (deflt == null && keys == null ? "" :
+             (",\n  deflt = "+deflt+
+              (keys == null ? "" :
+               ",\n  keys = "+keys)))))+
+          ")", e);
+    }
   }
 
-  protected Map parseMap(Object o) {
-    if (!(o instanceof List)) {
-      // throw exception if non-null?
-      return Collections.EMPTY_MAP;
+  /**
+   * All the other "get*" methods call this method.
+   * <p>
+   * Equivalent to:<pre>
+   *   List&lt;String&gt; l = get(key);
+   *   return (l == null ? deflt : l);
+   * </pre>
+   *
+   * @return the non-empty values or the deflt
+   */
+  public List<String> getStrings(String key, List<String> deflt) {
+    if (m instanceof OptimizedMap) {
+      return ((OptimizedMap) m).getStrings(key, deflt);
     }
-    List l = (List) o;
-    int n = l.size();
-    if (n == 0) {
-      return Collections.EMPTY_MAP;
-    }
-    Map ret = new HashMap(n);
-    for (int i = 0; i < n; i++) {
-      String s = (String) l.get(i);
-      int sepIdx = s.indexOf('=');
-      if (sepIdx < 0) {
-        // throw exception?
-        continue;
-      }
-      String key = s.substring(0, sepIdx);
-      String value = s.substring(sepIdx+1);
-      ret.put(key, value);
-    }
-    ret = Collections.unmodifiableMap(ret);
-    return ret;
+    List<String> l = m.get(key);
+    return (l == null ? deflt : l);
   }
 
+  //
+  // Helper methods:
+  //
+
+  /** @return the value, or null if not set */
   public String getString(String key) {
     return getString(key, null);
   }
-
+  /**
+   * Get the first value, or the specified default if there is
+   * no value.
+   * <p>
+   * Equivalent to:<pre>
+   *   List&lt;String&gt; l = get(key);
+   *   return (l == null ? deflt : l.get(0));
+   * </pre>
+   *
+   * @return the first value, or the deflt if not set
+   */
   public String getString(String key, String deflt) {
-    String value = (String) m.get(key);
-    return (value == null ? deflt : value);
+    if (m instanceof OptimizedMap) {
+      return ((OptimizedMap) m).getString(key, deflt);
+    }
+    List<String> l = m.get(key);
+    return (l == null ? deflt : l.get(0));
   }
+  /** @return same as {@link #get(String)} */
+  public List<String> getStrings(String key) {
+    return getStrings(key, null);
+  } 
 
+  /** @return the value, or false if not set */
+  public boolean getBoolean(String key) {
+    return getBoolean(key, false);
+  }
+  /** @return the first value, or the deflt if not set */
   public boolean getBoolean(String key, boolean deflt) {
     String value = getString(key);
     return (value == null ? deflt : "true".equals(value));
   }
+  /** @return the values, or null if not set */
+  public List<Boolean> getBooleans(String key) {
+    return getBooleans(key, null);
+  }
+  /** @return the values, or the deflt if not set */
+  public List<Boolean> getBooleans(String key, List<Boolean> deflt) {
+    List<String> l = getStrings(key, null);
+    if (l == null) return deflt;
+    int n = l.size();
+    if (n == 1) {
+      Boolean value = Boolean.valueOf(l.get(0));
+      return Collections.singletonList(value);
+    }
+    List<Boolean> ret = new ArrayList<Boolean>(n);
+    for (String s : l) {
+      ret.add(Boolean.valueOf(s));
+    }
+    return Collections.unmodifiableList(ret);
+  }
 
+  /** @return the value, or -1 if not set */
+  public int getInt(String key) {
+    return getInt(key, -1);
+  }
+  /** @return the first value, or the deflt if not set */
   public int getInt(String key, int deflt) {
     String value = getString(key);
     return (value == null ? deflt : Integer.parseInt(value));
   }
+  /** @return the values, or null if not set */
+  public List<Integer> getInts(String key) {
+    return getInts(key, null);
+  }
+  /** @return the values, or the deflt if not set */
+  public List<Integer> getInts(String key, List<Integer> deflt) {
+    List<String> l = getStrings(key, null);
+    if (l == null) return deflt;
+    int n = l.size();
+    if (n == 1) {
+      Integer value = Integer.valueOf(l.get(0));
+      return Collections.singletonList(value);
+    }
+    List<Integer> ret = new ArrayList<Integer>(n);
+    for (String s : l) {
+      ret.add(Integer.valueOf(s));
+    }
+    return Collections.unmodifiableList(ret);
+  }
 
+  /** @return the value, or -1 if not set */
+  public long getLong(String key) {
+    return getLong(key, -1);
+  }
+  /** @return the first value, or the deflt if not set */
   public long getLong(String key, long deflt) {
     String value = getString(key);
     return (value == null ? deflt : Long.parseLong(value));
   }
+  /** @return the value, or null if not set */
+  public List<Long> getLongs(String key) {
+    return getLongs(key, null);
+  }
+  /** @return the values, or the deflt if not set */
+  public List<Long> getLongs(String key, List<Long> deflt) {
+    List<String> l = getStrings(key, null);
+    if (l == null) return deflt;
+    int n = l.size();
+    if (n == 1) {
+      Long value = Long.valueOf(l.get(0));
+      return Collections.singletonList(value);
+    }
+    List<Long> ret = new ArrayList<Long>(n);
+    for (String s : l) {
+      ret.add(Long.valueOf(s));
+    }
+    return Collections.unmodifiableList(ret);
+  }
 
+  /** @return the value, or Double.NaN if not set */
+  public double getDouble(String key) {
+    return getDouble(key, Double.NaN);
+  }
+  /** @return the first value, or the deflt if not set */
   public double getDouble(String key, double deflt) {
     String value = getString(key);
     return (value == null ? deflt : Double.parseDouble(value));
   }
-
-  public Set getKeys() {
-    return m.keySet();
+  /** @return the value, or null if not set */
+  public List<Double> getDoubles(String key) {
+    return getDoubles(key, null);
+  }
+  /** @return the values, or the deflt if not set */
+  public List<Double> getDoubles(String key, List<Double> deflt) {
+    List<String> l = getStrings(key, null);
+    if (l == null) return deflt;
+    int n = l.size();
+    if (n == 1) {
+      Double value = Double.valueOf(l.get(0));
+      return Collections.singletonList(value);
+    }
+    List<Double> ret = new ArrayList<Double>(n);
+    for (String s : l) {
+      ret.add(Double.valueOf(s));
+    }
+    return Collections.unmodifiableList(ret);
   }
 
+  //
+  // Modifiers
+  //
+
+  /**
+   * Return an Arguments instance where the values for key1 and
+   * key2 are swapped.
+   * <p>
+   * In other words:<pre>
+   *   // given:
+   *   List&lt;String&gt; v1 = args.getStrings(key1);
+   *   List&lt;String&gt; v2 = args.getStrings(key2);
+   *
+   *   // do swap:
+   *   Arguments ret = args.swap(key1, key2);
+   *
+   *   // validate:
+   *   assert (ret.size() == args.size());
+   *   List&lt;String&gt; x1 = ret.getStrings(key1);
+   *   List&lt;String&gt; x2 = ret.getStrings(key2);
+   *   assert (v1 == null ? x2 == null : v1.equals(x2));
+   *   assert (v2 == null ? x1 == null : v2.equals(x1));
+   * </pre>
+   *
+   * @return returns a new Arguments instance
+   */
+  public Arguments swap(String key1, String key2) {
+    // could optimize this...
+    List<String> v1 = getStrings(key1);
+    List<String> v2 = getStrings(key2);
+    Arguments ret = setStrings(key1, v2);
+    ret = ret.setStrings(key2, v1);
+    return ret;
+  }
+
+  /** @see #setStrings */
+  public Arguments setString(String key, String value) {
+    List<String> l = (value == null ? null : Collections.singletonList(value));
+    return setStrings(key, l);
+  }
+
+  /**
+   * @param key the non-null key
+   * @param values the values, which can be null or empty to remove the
+   *   specified key's entry
+   * @return returns a possibly new Arguments instance
+   *   (like {@link String#trim} and similar copy-on-modify classes)
+   *   where "getStrings(key)" will be equal to the specified "values"
+   */
+  public Arguments setStrings(String key, List<String> values) {
+    // could optimize this...
+    List<String> old = getStrings(key);
+    if (values == null || values.isEmpty()) {
+      if (old == null) {
+        return this;
+      }
+      if (size() == 1) return EMPTY_INSTANCE;
+      Set<String> filter = new HashSet<String>(keySet());
+      filter.remove(key);
+      return new Arguments(this, null, null, filter);
+    } else {
+      Map<String,List<String>> add =
+        Collections.singletonMap(key, values);
+      return new Arguments(add, null, this);
+    }
+  }
+
+  //
+  // Required base class methods:
+  //
+
+  public Set<Map.Entry<String,List<String>>> entrySet() {
+    return m.entrySet();
+  }
+  // avoid linear scan through our "entrySet()":
+  public int size() { return m.size(); }
+  public boolean containsKey(Object key) { return (get(key) != null); }
+  public List<String> get(String key) { return m.get(key); }
+
+  //
+  // Reflection methods:
+  //
+
+  /**
+   * Call the given object's setter methods or fields for every name=value
+   * pair in the {@link #entrySet}, return the Set of unknown String keys.
+   * <p>
+   * For example, the name=value pair "x=y" will look for:<pre>
+   *   public void setX(<i>type</i>) {..}
+   * </pre>
+   * and field:<pre>
+   *   public <i>type</i> x;
+   * </pre>
+   * If neither are found then "x" will be included in the returned Set.
+   * 
+   * @param o Object that has the setter methods &amp; fields
+   * @return Subset of the {@link #keySet} that could not be set
+   */
+  public Set<String> callSetters(Object o) {
+    if (isEmpty()) return Collections.emptySet();
+    Class cl = o.getClass();
+    if (!Modifier.isPublic(cl.getModifiers())) {
+      return keySet();
+    }
+    Set<String> ret = null;
+    Method[] methods = cl.getMethods();
+    for (Map.Entry<String,List<String>> me : entrySet()) {
+      String key = me.getKey();
+      List<String> l = me.getValue();
+
+      boolean found = false;
+
+      // look for setter method(s)
+      String setter_name =
+        "set"+
+        Character.toUpperCase(key.charAt(0))+
+        key.substring(1);
+      for (int i = 0; i < methods.length; i++) {
+        Method mi = methods[i];
+        if (!Modifier.isPublic(mi.getModifiers())) continue;
+        if (!setter_name.equals(mi.getName())) continue;
+        Class[] p = mi.getParameterTypes();
+        if (p.length != 1) continue;
+        try {
+          Object arg = cast(l, p[0]);
+          mi.invoke(o, new Object[] { arg });
+          found = true;
+        } catch (Exception e) {
+          throw new RuntimeException(
+              "Unable to set "+key+"="+l+" on "+mi, e);
+        }
+      }
+
+      // look for field
+      Field field = null;
+      try {
+        field = cl.getField(key);
+        if (!Modifier.isPublic(field.getModifiers())) {
+          field = null;
+        }
+      } catch (Exception e) {
+      }
+      if (field != null) {
+        try {
+          Object arg = cast(l, field.getType());
+          field.set(o, arg);
+          found = true;
+        } catch (Exception e) {
+          throw new RuntimeException(
+              "Unable to set "+key+"="+l+" on "+field, e);
+        }
+      }
+
+      if (!found) {
+        if (ret == null) {
+          ret = new LinkedHashSet<String>();
+        }
+        ret.add(key);
+      }
+    }
+    if (ret == null) return Collections.emptySet();
+    return ret;
+  }
+
+  private static Object cast(List<String> l, Class type) {
+    if (String.class.isAssignableFrom(type)) {
+      return l.get(0);
+    }
+    if (type.isPrimitive()) {
+      String value = l.get(0);
+      if (type == Boolean.TYPE) {
+        return Boolean.valueOf(value);
+      } else if (type == Character.TYPE) {
+        return Character.valueOf(value.charAt(0));
+      } else if (type == Byte.TYPE) {
+        return Byte.valueOf(value);
+      } else if (type == Short.TYPE) {
+        return Short.valueOf(value);
+      } else if (type == Integer.TYPE) {
+        return Integer.valueOf(value);
+      } else if (type == Long.TYPE) {
+        return Long.valueOf(value);
+      } else if (type == Float.TYPE) {
+        return Float.valueOf(value);
+      } else if (type == Double.TYPE) {
+        return Double.valueOf(value);
+      }
+    }
+    if (Collection.class.isAssignableFrom(type)) {
+      return l;
+    }
+    // RFE support primitive wrappers, e.g. Integer?  Boolean?
+    // RFE support arrays, e.g. double[]?  String[]?
+    throw new UnsupportedOperationException(
+        "Unknown type "+type+" for "+l);
+  }
+
+  //
+  // toString methods:
+  //
+
+  /**
+   * @see #toString(String) Same as "{"+toString(null)+"}"
+   */
   public String toString() {
-    return "args["+m.size()+"]="+m;
+    // return "{" + toString(null, null) + "}";
+    return super.toString();
   }
+
+  /** @see #toString(String,String) Same as "toString(format, null)" */
+  public String toString(String format) {
+    return toString(format, null);
+  }
+
+  /**
+   * Create a string representation of this map using the given format.
+   *
+   * <pre>
+   * For example, if our map contains:
+   *   A=B
+   *   X=V0,V1,V2
+   *
+   * then:
+   *   toString("the_$key is the_$value", " * ");
+   * would return:
+   *   the_A is the_B * the_X is the_V0
+   *
+   * and:
+   *   toString("($key eq $vals)", " +\n");
+   * would return:
+   *   (A eq B) +
+   *   (X eq [V0, V1, V2])
+   *
+   * and:
+   *   toString("$key=$veach", "&amp;");
+   * would return a URL-like string:
+   *   A=B&amp;X=V0&amp;X=V1&amp;X=V2
+   *
+   * and:
+   *   "{" + toString("$key=$vlist", ", ") + "}";
+   * would return the standard {@link Map#toString} format:
+   *   {A=[B], X=[V0, V1, V2]}
+   * </pre>
+   *
+   * The supported variables are:<ul>
+   *   <li>"$key" is the string key name (e.g. "X")</li>
+   *   <li>"$value" is the first value (e.g. "V0"), as defined in
+   *        {@link #getString(String)}</li>
+   *   <li>"$vals" is the first value if there is only one value (e.g. "B"),
+   *       otherwise the list of values prefixed with "[" and "]" if there
+   *       are multiple values (e.g. "[V0, V1, V2]").</li>
+   *   <li>"$veach" is current value in the list (e.g. "V1")</li>
+   *   <li>"$vlist" is the "[]" wrapped list (e.g. "[B]" or "[V0, V1, V2]")</li>
+   * </ul>
+   *
+   * @param format optional format, defaults to "$key=$vlist"
+   * @param separator optional separator, defaults to ", "
+   *
+   * @return a string with each entry in the given format, where every "$key"
+   * is replaced with the map key and every "$value" is replaced with the map
+   * value.
+   */
+  public String toString(String format, String separator) {
+    String form = format;
+    if (form == null) {
+      form = "$key=$vlist";
+    }
+
+    String sep = separator;
+    if (sep == null) {
+      sep = ", ";
+    }
+    if (sep.length() == 0) {
+      sep = null;
+    }
+
+    Matcher x = PATTERN.matcher(form);
+
+    boolean firstTime = true;
+    StringBuffer buf = new StringBuffer();
+    for (Map.Entry<String,List<String>> me : entrySet()) {
+      String k = me.getKey();
+      List<String> l = me.getValue();
+
+      boolean hasEach = false;
+      int eachIndex = 0;
+      while (true) {
+        if (firstTime) {
+          firstTime = false;
+        } else {
+          if (sep != null) {
+            buf.append(sep);
+          }
+        }
+
+        x.reset();
+        while (x.find()) {
+          String tag = x.group(1);
+          String value;
+          if ("veach".equals(tag)) {
+            hasEach = true;
+            value = l.get(eachIndex);
+          } else {
+            value =
+              ("key".equals(tag) ? k :
+               "value".equals(tag) ? l.get(0) :
+               "vals".equals(tag) ? (l.size() == 1 ? l.get(0) : l.toString()) :
+               "vlist".equals(tag) ? l.toString() :
+               "InternalError!");
+          }
+          x.appendReplacement(buf, value);
+        }
+        x.appendTail(buf);
+
+        if (!hasEach || ++eachIndex >= l.size()) break;
+      }
+    }
+    return buf.toString();
+  }
+
+  //
+  // Internal parsing:
+  //
+
+  /**
+   * @return null or a modifiable, non-empty, ordered map of unmodifiable,
+   *   non-empty, lists
+   */
+  private static final Map<String,List<String>> parseMap(Object object) {
+    Object o = object;
+    if (o == null) return null;
+    if (o instanceof Arguments) return ((Arguments) o).m;
+    if (o instanceof Map) {
+      Map m2 = (Map) o;
+      if (m2.isEmpty()) return null;
+      Map<String,List<String>> ret = new LinkedHashMap<String,List<String>>();
+      for (Object x : m2.entrySet()) {
+        Map.Entry me = (Map.Entry) x;
+        String key = parseString(me.getKey(), "Map key");
+        List<String> value = parseList(me.getValue());
+        if (value == null) continue;
+        ret.put(key, value);
+      }
+      return ret;
+    }
+    if (o instanceof String) {
+      o = ((String) o).split("\\s*,\\s*");
+    }
+    if (o instanceof Object[]) {
+      o = Arrays.asList((Object[]) o);
+    }
+    if (!(o instanceof Collection)) {
+      throw new IllegalArgumentException(
+          "Expecting null, Arguments, Map, Object[], or Collection, not "+
+          (o == null ? "null" : o.getClass().getName()));
+    }
+    Collection c = (Collection) o;
+    int n = c.size();
+    if (n == 0) return null;
+    Map<String,List<String>> ret = null;
+    boolean hasMulti = false;
+    Iterator iter = c.iterator();
+    for (int i = 0; i < n; i++) {
+      Object oi = iter.next();
+      if (!(oi instanceof String)) {
+        throw new IllegalArgumentException(
+            "Expecting a Collection of Strings, not "+
+            (oi == null ? "null" : (oi.getClass().getName()+" "+oi)));
+      }
+      String s = (String) oi;
+      int sep = s.indexOf('=');
+      if (sep < 0) {
+        throw new IllegalArgumentException(
+            "Missing a \"=\" separator for \""+s+"\"");
+      }
+      String key = s.substring(0, sep).trim();
+      String value = s.substring(sep+1).trim();
+      if (key.length() <= 0) {
+        throw new IllegalArgumentException(
+            "Key length is zero for \""+s+"\"");
+      }
+      if (ret == null) {
+        ret = new LinkedHashMap<String,List<String>>();
+      }
+      List<String> prev = ret.get(key);
+      if (prev == null) {
+        ret.put(key, Collections.singletonList(value));
+        continue;
+      }
+      hasMulti = true;
+      if (prev.size() == 1) {
+        String s0 = prev.get(0);
+        prev = new ArrayList<String>(2);
+        prev.add(s0);
+        ret.put(key, prev);
+      }
+      prev.add(value);
+    }
+    if (hasMulti) {
+      // make values unmodifiable
+      for (Map.Entry<String,List<String>> me : ret.entrySet()) {
+        List<String> prev = me.getValue();
+        if (prev.size() == 1) continue;
+        prev = Collections.unmodifiableList(prev);
+        me.setValue(prev);
+      }
+    }
+    // don't need to make ret unmodifiable
+    return ret;
+  }
+
+  private static final Set<String> parseSet(Object object) {
+    Object o = object;
+    if (o == null) return null;
+    if (o instanceof String) {
+      o = ((String) o).split("\\s*,\\s*");
+    }
+    if (o instanceof Object[]) {
+      o = Arrays.asList((Object[]) o);
+    }
+    if (!(o instanceof Collection)) {
+      throw new IllegalArgumentException(
+          "Expecting null, String, Object[], or Collection, not "+
+          (o == null ? "null" : o.getClass().getName()));
+    }
+    Collection c = (Collection) o;
+    int n = c.size();
+    if (n == 0) return null;
+    Set<String> ret = new HashSet<String>(c.size());
+    for (Object oi : c) {
+      ret.add(parseString(oi, "Set filter value"));
+    }
+    return ret;
+  }
+
+  private static final List<String> parseList(Object object) {
+    Object o = object;
+    if (o instanceof String) {
+      return Collections.singletonList((String) o);
+    }
+    if (o instanceof Object[]) {
+      o = Arrays.asList((Object[]) o);
+    }
+    if (!(o instanceof Collection)) {
+      throw new IllegalArgumentException(
+          "Expecting a String, Object[], or Collection value, not "+
+          (o == null ? "null" : (o.getClass().getName())+" "+o));
+    }
+    Collection c = (Collection) o;
+    int n = c.size();
+    if (n == 0) return null;
+    Iterator iter = c.iterator();
+    if (n == 1) {
+      String s = parseString(iter.next(), "Collection value");
+      return Collections.singletonList(s);
+    }
+    List<String> ret = new ArrayList<String>(n);
+    for (int i = 0; i < n; i++) {
+      String s = parseString(iter.next(), "Collection value");
+      ret.add(s);
+    }
+    return Collections.unmodifiableList(ret);
+  }
+
+  private static final String parseString(Object o, String desc) {
+    if (!(o instanceof String)) {
+      throw new IllegalArgumentException(
+          "Expecting a "+desc+" String, not "+
+          (o == null ? "null" : (o.getClass().getName())+" "+o));
+    }
+    return (String) o;
+  }
+
+  /**
+   * @param m a map created by "parseMap()"
+   * @param deflt a map created by "parseMap()"
+   * @return a non-null, unmodifiable, ordered map
+   */
+  private static final Map<String,List<String>> parse(
+      Map<String,List<String>> m,
+      String propertyPrefix,
+      Map<String,List<String>> deflt,
+      Set<String> keys) {
+    Map<String,List<String>> ret = new LinkedHashMap<String,List<String>>();
+    if (m != null && !m.isEmpty()) {
+      if (keys == null) {
+        ret.putAll(m);
+      } else {
+        for (String key : keys) {
+          List<String> l = m.get(key);
+          if (l == null) continue;
+          ret.put(key, l);
+        }
+      }
+    }
+    if ((propertyPrefix != null) &&
+        (keys == null || (ret.size() < keys.size()))) {
+      Properties props = 
+        SystemProperties.getSystemPropertiesWithPrefix(
+            propertyPrefix);
+      if (props != null && !props.isEmpty()) {
+        for (Enumeration en = props.propertyNames();
+            en.hasMoreElements();
+            ) {
+          String name = (String) en.nextElement();
+          if (!name.startsWith(propertyPrefix)) continue;
+          String key = name.substring(propertyPrefix.length());
+          if (key.length() <= 0) continue;
+          if (ret.containsKey(key)) continue;
+          if (keys != null && !keys.contains(key)) continue;
+          String value = props.getProperty(name);
+          // RFE split by commas, but not if quoted?
+          List<String> l = Collections.singletonList(value);
+          ret.put(key, l);
+        }
+      }
+    }
+    if ((deflt != null && !deflt.isEmpty()) &&
+        (keys == null || (ret.size() < keys.size()))) {
+      for (Map.Entry<String,List<String>> me : deflt.entrySet()) {
+        String key = me.getKey();
+        if (ret.containsKey(key)) continue;
+        if (keys != null && !keys.contains(key)) continue;
+        ret.put(key, me.getValue());
+      }
+    }
+    int n = ret.size();
+    if (n == 0) {
+      return Collections.emptyMap();
+    }
+    if (n == 1) {
+      Map.Entry<String,List<String>> me = ret.entrySet().iterator().next();
+      return 
+        Collections.singletonMap(
+            me.getKey(),
+            me.getValue());
+    }
+    if (n <= OPTIMIZE_SIZE) {
+      boolean hasMulti = false;
+      for (List<String> l : ret.values()) {
+        if (l.size() > 1) {
+          hasMulti = true;
+          break;
+        }
+      }
+      if (!hasMulti) {
+        return new OptimizedMapImpl(ret);
+      }
+    }
+    return Collections.unmodifiableMap(ret);
+  }
+
+  interface OptimizedMap extends Map<String,List<String>> {
+    List<String> getStrings(String key, List<String> deflt);
+    String getString(String key, String deflt);
+  }
+
+  /**
+   * Nearly all of our expected uses will have only a handleful of entries,
+   * where every value is a single-element List&lt;String&gt;, so we optimize
+   * this case.
+   * <p>
+   * We keep two String arrays; one for the keys, and one for the values.
+   * <p>
+   * Contrast this with the general case, where we keep an unmodifiableMap
+   * wrapper around a LinkedHashMap of String-to-List entries, where the value
+   * Lists would be a mix of<br>
+   * &nbsp; (1) singletonList wrappers around strings, and<br>
+   * &nbsp; (2) unmodifiableList wrappers around ArrayLists of strings.<br>
+   */
+  private static final class OptimizedMapImpl 
+    extends AbstractMap<String,List<String>>
+    implements OptimizedMap, Serializable {
+      private final String[] keys;
+      private final String[] values;
+      public OptimizedMapImpl(Map<String,List<String>> m) {
+        keys = new String[m.size()];
+        values = new String[m.size()];
+        int i = 0;
+        for (Map.Entry<String,List<String>> me : m.entrySet()) {
+          keys[i] = me.getKey();
+          values[i] = me.getValue().get(0);
+          i++;
+        }
+      }
+      public List<String> getStrings(String key, List<String> deflt) {
+        String s = getString(key, null);
+        return (s == null ? deflt : Collections.singletonList(s));
+      }
+      public String getString(String key, String deflt) {
+        for (int i = 0; i < keys.length; i++) {
+          if (key.equals(keys[i])) {
+            return values[i];
+          }
+        }
+        return deflt;
+      }
+      // required by our AbstractMap base class:
+      public Set<Map.Entry<String,List<String>>> entrySet() {
+        return new AbstractSet<Map.Entry<String,List<String>>>() {
+          public int size() { return keys.length; }
+          public Iterator<Map.Entry<String,List<String>>> iterator() {
+            return new Iterator<Map.Entry<String,List<String>>>() {
+              private int i = 0;
+              public boolean hasNext() {
+                return i < keys.length;
+              }
+              public Map.Entry<String,List<String>> next() {
+                if (i >= keys.length) {
+                  throw new ArrayIndexOutOfBoundsException(i);
+                }
+                final int j = i++;
+                return new Map.Entry<String,List<String>>() {
+                  public String getKey() {
+                    return keys[j];
+                  }
+                  public List<String> getValue() {
+                    return Collections.singletonList(values[j]);
+                  }
+                  public List<String> setValue(List<String> value) {
+                    throw new UnsupportedOperationException();
+                  }
+                };
+              }
+              public void remove() {
+                throw new UnsupportedOperationException();
+              }
+            };
+          }
+        };
+      }
+      public boolean containsKey(Object key) {
+        for (int i = 0; i < keys.length; i++) {
+          if (key.equals(keys[i])) return true;
+        }
+        return false;
+      }
+      public List<String> get(String key) {
+        for (int i = 0; i < keys.length; i++) {
+          if (key.equals(keys[i])) {
+            return Collections.singletonList(values[i]);
+          }
+        }
+        return null;
+      }
+    }
 }

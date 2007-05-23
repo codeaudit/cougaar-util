@@ -26,9 +26,11 @@
 package org.cougaar.core.component;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.HashMap;
+import org.cougaar.util.Arguments;
 
 /** A base class useful for creating components
  * and instilling the "breath of life" (initial services)
@@ -91,8 +93,6 @@ public abstract class ComponentFactory
     return _classLoaderCache;
   }
 
-  private final static Class[] VO = new Class[]{Object.class};
-
   /** Override to change how a class is constructed.  Should return 
    * a Component in order for the rest of the default code to work.
    **/
@@ -109,18 +109,41 @@ public abstract class ComponentFactory
     throws ComponentFactoryException
   {
     try {
-      Object o = cc.newInstance();
-      if (o instanceof Component) {
-        Object p = desc.getParameter();
-        if (p != null) {
-          //if (!((Collection)p).isEmpty()) ...
-          Method m = cc.getMethod("setParameter", VO);
-          m.invoke(o, new Object[]{p});
-	}
-        return (Component) o;
-      } else {
+      if (!Component.class.isAssignableFrom(cc)) {
         throw new IllegalArgumentException("ComponentDescription "+desc+" does not name a Component");
       }
+      Object o = cc.newInstance();
+      Object p = desc.getParameter();
+
+      Method setArgs;
+      try {
+        setArgs = cc.getMethod("setArguments", new Class[] {Arguments.class});
+      } catch (Exception x) {
+        setArgs = null;
+      }
+      if (setArgs != null) {
+        Arguments args = new Arguments(p, cc.getName()+".");
+        if (args.isEmpty()) {
+          args = Arguments.EMPTY_INSTANCE;
+        }
+        setArgs.invoke(o, new Object[] {args});
+      }
+
+      if (p != null) {
+        //if (!((Collection)p).isEmpty()) ...
+        Method m;
+        try {
+          m = cc.getMethod("setParameter", new Class[]{Object.class});
+        } catch (NoSuchMethodException x) {
+          if (setArgs == null) throw x;
+          m = null;
+        }
+        if (m != null) {
+          m.invoke(o, new Object[] {p});
+        }
+      }
+
+      return (Component) o;
     } catch (Exception e) {
       e.printStackTrace();
       throw new ComponentFactoryException("Component cannot be instantiated", desc, e);

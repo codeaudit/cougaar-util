@@ -233,7 +233,7 @@ public abstract class BindingUtility {
     Method init = null;
     try {
       try {
-        init = childClass.getMethod(method, null);
+        init = childClass.getMethod(method, (Class[]) null);
       } catch (NoSuchMethodException e1) { }
       if (init != null) {
         init.invoke(child, new Object[] {});
