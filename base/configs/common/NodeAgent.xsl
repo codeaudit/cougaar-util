@@ -592,6 +592,14 @@ For additional notes, see "SimpleAgent.xsl".
         <argument>/wp</argument>
       </component>
 
+      <!-- logging level editor ("/log") -->
+      <component
+        name='org.cougaar.core.logging.LoggingConfigServlet()'
+        class='org.cougaar.core.logging.LoggingConfigServlet'
+        priority='COMPONENT'
+        insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
+      </component>
+
       <!-- component model view -->
       <component
         name='org.cougaar.core.util.ComponentViewServlet(/components)'
