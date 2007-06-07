@@ -103,8 +103,8 @@ public class TestArguments extends TestCase {
 
     assertEquals(
         "{one=[1], two=[2], "+
-        (hasProp ? "fromProp=["+fromProp+"]" : "")+
-        ", def=[ault]}",
+        (hasProp ? "fromProp=["+fromProp+"], " : "")+
+        "def=[ault]}",
         args.toString());
 
     assertEquals("1", args.getString("one"));
@@ -115,6 +115,35 @@ public class TestArguments extends TestCase {
     assertEquals(
         (hasProp ? Integer.parseInt(fromProp) : 1234),
         args.getInt("fromProp", 1234));
+  }
+
+  // test "split" method
+  public void test_split0() {
+    Arguments args = new Arguments(
+        "foo=f1, bar=b1, qux=q1,"+
+        "foo=f2, bar=b2, qux=q2,"+
+        "foo=f3, bar=b3, qux=q3");
+    List<Arguments> l = args.split();
+
+    assertEquals(3, l.size());
+    assertEquals("{foo=[f1], bar=[b1], qux=[q1]}", l.get(0).toString());
+    assertEquals("{foo=[f2], bar=[b2], qux=[q2]}", l.get(1).toString());
+    assertEquals("{foo=[f3], bar=[b3], qux=[q3]}", l.get(2).toString());
+  }
+
+  // test "split" method with mixed value sizes
+  public void test_split1() {
+    Arguments args = new Arguments(
+        "a=b,"+
+        "x=v0, x=v1, x=v2,"+
+        "z=42,"+
+        "p=q, p=r");
+    List<Arguments> l = args.split();
+
+    assertEquals(3, l.size());
+    assertEquals("{a=[b], x=[v0], z=[42], p=[q]}", l.get(0).toString());
+    assertEquals("{x=[v1], p=[r]}", l.get(1).toString());
+    assertEquals("{x=[v2]}", l.get(2).toString());
   }
 
   // test "swap" method

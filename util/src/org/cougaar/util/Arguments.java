@@ -335,6 +335,63 @@ implements Serializable {
     return Collections.unmodifiableList(ret);
   }
 
+  /**
+   * Split this arguments instance of String-to-List[N] pairs into a List of 
+   * "flattened" Arguments with String-to-List[1] pairs.
+   * <p>
+   * This is useful to group together same-named arguments.
+   * <pre>
+   * For example, the constructor input:
+   *   "foo=f1, bar=b1, qux=q1,
+   *    foo=f2, bar=b2, qux=q2,
+   *    foo=f3, bar=b3, qux=q3"
+   * will be parsed as:
+   *   {foo=[f1,f2,f3], bar=[b1,b2,b3], qux=[q1,q2,q3]}
+   * and can be split into:
+   *   [{foo=[f1], bar=[b1], qux=[q1]},
+   *    {foo=[f2], bar=[b2], qux=[q2]},
+   *    {foo=[f3], bar=[b3], qux=[q3]}}
+   * This simplifies iteration:
+   *   for (Arguments a : args.split()) {
+   *     System.out.println("foo is "+a.getString("foo"));
+   *   }
+   * which will print:
+   *   foo is f1
+   *   foo is f2
+   *   foo is f3
+   * </pre>
+   *
+   * @return a List of Arguments.
+   */
+  public List<Arguments> split() {
+    int n = 1;
+    if (!(m instanceof OptimizedMap)) {
+      for (List<String> l : m.values()) {
+        n = Math.max(n, l.size());
+      }
+    }
+    if (n == 1) return Collections.singletonList(this);
+
+    List<Map<String,String>> ma = new ArrayList<Map<String,String>>(n);
+    for (int i = 0; i < n; i++) {
+      ma.add(new LinkedHashMap<String,String>());
+    }
+
+    for (Map.Entry<String,List<String>> me : m.entrySet()) {
+      String key = me.getKey();
+      List<String> l = me.getValue();
+      for (int i = 0; i < l.size(); i++) {
+        ma.get(i).put(key, l.get(i));
+      }
+    }
+
+    List<Arguments> ret = new ArrayList<Arguments>(n);
+    for (Map<String,String> mi : ma) {
+      ret.add(new Arguments(mi));
+    }
+    return Collections.unmodifiableList(ret);
+  }
+
   //
   // Modifiers
   //
