@@ -36,6 +36,7 @@ public class UtilTest extends TestCase {
 
   public static Test suite() {
     TestSuite suite= new TestSuite("Cougaar Utility Class Tests");
+    suite.addTest(new TestSuite(TestArguments.class));
     suite.addTest(new TestSuite(TestCircularQueue.class));
     suite.addTest(new TestSuite(TestDBProperties.class));
     suite.addTest(new TestSuite(TestMappings.class));
