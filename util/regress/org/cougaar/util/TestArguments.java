@@ -42,46 +42,76 @@ import org.cougaar.bootstrap.SystemProperties;
 
 public class TestArguments extends TestCase {
 
-  // test the typical plugin usage
+  // test a trivial case
   public void test_parse0() {
-    Collection c = Arrays.asList(new String[] {
-      "foo=bar", "x=y", "count=1234"});
-    String clname = "org.MyPlugin";
-
-    Arguments args = new Arguments(c, clname+".");
+    Arguments args = new Arguments("foo=bar, x=y, num=1234");
 
     assertEquals(args.getString("foo"), "bar");
     assertEquals(args.getString("x"), "y");
-    assertEquals(args.getInt("count"), 1234);
+    assertEquals(args.getInt("num"), 1234);
+  }
 
-    String propertyPrefix = clname+".";
-    Properties props = 
-      SystemProperties.getSystemPropertiesWithPrefix(
-          propertyPrefix);
-    if (props != null && !props.isEmpty()) {
-      for (Enumeration en = props.propertyNames();
-          en.hasMoreElements();
-          ) {
+  // test the typical plugin usage w/ -D support
+  //
+  // e.g., run with:
+  //   -Dorg.cougaar.util.TestArguments$MyPlugin.a=b
+  //   -Dorg.cougaar.util.TestArguments$MyPlugin.foo=ignoreMe
+  //   -Dorg.cougaar.util.TestArguments$MyBase.p=q
+  //   -Dorg.cougaar.util.TestArguments$MyBase.a=hideMe
+  //   -Djava.lang.Object.j=k
+  //   -Djava.util.List.unrela=tedStuff
+  // and you should get:
+  //   foo=bar, num=1234, a=b, p=q, j=k
+  public void test_parse1() {
+    Class cl = MyPlugin.class;
+    Collection c = Arrays.asList(new String[] {"foo=bar", "num=1234"});
+
+    Arguments args = new Arguments(c, cl);
+
+    assertEquals(args.getString("foo"), "bar");
+    assertEquals(args.getInt("num"), 1234);
+
+    Map<String,String> props = getProps(cl);
+    for (Map.Entry<String,String> me : props.entrySet()) {
+      String key = me.getKey();
+      if ("foo".equals(key) || "num".equals(key)) continue;
+      assertEquals(args.getString(key), me.getValue());
+    }
+  }
+  private Map<String,String> getProps(Object o) {
+    if (o == null) return Collections.emptyMap();
+    List<String> prefixes;
+    if (o instanceof Class) {
+      prefixes = new ArrayList<String>();
+      for (Class cl = (Class) o; cl != null; cl = cl.getSuperclass()) {
+        prefixes.add(cl.getName()+".");
+      }
+    } else {
+      prefixes = Collections.singletonList((String) o);
+    }
+    Map<String,String> ret = new LinkedHashMap<String,String>();
+    for (String s : prefixes) {
+      Properties props = SystemProperties.getSystemPropertiesWithPrefix(s);
+      if (props == null || props.isEmpty()) continue;
+      for (Enumeration en = props.propertyNames(); en.hasMoreElements(); ) {
         String name = (String) en.nextElement();
-        if (!name.startsWith(propertyPrefix)) continue;
-        String key = name.substring(propertyPrefix.length());
+        if (!name.startsWith(s)) continue;
+        String key = name.substring(s.length());
+        if (key.length() <= 0) continue;
+        if (ret.containsKey(key)) continue;
         String value = props.getProperty(name);
-
-        List<String> l = args.getStrings(key);
-
-        assertTrue(
-            "Missing -D"+name+"="+value+" in "+args,
-            l != null && l.contains(value));
+        ret.put(key, value);
       }
     }
+    return ret;
   }
 
   // test non-string input types
-  public void test_parse1() {
+  public void test_parse2() {
     Arguments a1 = new Arguments(
         new String[] {"alpha=beta", "foo=bar", "x=y"});
     assertEquals("{alpha=[beta], foo=[bar], x=[y]}", a1.toString());
-    Map m = new LinkedHashMap();
+    Map<String,String> m = new LinkedHashMap<String,String>();
     m.put("alpha", "zeta");
     m.put("x", "z");
     Arguments a2 = new Arguments(m, null, a1);
@@ -89,7 +119,7 @@ public class TestArguments extends TestCase {
   }
 
   // test defaults and non-string types
-  public void test_parse2() {
+  public void test_parse3() {
     Arguments args = new Arguments(
         "one=1, filterMe=blah, two=2",
         "org.MyPlugin.",
@@ -273,4 +303,9 @@ public class TestArguments extends TestCase {
     assertEquals(a1.toString(), a2.toString());
   }
 
+
+  // dummy classes for -D prefix testing:
+  public static class MyPlugin extends MyBase { }
+  public static class MyBase extends MyModel { }
+  public static class MyModel { }
 }

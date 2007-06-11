@@ -122,7 +122,7 @@ public abstract class ComponentFactory
         setArgs = null;
       }
       if (setArgs != null) {
-        Arguments args = new Arguments(p, cc.getName()+".");
+        Arguments args = new Arguments(p, cc);
         if (args.isEmpty()) {
           args = Arguments.EMPTY_INSTANCE;
         }

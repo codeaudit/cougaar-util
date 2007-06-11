@@ -76,7 +76,7 @@ import org.cougaar.bootstrap.SystemProperties;
  *     // The "setArguments" method is special -- it's an optional method
  *     // that's found by the component model via reflection.  The passed-in
  *     // arguments instance is created via:
- *     //    new Arguments(listOfStrings, classname+".");
+ *     //    new Arguments(listOfStrings, classname);
  *     public void setArguments(Arguments args) { this.args = args; }
  *
  *     public void load() {
@@ -130,17 +130,18 @@ implements Serializable {
   public Arguments(Object o) {
     this(o, null);
   }
-  public Arguments(Object o, String propertyPrefix) {
+  public Arguments(Object o, Object propertyPrefix) {
     this(o, propertyPrefix, null);
   }
-  public Arguments(Object o, String propertyPrefix, Object deflt) {
+  public Arguments(Object o, Object propertyPrefix, Object deflt) {
     this(o, propertyPrefix, deflt, null);
   }
   /**
    * @param o the optional input object, e.g. a List of name=value Strings,
    *   or another Arguments instance.
    * @param propertyPrefix the optional SystemProperties property prefix, e.g.
-   *   "org.MyPlugin", for "-Dorg.MyPlugin.name=value" lookups.
+   *   "org.MyPlugin.", for "-Dorg.MyPlugin.name=value" lookups.  If a class
+   *   is specified, that class's name+. and its parent's names+. will be used.
    * @param deflt the optional default values, e.g. a List of name=value
    *   Strings, or another Arguments instance.
    * @param keys the optional filter on which keys are allowed, e.g. only
@@ -148,14 +149,15 @@ implements Serializable {
    */
   public Arguments(
       Object o,
-      String propertyPrefix,
+      Object propertyPrefix,
       Object deflt,
       Object keys) {
     try {
       Map<String,List<String>> m2 = parseMap(o);
+      List<String> prefixes = parsePrefixes(propertyPrefix);
       Map<String,List<String>> def = parseMap(deflt);
       Set<String> ks = parseSet(keys);
-      this.m = parse(m2, propertyPrefix, def, ks);
+      this.m = parse(m2, prefixes, def, ks);
     } catch (Exception e) {
       throw new IllegalArgumentException(
           "Unable to create new Arguments("+
@@ -865,14 +867,31 @@ implements Serializable {
     return (String) o;
   }
 
+  private static final List<String> parsePrefixes(Object o) {
+    if (o == null) return Collections.emptyList();
+    if (o instanceof String) return Collections.singletonList((String) o);
+    if (!(o instanceof Class)) {
+      throw new IllegalArgumentException(
+          "Expecting null, a String, or a Class, not "+
+          (o == null ? "null" : (o.getClass().getName())+" "+o));
+    }
+    List<String> ret = new ArrayList<String>();
+    for (Class cl = (Class) o; cl != null; cl = cl.getSuperclass()) {
+      ret.add(cl.getName()+".");
+    }
+    return ret;
+  }
+
   /**
    * @param m a map created by "parseMap()"
+   * @param prefixes a list created by "parsePrefixes()"
    * @param deflt a map created by "parseMap()"
+   * @param keys a set created by "parseSet()"
    * @return a non-null, unmodifiable, ordered map
    */
   private static final Map<String,List<String>> parse(
       Map<String,List<String>> m,
-      String propertyPrefix,
+      List<String> prefixes,
       Map<String,List<String>> deflt,
       Set<String> keys) {
     Map<String,List<String>> ret = new LinkedHashMap<String,List<String>>();
@@ -887,18 +906,15 @@ implements Serializable {
         }
       }
     }
-    if ((propertyPrefix != null) &&
+    if ((prefixes != null && !prefixes.isEmpty()) &&
         (keys == null || (ret.size() < keys.size()))) {
-      Properties props = 
-        SystemProperties.getSystemPropertiesWithPrefix(
-            propertyPrefix);
-      if (props != null && !props.isEmpty()) {
-        for (Enumeration en = props.propertyNames();
-            en.hasMoreElements();
-            ) {
+      for (String s : prefixes) {
+        Properties props = SystemProperties.getSystemPropertiesWithPrefix(s);
+        if (props == null || props.isEmpty()) continue;
+        for (Enumeration en = props.propertyNames(); en.hasMoreElements(); ) {
           String name = (String) en.nextElement();
-          if (!name.startsWith(propertyPrefix)) continue;
-          String key = name.substring(propertyPrefix.length());
+          if (!name.startsWith(s)) continue;
+          String key = name.substring(s.length());
           if (key.length() <= 0) continue;
           if (ret.containsKey(key)) continue;
           if (keys != null && !keys.contains(key)) continue;

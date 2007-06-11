@@ -536,6 +536,7 @@
 	     deprecation="${build.compiler.deprecation}"
 	     optimize="off"
 	     debug="on">
+        <!-- <compilerarg value="-Xlint:unchecked"/> -->
 	<classpath>
 	  <path refid="junit.classpath"/>
 	</classpath>
@@ -554,6 +555,14 @@
     <!-- ====================================================================== -->
     <target name="test" depends="compile-all" if="junit.present" description="Run JUnit tests for this module">
       <junit printsummary="yes" fork="yes" dir="">
+        <!-- misc -Ds for "TestArguments#parse1()" -->
+        <jvmarg value="-Dorg.cougaar.util.TestArguments$MyPlugin.a=b"/>
+        <jvmarg value="-Dorg.cougaar.util.TestArguments$MyPlugin.foo=ignoreMe"/>
+        <jvmarg value="-Dorg.cougaar.util.TestArguments$MyBase.p=q"/>
+        <jvmarg value="-Dorg.cougaar.util.TestArguments$MyBase.a=hideMe"/>
+        <jvmarg value="-Djava.lang.Object.j=k"/>
+        <jvmarg value="-Djava.util.List.unrela=tedStuff"/>
+
 	<classpath>
 	  <pathelement location="${module.regress}" />
 	  <path refid="junit.classpath" />
