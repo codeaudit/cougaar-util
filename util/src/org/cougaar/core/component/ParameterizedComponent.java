@@ -25,10 +25,9 @@
  */
 package org.cougaar.core.component;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
-
+import java.util.Map;
+import org.cougaar.util.Arguments;
 import org.cougaar.util.GenericStateModelAdapter;
 
 /**
@@ -39,52 +38,34 @@ abstract public class ParameterizedComponent
     extends GenericStateModelAdapter
     implements Component
 {
-    private Properties parameters;
+    protected Arguments args;
 
-    public String getParameter(String key) {
-	return getParameter(key, null);
+    public void setArguments(Arguments args) {
+      this.args = args;
     }
 
-    public String getParameter(String key, String defaultValue) {
-	if (parameters != null)
-	    return parameters.getProperty(key, defaultValue);
-	else
-	    return defaultValue;
+    /** @see Arguments#getString(String) */
+    protected String getParameter(String key) {
+	return args.getString(key);
     }
-
+    /** @see Arguments#getString(String,String) */
+    protected String getParameter(String key, String defaultValue) {
+        return args.getString(key, defaultValue);
+    }
+    /** @see Arguments#getLong(String,long) */
     public long getParameter(String key, long defaultValue) {
-	String spec = getParameter(key);
-	if (spec != null) {
-	    try { return Long.parseLong(spec); }
-	    catch (NumberFormatException ex) { return defaultValue; }
-	} else {
-	    return defaultValue;
-	}
+        return args.getLong(key, defaultValue);
     }
-
+    /** @see Arguments#getDouble(String,double) */
     public double getParameter(String key, double defaultValue) {
-	String spec = getParameter(key);
-	if (spec != null) {
-	    try { return Double.parseDouble(spec); }
-	    catch (NumberFormatException ex) { return defaultValue; }
-	} else {
-	    return defaultValue;
-	}
+        return args.getDouble(key, defaultValue);
     }
-
-    public void setParameter(Object param) {
-	parameters = new Properties();
-	if (param instanceof List) {
-	    Iterator itr = ((List) param).iterator();
-	    while(itr.hasNext()) {
-		String property = (String) itr.next();
-		int sepr = property.indexOf('=');
-		if (sepr < 0) continue;
-		String key = property.substring(0, sepr);
-		String value = property.substring(++sepr);
-		parameters.setProperty(key, value);
-	    }
-	}
+    /** @see Arguments#getStrings(String) */
+    public List getParameterValues(String key) {
+        return args.getStrings(key);
     }
-
+    /** @see Arguments */
+    public Map getParameterMap() {
+        return args;
+    }
 }
