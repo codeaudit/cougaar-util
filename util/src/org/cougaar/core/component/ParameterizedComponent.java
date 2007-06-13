@@ -99,11 +99,11 @@ abstract public class ParameterizedComponent
     @Retention(RetentionPolicy.RUNTIME)
     public @interface ArgSpec {
         String name();
-        BaseDataType valueType();
-	boolean sequence() default false;
-	boolean required() default true;
+        BaseDataType valueType() default BaseDataType.STRING;
+        boolean sequence() default false;
+        boolean required() default true;
         String defaultValue() default "";
-        String description();
+        String description() default "no description";
     }
     
     
@@ -129,6 +129,12 @@ abstract public class ParameterizedComponent
     
     protected Arguments args;
     
+    /**
+     * 
+     * @param field
+     * @param groupName
+     * @return true iff the field is a member of the given group
+     */
     private boolean isGroupMember(Field field, String groupName) {
 	for (Annotation anno : field.getAnnotations()) {
 	    Class annoClass = anno.annotationType();
@@ -138,11 +144,11 @@ abstract public class ParameterizedComponent
 		    return true;
 		}
 	    } else if (annoClass.getName().endsWith("ArgGroup")) {
-		Class[] parameterTypes = {};
-		Object[] args = {};
 		try {
+		    Class[] parameterTypes = {};
 		    Method roleGetter = annoClass.getDeclaredMethod("role", parameterTypes);
 		    Method nameGetter = annoClass.getDeclaredMethod("name", parameterTypes);
+		    Object[] args = {};
 		    ArgGroupRole role = (ArgGroupRole) roleGetter.invoke(anno, args);
 		    String name = (String) nameGetter.invoke(anno, args);
 		    if (role == ArgGroupRole.MEMBER && name.equals(groupName)) {
@@ -165,9 +171,26 @@ abstract public class ParameterizedComponent
 	boolean isRequired = spec.required();
 	String rawValue;
 	if (arguments.containsKey(key)) {
-	    rawValue = arguments.getString(key);
+	    List<String> values = arguments.getStrings(key);
+	    if (values.isEmpty()) {
+		// Can this really happen?
+		if (isRequired) {
+		    // TODO: Use logging service
+		    System.err.println("Warning: required argument " +key+ " was not provided");
+		    return;
+		} else {
+		    rawValue = defaultValue;
+		}
+	    } else {
+		rawValue = values.get(0);
+		if (values.size() > 1) {
+		    // TODO: Use logging service
+		    System.err.println("Warning: argument " +key+ " has multiple values");
+		}
+	    }
 	} else if (isRequired) {
-	    System.err.println("Required argument " +key+ " was not provided");
+	    // TODO: Use logging service
+	    System.err.println("Warning: required argument " +key+ " was not provided");
 	    return;
 	} else {
 	    rawValue = defaultValue;
