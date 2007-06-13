@@ -138,20 +138,19 @@ abstract public class ParameterizedComponent
 		    return true;
 		}
 	    } else if (annoClass.getName().endsWith("ArgGroup")) {
-		String className = annoClass.getName();
-		String name = className.substring(0, className.length()-8);
 		Class[] parameterTypes = {};
 		Object[] args = {};
-		ArgGroupRole role = null;
 		try {
 		    Method roleGetter = annoClass.getDeclaredMethod("role", parameterTypes);
-		    role = (ArgGroupRole) roleGetter.invoke(anno, args);
+		    Method nameGetter = annoClass.getDeclaredMethod("name", parameterTypes);
+		    ArgGroupRole role = (ArgGroupRole) roleGetter.invoke(anno, args);
+		    String name = (String) nameGetter.invoke(anno, args);
+		    if (role == ArgGroupRole.MEMBER && name.equals(groupName)) {
+			return true;
+		    }
 		} catch (Exception e) {
 		    return false;
 		}		
-		if (role == ArgGroupRole.MEMBER && name.equals(groupName)) {
-		    return true;
-		}
 	    }
 	}
 	return false;
@@ -214,7 +213,7 @@ abstract public class ParameterizedComponent
      */
     public void setGroupFields(String groupName, Arguments arguments) {
 	for (Field field : getClass().getFields()) {
-            if (isGroupMember(field, groupName) && field.isAnnotationPresent(ArgSpec.class)) {
+            if (field.isAnnotationPresent(ArgSpec.class) && isGroupMember(field, groupName)) {
         	setFieldFromSpec(field, arguments);
             }
         }
