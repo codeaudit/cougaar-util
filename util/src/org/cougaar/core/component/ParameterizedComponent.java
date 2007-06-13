@@ -48,6 +48,8 @@ abstract public class ParameterizedComponent
         extends GenericStateModelAdapter
         implements Component {
     
+    public static final String NO_VALUE = "###no-value###";
+    
     public static class ParseException extends Exception {
 	public ParseException(Throwable cause) {
 	    super(cause);
@@ -98,11 +100,14 @@ abstract public class ParameterizedComponent
     
     @Retention(RetentionPolicy.RUNTIME)
     public @interface ArgSpec {
-        String name();
+        /**
+	 * 
+	 */
+	String name();
         BaseDataType valueType() default BaseDataType.STRING;
         boolean sequence() default false;
         boolean required() default true;
-        String defaultValue() default "";
+        String defaultValue() default NO_VALUE;
         String description() default "no description";
     }
     
@@ -172,21 +177,10 @@ abstract public class ParameterizedComponent
 	String rawValue;
 	if (arguments.containsKey(key)) {
 	    List<String> values = arguments.getStrings(key);
-	    if (values.isEmpty()) {
-		// Can this really happen?
-		if (isRequired) {
-		    // TODO: Use logging service
-		    System.err.println("Warning: required argument " +key+ " was not provided");
-		    return;
-		} else {
-		    rawValue = defaultValue;
-		}
-	    } else {
-		rawValue = values.get(0);
-		if (values.size() > 1) {
-		    // TODO: Use logging service
-		    System.err.println("Warning: argument " +key+ " has multiple values");
-		}
+	    rawValue = values.get(0);
+	    if (values.size() > 1) {
+		// TODO: Use logging service
+		// System.err.println("INFO: argument " +key+ " has multiple values");
 	    }
 	} else if (isRequired) {
 	    // TODO: Use logging service
@@ -194,6 +188,9 @@ abstract public class ParameterizedComponent
 	    return;
 	} else {
 	    rawValue = defaultValue;
+	}
+	if (rawValue.equals(NO_VALUE)) {
+	    return;
 	}
 	Object value;
 	try {
