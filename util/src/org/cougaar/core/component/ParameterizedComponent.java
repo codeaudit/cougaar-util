@@ -42,7 +42,6 @@ implements Component {
     
     public void setArguments(Arguments args) {
         this.args = args;
-        args.setAllFields(this);
     }
     /** @see Arguments#getString(String) */
     protected String getParameter(String key) {
