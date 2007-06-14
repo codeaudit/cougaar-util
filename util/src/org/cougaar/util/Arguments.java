@@ -1274,7 +1274,7 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
         return false;
     }
 
-    private void setSequenceFieldFromSpec(Field field, Spec spec) 
+    private void setSequenceFieldFromSpec(Field field, Object object, Spec spec) 
             throws ParseException, IllegalAccessException {
         String defaultValue = spec.defaultValue();
         String key = spec.name();
@@ -1307,10 +1307,10 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
         for (String rawValue : rawValues) {
             values.add(type.parse(rawValue));
         }
-        field.set(this, values);
+        field.set(object, values);
     }
 
-    private void setSimpleFieldFromSpec(Field field, Spec spec)
+    private void setSimpleFieldFromSpec(Field field, Object object, Spec spec)
            throws ParseException, IllegalAccessException {
         String defaultValue = spec.defaultValue();
         String key = spec.name();
@@ -1334,16 +1334,16 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
         if (rawValue.equals(NO_VALUE)) {
             return;
         }
-        field.set(this, type.parse(rawValue));
+        field.set(object, type.parse(rawValue));
     }
 
-    private void setFieldFromSpec(Field field) {
+    private void setFieldFromSpec(Field field, Object object) {
         Spec spec = field.getAnnotation(Spec.class);
         try {
             if (spec.sequence()) {
-                setSequenceFieldFromSpec(field, spec);
+                setSequenceFieldFromSpec(field, object, spec);
             } else {
-                setSimpleFieldFromSpec(field, spec);
+                setSimpleFieldFromSpec(field, object, spec);
             }
         } catch (ParseException e) {
             // TODO Use loggger
@@ -1358,10 +1358,10 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
      * Set values of all fields that have ArgSpecs.
      * 
      */
-    public void setAllFields() {
-        for (Field field : getClass().getFields()) {
+    public void setAllFields(Object object) {
+        for (Field field : object.getClass().getFields()) {
             if (field.isAnnotationPresent(Spec.class)) {
-                setFieldFromSpec(field);
+                setFieldFromSpec(field, object);
             }
         }
     }
@@ -1371,10 +1371,10 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
      * the given arguments.
      * 
      */
-    public void setGroupFields(String groupName) {
-        for (Field field : getClass().getFields()) {
+    public void setGroupFields(Object object, String groupName) {
+        for (Field field : object.getClass().getFields()) {
             if (field.isAnnotationPresent(Spec.class) && isGroupMember(field, groupName)) {
-                setFieldFromSpec(field);
+                setFieldFromSpec(field, object);
             }
         }
     }
