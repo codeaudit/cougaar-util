@@ -41,9 +41,9 @@ implements Component {
     protected Arguments args;
     
     public void setArguments(Arguments args) {
-      this.args = args;
-     }
-
+        this.args = args;
+        args.setAllFields(this);
+    }
     /** @see Arguments#getString(String) */
     protected String getParameter(String key) {
 	return args.getString(key);
