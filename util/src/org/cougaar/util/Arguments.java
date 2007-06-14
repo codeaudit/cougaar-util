@@ -42,6 +42,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -63,12 +64,12 @@ import org.cougaar.bootstrap.SystemProperties;
  * Example use:
  * 
  * <pre>
- *   Arguments args = new Arguments("x=y, q=one, q=two, z=99");
- *   String x = args.getString("x");
- *   assert "y".equals(x);
- *   int z = args.getInt("z", 1234);
+ *   Arguments args = new Arguments(&quot;x=y, q=one, q=two, z=99&quot;);
+ *   String x = args.getString(&quot;x&quot;);
+ *   assert &quot;y&quot;.equals(x);
+ *   int z = args.getInt(&quot;z&quot;, 1234);
  *   assert z == 99;
- *   List&lt;String&gt; q = args.getStrings("q");
+ *   List&lt;String&gt; q = args.getStrings(&quot;q&quot;);
  *   assert q != null &amp;&amp; q.size() == 2;
  * </pre>
  * 
@@ -80,20 +81,20 @@ import org.cougaar.bootstrap.SystemProperties;
  *   package org;
  *   public class MyPlugin ... {
  *     private Arguments args;
- *     // The "setArguments" method is special -- it's an optional method
+ *     // The &quot;setArguments&quot; method is special -- it's an optional method
  *     // that's found by the component model via reflection.  The passed-in
  *     // arguments instance is created via:
  *     //    new Arguments(listOfStrings, classname);
  *     public void setArguments(Arguments args) { this.args = args; }
  *     public void load() {
  *       super.load();
- *       // Get the value of our "foo" argument
+ *       // Get the value of our &quot;foo&quot; argument
  *       //
- *       // First looks for a plugin XML argument named "foo",
- *       // next looks for a "-Dorg.MyPlugin.foo=" system property,
+ *       // First looks for a plugin XML argument named &quot;foo&quot;,
+ *       // next looks for a &quot;-Dorg.MyPlugin.foo=&quot; system property,
  *       // otherwise the value will be the 1234 default.
- *       int foo = args.getInt("foo", 1234);
- *       System.out.println("foo is "+foo);
+ *       int foo = args.getInt(&quot;foo&quot;, 1234);
+ *       System.out.println(&quot;foo is &quot;+foo);
  *     }
  *   }
  * </pre>
@@ -106,17 +107,19 @@ import org.cougaar.bootstrap.SystemProperties;
  *   public class MyPlugin ... {
  *     private int foo = 1234;
  *     public void setArguments(Arguments args) { args.callSetters(this); }
- *     // This "set<i>NAME</i>(<i>TYPE</i>)" method is found by reflection.
+ *     // This &quot;set&lt;i&gt;NAME&lt;/i&gt;(&lt;i&gt;TYPE&lt;/i&gt;)&quot; method is found by reflection.
  *     // The args class will only invoke the setters for which it has values.
  *     public void setFoo(int i) { this.foo = i; }
  *     public void load() {
  *       super.load();
- *       System.out.println("foo is "+foo);
+ *       System.out.println(&quot;foo is &quot;+foo);
  *     }
  *   }
  * </pre>
  */
-public final class Arguments extends AbstractMap<String, List<String>> implements Serializable {
+public final class Arguments extends AbstractMap<String, List<String>>
+    implements
+        Serializable {
 
     /** A singleton instance for an empty arguments */
     public static final Arguments EMPTY_INSTANCE = new Arguments(null);
@@ -141,20 +144,16 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
     }
 
     /**
-     * @param o
-     *            the optional input object, e.g. a List of name=value Strings,
-     *            or another Arguments instance.
-     * @param propertyPrefix
-     *            the optional SystemProperties property prefix, e.g.
+     * @param o the optional input object, e.g. a List of name=value Strings, or
+     *            another Arguments instance.
+     * @param propertyPrefix the optional SystemProperties property prefix, e.g.
      *            "org.MyPlugin.", for "-Dorg.MyPlugin.name=value" lookups. If a
      *            class is specified, that class's name+. and its parent's
      *            names+. will be used.
-     * @param deflt
-     *            the optional default values, e.g. a List of name=value
+     * @param deflt the optional default values, e.g. a List of name=value
      *            Strings, or another Arguments instance.
-     * @param keys
-     *            the optional filter on which keys are allowed, e.g. only allow
-     *            (A, B, C)
+     * @param keys the optional filter on which keys are allowed, e.g. only
+     *            allow (A, B, C)
      */
     public Arguments(Object o, Object propertyPrefix, Object deflt, Object keys) {
         try {
@@ -165,13 +164,20 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
             this.m = parse(m2, prefixes, def, ks);
         } catch (Exception e) {
             throw new IllegalArgumentException("Unable to create new Arguments("
-                    + "\n  o = "
-                    + o
-                    + (propertyPrefix == null && deflt == null && keys == null ? ""
-                            : (",\n  propertyPrefix = " + propertyPrefix + (deflt == null
-                                    && keys == null ? ""
-                                    : (",\n  deflt = " + deflt + (keys == null ? ""
-                                            : ",\n  keys = " + keys))))) + ")", e);
+                                                       + "\n  o = "
+                                                       + o
+                                                       + (propertyPrefix == null
+                                                               && deflt == null
+                                                               && keys == null ? ""
+                                                                              : (",\n  propertyPrefix = "
+                                                                                      + propertyPrefix + (deflt == null
+                                                                                      && keys == null ? ""
+                                                                                                     : (",\n  deflt = "
+                                                                                                             + deflt + (keys == null ? ""
+                                                                                                                                    : ",\n  keys = "
+                                                                                                                                            + keys)))))
+                                                       + ")",
+                                               e);
         }
     }
 
@@ -373,9 +379,9 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
      * 
      * <pre>
      * For example, the constructor input:
-     *   "foo=f1, bar=b1, qux=q1,
+     *   &quot;foo=f1, bar=b1, qux=q1,
      *    foo=f2, bar=b2, qux=q2,
-     *    foo=f3, bar=b3, qux=q3"
+     *    foo=f3, bar=b3, qux=q3&quot;
      * will be parsed as:
      *   {foo=[f1,f2,f3], bar=[b1,b2,b3], qux=[q1,q2,q3]}
      * and can be split into:
@@ -384,7 +390,7 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
      *    {foo=[f3], bar=[b3], qux=[q3]}}
      * This simplifies iteration:
      *   for (Arguments a : args.split()) {
-     *     System.out.println("foo is "+a.getString("foo"));
+     *     System.out.println(&quot;foo is &quot;+a.getString(&quot;foo&quot;));
      *   }
      * which will print:
      *   foo is f1
@@ -414,6 +420,39 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
             List<String> l = me.getValue();
             for (int i = 0; i < l.size(); i++) {
                 ma.get(i).put(key, l.get(i));
+            }
+        }
+
+        List<Arguments> ret = new ArrayList<Arguments>(n);
+        for (Map<String, String> mi : ma) {
+            ret.add(new Arguments(mi));
+        }
+        return Collections.unmodifiableList(ret);
+    }
+
+    /**
+     * Like {@link #split} except the sub Argument maps are restricted to
+     * include only given keys.
+     */
+    public List<Arguments> split(Set<String> keys) {
+        int n = 1;
+        if (!(m instanceof OptimizedMap)) {
+            for (List<String> l : m.values()) {
+                n = Math.max(n, l.size());
+            }
+        }
+        List<Map<String, String>> ma = new ArrayList<Map<String, String>>(n);
+        for (int i = 0; i < n; i++) {
+            ma.add(new LinkedHashMap<String, String>());
+        }
+
+        for (Map.Entry<String, List<String>> me : m.entrySet()) {
+            String key = me.getKey();
+            if (keys.contains(key)) {
+                List<String> l = me.getValue();
+                for (int i = 0; i < l.size(); i++) {
+                    ma.get(i).put(key, l.get(i));
+                }
             }
         }
 
@@ -461,16 +500,15 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
 
     /** @see #setStrings */
     public Arguments setString(String key, String value) {
-        List<String> l = (value == null ? null : Collections.singletonList(value));
+        List<String> l = (value == null ? null
+                                       : Collections.singletonList(value));
         return setStrings(key, l);
     }
 
     /**
-     * @param key
-     *            the non-null key
-     * @param values
-     *            the values, which can be null or empty to remove the specified
-     *            key's entry
+     * @param key the non-null key
+     * @param values the values, which can be null or empty to remove the
+     *            specified key's entry
      * @return returns a possibly new Arguments instance (like
      *         {@link String#trim} and similar copy-on-modify classes) where
      *         "getStrings(key)" will be equal to the specified "values"
@@ -489,7 +527,8 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
             filter.remove(key);
             return new Arguments(this, null, null, filter);
         } else {
-            Map<String, List<String>> add = Collections.singletonMap(key, values);
+            Map<String, List<String>> add = Collections.singletonMap(key,
+                                                                     values);
             return new Arguments(add, null, this);
         }
     }
@@ -526,19 +565,18 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
      * For example, the name=value pair "x=y" will look for:
      * 
      * <pre>
-     *   public void setX(<i>type</i>) {..}
+     *   public void setX(&lt;i&gt;type&lt;/i&gt;) {..}
      * </pre>
      * 
      * and field:
      * 
      * <pre>
-     *   public <i>type</i> x;
+     *   public &lt;i&gt;type&lt;/i&gt; x;
      * </pre>
      * 
      * If neither are found then "x" will be included in the returned Set.
      * 
-     * @param o
-     *            Object that has the setter methods &amp; fields
+     * @param o Object that has the setter methods &amp; fields
      * @return Subset of the {@link #keySet} that could not be set
      */
     public Set<String> callSetters(Object o) {
@@ -558,7 +596,8 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
             boolean found = false;
 
             // look for setter method(s)
-            String setter_name = "set" + Character.toUpperCase(key.charAt(0)) + key.substring(1);
+            String setter_name = "set" + Character.toUpperCase(key.charAt(0))
+                    + key.substring(1);
             for (int i = 0; i < methods.length; i++) {
                 Method mi = methods[i];
                 if (!Modifier.isPublic(mi.getModifiers())) {
@@ -576,7 +615,8 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
                     mi.invoke(o, new Object[] {arg});
                     found = true;
                 } catch (Exception e) {
-                    throw new RuntimeException("Unable to set " + key + "=" + l + " on " + mi, e);
+                    throw new RuntimeException("Unable to set " + key + "=" + l
+                            + " on " + mi, e);
                 }
             }
 
@@ -595,7 +635,8 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
                     field.set(o, arg);
                     found = true;
                 } catch (Exception e) {
-                    throw new RuntimeException("Unable to set " + key + "=" + l + " on " + field, e);
+                    throw new RuntimeException("Unable to set " + key + "=" + l
+                            + " on " + field, e);
                 }
             }
 
@@ -641,7 +682,8 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
         }
         // RFE support primitive wrappers, e.g. Integer? Boolean?
         // RFE support arrays, e.g. double[]? String[]?
-        throw new UnsupportedOperationException("Unknown type " + type + " for " + l);
+        throw new UnsupportedOperationException("Unknown type " + type
+                + " for " + l);
     }
 
     //
@@ -669,20 +711,20 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
      *   A=B
      *   X=V0,V1,V2
      * then:
-     *   toString("the_$key is the_$value", " * ");
+     *   toString(&quot;the_$key is the_$value&quot;, &quot; * &quot;);
      * would return:
      *   the_A is the_B * the_X is the_V0
      * and:
-     *   toString("($key eq $vals)", " +\n");
+     *   toString(&quot;($key eq $vals)&quot;, &quot; +\n&quot;);
      * would return:
      *   (A eq B) +
      *   (X eq [V0, V1, V2])
      * and:
-     *   toString("$key=$veach", "&amp;");
+     *   toString(&quot;$key=$veach&quot;, &quot;&amp;&quot;);
      * would return a URL-like string:
      *   A=B&amp;X=V0&amp;X=V1&amp;X=V2
      * and:
-     *   "{" + toString("$key=$vlist", ", ") + "}";
+     *   &quot;{&quot; + toString(&quot;$key=$vlist&quot;, &quot;, &quot;) + &quot;}&quot;;
      * would return the standard {@link Map#toString} format:
      *   {A=[B], X=[V0, V1, V2]}
      * </pre>
@@ -699,10 +741,8 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
      * <li>"$vlist" is the "[]" wrapped list (e.g. "[B]" or "[V0, V1, V2]")</li>
      * </ul>
      * 
-     * @param format
-     *            optional format, defaults to "$key=$vlist"
-     * @param separator
-     *            optional separator, defaults to ", "
+     * @param format optional format, defaults to "$key=$vlist"
+     * @param separator optional separator, defaults to ", "
      * 
      * @return a string with each entry in the given format, where every "$key"
      *         is replaced with the map key and every "$value" is replaced with
@@ -749,12 +789,12 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
                         hasEach = true;
                         value = l.get(eachIndex);
                     } else {
-                        value =
-                                ("key".equals(tag) ? k : "value".equals(tag) ? l.get(0)
-                                        : "vals".equals(tag) ? (l.size() == 1 ? l.get(0)
-                                                : l.toString())
-                                                : "vlist".equals(tag) ? l.toString()
-                                                        : "InternalError!");
+                        value = ("key".equals(tag) ? k
+                                                  : "value".equals(tag) ? l.get(0)
+                                                                       : "vals".equals(tag) ? (l.size() == 1 ? l.get(0)
+                                                                                                            : l.toString())
+                                                                                           : "vlist".equals(tag) ? l.toString()
+                                                                                                                : "InternalError!");
                     }
                     x.appendReplacement(buf, value);
                 }
@@ -822,17 +862,20 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
             Object oi = iter.next();
             if (!(oi instanceof String)) {
                 throw new IllegalArgumentException("Expecting a Collection of Strings, not "
-                        + (oi == null ? "null" : (oi.getClass().getName() + " " + oi)));
+                        + (oi == null ? "null"
+                                     : (oi.getClass().getName() + " " + oi)));
             }
             String s = (String) oi;
             int sep = s.indexOf('=');
             if (sep < 0) {
-                throw new IllegalArgumentException("Missing a \"=\" separator for \"" + s + "\"");
+                throw new IllegalArgumentException("Missing a \"=\" separator for \""
+                        + s + "\"");
             }
             String key = s.substring(0, sep).trim();
             String value = s.substring(sep + 1).trim();
             if (key.length() <= 0) {
-                throw new IllegalArgumentException("Key length is zero for \"" + s + "\"");
+                throw new IllegalArgumentException("Key length is zero for \""
+                        + s + "\"");
             }
             if (ret == null) {
                 ret = new LinkedHashMap<String, List<String>>();
@@ -925,7 +968,8 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
 
     private static final String parseString(Object o, String desc) {
         if (!(o instanceof String)) {
-            throw new IllegalArgumentException("Expecting a " + desc + " String, not "
+            throw new IllegalArgumentException("Expecting a " + desc
+                    + " String, not "
                     + (o == null ? "null" : (o.getClass().getName()) + " " + o));
         }
         return (String) o;
@@ -950,14 +994,10 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
     }
 
     /**
-     * @param m
-     *            a map created by "parseMap()"
-     * @param prefixes
-     *            a list created by "parsePrefixes()"
-     * @param deflt
-     *            a map created by "parseMap()"
-     * @param keys
-     *            a set created by "parseSet()"
+     * @param m a map created by "parseMap()"
+     * @param prefixes a list created by "parsePrefixes()"
+     * @param deflt a map created by "parseMap()"
+     * @param keys a set created by "parseSet()"
      * @return a non-null, unmodifiable, ordered map
      */
     private static final Map<String, List<String>> parse(Map<String, List<String>> m,
@@ -1007,7 +1047,8 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
                 }
             }
         }
-        if ((deflt != null && !deflt.isEmpty()) && (keys == null || (ret.size() < keys.size()))) {
+        if ((deflt != null && !deflt.isEmpty())
+                && (keys == null || (ret.size() < keys.size()))) {
             for (Map.Entry<String, List<String>> me : deflt.entrySet()) {
                 String key = me.getKey();
                 if (ret.containsKey(key)) {
@@ -1024,7 +1065,9 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
             return Collections.emptyMap();
         }
         if (n == 1) {
-            Map.Entry<String, List<String>> me = ret.entrySet().iterator().next();
+            Map.Entry<String, List<String>> me = ret.entrySet()
+                                                    .iterator()
+                                                    .next();
             return Collections.singletonMap(me.getKey(), me.getValue());
         }
         if (n <= OPTIMIZE_SIZE) {
@@ -1061,10 +1104,8 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
      * &nbsp; (1) singletonList wrappers around strings, and<br>
      * &nbsp; (2) unmodifiableList wrappers around ArrayLists of strings.<br>
      */
-    private static final class OptimizedMapImpl extends AbstractMap<String, List<String>>
-        implements
-            OptimizedMap,
-            Serializable {
+    private static final class OptimizedMapImpl extends
+        AbstractMap<String, List<String>> implements OptimizedMap, Serializable {
         private final String[] keys;
         private final String[] values;
 
@@ -1240,58 +1281,69 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
 
         GroupIterationPolicy policy() default GroupIterationPolicy.FIRST_UP;
     }
+    
+    // For now, group annotations can be specified in two ways.
+    // One is the defined {@link Group} above.  The other is
+    // any Annotation class whose name ends in "ArgGroup" and
+    // that has the right getter methods.  
+    //
+    // The purpose of the second form is to improve
+    // compile-time validation of group names, since
+    // the name string doesn't have to be repeated
+    // in every annotation.
 
-    /**
-     * 
-     * @param field
-     * @param groupName
-     * @return true iff the field is a member of the given group
-     */
-    private boolean isGroupMember(Field field, String groupName) {
+    private Set<String> getGroups(Field field) {
+        Set<String> groups = null;
         for (Annotation anno : field.getAnnotations()) {
             Class annoClass = anno.annotationType();
             if (anno instanceof Group) {
                 Group group = (Group) anno;
-                if (group.role() == GroupRole.MEMBER && group.name().equals(groupName)) {
-                    return true;
+                if (group.role() == GroupRole.MEMBER) {
+                    if (groups == null) {
+                        groups = new HashSet<String>();
+                    }
+                    groups.add(group.name());
                 }
             } else if (annoClass.getName().endsWith("ArgGroup")) {
                 try {
                     Class[] parameterTypes = {};
-                    Method roleGetter = annoClass.getDeclaredMethod("role", parameterTypes);
-                    Method nameGetter = annoClass.getDeclaredMethod("name", parameterTypes);
+                    Method roleGetter = annoClass.getDeclaredMethod("role",
+                                                                    parameterTypes);
+                    Method nameGetter = annoClass.getDeclaredMethod("name",
+                                                                    parameterTypes);
                     Object[] args = {};
                     GroupRole role = (GroupRole) roleGetter.invoke(anno, args);
                     String name = (String) nameGetter.invoke(anno, args);
-                    if (role == GroupRole.MEMBER && name.equals(groupName)) {
-                        return true;
+                    if (role == GroupRole.MEMBER) {
+                        if (groups == null) {
+                            groups = new HashSet<String>();
+                        }
+                        groups.add(name);
                     }
                 } catch (Exception e) {
-                    return false;
                 }
             }
         }
-        return false;
+        return groups;
     }
-    
-    private GroupIterationPolicy getGroupOwnerPolicy(Field field) {
+
+    private Annotation getOwnedGroup(Field field) {
         for (Annotation anno : field.getAnnotations()) {
             Class annoClass = anno.annotationType();
             if (anno instanceof Group) {
                 Group group = (Group) anno;
                 if (group.role() == GroupRole.OWNER) {
-                    return group.policy();
+                    return group;
                 }
             } else if (annoClass.getName().endsWith("ArgGroup")) {
                 try {
                     Class[] parameterTypes = {};
-                    Method roleGetter = annoClass.getDeclaredMethod("role", parameterTypes);
-                    Method policyGetter = annoClass.getDeclaredMethod("policy", parameterTypes);
+                    Method roleGetter = annoClass.getDeclaredMethod("role",
+                                                                    parameterTypes);
                     Object[] args = {};
                     GroupRole role = (GroupRole) roleGetter.invoke(anno, args);
-                    GroupIterationPolicy policy = (GroupIterationPolicy) policyGetter.invoke(anno, args);
                     if (role == GroupRole.OWNER) {
-                        return policy;
+                        return anno;
                     }
                 } catch (Exception e) {
                 }
@@ -1300,8 +1352,8 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
         return null;
     }
 
-    private void setSequenceFieldFromSpec(Field field, Object object, Spec spec) 
-            throws ParseException, IllegalAccessException {
+    private void setSequenceFieldFromSpec(Field field, Object object, Spec spec) throws ParseException,
+                                                                                IllegalAccessException {
         String defaultValue = spec.defaultValue();
         String key = spec.name();
         BaseDataType type = spec.valueType();
@@ -1311,18 +1363,21 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
             rawValues = getStrings(key);
         } else if (isRequired) {
             // TODO: Use logging service
-            System.err.println("Warning: required argument " + key + " was not provided");
+            System.err.println("Warning: required argument " + key
+                    + " was not provided");
             return;
         } else if (!rawValues.equals(NO_VALUE)) {
             // Should be in the form [x,y,z]
-            // TODO: Use the existing Arguments code for this, if I can ever find it
+            // TODO: Use the existing Arguments code for this, if I can ever
+            // find it
             String[] valueArray;
-            int end = defaultValue.length()-1;
-            if (defaultValue.charAt(0) == '[' && defaultValue.charAt(end) == ']') {
-                valueArray= defaultValue.substring(1,end).split(",");
+            int end = defaultValue.length() - 1;
+            if (defaultValue.charAt(0) == '['
+                    && defaultValue.charAt(end) == ']') {
+                valueArray = defaultValue.substring(1, end).split(",");
             } else {
                 // TODO log something
-                valueArray= defaultValue.split(",");
+                valueArray = defaultValue.split(",");
             }
             rawValues = Arrays.asList(valueArray);
         }
@@ -1336,8 +1391,8 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
         field.set(object, values);
     }
 
-    private void setSimpleFieldFromSpec(Field field, Object object, Spec spec)
-           throws ParseException, IllegalAccessException {
+    private void setSimpleFieldFromSpec(Field field, Object object, Spec spec) throws ParseException,
+                                                                              IllegalAccessException {
         String defaultValue = spec.defaultValue();
         String key = spec.name();
         BaseDataType type = spec.valueType();
@@ -1348,11 +1403,13 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
             rawValue = values.get(0);
             if (values.size() > 1) {
                 // TODO: Use logging service
-                // System.err.println("INFO: argument " +key+ " has multiple values");
+                // System.err.println("INFO: argument " +key+ " has multiple
+                // values");
             }
         } else if (isRequired) {
             // TODO: Use logging service
-            System.err.println("Warning: required argument " + key + " was not provided");
+            System.err.println("Warning: required argument " + key
+                    + " was not provided");
             return;
         } else {
             rawValue = defaultValue;
@@ -1363,8 +1420,7 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
         field.set(object, type.parse(rawValue));
     }
 
-    private void setFieldFromSpec(Field field, Object object) {
-        Spec spec = field.getAnnotation(Spec.class);
+    private void setFieldFromSpec(Field field, Spec spec, Object object) {
         try {
             if (spec.sequence()) {
                 setSequenceFieldFromSpec(field, object, spec);
@@ -1379,15 +1435,15 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
             e.printStackTrace();
         }
     }
-    
-    private void setGroupOwnerField(Field field, Object object, GroupIterationPolicy policy) {
+
+    private void setGroupOwnerField(Field field,
+                                    Object object,
+                                    GroupIterationPolicy policy,
+                                    Set<String> members) {
         // First version just splits the args.
         // TODO order the resulting list by policy
-        //
-        // Could filter the splits so they contain only the members of the group
-        // but the cost outweighs the benefits
         try {
-            field.set(object, split());
+            field.set(object, split(members));
         } catch (IllegalAccessException e) {
             // TODO Use logger
             e.printStackTrace();
@@ -1395,43 +1451,88 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
     }
 
     /**
-     * Set values of all fields that either have ArgSpecs
-     * or are group owners.
-     * 
+     * Set whatever {@link Spec}-annotated fields we have values for.
      */
-    public void setAllFields(Object object) {
+    public void setFields(Object object) {
         for (Field field : object.getClass().getFields()) {
             int mod = field.getModifiers();
             if (Modifier.isFinal(mod) || Modifier.isStatic(mod)) {
                 // skip finals and statics
                 continue;
             } else if (field.isAnnotationPresent(Spec.class)) {
-                setFieldFromSpec(field, object);
-            } else {
-                // Check for group owners
-                GroupIterationPolicy policy = getGroupOwnerPolicy(field);
-                if (policy != null) {
-                    setGroupOwnerField(field, object, policy);
+                Spec spec = field.getAnnotation(Spec.class);
+                String argName = spec.name();
+                if (containsKey(argName)) {
+                    setFieldFromSpec(field, spec, object);
                 }
             }
         }
     }
 
     /**
-     * Set values of all fields in the given group, using the 'split' values in
-     * the given arguments.
+     * Set values of every field that has either a {@link Spec} annotation, or a
+     * Group annotation with role OWNER.
      * 
      */
-    public void setGroupFields(Object object, String groupName) {
+    public void setAllFields(Object object) {
+        Map<String, Set<String>> groupMembers = new HashMap<String, Set<String>>();
+        Map<Annotation, Field> groupFields = new HashMap<Annotation, Field>();
         for (Field field : object.getClass().getFields()) {
             int mod = field.getModifiers();
             if (Modifier.isFinal(mod) || Modifier.isStatic(mod)) {
                 // skip finals and statics
                 continue;
-            } else if (field.isAnnotationPresent(Spec.class) && isGroupMember(field, groupName)) {
-                setFieldFromSpec(field, object);
+            } else if (field.isAnnotationPresent(Spec.class)) {
+                Spec spec = field.getAnnotation(Spec.class);
+                setFieldFromSpec(field, spec, object);
+                Set<String> groups = getGroups(field);
+                if (groups != null) {
+                    for (String group : groups) {
+                        Set<String> members = groupMembers.get(group);
+                        if (members == null) {
+                            members = new LinkedHashSet<String>();
+                            groupMembers.put(group, members);
+                        }
+                        members.add(spec.name());
+                    }
+                }
+            } else {
+                // Check for group owners
+                Annotation anno = getOwnedGroup(field);
+                if (anno != null) {
+                    groupFields.put(anno, field);
+                }
+            }
+        }
+        // Now set up group owners
+        for (Map.Entry<Annotation, Field> entry : groupFields.entrySet()) {
+            Annotation anno = entry.getKey();
+            Field field = entry.getValue();
+            Set<String> members = null;
+            GroupIterationPolicy policy = null;
+            Class annoClass = anno.annotationType();
+            if (anno instanceof Group) {
+                Group group = (Group) anno;
+                members = groupMembers.get(group.name());
+                policy = group.policy();
+            } else if (annoClass.getName().endsWith("ArgGroup")) {
+                try {
+                    Class[] parameterTypes = {};
+                    Method policyGetter = annoClass.getDeclaredMethod("policy",
+                                                                      parameterTypes);
+                    Method nameGetter = annoClass.getDeclaredMethod("name",
+                                                                    parameterTypes);
+                    Object[] args = {};
+                    policy = (GroupIterationPolicy) policyGetter.invoke(anno,
+                                                                        args);
+                    String name = (String) nameGetter.invoke(anno, args);
+                    members = groupMembers.get(name);
+                } catch (Exception e) {
+                }
+            }
+            if (policy != null && members != null && !members.isEmpty()) {
+                setGroupOwnerField(field, object, policy, members);
             }
         }
     }
-
 }
