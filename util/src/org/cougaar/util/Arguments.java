@@ -1273,6 +1273,32 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
         }
         return false;
     }
+    
+    private GroupIterationPolicy getGroupOwnerPolicy(Field field) {
+        for (Annotation anno : field.getAnnotations()) {
+            Class annoClass = anno.annotationType();
+            if (anno instanceof Group) {
+                Group group = (Group) anno;
+                if (group.role() == GroupRole.OWNER) {
+                    return group.policy();
+                }
+            } else if (annoClass.getName().endsWith("ArgGroup")) {
+                try {
+                    Class[] parameterTypes = {};
+                    Method roleGetter = annoClass.getDeclaredMethod("role", parameterTypes);
+                    Method policyGetter = annoClass.getDeclaredMethod("policy", parameterTypes);
+                    Object[] args = {};
+                    GroupRole role = (GroupRole) roleGetter.invoke(anno, args);
+                    GroupIterationPolicy policy = (GroupIterationPolicy) policyGetter.invoke(anno, args);
+                    if (role == GroupRole.OWNER) {
+                        return policy;
+                    }
+                } catch (Exception e) {
+                }
+            }
+        }
+        return null;
+    }
 
     private void setSequenceFieldFromSpec(Field field, Object object, Spec spec) 
             throws ParseException, IllegalAccessException {
@@ -1353,15 +1379,40 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
             e.printStackTrace();
         }
     }
+    
+    private void setGroupOwnerField(Field field, Object object, GroupIterationPolicy policy) {
+        // First version just splits the args.
+        // TODO order the resulting list by policy
+        //
+        // Could filter the splits so they contain only the members of the group
+        // but the cost outweighs the benefits
+        try {
+            field.set(object, split());
+        } catch (IllegalAccessException e) {
+            // TODO Use logger
+            e.printStackTrace();
+        }
+    }
 
     /**
-     * Set values of all fields that have ArgSpecs.
+     * Set values of all fields that either have ArgSpecs
+     * or are group owners.
      * 
      */
     public void setAllFields(Object object) {
         for (Field field : object.getClass().getFields()) {
-            if (field.isAnnotationPresent(Spec.class)) {
+            int mod = field.getModifiers();
+            if (Modifier.isFinal(mod) || Modifier.isStatic(mod)) {
+                // skip finals and statics
+                continue;
+            } else if (field.isAnnotationPresent(Spec.class)) {
                 setFieldFromSpec(field, object);
+            } else {
+                // Check for group owners
+                GroupIterationPolicy policy = getGroupOwnerPolicy(field);
+                if (policy != null) {
+                    setGroupOwnerField(field, object, policy);
+                }
             }
         }
     }
@@ -1373,7 +1424,11 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
      */
     public void setGroupFields(Object object, String groupName) {
         for (Field field : object.getClass().getFields()) {
-            if (field.isAnnotationPresent(Spec.class) && isGroupMember(field, groupName)) {
+            int mod = field.getModifiers();
+            if (Modifier.isFinal(mod) || Modifier.isStatic(mod)) {
+                // skip finals and statics
+                continue;
+            } else if (field.isAnnotationPresent(Spec.class) && isGroupMember(field, groupName)) {
                 setFieldFromSpec(field, object);
             }
         }
