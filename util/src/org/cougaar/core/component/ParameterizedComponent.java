@@ -42,11 +42,7 @@ implements Component {
     
     public void setArguments(Arguments args) {
       this.args = args;
-      if (args != null) {
-          // Initialize all public fields with an Arguments.Spec annotation
-          args.setAllFields();
-      }
-    }
+     }
 
     /** @see Arguments#getString(String) */
     protected String getParameter(String key) {
