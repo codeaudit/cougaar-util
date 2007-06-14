@@ -1351,14 +1351,14 @@ public final class Arguments extends AbstractMap<String, List<String>>
             } else if (annoClass.getName().endsWith("ArgGroup")) {
                 try {
                     Class[] parameterTypes = {};
-                    Method roleGetter = annoClass.getDeclaredMethod("role",
-                                                                    parameterTypes);
+                    Method roleGetter = annoClass.getDeclaredMethod("role", parameterTypes);
                     Object[] args = {};
                     GroupRole role = (GroupRole) roleGetter.invoke(anno, args);
                     if (role == GroupRole.OWNER) {
                         return anno;
                     }
                 } catch (Exception e) {
+                    // these can safely be ignored
                 }
             }
         }
@@ -1366,7 +1366,7 @@ public final class Arguments extends AbstractMap<String, List<String>>
     }
 
     private void setSequenceFieldFromSpec(Field field, Object object, Spec spec) 
-            throws ParseException, IllegalAccessException {
+            throws ParseException, IllegalAccessException, IllegalStateException {
         String defaultValue = spec.defaultValue();
         String key = spec.name();
         BaseDataType type = spec.valueType();
@@ -1375,10 +1375,8 @@ public final class Arguments extends AbstractMap<String, List<String>>
         if (containsKey(key)) {
             rawValues = getStrings(key);
         } else if (isRequired) {
-            // TODO: Use logging service
-            System.err.println("Warning: required argument " + key
+            throw new IllegalStateException("Required argument " + key
                     + " was not provided");
-            return;
         } else if (!rawValues.equals(NO_VALUE)) {
             // Should be in the form [x,y,z]
             // TODO: Use the existing Arguments code for this, if I can ever
@@ -1389,7 +1387,6 @@ public final class Arguments extends AbstractMap<String, List<String>>
                     && defaultValue.charAt(end) == ']') {
                 valueArray = defaultValue.substring(1, end).split(",");
             } else {
-                // TODO log something
                 valueArray = defaultValue.split(",");
             }
             rawValues = Arrays.asList(valueArray);
@@ -1405,7 +1402,7 @@ public final class Arguments extends AbstractMap<String, List<String>>
     }
 
     private void setSimpleFieldFromSpec(Field field, Object object, Spec spec) 
-            throws ParseException, IllegalAccessException {
+            throws ParseException, IllegalAccessException, IllegalStateException {
         String defaultValue = spec.defaultValue();
         String key = spec.name();
         BaseDataType type = spec.valueType();
@@ -1414,15 +1411,9 @@ public final class Arguments extends AbstractMap<String, List<String>>
         if (containsKey(key)) {
             List<String> values = getStrings(key);
             rawValue = values.get(0);
-            if (values.size() > 1) {
-                // TODO: Use logging service
-                // System.err.println("INFO: argument " +key+ " has multiple values");
-            }
         } else if (isRequired) {
-            // TODO: Use logging service
-            System.err.println("Warning: required argument " + key
+            throw new IllegalStateException("Required argument " + key
                     + " was not provided");
-            return;
         } else {
             rawValue = defaultValue;
         }
@@ -1432,40 +1423,30 @@ public final class Arguments extends AbstractMap<String, List<String>>
         field.set(object, type.parse(rawValue));
     }
 
-    private void setFieldFromSpec(Field field, Spec spec, Object object) {
-        try {
-            if (spec.sequence()) {
-                setSequenceFieldFromSpec(field, object, spec);
-            } else {
-                setSimpleFieldFromSpec(field, object, spec);
-            }
-        } catch (ParseException e) {
-            // TODO Use loggger
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            // TODO Use logger
-            e.printStackTrace();
+    private void setFieldFromSpec(Field field, Spec spec, Object object) 
+            throws ParseException, IllegalAccessException, IllegalStateException {
+        if (spec.sequence()) {
+            setSequenceFieldFromSpec(field, object, spec);
+        } else {
+            setSimpleFieldFromSpec(field, object, spec);
         }
     }
 
     private void setGroupOwnerField(Field field,
                                     Object object,
                                     GroupIterationPolicy policy,
-                                    Set<String> members) {
+                                    Set<String> members) 
+            throws ParseException, IllegalAccessException, IllegalStateException {
         // First version just splits the args.
         // TODO order the resulting list by policy
-        try {
-            field.set(object, split(members));
-        } catch (IllegalAccessException e) {
-            // TODO Use logger
-            e.printStackTrace();
-        }
+        field.set(object, split(members));
     }
 
     /**
      * Set whatever {@link Spec}-annotated fields we have values for.
      */
-    public void setFields(Object object) {
+    public void setFields(Object object) 
+            throws ParseException, IllegalAccessException, IllegalStateException {
         for (Field field : object.getClass().getFields()) {
             int mod = field.getModifiers();
             if (Modifier.isFinal(mod) || Modifier.isStatic(mod)) {
@@ -1486,7 +1467,8 @@ public final class Arguments extends AbstractMap<String, List<String>>
      * Group annotation with role OWNER.
      * 
      */
-    public void setAllFields(Object object) {
+    public void setAllFields(Object object) 
+            throws ParseException, IllegalAccessException, IllegalStateException {
         Map<String, Set<String>> groupMembers = new HashMap<String, Set<String>>();
         Map<Annotation, Field> groupFields = new HashMap<Annotation, Field>();
         for (Field field : object.getClass().getFields()) {
