@@ -64,12 +64,12 @@ import org.cougaar.bootstrap.SystemProperties;
  * Example use:
  * 
  * <pre>
- *   Arguments args = new Arguments(&quot;x=y, q=one, q=two, z=99&quot;);
- *   String x = args.getString(&quot;x&quot;);
- *   assert &quot;y&quot;.equals(x);
- *   int z = args.getInt(&quot;z&quot;, 1234);
+ *   Arguments args = new Arguments("x=y, q=one, q=two, z=99");
+ *   String x = args.getString("x");
+ *   assert "y".equals(x);
+ *   int z = args.getInt("z", 1234);
  *   assert z == 99;
- *   List&lt;String&gt; q = args.getStrings(&quot;q&quot;);
+ *   List&lt;String&gt; q = args.getStrings("q");
  *   assert q != null &amp;&amp; q.size() == 2;
  * </pre>
  * 
@@ -81,20 +81,20 @@ import org.cougaar.bootstrap.SystemProperties;
  *   package org;
  *   public class MyPlugin ... {
  *     private Arguments args;
- *     // The &quot;setArguments&quot; method is special -- it's an optional method
+ *     // The "setArguments" method is special -- it's an optional method
  *     // that's found by the component model via reflection.  The passed-in
  *     // arguments instance is created via:
  *     //    new Arguments(listOfStrings, classname);
  *     public void setArguments(Arguments args) { this.args = args; }
  *     public void load() {
  *       super.load();
- *       // Get the value of our &quot;foo&quot; argument
+ *       // Get the value of our "foo" argument
  *       //
- *       // First looks for a plugin XML argument named &quot;foo&quot;,
- *       // next looks for a &quot;-Dorg.MyPlugin.foo=&quot; system property,
+ *       // First looks for a plugin XML argument named "foo",
+ *       // next looks for a "-Dorg.MyPlugin.foo=" system property,
  *       // otherwise the value will be the 1234 default.
- *       int foo = args.getInt(&quot;foo&quot;, 1234);
- *       System.out.println(&quot;foo is &quot;+foo);
+ *       int foo = args.getInt("foo", 1234);
+ *       System.out.println("foo is "+foo);
  *     }
  *   }
  * </pre>
@@ -107,12 +107,12 @@ import org.cougaar.bootstrap.SystemProperties;
  *   public class MyPlugin ... {
  *     private int foo = 1234;
  *     public void setArguments(Arguments args) { args.callSetters(this); }
- *     // This &quot;set&lt;i&gt;NAME&lt;/i&gt;(&lt;i&gt;TYPE&lt;/i&gt;)&quot; method is found by reflection.
+ *     // This "set<i>NAME</i>(<i>TYPE</i>)" method is found by reflection.
  *     // The args class will only invoke the setters for which it has values.
  *     public void setFoo(int i) { this.foo = i; }
  *     public void load() {
  *       super.load();
- *       System.out.println(&quot;foo is &quot;+foo);
+ *       System.out.println("foo is "+foo);
  *     }
  *   }
  * </pre>
@@ -166,19 +166,21 @@ public final class Arguments extends AbstractMap<String, List<String>>
             throw new IllegalArgumentException("Unable to create new Arguments("
                                                        + "\n  o = "
                                                        + o
-                                                       + (propertyPrefix == null
-                                                               && deflt == null
-                                                               && keys == null ? ""
-                                                                              : (",\n  propertyPrefix = "
-                                                                                      + propertyPrefix + (deflt == null
-                                                                                      && keys == null ? ""
-                                                                                                     : (",\n  deflt = "
-                                                                                                             + deflt + (keys == null ? ""
-                                                                                                                                    : ",\n  keys = "
-                                                                                                                                            + keys)))))
+                                                       + argString(propertyPrefix, deflt, keys)
                                                        + ")",
                                                e);
         }
+    }
+
+    private String argString(Object propertyPrefix, Object deflt, Object keys) {
+        if (propertyPrefix == null  && deflt == null && keys == null) {
+            return "";
+        }
+        return  ",\n  propertyPrefix = " + propertyPrefix + 
+        (deflt == null && keys == null 
+                ? ""
+                  : (",\n  deflt = " + deflt + 
+                          (keys == null ? "" : ",\n  keys = " + keys)));
     }
 
     /**
@@ -379,9 +381,9 @@ public final class Arguments extends AbstractMap<String, List<String>>
      * 
      * <pre>
      * For example, the constructor input:
-     *   &quot;foo=f1, bar=b1, qux=q1,
+     *   "foo=f1, bar=b1, qux=q1,
      *    foo=f2, bar=b2, qux=q2,
-     *    foo=f3, bar=b3, qux=q3&quot;
+     *    foo=f3, bar=b3, qux=q3"
      * will be parsed as:
      *   {foo=[f1,f2,f3], bar=[b1,b2,b3], qux=[q1,q2,q3]}
      * and can be split into:
@@ -390,7 +392,7 @@ public final class Arguments extends AbstractMap<String, List<String>>
      *    {foo=[f3], bar=[b3], qux=[q3]}}
      * This simplifies iteration:
      *   for (Arguments a : args.split()) {
-     *     System.out.println(&quot;foo is &quot;+a.getString(&quot;foo&quot;));
+     *     System.out.println("foo is "+a.getString("foo"));
      *   }
      * which will print:
      *   foo is f1
@@ -500,8 +502,7 @@ public final class Arguments extends AbstractMap<String, List<String>>
 
     /** @see #setStrings */
     public Arguments setString(String key, String value) {
-        List<String> l = (value == null ? null
-                                       : Collections.singletonList(value));
+        List<String> l = (value == null ? null : Collections.singletonList(value));
         return setStrings(key, l);
     }
 
@@ -527,8 +528,7 @@ public final class Arguments extends AbstractMap<String, List<String>>
             filter.remove(key);
             return new Arguments(this, null, null, filter);
         } else {
-            Map<String, List<String>> add = Collections.singletonMap(key,
-                                                                     values);
+            Map<String, List<String>> add = Collections.singletonMap(key, values);
             return new Arguments(add, null, this);
         }
     }
@@ -565,13 +565,13 @@ public final class Arguments extends AbstractMap<String, List<String>>
      * For example, the name=value pair "x=y" will look for:
      * 
      * <pre>
-     *   public void setX(&lt;i&gt;type&lt;/i&gt;) {..}
+     *   public void setX(<i>type</i>) {..}
      * </pre>
      * 
      * and field:
      * 
      * <pre>
-     *   public &lt;i&gt;type&lt;/i&gt; x;
+     *   public <i>type</i> x;
      * </pre>
      * 
      * If neither are found then "x" will be included in the returned Set.
@@ -711,20 +711,20 @@ public final class Arguments extends AbstractMap<String, List<String>>
      *   A=B
      *   X=V0,V1,V2
      * then:
-     *   toString(&quot;the_$key is the_$value&quot;, &quot; * &quot;);
+     *   toString("the_$key is the_$value", " * ");
      * would return:
      *   the_A is the_B * the_X is the_V0
      * and:
-     *   toString(&quot;($key eq $vals)&quot;, &quot; +\n&quot;);
+     *   toString("($key eq $vals)", " +\n");
      * would return:
      *   (A eq B) +
      *   (X eq [V0, V1, V2])
      * and:
-     *   toString(&quot;$key=$veach&quot;, &quot;&amp;&quot;);
+     *   toString("$key=$veach", "&amp;");
      * would return a URL-like string:
      *   A=B&amp;X=V0&amp;X=V1&amp;X=V2
      * and:
-     *   &quot;{&quot; + toString(&quot;$key=$vlist&quot;, &quot;, &quot;) + &quot;}&quot;;
+     *   "{" + toString("$key=$vlist", ", ") + "}";
      * would return the standard {@link Map#toString} format:
      *   {A=[B], X=[V0, V1, V2]}
      * </pre>
@@ -789,12 +789,7 @@ public final class Arguments extends AbstractMap<String, List<String>>
                         hasEach = true;
                         value = l.get(eachIndex);
                     } else {
-                        value = ("key".equals(tag) ? k
-                                                  : "value".equals(tag) ? l.get(0)
-                                                                       : "vals".equals(tag) ? (l.size() == 1 ? l.get(0)
-                                                                                                            : l.toString())
-                                                                                           : "vlist".equals(tag) ? l.toString()
-                                                                                                                : "InternalError!");
+                        value = entryString(k, l, tag);
                     }
                     x.appendReplacement(buf, value);
                 }
@@ -805,6 +800,24 @@ public final class Arguments extends AbstractMap<String, List<String>>
             }
         }
         return buf.toString();
+    }
+
+    private String entryString(String k, List<String> l, String tag) {
+        if ("key".equals(tag)) {
+            return k;
+        } else if ("value".equals(tag)) {
+            return l.get(0);
+        } else if ("vals".equals(tag)) {
+            if (l.size() == 1) {
+                return l.get(0);
+            } else {
+                return l.toString();
+            }
+        } else if ("vlist".equals(tag)) {
+            return l.toString();
+        } else {
+            return "InternalError!";
+        }
     }
 
     //
@@ -1352,8 +1365,8 @@ public final class Arguments extends AbstractMap<String, List<String>>
         return null;
     }
 
-    private void setSequenceFieldFromSpec(Field field, Object object, Spec spec) throws ParseException,
-                                                                                IllegalAccessException {
+    private void setSequenceFieldFromSpec(Field field, Object object, Spec spec) 
+            throws ParseException, IllegalAccessException {
         String defaultValue = spec.defaultValue();
         String key = spec.name();
         BaseDataType type = spec.valueType();
@@ -1391,8 +1404,8 @@ public final class Arguments extends AbstractMap<String, List<String>>
         field.set(object, values);
     }
 
-    private void setSimpleFieldFromSpec(Field field, Object object, Spec spec) throws ParseException,
-                                                                              IllegalAccessException {
+    private void setSimpleFieldFromSpec(Field field, Object object, Spec spec) 
+            throws ParseException, IllegalAccessException {
         String defaultValue = spec.defaultValue();
         String key = spec.name();
         BaseDataType type = spec.valueType();
@@ -1403,8 +1416,7 @@ public final class Arguments extends AbstractMap<String, List<String>>
             rawValue = values.get(0);
             if (values.size() > 1) {
                 // TODO: Use logging service
-                // System.err.println("INFO: argument " +key+ " has multiple
-                // values");
+                // System.err.println("INFO: argument " +key+ " has multiple values");
             }
         } else if (isRequired) {
             // TODO: Use logging service
