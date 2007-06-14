@@ -25,17 +25,8 @@
  */
 package org.cougaar.core.component;
 
-import java.lang.annotation.Annotation;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import org.cougaar.util.Arguments;
 import org.cougaar.util.GenericStateModelAdapter;
@@ -45,202 +36,16 @@ import org.cougaar.util.GenericStateModelAdapter;
  * Parameters should take the form <var>=<value>.
  */
 abstract public class ParameterizedComponent
-        extends GenericStateModelAdapter
-        implements Component {
-    
-    public static final String NO_VALUE = "###no-value###";
-    
-    public static class ParseException extends Exception {
-	public ParseException(Throwable cause) {
-	    super(cause);
-	}
-    }
-    
-    public static enum BaseDataType {
-	FIXED {
-	    Object parse(String rawValue) throws ParseException {
-		try {
-		    return Integer.parseInt(rawValue);
-		} catch (NumberFormatException e) {
-		    throw new ParseException(e);
-		}
-	    }
-	},
-	REAL {
-	    Object parse(String rawValue) throws ParseException {
-		try {
-		    return Double.parseDouble(rawValue);
-		} catch (NumberFormatException e) {
-		    throw new ParseException(e);
-		}
-	    }
-	},
-	STRING {
-	    Object parse(String rawValue) throws ParseException {
-		return rawValue;
-	    }
-	},
-	BOOLEAN {
-	    Object parse(String rawValue) {
-		return Boolean.parseBoolean(rawValue);
-	    }
-	},
-	URI {
-	    Object parse(String rawValue) throws ParseException {
-		try {
-		    return new URI(rawValue);
-		} catch (URISyntaxException e) {
-		    throw new ParseException(e);
-		}
-	    }
-	};
-	
-	abstract Object parse(String rawValue) throws ParseException;
-    }
-    
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface ArgSpec {
-        /**
-	 * 
-	 */
-	String name();
-        BaseDataType valueType() default BaseDataType.STRING;
-        boolean sequence() default false;
-        boolean required() default true;
-        String defaultValue() default NO_VALUE;
-        String description() default "no description";
-    }
-    
-    
-    public static enum ArgGroupRole {
-        MEMBER,
-        OWNER
-    }
-    
-    public static enum ArgGroupIterationPolicy {
-        ROUND_ROBIN,
-        FIRST_UP,
-        CLOSEST,
-        RANDOM
-    }
-    
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface ArgGroup {
-        String name();
-        ArgGroupRole role() default ArgGroupRole.MEMBER;
-        ArgGroupIterationPolicy policy() default ArgGroupIterationPolicy.FIRST_UP;
-    }
-   
-    
+extends GenericStateModelAdapter
+implements Component {
     protected Arguments args;
-    
-    /**
-     * 
-     * @param field
-     * @param groupName
-     * @return true iff the field is a member of the given group
-     */
-    private boolean isGroupMember(Field field, String groupName) {
-	for (Annotation anno : field.getAnnotations()) {
-	    Class annoClass = anno.annotationType();
-	    if (anno instanceof ArgGroup) {
-		ArgGroup group = (ArgGroup) anno;
-		if (group.role() == ArgGroupRole.MEMBER && group.name().equals(groupName)) {
-		    return true;
-		}
-	    } else if (annoClass.getName().endsWith("ArgGroup")) {
-		try {
-		    Class[] parameterTypes = {};
-		    Method roleGetter = annoClass.getDeclaredMethod("role", parameterTypes);
-		    Method nameGetter = annoClass.getDeclaredMethod("name", parameterTypes);
-		    Object[] args = {};
-		    ArgGroupRole role = (ArgGroupRole) roleGetter.invoke(anno, args);
-		    String name = (String) nameGetter.invoke(anno, args);
-		    if (role == ArgGroupRole.MEMBER && name.equals(groupName)) {
-			return true;
-		    }
-		} catch (Exception e) {
-		    return false;
-		}		
-	    }
-	}
-	return false;
-    }
-    
-    private void setFieldFromSpec(Field field, Arguments arguments) {
-	ArgSpec spec = field.getAnnotation(ArgSpec.class);
-	String defaultValue = spec.defaultValue();
-	String key = spec.name();
-	BaseDataType type = spec.valueType();
-	boolean isSequence = spec.sequence();
-	boolean isRequired = spec.required();
-	String rawValue;
-	if (arguments.containsKey(key)) {
-	    List<String> values = arguments.getStrings(key);
-	    rawValue = values.get(0);
-	    if (values.size() > 1) {
-		// TODO: Use logging service
-		// System.err.println("INFO: argument " +key+ " has multiple values");
-	    }
-	} else if (isRequired) {
-	    // TODO: Use logging service
-	    System.err.println("Warning: required argument " +key+ " was not provided");
-	    return;
-	} else {
-	    rawValue = defaultValue;
-	}
-	if (rawValue.equals(NO_VALUE)) {
-	    return;
-	}
-	Object value;
-	try {
-	    if (isSequence) {
-		StringTokenizer tk = new StringTokenizer(rawValue, ",");
-		List<Object> values = new ArrayList<Object>(tk.countTokens());
-		while (tk.hasMoreTokens()) {
-		    values.add(type.parse(tk.nextToken()));
-		}
-		value = values;
-	    } else {
-		value = type.parse(rawValue);
-	    }
-	    field.set(this, value);
-	} catch (ParseException e) {
-	    e.printStackTrace();
-	} catch (IllegalAccessException e) {
-	    e.printStackTrace();
-	}
-    }
-
-    
-    /**
-     * Set values of all fields that have ArgSpecs.
-     *
-     */
-    public void setAllFields() {
-	for (Field field : getClass().getFields()) {
-            if (field.isAnnotationPresent(ArgSpec.class)) {
-        	setFieldFromSpec(field, args);
-            }
-        }
-    }
-    
-    /**
-     * Set values of all fields in the given group,
-     * using the 'split' values in the given
-     * arguments.
-     *
-     */
-    public void setGroupFields(String groupName, Arguments arguments) {
-	for (Field field : getClass().getFields()) {
-            if (field.isAnnotationPresent(ArgSpec.class) && isGroupMember(field, groupName)) {
-        	setFieldFromSpec(field, arguments);
-            }
-        }
-    }
     
     public void setArguments(Arguments args) {
       this.args = args;
+      if (args != null) {
+          // Initialize all public fields with an Arguments.Spec annotation
+          args.setAllFields();
+      }
     }
 
     /** @see Arguments#getString(String) */

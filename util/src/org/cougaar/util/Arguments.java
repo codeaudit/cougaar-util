@@ -27,9 +27,14 @@
 package org.cougaar.util;
 
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.AbstractMap;
 import java.util.AbstractSet;
 import java.util.ArrayList;
@@ -47,6 +52,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.cougaar.bootstrap.SystemProperties;
 
 /**
@@ -57,12 +63,12 @@ import org.cougaar.bootstrap.SystemProperties;
  * Example use:
  * 
  * <pre>
- *   Arguments args = new Arguments("x=y, q=one, q=two, z=99");
- *   String x = args.getString("x");
- *   assert "y".equals(x);
- *   int z = args.getInt("z", 1234);
+ *   Arguments args = new Arguments(&quot;x=y, q=one, q=two, z=99&quot;);
+ *   String x = args.getString(&quot;x&quot;);
+ *   assert &quot;y&quot;.equals(x);
+ *   int z = args.getInt(&quot;z&quot;, 1234);
  *   assert z == 99;
- *   List&lt;String&gt; q = args.getStrings("q");
+ *   List&lt;String&gt; q = args.getStrings(&quot;q&quot;);
  *   assert q != null &amp;&amp; q.size() == 2;
  * </pre>
  * 
@@ -74,20 +80,20 @@ import org.cougaar.bootstrap.SystemProperties;
  *   package org;
  *   public class MyPlugin ... {
  *     private Arguments args;
- *     // The "setArguments" method is special -- it's an optional method
+ *     // The &quot;setArguments&quot; method is special -- it's an optional method
  *     // that's found by the component model via reflection.  The passed-in
  *     // arguments instance is created via:
  *     //    new Arguments(listOfStrings, classname);
  *     public void setArguments(Arguments args) { this.args = args; }
  *     public void load() {
  *       super.load();
- *       // Get the value of our "foo" argument
+ *       // Get the value of our &quot;foo&quot; argument
  *       //
- *       // First looks for a plugin XML argument named "foo",
- *       // next looks for a "-Dorg.MyPlugin.foo=" system property,
+ *       // First looks for a plugin XML argument named &quot;foo&quot;,
+ *       // next looks for a &quot;-Dorg.MyPlugin.foo=&quot; system property,
  *       // otherwise the value will be the 1234 default.
- *       int foo = args.getInt("foo", 1234);
- *       System.out.println("foo is "+foo);
+ *       int foo = args.getInt(&quot;foo&quot;, 1234);
+ *       System.out.println(&quot;foo is &quot;+foo);
  *     }
  *   }
  * </pre>
@@ -100,12 +106,12 @@ import org.cougaar.bootstrap.SystemProperties;
  *   public class MyPlugin ... {
  *     private int foo = 1234;
  *     public void setArguments(Arguments args) { args.callSetters(this); }
- *     // This "set<i>NAME</i>(<i>TYPE</i>)" method is found by reflection.
+ *     // This &quot;set&lt;i&gt;NAME&lt;/i&gt;(&lt;i&gt;TYPE&lt;/i&gt;)&quot; method is found by reflection.
  *     // The args class will only invoke the setters for which it has values.
  *     public void setFoo(int i) { this.foo = i; }
  *     public void load() {
  *       super.load();
- *       System.out.println("foo is "+foo);
+ *       System.out.println(&quot;foo is &quot;+foo);
  *     }
  *   }
  * </pre>
@@ -367,9 +373,9 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
      * 
      * <pre>
      * For example, the constructor input:
-     *   "foo=f1, bar=b1, qux=q1,
+     *   &quot;foo=f1, bar=b1, qux=q1,
      *    foo=f2, bar=b2, qux=q2,
-     *    foo=f3, bar=b3, qux=q3"
+     *    foo=f3, bar=b3, qux=q3&quot;
      * will be parsed as:
      *   {foo=[f1,f2,f3], bar=[b1,b2,b3], qux=[q1,q2,q3]}
      * and can be split into:
@@ -378,7 +384,7 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
      *    {foo=[f3], bar=[b3], qux=[q3]}}
      * This simplifies iteration:
      *   for (Arguments a : args.split()) {
-     *     System.out.println("foo is "+a.getString("foo"));
+     *     System.out.println(&quot;foo is &quot;+a.getString(&quot;foo&quot;));
      *   }
      * which will print:
      *   foo is f1
@@ -520,13 +526,13 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
      * For example, the name=value pair "x=y" will look for:
      * 
      * <pre>
-     *   public void setX(<i>type</i>) {..}
+     *   public void setX(&lt;i&gt;type&lt;/i&gt;) {..}
      * </pre>
      * 
      * and field:
      * 
      * <pre>
-     *   public <i>type</i> x;
+     *   public &lt;i&gt;type&lt;/i&gt; x;
      * </pre>
      * 
      * If neither are found then "x" will be included in the returned Set.
@@ -663,20 +669,20 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
      *   A=B
      *   X=V0,V1,V2
      * then:
-     *   toString("the_$key is the_$value", " * ");
+     *   toString(&quot;the_$key is the_$value&quot;, &quot; * &quot;);
      * would return:
      *   the_A is the_B * the_X is the_V0
      * and:
-     *   toString("($key eq $vals)", " +\n");
+     *   toString(&quot;($key eq $vals)&quot;, &quot; +\n&quot;);
      * would return:
      *   (A eq B) +
      *   (X eq [V0, V1, V2])
      * and:
-     *   toString("$key=$veach", "&amp;");
+     *   toString(&quot;$key=$veach&quot;, &quot;&amp;&quot;);
      * would return a URL-like string:
      *   A=B&amp;X=V0&amp;X=V1&amp;X=V2
      * and:
-     *   "{" + toString("$key=$vlist", ", ") + "}";
+     *   &quot;{&quot; + toString(&quot;$key=$vlist&quot;, &quot;, &quot;) + &quot;}&quot;;
      * would return the standard {@link Map#toString} format:
      *   {A=[B], X=[V0, V1, V2]}
      * </pre>
@@ -1148,4 +1154,229 @@ public final class Arguments extends AbstractMap<String, List<String>> implement
             return null;
         }
     }
+
+    // Support for argument annotation metadata
+
+    // Can't use 'null' in annotation attributes, so use this instead
+    public static final String NO_VALUE = "###no-value###";
+
+    public static class ParseException extends Exception {
+        public ParseException(Throwable cause) {
+            super(cause);
+        }
+    }
+
+    public static enum BaseDataType {
+        FIXED {
+            Object parse(String rawValue) throws ParseException {
+                try {
+                    return Integer.parseInt(rawValue);
+                } catch (NumberFormatException e) {
+                    throw new ParseException(e);
+                }
+            }
+        },
+        REAL {
+            Object parse(String rawValue) throws ParseException {
+                try {
+                    return Double.parseDouble(rawValue);
+                } catch (NumberFormatException e) {
+                    throw new ParseException(e);
+                }
+            }
+        },
+        STRING {
+            Object parse(String rawValue) throws ParseException {
+                return rawValue;
+            }
+        },
+        BOOLEAN {
+            Object parse(String rawValue) {
+                return Boolean.parseBoolean(rawValue);
+            }
+        },
+        URI {
+            Object parse(String rawValue) throws ParseException {
+                try {
+                    return new URI(rawValue);
+                } catch (URISyntaxException e) {
+                    throw new ParseException(e);
+                }
+            }
+        };
+
+        abstract Object parse(String rawValue) throws ParseException;
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface Spec {
+
+        String name();
+
+        BaseDataType valueType() default BaseDataType.STRING;
+
+        boolean sequence() default false;
+
+        boolean required() default true;
+
+        String defaultValue() default NO_VALUE;
+
+        String description() default "no description";
+    }
+
+    public static enum GroupRole {
+        MEMBER, OWNER
+    }
+
+    public static enum GroupIterationPolicy {
+        ROUND_ROBIN, FIRST_UP, CLOSEST, RANDOM
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface Group {
+        String name();
+
+        GroupRole role() default GroupRole.MEMBER;
+
+        GroupIterationPolicy policy() default GroupIterationPolicy.FIRST_UP;
+    }
+
+    /**
+     * 
+     * @param field
+     * @param groupName
+     * @return true iff the field is a member of the given group
+     */
+    private boolean isGroupMember(Field field, String groupName) {
+        for (Annotation anno : field.getAnnotations()) {
+            Class annoClass = anno.annotationType();
+            if (anno instanceof Group) {
+                Group group = (Group) anno;
+                if (group.role() == GroupRole.MEMBER && group.name().equals(groupName)) {
+                    return true;
+                }
+            } else if (annoClass.getName().endsWith("ArgGroup")) {
+                try {
+                    Class[] parameterTypes = {};
+                    Method roleGetter = annoClass.getDeclaredMethod("role", parameterTypes);
+                    Method nameGetter = annoClass.getDeclaredMethod("name", parameterTypes);
+                    Object[] args = {};
+                    GroupRole role = (GroupRole) roleGetter.invoke(anno, args);
+                    String name = (String) nameGetter.invoke(anno, args);
+                    if (role == GroupRole.MEMBER && name.equals(groupName)) {
+                        return true;
+                    }
+                } catch (Exception e) {
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void setSequenceFieldFromSpec(Field field, Spec spec) 
+            throws ParseException, IllegalAccessException {
+        String defaultValue = spec.defaultValue();
+        String key = spec.name();
+        BaseDataType type = spec.valueType();
+        boolean isRequired = spec.required();
+        List<String> rawValues = null;
+        if (containsKey(key)) {
+            rawValues = getStrings(key);
+        } else if (isRequired) {
+            // TODO: Use logging service
+            System.err.println("Warning: required argument " + key + " was not provided");
+            return;
+        } else if (!rawValues.equals(NO_VALUE)) {
+            // Should be in the form [x,y,z]
+            // TODO: Use the existing Arguments code for this, if I can ever find it
+            String[] valueArray;
+            int end = defaultValue.length()-1;
+            if (defaultValue.charAt(0) == '[' && defaultValue.charAt(end) == ']') {
+                valueArray= defaultValue.substring(1,end).split(",");
+            } else {
+                // TODO log something
+                valueArray= defaultValue.split(",");
+            }
+            rawValues = Arrays.asList(valueArray);
+        }
+        if (rawValues == null) {
+            return;
+        }
+        List<Object> values = new ArrayList<Object>(rawValues.size());
+        for (String rawValue : rawValues) {
+            values.add(type.parse(rawValue));
+        }
+        field.set(this, values);
+    }
+
+    private void setSimpleFieldFromSpec(Field field, Spec spec)
+           throws ParseException, IllegalAccessException {
+        String defaultValue = spec.defaultValue();
+        String key = spec.name();
+        BaseDataType type = spec.valueType();
+        boolean isRequired = spec.required();
+        String rawValue;
+        if (containsKey(key)) {
+            List<String> values = getStrings(key);
+            rawValue = values.get(0);
+            if (values.size() > 1) {
+                // TODO: Use logging service
+                // System.err.println("INFO: argument " +key+ " has multiple values");
+            }
+        } else if (isRequired) {
+            // TODO: Use logging service
+            System.err.println("Warning: required argument " + key + " was not provided");
+            return;
+        } else {
+            rawValue = defaultValue;
+        }
+        if (rawValue.equals(NO_VALUE)) {
+            return;
+        }
+        field.set(this, type.parse(rawValue));
+    }
+
+    private void setFieldFromSpec(Field field) {
+        Spec spec = field.getAnnotation(Spec.class);
+        try {
+            if (spec.sequence()) {
+                setSequenceFieldFromSpec(field, spec);
+            } else {
+                setSimpleFieldFromSpec(field, spec);
+            }
+        } catch (ParseException e) {
+            // TODO Use loggger
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            // TODO Use logger
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Set values of all fields that have ArgSpecs.
+     * 
+     */
+    public void setAllFields() {
+        for (Field field : getClass().getFields()) {
+            if (field.isAnnotationPresent(Spec.class)) {
+                setFieldFromSpec(field);
+            }
+        }
+    }
+
+    /**
+     * Set values of all fields in the given group, using the 'split' values in
+     * the given arguments.
+     * 
+     */
+    public void setGroupFields(String groupName) {
+        for (Field field : getClass().getFields()) {
+            if (field.isAnnotationPresent(Spec.class) && isGroupMember(field, groupName)) {
+                setFieldFromSpec(field);
+            }
+        }
+    }
+
 }
