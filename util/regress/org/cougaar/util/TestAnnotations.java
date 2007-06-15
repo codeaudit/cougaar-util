@@ -100,12 +100,6 @@ public class TestAnnotations extends TestCase {
     )
     public List<String> defaultedListNull = new ArrayList<String>();
 
-    private final Arguments arguments;
-
-    public TestAnnotations() {
-	this.arguments = new Arguments(PARAMS);
-    }
-
     public void test_preconditions() {
 	assertEquals(simple, -1);
 	assertEquals(simpleDefaulted, -1);
@@ -113,7 +107,6 @@ public class TestAnnotations extends TestCase {
 	assertNull(list);
 	assertNull(defaultedList);
 	assertNotNull(defaultedListNull);
-	assertNull(groupOwner);
     }
 
     private void setAllFields(Arguments a1) {
@@ -126,6 +119,7 @@ public class TestAnnotations extends TestCase {
     }
 
     public void test_postconditions() {
+	Arguments arguments = new Arguments(PARAMS);
 	setAllFields(arguments);
 	assertEquals(simple, 1);
 	assertEquals(simpleDefaulted, 10);
@@ -139,11 +133,13 @@ public class TestAnnotations extends TestCase {
 	assertEquals(defaultedList.get(0), "d");
 	assertEquals(defaultedList.get(1), "e");
 	assertNull(defaultedListNull);
-	assertNotNull(groupOwner);
     }
 
     public void test_groups() {
+	Arguments arguments = new Arguments(PARAMS);
+	assertNull(groupOwner);
 	setAllFields(arguments);
+	assertNotNull(groupOwner);
 	assertEquals(groupOwner.size(), 2);
 	try {
 	    groupOwner.get(1).setFields(this);
@@ -152,5 +148,12 @@ public class TestAnnotations extends TestCase {
 	    fail(e.getMessage());
 	}
 	assertEquals(simple, 100);
+	try {
+	    groupOwner.get(0).setFields(this);
+	} catch (Exception e) {
+	    e.printStackTrace();
+	    fail(e.getMessage());
+	}
+	assertEquals(simple, 1);
     }
 }
