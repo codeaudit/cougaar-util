@@ -60,7 +60,7 @@ public class TestAnnotations extends TestCase {
 	    valueType=Arguments.BaseDataType.FIXED
     )
     @TestArgGroup()
-    public int simple = -1;
+    public int simple;
 
     @Arguments.Spec(
 	    name = "SimpleDefaultedParam", 
@@ -68,7 +68,7 @@ public class TestAnnotations extends TestCase {
 	    required=false,
 	    valueType=Arguments.BaseDataType.FIXED
     )
-    public int simpleDefaulted = -1;
+    public int simpleDefaulted;
 
     @Arguments.Spec(
 	    name = "SimpleDefaultedNullParam", 
@@ -76,13 +76,13 @@ public class TestAnnotations extends TestCase {
 	    required=false,
 	    valueType=Arguments.BaseDataType.STRING
     )
-    public String simpleDefaultedNull = "simpleDefaultedNull";
+    public String simpleDefaultedNull;
 
     @Arguments.Spec(
 	    name = "ListParam", 
 	    sequence=true
     )
-    public List<String> list = null;
+    public List<String> list;
 
     @Arguments.Spec(
 	    name = "DefaultedListParam", 
@@ -90,7 +90,7 @@ public class TestAnnotations extends TestCase {
 	    defaultValue="[d,e]",
 	    required=false
     )
-    public List<String> defaultedList = null;
+    public List<String> defaultedList;
 
     @Arguments.Spec(
 	    name = "DefaultedListNullParam", 
@@ -98,7 +98,7 @@ public class TestAnnotations extends TestCase {
 	    defaultValue=Arguments.NULL_VALUE,
 	    required=false
     )
-    public List<String> defaultedListNull = new ArrayList<String>();
+    public List<String> defaultedListNull;
 
     private void setAll(Arguments args) {
 	try {
@@ -118,25 +118,36 @@ public class TestAnnotations extends TestCase {
 	}
     }
     
-    public void test_preconditions() {
-	assertEquals(simple, -1);
-	assertEquals(simpleDefaulted, -1);
-	assertEquals(simpleDefaultedNull, "simpleDefaultedNull");
-	assertNull(list);
-	assertNull(defaultedList);
-	assertNotNull(defaultedListNull);
+    protected void setUp() {
+	simple = -1;
+	simpleDefaulted = -1;
+	simpleDefaultedNull = "simpleDefaultedNull";
+	list = null;
+	defaultedList = null;
+	defaultedListNull = new ArrayList<String>();
     }
 
-    public void test_postconditions() {
+    public void test_values() {
+	assertEquals(simple, -1);
+	assertNull(list);
 	Arguments arguments = new Arguments(PARAMS);
 	setAll(arguments);
 	assertEquals(simple, 1);
-	assertEquals(simpleDefaulted, 10);
-	assertNull(simpleDefaultedNull);
 	assertNotNull(list);
 	assertEquals(list.size(), 2);
 	assertEquals(list.get(0), "a");
 	assertEquals(list.get(1), "b");
+    }
+    
+    public void test_defaults() {
+	assertEquals(simpleDefaulted, -1);
+	assertEquals(simpleDefaultedNull, "simpleDefaultedNull");
+	assertNull(defaultedList);
+	assertNotNull(defaultedListNull);
+	Arguments arguments = new Arguments(PARAMS);
+	setAll(arguments);
+	assertEquals(simpleDefaulted, 10);
+	assertNull(simpleDefaultedNull);
 	assertNotNull(defaultedList);
 	assertEquals(defaultedList.size(), 2);
 	assertEquals(defaultedList.get(0), "d");
@@ -145,8 +156,8 @@ public class TestAnnotations extends TestCase {
     }
 
     public void test_groups() {
-	Arguments arguments = new Arguments(PARAMS);
 	assertNull(groupOwner);
+	Arguments arguments = new Arguments(PARAMS);
 	setAll(arguments);
 	assertNotNull(groupOwner);
 	assertEquals(groupOwner.size(), 2);
