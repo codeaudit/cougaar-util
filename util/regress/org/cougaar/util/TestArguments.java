@@ -311,36 +311,78 @@ public class TestArguments extends TestCase {
   // Some simple annotation tests
   public static class MyAnnotations {
       @Arguments.Spec(
-	      name = "FooParam", 
+	      name = "SimpleParam", 
 	      valueType=Arguments.BaseDataType.FIXED
       )
-      public int foo = -1;
+      public int simple = -1;
       
       @Arguments.Spec(
-	      name = "TagsParam", 
-	      valueType=Arguments.BaseDataType.STRING,
+	      name = "SimpleDefaultedParam", 
+	      defaultValue="10",
+	      required=false,
+	      valueType=Arguments.BaseDataType.FIXED
+      )
+      public int simpleDefaulted = -1;
+      
+      @Arguments.Spec(
+	      name = "SimpleDefaultedNullParam", 
+	      defaultValue=Arguments.NULL_VALUE,
+	      required=false,
+	      valueType=Arguments.BaseDataType.STRING
+      )
+      public String simpleDefaultedNull = "simpleDefaultedNull";
+      
+      @Arguments.Spec(
+	      name = "ListParam", 
 	      sequence=true
       )
-      public List<String> tags = null;
+      public List<String> list = null;
       
+      @Arguments.Spec(
+	      name = "DefaultedListParam", 
+	      sequence=true,
+	      defaultValue="[d,e]",
+	      required=false
+      )
+      public List<String> defaultedList = null;
+      
+      @Arguments.Spec(
+	      name = "DefaultedListNullParam", 
+	      sequence=true,
+	      defaultValue=Arguments.NULL_VALUE,
+	      required=false
+      )
+      public List<String> defaultedListNull = new ArrayList<String>();
       
       void test() {
-	  String arguments = "FooParam=1, TagsParam=a, TagsParam=b ";
-	  Arguments a1 = 
-	      new Arguments(arguments);
-	  assertEquals(foo, -1);
-	  assertNull(tags);
+	  String arguments = "SimpleParam=1, ListParam=a, ListParam=b ";
+	  Arguments a1 = new Arguments(arguments);
+	  assertEquals(simple, -1);
+	  assertEquals(simpleDefaulted, -1);
+	  assertEquals(simpleDefaultedNull, "simpleDefaultedNull");
+	  assertNull(list);
+	  assertNull(defaultedList);
+	  assertNotNull(defaultedListNull);
 	  try {
 	      a1.setAllFields(this);
 	  } catch (Exception e) {
 	      e.printStackTrace();
 	      fail(e.getMessage());
 	  }
-	  assertEquals(foo, 1);
-	  assertNotNull(tags);
-	  assertEquals(tags.size(), 2);
-	  assertEquals(tags.get(0), "a");
-	  assertEquals(tags.get(1), "b");
+	  assertEquals(simple, 1);
+	  assertEquals(simpleDefaulted, 10);
+	  assertNull(simpleDefaultedNull);
+	  assertNotNull(list);
+	  assertEquals(list.size(), 2);
+	  assertEquals(list.get(0), "a");
+	  assertEquals(list.get(1), "b");
+	  
+	  assertNotNull(defaultedList);
+	  assertEquals(defaultedList.size(), 2);
+	  assertEquals(defaultedList.get(0), "d");
+	  assertEquals(defaultedList.get(1), "e");
+	  
+	  assertNull(defaultedListNull);
       }
   }
   
