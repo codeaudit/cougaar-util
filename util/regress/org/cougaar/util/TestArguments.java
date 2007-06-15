@@ -31,13 +31,14 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+
 import junit.framework.TestCase;
+
 import org.cougaar.bootstrap.SystemProperties;
 
 public class TestArguments extends TestCase {
@@ -303,7 +304,46 @@ public class TestArguments extends TestCase {
     assertEquals(a1.toString(), a2.toString());
   }
 
-
+  public void test_annotations() {
+      new MyAnnotations().test();
+  }
+  
+  // Some simple annotation tests
+  public static class MyAnnotations {
+      @Arguments.Spec(
+	      name = "FooParam", 
+	      valueType=Arguments.BaseDataType.FIXED
+      )
+      public int foo = -1;
+      
+      @Arguments.Spec(
+	      name = "TagsParam", 
+	      valueType=Arguments.BaseDataType.STRING,
+	      sequence=true
+      )
+      public List<String> tags = null;
+      
+      
+      void test() {
+	  String arguments = "FooParam=1, TagsParam=a, TagsParam=b ";
+	  Arguments a1 = 
+	      new Arguments(arguments);
+	  assertEquals(foo, -1);
+	  assertNull(tags);
+	  try {
+	      a1.setAllFields(this);
+	  } catch (Exception e) {
+	      e.printStackTrace();
+	      fail(e.getMessage());
+	  }
+	  assertEquals(foo, 1);
+	  assertNotNull(tags);
+	  assertEquals(tags.size(), 2);
+	  assertEquals(tags.get(0), "a");
+	  assertEquals(tags.get(1), "b");
+      }
+  }
+  
   // dummy classes for -D prefix testing:
   public static class MyPlugin extends MyBase { }
   public static class MyBase extends MyModel { }
