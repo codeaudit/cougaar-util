@@ -432,39 +432,6 @@ public final class Arguments extends AbstractMap<String, List<String>>
         return Collections.unmodifiableList(ret);
     }
 
-    /**
-     * Like {@link #split} except the sub Argument maps are restricted to
-     * include only given keys.
-     */
-    public List<Arguments> split(Set<String> keys) {
-        int n = 1;
-        if (!(m instanceof OptimizedMap)) {
-            for (List<String> l : m.values()) {
-                n = Math.max(n, l.size());
-            }
-        }
-        List<Map<String, String>> ma = new ArrayList<Map<String, String>>(n);
-        for (int i = 0; i < n; i++) {
-            ma.add(new LinkedHashMap<String, String>());
-        }
-
-        for (Map.Entry<String, List<String>> me : m.entrySet()) {
-            String key = me.getKey();
-            if (keys.contains(key)) {
-                List<String> l = me.getValue();
-                for (int i = 0; i < l.size(); i++) {
-                    ma.get(i).put(key, l.get(i));
-                }
-            }
-        }
-
-        List<Arguments> ret = new ArrayList<Arguments>(n);
-        for (Map<String, String> mi : ma) {
-            ret.add(new Arguments(mi));
-        }
-        return Collections.unmodifiableList(ret);
-    }
-
     //
     // Modifiers
     //
@@ -1398,7 +1365,7 @@ public final class Arguments extends AbstractMap<String, List<String>>
         for (String rawValue : rawValues) {
             values.add(type.parse(rawValue));
         }
-        field.set(object, values);
+        field.set(object, Collections.unmodifiableList(values));
     }
 
     private void setSimpleFieldFromSpec(Field field, Object object, Spec spec) 
@@ -1439,7 +1406,7 @@ public final class Arguments extends AbstractMap<String, List<String>>
             throws ParseException, IllegalAccessException, IllegalStateException {
         // First version just splits the args.
         // TODO order the resulting list by policy
-        field.set(object, split(members));
+        field.set(object, new Arguments(this, null, null, members).split());
     }
 
     /**
