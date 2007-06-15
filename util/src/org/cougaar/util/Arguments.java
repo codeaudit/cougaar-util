@@ -1179,54 +1179,58 @@ public final class Arguments extends AbstractMap<String, List<String>>
     // Support for argument annotation metadata
 
     // Can't use 'null' in annotation attributes, so use this instead
+    public static final String NULL_VALUE = "####null-value";
+    
+    // This is used to indicate that the field should be left as is
     public static final String NO_VALUE = "###no-value###";
 
     public static class ParseException extends Exception {
-        public ParseException(Throwable cause) {
-            super(cause);
+        public ParseException(Field field, String value, Throwable cause) {
+            super("Couldn't parse " +value+ " for field " +
+        	    field.getName() + ": " +cause.getMessage());
         }
     }
 
     public static enum BaseDataType {
         FIXED {
-            Object parse(String rawValue) throws ParseException {
+            Object parse(Field field, String rawValue) throws ParseException {
                 try {
                     return Integer.parseInt(rawValue);
                 } catch (NumberFormatException e) {
-                    throw new ParseException(e);
+                    throw new ParseException(field, rawValue, e);
                 }
             }
         },
         REAL {
-            Object parse(String rawValue) throws ParseException {
+            Object parse(Field field, String rawValue) throws ParseException {
                 try {
                     return Double.parseDouble(rawValue);
                 } catch (NumberFormatException e) {
-                    throw new ParseException(e);
+                    throw new ParseException(field, rawValue, e);
                 }
             }
         },
         STRING {
-            Object parse(String rawValue) throws ParseException {
+            Object parse(Field field, String rawValue) throws ParseException {
                 return rawValue;
             }
         },
         BOOLEAN {
-            Object parse(String rawValue) {
+            Object parse(Field field, String rawValue) {
                 return Boolean.parseBoolean(rawValue);
             }
         },
         URI {
-            Object parse(String rawValue) throws ParseException {
+            Object parse(Field field, String rawValue) throws ParseException {
                 try {
                     return new URI(rawValue);
                 } catch (URISyntaxException e) {
-                    throw new ParseException(e);
+                    throw new ParseException(field, rawValue, e);
                 }
             }
         };
 
-        abstract Object parse(String rawValue) throws ParseException;
+        abstract Object parse(Field field, String rawValue) throws ParseException;
     }
 
     @Retention(RetentionPolicy.RUNTIME)
@@ -1344,7 +1348,12 @@ public final class Arguments extends AbstractMap<String, List<String>>
         } else if (isRequired) {
             throw new IllegalStateException("Required argument " + key
                     + " was not provided");
-        } else if (!rawValues.equals(NO_VALUE)) {
+        } else if (defaultValue.equals(NULL_VALUE)) {
+            field.set(object, null);
+            return;
+        } else if (defaultValue.equals(NO_VALUE)) {
+            return;
+        } else {
             // Should be in the form [x,y,z]
             // TODO: Use the existing Arguments code for this, if I can ever
             // find it
@@ -1358,12 +1367,9 @@ public final class Arguments extends AbstractMap<String, List<String>>
             }
             rawValues = Arrays.asList(valueArray);
         }
-        if (rawValues == null) {
-            return;
-        }
         List<Object> values = new ArrayList<Object>(rawValues.size());
         for (String rawValue : rawValues) {
-            values.add(type.parse(rawValue));
+            values.add(type.parse(field, rawValue));
         }
         field.set(object, Collections.unmodifiableList(values));
     }
@@ -1387,16 +1393,36 @@ public final class Arguments extends AbstractMap<String, List<String>>
         if (rawValue.equals(NO_VALUE)) {
             return;
         }
-        field.set(object, type.parse(rawValue));
+        Object parsedValue = 
+            rawValue.equals(NULL_VALUE) ? null : type.parse(field, rawValue);
+	field.set(object, parsedValue);
     }
 
     private void setFieldFromSpec(Field field, Spec spec, Object object) 
             throws ParseException, IllegalAccessException, IllegalStateException {
-        if (spec.sequence()) {
-            setSequenceFieldFromSpec(field, object, spec);
-        } else {
-            setSimpleFieldFromSpec(field, object, spec);
-        }
+        try {
+	    if (spec.sequence()) {
+	        setSequenceFieldFromSpec(field, object, spec);
+	    } else {
+	        setSimpleFieldFromSpec(field, object, spec);
+	    }
+	} catch (IllegalAccessException e) {
+	    String exceptionMsg = e.getMessage();
+	    String msg = "Couldn't set field " +field.getName()+ 
+	    " from argument " +spec.name();
+	    if (exceptionMsg != null) {
+		msg += ": " +exceptionMsg;
+	    }
+	    throw new IllegalAccessException(msg);
+	} catch (IllegalArgumentException e) {
+	    String exceptionMsg = e.getMessage();
+	    String msg = "Couldn't set field " +field.getName()+ 
+	    " from argument " +spec.name();
+	    if (exceptionMsg != null) {
+		msg += ": " +exceptionMsg;
+	    }
+	    throw new IllegalArgumentException(msg);
+	}
     }
 
     private void setGroupOwnerField(Field field,
