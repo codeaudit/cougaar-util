@@ -1254,7 +1254,15 @@ public final class Arguments extends AbstractMap<String, List<String>>
     }
 
     public static enum GroupIterationPolicy {
-        ROUND_ROBIN, FIRST_UP, CLOSEST, RANDOM
+        ROUND_ROBIN, FIRST_UP, CLOSEST, RANDOM;
+        
+        // Default is to restrict the arguments to the 
+        // given members, and then split it.
+        // 
+        // TODO: Specialize this per policy
+        List<Arguments> split(Arguments arguments, Set<String> members) {
+            return new Arguments(arguments, null, null, members).split();
+        }
     }
 
     @Retention(RetentionPolicy.RUNTIME)
@@ -1430,9 +1438,8 @@ public final class Arguments extends AbstractMap<String, List<String>>
                                     GroupIterationPolicy policy,
                                     Set<String> members) 
             throws ParseException, IllegalAccessException, IllegalStateException {
-        // First version just splits the args.
-        // TODO order the resulting list by policy
-        field.set(object, new Arguments(this, null, null, members).split());
+        List<Arguments> split = policy.split(this, members);
+        field.set(object, split);
     }
 
     /**
