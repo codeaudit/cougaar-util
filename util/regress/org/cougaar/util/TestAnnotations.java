@@ -100,6 +100,24 @@ public class TestAnnotations extends TestCase {
     )
     public List<String> defaultedListNull = new ArrayList<String>();
 
+    private void setAll(Arguments args) {
+	try {
+	    args.setAllFields(this);
+	} catch (Exception e) {
+	    e.printStackTrace();
+	    fail(e.getMessage());
+	}
+    }
+    
+    private void setGroup(List<Arguments> owner, int index) {
+	try {
+	    owner.get(index).setFields(this);
+	} catch (Exception e) {
+	    e.printStackTrace();
+	    fail(e.getMessage());
+	}
+    }
+    
     public void test_preconditions() {
 	assertEquals(simple, -1);
 	assertEquals(simpleDefaulted, -1);
@@ -109,18 +127,9 @@ public class TestAnnotations extends TestCase {
 	assertNotNull(defaultedListNull);
     }
 
-    private void setAllFields(Arguments a1) {
-	try {
-	    a1.setAllFields(this);
-	} catch (Exception e) {
-	    e.printStackTrace();
-	    fail(e.getMessage());
-	}
-    }
-
     public void test_postconditions() {
 	Arguments arguments = new Arguments(PARAMS);
-	setAllFields(arguments);
+	setAll(arguments);
 	assertEquals(simple, 1);
 	assertEquals(simpleDefaulted, 10);
 	assertNull(simpleDefaultedNull);
@@ -138,22 +147,12 @@ public class TestAnnotations extends TestCase {
     public void test_groups() {
 	Arguments arguments = new Arguments(PARAMS);
 	assertNull(groupOwner);
-	setAllFields(arguments);
+	setAll(arguments);
 	assertNotNull(groupOwner);
 	assertEquals(groupOwner.size(), 2);
-	try {
-	    groupOwner.get(1).setFields(this);
-	} catch (Exception e) {
-	    e.printStackTrace();
-	    fail(e.getMessage());
-	}
+	setGroup(groupOwner, 1);
 	assertEquals(simple, 100);
-	try {
-	    groupOwner.get(0).setFields(this);
-	} catch (Exception e) {
-	    e.printStackTrace();
-	    fail(e.getMessage());
-	}
+	setGroup(groupOwner, 0);
 	assertEquals(simple, 1);
     }
 }
