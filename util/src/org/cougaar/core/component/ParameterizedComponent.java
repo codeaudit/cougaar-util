@@ -42,6 +42,12 @@ implements Component {
     
     public void setArguments(Arguments args) {
         this.args = args;
+        try {
+	    args.setAllFields(this);
+	} catch (Exception e) {
+	    // TODO: Add Logging support when it's ready
+	    throw new RuntimeException("Exception during field initialization", e);
+	}
     }
     /** @see Arguments#getString(String) */
     protected String getParameter(String key) {
