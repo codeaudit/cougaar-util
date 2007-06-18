@@ -51,6 +51,8 @@ import java.util.Set;
  * 
  */
 public class Annotations {
+    private static final String ARG_GROUP_SUFFIX = "ArgGroup";
+
     // Can't use 'null' in annotation attributes, so use this instead
     public static final String NULL_VALUE = "###null-value###";
 
@@ -77,6 +79,12 @@ public class Annotations {
         GroupRole role() default GroupRole.MEMBER;
         GroupIterationPolicy policy() default GroupIterationPolicy.FIRST_UP;
     }
+    
+    private String getArgGroupName(Class annotationClass) {
+	// remove 'ArgGroup' from the end of the simplename
+	String name = annotationClass.getSimpleName();
+	return name.substring(0, name.length()-ARG_GROUP_SUFFIX.length());
+    }
 
     private Set<String> getGroups(Field field) {
         Set<String> groups = null;
@@ -90,16 +98,14 @@ public class Annotations {
                     }
                     groups.add(group.name());
                 }
-            } else if (annoClass.getName().endsWith("ArgGroup")) {
+            } else if (annoClass.getName().endsWith(ARG_GROUP_SUFFIX)) {
                 try {
                     Class[] parameterTypes = {};
                     Method roleGetter = annoClass.getDeclaredMethod("role",
                                                                     parameterTypes);
-                    Method nameGetter = annoClass.getDeclaredMethod("name",
-                                                                    parameterTypes);
                     Object[] args = {};
                     GroupRole role = (GroupRole) roleGetter.invoke(anno, args);
-                    String name = (String) nameGetter.invoke(anno, args);
+                    String name = getArgGroupName(annoClass);
                     if (role == GroupRole.MEMBER) {
                         if (groups == null) {
                             groups = new HashSet<String>();
@@ -121,7 +127,7 @@ public class Annotations {
                 if (group.role() == GroupRole.OWNER) {
                     return group;
                 }
-            } else if (annoClass.getName().endsWith("ArgGroup")) {
+            } else if (annoClass.getName().endsWith(ARG_GROUP_SUFFIX)) {
                 try {
                     Class[] parameterTypes = {};
                     Method roleGetter = annoClass.getDeclaredMethod("role", parameterTypes);
@@ -312,17 +318,15 @@ public class Annotations {
                 Group group = (Group) anno;
                 members = groupMembers.get(group.name());
                 policy = group.policy();
-            } else if (annoClass.getName().endsWith("ArgGroup")) {
+            } else if (annoClass.getName().endsWith(ARG_GROUP_SUFFIX)) {
                 try {
                     Class[] parameterTypes = {};
                     Method policyGetter = annoClass.getDeclaredMethod("policy",
                                                                       parameterTypes);
-                    Method nameGetter = annoClass.getDeclaredMethod("name",
-                                                                    parameterTypes);
                     Object[] methodArgs = {};
                     policy = (GroupIterationPolicy) 
                         policyGetter.invoke(anno, methodArgs);
-                    String name = (String) nameGetter.invoke(anno, methodArgs);
+                    String name = getArgGroupName(annoClass);
                     members = groupMembers.get(name);
                 } catch (Exception e) {
                 }

@@ -45,7 +45,6 @@ public class TestAnnotations extends TestCase {
 
     @Retention(RetentionPolicy.RUNTIME)
     public @interface TestArgGroup {
-        String name() default "TestArgGroup";
         Annotations.GroupRole role() default Annotations.GroupRole.MEMBER;
         Annotations.GroupIterationPolicy policy() default Annotations.GroupIterationPolicy.FIRST_UP;
     }
