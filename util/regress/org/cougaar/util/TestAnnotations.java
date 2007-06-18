@@ -42,18 +42,24 @@ import org.cougaar.util.Arguments.GroupRole;
  *
  */
 public class TestAnnotations extends TestCase {
-    private static final String TEST_GROUP_NAME = "TestArgGroup";
-    private static final String PARAMS = "SimpleParam=1, SimpleParam=100, ListParam=a, ListParam=b ";
+    private static final String GROUP_NAME = "GroupX";
+    private static final String PARAMS = 
+	"SimpleParam=1, SimpleParam=100, ListParam=a, ListParam=b ";
 
     @Retention(RetentionPolicy.RUNTIME)
     public @interface TestArgGroup {
-	String name() default TEST_GROUP_NAME;
+	String name() default "TestArgGroup";
 	GroupRole role() default GroupRole.MEMBER;
 	GroupIterationPolicy policy() default GroupIterationPolicy.FIRST_UP;
     }
 
-    @TestArgGroup(role=Arguments.GroupRole.OWNER)
+    @Arguments.Group(role=Arguments.GroupRole.OWNER, name=GROUP_NAME)
     public List<Arguments> groupOwner;
+    
+    @TestArgGroup(role=Arguments.GroupRole.OWNER)
+    public List<Arguments> testArgGroupOwner;
+    
+   
 
     @Arguments.Spec(
 	    name = "SimpleParam", 
@@ -82,6 +88,7 @@ public class TestAnnotations extends TestCase {
 	    name = "ListParam", 
 	    sequence=true
     )
+    @Arguments.Group(name=GROUP_NAME)
     public List<String> list;
 
     @Arguments.Spec(
@@ -98,6 +105,7 @@ public class TestAnnotations extends TestCase {
 	    defaultValue=Arguments.NULL_VALUE,
 	    required=false
     )
+    @Arguments.Group(name=GROUP_NAME)
     public List<String> defaultedListNull;
 
     private void setAll(Arguments args) {
@@ -125,6 +133,7 @@ public class TestAnnotations extends TestCase {
 	list = null;
 	defaultedList = null;
 	defaultedListNull = new ArrayList<String>();
+	testArgGroupOwner = null;
     }
 
     public void test_values() {
@@ -156,14 +165,24 @@ public class TestAnnotations extends TestCase {
     }
 
     public void test_groups() {
+	assertNull(testArgGroupOwner);
 	assertNull(groupOwner);
+	assertNull(list);
 	Arguments arguments = new Arguments(PARAMS);
 	setAll(arguments);
+	assertNotNull(testArgGroupOwner);
+	assertEquals(testArgGroupOwner.size(), 2);
 	assertNotNull(groupOwner);
 	assertEquals(groupOwner.size(), 2);
-	setGroup(groupOwner, 1);
+	setGroup(testArgGroupOwner, 1);
 	assertEquals(simple, 100);
-	setGroup(groupOwner, 0);
+	setGroup(testArgGroupOwner, 0);
 	assertEquals(simple, 1);
+	
+	assertNotNull(list);
+	assertEquals(list.size(), 2);
+	setGroup(groupOwner, 1);
+	assertEquals(list.size(), 1);
+	assertEquals(list.get(0), "b");
     }
 }
