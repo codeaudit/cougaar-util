@@ -121,6 +121,7 @@ public class TestAnnotations extends TestCase {
 	defaultedList = null;
 	defaultedListNull = new ArrayList<String>();
 	testArgGroupOwner = null;
+	groupOwner = null;
     }
 
     public void test_values() {
