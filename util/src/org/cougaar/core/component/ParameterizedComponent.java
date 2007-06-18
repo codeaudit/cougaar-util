@@ -43,7 +43,7 @@ implements Component {
     public void setArguments(Arguments args) {
         this.args = args;
         try {
-	    args.setAllFields(this);
+	    args.getAnnotations().setAllFields(this);
 	} catch (Exception e) {
 	    // TODO: Add Logging support when it's ready
 	    throw new RuntimeException("Exception during field initialization", e);

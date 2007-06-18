@@ -33,9 +33,6 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import org.cougaar.util.Arguments.GroupIterationPolicy;
-import org.cougaar.util.Arguments.GroupRole;
-
 /**
  * Test field initialization via annotation metatdata
  * @author rshapiro
@@ -48,69 +45,59 @@ public class TestAnnotations extends TestCase {
 
     @Retention(RetentionPolicy.RUNTIME)
     public @interface TestArgGroup {
-	String name() default "TestArgGroup";
-	GroupRole role() default GroupRole.MEMBER;
-	GroupIterationPolicy policy() default GroupIterationPolicy.FIRST_UP;
+        String name() default "TestArgGroup";
+        Annotations.GroupRole role() default Annotations.GroupRole.MEMBER;
+        Annotations.GroupIterationPolicy policy() default Annotations.GroupIterationPolicy.FIRST_UP;
     }
 
-    @Arguments.Group(role=Arguments.GroupRole.OWNER, name=GROUP_NAME)
+    @Annotations.Group(role=Annotations.GroupRole.OWNER, name=GROUP_NAME)
     public List<Arguments> groupOwner;
     
-    @TestArgGroup(role=Arguments.GroupRole.OWNER)
+    @TestArgGroup(role=Annotations.GroupRole.OWNER)
     public List<Arguments> testArgGroupOwner;
     
    
 
-    @Arguments.Spec(
-	    name = "SimpleParam", 
-	    valueType=Arguments.BaseDataType.FIXED
-    )
+    @Annotations.Spec(name = "SimpleParam")
     @TestArgGroup()
     public int simple;
 
-    @Arguments.Spec(
+    @Annotations.Spec(
 	    name = "SimpleDefaultedParam", 
 	    defaultValue="10",
-	    required=false,
-	    valueType=Arguments.BaseDataType.FIXED
+	    required=false
     )
     public int simpleDefaulted;
 
-    @Arguments.Spec(
+    @Annotations.Spec(
 	    name = "SimpleDefaultedNullParam", 
-	    defaultValue=Arguments.NULL_VALUE,
-	    required=false,
-	    valueType=Arguments.BaseDataType.STRING
+	    defaultValue=Annotations.NULL_VALUE,
+	    required=false
     )
     public String simpleDefaultedNull;
 
-    @Arguments.Spec(
-	    name = "ListParam", 
-	    sequence=true
-    )
-    @Arguments.Group(name=GROUP_NAME)
+    @Annotations.Spec(name = "ListParam")
+    @Annotations.Group(name=GROUP_NAME)
     public List<String> list;
 
-    @Arguments.Spec(
+    @Annotations.Spec(
 	    name = "DefaultedListParam", 
-	    sequence=true,
 	    defaultValue="[d,e]",
 	    required=false
     )
     public List<String> defaultedList;
 
-    @Arguments.Spec(
+    @Annotations.Spec(
 	    name = "DefaultedListNullParam", 
-	    sequence=true,
-	    defaultValue=Arguments.NULL_VALUE,
+	    defaultValue=Annotations.NULL_VALUE,
 	    required=false
     )
-    @Arguments.Group(name=GROUP_NAME)
+    @Annotations.Group(name=GROUP_NAME)
     public List<String> defaultedListNull;
 
     private void setAll(Arguments args) {
 	try {
-	    args.setAllFields(this);
+	    args.getAnnotations().setAllFields(this);
 	} catch (Exception e) {
 	    e.printStackTrace();
 	    fail(e.getMessage());
@@ -119,7 +106,7 @@ public class TestAnnotations extends TestCase {
     
     private void setGroup(List<Arguments> owner, int index) {
 	try {
-	    owner.get(index).setFields(this);
+	    owner.get(index).getAnnotations().setFields(this);
 	} catch (Exception e) {
 	    e.printStackTrace();
 	    fail(e.getMessage());

@@ -27,14 +27,9 @@
 package org.cougaar.util;
 
 import java.io.Serializable;
-import java.lang.annotation.Annotation;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.AbstractMap;
 import java.util.AbstractSet;
 import java.util.ArrayList;
@@ -42,7 +37,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -130,6 +124,8 @@ public final class Arguments extends AbstractMap<String, List<String>>
     private static final int OPTIMIZE_SIZE = 5;
 
     private final Map<String, List<String>> m;
+    
+    private final Annotations annotations;
 
     public Arguments(Object o) {
         this(o, null);
@@ -162,6 +158,7 @@ public final class Arguments extends AbstractMap<String, List<String>>
             Map<String, List<String>> def = parseMap(deflt);
             Set<String> ks = parseSet(keys);
             this.m = parse(m2, prefixes, def, ks);
+            this.annotations = new Annotations(this);
         } catch (Exception e) {
             throw new IllegalArgumentException("Unable to create new Arguments("
                                                        + "\n  o = "
@@ -170,6 +167,10 @@ public final class Arguments extends AbstractMap<String, List<String>>
                                                        + ")",
                                                e);
         }
+    }
+    
+    public Annotations getAnnotations() {
+        return annotations;
     }
 
     private String argString(Object propertyPrefix, Object deflt, Object keys) {
@@ -1173,360 +1174,6 @@ public final class Arguments extends AbstractMap<String, List<String>>
                 }
             }
             return null;
-        }
-    }
-
-    // Support for argument annotation metadata
-
-    // Can't use 'null' in annotation attributes, so use this instead
-    public static final String NULL_VALUE = "####null-value";
-    
-    // This is used to indicate that the field should be left as is
-    public static final String NO_VALUE = "###no-value###";
-
-    public static class ParseException extends Exception {
-        public ParseException(Field field, String value, Throwable cause) {
-            super("Couldn't parse " +value+ " for field " +
-        	    field.getName() + ": " +cause.getMessage());
-        }
-    }
-
-    public static enum BaseDataType {
-        FIXED {
-            Object parse(Field field, String rawValue) throws ParseException {
-                try {
-                    return Integer.parseInt(rawValue);
-                } catch (NumberFormatException e) {
-                    throw new ParseException(field, rawValue, e);
-                }
-            }
-        },
-        REAL {
-            Object parse(Field field, String rawValue) throws ParseException {
-                try {
-                    return Double.parseDouble(rawValue);
-                } catch (NumberFormatException e) {
-                    throw new ParseException(field, rawValue, e);
-                }
-            }
-        },
-        STRING {
-            Object parse(Field field, String rawValue) throws ParseException {
-                return rawValue;
-            }
-        },
-        BOOLEAN {
-            Object parse(Field field, String rawValue) {
-                return Boolean.parseBoolean(rawValue);
-            }
-        },
-        URI {
-            Object parse(Field field, String rawValue) throws ParseException {
-                try {
-                    return new URI(rawValue);
-                } catch (URISyntaxException e) {
-                    throw new ParseException(field, rawValue, e);
-                }
-            }
-        };
-
-        abstract Object parse(Field field, String rawValue) throws ParseException;
-    }
-
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface Spec {
-
-        String name();
-
-        BaseDataType valueType() default BaseDataType.STRING;
-
-        boolean sequence() default false;
-
-        boolean required() default true;
-
-        String defaultValue() default NO_VALUE;
-
-        String description() default "no description";
-    }
-
-    public static enum GroupRole {
-        MEMBER, OWNER
-    }
-
-    public static enum GroupIterationPolicy {
-        ROUND_ROBIN, FIRST_UP, CLOSEST, RANDOM;
-        
-        // Default is to restrict the arguments to the 
-        // given members, and then split it.
-        // 
-        // TODO: Specialize this per policy
-        List<Arguments> split(Arguments arguments, Set<String> members) {
-            return new Arguments(arguments, null, null, members).split();
-        }
-    }
-
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface Group {
-        String name();
-
-        GroupRole role() default GroupRole.MEMBER;
-
-        GroupIterationPolicy policy() default GroupIterationPolicy.FIRST_UP;
-    }
-    
-    // For now, group annotations can be specified in two ways.
-    // One is the defined {@link Group} above.  The other is
-    // any Annotation class whose name ends in "ArgGroup" and
-    // that has the right getter methods.  
-    //
-    // The purpose of the second form is to improve
-    // compile-time validation of group names, since
-    // the name string doesn't have to be repeated
-    // in every annotation.
-
-    private Set<String> getGroups(Field field) {
-        Set<String> groups = null;
-        for (Annotation anno : field.getAnnotations()) {
-            Class annoClass = anno.annotationType();
-            if (anno instanceof Group) {
-                Group group = (Group) anno;
-                if (group.role() == GroupRole.MEMBER) {
-                    if (groups == null) {
-                        groups = new HashSet<String>();
-                    }
-                    groups.add(group.name());
-                }
-            } else if (annoClass.getName().endsWith("ArgGroup")) {
-                try {
-                    Class[] parameterTypes = {};
-                    Method roleGetter = annoClass.getDeclaredMethod("role",
-                                                                    parameterTypes);
-                    Method nameGetter = annoClass.getDeclaredMethod("name",
-                                                                    parameterTypes);
-                    Object[] args = {};
-                    GroupRole role = (GroupRole) roleGetter.invoke(anno, args);
-                    String name = (String) nameGetter.invoke(anno, args);
-                    if (role == GroupRole.MEMBER) {
-                        if (groups == null) {
-                            groups = new HashSet<String>();
-                        }
-                        groups.add(name);
-                    }
-                } catch (Exception e) {
-                }
-            }
-        }
-        return groups;
-    }
-
-    private Annotation getOwnedGroup(Field field) {
-        for (Annotation anno : field.getAnnotations()) {
-            Class annoClass = anno.annotationType();
-            if (anno instanceof Group) {
-                Group group = (Group) anno;
-                if (group.role() == GroupRole.OWNER) {
-                    return group;
-                }
-            } else if (annoClass.getName().endsWith("ArgGroup")) {
-                try {
-                    Class[] parameterTypes = {};
-                    Method roleGetter = annoClass.getDeclaredMethod("role", parameterTypes);
-                    Object[] args = {};
-                    GroupRole role = (GroupRole) roleGetter.invoke(anno, args);
-                    if (role == GroupRole.OWNER) {
-                        return anno;
-                    }
-                } catch (Exception e) {
-                    // these can safely be ignored
-                }
-            }
-        }
-        return null;
-    }
-
-    private void setSequenceFieldFromSpec(Field field, Object object, Spec spec) 
-            throws ParseException, IllegalAccessException, IllegalStateException {
-        String defaultValue = spec.defaultValue();
-        String key = spec.name();
-        BaseDataType type = spec.valueType();
-        boolean isRequired = spec.required();
-        List<String> rawValues = null;
-        if (containsKey(key)) {
-            rawValues = getStrings(key);
-        } else if (isRequired) {
-            throw new IllegalStateException("Required argument " + key
-                    + " was not provided");
-        } else if (defaultValue.equals(NULL_VALUE)) {
-            field.set(object, null);
-            return;
-        } else if (defaultValue.equals(NO_VALUE)) {
-            return;
-        } else {
-            // Should be in the form [x,y,z]
-            // TODO: Use the existing Arguments code for this, if I can ever
-            // find it
-            String[] valueArray;
-            int end = defaultValue.length() - 1;
-            if (defaultValue.charAt(0) == '['
-                    && defaultValue.charAt(end) == ']') {
-                valueArray = defaultValue.substring(1, end).split(",");
-            } else {
-                valueArray = defaultValue.split(",");
-            }
-            rawValues = Arrays.asList(valueArray);
-        }
-        List<Object> values = new ArrayList<Object>(rawValues.size());
-        for (String rawValue : rawValues) {
-            values.add(type.parse(field, rawValue));
-        }
-        field.set(object, Collections.unmodifiableList(values));
-    }
-
-    private void setSimpleFieldFromSpec(Field field, Object object, Spec spec) 
-            throws ParseException, IllegalAccessException, IllegalStateException {
-        String defaultValue = spec.defaultValue();
-        String key = spec.name();
-        BaseDataType type = spec.valueType();
-        boolean isRequired = spec.required();
-        String rawValue;
-        if (containsKey(key)) {
-            List<String> values = getStrings(key);
-            rawValue = values.get(0);
-        } else if (isRequired) {
-            throw new IllegalStateException("Required argument " + key
-                    + " was not provided");
-        } else {
-            rawValue = defaultValue;
-        }
-        if (rawValue.equals(NO_VALUE)) {
-            return;
-        }
-        Object parsedValue = 
-            rawValue.equals(NULL_VALUE) ? null : type.parse(field, rawValue);
-	field.set(object, parsedValue);
-    }
-
-    private void setFieldFromSpec(Field field, Spec spec, Object object) 
-            throws ParseException, IllegalAccessException, IllegalStateException {
-        try {
-	    if (spec.sequence()) {
-	        setSequenceFieldFromSpec(field, object, spec);
-	    } else {
-	        setSimpleFieldFromSpec(field, object, spec);
-	    }
-	} catch (IllegalAccessException e) {
-	    String exceptionMsg = e.getMessage();
-	    String msg = "Couldn't set field " +field.getName()+ 
-	    " from argument " +spec.name();
-	    if (exceptionMsg != null) {
-		msg += ": " +exceptionMsg;
-	    }
-	    throw new IllegalAccessException(msg);
-	} catch (IllegalArgumentException e) {
-	    String exceptionMsg = e.getMessage();
-	    String msg = "Couldn't set field " +field.getName()+ 
-	    " from argument " +spec.name();
-	    if (exceptionMsg != null) {
-		msg += ": " +exceptionMsg;
-	    }
-	    throw new IllegalArgumentException(msg);
-	}
-    }
-
-    private void setGroupOwnerField(Field field,
-                                    Object object,
-                                    GroupIterationPolicy policy,
-                                    Set<String> members) 
-            throws ParseException, IllegalAccessException, IllegalStateException {
-        List<Arguments> split = policy.split(this, members);
-        field.set(object, split);
-    }
-
-    /**
-     * Set whatever {@link Spec}-annotated fields we have values for.
-     */
-    public void setFields(Object object) 
-            throws ParseException, IllegalAccessException, IllegalStateException {
-        for (Field field : object.getClass().getFields()) {
-            int mod = field.getModifiers();
-            if (Modifier.isFinal(mod) || Modifier.isStatic(mod)) {
-                // skip finals and statics
-                continue;
-            } else if (field.isAnnotationPresent(Spec.class)) {
-                Spec spec = field.getAnnotation(Spec.class);
-                String argName = spec.name();
-                if (containsKey(argName)) {
-                    setFieldFromSpec(field, spec, object);
-                }
-            }
-        }
-    }
-
-    /**
-     * Set values of every field that has either a {@link Spec} annotation, or a
-     * Group annotation with role OWNER.
-     * 
-     */
-    public void setAllFields(Object object) 
-            throws ParseException, IllegalAccessException, IllegalStateException {
-        Map<String, Set<String>> groupMembers = new HashMap<String, Set<String>>();
-        Map<Annotation, Field> groupFields = new HashMap<Annotation, Field>();
-        for (Field field : object.getClass().getFields()) {
-            int mod = field.getModifiers();
-            if (Modifier.isFinal(mod) || Modifier.isStatic(mod)) {
-                // skip finals and statics
-                continue;
-            } else if (field.isAnnotationPresent(Spec.class)) {
-                Spec spec = field.getAnnotation(Spec.class);
-                setFieldFromSpec(field, spec, object);
-                Set<String> groups = getGroups(field);
-                if (groups != null) {
-                    for (String group : groups) {
-                        Set<String> members = groupMembers.get(group);
-                        if (members == null) {
-                            members = new LinkedHashSet<String>();
-                            groupMembers.put(group, members);
-                        }
-                        members.add(spec.name());
-                    }
-                }
-            } else {
-                // Check for group owners
-                Annotation anno = getOwnedGroup(field);
-                if (anno != null) {
-                    groupFields.put(anno, field);
-                }
-            }
-        }
-        // Now set up group owners
-        for (Map.Entry<Annotation, Field> entry : groupFields.entrySet()) {
-            Annotation anno = entry.getKey();
-            Field field = entry.getValue();
-            Set<String> members = null;
-            GroupIterationPolicy policy = null;
-            Class annoClass = anno.annotationType();
-            if (anno instanceof Group) {
-                Group group = (Group) anno;
-                members = groupMembers.get(group.name());
-                policy = group.policy();
-            } else if (annoClass.getName().endsWith("ArgGroup")) {
-                try {
-                    Class[] parameterTypes = {};
-                    Method policyGetter = annoClass.getDeclaredMethod("policy",
-                                                                      parameterTypes);
-                    Method nameGetter = annoClass.getDeclaredMethod("name",
-                                                                    parameterTypes);
-                    Object[] args = {};
-                    policy = (GroupIterationPolicy) policyGetter.invoke(anno,
-                                                                        args);
-                    String name = (String) nameGetter.invoke(anno, args);
-                    members = groupMembers.get(name);
-                } catch (Exception e) {
-                }
-            }
-            if (policy != null && members != null && !members.isEmpty()) {
-                setGroupOwnerField(field, object, policy, members);
-            }
         }
     }
 }
