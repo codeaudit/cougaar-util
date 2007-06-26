@@ -57,6 +57,12 @@ For additional notes, see "SimpleAgent.xsl".
   <xsl:param name="link_protocol.rmi" select="substring-before(substring-after($matrix, concat('link_protocol.rmi', '=')), ',')"/>
   <xsl:param name="link_protocol.jms" select="substring-before(substring-after($matrix, concat('link_protocol.jms', '=')), ',')"/>
   <xsl:param name="pluginThreadPool" select="substring-before(substring-after($matrix, concat('pluginThreadPool', '=')), ',')"/>
+  <xsl:param name="servlet_engine.tomcat" select="substring-before(substring-after($matrix, concat('servlet_engine.tomcat', '=')), ',')"/>
+  <xsl:param name="servlet_engine.micro" select="substring-before(substring-after($matrix, concat('servlet_engine.micro', '=')), ',')"/>
+  <xsl:param name="servlet_engine.mts" select="substring-before(substring-after($matrix, concat('servlet_engine.mts', '=')), ',')"/>
+  <xsl:param name="servlet_redirector.http_redirect" select="substring-before(substring-after($matrix, concat('servlet_redirector.http_redirect', '=')), ',')"/>
+  <xsl:param name="servlet_redirector.http_tunnel" select="substring-before(substring-after($matrix, concat('servlet_redirector.http_tunnel', '=')), ',')"/>
+  <xsl:param name="servlet_redirector.mts_tunnel" select="substring-before(substring-after($matrix, concat('servlet_redirector.mts_tunnel', '=')), ',')"/>
 
   <!--
   if a node "template" attribute is not specified, the "defaultNode"
@@ -68,7 +74,7 @@ For additional notes, see "SimpleAgent.xsl".
 
   <!-- match 'node' elements -->
   <xsl:template match="node[(@template = 'NodeAgent.xsl') or ($defaultNode = 'NodeAgent.xsl' and not(@template) and not(@type))]">
-    <xsl:if test="not($node) or ($node = @name)">
+    <xsl:if test="not($node) or not(@name) or ($node = '*') or (@name = '*') or ($node = @name)">
       <node name="{@name}" template="">
         <!-- preserve facets, vm_parameters, etc -->
         <xsl:apply-templates select="node()[not(self::agent)]"/>
@@ -88,6 +94,7 @@ For additional notes, see "SimpleAgent.xsl".
 
     <xsl:call-template name="init_node"/>
 
+    <xsl:call-template name="HIGH_agent_pre"/>
     <xsl:call-template name="HIGH_node_pre0"/>
 
     <xsl:call-template name="HIGH_agent_0"/>
@@ -97,6 +104,8 @@ For additional notes, see "SimpleAgent.xsl".
     <xsl:call-template name="HIGH_node_1b"/>
 
     <xsl:call-template name="HIGH_agent_2"/>
+
+    <xsl:call-template name="HIGH_node_servlet_engine"/>
 
     <xsl:call-template name="INTERNAL_config"/>
 
@@ -487,9 +496,68 @@ For additional notes, see "SimpleAgent.xsl".
       class="org.cougaar.core.node.NaturalTimeComponent"
       priority="HIGH"
       insertionpoint="Node.AgentManager.Agent.Component"/>
+  </xsl:template>
 
+  <xsl:template name="HIGH_node_servlet_engine">
     <xsl:if test="$servlets = 'true'">
-      <!-- servlets -->
+
+      <!-- servlet engine(s) -->
+      <component
+        name="org.cougaar.lib.web.engine.ServletEngineRegistry()"
+        class="org.cougaar.lib.web.engine.ServletEngineRegistry"
+        priority="HIGH"
+        insertionpoint="Node.AgentManager.Agent.Component"/>
+      <xsl:if test="$servlet_engine.tomcat = 'true'">
+        <component
+          name="org.cougaar.lib.web.tomcat.TomcatServletEngine()"
+          class="org.cougaar.lib.web.tomcat.TomcatServletEngine"
+          priority="HIGH"
+          insertionpoint="Node.AgentManager.Agent.Component"/>
+      </xsl:if>
+      <xsl:if test="$servlet_engine.micro = 'true'">
+        <component
+          name="org.cougaar.lib.web.micro.http.HttpServletEngine()"
+          class="org.cougaar.lib.web.micro.http.HttpServletEngine"
+          priority="HIGH"
+          insertionpoint="Node.AgentManager.Agent.Component"/>
+      </xsl:if>
+      <xsl:if test="$servlet_engine.mts = 'true'">
+        <component
+          name="org.cougaar.lib.web.micro.mts.MessagingServletEngine()"
+          class="org.cougaar.lib.web.micro.mts.MessagingServletEngine"
+          priority="HIGH"
+          insertionpoint="Node.AgentManager.Agent.Component"/>
+      </xsl:if>
+
+      <!-- servlet redirectors/tunnels -->
+      <component
+        name="org.cougaar.lib.web.redirect.ServletRedirectorRegistry()"
+        class="org.cougaar.lib.web.redirect.ServletRedirectorRegistry"
+        priority="HIGH"
+        insertionpoint="Node.AgentManager.Agent.Component"/>
+      <xsl:if test="$servlet_redirector.http_redirect = 'true'">
+        <component
+          name="org.cougaar.lib.web.redirect.HttpServletRedirector()"
+          class="org.cougaar.lib.web.redirect.HttpServletRedirector"
+          priority="HIGH"
+          insertionpoint="Node.AgentManager.Agent.Component"/>
+      </xsl:if>
+      <xsl:if test="$servlet_redirector.http_tunnel = 'true'">
+        <component
+          name="org.cougaar.lib.web.micro.http.HttpServletTunnel()"
+          class="org.cougaar.lib.web.micro.http.HttpServletTunnel"
+          priority="HIGH"
+          insertionpoint="Node.AgentManager.Agent.Component"/>
+      </xsl:if>
+      <xsl:if test="$servlet_redirector.mts_tunnel = 'true'">
+        <component
+          name="org.cougaar.lib.web.micro.mts.MessagingServletTunnel()"
+          class="org.cougaar.lib.web.micro.mts.MessagingServletTunnel"
+          priority="HIGH"
+          insertionpoint="Node.AgentManager.Agent.Component"/>
+      </xsl:if>
+
+      <!-- root-level servlet service -->
       <component
          name="org.cougaar.lib.web.service.RootServletServiceComponent()"
          class="org.cougaar.lib.web.service.RootServletServiceComponent"
@@ -499,14 +567,34 @@ For additional notes, see "SimpleAgent.xsl".
   </xsl:template>
 
   <xsl:template name="BINDER_node_pre0">
-    <!-- community config reader -->
-    <xsl:if test="$communities = 'true'">
-      <component
-         name="org.cougaar.community.init.CommunityInitializerServiceComponent()"
-         class="org.cougaar.community.init.CommunityInitializerServiceComponent"
-         priority="BINDER"
-         insertionpoint="Node.AgentManager.Agent.Component"/>
-    </xsl:if>
+    <!-- communities -->
+    <xsl:choose>
+      <xsl:when test="$communities = 'true'">
+        <!-- shared node-level community service impl -->
+        <component
+          name="org.cougaar.community.CommunityServiceComponent()"
+          class="org.cougaar.core.agent.service.community.CommunityServiceProvider"
+          priority="BINDER"
+          insertionpoint="Node.AgentManager.Agent.Component"/>
+      </xsl:when>
+      <xsl:when test="$communities = 'legacy'">
+        <!-- community config reader -->
+        <component
+          name="org.cougaar.community.init.CommunityInitializerServiceComponent()"
+          class="org.cougaar.community.init.CommunityInitializerServiceComponent"
+          priority="BINDER"
+          insertionpoint="Node.AgentManager.Agent.Component"/>
+      </xsl:when>
+      <xsl:when test="$communities = 'false' or $communities = ''">
+        <!-- no community support -->
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="logBadParameter">
+          <xsl:with-param name="name" select="'communities'"/>
+          <xsl:with-param name="value" select="$communities"/>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
 
     <!-- asset config reader -->
     <xsl:if test="$planning = 'true'">
@@ -571,6 +659,15 @@ For additional notes, see "SimpleAgent.xsl".
         priority='COMPONENT'
         insertionpoint='Node.AgentManager.Agent.PluginManager.Plugin'>
       </component>
+    </xsl:if>
+
+    <xsl:if test="$servlets = 'true'">
+      <!-- /favicon.ico -->
+      <component
+        name="org.cougaar.lib.web.service.FavIconServlet()"
+        class="org.cougaar.lib.web.service.FavIconServlet"
+        priority="COMPONENT"
+        insertionpoint="Node.AgentManager.Agent.Component"/>
     </xsl:if>
 
     <!-- optional servlets -->

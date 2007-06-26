@@ -101,6 +101,8 @@ section titled "XSL Agent Templates".
         servlets=true,
         standard_agent_servlets=true,
         standard_node_servlets=true,
+        servlet_engine.tomcat=true,
+        servlet_redirector.http_redirect=true,
       </xsl:when>
       <xsl:when test="$template = 'single_debug'">
         threadService=full,
@@ -115,6 +117,8 @@ section titled "XSL Agent Templates".
         standard_agent_servlets=true,
         standard_node_servlets=true,
         standard_aspects=true,
+        servlet_engine.tomcat=true,
+        servlet_redirector.http_redirect=true,
       </xsl:when>
       <xsl:when test="$template = 'legacy'">
         threadService=full,
@@ -127,6 +131,8 @@ section titled "XSL Agent Templates".
         planning=true,
         domain_ini=true,
         communities=true,
+        servlet_engine.tomcat=true,
+        servlet_redirector.http_redirect=true,
       </xsl:when>
       <xsl:when test="$template = 'lan'">
         threadService=full,
@@ -141,6 +147,10 @@ section titled "XSL Agent Templates".
         standard_agent_servlets=true,
         standard_node_servlets=true,
         standard_aspects=true,
+        servlet_engine.tomcat=true,
+        servlet_engine.mts=true,
+        servlet_redirector.http_redirect=true,
+        servlet_redirector.mts_tunnel=true,
       </xsl:when>
       <xsl:when test="$template = 'wan'">
         threadService=full,
@@ -159,6 +169,10 @@ section titled "XSL Agent Templates".
         standard_agent_servlets=true,
         standard_node_servlets=true,
         standard_aspects=true,
+        servlet_engine.tomcat=true,
+        servlet_engine.mts=true,
+        servlet_redirector.http_redirect=true,
+        servlet_redirector.mts_tunnel=true,
       </xsl:when>
       <xsl:otherwise>
         <xsl:call-template name="logBadParameter">
@@ -232,6 +246,8 @@ section titled "XSL Agent Templates".
   "subclassing" of this templates, e.g. "NodeAgent.xsl".
   -->
   <xsl:template name="SimpleAgent_run">
+    <xsl:call-template name="HIGH_agent_pre"/>
+
     <xsl:call-template name="HIGH_agent_0"/>
     <xsl:call-template name="HIGH_config"/>
     <xsl:call-template name="HIGH_agent_1"/>
@@ -253,6 +269,74 @@ section titled "XSL Agent Templates".
   </xsl:template>
 
   <!-- named templates, which simply group components -->
+
+  <xsl:template name="HIGH_agent_pre">
+    <!-- agent-id service -->
+    <component
+      name="org.cougaar.core.agent.service.id.AgentIdentificationServiceComponent()"
+      class="org.cougaar.core.agent.service.id.AgentIdentificationServiceComponent"
+      priority="HIGH"
+      insertionpoint="Node.AgentManager.Agent.Component">
+      <!-- only the first agent-level component supports this "$AGENT_NAME" arg. -->
+      <argument>$AGENT_NAME</argument>
+    </component>
+
+    <!-- block the NodeControlService if (agent-id != node-id) -->
+    <component
+      name="org.cougaar.core.agent.NodeControlBlocker()"
+      class="org.cougaar.core.agent.NodeControlBlocker"
+      priority="HIGH"
+      insertionpoint="Node.AgentManager.Agent.Component"/>
+
+    <!-- logging service, which wraps Log4j -->
+    <component
+      name="org.cougaar.core.node.LoggingServiceComponent()"
+      class="org.cougaar.core.node.LoggingServiceComponent"
+      priority="HIGH"
+      insertionpoint="Node.AgentManager.Agent.Component"/>
+
+    <!-- node-level blackboard quiescence monitor, disabled in agents -->
+    <component
+      name="org.cougaar.core.node.QuiescenceReportComponent()"
+      class="org.cougaar.core.node.QuiescenceReportComponent"
+      priority="HIGH"
+      insertionpoint="Node.AgentManager.Agent.Component"/>
+
+    <!-- loading/starting/etc logger -->
+    <component
+      name="org.cougaar.core.agent.BeginLogger()"
+      class="org.cougaar.core.agent.BeginLogger"
+      priority="HIGH"
+      insertionpoint="Node.AgentManager.Agent.Component"/>
+
+    <!-- persistence, which requires the "lib/javaiopatch.jar" -->
+    <component
+      name="org.cougaar.core.persist.PersistenceServiceComponent()"
+      class="org.cougaar.core.persist.PersistenceServiceComponent"
+      priority="HIGH"
+      insertionpoint="Node.AgentManager.Agent.Component"/>
+
+    <!-- register agent in the static deserializer table (mts, etc) -->
+    <component
+      name="org.cougaar.core.agent.RegisterContext()"
+      class="org.cougaar.core.agent.RegisterContext"
+      priority="HIGH"
+      insertionpoint="Node.AgentManager.Agent.Component"/>
+
+    <!-- rehydrate mobile/persisted state -->
+    <component
+      name="org.cougaar.core.agent.RehydrateEarly()"
+      class="org.cougaar.core.agent.RehydrateEarly"
+      priority="HIGH"
+      insertionpoint="Node.AgentManager.Agent.Component"/>
+
+    <!--  read the mobility snapshot and override our component list -->
+    <component
+      name="org.cougaar.core.agent.FindComponentsEarly()"
+      class="org.cougaar.core.agent.FindComponentsEarly"
+      priority="HIGH"
+      insertionpoint="Node.AgentManager.Agent.Component"/>
+  </xsl:template>
 
   <xsl:template name="HIGH_agent_0">
     <!-- events -->
@@ -292,11 +376,7 @@ section titled "XSL Agent Templates".
       priority="HIGH"
       insertionpoint="Node.AgentManager.Agent.Component"/>
 
-    <!--
-    if we're rehydrated, override our component list with the
-    components found in the snapshot.  This will discard the
-    remainder of this config.
-    -->
+    <!--  read the persistence snapshot and override our component list -->
     <component
       name="org.cougaar.core.agent.FindComponentsLate()"
       class="org.cougaar.core.agent.FindComponentsLate"
@@ -453,8 +533,8 @@ section titled "XSL Agent Templates".
       <xsl:with-param name="insertionpoint" select="'Node.AgentManager.Agent.DomainManager.'"/>
     </xsl:call-template>
 
-    <!-- communities -->
-    <xsl:if test="$communities = 'true'">
+    <!-- legacy community service impl -->
+    <xsl:if test="$communities = 'legacy'">
       <component
          name="org.cougaar.community.CommunityServiceComponent()"
          class="org.cougaar.community.CommunityServiceComponent"

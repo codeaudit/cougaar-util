@@ -33,6 +33,7 @@ The supported values are:
 
     <b>lan</b>           = distributed mts/wp, added metrics aspects,
                     adds standard plugins and servlets (e.g. "/wp" servlet)
+                    adds servlet tunneling through mts (but will favor http-redirect)
 
     <b>wan</b>           = currently same as lan.
                     eventually we'll add mts sequence checking here, etc.
@@ -81,6 +82,18 @@ servlets by setting:
   <tr><td><b>standard_node_servlets</b> e.g. "/wp"</td><td bgcolor=pink>false</td><td bgcolor=lightgreen>true</td><td bgcolor=lightgreen>true</td><td bgcolor=pink>false</td><td bgcolor=lightgreen>true</td><td bgcolor=lightgreen>true</td></tr>
 
   <tr><td><b>standard_agent_servlets</b> e.g. "/tasks"</td><td bgcolor=pink>false</td><td bgcolor=lightgreen>true</td><td bgcolor=lightgreen>true</td><td bgcolor=pink>false</td><td bgcolor=lightgreen>true</td><td bgcolor=lightgreen>true</td></tr>
+
+  <tr><td><b>servlet_engine.tomcat</b></td><td bgcolor=pink>false</td><td bgcolor=lightgreen>true</td><td bgcolor=lightgreen>true</td><td bgcolor=lightgreen>true</td><td bgcolor=lightgreen>true</td><td bgcolor=lightgreen>true</td></tr>
+
+  <tr><td><b>servlet_engine.micro</b></td><td bgcolor=pink>false</td><td bgcolor=pink>false</td><td bgcolor=pink>false</td><td bgcolor=pink>false</td><td bgcolor=pink>false</td><td bgcolor=pink>false</td></tr>
+
+  <tr><td><b>servlet_engine.mts</b></td><td bgcolor=pink>false</td><td bgcolor=pink>false</td><td bgcolor=pink>false</td><td bgcolor=pink>false</td><td bgcolor=lightgreen>true</td><td bgcolor=lightgreen>true</td></tr>
+
+  <tr><td><b>servlet_redirector.http_redirect</b></td><td bgcolor=pink>false</td><td bgcolor=lightgreen>true</td><td bgcolor=lightgreen>true</td><td bgcolor=lightgreen>true</td><td bgcolor=lightgreen>true</td><td bgcolor=lightgreen>true</td></tr>
+
+  <tr><td><b>servlet_redirector.http_tunnel</b></td><td bgcolor=pink>false</td><td bgcolor=pink>false</td><td bgcolor=pink>false</td><td bgcolor=pink>false</td><td bgcolor=pink>false</td><td bgcolor=pink>false</td></tr>
+
+  <tr><td><b>servlet_redirector.mts_tunnel</b></td><td bgcolor=pink>false</td><td bgcolor=pink>false</td><td bgcolor=pink>false</td><td bgcolor=pink>false</td><td bgcolor=lightgreen>true</td><td bgcolor=lightgreen>true</td></tr>
 
   <tr><td><b>communities</b></td><td bgcolor=pink>false</td><td bgcolor=pink>false</td><td bgcolor=pink>false</td><td bgcolor="lightgreen">true <a href="#communities"><i>note</i></a></td><td bgcolor=pink>false</td><td bgcolor=lightgreen>true</td></tr>
 
