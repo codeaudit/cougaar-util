@@ -211,7 +211,7 @@ public class XURLClassLoader extends SecureClassLoader {
      * Resource. The resulting Class must be resolved before it can be
      * used.
      */
-    private Class defineClass(String name, Resource res) throws IOException {
+    protected Class defineClass(String name, Resource res) throws IOException {
 	int i = name.lastIndexOf('.');
 	URL url = res.getCodeSourceURL();
 	if (i != -1) {
