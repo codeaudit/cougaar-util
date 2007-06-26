@@ -123,11 +123,24 @@ public final class Configuration {
     if (s.startsWith("resource://")) {
       s = "file:/IN_COUGAAR_JARS/"+s.substring("resource://".length());
     }
-    try {
-      if (!s.endsWith("/")) s += "/";
-      return new URL(s);
-    } catch (MalformedURLException mue) {
-//      savedx = mue;
+    if (!s.endsWith("/")) s += "/";
+    if (s.indexOf(":/") >= 0) {
+      if (s.charAt(0) == '/' && s.matches("^/\\w{3,}:/.*$")) {
+        // remove the leading (erroneous) "/" character.
+        //
+        // The File constructor does this automatically:
+        //   "//foo/"  -->  "/foo/"
+        // so we want similar support for URLs:
+        //   "/file:/foo/"  -->  "file:/foo/"
+        // Without this fix, we'd get:
+        //   "/file:/foo/"  -->  "file:/file:/foo/"
+        s = s.substring(1);
+      }
+      try {
+        return new URL(s);
+      } catch (MalformedURLException mue) {
+//        savedx = mue;
+      }
     }
 
     try {

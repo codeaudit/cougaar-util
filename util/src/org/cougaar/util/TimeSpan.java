@@ -27,6 +27,7 @@
 package org.cougaar.util;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * An abstraction of an object which starts at a known point
@@ -99,6 +100,14 @@ public interface TimeSpan
     }
     public long getStartTime() { return t; }
     public long getEndTime() { return t+EPSILON; }
+    public String toString() {
+      return 
+        "["+
+        (t == MIN_VALUE ? "MIN_VALUE" :
+         t == MAX_VALUE ? "MAX_VALUE" :
+         (new Date(t)).toString())+
+        "]";
+    }
   }
 
   /** A simple implementation of a two-point specified time span.
@@ -114,8 +123,18 @@ public interface TimeSpan
     }
     public long getStartTime() { return t0; }
     public long getEndTime() { return t1; }
+    public String toString() {
+      return 
+        "["+
+        (t0 == MIN_VALUE ? "MIN_VALUE" : (new Date(t0)).toString())+
+        "-"+
+        (t1 == MAX_VALUE ? "MAX_VALUE" : (new Date(t1)).toString())+
+        "]";
+    }
   }
 
   /** a TimeSpan representing all representable time **/
-  TimeSpan FOREVER = new Span(MIN_VALUE,MAX_VALUE);
+  TimeSpan FOREVER = new Span(MIN_VALUE,MAX_VALUE) {
+    public String toString() { return "[forever]"; }
+  };
 }

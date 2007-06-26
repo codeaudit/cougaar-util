@@ -27,6 +27,8 @@
 package org.cougaar.util;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Implementation of NewTimeSpan interface
@@ -99,5 +101,19 @@ public class MutableTimeSpan implements NewTimeSpan, Serializable {
       
   public int hashCode() {
     return (int) (myStartTime + (myEndTime * 1000));
+  }
+
+  public String toString() {
+    return "[" + dateString(new Date(myStartTime)) + " - " + dateString(new Date(myEndTime)) + "]";
+  }
+
+  public static String dateString (Date date) {
+    SimpleDateFormat dateTimeFormat_= new SimpleDateFormat("MM/dd/yyyy HH:mm:ss.SSS z");
+    String sdate = dateTimeFormat_.format(date);
+    // map '9/8/00 12:00 AM' to ' 9/8/00 12:00 AM'
+    while(sdate.length()<17){
+      sdate = " "+sdate;
+    }
+    return sdate;
   }
 }

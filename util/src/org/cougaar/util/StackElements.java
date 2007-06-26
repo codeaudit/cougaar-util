@@ -25,6 +25,8 @@
  */
 package org.cougaar.util;
 
+import java.util.Map;
+
 /**
  * Wrapper around a Throwable for stack-based equality.
  */
@@ -33,6 +35,24 @@ public final class StackElements {
   private final Throwable throwable;
   private StackTraceElement[] elements;
   private int _hc;
+
+  public static final StackElements getStackElements(Map cache) {
+    return getStackElements(cache, new Throwable());
+  }
+  public static final StackElements getStackElements(Map cache, Throwable t) {
+    return getStackElements(cache, new StackElements(t));
+  }
+  public static final StackElements getStackElements(Map cache, StackElements se) {
+    synchronized (cache) {
+      StackElements cached_se = (StackElements) cache.get(se);
+      if (cached_se == null) {
+        cache.put(se, se);
+      } else {
+        se = cached_se;
+      }
+    }
+    return se;
+  }
 
   public StackElements(Throwable throwable) {
     this.throwable = throwable;
