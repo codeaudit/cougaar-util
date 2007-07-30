@@ -43,9 +43,8 @@ import java.util.NoSuchElementException;
  * Inspired by _Data Structure and Algorithms_ by Aho, Hopcroft and Ullman.
  **/
 
-public class CircularQueue extends AbstractCollection
-{
-  protected Object[] elements;
+public class CircularQueue<E> extends AbstractCollection<E> {
+  protected E[] elements;
   protected int front;
   protected int rear;
   protected int size;
@@ -55,35 +54,39 @@ public class CircularQueue extends AbstractCollection
     this(5);
   }
   public CircularQueue(int max) {
-    elements = new Object[max];
+    elements = makeArray(max);
     front=0;
     rear=max-1;
     size = 0;
     this.max=max;
   }
-    
+  
   private final int nextIndex(int i) {
     return (i+1)%max;
   }
+  
   public void clear() {
     front=0;
     rear=max-1;
     size=0;
   }
+  
   public final boolean isEmpty() {
     return (nextIndex(rear)==front);
   }
+  
   private final boolean isFull() {
     return (nextIndex(nextIndex(rear))==front);
   }
 
-  public Object peek() {
+  public E peek() {
     if (isEmpty())
       return null;
     else
       return elements[front];
   }
-  public boolean add(Object el) {
+  
+  public boolean add(E el) {
     if (isFull())
       extend();
     int adv = nextIndex(rear);
@@ -93,19 +96,20 @@ public class CircularQueue extends AbstractCollection
     return true;
   }
 
-  public boolean addAll(Collection c) {
-    for (Iterator i = c.iterator(); i.hasNext(); ) {
-      add(i.next());
+  public boolean addAll(Collection<? extends E> c) {
+    for (E t : c ) {
+      add(t);
     }
     return true;
   }
+  
   public boolean remove(Object el) {
     throw new UnsupportedOperationException();
   }
-  public boolean removeAll(Collection c) {
+  public boolean removeAll(Collection<?> c) {
     throw new UnsupportedOperationException();
   }
-  public boolean retainAll(Collection c) {
+  public boolean retainAll(Collection<?> c) {
     throw new UnsupportedOperationException();
   }
 
@@ -132,33 +136,41 @@ public class CircularQueue extends AbstractCollection
     }
     return result;
   }
-    
-  public Object[] toArray(Object[] result) {
+   
+  @SuppressWarnings("unchecked")
+  private final E[] makeArray(int size) {
+      // XXX: Unavoidable (?) warning
+      return (E[]) new Object[size];
+  }
+  
+  @SuppressWarnings("unchecked")
+  public <T> T[] toArray(T[] result) {
     int i = front;
     int x = nextIndex(rear);
     int j = 0;
     while (i!=x) {
-      result[j] = elements[i];
+      // XXX: Unavoidable (?) warning	
+      result[j] = (T) elements[i];
       i=nextIndex(i);
       j++;
     }
     return result;
   }
 
-  public boolean containsAll(Collection c) {
+  public boolean containsAll(Collection<?> c) {
     // UGH! n^2
-    for (Iterator i = c.iterator(); i.hasNext(); ) {
-      if (!contains(i.next()))
+    for (Object elt : c) {
+      if (!contains(elt))
         return false;
     }
     return true;
   }
 
-  public Object next() {
+  public E next() {
     if (isEmpty()) {
       return null;
     } else {
-      Object o = elements[front];
+      E o = elements[front];
       elements[front]=null;     // allow gc
       front = nextIndex(front);
       size--;
@@ -168,7 +180,7 @@ public class CircularQueue extends AbstractCollection
   private void extend() {
     //System.err.println("Extending "+this);
     int nmax = max*2;
-    Object[] nelements = new Object[nmax];
+    E[] nelements = makeArray(nmax);
     // we could do this with two array copies
     for (int i = 0; i<size; i++) {
       nelements[i]=peek();
@@ -180,16 +192,16 @@ public class CircularQueue extends AbstractCollection
     max=nmax;
   }
       
-  public Iterator iterator() {
+  public Iterator<E> iterator() {
     final int capturedFront = front;
-    return new Iterator() {
+    return new Iterator<E>() {
         private int i = capturedFront;
         public final boolean hasNext() {
           return (nextIndex(rear)!=i);
         }
-        public final Object next() {
+        public final E next() {
           if (!hasNext()) throw new NoSuchElementException();
-          Object o = elements[i];
+          E o = elements[i];
           i = nextIndex(i);
           return o;
         }

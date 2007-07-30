@@ -25,65 +25,68 @@
  */
 
 package org.cougaar.util;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import junit.framework.TestCase;
-import junit.framework.*;
 
 public class TestCircularQueue extends TestCase {
   public void test_toString0() {
-    assertEquals(new CircularQueue(2).toString(), "{CircularQueue 0/2}");
+    assertEquals(new CircularQueue<Object>(2).toString(), "{CircularQueue 0/2}");
   }
   public void test_toString1() {
-    CircularQueue q = new CircularQueue(2);
-    q.add(new Integer(1));
-    q.add(new Integer(2));
-    q.add(new Integer(3));
-    q.add(new Integer(4));
+    CircularQueue<Integer> q = new CircularQueue<Integer>(2);
+    q.add(1);
+    q.add(2);
+    q.add(3);
+    q.add(4);
     // 8 because the queue algorithm needs an extra slot
     assertEquals("{CircularQueue 4/8}", q.toString());
   }
 
   public void test_add_next0() {
-    CircularQueue q = new CircularQueue(2);
-    q.add(new Integer(1));
-    q.add(new Integer(2));
-    q.add(new Integer(3));
-    q.add(new Integer(4));
-    assertEquals(q.next(), new Integer(1));
-    assertEquals(q.next(), new Integer(2));
-    assertEquals(q.next(), new Integer(3));
-    assertEquals(q.next(), new Integer(4));
+    CircularQueue<Integer> q = new CircularQueue<Integer>(2);
+    q.add(1);
+    q.add(2);
+    q.add(3);
+    q.add(4);
+    assertEquals(q.next().intValue(), 1);
+    assertEquals(q.next().intValue(), 2);
+    assertEquals(q.next().intValue(), 3);
+    assertEquals(q.next().intValue(), 4);
     assertEquals(q.next(), null);
   }
+  
   public void test_fillList() {
-    CircularQueue q = new CircularQueue(2);
-    q.add(new Integer(1));
-    q.add(new Integer(2));
-    ArrayList l = new ArrayList();
+    CircularQueue<Integer> q = new CircularQueue<Integer>(2);
+    q.add(1);
+    q.add(2);
+    List<Integer> l = new ArrayList<Integer>();
     l.addAll(q);
     assertTrue(l.size()==2);
-    assertEquals(new Integer(1),l.get(0));
-    assertEquals(new Integer(2), l.get(1));
-  }    
+    assertEquals(1,l.get(0).intValue());
+    assertEquals(2, l.get(1).intValue());
+  }
+  
   public void test_toArray1() {
-    CircularQueue q = new CircularQueue(2);
-    q.add(new Integer(1));
-    q.add(new Integer(2));
+    CircularQueue<Integer> q = new CircularQueue<Integer>(2);
+    q.add(1);
+    q.add(2);
     Object[] l = q.toArray();
     assertTrue(l.length==2);
-    assertEquals(new Integer(1), l[0]);
-    assertEquals(new Integer(2), l[1]);
+    assertEquals(1, l[0]);
+    assertEquals(2, l[1]);
   }    
+  
   public void test_toArray2() {
-    CircularQueue q = new CircularQueue(2);
-    q.add(new Integer(1));
-    q.add(new Integer(2));
-    Integer[] l = (Integer[]) q.toArray(new Integer[2]);
+    CircularQueue<Integer> q = new CircularQueue<Integer>(2);
+    q.add(1);
+    q.add(2);
+    Integer[] l = q.toArray(new Integer[2]);
     assertTrue(l.length==2);
-    assertEquals(new Integer(1), l[0]);
-    assertEquals(new Integer(2), l[1]);
+    assertEquals(1, l[0].intValue());
+    assertEquals(2, l[1].intValue());
   }    
-
 }
 
