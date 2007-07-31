@@ -40,7 +40,7 @@ import java.util.SortedSet;
  * end time.  The order of temporally-equivalent but non-equal
  * objects is undefined but stable.
  **/
-public class TimeSpanSet 
+public class TimeSpanSet
   extends ArrayListFoundation
   implements SortedSet, Serializable
 {
@@ -55,7 +55,7 @@ public class TimeSpanSet
 
   public TimeSpanSet(Collection c) {
     super(c.size());
-    
+
     addAll(c);
   }
 
@@ -67,27 +67,33 @@ public class TimeSpanSet
 
 
   public boolean add(Object o) {
-    if (! (o instanceof TimeSpan)) 
+    if (! (o instanceof TimeSpan))
       throw new IllegalArgumentException();
     TimeSpan timeSpan = (TimeSpan)o;
 
+    TimeSpan last = (TimeSpan) last();
+    if (last == null || last.getStartTime() < timeSpan.getStartTime()) {
+      super.add(size, timeSpan);
+      return true;
+    }
+    
     int i = Collections.binarySearch(this, timeSpan, bsComparator);
-    if (i >= 0) 
+    if (i >= 0)
       return false; // This timespan is already in set
     i = -(i + 1);             // The insertion point
 
     for (int j = i; --j >= 0; ) {
-      if (bsComparator.compare(timeSpan, elementData[j]) != 0) 
-	break;
-      if (timeSpan.equals(elementData[j])) 
-	return false;
+      if (bsComparator.compare(timeSpan, elementData[j]) != 0)
+        break;
+      if (timeSpan.equals(elementData[j]))
+        return false;
     }
 
     for (int j = i, e = size(); j < e; j++) {
-      if (bsComparator.compare(timeSpan, elementData[j]) != 0) 
-	break;
-      if (timeSpan.equals(elementData[j])) 
-	return false;
+      if (bsComparator.compare(timeSpan, elementData[j]) != 0)
+        break;
+      if (timeSpan.equals(elementData[j]))
+        return false;
     }
 
     super.add(i, timeSpan);
@@ -95,7 +101,7 @@ public class TimeSpanSet
   }
 
   public void add(int i, Object o) {
-    throw new UnsupportedOperationException("TimeSpanSet.add(int index, Object o) is not supported."); 
+    throw new UnsupportedOperationException("TimeSpanSet.add(int index, Object o) is not supported.");
   }
 
   public boolean addAll(Collection c) {
@@ -104,7 +110,7 @@ public class TimeSpanSet
     if (c instanceof List) {
       List list = (List)c;
       int numToAdd = list.size();
-      
+
       for (int index = 0; index < numToAdd; index++) {
         if (add(list.get(index))) {
           hasChanged = true;
@@ -121,7 +127,7 @@ public class TimeSpanSet
   }
 
   public boolean addAll(int index, Collection c) {
-    throw new UnsupportedOperationException("TimeSpanSet.addAll(int index, Collection c) is not supported."); 
+    throw new UnsupportedOperationException("TimeSpanSet.addAll(int index, Collection c) is not supported.");
   }
 
   public boolean contains(Object o) {
@@ -144,7 +150,7 @@ public class TimeSpanSet
   }
 
   public Object set(int index, Object element) {
-    throw new UnsupportedOperationException("TimeSpanSet.set(int index, Object element) is not supported."); 
+    throw new UnsupportedOperationException("TimeSpanSet.set(int index, Object element) is not supported.");
   }
 
   public String toString() {
@@ -174,7 +180,7 @@ public class TimeSpanSet
   }
 
   /** generic timespan comparison **/
-  public static final int compare(TimeSpan p1, TimeSpan p2) {
+  private static int compare(TimeSpan p1, TimeSpan p2) {
     int compare;
 
     if (p2.getStartTime() != p1.getStartTime()) {
@@ -191,7 +197,7 @@ public class TimeSpanSet
   }
 
   /** optimization for non-comparator use **/
-  public static final int compare(long p1s, long p1e, TimeSpan p2) {
+  private static int compare(long p1s, long p1e, TimeSpan p2) {
     int compare;
 
     if (p2.getStartTime() != p1s) {
@@ -201,21 +207,21 @@ public class TimeSpanSet
     } else {
       compare = 0;
     }
-    
+
     return compare;
   }
 
   /** comparator for Collection use **/
   private static final Comparator myComparator = new Comparator() {
-      public int compare(Object o1, Object o2) {
-        if (o1 instanceof TimeSpan &&
-            o2 instanceof TimeSpan) {
-          return TimeSpanSet.compare((TimeSpan)o1,(TimeSpan)o2);
-        } else {
-          return 0;
-        }
+    public int compare(Object o1, Object o2) {
+      if (o1 instanceof TimeSpan &&
+        o2 instanceof TimeSpan) {
+        return TimeSpanSet.compare((TimeSpan)o1,(TimeSpan)o2);
+      } else {
+        return 0;
       }
-    };
+    }
+  };
 
   private static final Comparator bsComparator = new Comparator() {
     public int compare(Object o1, Object o2) {
@@ -252,7 +258,7 @@ public class TimeSpanSet
 
       long d=t1-t0;
       if (best ==null ||
-          (d < bestd) ) {
+        (d < bestd) ) {
         best = ts;
         bestd = d;
       }
@@ -271,28 +277,28 @@ public class TimeSpanSet
    **/
   public final Collection intersectingSet(final long time) {
     return filter(new UnaryPredicate() {
-        public boolean execute(Object o) {
-          TimeSpan ts = (TimeSpan) o;
-          return (time >= ts.getStartTime() &&
-                  time < ts.getEndTime());
-        }
-      });
+      public boolean execute(Object o) {
+        TimeSpan ts = (TimeSpan) o;
+        return (time >= ts.getStartTime() &&
+          time < ts.getEndTime());
+      }
+    });
   }
 
   /** @return the subset of elements which intersect with the
    * specified time span.
    **/
-  public final Collection intersectingSet(final long startTime, 
+  public final Collection intersectingSet(final long startTime,
                                           final long endTime) {
     return filter(new UnaryPredicate() {
-        public boolean execute(Object o) {
-          TimeSpan ts = (TimeSpan) o;
-          return (ts.getStartTime()<endTime &&
-                  ts.getEndTime()>startTime);
-        }
-      });
+      public boolean execute(Object o) {
+        TimeSpan ts = (TimeSpan) o;
+        return (ts.getStartTime()<endTime &&
+          ts.getEndTime()>startTime);
+      }
+    });
   }
-  
+
   /** @return the subset of elements which intersect with the
    * specified time span.
    **/
@@ -303,15 +309,15 @@ public class TimeSpanSet
   /** @return the subset of elements which are completely enclosed
    * by the specified time span.
    **/
-  public final Collection encapsulatedSet(final long startTime, 
+  public final Collection encapsulatedSet(final long startTime,
                                           final long endTime) {
     return filter(new UnaryPredicate() {
-        public boolean execute(Object o) {
-          TimeSpan ts = (TimeSpan) o;
-          return (ts.getStartTime()>=startTime &&
-                  ts.getEndTime()<=endTime);
-        }
-      });
+      public boolean execute(Object o) {
+        TimeSpan ts = (TimeSpan) o;
+        return (ts.getStartTime()>=startTime &&
+          ts.getEndTime()<=endTime);
+      }
+    });
   }
 
   /** @return the subset of elements which are completely enclosed
@@ -324,17 +330,17 @@ public class TimeSpanSet
   /** @return the subset of elements which completely enclose
    * the specified time span.
    **/
-  public final Collection encapsulatingSet(final long startTime, 
+  private Collection encapsulatingSet(final long startTime,
                                            final long endTime) {
     return filter(new UnaryPredicate() {
-        public boolean execute(Object o) {
-          TimeSpan ts = (TimeSpan) o;
-          return (startTime <= ts.getStartTime() &&
-                  endTime >= ts.getEndTime());
-        }
-      });
+      public boolean execute(Object o) {
+        TimeSpan ts = (TimeSpan) o;
+        return (startTime <= ts.getStartTime() &&
+          endTime >= ts.getEndTime());
+      }
+    });
   }
-    
+
   /** @return the subset of elements which completely enclose
    * the specified time span.
    **/
@@ -344,7 +350,7 @@ public class TimeSpanSet
 
   // private support
 
-  /** 
+  /**
    * unsafeUpdate - replaces all elements with specified Collection
    * Should only be used if c has already been validated.
    * @return boolean - true if any elements added else false.
@@ -355,7 +361,7 @@ public class TimeSpanSet
   }
 
   /** @return the index of the object in the list or -1 **/
-  protected final int find(TimeSpan o) {
+  private int find(TimeSpan o) {
     // we should really use a boolean search rather
     // than iterating through
     int l = size;
