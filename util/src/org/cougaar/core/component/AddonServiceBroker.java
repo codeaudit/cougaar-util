@@ -100,10 +100,10 @@ public class AddonServiceBroker
                                                 delegate.getCurrentServiceClasses()});
   }
 
-  public final Object getService(Object requestor, final Class serviceClass, final ServiceRevokedListener srl) {
+  public final <T> T getService(Object requestor, final Class<T> serviceClass, final ServiceRevokedListener srl) {
     ServiceResult sr = getService(
         0, null, requestor, serviceClass, srl, true);
-    return (sr == null ? null : sr.getService());
+    return (sr == null ? null : (T) sr.getService());
   }
   public final ServiceResult getService(
       int requestorId, ComponentDescription requestorDesc,

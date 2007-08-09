@@ -157,13 +157,13 @@ implements ExtendedServiceBroker {
           Collections.singleton(ViewService.class).iterator(),
           delegate.getCurrentServiceClasses()});
   }
-  public Object getService(
-      Object requestor, Class serviceClass, ServiceRevokedListener srl) {
+  public <T> T getService(
+      Object requestor, Class<T> serviceClass, ServiceRevokedListener srl) {
     ServiceResult sr = getService(
         myId, myDesc,
         requestor, serviceClass, srl,
         true);
-    return (sr == null ? null : sr.getService());
+    return (sr == null ? null : (T) sr.getService());
   }
   public ServiceResult getService(
       int requestorId, ComponentDescription requestorDesc,

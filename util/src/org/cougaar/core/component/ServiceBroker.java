@@ -70,7 +70,7 @@ public interface ServiceBroker {
    * @note It is always a 
    * good idea to pair getService and releaseService calls.
    **/
-  Object getService(Object requestor, Class serviceClass, ServiceRevokedListener srl);
+  <T> T getService(Object requestor, Class<T> serviceClass, ServiceRevokedListener srl);
 
   /** Release a service object previously requested by a call to getService.
    * Service object instances usually require significant non-GCable memory, so

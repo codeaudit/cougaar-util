@@ -173,13 +173,13 @@ public class ServiceBrokerSupport
   /** get an instance of the requested service from a service provider associated
    * with this context.
    **/
-  public Object getService(
-      Object requestor, Class serviceClass, ServiceRevokedListener srl) {
+  public <T> T getService(
+      Object requestor, Class<T> serviceClass, ServiceRevokedListener srl) {
     ServiceResult sr = getService(
         0, null,
         requestor, serviceClass, srl,
         true);
-    return (sr == null ? null : sr.getService());
+    return (sr == null ? null : (T) sr.getService());
   }
   public ServiceResult getService(
       int requestorId, ComponentDescription requestorDesc,

@@ -148,7 +148,7 @@ public class DelegatingServiceBroker
   /** get an instance of the requested service from a service provider associated
    * with this context.
    **/
-  public Object getService(Object requestor, final Class serviceClass, final ServiceRevokedListener srl) {
+  public <T> T getService(Object requestor, final Class<T> serviceClass, final ServiceRevokedListener srl) {
     return delegate.getService(requestor, serviceClass, srl);
   }
 
