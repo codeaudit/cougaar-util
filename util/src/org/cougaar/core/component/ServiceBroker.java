@@ -26,7 +26,6 @@
 package org.cougaar.core.component;
 
 import java.util.Iterator;
-import java.beans.beancontext.*; /*make @see reference work*/
 
 /** Cougaar component Service Broker.
  * Note that this was previously called Services in deference to
@@ -44,19 +43,19 @@ public interface ServiceBroker {
   /** Add a Service to this Services Context.
    * @return true IFF successful and not redundant.
    **/
-  boolean addService(Class serviceClass, ServiceProvider serviceProvider);
+  boolean addService(Class<?> serviceClass, ServiceProvider serviceProvider);
 
   /** Remoke or remove an existing service **/
-  void revokeService(Class serviceClass, ServiceProvider serviceProvider);
+  void revokeService(Class<?> serviceClass, ServiceProvider serviceProvider);
 
   /** Is the service currently available? **/
-  boolean hasService(Class serviceClass);
+  boolean hasService(Class<?> serviceClass);
 
   /** Gets the currently available services for this context.
    * All standard implementations return an Iterator over a copy of the set of ServiceClasses
    * so that there is no risk of ComodificationException.
    **/
-  Iterator getCurrentServiceClasses();
+  Iterator<Class<?>> getCurrentServiceClasses();
 
   /** get an instance of the requested service from a service provider associated
    * with this context.
@@ -78,5 +77,5 @@ public interface ServiceBroker {
    * @note It is always a 
    * good idea to pair getService and releaseService calls.
    */
-  void releaseService(Object requestor, Class serviceClass, Object service);
+  <T> void releaseService(Object requestor, Class<T> serviceClass, T service);
 }
