@@ -151,7 +151,7 @@ public class Annotations {
         String defaultValue = spec.defaultValue();
         String key = spec.name();
         DataType type = DataType.fromField(field);
-        boolean isRequired = spec.required();
+        boolean isRequired = spec.required() && defaultValue.equals(NO_VALUE);
         List<String> rawValues = null;
         if (args.containsKey(key)) {
             rawValues = args.getStrings(key);
@@ -191,7 +191,7 @@ public class Annotations {
         String defaultValue = spec.defaultValue();
         String key = spec.name();
         DataType type = DataType.fromField(field);
-        boolean isRequired = spec.required();
+        boolean isRequired = spec.required() && defaultValue.equals(NO_VALUE);
         String rawValue;
         if (args.containsKey(key)) {
             List<String> values = args.getStrings(key);
@@ -345,16 +345,34 @@ public class Annotations {
 	}
 
 	public static enum DataType {
-	    FIXED {
+	    INT {
+            Object parse(Field field, String rawValue) throws ParseException {
+                try {
+                    return Integer.parseInt(rawValue);
+                } catch (NumberFormatException e) {
+                    throw new ParseException(field, rawValue, e);
+                }
+            }
+        },
+	    LONG {
 	        Object parse(Field field, String rawValue) throws ParseException {
 	            try {
-	                return Integer.parseInt(rawValue);
+	                return Long.parseLong(rawValue);
 	            } catch (NumberFormatException e) {
 	                throw new ParseException(field, rawValue, e);
 	            }
 	        }
 	    },
-	    REAL {
+	    FLOAT {
+            Object parse(Field field, String rawValue) throws ParseException {
+                try {
+                    return Float.parseFloat(rawValue);
+                } catch (NumberFormatException e) {
+                    throw new ParseException(field, rawValue, e);
+                }
+            }
+        },
+	    DOUBLE {
 	        Object parse(Field field, String rawValue) throws ParseException {
 	            try {
 	                return Double.parseDouble(rawValue);
@@ -407,11 +425,14 @@ public class Annotations {
 		if (List.class.isAssignableFrom(valueType)) {
 		    valueType = elementType(field, valueType);
 		}
-		if (valueType == int.class || valueType == Integer.class) {
-		    return FIXED;
-		} else if (valueType == float.class || valueType == double.class ||
-			valueType == Float.class || valueType == Double.class) {
-		    return REAL;
+		if (valueType == long.class || valueType == Long.class) {
+		    return LONG;
+		} else if (valueType == int.class || valueType == Integer.class) {
+		    return INT;
+		} else if (valueType == double.class || valueType == Double.class) {
+		    return DOUBLE;
+		} else if (valueType == float.class || valueType == Float.class) {
+		    return FLOAT;
 		} else if (valueType == boolean.class || valueType == Boolean.class) {
 		    return BOOLEAN;
 		} else if (valueType == String.class) {
