@@ -1,0 +1,13 @@
+To do COUGAAR development with IDEA, check out the modules you want in a
+common directory, then copy cougaar.ipr into that same common parent directory.
+The copied cougaar.ipr can then be launched, or opened in IDEA.  The checked-in
+ipr file is for reference only and won't work if used directly.  If you only
+check out some of the supported COUGAAR modules you'll probably need to modify
+the copied ipr file, since it assumes all the modules are there.
+
+The COUGAAR modules that currently have checked-in iml files are: base, bootstrap,
+build, core, jars, mtsstd, ping, qos, qrs, tools, uti, webserver, webtomcat.  Note
+that dependencies might require you to check out modules you're not actively working
+in.  For instance the webtomcat module depends on webserver, which in turn depends
+on core, which depends on util, which depends on bootstrap, which depends on jars.
+So if you're working in webtomcat, you would need all the others as well.
