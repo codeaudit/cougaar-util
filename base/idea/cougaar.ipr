@@ -306,6 +306,7 @@
       <module fileurl="file://$PROJECT_DIR$/jars/jars.iml" filepath="$PROJECT_DIR$/jars/jars.iml" />
       <module fileurl="file://$PROJECT_DIR$/mtsstd/mtsstd.iml" filepath="$PROJECT_DIR$/mtsstd/mtsstd.iml" />
       <module fileurl="file://$PROJECT_DIR$/ping/ping.iml" filepath="$PROJECT_DIR$/ping/ping.iml" />
+      <module fileurl="file://$PROJECT_DIR$/profile/profile.iml" filepath="$PROJECT_DIR$/profile/profile.iml" />
       <module fileurl="file://$PROJECT_DIR$/qos/qos.iml" filepath="$PROJECT_DIR$/qos/qos.iml" />
       <module fileurl="file://$PROJECT_DIR$/qrs/qrs.iml" filepath="$PROJECT_DIR$/qrs/qrs.iml" />
       <module fileurl="file://$PROJECT_DIR$/tools/tools.iml" filepath="$PROJECT_DIR$/tools/tools.iml" />
