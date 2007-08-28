@@ -49,7 +49,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.cougaar.bootstrap.SystemProperties;
-import org.cougaar.util.annotations.ParameterAnnotations;
 
 /**
  * A "name=value" parser.
@@ -125,8 +124,6 @@ public final class Arguments extends AbstractMap<String, List<String>>
     private static final int OPTIMIZE_SIZE = 5;
 
     private final Map<String, List<String>> m;
-    
-    private final ParameterAnnotations annotations;
 
     public Arguments(Object o) {
         this(o, null);
@@ -159,7 +156,6 @@ public final class Arguments extends AbstractMap<String, List<String>>
             Map<String, List<String>> def = parseMap(deflt);
             Set<String> ks = parseSet(keys);
             this.m = parse(m2, prefixes, def, ks);
-            this.annotations = new ParameterAnnotations(this);
         } catch (Exception e) {
             throw new IllegalArgumentException("Unable to create new Arguments("
                                                        + "\n  o = "
@@ -168,10 +164,6 @@ public final class Arguments extends AbstractMap<String, List<String>>
                                                        + ")",
                                                e);
         }
-    }
-    
-    public ParameterAnnotations getAnnotations() {
-        return annotations;
     }
 
     private String argString(Object propertyPrefix, Object deflt, Object keys) {
