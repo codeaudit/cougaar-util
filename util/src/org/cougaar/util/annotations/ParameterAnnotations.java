@@ -82,7 +82,8 @@ public class ParameterAnnotations {
                     Class<?>[] parameterTypes = {};
                     Method roleGetter = annoClass.getDeclaredMethod("role", parameterTypes);
                     Object[] args = {};
-                    Cougaar.ParamGroupRole role = (Cougaar.ParamGroupRole) roleGetter.invoke(anno, args);
+                    Cougaar.ParamGroupRole role =
+                            (Cougaar.ParamGroupRole) roleGetter.invoke(anno, args);
                     String name = getArgGroupName(annoClass);
                     if (role == Cougaar.ParamGroupRole.MEMBER) {
                         if (groups == null) {
@@ -110,7 +111,8 @@ public class ParameterAnnotations {
                     Class<?>[] parameterTypes = {};
                     Method roleGetter = annoClass.getDeclaredMethod("role", parameterTypes);
                     Object[] args = {};
-                    Cougaar.ParamGroupRole role = (Cougaar.ParamGroupRole) roleGetter.invoke(anno, args);
+                    Cougaar.ParamGroupRole role =
+                            (Cougaar.ParamGroupRole) roleGetter.invoke(anno, args);
                     if (role == Cougaar.ParamGroupRole.OWNER) {
                         return anno;
                     }
@@ -122,9 +124,8 @@ public class ParameterAnnotations {
         return null;
     }
 
-    private void setSequenceFieldFromSpec(Field field, Object object, Cougaar.Param spec) throws ParseException,
-                                                                                IllegalAccessException,
-                                                                                IllegalStateException {
+    private void setSequenceFieldFromSpec(Field field, Object object, Cougaar.Param spec)
+            throws ParseException, IllegalAccessException, IllegalStateException {
         String defaultValue = spec.defaultValue();
         String key = spec.name();
         DataType type = DataType.fromField(field);
@@ -159,9 +160,8 @@ public class ParameterAnnotations {
         field.set(object, Collections.unmodifiableList(values));
     }
 
-    private void setSimpleFieldFromSpec(Field field, Object object, Cougaar.Param spec) throws ParseException,
-                                                                              IllegalAccessException,
-                                                                              IllegalStateException {
+    private void setSimpleFieldFromSpec(Field field, Object object, Cougaar.Param spec)
+            throws ParseException, IllegalAccessException, IllegalStateException {
         String defaultValue = spec.defaultValue();
         String key = spec.name();
         DataType type = DataType.fromField(field);
@@ -178,13 +178,13 @@ public class ParameterAnnotations {
         if (rawValue.equals(Cougaar.NO_VALUE)) {
             return;
         }
-        Object parsedValue = rawValue.equals(Cougaar.NULL_VALUE) ? null : type.parse(field, rawValue);
+        Object parsedValue =
+                rawValue.equals(Cougaar.NULL_VALUE) ? null : type.parse(field, rawValue);
         field.set(object, parsedValue);
     }
 
-    private void setFieldFromSpec(Field field, Cougaar.Param spec, Object object) throws ParseException,
-                                                                        IllegalAccessException,
-                                                                        IllegalStateException {
+    private void setFieldFromSpec(Field field, Cougaar.Param spec, Object object)
+            throws ParseException, IllegalAccessException, IllegalStateException {
         try {
             Class<?> valueType = field.getType();
             boolean isSequence = List.class.isAssignableFrom(valueType);
@@ -213,9 +213,8 @@ public class ParameterAnnotations {
     private void setGroupOwnerField(Field field,
                                     Object object,
                                     Cougaar.ParamGroupIterationPolicy policy,
-                                    Set<String> members) throws ParseException,
-                                                        IllegalAccessException,
-                                                        IllegalStateException {
+                                    Set<String> members)
+            throws ParseException, IllegalAccessException, IllegalStateException {
         List<Arguments> split = policy.split(args, members);
         field.set(object, split);
     }
@@ -223,9 +222,8 @@ public class ParameterAnnotations {
     /**
      * Set whatever {@link Cougaar.Param}-annotated fields we have values for.
      */
-    public void setFields(Object object) throws ParseException,
-                                        IllegalAccessException,
-                                        IllegalStateException {
+    public void setFields(Object object)
+            throws ParseException, IllegalAccessException, IllegalStateException {
         for (Field field : object.getClass().getFields()) {
             int mod = field.getModifiers();
             if (Modifier.isFinal(mod) || Modifier.isStatic(mod)) {
@@ -242,13 +240,12 @@ public class ParameterAnnotations {
     }
 
     /**
-     * Set values of every field that has either a {@link Cougaar.Param} annotation, or a
-     * Group annotation with role OWNER.
+     * Set values of every field that has either a {@link Cougaar.Param}
+     * annotation, or a Group annotation with role OWNER.
      * 
      */
-    public void setAllFields(Object object) throws ParseException,
-                                           IllegalAccessException,
-                                           IllegalStateException {
+    public void setAllFields(Object object)
+            throws ParseException, IllegalAccessException, IllegalStateException {
         Map<String, Set<String>> groupMembers = new HashMap<String, Set<String>>();
         Map<Annotation, Field> groupFields = new HashMap<Annotation, Field>();
         for (Field field : object.getClass().getFields()) {
@@ -294,7 +291,9 @@ public class ParameterAnnotations {
                     Class<?>[] parameterTypes = {};
                     Method policyGetter = annoClass.getDeclaredMethod("policy", parameterTypes);
                     Object[] methodArgs = {};
-                    policy = (Cougaar.ParamGroupIterationPolicy) policyGetter.invoke(anno, methodArgs);
+                    policy =
+                            (Cougaar.ParamGroupIterationPolicy) policyGetter.invoke(anno,
+                                                                                    methodArgs);
                     String name = getArgGroupName(annoClass);
                     members = groupMembers.get(name);
                 } catch (Exception e) {
