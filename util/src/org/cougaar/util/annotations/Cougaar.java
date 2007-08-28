@@ -73,21 +73,23 @@ public class Cougaar {
     public static enum BlackboardOp {
         ADD,
         REMOVE,
-        MODIFY
+        CHANGE
     }
     
-    public static enum BlackboardEvt {
-        BLACKBOARD,
-        ALARM,
-        TODO
+    private static final class NoClass {
+        
+    }
+    
+    public static boolean isNoClass(Class<?> candidate) {
+        return candidate == NoClass.class;
     }
     
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Execute {                                                     
-        BlackboardEvt from() default BlackboardEvt.BLACKBOARD;        
         BlackboardOp[] on();                                 
-        String when() default "";  //The name of a predicate method             
-        Class<?> isa() default Object.class;   // simple 'instanceof' predicate                                
+        String todo() default "";  // name of a specific TODO queue
+        String when() default "";  // The name of a predicate method            
+        Class<?> isa() default NoClass.class;   // simple 'instanceof' predicate                                
     }                                                                           
 
 }
