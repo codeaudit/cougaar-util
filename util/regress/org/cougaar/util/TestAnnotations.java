@@ -33,6 +33,8 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.cougaar.util.annotations.Cougaar;
+
 /**
  * Test field initialization via annotation metatdata
  * @author rshapiro
@@ -45,53 +47,53 @@ public class TestAnnotations extends TestCase {
 
     @Retention(RetentionPolicy.RUNTIME)
     public @interface TestArgGroup {
-        Annotations.GroupRole role() default Annotations.GroupRole.MEMBER;
-        Annotations.GroupIterationPolicy policy() default Annotations.GroupIterationPolicy.FIRST_UP;
+        Cougaar.ParamGroupRole role() default Cougaar.ParamGroupRole.MEMBER;
+        Cougaar.ParamGroupIterationPolicy policy() default Cougaar.ParamGroupIterationPolicy.FIRST_UP;
     }
 
-    @Annotations.Group(role=Annotations.GroupRole.OWNER, name=GROUP_NAME)
+    @Cougaar.ParamGroup(role=Cougaar.ParamGroupRole.OWNER, name=GROUP_NAME)
     public List<Arguments> groupOwner;
     
-    @TestArgGroup(role=Annotations.GroupRole.OWNER)
+    @TestArgGroup(role=Cougaar.ParamGroupRole.OWNER)
     public List<Arguments> testArgGroupOwner;
     
    
 
-    @Annotations.Spec(name = "SimpleParam")
+    @Cougaar.Param(name = "SimpleParam")
     @TestArgGroup()
     public int simple;
 
-    @Annotations.Spec(
+    @Cougaar.Param(
 	    name = "SimpleDefaultedParam", 
 	    defaultValue="10",
 	    required=false
     )
     public int simpleDefaulted;
 
-    @Annotations.Spec(
+    @Cougaar.Param(
 	    name = "SimpleDefaultedNullParam", 
-	    defaultValue=Annotations.NULL_VALUE,
+	    defaultValue=Cougaar.NULL_VALUE,
 	    required=false
     )
     public String simpleDefaultedNull;
 
-    @Annotations.Spec(name = "ListParam")
-    @Annotations.Group(name=GROUP_NAME)
+    @Cougaar.Param(name = "ListParam")
+    @Cougaar.ParamGroup(name=GROUP_NAME)
     public List<String> list;
 
-    @Annotations.Spec(
+    @Cougaar.Param(
 	    name = "DefaultedListParam", 
 	    defaultValue="[d,e]",
 	    required=false
     )
     public List<String> defaultedList;
 
-    @Annotations.Spec(
+    @Cougaar.Param(
 	    name = "DefaultedListNullParam", 
-	    defaultValue=Annotations.NULL_VALUE,
+	    defaultValue=Cougaar.NULL_VALUE,
 	    required=false
     )
-    @Annotations.Group(name=GROUP_NAME)
+    @Cougaar.ParamGroup(name=GROUP_NAME)
     public List<String> defaultedListNull;
 
     private void setAll(Arguments args) {
