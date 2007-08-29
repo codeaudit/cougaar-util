@@ -91,12 +91,6 @@ public class Cougaar {
     
     // Execution annotations
     
-    public static enum BlackboardOp {
-        ADD,
-        REMOVE,
-        CHANGE
-    }
-    
     private static final class NoClass {
         
     }
@@ -105,12 +99,27 @@ public class Cougaar {
         return candidate == NoClass.class;
     }
     
+    /**
+     * Attaching this kind annotation to a public method will cause that method
+     * to be invoked once per item per BlackboardOp collection, for a given
+     * subscription.
+     * 
+     * The subscription can be specified in one of three ways, which are tried
+     * in order. If the {@link #todo} is specified, a TodoSubscription with the
+     * given name is used. Otherwise, if the {@link #isa} class is specified, an
+     * IncrementalSubscription is used that will test instanceof the given
+     * class. Otherwise, if a {@link #when} is specified, the corresponding
+     * method is invoked (this method must be public, must return a boolean, and
+     * must take one argument whose type is the same as the method being
+     * annotated).
+     * 
+     */
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Execute {                                                     
-        BlackboardOp[] on();                                 
+        Subscribe.ModType[] on();                                 
         String todo() default "";  // name of a specific TODO queue
-        String when() default "";  // The name of a predicate method            
         Class<?> isa() default NoClass.class;   // simple 'instanceof' predicate                                
+        String when() default "";  // The name of a predicate method            
     }                                                                           
 
 }
