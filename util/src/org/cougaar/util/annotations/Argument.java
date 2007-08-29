@@ -50,12 +50,12 @@ import org.cougaar.util.Arguments;
  * annotations.
  * 
  */
-public class ParameterAnnotations {
+public class Argument {
     private static final String ARG_GROUP_SUFFIX = "ArgGroup";
 
     private final Arguments args;
 
-    public ParameterAnnotations(Arguments args) {
+    public Argument(Arguments args) {
         this.args = args;
     }
 
@@ -69,9 +69,9 @@ public class ParameterAnnotations {
         Set<String> groups = null;
         for (Annotation anno : field.getAnnotations()) {
             Class<?> annoClass = anno.annotationType();
-            if (anno instanceof Cougaar.ParamGroup) {
-                Cougaar.ParamGroup group = (Cougaar.ParamGroup) anno;
-                if (group.role() == Cougaar.ParamGroupRole.MEMBER) {
+            if (anno instanceof Cougaar.ArgGroup) {
+                Cougaar.ArgGroup group = (Cougaar.ArgGroup) anno;
+                if (group.role() == Argument.GroupRole.MEMBER) {
                     if (groups == null) {
                         groups = new HashSet<String>();
                     }
@@ -82,10 +82,10 @@ public class ParameterAnnotations {
                     Class<?>[] parameterTypes = {};
                     Method roleGetter = annoClass.getDeclaredMethod("role", parameterTypes);
                     Object[] args = {};
-                    Cougaar.ParamGroupRole role =
-                            (Cougaar.ParamGroupRole) roleGetter.invoke(anno, args);
+                    Argument.GroupRole role =
+                            (Argument.GroupRole) roleGetter.invoke(anno, args);
                     String name = getArgGroupName(annoClass);
-                    if (role == Cougaar.ParamGroupRole.MEMBER) {
+                    if (role == Argument.GroupRole.MEMBER) {
                         if (groups == null) {
                             groups = new HashSet<String>();
                         }
@@ -101,9 +101,9 @@ public class ParameterAnnotations {
     private Annotation getOwnedGroup(Field field) {
         for (Annotation anno : field.getAnnotations()) {
             Class<?> annoClass = anno.annotationType();
-            if (anno instanceof Cougaar.ParamGroup) {
-                Cougaar.ParamGroup group = (Cougaar.ParamGroup) anno;
-                if (group.role() == Cougaar.ParamGroupRole.OWNER) {
+            if (anno instanceof Cougaar.ArgGroup) {
+                Cougaar.ArgGroup group = (Cougaar.ArgGroup) anno;
+                if (group.role() == Argument.GroupRole.OWNER) {
                     return group;
                 }
             } else if (annoClass.getName().endsWith(ARG_GROUP_SUFFIX)) {
@@ -111,9 +111,9 @@ public class ParameterAnnotations {
                     Class<?>[] parameterTypes = {};
                     Method roleGetter = annoClass.getDeclaredMethod("role", parameterTypes);
                     Object[] args = {};
-                    Cougaar.ParamGroupRole role =
-                            (Cougaar.ParamGroupRole) roleGetter.invoke(anno, args);
-                    if (role == Cougaar.ParamGroupRole.OWNER) {
+                    Argument.GroupRole role =
+                            (Argument.GroupRole) roleGetter.invoke(anno, args);
+                    if (role == Argument.GroupRole.OWNER) {
                         return anno;
                     }
                 } catch (Exception e) {
@@ -124,7 +124,7 @@ public class ParameterAnnotations {
         return null;
     }
 
-    private void setSequenceFieldFromSpec(Field field, Object object, Cougaar.Param spec)
+    private void setSequenceFieldFromSpec(Field field, Object object, Cougaar.Arg spec)
             throws ParseException, IllegalAccessException, IllegalStateException {
         String defaultValue = spec.defaultValue();
         String key = spec.name();
@@ -159,7 +159,7 @@ public class ParameterAnnotations {
         field.set(object, Collections.unmodifiableList(values));
     }
 
-    private void setSimpleFieldFromSpec(Field field, Object object, Cougaar.Param spec)
+    private void setSimpleFieldFromSpec(Field field, Object object, Cougaar.Arg spec)
             throws ParseException, IllegalAccessException, IllegalStateException {
         String defaultValue = spec.defaultValue();
         String key = spec.name();
@@ -181,7 +181,7 @@ public class ParameterAnnotations {
         field.set(object, parsedValue);
     }
 
-    private void setFieldFromSpec(Field field, Cougaar.Param spec, Object object)
+    private void setFieldFromSpec(Field field, Cougaar.Arg spec, Object object)
             throws ParseException, IllegalAccessException, IllegalStateException {
         try {
             Class<?> valueType = field.getType();
@@ -210,7 +210,7 @@ public class ParameterAnnotations {
 
     private void setGroupOwnerField(Field field,
                                     Object object,
-                                    Cougaar.ParamGroupIterationPolicy policy,
+                                    Argument.GroupIterationPolicy policy,
                                     Set<String> members)
             throws ParseException, IllegalAccessException, IllegalStateException {
         List<Arguments> split = policy.split(args, members);
@@ -218,7 +218,7 @@ public class ParameterAnnotations {
     }
 
     /**
-     * Set whatever {@link Cougaar.Param}-annotated fields we have values for.
+     * Set whatever {@link Cougaar.Arg}-annotated fields we have values for.
      */
     public void setFields(Object object)
             throws ParseException, IllegalAccessException, IllegalStateException {
@@ -227,8 +227,8 @@ public class ParameterAnnotations {
             if (Modifier.isFinal(mod) || Modifier.isStatic(mod)) {
                 // skip finals and statics
                 continue;
-            } else if (field.isAnnotationPresent(Cougaar.Param.class)) {
-                Cougaar.Param spec = field.getAnnotation(Cougaar.Param.class);
+            } else if (field.isAnnotationPresent(Cougaar.Arg.class)) {
+                Cougaar.Arg spec = field.getAnnotation(Cougaar.Arg.class);
                 String argName = spec.name();
                 if (args.containsKey(argName)) {
                     setFieldFromSpec(field, spec, object);
@@ -238,7 +238,7 @@ public class ParameterAnnotations {
     }
 
     /**
-     * Set values of every field that has either a {@link Cougaar.Param}
+     * Set values of every field that has either a {@link Cougaar.Arg}
      * annotation, or a Group annotation with role OWNER.
      * 
      */
@@ -251,8 +251,8 @@ public class ParameterAnnotations {
             if (Modifier.isFinal(mod) || Modifier.isStatic(mod)) {
                 // skip finals and statics
                 continue;
-            } else if (field.isAnnotationPresent(Cougaar.Param.class)) {
-                Cougaar.Param spec = field.getAnnotation(Cougaar.Param.class);
+            } else if (field.isAnnotationPresent(Cougaar.Arg.class)) {
+                Cougaar.Arg spec = field.getAnnotation(Cougaar.Arg.class);
                 setFieldFromSpec(field, spec, object);
                 Set<String> groups = getGroups(field);
                 if (groups != null) {
@@ -278,10 +278,10 @@ public class ParameterAnnotations {
             Annotation anno = entry.getKey();
             Field field = entry.getValue();
             Set<String> members = null;
-            Cougaar.ParamGroupIterationPolicy policy = null;
+            Argument.GroupIterationPolicy policy = null;
             Class<?> annoClass = anno.annotationType();
-            if (anno instanceof Cougaar.ParamGroup) {
-                Cougaar.ParamGroup group = (Cougaar.ParamGroup) anno;
+            if (anno instanceof Cougaar.ArgGroup) {
+                Cougaar.ArgGroup group = (Cougaar.ArgGroup) anno;
                 members = groupMembers.get(group.name());
                 policy = group.policy();
             } else if (annoClass.getName().endsWith(ARG_GROUP_SUFFIX)) {
@@ -290,7 +290,7 @@ public class ParameterAnnotations {
                     Method policyGetter = annoClass.getDeclaredMethod("policy", parameterTypes);
                     Object[] methodArgs = {};
                     policy =
-                            (Cougaar.ParamGroupIterationPolicy) policyGetter.invoke(anno,
+                            (Argument.GroupIterationPolicy) policyGetter.invoke(anno,
                                                                                     methodArgs);
                     String name = getArgGroupName(annoClass);
                     members = groupMembers.get(name);
@@ -420,6 +420,22 @@ public class ParameterAnnotations {
                type = URI;
             }
             return type.parse(valueClass, field, rawValue);
+        }
+    }
+
+    public static enum GroupRole {
+        MEMBER, OWNER
+    }
+
+    public static enum GroupIterationPolicy {
+        ROUND_ROBIN, FIRST_UP, CLOSEST, RANDOM;
+    
+        // Default is to restrict the arguments to the
+        // given members, and then split it.
+        // 
+        // TODO: Specialize this per policy
+        public List<Arguments> split(Arguments arguments, Set<String> members) {
+            return new Arguments(arguments, null, null, members).split();
         }
     }
 }

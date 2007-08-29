@@ -30,7 +30,7 @@ import java.util.Map;
 
 import org.cougaar.util.Arguments;
 import org.cougaar.util.GenericStateModelAdapter;
-import org.cougaar.util.annotations.ParameterAnnotations;
+import org.cougaar.util.annotations.Argument;
 
 /**
  * Simple Component base class that provides named paramater support. Parameters
@@ -42,7 +42,7 @@ abstract public class ParameterizedComponent extends GenericStateModelAdapter im
     public void setArguments(Arguments args) {
         this.args = args;
         try {
-            new ParameterAnnotations(args).setAllFields(this);
+            new Argument(args).setAllFields(this);
         } catch (Exception e) {
             // TODO: Add Logging support when it's ready
             throw new RuntimeException("Exception during field initialization", e);

@@ -34,7 +34,7 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import org.cougaar.util.annotations.Cougaar;
-import org.cougaar.util.annotations.ParameterAnnotations;
+import org.cougaar.util.annotations.Argument;
 
 /**
  * Test field initialization via annotation metatdata
@@ -49,41 +49,41 @@ public class TestAnnotations extends TestCase {
 
     @Retention(RetentionPolicy.RUNTIME)
     public @interface TestArgGroup {
-        Cougaar.ParamGroupRole role() default Cougaar.ParamGroupRole.MEMBER;
+        Argument.GroupRole role() default Argument.GroupRole.MEMBER;
 
-        Cougaar.ParamGroupIterationPolicy policy() default Cougaar.ParamGroupIterationPolicy.FIRST_UP;
+        Argument.GroupIterationPolicy policy() default Argument.GroupIterationPolicy.FIRST_UP;
     }
 
-    @Cougaar.ParamGroup(role=Cougaar.ParamGroupRole.OWNER, name=GROUP_NAME)
+    @Cougaar.ArgGroup(role=Argument.GroupRole.OWNER, name=GROUP_NAME)
     public List<Arguments> groupOwner;
 
-    @TestArgGroup(role=Cougaar.ParamGroupRole.OWNER)
+    @TestArgGroup(role=Argument.GroupRole.OWNER)
     public List<Arguments> testArgGroupOwner;
 
-    @Cougaar.Param(name="SimpleParam")
+    @Cougaar.Arg(name="SimpleParam")
     @TestArgGroup()
     public int simple;
 
-    @Cougaar.Param(name="SimpleDefaultedParam", defaultValue="10")
+    @Cougaar.Arg(name="SimpleDefaultedParam", defaultValue="10")
     public int simpleDefaulted;
 
-    @Cougaar.Param(name="SimpleDefaultedNullParam", defaultValue=Cougaar.NULL_VALUE)
+    @Cougaar.Arg(name="SimpleDefaultedNullParam", defaultValue=Cougaar.NULL_VALUE)
     public String simpleDefaultedNull;
 
-    @Cougaar.Param(name="ListParam")
-    @Cougaar.ParamGroup(name=GROUP_NAME)
+    @Cougaar.Arg(name="ListParam")
+    @Cougaar.ArgGroup(name=GROUP_NAME)
     public List<String> list;
 
-    @Cougaar.Param(name="DefaultedListParam", defaultValue="[d,e]")
+    @Cougaar.Arg(name="DefaultedListParam", defaultValue="[d,e]")
     public List<String> defaultedList;
 
-    @Cougaar.Param(name="DefaultedListNullParam", defaultValue=Cougaar.NULL_VALUE)
-    @Cougaar.ParamGroup(name=GROUP_NAME)
+    @Cougaar.Arg(name="DefaultedListNullParam", defaultValue=Cougaar.NULL_VALUE)
+    @Cougaar.ArgGroup(name=GROUP_NAME)
     public List<String> defaultedListNull;
 
     private void setAll(Arguments args) {
         try {
-            new ParameterAnnotations(args).setAllFields(this);
+            new Argument(args).setAllFields(this);
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
@@ -92,7 +92,7 @@ public class TestAnnotations extends TestCase {
 
     private void setGroup(List<Arguments> owner, int index) {
         try {
-            new ParameterAnnotations(owner.get(index)).setFields(this);
+            new Argument(owner.get(index)).setFields(this);
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
