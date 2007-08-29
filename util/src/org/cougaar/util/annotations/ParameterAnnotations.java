@@ -128,7 +128,6 @@ public class ParameterAnnotations {
             throws ParseException, IllegalAccessException, IllegalStateException {
         String defaultValue = spec.defaultValue();
         String key = spec.name();
-        DataType type = DataType.fromField(field);
         boolean isRequired = spec.required() && defaultValue.equals(Cougaar.NO_VALUE);
         List<String> rawValues = null;
         if (args.containsKey(key)) {
@@ -155,7 +154,7 @@ public class ParameterAnnotations {
         }
         List<Object> values = new ArrayList<Object>(rawValues.size());
         for (String rawValue : rawValues) {
-            values.add(type.parse(field, rawValue));
+            values.add(DataType.fromField(field, rawValue));
         }
         field.set(object, Collections.unmodifiableList(values));
     }
@@ -164,7 +163,6 @@ public class ParameterAnnotations {
             throws ParseException, IllegalAccessException, IllegalStateException {
         String defaultValue = spec.defaultValue();
         String key = spec.name();
-        DataType type = DataType.fromField(field);
         boolean isRequired = spec.required() && defaultValue.equals(Cougaar.NO_VALUE);
         String rawValue;
         if (args.containsKey(key)) {
@@ -179,7 +177,7 @@ public class ParameterAnnotations {
             return;
         }
         Object parsedValue =
-                rawValue.equals(Cougaar.NULL_VALUE) ? null : type.parse(field, rawValue);
+                rawValue.equals(Cougaar.NULL_VALUE) ? null : DataType.fromField(field, rawValue);
         field.set(object, parsedValue);
     }
 
@@ -314,7 +312,7 @@ public class ParameterAnnotations {
 
     public static enum DataType {
         INT {
-            Object parse(Field field, String rawValue) throws ParseException {
+            Object parse(Class<?> valueClass, Field field, String rawValue) throws ParseException {
                 try {
                     return Integer.parseInt(rawValue);
                 } catch (NumberFormatException e) {
@@ -323,7 +321,7 @@ public class ParameterAnnotations {
             }
         },
         LONG {
-            Object parse(Field field, String rawValue) throws ParseException {
+            Object parse(Class<?> valueClass, Field field, String rawValue) throws ParseException {
                 try {
                     return Long.parseLong(rawValue);
                 } catch (NumberFormatException e) {
@@ -332,7 +330,7 @@ public class ParameterAnnotations {
             }
         },
         FLOAT {
-            Object parse(Field field, String rawValue) throws ParseException {
+            Object parse(Class<?> valueClass, Field field, String rawValue) throws ParseException {
                 try {
                     return Float.parseFloat(rawValue);
                 } catch (NumberFormatException e) {
@@ -341,7 +339,7 @@ public class ParameterAnnotations {
             }
         },
         DOUBLE {
-            Object parse(Field field, String rawValue) throws ParseException {
+            Object parse(Class<?> valueClass, Field field, String rawValue) throws ParseException {
                 try {
                     return Double.parseDouble(rawValue);
                 } catch (NumberFormatException e) {
@@ -350,26 +348,40 @@ public class ParameterAnnotations {
             }
         },
         STRING {
-            Object parse(Field field, String rawValue) throws ParseException {
+            Object parse(Class<?> valueClass, Field field, String rawValue) throws ParseException {
                 return rawValue;
             }
         },
         BOOLEAN {
-            Object parse(Field field, String rawValue) {
+            Object parse(Class<?> valueClass, Field field, String rawValue) {
                 return Boolean.parseBoolean(rawValue);
             }
         },
         URI {
-            Object parse(Field field, String rawValue) throws ParseException {
+            Object parse(Class<?> valueClass, Field field, String rawValue) throws ParseException {
                 try {
                     return new URI(rawValue);
                 } catch (URISyntaxException e) {
                     throw new ParseException(field, rawValue, e);
                 }
             }
+        },
+        OTHER {
+            Object parse(Class<?> valueClass, Field field, String rawValue) throws ParseException {
+                try {
+                    for (Method method : valueClass.getMethods()) {
+                        if (method.isAnnotationPresent(Cougaar.Resolver.class)) {
+                            return method.invoke(valueClass, rawValue);
+                        }
+                    }
+                    throw new RuntimeException("No Resolver for " + valueClass);
+                } catch (Exception ex) {
+                    throw new ParseException(field, rawValue, ex);
+                }
+            }
         };
 
-        abstract Object parse(Field field, String rawValue) throws ParseException;
+        abstract Object parse(Class<?> valueClass, Field field, String rawValue) throws ParseException;
 
         static Class<?> elementType(Field field, Class<?> valueType) {
             Type gtype = field.getGenericType();
@@ -385,29 +397,29 @@ public class ParameterAnnotations {
             }
             return (Class<?>) etype;
         }
-
-        static DataType fromField(Field field) {
-            Class<?> valueType = field.getType();
-            if (List.class.isAssignableFrom(valueType)) {
-                valueType = elementType(field, valueType);
+        
+        static Object fromField(Field field, String rawValue) throws ParseException {
+            Class<?> valueClass = field.getType();
+            if (List.class.isAssignableFrom(valueClass)) {
+                valueClass = elementType(field, valueClass);
             }
-            if (valueType == long.class || valueType == Long.class) {
-                return LONG;
-            } else if (valueType == int.class || valueType == Integer.class) {
-                return INT;
-            } else if (valueType == double.class || valueType == Double.class) {
-                return DOUBLE;
-            } else if (valueType == float.class || valueType == Float.class) {
-                return FLOAT;
-            } else if (valueType == boolean.class || valueType == Boolean.class) {
-                return BOOLEAN;
-            } else if (valueType == String.class) {
-                return STRING;
-            } else if (URI.class.isAssignableFrom(valueType)) {
-                return URI;
-            } else {
-                throw new IllegalStateException("Can't handle fields of type " + valueType);
+            DataType type = OTHER;
+            if (valueClass == long.class || valueClass == Long.class) {
+                type = LONG;
+            } else if (valueClass == int.class || valueClass == Integer.class) {
+                type = INT;
+            } else if (valueClass == double.class || valueClass == Double.class) {
+                type = DOUBLE;
+            } else if (valueClass == float.class || valueClass == Float.class) {
+                type = FLOAT;
+            } else if (valueClass == boolean.class || valueClass == Boolean.class) {
+                type = BOOLEAN;
+            } else if (valueClass == String.class) {
+                type = STRING;
+            } else if (URI.class.isAssignableFrom(valueClass)) {
+               type = URI;
             }
+            return type.parse(valueClass, field, rawValue);
         }
     }
 }

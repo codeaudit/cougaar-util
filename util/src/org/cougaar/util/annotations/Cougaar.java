@@ -47,6 +47,10 @@ public class Cougaar {
         }
     }
     
+    /**
+     * This annotation should be attached to a public data member
+     * to initialize it from an argument element in the society xml.
+     */
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Param {
         String name();
@@ -58,6 +62,11 @@ public class Cougaar {
         String description() default "no description";
     }
     
+    /**
+     * This annotation should be attached to a public data member
+     * if it belongs to a collection of members that need to be set
+     * as a group.
+     */
     @Retention(RetentionPolicy.RUNTIME)
     public @interface ParamGroup {
         String name();
@@ -67,6 +76,18 @@ public class Cougaar {
         Cougaar.ParamGroupIterationPolicy policy() default Cougaar.ParamGroupIterationPolicy.FIRST_UP;
     }
 
+    /**
+     * This annotation should be attached to a public static
+     * method of any class that can create an instance given
+     * a string.  This resolver method will be used by the
+     * argument initialization mechanism for data members whose
+     * type isn't one of the presupported ones (ie not an atomic
+     * type, or a boxed atomic type, or String, or URI).
+     */
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface Resolver {
+    }
+    
     
     // Execution annotations
     
