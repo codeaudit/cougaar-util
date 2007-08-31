@@ -212,7 +212,7 @@ public class Argument {
                                     Object object,
                                     Argument.GroupIterationPolicy policy,
                                     Set<String> members)
-            throws ParseException, IllegalAccessException, IllegalStateException {
+            throws IllegalAccessException, IllegalStateException {
         List<Arguments> split = policy.split(args, members);
         field.set(object, split);
     }

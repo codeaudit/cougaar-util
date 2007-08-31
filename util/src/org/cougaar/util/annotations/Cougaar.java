@@ -73,7 +73,33 @@ public class Cougaar {
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Resolver {
     }
+    
+    
+    // Component Life cycle
+   
+    /**
+     * Nothing inside, just an indicator that the
+     * annotated method is one of the ones called
+     * automatically when components are made
+     * and destroyed.
+     */
+    public @interface Lifecycle {
+    }
 
+    // Binding to services automatically; not supported yet
+    
+    /**
+     * Eventually this will be used to set a data member to
+     * a service when it becomes available, or invoke a 
+     * method when it becomes available.  No fields are
+     * required, since the service class is available
+     * already
+     */
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface Service {
+    }
+    
+    
     // Execution annotations
 
     /**
@@ -95,11 +121,30 @@ public class Cougaar {
     public @interface Execute {
         Subscribe.ModType[] on();
 
+        /**
+         * @return  the name of a TodoSubscription
+         */
         String todo() default NO_VALUE; // name of a specific TODO queue
 
-        Class<?> isa() default NoClass.class; // simple 'instanceof' predicate
+        /**
+         * 
+         * @return the class that will be used in an IsInstanceOf UnaryPredicate.
+         */
+        Class<?> isa() default NoClass.class;
 
-        String when() default NO_VALUE; // The name of a predicate method
+        /**
+         * @return the name of a {@link Predicate}
+         */
+        String when() default NO_VALUE; 
     }
 
+    /**
+     * If an {@link Execute} annotation uses the 'when' form, some
+     * other method should be tagged with a Predicate annotation on
+     * the same 'when'.
+     */
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface Predicate {
+        String when() default NO_VALUE;
+    }
 }
