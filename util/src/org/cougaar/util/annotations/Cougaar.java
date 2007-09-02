@@ -81,6 +81,13 @@ public class Cougaar {
     
     // Execution annotations
     
+    /**
+     * Attaching this kind of annotation to a public field will create a
+     * TodoSubscription and set that field to that subscription. The elements on
+     * the TodoSubscription will be TodoItems and will be run in the plugin's
+     * execute context (ie, in blackboard transaction). New items can be added
+     * in any context.
+     */
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Todo {
         String id();
@@ -89,16 +96,19 @@ public class Cougaar {
     /**
      * Attaching this kind annotation to a public method will cause that method
      * to be invoked once per item per {@link Subscribe.ModType} collection, for
-     * a given subscription.
+     * a given IncrementalSubscription. These invocations will happen in the
+     * plugin's execute context (ie, in blackboard transaction). These methods
+     * must be a public and should take exactly one parameter. The return value
+     * is ignored, so a 'void' return type is almost always the right choice.
      * 
-     * The subscription can be specified in one of three ways, which are tried
-     * in order. If the {@link #todo} is specified, a TodoSubscription with the
-     * given name is used. Otherwise, if the {@link #isa} class is specified, an
-     * IncrementalSubscription is used that will test instanceof the given
-     * class. Otherwise, if a {@link #when} is specified, the corresponding
-     * method is invoked (this method must be public, must return a boolean, and
-     * must take one argument whose type is the same as the method being
-     * annotated).
+     * By default, the method will be invoked on objects whose class matches the
+     * class of the method's parameter.
+     * 
+     * If a {@link #when} is specified, the plugin should also define a method
+     * with the same signature that returns a boolean, and that has a
+     * {@link Predicate} with a matching {@link Predicate#when}. This predicate
+     * method is used to further filter the set of items that will be passed to
+     * the execute method.
      * 
      */
     @Retention(RetentionPolicy.RUNTIME)
@@ -115,9 +125,14 @@ public class Cougaar {
     }
 
     /**
-     * If an {@link Execute} annotation uses the 'when' form, some
-     * other method should be tagged with a Predicate annotation on
-     * the same 'when'.
+     * Attaching this kind of annotation to a public method causes it to
+     * be used as a filter for an {@link Execute} method with a matching
+     * {@link Execute#when}.
+     * 
+     * A predicate method must be a public, must return a boolean and
+     * must take exactly one argument.  Further, the type of the argument
+     * should match that of the one argument of the corresonding 
+     * {@link Execute}.
      */
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Predicate {
