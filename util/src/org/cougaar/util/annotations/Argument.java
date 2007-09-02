@@ -128,7 +128,7 @@ public class Argument {
             throws ParseException, IllegalAccessException, IllegalStateException {
         String defaultValue = spec.defaultValue();
         String key = spec.name();
-        boolean isRequired = spec.required() && defaultValue.equals(Cougaar.NO_VALUE);
+        boolean isRequired = spec.required() && Cougaar.NO_VALUE.equals(defaultValue);
         List<String> rawValues = null;
         if (args.containsKey(key)) {
             rawValues = args.getStrings(key);
@@ -137,7 +137,7 @@ public class Argument {
         } else if (defaultValue.equals(Cougaar.NULL_VALUE)) {
             field.set(object, null);
             return;
-        } else if (defaultValue.equals(Cougaar.NO_VALUE)) {
+        } else if (Cougaar.NO_VALUE.equals(defaultValue)) {
             return;
         } else {
             // Should be in the form [x,y,z]
@@ -163,7 +163,7 @@ public class Argument {
             throws ParseException, IllegalAccessException, IllegalStateException {
         String defaultValue = spec.defaultValue();
         String key = spec.name();
-        boolean isRequired = spec.required() && defaultValue.equals(Cougaar.NO_VALUE);
+        boolean isRequired = spec.required() && Cougaar.NO_VALUE.equals(defaultValue);
         String rawValue;
         if (args.containsKey(key)) {
             List<String> values = args.getStrings(key);

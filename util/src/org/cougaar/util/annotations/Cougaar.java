@@ -75,32 +75,16 @@ public class Cougaar {
     }
     
     
-    // Component Life cycle
-   
-    /**
-     * Nothing inside, just an indicator that the
-     * annotated method is one of the ones called
-     * automatically when components are made
-     * and destroyed.
-     */
-    public @interface Lifecycle {
-    }
-
-    // Binding to services automatically; not supported yet
-    
-    /**
-     * Eventually this will be used to set a data member to
-     * a service when it becomes available, or invoke a 
-     * method when it becomes available.  No fields are
-     * required, since the service class is available
-     * already
-     */
-    @Retention(RetentionPolicy.RUNTIME)
+    // Obtaining services, TBD
     public @interface Service {
     }
     
-    
     // Execution annotations
+    
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface Todo {
+        String id();
+    }
 
     /**
      * Attaching this kind annotation to a public method will cause that method
@@ -119,18 +103,10 @@ public class Cougaar {
      */
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Execute {
+        /**
+         * @return which subscription modification types are relevant
+         */
         Subscribe.ModType[] on();
-
-        /**
-         * @return  the name of a TodoSubscription
-         */
-        String todo() default NO_VALUE; // name of a specific TODO queue
-
-        /**
-         * 
-         * @return the class that will be used in an IsInstanceOf UnaryPredicate.
-         */
-        Class<?> isa() default NoClass.class;
 
         /**
          * @return the name of a {@link Predicate}
