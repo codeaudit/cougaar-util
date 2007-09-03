@@ -27,13 +27,6 @@ public class Cougaar {
      */
     public static final String NO_VALUE = "###no-value###";
     
-    /**
-     * This class is used only as the default value for {@link Execute#isa()}.
-     * Its presence indicates that 'isa' hasn't been set by the user.
-     */
-    public static final class NoClass {
-    }
-    
 
     /**
      * This annotation should be attached to a public data member to initialize
