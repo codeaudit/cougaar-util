@@ -75,18 +75,6 @@ public class Cougaar {
     // Execution annotations
     
     /**
-     * Attaching this kind of annotation to a public field will create a
-     * TodoSubscription and set that field to that subscription. The elements on
-     * the TodoSubscription will be TodoItems and will be run in the plugin's
-     * execute context (ie, in blackboard transaction). New items can be added
-     * in any context.
-     */
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface Todo {
-        String id();
-    }
-
-    /**
      * Attaching this kind annotation to a public method will cause that method
      * to be invoked once per item per {@link Subscribe.ModType} collection, for
      * a given IncrementalSubscription. These invocations will happen in the
