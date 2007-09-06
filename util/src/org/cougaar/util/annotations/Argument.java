@@ -367,8 +367,13 @@ public class Argument {
             }
         },
         OTHER {
-            Object parse(Class<?> valueClass, Field field, String rawValue) throws ParseException {
+            @SuppressWarnings("unchecked") // enum fiddling causes unavoidable warnings
+            Object parse(Class valueClass, Field field, String rawValue) throws ParseException {
                 try {
+                    if (valueClass.isEnum()) {
+                        // coerce the string in the default enum way
+                        return Enum.valueOf(valueClass, rawValue);
+                    }
                     for (Method method : valueClass.getMethods()) {
                         if (method.isAnnotationPresent(Cougaar.Resolver.class)) {
                             return method.invoke(valueClass, rawValue);

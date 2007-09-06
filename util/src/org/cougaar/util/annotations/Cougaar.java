@@ -61,7 +61,7 @@ public class Cougaar {
      * that can create an instance given a string. This resolver method will be
      * used by the argument initialization mechanism for data members whose type
      * isn't one of the presupported ones (ie not an atomic type, or a boxed
-     * atomic type, or String, or URI).
+     * atomic type, or String, or URI, or an Enum).
      */
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Resolver {
