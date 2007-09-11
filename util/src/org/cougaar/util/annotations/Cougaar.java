@@ -66,7 +66,7 @@ public class Cougaar {
     }
 
     // Obtaining services, TBD
-    public @interface Service {
+    public @interface ObtainService {
     }
 
     // Execution annotations
