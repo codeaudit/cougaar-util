@@ -66,6 +66,7 @@ public class Cougaar {
     }
 
     // Obtaining services, TBD
+    @Retention(RetentionPolicy.RUNTIME)
     public @interface ObtainService {
     }
 

@@ -25,11 +25,13 @@
  */
 package org.cougaar.core.component;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.cougaar.util.annotations.Cougaar;
 import org.cougaar.util.log.Logger;
 import org.cougaar.util.log.Logging;
 
@@ -86,6 +88,7 @@ public abstract class BindingUtility {
   }
 
   private static class SetServiceInvocation {
+    final Field f;
     final Method m;
     final Object o;
     final Object service;
@@ -93,13 +96,23 @@ public abstract class BindingUtility {
 
     SetServiceInvocation(Method m, Object o, Object s, Class p) {
       this.m = m; this.o = o; this.service = s; this.p = p;
+      this.f = null;
     }
+    
+    SetServiceInvocation(Field f, Object o, Object s, Class p) {
+      this.f = f; this.o = o; this.service = s; this.p = p;
+      this.m = null;
+    }
+    
     void invoke() throws InvocationTargetException, IllegalAccessException {
       // we shouldn't have been here if service is null.
       assert service != null;
-
-      Object[] args = new Object[] { service };
-      m.invoke(o, args);
+      if (m != null) {
+        Object[] args = new Object[] { service };
+        m.invoke(o, args);
+      } else if (f != null){
+        f.set(o, service);
+      }
     }
     void release(ServiceBroker b, Object child) {
       b.releaseService(child,p,service);
@@ -118,6 +131,35 @@ public abstract class BindingUtility {
     ArrayList ssi = new ArrayList();
 
     try {
+      Field[] fields = childClass.getFields();
+      for (final Field field : fields) {
+        if (field.isAnnotationPresent(Cougaar.ObtainService.class)) {
+          Class<?> fieldClass = field.getType();
+          if (Service.class.isAssignableFrom(fieldClass)) {
+            final Object fc = child;
+            ServiceRevokedListener srl = new ServiceRevokedListener() {
+              public void serviceRevoked(ServiceRevokedEvent re) {
+                try {
+                  field.set(fc, null);
+                } catch (Throwable t) {
+                  Logger logger = Logging.getLogger(BindingUtility.class);
+                  logger.error("Component "+fc+" annotated field "+field+" fails with null" , t);
+                }
+              }
+            };
+            try {
+              Object service = servicebroker.getService(child, fieldClass, srl);
+              if (service == null) throw new Throwable("No service for "+fieldClass);
+              // remember the services to set for the second pass
+              ssi.add(new SetServiceInvocation(field, child, service, fieldClass));
+            } catch (Throwable t) {
+              Object[] fail = new Object[] {fieldClass, t};
+              failures.add(fail);
+              break;          // break out of the loop
+            }
+          }
+        }
+      }
       Method[] methods = childClass.getMethods();
 
       int l = methods.length;
