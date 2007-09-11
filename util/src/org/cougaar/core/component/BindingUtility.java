@@ -157,6 +157,13 @@ public abstract class BindingUtility {
               failures.add(fail);
               break;          // break out of the loop
             }
+          } else if (ServiceBroker.class.equals(fieldClass)) {
+            try {
+              field.set(child, servicebroker);
+            } catch (Throwable t) {
+              Logger logger = Logging.getLogger(BindingUtility.class);
+              logger.error("Component "+child+" annotated field "+field+" fails with ServiceBroker" , t);
+            }
           }
         }
       }
