@@ -11,7 +11,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="bootstrap" exported="" />
+    <orderEntry type="module" module-name="bootstrap" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
@@ -21,7 +21,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library" exported="">
+    <orderEntry type="module-library">
       <library>
         <CLASSES>
           <root url="jar://$MODULE_DIR$/../jars/lib/log4j.jar!/" />
