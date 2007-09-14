@@ -15,5 +15,6 @@
 		<project reference="1.0,:ext:cougaar.org:/cvsroot/util,util,util"/>
 		<project reference="1.0,:ext:cougaar.org:/cvsroot/webserver,webserver,webserver"/>
 		<project reference="1.0,:ext:cougaar.org:/cvsroot/webserver,webtomcat,webtomcat"/>
+		<project reference="1.0,:ext:cougaar.org:/cvsroot/webserver,webmicro,webmicro"/>
 	</provider>
 </psf>
