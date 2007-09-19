@@ -95,7 +95,7 @@ servlets by setting:
 
   <tr><td><b>servlet_redirector.mts_tunnel</b></td><td bgcolor=pink>false</td><td bgcolor=pink>false</td><td bgcolor=pink>false</td><td bgcolor=pink>false</td><td bgcolor=lightgreen>true</td><td bgcolor=lightgreen>true</td></tr>
 
-  <tr><td><b>communities</b></td><td bgcolor=pink>false</td><td bgcolor=pink>false</td><td bgcolor=pink>false</td><td bgcolor="lightgreen">true <a href="#communities"><i>note</i></a></td><td bgcolor=pink>false</td><td bgcolor=lightgreen>true</td></tr>
+  <tr><td><b>communities</b></td><td bgcolor=pink>false</td><td bgcolor=pink>false</td><td bgcolor=pink>false</td><td>legacy <a href="#communities"><i>note</i></a></td><td bgcolor=pink>false</td><td bgcolor=lightgreen>true</td></tr>
 
   <tr><td>assume <b>planning</b> domain should be loaded</td><td bgcolor=pink>false</td><td bgcolor=pink>false</td><td bgcolor=pink>false</td><td bgcolor=lightgreen>true <a href="#planning"><i>note</i></a></td><td bgcolor=pink>false</td><td bgcolor=pink>false</td></tr>
 
@@ -135,8 +135,9 @@ load the WPServer component into every node.  This is for backwards compatibilit
 <a name="communities">
 <h4>communities:</h4>
 </dt><dd>
-Communities are only enabled for backwards-compability and the <b>wan</b>
-configuration.
+The <b>communities</b> option supports a default "false" value, a "legacy"
+value for the old <tt>lib/community.jar</tt> implementation, and a "true" value
+for the new core implementation in <tt>org/cougaar/core/agent/service/community</tt>.
 </dd>
 <p>
 
