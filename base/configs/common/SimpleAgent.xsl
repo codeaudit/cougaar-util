@@ -130,7 +130,7 @@ section titled "XSL Agent Templates".
         servlets=true,
         planning=true,
         domain_ini=true,
-        communities=true,
+        communities=legacy,
         servlet_engine.tomcat=true,
         servlet_redirector.http_redirect=true,
       </xsl:when>
