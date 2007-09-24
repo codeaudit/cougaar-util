@@ -459,8 +459,8 @@ For additional notes, see "SimpleAgent.xsl".
         </xsl:if>
         <xsl:if test="$link_protocol.rmi = 'true'">
           <component
-            name='org.cougaar.mts.base.RMILinkProtocol()'
-            class='org.cougaar.mts.base.RMILinkProtocol'
+            name='org.cougaar.mts.rmi.RMILinkProtocol()'
+            class='org.cougaar.mts.rmi.RMILinkProtocol'
             priority='COMPONENT'
             insertionpoint='Node.AgentManager.Agent.MessageTransport.Component'/>
         </xsl:if>
