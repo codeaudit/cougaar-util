@@ -8,6 +8,7 @@
 		<project reference="1.0,:ext:cougaar.org:/cvsroot/core,core,core"/>
 		<project reference="1.0,:ext:cougaar.org:/cvsroot/build,build,build"/>
 		<project reference="1.0,:ext:cougaar.org:/cvsroot/mts,mtsstd,mtsstd"/>
+		<project reference="1.0,:ext:cougaar.org:/cvsroot/mts,mtslinks,mtslinks"/>
 		<project reference="1.0,:ext:cougaar.org:/cvsroot/tutorials,ping,ping"/>
 		<project reference="1.0,:ext:cougaar.org:/cvsroot/qos,qos,qos"/>
 		<project reference="1.0,:ext:cougaar.org:/cvsroot/qos,qrs,qrs"/>
