@@ -1,0 +1,106 @@
+<html><head><title>ServletTunnel</title></head><body>
+
+<h1>Servlet Tunnel and Redirect support </h1>
+
+<p />
+This page discusses Cougaar's remote servlet tunnel/redirect support.
+<p />
+The servlet tunnel allows requests for remote servlets to be tunneled through the message transport, instead of using a browser HTTP-Redirect.  This provides two benefits: <ol>
+<li> It uses the message transport protocol, firewall, and security code
+</li> <li> It allows a node to support servlets even if that node can't run an HTTP server.
+</li></ol> 
+<p />
+<h2><a name="Features"></a> Features </h2>
+<p />
+For example, say we had: <ul>
+
+<li> host "A" has node "1" and agent "alpha"
+</li> <li> host "B" has node "2" and agent "beta"
+</li></ul> 
+<p />
+Without the tunnel, a servlet request from a browser/UI on host "A" to <ul>
+<li> <a href="http://A:8800/$beta/foo" target="_top">http://A:8800/$beta/foo</a>
+</li></ul> 
+will send back a browser HTTP-Redirect of: <ul>
+<li> <a href="http://B:8800/$beta/foo" target="_top">http://B:8800/$beta/foo</a>
+
+</li></ul> 
+and the browser/UI will open this remote URL.  The HTTP-Redirect is visible in browsers as a change to the Brower URL Location line.
+<p />
+With the tunnel, the request is instead sent through the message transport to the remote node.  This tunneling is completely transparent to the browser/UI.  In particular, the Browser URL Location will remain as <ul>
+<li> <a href="http://A:8800/$beta/foo" target="_top">http://A:8800/$beta/foo</a>
+</li></ul> 
+yet show agent "beta"'s servlet pages (note the "A" hostname).  The console will show "+-+-" output due to the messages being sent &amp; received between the two nodes.  The message transport will use the low-level link protocol (e.g. JMS) to take care of any firewall/security issues.
+<p />
+Multiple redirectors can be loaded into a node and will be attempted in their load-order, which (by default) favors the HTTP-Redirect.  The user can specify an explicit redirector/tunnel on the URL line, e.g.: <ul>
+<li> <a href="http://A:8800/$(mts_tunnel)beta/foo" target="_top">http://A:8800/$(mts_tunnel)beta/foo</a>
+
+</li></ul> 
+For details, see the javadocs for <ul>
+<li> webserver/src/org/cougaar/lib/web/arch/util/PathParser.java
+</li></ul> 
+<p />
+<h2><a name="Configuration"></a> Configuration </h2>
+<p />
+By default, a multi-node Cougaar society uses backwards-compatible HTTP-Redirects.  The MTS tunnel is enabled but will only be used if<br>
+&nbsp;&nbsp; a) the remote node is not running an HTTP server, or<br>
+&nbsp;&nbsp; b) the local node is configured to disable remote HTTP-Redirects, or<br>
+
+&nbsp;&nbsp; c) the user explicitly requests the MTS tunnel in the URL.
+<p />
+<b>a)</b><br>
+To start an "embedded" node with no HTTP server that will allow MTS tunnel-based servlet access, set the following system properties: <ul>
+<li> -Dorg.cougaar.society.xsl.param.servlet_engine.tomcat=false
+</li> <li> -Dorg.cougaar.society.xsl.param.servlet_redirector.http_redirect=false
+</li></ul> 
+The following system properties are the defaults, so you don't need to specify them: <ul>
+<li> -Dorg.cougaar.society.xsl.param.servlets=true
+
+</li> <li> -Dorg.cougaar.society.xsl.param.servlet_engine.mts=true
+</li> <li> -Dorg.cougaar.society.xsl.param.servlet_redirector.mts_tunnel=true
+</li></ul> 
+With the above configuration, a remote Tomcat-enabled "gateway" node will be able to access servlets on the above "embedded" node.
+<p />
+<b>b)</b><br>
+To disable HTTP redirects and force the use of the MTS tunnel, even if the remote node is running an HTTP server, set: <ul>
+<li> -Dorg.cougaar.society.xsl.param.servlet_redirector.http_redirect=false
+</li></ul> 
+This option is useful if HTTP-Redirects are forbidden (e.g. blocked by firewalls).
+
+<p />
+<b>c)</b><br>
+The MTS tunnel can also be forced on the URL line via URL "options", without requiring the above -D.  For example: <ul>
+<li> <a href="http://A:8800/$(mts_tunnel)beta/foo" target="_top">http://A:8800/$(mts_tunnel)beta/foo</a>
+</li></ul> 
+Or, to prevent redirects and display an error page if the specified agent "beta" is not on "A:8800", use: <ul>
+<li> <a href="http://A:8800/$()beta/foo" target="_top">http://A:8800/$()beta/foo</a>
+</li></ul> 
+For details, see the javadocs for <ul>
+
+<li> webserver/src/org/cougaar/lib/web/arch/util/PathParser.java
+</li></ul> 
+<p />
+<h2><a name="Advanced_configuration_options"></a> Advanced configuration options </h2>
+<p />
+The servlet "engine"s and "redirector"s are pluggable.  They are specified in the agent template files: <ul>
+<li> configs/common/NodeAgent.xsl
+</li> <li> configs/common/SimpleAgent.xsl
+</li></ul> 
+<p />
+
+A node can be configured to run any/all of the following "servlet_engine"s: <ul>
+<li> "tomcat" : Our standard Tomcat-based HTTP engine
+</li> <li> "micro" : A new, trimmed-down HTTP engine, which is subclassed by the MTS tunnel engine
+</li> <li> "mts" : Receives tunneled MTS servlet requests
+</li></ul> 
+and any/all of the following servlet "servlet_redirector"s: <ul>
+<li> "http_redirect" :  Our standard HTTP-Redirect to a remote host:port
+</li> <li> "http_tunnel" : A proof-of-concept URL connection tunnel, disabled by default
+
+</li> <li> "mts_tunnel" : Sends tunneled MTS servlet requests
+</li></ul> 
+<p />
+When a node is created, it registers its available servlet engines in the naming service.  This tells a remote node how to redirect/tunnel requests to agents on that remote node.
+<p />
+
+</body></html>
