@@ -311,6 +311,7 @@
       <module fileurl="file://$PROJECT_DIR$/build/build.iml" filepath="$PROJECT_DIR$/build/build.iml" />
       <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" />
       <module fileurl="file://$PROJECT_DIR$/jars/jars.iml" filepath="$PROJECT_DIR$/jars/jars.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mtslinks/mtslinks.iml" filepath="$PROJECT_DIR$/mtslinks/mtslinks.iml" />
       <module fileurl="file://$PROJECT_DIR$/mtsstd/mtsstd.iml" filepath="$PROJECT_DIR$/mtsstd/mtsstd.iml" />
       <module fileurl="file://$PROJECT_DIR$/ping/ping.iml" filepath="$PROJECT_DIR$/ping/ping.iml" />
       <module fileurl="file://$PROJECT_DIR$/profile/profile.iml" filepath="$PROJECT_DIR$/profile/profile.iml" />
@@ -318,6 +319,7 @@
       <module fileurl="file://$PROJECT_DIR$/qrs/qrs.iml" filepath="$PROJECT_DIR$/qrs/qrs.iml" />
       <module fileurl="file://$PROJECT_DIR$/tools/tools.iml" filepath="$PROJECT_DIR$/tools/tools.iml" />
       <module fileurl="file://$PROJECT_DIR$/util/util.iml" filepath="$PROJECT_DIR$/util/util.iml" />
+      <module fileurl="file://$PROJECT_DIR$/webmicro/webmicro.iml" filepath="$PROJECT_DIR$/webmicro/webmicro.iml" />
       <module fileurl="file://$PROJECT_DIR$/webserver/webserver.iml" filepath="$PROJECT_DIR$/webserver/webserver.iml" />
       <module fileurl="file://$PROJECT_DIR$/webtomcat/webtomcat.iml" filepath="$PROJECT_DIR$/webtomcat/webtomcat.iml" />
     </modules>
