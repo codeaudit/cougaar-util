@@ -328,11 +328,47 @@
     <output url="file://$PROJECT_DIR$/classes" />
   </component>
   <component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="Node 1" type="Application" factoryName="Application" enabled="false" merge="false">
+      <option name="MAIN_CLASS_NAME" value="org.cougaar.bootstrap.Bootstrapper" />
+      <option name="VM_PARAMETERS" value="-Dorg.cougaar.society.file=../configs/PingFanSociety.xml -Dorg.cougaar.runtime.file=PingFanRuntime.xml -Dorg.cougaar.node.name=Node1 -Dorg.cougaar.society.xsl.param.template=lan -Dorg.cougaar.name.server=NameServer@localhost:8888 -Dorg.cougaar.demo.ping.PingSender.delayMillis=0 -Dorg.cougaar.demo.ping.PingSender.verbose=false -Dorg.cougaar.demo.ping.PingReceiver.verbose=false -Dorg.cougaar.core.logging.config.filename=$PROJECT_DIR$/ping/run/logging.props -Dorg.cougaar.install.path=$PROJECT_DIR$/base -Dorg.cougaar.society.path=$PROJECT_DIR$/ping -Dorg.cougaar.runtime.path=$PROJECT_DIR$/ping/run -Dorg.cougaar.bootstrap.application=org.cougaar.core.node.Node -Dorg.cougaar.core.node.InitializationComponent=XML -Dorg.cougaar.core.persistence.verifyJavaIOPatch=false -Dorg.cougaar.core.agent.quiet=true -Dorg.cougaar.core.agent.heartbeat=false -Dorg.xml.sax.driver=com.sun.org.apache.xerces.internal.parsers.SAXParser -Dcom.apple.mrj.application.apple.menu.about.name=&quot;PingFan 1&quot;  -Xmx256m -XX:ThreadStackSize=256" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$/ping" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" value="" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <module name="ping" />
+      <RunnerSettings RunnerId="Profile ">
+        <option name="myExternalizedOptions" value="&#10;snapshots-dir=&#10;" />
+      </RunnerSettings>
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method>
+        <option name="Make" value="true" />
+      </method>
+    </configuration>
     <configuration default="false" name="ping benchmark" type="Application" factoryName="Application" enabled="false" merge="false">
       <option name="MAIN_CLASS_NAME" value="org.cougaar.bootstrap.Bootstrapper" />
-      <option name="VM_PARAMETERS" value="-Dorg.cougaar.society.file=../configs/PingBenchmarkSociety.xml -Dorg.cougaar.runtime.file=PingBenchmarkRuntime.xml -Dorg.cougaar.node.name=Node1 -Dorg.cougaar.society.xsl.param.template=single_debug -Dorg.cougaar.core.logging.config.filename=$PROJECT_DIR$/ping/run/logging.props -Dorg.cougaar.install.path=$PROJECT_DIR$/base -Dorg.cougaar.society.path=$PROJECT_DIR$/ping -Dorg.cougaar.runtime.path=$PROJECT_DIR$/ping/run -Dorg.cougaar.bootstrap.application=org.cougaar.core.node.Node -Dorg.cougaar.core.node.InitializationComponent=XML -Dorg.cougaar.core.persistence.verifyJavaIOPatch=false -Dorg.cougaar.core.agent.quiet=true -Dorg.cougaar.core.agent.heartbeat=false -Dorg.xml.sax.driver=com.sun.org.apache.xerces.internal.parsers.SAXParser -Dcom.apple.mrj.application.apple.menu.about.name=&quot;PingBenchmark&quot;  -Xmx256m -XX:ThreadStackSize=256" />
+      <option name="VM_PARAMETERS" value="-Dorg.cougaar.society.file=../configs/PingBasicSociety.xml -Dorg.cougaar.runtime.file=PingBenchmarkRuntime.xml -Dorg.cougaar.node.name=Node1 -Dorg.cougaar.society.xsl.param.template=single_debug -Dorg.cougaar.core.logging.config.filename=$PROJECT_DIR$/ping/run/logging.props -Dorg.cougaar.install.path=$PROJECT_DIR$/base -Dorg.cougaar.society.path=$PROJECT_DIR$/ping -Dorg.cougaar.runtime.path=$PROJECT_DIR$/ping/run -Dorg.cougaar.bootstrap.application=org.cougaar.core.node.Node -Dorg.cougaar.core.node.InitializationComponent=XML -Dorg.cougaar.core.persistence.verifyJavaIOPatch=false -Dorg.cougaar.core.agent.quiet=true -Dorg.cougaar.core.agent.heartbeat=false -Dorg.xml.sax.driver=com.sun.org.apache.xerces.internal.parsers.SAXParser -Dcom.apple.mrj.application.apple.menu.about.name=&quot;PingBenchmark&quot;  -Xmx256m -XX:ThreadStackSize=256" />
       <option name="PROGRAM_PARAMETERS" value="" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$/ping/run" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" value="" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <module name="ping" />
+      <RunnerSettings RunnerId="Profile ">
+        <option name="myExternalizedOptions" value="&#10;snapshots-dir=&#10;" />
+      </RunnerSettings>
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method>
+        <option name="Make" value="true" />
+      </method>
+    </configuration>
+    <configuration default="false" name="Node 2" type="Application" factoryName="Application" enabled="false" merge="false">
+      <option name="MAIN_CLASS_NAME" value="org.cougaar.bootstrap.Bootstrapper" />
+      <option name="VM_PARAMETERS" value="-Dorg.cougaar.society.file=../configs/PingFanSociety.xml -Dorg.cougaar.runtime.file=PingFanRuntime.xml -Dorg.cougaar.node.name=Node2 -Dorg.cougaar.society.xsl.param.template=lan -Dorg.cougaar.name.server=NameServer@localhost:8888 -Dorg.cougaar.demo.ping.PingSender.delayMillis=0 -Dorg.cougaar.demo.ping.PingSender.verbose=false -Dorg.cougaar.demo.ping.PingReceiver.verbose=false -Dorg.cougaar.core.logging.config.filename=$PROJECT_DIR$/ping/run/logging.props -Dorg.cougaar.install.path=$PROJECT_DIR$/base -Dorg.cougaar.society.path=$PROJECT_DIR$/ping -Dorg.cougaar.runtime.path=$PROJECT_DIR$/ping/run -Dorg.cougaar.bootstrap.application=org.cougaar.core.node.Node -Dorg.cougaar.core.node.InitializationComponent=XML -Dorg.cougaar.core.persistence.verifyJavaIOPatch=false -Dorg.cougaar.core.agent.quiet=true -Dorg.cougaar.core.agent.heartbeat=false -Dorg.xml.sax.driver=com.sun.org.apache.xerces.internal.parsers.SAXParser -Dcom.apple.mrj.application.apple.menu.about.name=&quot;PingFan 2&quot;  -Xmx256m -XX:ThreadStackSize=256" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$/ping" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" value="" />
       <option name="ENABLE_SWING_INSPECTOR" value="false" />
