@@ -103,58 +103,59 @@ the Node's Message address. The Node is also contained within a Host
 Context and inherits all the Host Context's formulas.
 
 <dl>
-    <dt> <b><code>Node([Node ID]):CPULoadAvg(1xxxSecAvg)</code> </b></dt>
+    <dt> <b><code>Node([Node ID]):CPULoadAvg(1xxx)</code> </b></dt>
       
   <dd>The average number of threads working for all component on this  Node during the
-  Averaging Period. <p> </dd>
+  1xxx second Averaging Period. <p> </dd>
 
-  <dt> <b><code>Node([Node ID]):CPULoadMJips(1xxxSecAvg)</code> </b></dt>
+  <dt> <b><code>Node([Node ID]):CPULoadMJips(1xxx)</code> </b></dt>
       
   <dd>The average MJIPS used by all the threads for all components on
   this  Node during the
-  Averaging Period. <p> </dd>
+  1xxx second Averaging Period. <p> </dd>
 
-  <dt> <b><code>Node([Node ID]):MsgIn(1xxxSecAvg)</code> </b></dt>
+  <dt> <b><code>Node([Node ID]):MsgIn(1xxx)</code> </b></dt>
       
   <dd>The average messages into all Agents on this Node during the
-  Averaging Period. <p> </dd>
+  1xxx second Averaging Period. <p> </dd>
 
-  <dt> <b><code>Node([Node ID]):MsgOut(1xxxSecAvg)</code> </b></dt>
+  <dt> <b><code>Node([Node ID]):MsgOut(1xxx)</code> </b></dt>
       
   <dd>The average messages out of All Agents this Node during the
-  Averaging Period. <p> </dd>
+  1xxx second Averaging Period. <p> </dd>
 
       
-  <dt> <b><code>Node([Node ID]):BytesIn(1xxxSecAvg)</code> </b></dt>
+  <dt> <b><code>Node([Node ID]):BytesIn(1xxx)</code> </b></dt>
       
   <dd>The average number of bytes (for all messages) into all Agents
   on this Node during the
-  Averaging Period. <p> </dd>
+  1xxx second Averaging Period. <p> </dd>
 
-  <dt> <b><code>Node([Node ID]):BytesOut(1xxxSecAvg)</code> </b></dt>
+  <dt> <b><code>Node([Node ID]):BytesOut(1xxx)</code> </b></dt>
       
   <dd>The average number of bytes (for all messages) out of All Agents
-   on this Node during the Averaging Period.
+   on this Node during the 
+   1xxx second Averaging Period.
    <p> </dd>
 
 
   <dt> <b><code>Node([Node ID]):VMSize</code> </b></dt>
   <dd>Size in Bytes of the Node's VM <p> </dd>
       
-<dt> <b><code>Node([node Addr]):Destination([Agent ID]):MsgTo(1xxSecAvg)</code> </b></dt>
+<dt> <b><code>Node([node Addr]):Destination([Agent ID]):MsgTo(1xxx)</code> </b></dt>
   <dd> Message per second from all agents on the Node, to the
       destination Agent <p> </dd>
 
-<dt> <b><code>Node([node Addr]):Destination([Agent ID]):MsgFrom(1xxSecAvg)</code> </b></dt>
+<dt> <b><code>Node([node Addr]):Destination([Agent ID]):MsgFrom(1xxx)</code> </b></dt>
   <dd> Message per second to any agent on the Node, from the
       destination Agent <p> </dd>
   
 
-<dt> <b><code>Node([node Addr]):Destination([Agent ID]):BytesTo(1xxSecAvg)</code> </b></dt>
+<dt> <b><code>Node([node Addr]):Destination([Agent ID]):BytesTo(1xxx)</code> </b></dt>
   <dd> Bytes per second from all agents on the Node, to the
       destination Agent <p> </dd>
 
-<dt> <b><code>Node([node Addr]):Destination([Agent ID]):BytesFrom(1xxSecAvg)</code> </b></dt>
+<dt> <b><code>Node([node Addr]):Destination([Agent ID]):BytesFrom(1xxx)</code> </b></dt>
   <dd> Bytes per second to any agent on the Node, from the
       destination Agent <p> </dd>
 
@@ -197,36 +198,36 @@ slightly delayed due to discovery issues.
   <dd> Seconds since last error in communications. This is a large
   number with 0.0 credibility, if no error has occurred. <p> </dd>
 
-  <dt> <b><code>Agent([Agent ID]):CPULoadAvg(1xxxSecAvg)</code> </b></dt>
+  <dt> <b><code>Agent([Agent ID]):CPULoadAvg(1xxx)</code> </b></dt>
       
   <dd>The average number of threads working for this Agent during the
-  Averaging Period. <p> </dd>
+  1xxx second Averaging Period. <p> </dd>
 
-  <dt> <b><code>Agent([Agent ID]):CPULoadMJips(1xxxSecAvg)</code> </b></dt>
+  <dt> <b><code>Agent([Agent ID]):CPULoadMJips(1xxx)</code> </b></dt>
       
   <dd>The average MJIPS used by all the threads for this Agent during the
-  Averaging Period. <p> </dd>
+  1xxx second Averaging Period. <p> </dd>
 
-  <dt> <b><code>Agent([Agent ID]):MsgIn(1xxxSecAvg)</code> </b></dt>
+  <dt> <b><code>Agent([Agent ID]):MsgIn(1xxx)</code> </b></dt>
       
   <dd>The average messages into this Agent during the
-  Averaging Period. <p> </dd>
+  1xxx second Averaging Period. <p> </dd>
 
-  <dt> <b><code>Agent([Agent ID]):MsgOut(1xxxSecAvg)</code> </b></dt>
+  <dt> <b><code>Agent([Agent ID]):MsgOut(1xxx)</code> </b></dt>
       
   <dd>The average messages out of this Agent during the
-  Averaging Period. <p> </dd>
+  1xxx second Averaging Period. <p> </dd>
 
       
-  <dt> <b><code>Agent([Agent ID]):BytesIn(1xxxSecAvg)</code> </b></dt>
+  <dt> <b><code>Agent([Agent ID]):BytesIn(1xxx)</code> </b></dt>
       
   <dd>The average number of bytes (for all messages) into this Agent during the
-  Averaging Period. <p> </dd>
+  1xxx second Averaging Period. <p> </dd>
 
-  <dt> <b><code>Agent([Agent ID]):BytesOut(1xxxSecAvg)</code> </b></dt>
+  <dt> <b><code>Agent([Agent ID]):BytesOut(1xxx)</code> </b></dt>
       
   <dd>The average number of bytes (for all messages) out of this Agent during the
-   <p> </dd>
+   1xxx second Averaging Period. <p> </dd>
 
 
   <dt> <b><code>Agent([Agent ID]):PersistSizeLast</code> </b></dt>
@@ -259,11 +260,11 @@ parameters which is the source and destination agent message address.
 Since 11.2 the AgentFlow context is no longer used, because it added
 too many formulas to the metrics service when societies are large.
 <dl>
-  <dt><b><code>AgentFlow([SrcAddr],[DstAddr]):MsgRate(1xxxSecAvg)</code></b></dt>
+  <dt><b><code>AgentFlow([SrcAddr],[DstAddr]):MsgRate(1xxx)</code></b></dt>
 
   <dd> Messages per Second from Source Agent to Destination Agent."<p> </dd>
       
-  <dt><b><code>AgentFlow([SrcAddr],[DstAddr]):ByteRate(1xxxSecAvg)</code></b></dt>
+  <dt><b><code>AgentFlow([SrcAddr],[DstAddr]):ByteRate(1xxx)</code></b></dt>
   <dd> Bytes per Second from Source Agent to Destination Agent.<p> </dd>
 </dl>
 

@@ -19,6 +19,17 @@ and substitution is handled by the Metrics Service.
 <code>StandardVariableEvaluator</code>, which can supply values for
 the variables <code>localagent</code>, <code>localnode</code> and
 <code>localhost</code>.
+<p>
+For example if you're running on host foo.bar.com, then the path
+  <pre>
+      $(localhost):EffectiveMJips
+  </pre>
+  will be converted to:
+  <pre>
+     Host(foo.bar.com):EffectiveMJips
+  </pre>
+
+
 
 <hr>
 
