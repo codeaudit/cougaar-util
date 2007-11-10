@@ -58,24 +58,40 @@ public class CSVUtility {
   }
 
   private static String[] parse(String str, Pattern p) {
-    List l = parseToList(str, p);
-    return (String[]) l.toArray(emptyStrings);
+    List<String> l = parseToList(str, p);
+    return l.toArray(emptyStrings);
   }
 
-  public static List parseToList(String str) {
+  public static List<String> parseToList(String str) {
     return parseToList(str,commaP);
   }
 
-  public static List parseToList(String str, char sep) {
+  public static List<String> parseToList(String str, char sep) {
     return parseToList(str, buildPattern(sep));
   }
 
-  public static List parseToList(String str, Pattern p) {
-    List l = new ArrayList();
+  public static List<String> parseToList(String str, Pattern p) {
+    List<String> l = new ArrayList<String>();
+    if (p == commaP && str.indexOf('\"') < 0) {
+      // optimized case
+      int i = 0;
+      while (i < str.length()) {
+        int j = str.indexOf(',', i);
+        if (j < 0) {
+          l.add(str.substring(i).trim());
+          break;
+        }
+        l.add(str.substring(i, j).trim());
+        i = j+1;
+      }
+      return l;
+    }
+
+    // general case
     Matcher m = p.matcher(str);
     while (m.find()) {
       String v = m.group(1);
-      v.trim();
+      v = v.trim();
       if (v.length() > 1 && v.startsWith("\"") && v.endsWith("\"")) {
         v = v.substring(1,v.length()-1);
         v = v.replaceAll("\"\"", "\"");
