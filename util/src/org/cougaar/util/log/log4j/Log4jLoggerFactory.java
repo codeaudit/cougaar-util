@@ -212,12 +212,13 @@ public class Log4jLoggerFactory
   }
 
   // Do a pseudo-ConfigFinder search for a file
-  // HOWEVER: In this case, search only 2 ways.
+  // HOWEVER: In this case, search only 3 ways.
   // 1: Treat the filename as a URL or Absolute Path.
   // If we can't open a URL connection to that (it doesn't exist)
   // then,
   // 2: Look for a file of that name in $INSTALL/configs/common
   // return URL to the file or NULL if not found
+  // 3: Look in the classpath for the file as a resource
   // See org.cougaar.util.Configuration
   private URL findURLFromName(String fileName) {
     URL url = null;
@@ -268,6 +269,15 @@ public class Log4jLoggerFactory
       }	
     }
     //System.out.println("Result of looking for " + fileName + " is the url: " + url);
+
+    // now try looking in the classpath
+    if (url == null) {
+      String resourceName = fileName;
+      if (!fileName.startsWith("/")) {
+        resourceName = "/"+fileName;
+      }
+      url = getClass().getResource(resourceName);
+    }
 
     // Return whatever URL we came up with - possible null
     return url;
