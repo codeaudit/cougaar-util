@@ -31,8 +31,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -311,6 +313,24 @@ public class Argument {
     }
 
     public static enum DataType {
+        BYTE {
+            Object parse(Class<?> valueClass, Field field, String rawValue) throws ParseException {
+                try {
+                    return Byte.parseByte(rawValue);
+                } catch (NumberFormatException e) {
+                    throw new ParseException(field, rawValue, e);
+                }
+            }
+        },
+        SHORT {
+            Object parse(Class<?> valueClass, Field field, String rawValue) throws ParseException {
+                try {
+                    return Short.parseShort(rawValue);
+                } catch (NumberFormatException e) {
+                    throw new ParseException(field, rawValue, e);
+                }
+            }
+        },
         INT {
             Object parse(Class<?> valueClass, Field field, String rawValue) throws ParseException {
                 try {
@@ -366,6 +386,15 @@ public class Argument {
                 }
             }
         },
+        INET_ADDR {
+            Object parse(Class<?> valueClass, Field field, String rawValue) throws ParseException {
+                try {
+                    return InetAddress.getByName(rawValue);
+                } catch (UnknownHostException e) {
+                    throw new ParseException(field, rawValue, e);
+                }
+            }
+        },
         OTHER {
             @SuppressWarnings("unchecked") // enum fiddling causes unavoidable warnings
             Object parse(Class valueClass, Field field, String rawValue) throws ParseException {
@@ -413,6 +442,10 @@ public class Argument {
                 type = LONG;
             } else if (valueClass == int.class || valueClass == Integer.class) {
                 type = INT;
+            } else if (valueClass == short.class || valueClass == Short.class) {
+                type = SHORT;
+            } else if (valueClass == byte.class || valueClass == Byte.class) {
+                type = BYTE;
             } else if (valueClass == double.class || valueClass == Double.class) {
                 type = DOUBLE;
             } else if (valueClass == float.class || valueClass == Float.class) {
@@ -423,6 +456,8 @@ public class Argument {
                 type = STRING;
             } else if (URI.class.isAssignableFrom(valueClass)) {
                type = URI;
+            } else if (InetAddress.class.isAssignableFrom(valueClass)) {
+                type = INET_ADDR;
             }
             return type.parse(valueClass, field, rawValue);
         }
