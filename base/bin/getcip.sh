@@ -98,7 +98,7 @@ rm *.zip
 cd $cougaar_install_base/$version
 
 # Rename the previous 'latest' back to its timestamp
-previous=`find . -type l -maxdepth 1 -print`
+previous=`find . -maxdepth 1 -type l -print`
 symlinks=`echo $previous | wc -w | sed 's/^[ ]*//'`
 echo "found $symlinks symbolic links"
 if [ "$symlinks" = 1 ] ; then
