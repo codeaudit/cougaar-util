@@ -53,9 +53,19 @@ import java.util.HashSet;
  *
  * @property org.cougaar.util.log.checkwrappers
  * Debugging check to ensure that every call to the logger is wrapped with an <code>isEnabled</code> check.
+ *
+ * @property org.cougaar.util.log.fqcn
+ * Log4j fully qualified classname, for "%F" and "%L" format support.
+ * Defaults to "org.cougaar.util.log.LoggerAdapter".
+ * 
  * @see org.cougaar.util.log.LoggerFactory
  */
 class LoggerImpl extends LoggerAdapter {
+
+  // support %F and %L format options
+  private static final String FQCN = SystemProperties.getProperty(
+      "org.cougaar.util.log.fqcn", "org.cougaar.util.log.LoggerAdapter");
+
   private static final int MAXDOTS = 50;
   private static int ndots = 0;
   private static Object dotsLock = new Object();
@@ -127,10 +137,10 @@ class LoggerImpl extends LoggerAdapter {
       // synchronize to prevent any dots between dumpDots and logging.
       synchronized (dotsLock) {
         dumpDots();
-        cat.log(p, message, t);
+        cat.log(FQCN, p, message, t);
       }
     } else {
-      cat.log(p, message, t);
+      cat.log(FQCN, p, message, t);
     }
   }
 
