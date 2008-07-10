@@ -6,8 +6,16 @@
 
 package org.cougaar.util.annotations;
 
+import java.lang.annotation.Annotation;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.Field;
+import java.lang.reflect.Member;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.Collection;
+import java.util.LinkedList;
 
 /**
  * Use this class to define COUGAAR-specific annotations. The worker methods for
@@ -25,6 +33,113 @@ public class Cougaar {
      * This is used to indicate that the field should be left as is
      */
     public static final String NO_VALUE = "###no-value###";
+
+    /**
+     * Collect all Members in a given class or any of its super classes 
+     * which have any of a given set of annotations. Mark each such Member
+     * as accessible.
+     * 
+     * @param startClass the first class in which to look for annotated Members
+     * 
+     * @param endClass the class at which to stop the super walk
+     * 
+     * @param annotationClasses which annotations to look for
+     * 
+     * @param members the members so far.  The initial invoker should supply an empty list
+     */
+    public static <T extends AccessibleObject&Member> 
+    void getAnnotatedMembers(Class<?> startClass, 
+                             Class<?> endClass,
+                             Collection<Class<? extends Annotation>> annotationClasses,
+                             Class<T> memberClass,
+                             Collection<T> members) {
+        T[] declaredMembers;
+        if (memberClass == Field.class) {
+            declaredMembers = (T[]) startClass.getDeclaredFields();
+        } else if (memberClass == Method.class) {
+            declaredMembers = (T[]) startClass.getDeclaredMethods();
+        } else {
+            throw new IllegalArgumentException(memberClass + " is not Field or Method");
+        }
+        for (T member : declaredMembers) {
+            int mod = member.getModifiers();
+            if (Modifier.isFinal(mod) || Modifier.isStatic(mod)) {
+                // skip finals and statics
+                continue;
+            } else {
+                for (Class<? extends Annotation> annotationClass : annotationClasses) {
+                    if (member.isAnnotationPresent(annotationClass)) {
+                        members.add(member);
+                        member.setAccessible(true);
+                        break;
+                    }
+                }
+            }
+        }
+        Class<?> superClass = startClass.getSuperclass();
+        if (superClass != null && superClass != endClass) {
+            getAnnotatedMembers(superClass, endClass, annotationClasses, memberClass, members);
+        }
+    }
+    
+    /**
+     * Collect all fields in a given class or any of its super classes 
+     * which have any of a given set of annotations. Fields can have
+     * any visibility; each will be tagged as accessible.
+     * 
+     * @param startClass the first class in which to look for annotated fields
+     * 
+     * @param endClass the class at which to stop the super walk
+     * 
+     * @param annotationClasses which annotations to look for
+     * 
+     */
+    public static <T extends AccessibleObject&Member>
+    Collection<T> getAnnotatedMembers(Class<?> startClass, 
+                                      Class<?> endClass,
+                                      Collection<Class<? extends Annotation>> annotationClasses,
+                                      Class<T> memberClass) {
+        Collection<T> members = new LinkedList<T>();
+        getAnnotatedMembers(startClass, endClass, annotationClasses, memberClass, members);
+        return members;
+    }
+    
+    /**
+     * Collect all fields in a given class or any of its super classes 
+     * which have a given annotation. Fields can have
+     * any visibility; each will be tagged as accessible.
+     * 
+     * @param startClass the first class in which to look for annotated fields
+     * 
+     * @param endClass the class at which to stop the super walk
+     * 
+     * @param annotationClass which annotation to look for
+     * 
+     */
+    public static <T extends AccessibleObject&Member>
+    Collection<T> getAnnotatedMembers(Class<?> startClass, 
+                                      Class<?> endClass,
+                                      Class<? extends Annotation> annotationClass,
+                                      Class<T> memberClass) {
+        Collection<T> members = new LinkedList<T>();
+        Collection<Class<? extends Annotation>> annotationClasses = 
+            new LinkedList<Class<? extends Annotation>>();
+        annotationClasses.add(annotationClass);
+        getAnnotatedMembers(startClass, endClass, annotationClasses, memberClass, members);
+        return members;
+    }
+    
+    public static Collection<Field> getAnnotatedFields(Class<?> startClass, 
+                                                       Class<?> endClass,
+                                                       Class<? extends Annotation> annotationClass) {
+        return getAnnotatedMembers(startClass, endClass, annotationClass, Field.class);
+    }
+    
+    public static Collection<Method> getAnnotatedMethods(Class<?> startClass, 
+                                                         Class<?> endClass,
+                                                         Class<? extends Annotation> annotationClass) {
+        return getAnnotatedMembers(startClass, endClass, annotationClass, Method.class);
+    }
 
     /**
      * This annotation should be attached to a public data member to initialize

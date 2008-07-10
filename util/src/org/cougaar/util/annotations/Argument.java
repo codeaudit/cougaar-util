@@ -28,7 +28,6 @@ package org.cougaar.util.annotations;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.net.InetAddress;
@@ -37,10 +36,12 @@ import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -218,23 +219,30 @@ public class Argument {
         List<Arguments> split = policy.split(args, members);
         field.set(object, split);
     }
+    
+    private Collection<Field> getArgFields(Object object) {
+        return Cougaar.getAnnotatedFields(object.getClass(), Object.class, Cougaar.Arg.class);
+    }
+    
+    private Collection<Field> getArgAndGroupFields(Object object) {
+        List<Class<? extends Annotation>> annotationClasses = 
+            new LinkedList<Class<? extends Annotation>>();
+        annotationClasses.add(Cougaar.Arg.class);
+        annotationClasses.add(Cougaar.ArgGroup.class);
+        return Cougaar.getAnnotatedMembers(object.getClass(), Object.class, annotationClasses,
+                                           Field.class);
+    }
 
     /**
      * Set whatever {@link Cougaar.Arg}-annotated fields we have values for.
      */
     public void setFields(Object object)
             throws ParseException, IllegalAccessException, IllegalStateException {
-        for (Field field : object.getClass().getFields()) {
-            int mod = field.getModifiers();
-            if (Modifier.isFinal(mod) || Modifier.isStatic(mod)) {
-                // skip finals and statics
-                continue;
-            } else if (field.isAnnotationPresent(Cougaar.Arg.class)) {
-                Cougaar.Arg spec = field.getAnnotation(Cougaar.Arg.class);
-                String argName = spec.name();
-                if (args.containsKey(argName)) {
-                    setFieldFromSpec(field, spec, object);
-                }
+        for (Field field : getArgFields(object)) {
+            Cougaar.Arg spec = field.getAnnotation(Cougaar.Arg.class);
+            String argName = spec.name();
+            if (args.containsKey(argName)) {
+                setFieldFromSpec(field, spec, object);
             }
         }
     }
@@ -248,12 +256,8 @@ public class Argument {
             throws ParseException, IllegalAccessException, IllegalStateException {
         Map<String, Set<String>> groupMembers = new HashMap<String, Set<String>>();
         Map<Annotation, Field> groupFields = new HashMap<Annotation, Field>();
-        for (Field field : object.getClass().getFields()) {
-            int mod = field.getModifiers();
-            if (Modifier.isFinal(mod) || Modifier.isStatic(mod)) {
-                // skip finals and statics
-                continue;
-            } else if (field.isAnnotationPresent(Cougaar.Arg.class)) {
+        for (Field field : getArgAndGroupFields(object)) {
+            if (field.isAnnotationPresent(Cougaar.Arg.class)) {
                 Cougaar.Arg spec = field.getAnnotation(Cougaar.Arg.class);
                 setFieldFromSpec(field, spec, object);
                 Set<String> groups = getGroups(field);
