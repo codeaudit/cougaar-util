@@ -221,7 +221,7 @@ public class Argument {
     }
     
     private Collection<Field> getArgFields(Object object) {
-        return Cougaar.getAnnotatedFields(object.getClass(), Object.class, Cougaar.Arg.class);
+        return Cougaar.getAnnotatedFields(object.getClass(), Cougaar.Arg.class);
     }
     
     private Collection<Field> getArgAndGroupFields(Object object) {

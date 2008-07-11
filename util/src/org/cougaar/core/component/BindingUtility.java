@@ -29,6 +29,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 
 import org.cougaar.util.annotations.Cougaar;
@@ -131,41 +132,39 @@ public abstract class BindingUtility {
     ArrayList ssi = new ArrayList();
 
     try {
-      Field[] fields = childClass.getFields();
+      Collection<Field> fields = Cougaar.getAnnotatedFields(childClass, Cougaar.ObtainService.class);
       for (final Field field : fields) {
-        if (field.isAnnotationPresent(Cougaar.ObtainService.class)) {
           Class<?> fieldClass = field.getType();
           if (Service.class.isAssignableFrom(fieldClass)) {
-            final Object fc = child;
-            ServiceRevokedListener srl = new ServiceRevokedListener() {
-              public void serviceRevoked(ServiceRevokedEvent re) {
-                try {
-                  field.set(fc, null);
-                } catch (Throwable t) {
-                  Logger logger = Logging.getLogger(BindingUtility.class);
-                  logger.error("Component "+fc+" annotated field "+field+" fails with null" , t);
-                }
+              final Object fc = child;
+              ServiceRevokedListener srl = new ServiceRevokedListener() {
+                  public void serviceRevoked(ServiceRevokedEvent re) {
+                      try {
+                          field.set(fc, null);
+                      } catch (Throwable t) {
+                          Logger logger = Logging.getLogger(BindingUtility.class);
+                          logger.error("Component "+fc+" annotated field "+field+" fails with null" , t);
+                      }
+                  }
+              };
+              try {
+                  Object service = servicebroker.getService(child, fieldClass, srl);
+                  if (service == null) throw new Throwable("No service for "+fieldClass);
+                  // remember the services to set for the second pass
+                  ssi.add(new SetServiceInvocation(field, child, service, fieldClass));
+              } catch (Throwable t) {
+                  Object[] fail = new Object[] {fieldClass, t};
+                  failures.add(fail);
+                  break;          // break out of the loop
               }
-            };
-            try {
-              Object service = servicebroker.getService(child, fieldClass, srl);
-              if (service == null) throw new Throwable("No service for "+fieldClass);
-              // remember the services to set for the second pass
-              ssi.add(new SetServiceInvocation(field, child, service, fieldClass));
-            } catch (Throwable t) {
-              Object[] fail = new Object[] {fieldClass, t};
-              failures.add(fail);
-              break;          // break out of the loop
-            }
           } else if (ServiceBroker.class.equals(fieldClass)) {
-            try {
-              field.set(child, servicebroker);
-            } catch (Throwable t) {
-              Logger logger = Logging.getLogger(BindingUtility.class);
-              logger.error("Component "+child+" annotated field "+field+" fails with ServiceBroker" , t);
-            }
+              try {
+                  field.set(child, servicebroker);
+              } catch (Throwable t) {
+                  Logger logger = Logging.getLogger(BindingUtility.class);
+                  logger.error("Component "+child+" annotated field "+field+" fails with ServiceBroker" , t);
+              }
           }
-        }
       }
       Method[] methods = childClass.getMethods();
 
