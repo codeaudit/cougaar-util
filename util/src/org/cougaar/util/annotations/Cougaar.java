@@ -17,6 +17,8 @@ import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import org.cougaar.util.GenericStateModelAdapter;
+
 /**
  * Use this class to define COUGAAR-specific annotations. The worker methods for
  * each annotation type should live elsewhere (eg {@link Argument}).
@@ -181,12 +183,28 @@ public class Cougaar {
     
     public static Collection<Field> getAnnotatedFields(Class<?> targetClass, 
                                                        Class<? extends Annotation> annotationClass) {
-        return getAnnotatedMembers(targetClass, Object.class, annotationClass, Field.class);
+        Class<?> endClass;
+        // logical end-class is the super of ParameterizedPlugin, but since that's in core we
+        // don't have compile-time access here.
+        try {
+            endClass = Class.forName("org.cougaar.core.plugin.ParameterizedPlugin").getSuperclass();
+        } catch (ClassNotFoundException e) {
+            endClass = GenericStateModelAdapter.class;
+        }
+        return getAnnotatedMembers(targetClass, endClass, annotationClass, Field.class);
     }
     
     public static Collection<Method> getAnnotatedMethods(Class<?> targetClass, 
                                                          Class<? extends Annotation> annotationClass) {
-        return getAnnotatedMembers(targetClass, Object.class, annotationClass, Method.class);
+        Class<?> endClass;
+        // logical end-class is the super of ParameterizedPlugin, but since that's in core we
+        // don't have compile-time access here.
+        try {
+            endClass = Class.forName("org.cougaar.core.plugin.ParameterizedPlugin").getSuperclass();
+        } catch (ClassNotFoundException e) {
+            endClass = GenericStateModelAdapter.class;
+        }
+        return getAnnotatedMembers(targetClass, endClass, annotationClass, Method.class);
     }
 
     /**
