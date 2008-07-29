@@ -63,7 +63,7 @@ servlets by setting:
 
   <tr><td><b>pluginThreadPool</b> <a href="#thread_pool"><i>note</i></a></td><td bgcolor=pink>N/A</td><td bgcolor=pink>N/A</td><td bgcolor=lightgreen>30</td><td bgcolor=lightgreen>30</td><td bgcolor=lightgreen>30</td><td bgcolor=lightgreen>30</td></tr>
 
-  <tr><td><b>mts</b></td><td bgcolor=pink>singlenode</td><td bgcolor=pink>singlenode</td><td bgcolor=lightgreen>full</td><td bgcolor=lightgreen>full</td><td bgcolor=lightgreen>full</td><td bgcolor=lightgreen>full</td></tr>
+  <tr><td><b>mts</b> <a href="#mts"><i>note</i></a></td><td bgcolor=pink>singlenode</td><td bgcolor=pink>singlenode</td><td bgcolor=lightgreen>full</td><td bgcolor=lightgreen>full</td><td bgcolor=lightgreen>full</td><td bgcolor=lightgreen>full</td></tr>
 
   <tr><td><b>wpserver</b></td><td bgcolor=pink>singlenode</td><td bgcolor=pink>singlenode</td><td bgcolor=pink>singlenode</td><td>true <a href="#wpserver"><i>note</i></a></td><td bgcolor=lightgreen>full</td><td bgcolor=lightgreen>full</td></tr>
 
@@ -119,6 +119,14 @@ servlets by setting:
 </dt><dd>
 The full <b>threadService</b> supports a plugin thread limit.  The trivial thread
 service implementation has no limit.
+</dd>
+<p>
+
+<dt>
+<a name="mts">
+<h4>mts:</h4>
+</dt><dd>
+Only the full <b>mts</b> supports aspects and link protocols.
 </dd>
 <p>
 
