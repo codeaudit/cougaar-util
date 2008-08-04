@@ -39,9 +39,9 @@ public class Cougaar {
     @SuppressWarnings("unchecked") // unavoidable warnings
     private static <T extends AccessibleObject&Member>
     T[] getMembers(Class<?> targetClass, Class<T> memberClass) {
-        if (memberClass == Field.class) {
+        if (memberClass.equals(Field.class)) {
             return (T[]) targetClass.getDeclaredFields();
-        } else if (memberClass == Method.class) {
+        } else if (memberClass.equals(Method.class)) {
             return (T[]) targetClass.getDeclaredMethods();
         } else {
             throw new IllegalArgumentException(memberClass + " is not Field or Method");
