@@ -399,6 +399,30 @@ For additional notes, see "SimpleAgent.xsl".
 
         <xsl:if test="$standard_aspects = 'true'">
           <!-- standard metrics and gossip aspects -->
+           <component
+            name='org.cougaar.mts.std.MessageTimeoutAspect'
+            class='org.cougaar.mts.std.MessageTimeoutAspect'
+            priority='COMPONENT'
+            insertionpoint='Node.AgentManager.Agent.MessageTransport.Aspect'>
+           </component>
+           <component
+            name='org.cougaar.mts.std.WatcherAspect'
+            class='org.cougaar.mts.std.WatcherAspect'
+            priority='COMPONENT'
+            insertionpoint='Node.AgentManager.Agent.MessageTransport.Aspect'>
+          </component>
+          <component
+            name='org.cougaar.mts.std.AgentStatusAspect'
+            class='org.cougaar.mts.std.AgentStatusAspect'
+            priority='COMPONENT'
+            insertionpoint='Node.AgentManager.Agent.MessageTransport.Aspect'>
+          </component>
+          <component
+            name='org.cougaar.mts.std.MulticastAspect'
+            class='org.cougaar.mts.std.MulticastAspect'
+            priority='COMPONENT'
+            insertionpoint='Node.AgentManager.Agent.MessageTransport.Aspect'>
+          </component>
           <component
             name='org.cougaar.mts.std.StatisticsAspect()'
             class='org.cougaar.mts.std.StatisticsAspect'
