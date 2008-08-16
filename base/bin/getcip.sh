@@ -84,7 +84,7 @@ curl -o cougaar-support.zip $cougaar_url_base/cougaar-support.zip
 #curl -o cougaar-src.zip $cougaar_url_base/cougaar-src.zip
 
 # optional: standalone cougaar demos
-#curl -o demo-tools.zip $cougaar_url_base/demo-hello.zip
+#curl -o demo-hello.zip $cougaar_url_base/demo-hello.zip
 #curl -o demo-ping.zip $cougaar_url_base/demo-ping.zip
 #curl -o demo-tools.zip $cougaar_url_base/demo-tools.zip
 
