@@ -14,6 +14,7 @@
  */
 
 package org.cougaar.bootstrap;  // BBN
+
 import java.io.File;
 import java.io.FilePermission;
 import java.io.IOException;
@@ -31,9 +32,8 @@ import java.security.SecureClassLoader;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
 import java.util.jar.Attributes;
-import java.util.jar.Manifest;
 import java.util.jar.Attributes.Name;
-
+import java.util.jar.Manifest;
 import sun.misc.Resource;
 import sun.misc.URLClassPath;
 import sun.net.www.ParseUtil;
@@ -177,6 +177,9 @@ public class XURLClassLoader extends SecureClassLoader {
      * path. Any URLs referring to JAR files are loaded and opened as needed
      * until the class is found.
      *
+     * Logs if there is a version mismatch between the VM and the class files.
+     * This happens when trying to run in a 1.5 VM with 1.6 class files.
+     *
      * @param name the name of the class
      * @return the resulting class
      * @exception ClassNotFoundException if the class could not be found
@@ -195,7 +198,11 @@ public class XURLClassLoader extends SecureClassLoader {
 				return defineClass(name, res);
 			    } catch (IOException e) {
 				throw new ClassNotFoundException(name, e);
-			    }
+          } catch (UnsupportedClassVersionError error) {
+            if (Bootstrapper.getLoudness()>0)
+              System.out.println("XURLClassLoader: wrong version number for "+path+" in "+res.getURL());
+            throw error;
+          }
 			} else {
 			    throw new ClassNotFoundException(name);
 			}
