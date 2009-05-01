@@ -155,6 +155,11 @@ public final class Configuration {
     File f = new File(s);
     try { 
       f = f.getCanonicalFile();
+      if (s.startsWith("file:///") && f.toString().indexOf("file:/") > 0) {
+        // this is the same "sandbox" bug as described below, e.g.
+        //   file:///foo --> /home/cip/file:/foo
+        return s;
+      }
     } catch (IOException ioe) {
       // okay
     } catch (AccessControlException ace) {
