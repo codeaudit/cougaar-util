@@ -14,6 +14,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.security.AccessControlException;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -40,9 +41,19 @@ public class Cougaar {
     private static <T extends AccessibleObject&Member>
     T[] getMembers(Class<?> targetClass, Class<T> memberClass) {
         if (memberClass.equals(Field.class)) {
+          try {
             return (T[]) targetClass.getDeclaredFields();
+          } catch (AccessControlException ace) {
+            // inside applet? return public fields, TODO remove inherited fields
+            return (T[]) targetClass.getFields();
+          }
         } else if (memberClass.equals(Method.class)) {
+          try {
             return (T[]) targetClass.getDeclaredMethods();
+          } catch (AccessControlException ace) {
+            // same as above applet case
+            return (T[]) targetClass.getMethods();
+          }
         } else {
             throw new IllegalArgumentException(memberClass + " is not Field or Method");
         }
