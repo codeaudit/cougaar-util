@@ -69,6 +69,11 @@ abstract public class ParameterizedComponent extends GenericStateModelAdapter im
         return args.getDouble(key, defaultValue);
     }
 
+    /** @see Arguments#getBoolean(String,boolean) */
+    public boolean getParameter(String key, boolean defaultValue) {
+        return args.getBoolean(key, defaultValue);
+    }
+
     /** @see Arguments#getStrings(String) */
     public List<String> getParameterValues(String key) {
         return args.getStrings(key);
