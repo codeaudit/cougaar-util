@@ -44,15 +44,20 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.Driver;
 import java.sql.DriverManager;
+import java.sql.NClob;
 import java.sql.ParameterMetaData;
 import java.sql.PreparedStatement;
 import java.sql.Ref;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.RowId;
+import java.sql.SQLClientInfoException;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
+import java.sql.SQLXML;
 import java.sql.Savepoint;
 import java.sql.Statement;
+import java.sql.Struct;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -730,6 +735,126 @@ public class DBConnectionPool {
 
       // end jdk1.4 compatability
 
+      // begin jdk1.6 compatability
+      public <T> T unwrap(java.lang.Class<T> iface) throws SQLException {
+	    if (closed) throw new SQLException("Connection is closed");
+        try {
+    	  return c.unwrap(iface);
+        } catch (SQLException sqle) {
+          destroyPool();
+          throw sqle;
+        }
+      }
+      public boolean isWrapperFor(java.lang.Class<?> iface) throws SQLException {
+	    if (closed) throw new SQLException("Connection is closed");
+        try {
+    	  return c.isWrapperFor(iface);
+        } catch (SQLException sqle) {
+          destroyPool();
+          throw sqle;
+        }
+      }
+      public Clob createClob() throws SQLException {
+	    if (closed) throw new SQLException("Connection is closed");
+        try {
+    	  return c.createClob();
+        } catch (SQLException sqle) {
+          destroyPool();
+          throw sqle;
+        }
+      }
+      public Blob createBlob() throws SQLException {
+	    if (closed) throw new SQLException("Connection is closed");
+        try {
+    	  return c.createBlob();
+        } catch (SQLException sqle) {
+          destroyPool();
+          throw sqle;
+        }
+      }
+      public NClob createNClob() throws SQLException {
+	    if (closed) throw new SQLException("Connection is closed");
+        try {
+    	  return c.createNClob();
+        } catch (SQLException sqle) {
+          destroyPool();
+          throw sqle;
+        }
+      }
+      public SQLXML createSQLXML() throws SQLException {
+	    if (closed) throw new SQLException("Connection is closed");
+        try {
+    	  return c.createSQLXML();
+        } catch (SQLException sqle) {
+          destroyPool();
+          throw sqle;
+        }
+      }
+      public boolean isValid(int timeout) throws SQLException {
+	    if (closed) throw new SQLException("Connection is closed");
+        try {
+    	  return c.isValid(timeout);
+        } catch (SQLException sqle) {
+          destroyPool();
+          throw sqle;
+        }
+      }
+      public void setClientInfo(String name, String value) throws SQLClientInfoException {
+	    if (closed) throw new SQLClientInfoException("Connection is closed", null);
+        try {
+    	  c.setClientInfo(name, value);
+        } catch (SQLClientInfoException sqle) {
+          destroyPool();
+          throw sqle;
+        }
+      }
+      public void setClientInfo(Properties properties) throws SQLClientInfoException {
+	    if (closed) throw new SQLClientInfoException("Connection is closed", null);
+        try {
+    	  c.setClientInfo(properties);
+        } catch (SQLClientInfoException sqle) {
+          destroyPool();
+          throw sqle;
+        }
+      }
+      public String getClientInfo(String name) throws SQLException {
+	    if (closed) throw new SQLException("Connection is closed");
+        try {
+    	  return c.getClientInfo(name);
+        } catch (SQLException sqle) {
+          destroyPool();
+          throw sqle;
+        }
+      }
+      public Properties getClientInfo() throws SQLException {
+	    if (closed) throw new SQLException("Connection is closed");
+        try {
+    	  return c.getClientInfo();
+        } catch (SQLException sqle) {
+          destroyPool();
+          throw sqle;
+        }
+      }
+      public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
+	    if (closed) throw new SQLException("Connection is closed");
+        try {
+    	  return c.createArrayOf(typeName, elements);
+        } catch (SQLException sqle) {
+          destroyPool();
+          throw sqle;
+        }
+      }
+      public Struct createStruct(String typeName, Object[] attributes) throws SQLException {
+	    if (closed) throw new SQLException("Connection is closed");
+        try {
+    	  return c.createStruct(typeName, attributes);
+        } catch (SQLException sqle) {
+          destroyPool();
+          throw sqle;
+        }
+      }
+      // end jdk1.6 compatibility
+
       /**
        * A wrapper for a Statement object. Most operations are
        * delegated to the wrapped object. The close operation goes
@@ -1071,6 +1196,49 @@ public class DBConnectionPool {
           }
         }
         // end jdk 1.4 compatability
+
+        // begin jdk 1.6 compatability
+        public <T> T unwrap(java.lang.Class<T> iface) throws java.sql.SQLException {
+          try {
+            return theStatement.unwrap(iface);
+          } catch (SQLException sqle) {
+            PoolConnection.this.destroyPool();
+            throw sqle;
+          }
+        }
+        public boolean isWrapperFor(java.lang.Class<?> iface) throws java.sql.SQLException {
+          try {
+            return theStatement.isWrapperFor(iface);
+          } catch (SQLException sqle) {
+            PoolConnection.this.destroyPool();
+            throw sqle;
+          }
+        }
+        public boolean isClosed() throws java.sql.SQLException {
+          try {
+            return theStatement.isClosed();
+          } catch (SQLException sqle) {
+            PoolConnection.this.destroyPool();
+            throw sqle;
+          }
+        }
+        public void setPoolable(boolean poolable) throws java.sql.SQLException {
+          try {
+            theStatement.setPoolable(poolable);
+          } catch (SQLException sqle) {
+            PoolConnection.this.destroyPool();
+            throw sqle;
+          }
+        }
+        public boolean isPoolable() throws java.sql.SQLException {
+          try {
+            return theStatement.isPoolable();
+          } catch (SQLException sqle) {
+            PoolConnection.this.destroyPool();
+            throw sqle;
+          }
+        }
+        // end jdk 1.6 compatability
       }
       /**
        * A wrapper for a PreparedStatement object. All operations are
@@ -1390,6 +1558,152 @@ public class DBConnectionPool {
         }
         // end jdk 1.4 compatability
 
+        // begin jdk 1.6 compatability
+        public void setRowId(int parameterIndex, RowId x) throws SQLException {
+            try {
+                thePreparedStatement.setRowId(parameterIndex, x);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setNString(int parameterIndex, String value) throws SQLException {
+            try {
+                thePreparedStatement.setNString(parameterIndex, value);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setNCharacterStream(int parameterIndex, Reader value, long length) throws SQLException {
+            try {
+                thePreparedStatement.setNCharacterStream(parameterIndex, value, length);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setNClob(int parameterIndex, NClob value) throws SQLException {
+            try {
+                thePreparedStatement.setNClob(parameterIndex, value);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setClob(int parameterIndex, Reader reader, long length) throws SQLException {
+            try {
+                thePreparedStatement.setClob(parameterIndex, reader, length);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setBlob(int parameterIndex, InputStream inputStream, long length) throws SQLException {
+            try {
+                thePreparedStatement.setBlob(parameterIndex, inputStream, length);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setNClob(int parameterIndex, Reader reader, long length) throws SQLException {
+            try {
+                thePreparedStatement.setNClob(parameterIndex, reader, length);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setSQLXML(int parameterIndex, SQLXML xmlObject) throws SQLException {
+            try {
+                thePreparedStatement.setSQLXML(parameterIndex, xmlObject);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setAsciiStream(int parameterIndex, java.io.InputStream x, long length) throws SQLException {
+            try {
+                thePreparedStatement.setAsciiStream(parameterIndex, x, length);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setBinaryStream(int parameterIndex, java.io.InputStream x, long length) throws SQLException {
+            try {
+                thePreparedStatement.setBinaryStream(parameterIndex, x, length);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setCharacterStream(int parameterIndex, java.io.Reader reader, long length) throws SQLException {
+            try {
+                thePreparedStatement.setCharacterStream(parameterIndex, reader, length);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setAsciiStream(int parameterIndex, java.io.InputStream x) throws SQLException {
+            try {
+                thePreparedStatement.setAsciiStream(parameterIndex, x);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setBinaryStream(int parameterIndex, java.io.InputStream x) throws SQLException {
+            try {
+                thePreparedStatement.setBinaryStream(parameterIndex, x);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setCharacterStream(int parameterIndex, java.io.Reader reader) throws SQLException {
+            try {
+                thePreparedStatement.setCharacterStream(parameterIndex, reader);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setNCharacterStream(int parameterIndex, Reader value) throws SQLException {
+            try {
+                thePreparedStatement.setNCharacterStream(parameterIndex, value);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setClob(int parameterIndex, Reader reader) throws SQLException {
+            try {
+                thePreparedStatement.setClob(parameterIndex, reader);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setBlob(int parameterIndex, InputStream inputStream) throws SQLException {
+            try {
+                thePreparedStatement.setBlob(parameterIndex, inputStream);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setNClob(int parameterIndex, Reader reader) throws SQLException {
+            try {
+                thePreparedStatement.setNClob(parameterIndex, reader);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        // end jdk 1.6 compatability
       }
       /**
        * A wrapper for a CallableStatement object. All operations are
@@ -1836,7 +2150,7 @@ public class DBConnectionPool {
             throw sqle;
           }
         }
-        public void setObject(String pn, Object x, int tt,int s) throws java.sql.SQLException {
+        public void setObject(String pn, Object x, int tt, int s) throws java.sql.SQLException {
           try {
             theCallableStatement.setObject(pn,x,tt,s);
           } catch (SQLException sqle) {
@@ -2085,6 +2399,265 @@ public class DBConnectionPool {
           }
         }
         // end jdk 1.4 compatability
+
+        // begin jdk 1.6 compatability
+        public RowId getRowId(int parameterIndex) throws SQLException {
+            try {
+                return theCallableStatement.getRowId(parameterIndex);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public RowId getRowId(String parameterName) throws SQLException {
+            try {
+                return theCallableStatement.getRowId(parameterName);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setRowId(String parameterName, RowId x) throws SQLException {
+            try {
+                theCallableStatement.setRowId(parameterName, x);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setNString(String parameterName, String value) throws SQLException {
+            try {
+                theCallableStatement.setNString(parameterName, value);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setNCharacterStream(String parameterName, Reader value, long length) throws SQLException {
+            try {
+                theCallableStatement.setNCharacterStream(parameterName, value, length);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setNClob(String parameterName, NClob value) throws SQLException {
+            try {
+                theCallableStatement.setNClob(parameterName, value);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setClob(String parameterName, Reader reader, long length) throws SQLException {
+            try {
+                theCallableStatement.setClob(parameterName, reader, length);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setBlob(String parameterName, InputStream inputStream, long length) throws SQLException {
+            try {
+                theCallableStatement.setBlob(parameterName, inputStream, length);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setNClob(String parameterName, Reader reader, long length) throws SQLException {
+            try {
+                theCallableStatement.setNClob(parameterName, reader, length);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public NClob getNClob (int parameterIndex) throws SQLException {
+            try {
+                return theCallableStatement.getNClob (parameterIndex);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public NClob getNClob (String parameterName) throws SQLException {
+            try {
+                return theCallableStatement.getNClob (parameterName);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setSQLXML(String parameterName, SQLXML xmlObject) throws SQLException {
+            try {
+                theCallableStatement.setSQLXML(parameterName, xmlObject);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public SQLXML getSQLXML(int parameterIndex) throws SQLException {
+            try {
+                return theCallableStatement.getSQLXML(parameterIndex);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public SQLXML getSQLXML(String parameterName) throws SQLException {
+            try {
+                return theCallableStatement.getSQLXML(parameterName);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public String getNString(int parameterIndex) throws SQLException {
+            try {
+                return theCallableStatement.getNString(parameterIndex);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public String getNString(String parameterName) throws SQLException {
+            try {
+                return theCallableStatement.getNString(parameterName);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public java.io.Reader getNCharacterStream(int parameterIndex) throws SQLException {
+            try {
+                return theCallableStatement.getNCharacterStream(parameterIndex);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public java.io.Reader getNCharacterStream(String parameterName) throws SQLException {
+            try {
+                return theCallableStatement.getNCharacterStream(parameterName);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public java.io.Reader getCharacterStream(int parameterIndex) throws SQLException {
+            try {
+                return theCallableStatement.getCharacterStream(parameterIndex);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public java.io.Reader getCharacterStream(String parameterName) throws SQLException {
+            try {
+                return theCallableStatement.getCharacterStream(parameterName);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setBlob (String parameterName, Blob x) throws SQLException {
+            try {
+                theCallableStatement.setBlob (parameterName, x);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setClob (String parameterName, Clob x) throws SQLException {
+            try {
+                theCallableStatement.setClob (parameterName, x);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setAsciiStream(String parameterName, java.io.InputStream x, long length) throws SQLException {
+            try {
+                theCallableStatement.setAsciiStream(parameterName, x, length);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setBinaryStream(String parameterName, java.io.InputStream x, long length) throws SQLException {
+            try {
+                theCallableStatement.setBinaryStream(parameterName, x, length);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setCharacterStream(String parameterName, java.io.Reader reader, long length) throws SQLException {
+            try {
+                theCallableStatement.setCharacterStream(parameterName, reader, length);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setAsciiStream(String parameterName, java.io.InputStream x) throws SQLException {
+            try {
+                theCallableStatement.setAsciiStream(parameterName, x);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setBinaryStream(String parameterName, java.io.InputStream x) throws SQLException {
+            try {
+                theCallableStatement.setBinaryStream(parameterName, x);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setCharacterStream(String parameterName, java.io.Reader reader) throws SQLException {
+            try {
+                theCallableStatement.setCharacterStream(parameterName, reader);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setNCharacterStream(String parameterName, Reader value) throws SQLException {
+            try {
+                theCallableStatement.setNCharacterStream(parameterName, value);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setClob(String parameterName, Reader reader) throws SQLException {
+            try {
+                theCallableStatement.setClob(parameterName, reader);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setBlob(String parameterName, InputStream inputStream) throws SQLException {
+            try {
+                theCallableStatement.setBlob(parameterName, inputStream);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        public void setNClob(String parameterName, Reader reader) throws SQLException {
+            try {
+                theCallableStatement.setNClob(parameterName, reader);
+            } catch (SQLException sqle) {
+                PoolConnection.this.destroyPool();
+                throw sqle;
+            }
+        }
+        // end jdk 1.6 compatability
       }
     }
   }
