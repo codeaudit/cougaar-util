@@ -27,6 +27,8 @@ package org.cougaar.core.component;
 
 import java.util.List;
 import java.util.Map;
+import java.net.URL;
+import java.net.InetAddress;
 
 import org.cougaar.util.Arguments;
 import org.cougaar.util.GenericStateModelAdapter;
@@ -67,6 +69,15 @@ abstract public class ParameterizedComponent extends GenericStateModelAdapter im
     /** @see Arguments#getDouble(String,double) */
     public double getParameter(String key, double defaultValue) {
         return args.getDouble(key, defaultValue);
+    }
+
+    /** @see Arguments#getURL(String,URL) */
+    public URL getParameter(String key, URL defaultValue) {
+        return args.getURL(key, defaultValue);
+    }
+
+    public InetAddress getParameter(String key, InetAddress defaultValue) {
+        return args.getInetAddr(key, defaultValue);
     }
 
     /** @see Arguments#getBoolean(String,boolean) */

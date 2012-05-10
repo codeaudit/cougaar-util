@@ -47,7 +47,8 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+import java.net.URL;
+import java.net.InetAddress;
 import org.cougaar.bootstrap.SystemProperties;
 
 /**
@@ -229,6 +230,38 @@ public final class Arguments extends AbstractMap<String, List<String>>
     /** @return same as {@link #get(String)} */
     public List<String> getStrings(String key) {
         return getStrings(key, null);
+    }
+
+    /** @return the value, or null if not set */
+    public URL getURL(String key) {
+        return getURL(key, null);
+    }
+
+    /** @return the first value, or the deflt if not set */
+    public URL getURL(String key, URL deflt) {
+        try {
+           URL u = new URL(key);
+           return u;
+        } catch (Exception e) {
+            // may throw MalformedURLException, which we ignore
+            return deflt;
+        }
+    }
+
+    /** @return the value, or null if not set */
+    public InetAddress getInetAddr(String key) {
+        return getInetAddr(key, null);
+    }
+
+    /** @return the first value, or the deflt if not set */
+    public InetAddress getInetAddr(String key, InetAddress deflt) {
+        try {
+           InetAddress a = InetAddress.getByName(key);
+           return a;
+        } catch (Exception e) {
+            // may throw UnknownHostException, which we ignore
+            return deflt;
+        }
     }
 
     /** @return the value, or false if not set */
