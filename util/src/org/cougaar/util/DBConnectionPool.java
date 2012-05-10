@@ -552,7 +552,7 @@ public class DBConnectionPool {
           throw sqle;
         }
       }
-      // begin jdk1.4 compatability
+      // begin jdk1.4 compatibility
       public void setHoldability(int holdability) throws SQLException {
 	if (closed) throw new SQLException("Connection is closed");
         try {
@@ -733,9 +733,9 @@ public class DBConnectionPool {
         if (closed) throw new SQLException("Connection is closed");
       }
 
-      // end jdk1.4 compatability
+      // end jdk1.4 compatibility
 
-      // begin jdk1.6 compatability
+      // begin jdk1.6 compatibility
       public <T> T unwrap(java.lang.Class<T> iface) throws SQLException {
 	    if (closed) throw new SQLException("Connection is closed");
         try {
@@ -854,6 +854,28 @@ public class DBConnectionPool {
         }
       }
       // end jdk1.6 compatibility
+
+//1.7:      // begin jdk1.7 compatibility
+//1.7:      public void setNetworkTimeout(java.util.concurrent.Executor executor, int milliseconds) throws SQLException {
+//1.7:        if (closed) throw new SQLException("Connection is closed");
+//1.7:	c.setNetworkTimeout(executor, milliseconds);
+//1.7:      }
+//1.7:
+//1.7:      public int getNetworkTimeout() throws SQLException {
+//1.7:        if (closed) throw new SQLException("Connection is closed");
+//1.7:
+//1.7:	return c.getNetworkTimeout();
+//1.7:      }
+//1.7:
+//1.7:      public void abort(java.util.concurrent.Executor executor) throws SQLException {
+//1.7:        try {
+//1.7:          c.abort(executor);
+//1.7:        } catch (SQLException sqle) {
+//1.7:          destroyPool();
+//1.7:          throw sqle;
+//1.7:        }
+//1.7:      }
+//1.7:      // end jdk1.7 compatibility
 
       /**
        * A wrapper for a Statement object. Most operations are
@@ -1122,7 +1144,7 @@ public class DBConnectionPool {
           }
           return b;
 	}
-        // begin jdk 1.4 compatability
+        // begin jdk 1.4 compatibility
         public boolean getMoreResults(int current) throws java.sql.SQLException {
           try {
             return theStatement.getMoreResults(current);
@@ -1195,9 +1217,9 @@ public class DBConnectionPool {
             throw sqle;
           }
         }
-        // end jdk 1.4 compatability
+        // end jdk 1.4 compatibility
 
-        // begin jdk 1.6 compatability
+        // begin jdk 1.6 compatibility
         public <T> T unwrap(java.lang.Class<T> iface) throws java.sql.SQLException {
           try {
             return theStatement.unwrap(iface);
@@ -1238,8 +1260,30 @@ public class DBConnectionPool {
             throw sqle;
           }
         }
-        // end jdk 1.6 compatability
-      }
+        // end jdk 1.6 compatibility
+
+//1.7:        // begin jdk1.7 compatibility
+//1.7:        public void closeOnCompletion() throws SQLException {
+//1.7:          try {
+//1.7:	    theStatement.closeOnCompletion();
+//1.7:          } catch (SQLException sqle) {
+//1.7:            PoolConnection.this.destroyPool();
+//1.7:            throw sqle;
+//1.7:          }
+//1.7:	}
+//1.7:
+//1.7:        public boolean isCloseOnCompletion() throws SQLException {
+//1.7:          try {
+//1.7:	    return theStatement.isCloseOnCompletion();
+//1.7:          } catch (SQLException sqle) {
+//1.7:            PoolConnection.this.destroyPool();
+//1.7:            throw sqle;
+//1.7:          }
+//1.7:        }
+//1.7:        // end jdk1.7 compatibility
+
+      } // end class PoolStatement
+
       /**
        * A wrapper for a PreparedStatement object. All operations are
        * delegated to the wrapped object. The close operation in the
@@ -1539,7 +1583,7 @@ public class DBConnectionPool {
           }
           return b;
 	}
-        // begin jdk 1.4 compatability
+        // begin jdk 1.4 compatibility
         public void setURL(int param, URL x) throws java.sql.SQLException {
           try {
 	    thePreparedStatement.setURL(param, x);
@@ -1556,9 +1600,9 @@ public class DBConnectionPool {
             throw sqle;
           }
         }
-        // end jdk 1.4 compatability
+        // end jdk 1.4 compatibility
 
-        // begin jdk 1.6 compatability
+        // begin jdk 1.6 compatibility
         public void setRowId(int parameterIndex, RowId x) throws SQLException {
             try {
                 thePreparedStatement.setRowId(parameterIndex, x);
@@ -1703,8 +1747,17 @@ public class DBConnectionPool {
                 throw sqle;
             }
         }
-        // end jdk 1.6 compatability
-      }
+        // end jdk 1.6 compatibility
+
+//1.7:        // begin jdk1.7 compatibility
+//1.7:        public boolean isCloseOnCompletion() throws SQLException {
+//1.7:         if (closed) throw new SQLException("Connection is closed");
+//1.7:
+//1.7: 	 return false;		// means won't close
+//1.7:        }
+//1.7:        // end jdk1.7 compatibility
+      } // end class PoolPreparedStatement
+
       /**
        * A wrapper for a CallableStatement object. All operations are
        * delegated to the wrapped object. The close operation in the
@@ -1981,7 +2034,7 @@ public class DBConnectionPool {
           }
           return o;
 	}
-        // begin jdk 1.4 compatability
+        // begin jdk 1.4 compatibility
         public void registerOutParameter(String pn, int sqltype) throws java.sql.SQLException {
           try {
             theCallableStatement.registerOutParameter(pn, sqltype);
@@ -2398,9 +2451,9 @@ public class DBConnectionPool {
             throw sqle;
           }
         }
-        // end jdk 1.4 compatability
+        // end jdk 1.4 compatibility
 
-        // begin jdk 1.6 compatability
+        // begin jdk 1.6 compatibility
         public RowId getRowId(int parameterIndex) throws SQLException {
             try {
                 return theCallableStatement.getRowId(parameterIndex);
@@ -2657,10 +2710,50 @@ public class DBConnectionPool {
                 throw sqle;
             }
         }
-        // end jdk 1.6 compatability
-      }
-    }
-  }
+        // end jdk 1.6 compatibility
+
+//1.7:        // begin jdk1.7 compatibility with CallableStatement
+//1.7:        public <T> T getObject(String parameterName, Class<T> type) throws SQLException {
+//1.7:          try {
+//1.7:            return theCallableStatement.getObject(parameterName, type);
+//1.7:          } catch (SQLException sqle) {
+//1.7:            PoolConnection.this.destroyPool();
+//1.7:            throw sqle;
+//1.7:          }
+//1.7:        }
+//1.7:
+//1.7:        public <T> T getObject(int parameterIndex, Class<T> type) throws SQLException {
+//1.7:          try {
+//1.7:            return theCallableStatement.getObject(parameterIndex, type);
+//1.7:          } catch (SQLException sqle) {
+//1.7:            PoolConnection.this.destroyPool();
+//1.7:            throw sqle;
+//1.7:          }
+//1.7:        }
+//1.7:        // end jdk1.7 compatibility
+      } // end class PoolCallableStatement
+
+//1.7:        // begin jdk1.7 compatibility with Connection
+//1.7:        public void setSchema(String schema) throws SQLException {
+//1.7:          try {
+//1.7:            c.setSchema(schema);
+//1.7:          } catch (SQLException sqle) {
+//1.7:            destroyPool();
+//1.7:            throw sqle;
+//1.7:          }
+//1.7:	}
+//1.7:
+//1.7:        public String getSchema() throws SQLException {
+//1.7:          try {
+//1.7:            return c.getSchema();
+//1.7:          } catch (SQLException sqle) {
+//1.7:            destroyPool();
+//1.7:            throw sqle;
+//1.7:          }
+//1.7:	}
+//1.7:        // end jdk1.7 compatibility
+    } // end class class PoolConnection
+  } // end class DBConnectionPoolEntry
 
   /**
    * One of the three main functions of this class. This is intended
