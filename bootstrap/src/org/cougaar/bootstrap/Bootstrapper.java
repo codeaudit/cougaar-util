@@ -167,10 +167,9 @@ import java.util.regex.Pattern;
  * A couple jars are typically excluded by the jar finder, and
  * instead are loaded by the Java system ClassLoader:<pre> 
  *   bootstrap.jar   <i>(contains this Bootstrapper class)</i>
- *   javaiopatch.jar <i>(contains the persistence I/O overrides)</i>
  * </pre> 
  * These excluded jars are set by:<pre> 
- *   -Dorg.cougaar.bootstrap.excludeJars=javaiopatch.jar:bootstrap.jar
+ *   -Dorg.cougaar.bootstrap.excludeJars=bootstrap.jar
  * </pre>
  * <p> 
  * <b>Important Notes:</b>
@@ -236,7 +235,7 @@ import java.util.regex.Pattern;
  *
  * @property org.cougaar.bootstrap.excludeJars
  *   Allows exclusion of specific jar files from consideration by
- *   bootstrapper.  Defaults to "javaiopatch.jar:bootstrap.jar".
+ *   bootstrapper.  Defaults to "bootstrap.jar".
  *
  * @property org.cougaar.bootstrap.application
  *   The name of the application class to bootstrap.  If not
@@ -813,7 +812,7 @@ public class Bootstrapper
 
   /**
    * Get the list of jar files to be ignored by bootstrapper, which
-   * typically includes javaiopatch and boostrap itself.
+   * typically includes boostrap itself.
    * @todo Replace this with something which examines the
    * jars for dont-bootstrap-me flags.
    **/
@@ -822,7 +821,7 @@ public class Bootstrapper
       excludedJars = new ArrayList();
       String s = getProperty("org.cougaar.bootstrap.excludeJars");
       if (s == null) {
-        s = "javaiopatch.jar:bootstrap.jar";
+        s = "bootstrap.jar";
       }
       if (s.length() > 0) {
         String files[] = s.split(":");

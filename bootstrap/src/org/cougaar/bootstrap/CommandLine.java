@@ -149,9 +149,6 @@ import org.xml.sax.helpers.DefaultHandler;
  *       specified, then
  *       "-Dorg.cougaar.install.path=$COUGAAR_INSTALL_PATH"
  *       is used.</li>
- *   <li>If a "-Xbootclasspath.." is not specified, then
- *       "-Xbootclasspath/p:$COUGAAR_INSTALL_PATH/lib/javaiopatch.jar"
- *       is used.</li>
  *   <li>If
  *       "-Dorg.cougaar.core.node.InitializationComponent=<i>type</i>"
  *       is not specified,
@@ -560,9 +557,6 @@ public final class CommandLine {
           }
           m.put("-Dorg.cougaar.install.path", install_path);
         }
-        if (!hasBootpath) {
-          m.put("-Xbootclasspath/p:"+install_path+"/lib/javaiopatch.jar", null);
-        }
         if (!m.containsKey(
               "-Dorg.cougaar.core.node.InitializationComponent")) {
           m.put(
@@ -675,9 +669,6 @@ public final class CommandLine {
     // wrap the bootstrapper to use our props
     Bootstrapper b = new Bootstrapper() {
       protected String getProperty(String key) {
-        if ("org.cougaar.bootstrap.excludeJars".equals(key)) {
-          return "javaiopatch.jar";
-        }
         return props.getProperty(key);
       }
       protected String getProperty(String key, String def) {
