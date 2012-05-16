@@ -64,7 +64,7 @@ else
 fi
 
 cip=$cougaar_install_base/$version/$time
-cougaar_url_base="http://build.cougaar.org/auto/$version/latest_success"
+cougaar_url_base="http://cougaar.org/build/$version/latest"
 
 mkdir -p $cip
 cd $cip
