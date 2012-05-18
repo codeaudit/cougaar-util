@@ -26,13 +26,6 @@
 
 package org.cougaar.lib.contract.lang.op;
 
-import java.util.*;
-
-import org.cougaar.lib.contract.lang.*;
-import org.cougaar.lib.contract.lang.op.constant.*;
-import org.cougaar.lib.contract.lang.op.logical.*;
-import org.cougaar.lib.contract.lang.op.list.*;
-import org.cougaar.lib.contract.lang.op.reflect.*;
 
 public interface OpCodes {
 

@@ -41,7 +41,11 @@ class RemoteProcessImpl
 extends UnicastRemoteObject 
 implements RemoteProcessDecl {
 
-  private final RemoteProcess rp;
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+private final RemoteProcess rp;
 
   public RemoteProcessImpl(
       RemoteProcess rp) throws RemoteException {

@@ -186,6 +186,7 @@ public class URLListener {
       public void run() {
         serve();
       }
+      @Override
       public String toString() {
         return "URL listener for server ("+port+")";
       }
@@ -199,6 +200,7 @@ public class URLListener {
       public void run() {
         handle(clientSock);
       }
+      @Override
       public String toString() {
         return "URL socket handler for ("+port+") client: "+clientSock;
       }
@@ -386,7 +388,8 @@ public class URLListener {
     return ob;
   }
 
-  public String toString() {
+  @Override
+public String toString() {
     return "URLListener on port "+port;
   }
 }

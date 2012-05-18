@@ -47,7 +47,8 @@ public class RMIRegistry extends RemoteHostRegistry {
   // misc "create*" methods
 
   // client
-  public RemoteHost lookupRemoteHost(
+  @Override
+public RemoteHost lookupRemoteHost(
       String hostName, 
       int hostPort,
       boolean verbose) throws Exception {
@@ -85,7 +86,8 @@ public class RMIRegistry extends RemoteHostRegistry {
   }
 
   // server
-  public void bindRemoteHost(
+  @Override
+public void bindRemoteHost(
       RemoteHost rh,
       int port,
       boolean verbose) throws Exception {

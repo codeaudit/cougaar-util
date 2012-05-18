@@ -26,9 +26,14 @@
  
 package org.cougaar.tools.server.examples;
 
-import java.io.OutputStream;
 import java.awt.Color;
-import javax.swing.text.*;
+import java.io.OutputStream;
+
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 
 /**
  * Adapter for a swing Document to act like an OutputStream.
@@ -73,22 +78,27 @@ public class DocumentOutputStream extends OutputStream {
     this.atts = atts;
   }
 
-  public void write(int b) {
+  @Override
+public void write(int b) {
     append(Integer.toString(b));
   }
 
-  public void write(byte[] b) {
+  @Override
+public void write(byte[] b) {
     append(new String(b));
   }
 
-  public void write(byte[] b, int off, int len) {
+  @Override
+public void write(byte[] b, int off, int len) {
     append(new String(b, off, len));
   }
 
-  public void flush() {
+  @Override
+public void flush() {
   }
 
-  public void close() {
+  @Override
+public void close() {
   }
 
   private void append(String s) {

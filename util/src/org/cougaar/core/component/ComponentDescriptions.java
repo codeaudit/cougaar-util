@@ -44,7 +44,11 @@ import java.util.List;
 public class ComponentDescriptions
 implements Serializable
 {
-  /** Storage for the ComponentDescriptions.
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+/** Storage for the ComponentDescriptions.
    * @todo A more efficient form for traversal would be good - we're not optimizing it 
    * for now.
    **/
@@ -142,7 +146,8 @@ implements Serializable
     return l;
   }
 
-  public String toString() {
+  @Override
+public String toString() {
     List l;
     StringBuffer buf = new StringBuffer();
     buf.append("ComponentDescriptions[");

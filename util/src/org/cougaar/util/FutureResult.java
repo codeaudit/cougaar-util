@@ -123,7 +123,11 @@ public class FutureResult {
   }
 
   public static class TimeoutException extends InterruptedException {
-    private final long duration;
+    /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+   private final long duration;
     public TimeoutException(long time) { duration = time; }
     public TimeoutException(long time, String message) {
       super(message);

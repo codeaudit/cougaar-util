@@ -38,7 +38,11 @@ import java.util.Map;
  */
 public class LRUCache extends LinkedHashMap 
 {
-  private final int CAPACITY;
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+private final int CAPACITY;
   public LRUCache(int capacity) {
     super(capacity, 0.75f, true);
     this.CAPACITY = capacity;
@@ -48,7 +52,8 @@ public class LRUCache extends LinkedHashMap
    * Called by the LinkedHashMap when an entry is added,
    * this allows the cache to remove the LRU "eldest" entry.
    */
-  protected boolean removeEldestEntry(Map.Entry eldest) {
+  @Override
+protected boolean removeEldestEntry(Map.Entry eldest) {
     return (size() > CAPACITY);
   }
 }

@@ -177,7 +177,8 @@ public class ReusableThreadPool {
   public static class Counter {
     private int value = 0;
     public void incr() { value++; }
-    public String toString() { return new Integer(value).toString(); }
+    @Override
+   public String toString() { return new Integer(value).toString(); }
     public int getValue() { return value; }
     public Counter() { }
     public Counter(int v) { value = v; }
@@ -194,16 +195,19 @@ public class ReusableThreadPool {
       mycount = new Counter(count.getValue());
       System.err.println("Created "+this);
     }
-    public Runnable getRunnable() {
+    @Override
+   public Runnable getRunnable() {
       myinvoke++;
       System.err.println("Invoking "+this);
       return super.getRunnable();
     }
-    protected void reclaim() {
+    @Override
+   protected void reclaim() {
       System.err.println("Reclaiming "+this);
       super.reclaim();
     }
-    public String toString() { 
+    @Override
+   public String toString() { 
       return "<"+getName()+" "+mycount+"("+myinvoke+")>";
     }
 
@@ -215,7 +219,8 @@ public class ReusableThreadPool {
       super(init,max);
     }
 
-    protected ReusableThread constructReusableThread() {
+    @Override
+   protected ReusableThread constructReusableThread() {
       ReusableThread t = new TestThread(this);
       return t;
     }

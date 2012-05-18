@@ -45,15 +45,18 @@ public final class StringKey {
     hc = string.hashCode();
   }
 
-  public final boolean equals(Object o) {
+  @Override
+public final boolean equals(Object o) {
     if (this == o) return true;
     if (o instanceof StringKey) {
       return string.equals(((StringKey) o).string);
     }
     return false;
   }
-  public final int hashCode() { return hc; }
+  @Override
+public final int hashCode() { return hc; }
 
-  public final String toString() { return string; }
+  @Override
+public final String toString() { return string; }
 }
     

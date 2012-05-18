@@ -42,7 +42,11 @@ public final class OutputPolicy
 implements java.io.Serializable
 {
 
-  /** @see #getBufferSize() */
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+/** @see #getBufferSize() */
   private final int bufferSize;
 
   //
@@ -104,7 +108,8 @@ implements java.io.Serializable
     return bufferSize;
   }
 
-  public String toString() {
+  @Override
+public String toString() {
     return
       "OutputPolicy {"+
       "\n  bufferSize: "+getBufferSize()+

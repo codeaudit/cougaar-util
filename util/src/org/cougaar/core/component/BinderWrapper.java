@@ -43,7 +43,8 @@ public abstract class BinderWrapper
     return child==null?null:child.getComponentDescription();
   }
 
-  protected void attachChild(Object cd) {
+  @Override
+protected void attachChild(Object cd) {
     if (cd instanceof Binder) {
       child = (Binder) cd;
     } else {
@@ -79,7 +80,8 @@ public abstract class BinderWrapper
   // child services initialization
   //
   
-  public void initialize() {
+  @Override
+public void initialize() {
     ContainerAPI proxy = getContainerProxy();
     BindingUtility.setBindingSite(getChildBinder(), proxy);
     if (getServiceBroker() != null) {
@@ -90,34 +92,44 @@ public abstract class BinderWrapper
     child.initialize();
   }
 
-  public void load() {
+  @Override
+public void load() {
     child.load();
   }
-  public void start() {
+  @Override
+public void start() {
     child.start();
   }
-  public void suspend() {
+  @Override
+public void suspend() {
     child.suspend();
   }
-  public void resume() {
+  @Override
+public void resume() {
     child.resume();
   }
-  public void stop() {
+  @Override
+public void stop() {
     child.stop();
   }
-  public void halt() {
+  @Override
+public void halt() {
     child.halt();
   }
-  public void unload() {
+  @Override
+public void unload() {
     child.unload();
   }
-  public int getModelState() {
+  @Override
+public int getModelState() {
     return child.getModelState();
   }
-  public Object getState() {
+  @Override
+public Object getState() {
     return child.getState();
   }
-  public void setState(Object state) {
+  @Override
+public void setState(Object state) {
     child.setState(state);
   }
 }

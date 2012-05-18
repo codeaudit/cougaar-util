@@ -26,10 +26,6 @@
 
 package org.cougaar.lib.contract.lang.parser;
 
-import java.io.*;
-import java.util.*;
-
-import org.cougaar.lib.contract.lang.*;
 
 /**
  * Implementation of <code>TreeVisitor</code> which will create a
@@ -100,7 +96,8 @@ public class ParenStringVisitor implements StringVisitor {
   public final void visitEndOfTree() {
   }
 
-  public String toString() {
+  @Override
+public String toString() {
     return sb.toString();
   }
 }

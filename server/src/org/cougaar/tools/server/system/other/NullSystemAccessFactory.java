@@ -56,19 +56,23 @@ extends SystemAccessFactory {
     return SINGLETON;
   }
 
-  public ProcessLauncher createProcessLauncher() {
+  @Override
+public ProcessLauncher createProcessLauncher() {
     return npl;
   }
 
-  public JavaThreadDumper createJavaThreadDumper() {
+  @Override
+public JavaThreadDumper createJavaThreadDumper() {
     return null;
   }
 
-  public ProcessStatusReader createProcessStatusReader() {
+  @Override
+public ProcessStatusReader createProcessStatusReader() {
     return null;
   }
 
-  public ProcessKiller createProcessKiller() {
+  @Override
+public ProcessKiller createProcessKiller() {
     return null;
   }
 

@@ -63,8 +63,10 @@ public class ReadOnlySet implements Set {
       }
     };
   }
-  public boolean equals(Object o) { return inner.equals(o); }
-  public int hashCode() { return inner.hashCode(); }
+  @Override
+public boolean equals(Object o) { return inner.equals(o); }
+  @Override
+public int hashCode() { return inner.hashCode(); }
   public Object[] toArray() { return inner.toArray(); }
   public Object[] toArray(Object[] a) { return inner.toArray(a); }
 

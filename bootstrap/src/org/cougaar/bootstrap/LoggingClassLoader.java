@@ -40,15 +40,14 @@ package org.cougaar.bootstrap;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.net.URL;
 import java.net.URLStreamHandlerFactory;
 import java.util.HashMap;
 import java.util.Map;
+
 import sun.misc.Resource;
 
 /**
@@ -92,12 +91,14 @@ public class LoggingClassLoader extends XURLClassLoader {
     logInit();
   }
 
-  protected void addURL(URL url) {
+  @Override
+protected void addURL(URL url) {
     super.addURL(url);
     logAddURL(url);
   }
 
-  protected Class defineClass(String name, Resource res) throws IOException {
+  @Override
+protected Class defineClass(String name, Resource res) throws IOException {
     Class ret = super.defineClass(name, res);
     logDefineClass(res.getCodeSourceURL(), name);
     return ret;
@@ -243,7 +244,8 @@ public class LoggingClassLoader extends XURLClassLoader {
         throw new IllegalArgumentException("null stream");
       }
     }
-    public void run() {
+    @Override
+   public void run() {
       try {
         logStream.flush();
       } catch (Exception e) {

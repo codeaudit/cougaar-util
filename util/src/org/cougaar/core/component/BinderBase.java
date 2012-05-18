@@ -88,7 +88,8 @@ public abstract class BinderBase
   public abstract Object getState();
   public abstract void setState(Object state);
 
-  public String toString() {
+  @Override
+public String toString() {
     String s = this.getClass().toString();
     int i = s.lastIndexOf(".");
     return s.substring(i+1);

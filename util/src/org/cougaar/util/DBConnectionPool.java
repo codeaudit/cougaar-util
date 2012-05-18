@@ -308,7 +308,7 @@ public class DBConnectionPool {
         if (closed) throw new SQLException("Connection is closed");
 	PreparedStatement statement = null;
         try {
-          statement = (PreparedStatement)new PoolPreparedStatement(c.prepareStatement(sql));
+          statement = new PoolPreparedStatement(c.prepareStatement(sql));
 	  statements.add(statement);
         } catch (SQLException sqle) {
           destroyPool();
@@ -320,7 +320,7 @@ public class DBConnectionPool {
         if (closed) throw new SQLException("Connection is closed");
 	PreparedStatement statement = null;
         try {
-          statement = (PreparedStatement)new PoolPreparedStatement(c.prepareStatement(sql, a, b));
+          statement = new PoolPreparedStatement(c.prepareStatement(sql, a, b));
 	  statements.add(statement);
         } catch (SQLException sqle) {
           destroyPool();
@@ -401,6 +401,7 @@ public class DBConnectionPool {
           throw sqle;
         }
       }
+      @Override
       public void finalize() {
 	if (closed) return;	// Connection already closed (normal case)
 	try {			// Connection was never closed (abandoned)
@@ -637,7 +638,7 @@ public class DBConnectionPool {
         if (closed) throw new SQLException("Connection is closed");
 	PreparedStatement statement = null;
         try {
-          statement = (PreparedStatement)new PoolPreparedStatement(c.prepareStatement(sql, a, b,p));
+          statement = new PoolPreparedStatement(c.prepareStatement(sql, a, b,p));
 	  statements.add(statement);
         } catch (SQLException sqle) {
           destroyPool();
@@ -666,7 +667,7 @@ public class DBConnectionPool {
         if (closed) throw new SQLException("Connection is closed");
 	PreparedStatement statement = null;
         try {
-          statement = (PreparedStatement)new PoolPreparedStatement(c.prepareStatement(sql, a));
+          statement = new PoolPreparedStatement(c.prepareStatement(sql, a));
 	  statements.add(statement);
         } catch (SQLException sqle) {
           destroyPool();
@@ -682,7 +683,7 @@ public class DBConnectionPool {
         if (closed) throw new SQLException("Connection is closed");
 	PreparedStatement statement = null;
         try {
-          statement = (PreparedStatement)new PoolPreparedStatement(c.prepareStatement(sql, ci));
+          statement = new PoolPreparedStatement(c.prepareStatement(sql, ci));
 	  statements.add(statement);
         } catch (SQLException sqle) {
           destroyPool();
@@ -697,7 +698,7 @@ public class DBConnectionPool {
         if (closed) throw new SQLException("Connection is closed");
 	PreparedStatement statement = null;
         try {
-          statement = (PreparedStatement)new PoolPreparedStatement(c.prepareStatement(sql, cn));
+          statement = new PoolPreparedStatement(c.prepareStatement(sql, cn));
 	  statements.add(statement);
         } catch (SQLException sqle) {
           destroyPool();

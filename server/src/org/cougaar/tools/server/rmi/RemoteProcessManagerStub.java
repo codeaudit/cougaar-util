@@ -61,8 +61,7 @@ implements RemoteProcessManager {
     // get reference to remote process on app server
     RemoteProcessDecl rpd;
     try {
-      rpd = (RemoteProcessDecl)
-        rpmd.createRemoteProcess(
+      rpd = rpmd.createRemoteProcess(
           pd, 
           rlcw);
     } catch (IOException ioe) {

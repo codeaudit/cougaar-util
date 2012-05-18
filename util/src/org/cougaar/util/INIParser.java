@@ -31,9 +31,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /** Utility for reading MSWindows-style .ini files.
  **/
@@ -81,7 +81,8 @@ public class INIParser {
 
     public Section(String name) { this.name = name; }
 
-    public String toString() { return "Section "+name; }
+    @Override
+   public String toString() { return "Section "+name; }
   }
 
   public static class Slot {
@@ -98,8 +99,10 @@ public class INIParser {
     public void addValue(String v) { values.add(v); }
 
     public Slot(String name) { this.name = name; }
-    public String toString() { return "Slot "+name; }
-    public boolean equals(Object obj) {
+    @Override
+   public String toString() { return "Slot "+name; }
+    @Override
+   public boolean equals(Object obj) {
       if (obj instanceof String) {
 	return name.equals(obj);
       }

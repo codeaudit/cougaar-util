@@ -26,6 +26,7 @@
 
 package org.cougaar.util;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -56,7 +57,7 @@ public class ShortDateFormat {
       myDateFormat.format(
         ((date != null) ? date : new Date()),
         new StringBuffer(""), 
-        new java.text.FieldPosition(SimpleDateFormat.YEAR_FIELD)).toString();
+        new java.text.FieldPosition(DateFormat.YEAR_FIELD)).toString();
   }
 
   /**

@@ -25,10 +25,10 @@
  */
 package org.cougaar.core.component;
 
+import java.net.InetAddress;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
-import java.net.URL;
-import java.net.InetAddress;
 
 import org.cougaar.util.Arguments;
 import org.cougaar.util.GenericStateModelAdapter;

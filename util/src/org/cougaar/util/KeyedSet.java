@@ -74,8 +74,10 @@ public class KeyedSet
     return inner.keySet();
   }
 
-  public int hashCode() { return 7+inner.hashCode(); }
-  public boolean equals(Object o) {
+  @Override
+public int hashCode() { return 7+inner.hashCode(); }
+  @Override
+public boolean equals(Object o) {
     if (this == o) return true;
     if (o instanceof CollectionDelegate) {
       return inner.equals(((CollectionDelegate)o).inner);

@@ -27,9 +27,17 @@
 package org.cougaar.lib.contract.lang.op.list;
 
 import java.lang.reflect.Array;
-import java.util.*;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
 
-import org.cougaar.lib.contract.lang.*;
+import org.cougaar.lib.contract.lang.Op;
+import org.cougaar.lib.contract.lang.OpImpl;
+import org.cougaar.lib.contract.lang.OpParser;
+import org.cougaar.lib.contract.lang.ParseException;
+import org.cougaar.lib.contract.lang.TreeVisitor;
+import org.cougaar.lib.contract.lang.TypeList;
 import org.cougaar.lib.contract.lang.op.OpCodes;
 
 /**
@@ -40,6 +48,11 @@ public final class AllOp
     extends OpImpl {
 
   /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+
+/**
    * <pre>
    * Logically:
    *   <code>
@@ -58,11 +71,13 @@ public final class AllOp
 
   public AllOp() {}
 
-  public final int getID() {
+  @Override
+public final int getID() {
     return OpCodes.ALL_ID;
   }
 
-  public final Op parse(final OpParser p) throws ParseException {
+  @Override
+public final Op parse(final OpParser p) throws ParseException {
     TypeList origTypeList = p.cloneTypeList();
 
     // get expected list type
@@ -97,7 +112,8 @@ public final class AllOp
     return this;
   }
 
-  public final boolean execute(final Object o) {
+  @Override
+public final boolean execute(final Object o) {
     if (o == null) {
       return VALUE_WHEN_EMPTY;
     } else {
@@ -187,11 +203,13 @@ public final class AllOp
     }
   }
 
-  public final void setConst(final String key, final Object val) {
+  @Override
+public final void setConst(final String key, final Object val) {
     u.setConst(key, val);
   }
 
-  public final void accept(TreeVisitor visitor) {
+  @Override
+public final void accept(TreeVisitor visitor) {
     // (all op)
     visitor.visitWord(OpCodes.ALL_NAME);
     if (u != null) {

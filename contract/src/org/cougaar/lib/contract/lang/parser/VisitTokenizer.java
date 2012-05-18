@@ -26,9 +26,6 @@
 
 package org.cougaar.lib.contract.lang.parser;
 
-import java.util.*;
-
-import org.cougaar.lib.contract.lang.*;
 
 /**
  * A generic tree tokenizer, used as a buffer from a <code>TreeVisitor</code>.

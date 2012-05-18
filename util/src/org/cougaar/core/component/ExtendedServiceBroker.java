@@ -92,7 +92,8 @@ public interface ExtendedServiceBroker extends ServiceBroker {
     public Object getService() {
       return service;
     }
-    public String toString() {
+    @Override
+   public String toString() {
       return 
         "(service-result id="+providerId+
         " desc="+providerDesc+

@@ -116,7 +116,8 @@ public class PropagatingServiceBroker
   }
 
   /** is the service currently available in this broker or in the Delegate? **/
-  public boolean hasService(Class serviceClass) {
+  @Override
+public boolean hasService(Class serviceClass) {
     boolean localp = super.hasService(serviceClass);
     return localp || delegate.hasService(serviceClass);
   }
@@ -125,7 +126,8 @@ public class PropagatingServiceBroker
    * This version copies the keyset to keep the iterator safe, so don't be doing this
    * too often.
    **/
-  public Iterator getCurrentServiceClasses() {
+  @Override
+public Iterator getCurrentServiceClasses() {
     ArrayList l = new ArrayList(); // ugh!
     // get the local services
     {
@@ -147,7 +149,8 @@ public class PropagatingServiceBroker
   /** get an instance of the requested service from a service provider associated
    * with this context.
    **/
-  public ServiceResult getService(
+  @Override
+public ServiceResult getService(
       int requestorId, ComponentDescription requestorDesc,
       Object requestor, Class serviceClass, ServiceRevokedListener srl,
       boolean recordInView) {
@@ -182,7 +185,8 @@ public class PropagatingServiceBroker
     return sr;
   }
 
-  public void releaseService(
+  @Override
+public void releaseService(
       int requestorId, ComponentDescription requestorDesc,
       Object requestor, Class serviceClass, Object service,
       boolean recordInView) {
@@ -208,7 +212,8 @@ public class PropagatingServiceBroker
     }
   }
 
-  public void revokeService(Class serviceClass, ServiceProvider serviceProvider) {
+  @Override
+public void revokeService(Class serviceClass, ServiceProvider serviceProvider) {
     synchronized (servicesLock) {
       if (super.hasService(serviceClass)) {
         super.revokeService(serviceClass, serviceProvider);

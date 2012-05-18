@@ -25,16 +25,14 @@
  */
 
 package org.cougaar.util;
-import java.util.*;
-
 import junit.framework.TestCase;
-import junit.framework.*;
 
 public class TestStateMachine extends TestCase {
   class TestSM extends StateMachine {
     private String seq = null;    // we'll accumulate the states here (yuck)
     String getSeq() { return seq; }
-    protected void _set(State s) {
+    @Override
+   protected void _set(State s) {
       if (seq == null) {
         seq = s.getKey();
       } else {
@@ -46,10 +44,14 @@ public class TestStateMachine extends TestCase {
 
   public TestSM createSM() {
     TestSM sm = new TestSM();
-    sm.add(new StateMachine.State("A") { public void invoke() { transit("B"); }});
-    sm.add(new StateMachine.State("B") { public void invoke() { transit("C"); }});
-    sm.add(new StateMachine.State("C") { public void invoke() { transit("D"); }});
-    sm.add(new StateMachine.State("D") { public void invoke() { transit("DONE"); }});
+    sm.add(new StateMachine.State("A") { @Override
+   public void invoke() { transit("B"); }});
+    sm.add(new StateMachine.State("B") { @Override
+   public void invoke() { transit("C"); }});
+    sm.add(new StateMachine.State("C") { @Override
+   public void invoke() { transit("D"); }});
+    sm.add(new StateMachine.State("D") { @Override
+   public void invoke() { transit("DONE"); }});
 
     sm.reset("A");
     return sm;
@@ -74,7 +76,8 @@ public class TestStateMachine extends TestCase {
     // replace B with a state which requires several invokes
     sm.add(new StateMachine.State("B") {
         private int count = 0;
-        public void invoke() { 
+        @Override
+      public void invoke() { 
           count++;
           if (count >= 3) transit("C"); 
           else transit("B");

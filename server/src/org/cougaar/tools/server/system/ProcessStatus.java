@@ -40,6 +40,11 @@ public final class ProcessStatus
 implements Serializable {
 
   /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+
+/**
    * Marking disabled or there is no relation with this
    * ProcessStatus and the self-"marked" ProcessStatus.
    *
@@ -272,7 +277,8 @@ implements Serializable {
     }
   }
 
-  public String toString() {
+  @Override
+public String toString() {
     return toString(true);
   }
 

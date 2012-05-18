@@ -284,7 +284,8 @@ implements Serializable, Cloneable {
   /**
    * @return  a clone of this <tt>DualStreamBuffer</tt> instance.
    */
-  public Object clone() {
+  @Override
+public Object clone() {
     // since the buffer is add-only we may be able to cheat.
     // However, we want the clone to "trim()" and save memory.
     // For now let's do a real clone:
@@ -316,18 +317,21 @@ implements Serializable, Cloneable {
       this.isOut = isOut;
     }
 
-    public void write(int b) {
+    @Override
+   public void write(int b) {
       // append
       int mbIdx = mergedBufferLength;
       growCapacity(1);
       mergedBuffer[mbIdx] = (byte) b;
     }
 
-    public void write(byte b[]) {
+    @Override
+   public void write(byte b[]) {
       write(b, 0, b.length);
     }
 
-    public void write(byte b[], int off, int len) {
+    @Override
+   public void write(byte b[], int off, int len) {
       if (b == null) {
         throw new NullPointerException();
       } else if ((off < 0) || (off > b.length) || (len < 0)) {

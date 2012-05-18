@@ -310,7 +310,12 @@ public class Argument {
     }
 
     public static class ParseException extends Exception {
-        public ParseException(Field field, String value, Throwable cause) {
+        /**
+       * 
+       */
+      private static final long serialVersionUID = 1L;
+
+      public ParseException(Field field, String value, Throwable cause) {
             super("Couldn't parse " + value + " for field " + field.getName() + ": "
                     + cause.getMessage());
         }
@@ -318,6 +323,7 @@ public class Argument {
 
     public static enum DataType {
         BYTE {
+            @Override
             Object parse(Class<?> valueClass, Field field, String rawValue) throws ParseException {
                 try {
                     return Byte.parseByte(rawValue);
@@ -327,6 +333,7 @@ public class Argument {
             }
         },
         SHORT {
+            @Override
             Object parse(Class<?> valueClass, Field field, String rawValue) throws ParseException {
                 try {
                     return Short.parseShort(rawValue);
@@ -336,6 +343,7 @@ public class Argument {
             }
         },
         INT {
+            @Override
             Object parse(Class<?> valueClass, Field field, String rawValue) throws ParseException {
                 try {
                     return Integer.parseInt(rawValue);
@@ -345,6 +353,7 @@ public class Argument {
             }
         },
         LONG {
+            @Override
             Object parse(Class<?> valueClass, Field field, String rawValue) throws ParseException {
                 try {
                     return Long.parseLong(rawValue);
@@ -354,6 +363,7 @@ public class Argument {
             }
         },
         FLOAT {
+            @Override
             Object parse(Class<?> valueClass, Field field, String rawValue) throws ParseException {
                 try {
                     return Float.parseFloat(rawValue);
@@ -363,6 +373,7 @@ public class Argument {
             }
         },
         DOUBLE {
+            @Override
             Object parse(Class<?> valueClass, Field field, String rawValue) throws ParseException {
                 try {
                     return Double.parseDouble(rawValue);
@@ -372,16 +383,19 @@ public class Argument {
             }
         },
         STRING {
+            @Override
             Object parse(Class<?> valueClass, Field field, String rawValue) throws ParseException {
                 return rawValue;
             }
         },
         BOOLEAN {
+            @Override
             Object parse(Class<?> valueClass, Field field, String rawValue) {
                 return Boolean.parseBoolean(rawValue);
             }
         },
         URI {
+            @Override
             Object parse(Class<?> valueClass, Field field, String rawValue) throws ParseException {
                 try {
                     return new URI(rawValue);
@@ -391,6 +405,7 @@ public class Argument {
             }
         },
         INET_ADDR {
+            @Override
             Object parse(Class<?> valueClass, Field field, String rawValue) throws ParseException {
                 try {
                     return InetAddress.getByName(rawValue);
@@ -400,6 +415,7 @@ public class Argument {
             }
         },
         OTHER {
+            @Override
             @SuppressWarnings("unchecked") // enum fiddling causes unavoidable warnings
             Object parse(Class valueClass, Field field, String rawValue) throws ParseException {
                 try {

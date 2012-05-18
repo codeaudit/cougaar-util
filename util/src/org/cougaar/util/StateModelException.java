@@ -35,7 +35,11 @@ package org.cougaar.util;
  **/
 
 public class StateModelException extends RuntimeException {
-  public StateModelException() { super(); }
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+public StateModelException() { super(); }
   public StateModelException(String s) { super(s); }
 }
 

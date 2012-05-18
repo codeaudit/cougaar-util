@@ -65,13 +65,15 @@ public class CircularQueue<E> extends AbstractCollection<E> {
     return (i+1)%max;
   }
   
-  public void clear() {
+  @Override
+public void clear() {
     front=0;
     rear=max-1;
     size=0;
   }
   
-  public final boolean isEmpty() {
+  @Override
+public final boolean isEmpty() {
     return (nextIndex(rear)==front);
   }
   
@@ -86,7 +88,8 @@ public class CircularQueue<E> extends AbstractCollection<E> {
       return elements[front];
   }
   
-  public boolean add(E el) {
+  @Override
+public boolean add(E el) {
     if (isFull())
       extend();
     int adv = nextIndex(rear);
@@ -96,24 +99,29 @@ public class CircularQueue<E> extends AbstractCollection<E> {
     return true;
   }
 
-  public boolean addAll(Collection<? extends E> c) {
+  @Override
+public boolean addAll(Collection<? extends E> c) {
     for (E t : c ) {
       add(t);
     }
     return true;
   }
   
-  public boolean remove(Object el) {
+  @Override
+public boolean remove(Object el) {
     throw new UnsupportedOperationException();
   }
-  public boolean removeAll(Collection<?> c) {
+  @Override
+public boolean removeAll(Collection<?> c) {
     throw new UnsupportedOperationException();
   }
-  public boolean retainAll(Collection<?> c) {
+  @Override
+public boolean retainAll(Collection<?> c) {
     throw new UnsupportedOperationException();
   }
 
-  public boolean contains(Object el) {
+  @Override
+public boolean contains(Object el) {
     int i = front;
     int x = nextIndex(rear);
     while (i!=x) {
@@ -124,7 +132,8 @@ public class CircularQueue<E> extends AbstractCollection<E> {
     return false;
   }
 
-  public Object[] toArray() {
+  @Override
+public Object[] toArray() {
     Object[] result = new Object[size];
     int i = front;
     int x = nextIndex(rear);
@@ -143,7 +152,8 @@ public class CircularQueue<E> extends AbstractCollection<E> {
       return (E[]) new Object[size];
   }
   
-  @SuppressWarnings("unchecked")
+  @Override
+@SuppressWarnings("unchecked")
   public <T> T[] toArray(T[] result) {
     int i = front;
     int x = nextIndex(rear);
@@ -157,7 +167,8 @@ public class CircularQueue<E> extends AbstractCollection<E> {
     return result;
   }
 
-  public boolean containsAll(Collection<?> c) {
+  @Override
+public boolean containsAll(Collection<?> c) {
     // UGH! n^2
     for (Object elt : c) {
       if (!contains(elt))
@@ -192,7 +203,8 @@ public class CircularQueue<E> extends AbstractCollection<E> {
     max=nmax;
   }
       
-  public Iterator<E> iterator() {
+  @Override
+public Iterator<E> iterator() {
     final int capturedFront = front;
     return new Iterator<E>() {
         private int i = capturedFront;
@@ -209,11 +221,13 @@ public class CircularQueue<E> extends AbstractCollection<E> {
       };
   }
 
-  public int size() {
+  @Override
+public int size() {
     return size;
   }
 
-  public String toString() {
+  @Override
+public String toString() {
     return "{CircularQueue "+size+"/"+max+"}";
   }
 

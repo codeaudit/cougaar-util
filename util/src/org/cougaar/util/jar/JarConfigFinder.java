@@ -203,7 +203,8 @@ extends ConfigFinder
    * Locate an actual file in the config path.
    * @param aFilename The name of a file being searched
    */
-  public File locateFile(String aFilename) {
+  @Override
+public File locateFile(String aFilename) {
     if (getLogger().isDebugEnabled()) {
       getLogger().debug("locateFile:" + aFilename);
     }
@@ -254,7 +255,8 @@ extends ConfigFinder
    * @param aURL The name of a file being searched
    * @throws FileNotFoundException if the resource cannot be found.
    **/
-  public InputStream open(String aURL)
+  @Override
+public InputStream open(String aURL)
   throws IOException {
     if (getLogger().isDebugEnabled()) {
       getLogger().debug("open:" + aURL);
@@ -289,7 +291,8 @@ extends ConfigFinder
    * </ul>
    * @param aURL The name of a file being searched
    **/
-  public URL find(String aURL)
+  @Override
+public URL find(String aURL)
   throws IOException {
     // The resolveUrl() method checks that the
     // signature was valid, so we do not check again
@@ -751,7 +754,7 @@ extends ConfigFinder
           }
         });
         for (int i = 0 ; i < jarFiles.length ; i++) {
-          JarFile aJar = getJarFile((File)jarFiles[i]);
+          JarFile aJar = getJarFile(jarFiles[i]);
           if (aJar != null) {
             // Add the new jar file to the list of jar files.
             try {

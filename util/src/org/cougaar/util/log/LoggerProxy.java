@@ -42,11 +42,13 @@ public class LoggerProxy
     this.l = l; 
   }
 
-  public boolean isEnabledFor(int level) {
+  @Override
+public boolean isEnabledFor(int level) {
     return l.isEnabledFor(level); 
   }
 
-  public void log(
+  @Override
+public void log(
       int level, String message, Throwable t) { 
     l.log(level, message, t);
   }

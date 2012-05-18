@@ -44,7 +44,12 @@ class RemoteHostImpl
   implements RemoteHostDecl 
 {
 
-  private final RemoteHost rh;
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+
+private final RemoteHost rh;
 
   private final Object lock = new Object();
   private RemoteProcessManagerDecl rpmd;

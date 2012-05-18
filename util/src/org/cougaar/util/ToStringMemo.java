@@ -26,6 +26,7 @@
 package org.cougaar.util;
 
 import java.lang.ref.SoftReference;
+
 import org.cougaar.bootstrap.SystemProperties;
 
 /** A hack for computing a complex object's toString as needed,
@@ -44,16 +45,19 @@ public abstract class ToStringMemo {
   public abstract void discard(); 
 
   /** return a cached value or call generate **/
-  public abstract String toString();
+  @Override
+public abstract String toString();
 
   /** The standard ToStringMemo implementation **/
   public static abstract class SoftToStringMemo extends ToStringMemo {
     private transient SoftReference memo = null;
 
-    public final synchronized void discard() {
+    @Override
+   public final synchronized void discard() {
       memo = null;
     }
-    public final synchronized String toString() {
+    @Override
+   public final synchronized String toString() {
       if (memo != null) {         // we've got a memo
         String s = (String) memo.get();
         if (s != null) {          // and the memo isn't empty
@@ -70,8 +74,10 @@ public abstract class ToStringMemo {
 
   /** A version of ToStringMemo which doesn't really ever cache **/
   public static abstract class UncachedToStringMemo extends ToStringMemo {
-    public void discard() {}
-    public String toString() { return generate(); };
+    @Override
+   public void discard() {}
+    @Override
+   public String toString() { return generate(); };
   }
 
   /** Construct a ToStringMemo which uses the parameter object's toString
@@ -80,11 +86,13 @@ public abstract class ToStringMemo {
   public static ToStringMemo getInstance(final Object gen) {
     if (isCaching) {
       return new SoftToStringMemo() {
-          protected String generate() { return gen.toString(); }
+          @Override
+         protected String generate() { return gen.toString(); }
         };
     } else {
       return new UncachedToStringMemo() {
-          protected String generate() { return gen.toString(); }
+          @Override
+         protected String generate() { return gen.toString(); }
         };
     }
   }

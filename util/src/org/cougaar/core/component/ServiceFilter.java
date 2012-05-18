@@ -39,9 +39,11 @@ public class ServiceFilter
 {
   public ServiceFilter() {}
 
-  protected Class getBinderClass(Object child) {
+  @Override
+protected Class getBinderClass(Object child) {
     return ServiceFilterBinder.class;
   }
 
-  public int getPriority() { return NORM_PRIORITY; }
+  @Override
+public int getPriority() { return NORM_PRIORITY; }
 }

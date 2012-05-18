@@ -80,11 +80,13 @@ public class LoggerWithPrefix extends LoggerAdapter {
     this.prefix = prefix;
   }
 
-  public boolean isEnabledFor(int level) {
+  @Override
+public boolean isEnabledFor(int level) {
     return logger.isEnabledFor(level);
   }
 
-  public void log(int level, String message, Throwable t) {
+  @Override
+public void log(int level, String message, Throwable t) {
     logger.log(level, prefix + message, t);
   }
 

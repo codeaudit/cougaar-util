@@ -73,7 +73,8 @@ public final class StackElements {
     return elements;
   }
 
-  public int hashCode() {
+  @Override
+public int hashCode() {
     if (_hc == 0) {
       _hc = 1;
       StackTraceElement[] st = getStackTrace();
@@ -84,7 +85,8 @@ public final class StackElements {
     return _hc;
   }
 
-  public boolean equals(Object o) {
+  @Override
+public boolean equals(Object o) {
     if (o == this) {
       return true;
     } else if (!(o instanceof StackElements)) {
@@ -103,7 +105,8 @@ public final class StackElements {
     return true;
   }
 
-  public String toString() {
+  @Override
+public String toString() {
     return throwable.toString();
   }
 }

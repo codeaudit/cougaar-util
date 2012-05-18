@@ -26,14 +26,24 @@
 
 package org.cougaar.lib.contract.lang.compare;
 
-import java.util.*;
-
-import org.cougaar.lib.contract.lang.*;
+import org.cougaar.lib.contract.lang.Op;
+import org.cougaar.lib.contract.lang.Type;
 import org.cougaar.lib.contract.lang.op.OpCodes;
-import org.cougaar.lib.contract.lang.op.constant.*;
-import org.cougaar.lib.contract.lang.op.list.*;
-import org.cougaar.lib.contract.lang.op.logical.*;
-import org.cougaar.lib.contract.lang.op.reflect.*;
+import org.cougaar.lib.contract.lang.op.constant.ConstantOp;
+import org.cougaar.lib.contract.lang.op.constant.GetOp;
+import org.cougaar.lib.contract.lang.op.list.AllOp;
+import org.cougaar.lib.contract.lang.op.list.EmptyOp;
+import org.cougaar.lib.contract.lang.op.list.ExistsOp;
+import org.cougaar.lib.contract.lang.op.logical.AndOp;
+import org.cougaar.lib.contract.lang.op.logical.FalseOp;
+import org.cougaar.lib.contract.lang.op.logical.NotOp;
+import org.cougaar.lib.contract.lang.op.logical.OrOp;
+import org.cougaar.lib.contract.lang.op.logical.TrueOp;
+import org.cougaar.lib.contract.lang.op.reflect.ApplyOp;
+import org.cougaar.lib.contract.lang.op.reflect.FieldOp;
+import org.cougaar.lib.contract.lang.op.reflect.InstanceOfOp;
+import org.cougaar.lib.contract.lang.op.reflect.MethodOp;
+import org.cougaar.lib.contract.lang.op.reflect.ThisOp;
 
 /**
  * Compares two <code>Op</code>s for equality.
@@ -281,7 +291,7 @@ public final class Equal implements OpCodes {
       final InstanceOfOp o1, final Op o2) {
     if (o2.getID() == INSTANCEOF_ID) {
       // instanceofs are equal if they have the same "not" and "clazz"
-      Type t1 = (Type)o1;
+      Type t1 = o1;
       Type t2 = (Type)o2;
       if (t1.isNot() != t2.isNot()) {
         return false;

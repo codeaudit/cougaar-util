@@ -77,7 +77,8 @@ public class BootstrapClassLoader extends XURLClassLoader {
     }
   }
 
-  protected synchronized Class loadClass(String name, boolean resolve)
+  @Override
+protected synchronized Class loadClass(String name, boolean resolve)
     throws ClassNotFoundException
   {
     // First, check if the class has already been loaded

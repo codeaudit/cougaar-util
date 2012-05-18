@@ -27,9 +27,16 @@
 package org.cougaar.lib.contract.lang.op.list;
 
 import java.lang.reflect.Array;
-import java.util.*;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
 
-import org.cougaar.lib.contract.lang.*;
+import org.cougaar.lib.contract.lang.Op;
+import org.cougaar.lib.contract.lang.OpImpl;
+import org.cougaar.lib.contract.lang.OpParser;
+import org.cougaar.lib.contract.lang.ParseException;
+import org.cougaar.lib.contract.lang.TreeVisitor;
 import org.cougaar.lib.contract.lang.op.OpCodes;
 
 /** 
@@ -39,17 +46,24 @@ import org.cougaar.lib.contract.lang.op.OpCodes;
 public final class EmptyOp
     extends OpImpl {
 
-  public static final Op singleInstance = new EmptyOp();
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+
+public static final Op singleInstance = new EmptyOp();
 
   public int expected_id;
 
   private EmptyOp() { }
 
-  public final int getID() {
+  @Override
+public final int getID() {
     return OpCodes.EMPTY_ID;
   }
 
-  public final Op parse(final OpParser p) throws ParseException {
+  @Override
+public final Op parse(final OpParser p) throws ParseException {
     // get expected list type
     expected_id = TypeHelper.getExpectedId(p, false);
     if (expected_id == TypeHelper.EXPECT_UNKNOWN) {
@@ -69,7 +83,8 @@ public final class EmptyOp
     return this;
   }
 
-  public final boolean execute(final Object o) {
+  @Override
+public final boolean execute(final Object o) {
     if (o == null) {
       return true;
     } else {
@@ -91,7 +106,8 @@ public final class EmptyOp
     }
   }
  
-  public final void accept(TreeVisitor visitor) {
+  @Override
+public final void accept(TreeVisitor visitor) {
     // (empty)
     visitor.visitWord(OpCodes.EMPTY_NAME);
     visitor.visitEnd();

@@ -25,8 +25,8 @@
  */
 package org.cougaar.core.component;
 
-import java.util.List;
 import java.util.Collections;
+import java.util.List;
 
 /** 
  * A Shell implementation of a ContainerBinder based upon
@@ -94,9 +94,11 @@ implements ContainerBinder
   /**
    * @see BinderSupport#getBinderProxy() get the binding site
    */
-  protected abstract BindingSite getBinderProxy();
+  @Override
+protected abstract BindingSite getBinderProxy();
 
-  public String toString() {
+  @Override
+public String toString() {
     return getComponent()+"/ContainerBinder";
   }
 

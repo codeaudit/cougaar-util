@@ -24,14 +24,18 @@
  * </copyright>
  */
 package org.cougaar.core.component;
-import java.beans.beancontext.*; /*make @see reference work*/
 
 /** ServiceRevokedEvent indicates that a service has been 
  * revoked in a service context.
  * @see java.beans.beancontext.BeanContextServiceRevokedEvent
  **/
 public class ServiceRevokedEvent extends ServiceEvent {
-  /** Construct a ServiceRevokedEvent **/
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+
+/** Construct a ServiceRevokedEvent **/
   ServiceRevokedEvent(ServiceBroker servicebroker, Class revokedService) {
     super(servicebroker, revokedService);
   }

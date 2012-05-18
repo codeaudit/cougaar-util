@@ -29,7 +29,6 @@ package org.cougaar.util;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -42,7 +41,13 @@ import java.util.Iterator;
  **/
 public class NonOverlappingTimeSpanSet extends TimeSpanSet {
 
-  // constructors
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+
+
+// constructors
   public NonOverlappingTimeSpanSet() {
     super();
   }
@@ -67,7 +72,8 @@ public class NonOverlappingTimeSpanSet extends TimeSpanSet {
   }
 
   //Add check for overlapping
-  public boolean add(Object o) {
+  @Override
+public boolean add(Object o) {
     if (!(o instanceof TimeSpan)) {
       throw new ClassCastException();
     }

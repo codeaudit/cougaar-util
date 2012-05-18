@@ -25,10 +25,7 @@
  */
 
 package org.cougaar.util;
-import java.util.*;
-
 import junit.framework.TestCase;
-import junit.framework.*;
 
 public class TestStringUtility extends TestCase {
   public void test_misc() {

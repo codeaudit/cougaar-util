@@ -26,10 +26,6 @@
 
 package org.cougaar.lib.contract.lang.parser;
 
-import java.io.*;
-import java.util.*;
-
-import org.cougaar.lib.contract.lang.*;
 
 /**
  * A simple <code>String</code> indent factory.

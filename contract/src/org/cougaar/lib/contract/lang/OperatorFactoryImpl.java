@@ -26,14 +26,13 @@
 
 package org.cougaar.lib.contract.lang;
 
-import java.io.*;
-import java.util.*;
-
 import org.cougaar.lib.contract.Operator;
 import org.cougaar.lib.contract.OperatorFactory;
-
 import org.cougaar.lib.contract.lang.cache.ClassCache;
-import org.cougaar.lib.contract.lang.parser.*;
+import org.cougaar.lib.contract.lang.parser.BufferedVisitor;
+import org.cougaar.lib.contract.lang.parser.OpParserImpl;
+import org.cougaar.lib.contract.lang.parser.ParenParser;
+import org.cougaar.lib.contract.lang.parser.XMLParser;
 
 /**
  * Implementation of <code>org.cougaar.lib.contract.OperatorFactory</code> -- used to hide
@@ -59,15 +58,16 @@ public class OperatorFactoryImpl extends OperatorFactory {
     ClassCache.setPackages(packages);
   }
 
-  public Operator create(
+  @Override
+public Operator create(
       final int style, 
       final Object inObj) throws Exception {
     try {
       // build tree tokenizer
       BufferedVisitor bufVis = new BufferedVisitor();
-      if ((style & Op.PAREN_FLAG) != 0) {
+      if ((style & Operator.PAREN_FLAG) != 0) {
         ParenParser.parse(bufVis, inObj);
-      } else if ((style & Op.XML_FLAG) != 0) {
+      } else if ((style & Operator.XML_FLAG) != 0) {
         XMLParser.parse(bufVis, inObj);
       } else {
         throw new IllegalArgumentException(

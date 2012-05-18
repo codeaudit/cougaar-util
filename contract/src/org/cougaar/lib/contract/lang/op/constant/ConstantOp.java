@@ -26,9 +26,12 @@
 
 package org.cougaar.lib.contract.lang.op.constant;
 
-import org.cougaar.lib.contract.lang.*;
+import org.cougaar.lib.contract.lang.Op;
+import org.cougaar.lib.contract.lang.OpImpl;
+import org.cougaar.lib.contract.lang.OpParser;
+import org.cougaar.lib.contract.lang.ParseException;
+import org.cougaar.lib.contract.lang.TreeVisitor;
 import org.cougaar.lib.contract.lang.cache.ClassCache;
-import org.cougaar.lib.contract.lang.op.OpBuilder;
 import org.cougaar.lib.contract.lang.op.OpCodes;
 
 /**
@@ -54,7 +57,11 @@ import org.cougaar.lib.contract.lang.op.OpCodes;
 public final class ConstantOp
     extends OpImpl {
 
-  public final Class clazz;
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+public final Class clazz;
   public final Object val;
 
   /** 
@@ -203,11 +210,13 @@ public final class ConstantOp
     this.val = val;
   }
 
-  public final int getID() {
+  @Override
+public final int getID() {
     return OpCodes.CONSTANT_ID;
   }
 
-  public final Op parse(final OpParser p) throws ParseException {
+  @Override
+public final Op parse(final OpParser p) throws ParseException {
     Op u1 = p.nextOp();
     if (u1 == null) {
       // check for value
@@ -272,25 +281,30 @@ public final class ConstantOp
     }
   }
 
-  public final boolean isReturnBoolean() {
+  @Override
+public final boolean isReturnBoolean() {
     return (clazz == Boolean.TYPE);
   }
 
-  public final Class getReturnClass() {
+  @Override
+public final Class getReturnClass() {
     return clazz;
   }
 
-  public final boolean execute(final Object o) {
+  @Override
+public final boolean execute(final Object o) {
     // ignore o
     return ((Boolean)val).booleanValue();
   }
 
-  public final Object operate(final Object o) {
+  @Override
+public final Object operate(final Object o) {
     // ignore o
     return val;
   }
 
-  public final void accept(TreeVisitor visitor) {
+  @Override
+public final void accept(TreeVisitor visitor) {
     if (clazz == String.class) {
       if (val != null) {
         // (const ("val"))

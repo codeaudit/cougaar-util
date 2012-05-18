@@ -49,15 +49,18 @@ public class NullLogger
     return NULL_LOGGER_SINGLETON;
   }
 
-  public boolean isEnabledFor(int level) {
+  @Override
+public boolean isEnabledFor(int level) {
     return false;
   }
 
-  public void log(int level, String message, Throwable t) { }
+  @Override
+public void log(int level, String message, Throwable t) { }
 
   public void printDot(String dot) { }
 
-  public String toString() {
+  @Override
+public String toString() {
     return "null-logger";
   }
 }

@@ -33,8 +33,8 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import org.cougaar.util.annotations.Cougaar;
 import org.cougaar.util.annotations.Argument;
+import org.cougaar.util.annotations.Cougaar;
 
 /**
  * Test field initialization via annotation metatdata
@@ -99,7 +99,8 @@ public class TestAnnotations extends TestCase {
         }
     }
 
-    protected void setUp() {
+    @Override
+   protected void setUp() {
         simple = -1;
         simpleDefaulted = -1;
         simpleDefaultedNull = "simpleDefaultedNull";

@@ -34,7 +34,11 @@ package org.cougaar.core.component;
  **/
 public class ComponentRuntimeException extends RuntimeException
 {
-  private final Object cd;
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+private final Object cd;
   public ComponentRuntimeException(String explanation, Object cd, Throwable nestedException) {
     super(explanation, nestedException);
     this.cd = cd;
@@ -45,7 +49,8 @@ public class ComponentRuntimeException extends RuntimeException
     this.cd = cd;
   }
 
-  public String toString() {
+  @Override
+public String toString() {
     return super.toString()+" for "+cd;
   }
 }

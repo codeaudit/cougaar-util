@@ -273,7 +273,8 @@ public final class ComponentDescription implements Serializable {
    * certificate, lease, and/or policy.
    * @note Priority is not considered when testing components for priority.
    */
-  public boolean equals(Object o) {
+  @Override
+public boolean equals(Object o) {
     if (o == this) {
       return true;
     }
@@ -299,7 +300,8 @@ public final class ComponentDescription implements Serializable {
     return ((a == null) ? (b == null) : (a.equals(b)));
   }
 
-  public int hashCode() {
+  @Override
+public int hashCode() {
     return 
       (name.hashCode() ^ 
        insertionPoint.hashCode() ^ 
@@ -319,7 +321,8 @@ public final class ComponentDescription implements Serializable {
     }
   }
 
-  public String toString() {
+  @Override
+public String toString() {
     return "<ComponentDescription "+classname+
       ((parameter==null)?"":(" "+parameter))+
       ">";

@@ -36,7 +36,12 @@ package org.cougaar.core.component;
 public class IncorrectInsertionPointException 
 extends ComponentLoadFailure
 {
-  public IncorrectInsertionPointException(
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+
+public IncorrectInsertionPointException(
       String explanation, Object cd, Throwable nestedException) {
     super(explanation, cd, nestedException);
   }

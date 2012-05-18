@@ -71,12 +71,14 @@ extends InputStream {
   // For now we'll not introduce the clutter...
   //
 
-  public int read(byte[] b) throws IOException {
+  @Override
+public int read(byte[] b) throws IOException {
     return this.read(b, 0, b.length);
   }
 
   // special-case implementation for "read(byte[] ..)"
-  public int read(byte[] b, int off, int length) throws IOException {
+  @Override
+public int read(byte[] b, int off, int length) throws IOException {
     byte[] tmpBuf = isd.read(length-off);
     int n;
     if (tmpBuf != null) {
@@ -92,29 +94,36 @@ extends InputStream {
   // all the other methods of InputStream:
   //
 
-  public int read() throws IOException {
+  @Override
+public int read() throws IOException {
     return isd.read();
   }
-  public long skip(long n) throws IOException {
+  @Override
+public long skip(long n) throws IOException {
     return isd.skip(n);
   }
-  public int available() throws IOException {
+  @Override
+public int available() throws IOException {
     return isd.available();
   }
-  public void close() throws IOException {
+  @Override
+public void close() throws IOException {
     isd.close();
   }
-  public void mark(int readlimit) {
+  @Override
+public void mark(int readlimit) {
     try {
       isd.mark(readlimit);
     } catch (RemoteException re) {
       throw (RuntimeException)re.detail;
     }
   }
-  public void reset() throws IOException {
+  @Override
+public void reset() throws IOException {
     isd.reset();
   }
-  public boolean markSupported() {
+  @Override
+public boolean markSupported() {
     try {
       return isd.markSupported();
     } catch (RemoteException re) {

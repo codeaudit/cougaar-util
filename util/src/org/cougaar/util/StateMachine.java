@@ -126,7 +126,8 @@ public class StateMachine {
   /** Add a direct link between two tags **/
   public void addLink(String startTag, final String nextTag) {
     add(new State(startTag) {
-        public void invoke() {
+        @Override
+      public void invoke() {
           transit(nextTag);
         }
       });
@@ -222,7 +223,8 @@ public class StateMachine {
     /** Whenever the StateMachine is invoked, so is the current State **/
     public abstract void invoke();
 
-    public String toString() {
+    @Override
+   public String toString() {
       return "State "+key;
     }
   }
@@ -232,7 +234,8 @@ public class StateMachine {
    */
   private static class ConstantState extends State {
     private ConstantState(String key) { super(key); }
-    public void invoke() {
+    @Override
+   public void invoke() {
       throw new IllegalStateException("ConstantState \""+key+"\" must never be invoked."); 
     }
   }
@@ -241,6 +244,11 @@ public class StateMachine {
    * Utility Exception for use by the StateMachine
    **/
   public static class IllegalStateException extends RuntimeException {
-    public IllegalStateException(String s) { super(s); }
+    /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+
+   public IllegalStateException(String s) { super(s); }
   }
 }

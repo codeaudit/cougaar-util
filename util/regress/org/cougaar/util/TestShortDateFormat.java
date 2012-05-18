@@ -25,11 +25,10 @@
  */
 
 package org.cougaar.util;
-import java.util.*;
-import java.text.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import junit.framework.TestCase;
-import junit.framework.*;
 
 public class TestShortDateFormat extends TestCase {
   SimpleDateFormat fmt = new SimpleDateFormat("yyyy.MM.dd");

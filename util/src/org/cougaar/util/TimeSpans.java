@@ -26,8 +26,6 @@
 
 package org.cougaar.util;
 
-import java.io.Serializable;
-
 /** Collection of utility methods for manipulation and 
  * construction of TimeSpan objects.
  **/

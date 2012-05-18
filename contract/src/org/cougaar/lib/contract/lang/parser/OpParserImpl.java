@@ -26,10 +26,11 @@
 
 package org.cougaar.lib.contract.lang.parser;
 
-import java.io.*;
-import java.util.*;
-
-import org.cougaar.lib.contract.lang.*;
+import org.cougaar.lib.contract.lang.Op;
+import org.cougaar.lib.contract.lang.OpParser;
+import org.cougaar.lib.contract.lang.ParseException;
+import org.cougaar.lib.contract.lang.Type;
+import org.cougaar.lib.contract.lang.TypeList;
 import org.cougaar.lib.contract.lang.op.OpBuilder;
 import org.cougaar.lib.contract.lang.type.TypeImpl;
 import org.cougaar.lib.contract.lang.type.TypeListImpl;

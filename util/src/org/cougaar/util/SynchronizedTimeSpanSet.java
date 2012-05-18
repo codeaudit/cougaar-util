@@ -33,7 +33,12 @@ import java.util.Collection;
  **/
 public class SynchronizedTimeSpanSet extends TimeSpanSet {
 
-  // constructors
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+
+// constructors
   public SynchronizedTimeSpanSet() {
     super();
   }
@@ -60,7 +65,8 @@ public class SynchronizedTimeSpanSet extends TimeSpanSet {
    * BOZO - write a comment
    * Should simply return false
    */
-  public synchronized boolean add(Object o) {
+  @Override
+public synchronized boolean add(Object o) {
     return super.add(o);
   }
 
@@ -68,34 +74,41 @@ public class SynchronizedTimeSpanSet extends TimeSpanSet {
    * BOZO - write a comment
    * Should simply return false
    */
-  public synchronized boolean addAll(Collection objects) {
+  @Override
+public synchronized boolean addAll(Collection objects) {
     synchronized (objects) {
       return super.addAll(objects);
     }
   }
 
-  public synchronized void clear() {
+  @Override
+public synchronized void clear() {
     super.clear();
   }
-  public synchronized boolean contains(Object o) {
+  @Override
+public synchronized boolean contains(Object o) {
     return super.contains(o);
   }
 
-  public synchronized boolean containsAll(Collection c) {
+  @Override
+public synchronized boolean containsAll(Collection c) {
     synchronized (c) {
       return super.containsAll(c);
     }
   }
 
-  public synchronized Object get(int index) {
+  @Override
+public synchronized Object get(int index) {
     return super.get(index);
   }
   
-  public synchronized int indexOf(Object elem) {
+  @Override
+public synchronized int indexOf(Object elem) {
     return super.indexOf(elem);
   }
 
-  public synchronized int lastIndexOf(Object elem) {
+  @Override
+public synchronized int lastIndexOf(Object elem) {
     return super.lastIndexOf(elem);
   }
 
@@ -103,11 +116,13 @@ public class SynchronizedTimeSpanSet extends TimeSpanSet {
    * BOZO - write a comment
    * Should simply return false
    */
-  public synchronized boolean remove(Object o) {
+  @Override
+public synchronized boolean remove(Object o) {
     return super.remove(o);
   }
 
-  public synchronized Object remove(int index) {
+  @Override
+public synchronized Object remove(int index) {
     return super.remove(index);
   }
 
@@ -115,7 +130,8 @@ public class SynchronizedTimeSpanSet extends TimeSpanSet {
    * BOZO - write a comment
    * Should simply return false
    */
-  public synchronized boolean removeAll(Collection objects) {
+  @Override
+public synchronized boolean removeAll(Collection objects) {
     synchronized (objects) {
       return super.removeAll(objects);
     }
@@ -126,35 +142,42 @@ public class SynchronizedTimeSpanSet extends TimeSpanSet {
    * BOZO - write a comment
    * Should simply return false
    */
-  public synchronized boolean retainAll(Collection objects) {
+  @Override
+public synchronized boolean retainAll(Collection objects) {
     synchronized (objects) {
       return super.removeAll(objects);
     }
   }
 
 
-  public synchronized int size() {
+  @Override
+public synchronized int size() {
     return super.size();
   }
 
-  public synchronized Object[] toArray() {
+  @Override
+public synchronized Object[] toArray() {
     return super.toArray();
   }
 
-  public synchronized Object[] toArray(Object a[]) {
+  @Override
+public synchronized Object[] toArray(Object a[]) {
     return super.toArray(a);
   }
 
-  public synchronized String toString() {
+  @Override
+public synchronized String toString() {
     return super.toString();
   }
 
 
-  public synchronized Object last() {
+  @Override
+public synchronized Object last() {
     return super.last();
   }
 
-  public synchronized Collection filter(UnaryPredicate predicate) {
+  @Override
+public synchronized Collection filter(UnaryPredicate predicate) {
     return super.filter(predicate);
   }
 
@@ -162,17 +185,20 @@ public class SynchronizedTimeSpanSet extends TimeSpanSet {
    * The result is undefined if there is a tie for smallest and null 
    * if there are no elements.
    **/
-  public synchronized Object getMinimalIntersectingElement(final long time) {
+  @Override
+public synchronized Object getMinimalIntersectingElement(final long time) {
     return super.getMinimalIntersectingElement(time);
   }
 
-  public synchronized boolean equals(Object o) {
+  @Override
+public synchronized boolean equals(Object o) {
     synchronized(o) {
       return super.equals(o);
     }
   }
 
-  public synchronized int hashCode() {
+  @Override
+public synchronized int hashCode() {
     return super.hashCode();
   }
 
@@ -182,7 +208,8 @@ public class SynchronizedTimeSpanSet extends TimeSpanSet {
    * Should only be used if c has already been validated.
    * @return boolean - true if any elements added else false.
    */
-  protected boolean unsafeUpdate(Collection c) {
+  @Override
+protected boolean unsafeUpdate(Collection c) {
     synchronized (c) {
       return super.unsafeUpdate(c);
     }

@@ -25,12 +25,12 @@
  */
 package org.cougaar.util;
 
-import java.util.Iterator;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
 public class Random extends java.util.Random {
-  // Memoize for repeated use with the same mean rate (xm)
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+// Memoize for repeated use with the same mean rate (xm)
   private double oldXm = -1.0;		// Flag for whether xm has changed since last call,
   private double g, sq, logXm;
 

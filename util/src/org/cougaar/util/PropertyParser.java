@@ -26,6 +26,7 @@
 package org.cougaar.util;
 
 import java.util.Properties;
+
 import org.cougaar.bootstrap.SystemProperties;
 
 /**

@@ -25,10 +25,10 @@
  */
 package org.cougaar.core.component;
 
+import java.util.ArrayList;
+
 import org.cougaar.util.log.Logger;
 import org.cougaar.util.log.Logging;
-
-import java.util.ArrayList;
 
 /** A Wrapper Binder contructed by ServiceFilter which 
  * watches service requests and has convenient overridable points
@@ -51,7 +51,8 @@ public abstract class ServiceFilterBinder
     myContainerProxy = createContainerProxy();
   }
 
-  public void setBindingSite(BindingSite bs) {
+  @Override
+public void setBindingSite(BindingSite bs) {
     super.setBindingSite(bs);
     myFilteringServiceBroker = createFilteringServiceBroker(getServiceBroker());
   }
@@ -71,7 +72,8 @@ public abstract class ServiceFilterBinder
    * and/or knowledge of the Binder class.  This is neccessary when Binders do
    * not have private channels of communication to the Container.
    **/
-  protected ContainerAPI getContainerProxy() { return myContainerProxy; }
+  @Override
+protected ContainerAPI getContainerProxy() { return myContainerProxy; }
 
   private ServiceBroker myFilteringServiceBroker = null;
   
@@ -125,7 +127,8 @@ public abstract class ServiceFilterBinder
      * returns true, will then call getClientProxy to proxy the client, delegates to the real broker
      * to request the service, then calls getServiceProxy to wrap the service. <p>
      **/
-    public Object getService(Object requestor, Class serviceClass, ServiceRevokedListener srl) {
+    @Override
+   public Object getService(Object requestor, Class serviceClass, ServiceRevokedListener srl) {
       if (allowService(serviceClass)) {
         // get the client proxy
         Object clientProxy = getClientProxy(requestor, serviceClass);
@@ -197,7 +200,8 @@ public abstract class ServiceFilterBinder
      * binder may have provided.
      * Calls releaseServiceProxy and releaseClientProxy as appropriate.
      **/
-    public void releaseService(Object requestor, Class serviceClass, Object service) {
+    @Override
+   public void releaseService(Object requestor, Class serviceClass, Object service) {
       ServiceTuple t;
       synchronized (serviceTuples) {
         int i = serviceTuples.indexOf(new ServiceTuple(requestor, serviceClass));
@@ -264,7 +268,8 @@ public abstract class ServiceFilterBinder
     public Object getReturnedService() {
       return (serviceProxy!=null)?serviceProxy:service;
     }
-    public boolean equals(Object o) {
+    @Override
+   public boolean equals(Object o) {
       return ((o instanceof ServiceTuple) &&
               client.equals(((ServiceTuple)o).client) &&
               serviceClass.equals(((ServiceTuple)o).serviceClass));

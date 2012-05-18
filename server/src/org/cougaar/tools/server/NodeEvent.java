@@ -115,7 +115,8 @@ public final class NodeEvent implements java.io.Serializable, Cloneable {
   // might add other info, e.g. timestamp
   //
 
-  public Object clone() {
+  @Override
+public Object clone() {
     try {
       return super.clone();
     } catch (CloneNotSupportedException e) {
@@ -124,7 +125,8 @@ public final class NodeEvent implements java.io.Serializable, Cloneable {
     }
   }
 
-  public String toString() {
+  @Override
+public String toString() {
     String pf = PREFIX[type];
     return 
       ((!(msg.equals("")))  ?

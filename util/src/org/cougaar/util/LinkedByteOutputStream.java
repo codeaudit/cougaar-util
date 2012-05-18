@@ -78,7 +78,8 @@ public class LinkedByteOutputStream extends OutputStream {
    *
    * @param b the byte to be written.
    */
-  public synchronized void write(int b) {
+  @Override
+public synchronized void write(int b) {
     byte[] buf;
     if (tail == null) {
       Link x = allocLink(1);
@@ -107,7 +108,8 @@ public class LinkedByteOutputStream extends OutputStream {
    * @param off the start offset in the data.
    * @param len the number of bytes to write.
    */
-  public void write(byte[] b, int off, int len) {
+  @Override
+public void write(byte[] b, int off, int len) {
     if ((off < 0) || (off > b.length) || (len < 0) ||
         ((off + len) > b.length) || ((off + len) < 0)) {
       throw new IndexOutOfBoundsException();
@@ -212,7 +214,8 @@ public class LinkedByteOutputStream extends OutputStream {
    *
    * @return String translated from the buffer's contents.
    */
-  public String toString() {
+  @Override
+public String toString() {
     return new String(toByteArray());
   }
 
@@ -234,7 +237,8 @@ public class LinkedByteOutputStream extends OutputStream {
    * this class can be called after the stream has been closed without
    * generating an <tt>IOException</tt>.
    */
-  public void close() throws IOException {
+  @Override
+public void close() throws IOException {
   }
 
   /**
@@ -286,7 +290,8 @@ public class LinkedByteOutputStream extends OutputStream {
     // constructor:
     public Link(int len) { this.buf = new byte[len]; }
     // developer debug:
-    public String toString() {
+    @Override
+   public String toString() {
       return 
         "{"+offset+"/"+buf.length+"}["+new String(buf)+"]"+
         (next != null ? next.toString() : "");

@@ -27,9 +27,7 @@
 package org.cougaar.util;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -84,7 +82,8 @@ public class PropertyTree
    *
    * @see PropertyTree.PropertyTreeEntry
    */
-  protected Map.Entry createEntry(
+  @Override
+protected Map.Entry createEntry(
       final Object key,
       final Object value) {
     return new PropertyTreeEntry(key, value);
@@ -104,6 +103,11 @@ public class PropertyTree
   protected static class PropertyTreeEntry 
     extends ArrayMap.ArrayEntry {
 
+      /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+
       public PropertyTreeEntry(
           final Object key, 
           final Object value) {
@@ -112,6 +116,7 @@ public class PropertyTree
         assertIsValidValue(value);
       }
 
+      @Override
       public Object setValue(final Object newValue) {
         assertIsValidValue(newValue);
         return super.setValue(newValue);

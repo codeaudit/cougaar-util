@@ -26,9 +26,15 @@
 
 package org.cougaar.lib.contract.lang.op.reflect;
 
-import java.util.*;
+import java.util.List;
 
-import org.cougaar.lib.contract.lang.*;
+import org.cougaar.lib.contract.lang.Op;
+import org.cougaar.lib.contract.lang.OpImpl;
+import org.cougaar.lib.contract.lang.OpParser;
+import org.cougaar.lib.contract.lang.ParseException;
+import org.cougaar.lib.contract.lang.TreeVisitor;
+import org.cougaar.lib.contract.lang.Type;
+import org.cougaar.lib.contract.lang.TypeList;
 import org.cougaar.lib.contract.lang.op.OpCodes;
 
 /**
@@ -37,15 +43,21 @@ import org.cougaar.lib.contract.lang.op.OpCodes;
 public final class ThisOp
     extends OpImpl {
 
-  private Class clazz;
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+private Class clazz;
 
   public ThisOp() {}
 
-  public final int getID() {
+  @Override
+public final int getID() {
     return OpCodes.THIS_ID;
   }
 
-  public final Op parse(final OpParser p) throws ParseException {
+  @Override
+public final Op parse(final OpParser p) throws ParseException {
     Op u1 = p.nextOp();
     if (u1 != null) {
       throw new ParseException(
@@ -86,23 +98,28 @@ public final class ThisOp
     return this;
   }
 
-  public final boolean isReturnBoolean() {
+  @Override
+public final boolean isReturnBoolean() {
     return (clazz == Boolean.TYPE);
   }
 
-  public final Class getReturnClass() {
+  @Override
+public final Class getReturnClass() {
     return clazz;
   }
 
-  public final boolean execute(final Object o) {
+  @Override
+public final boolean execute(final Object o) {
     return ((Boolean)o).booleanValue();
   }
 
-  public final Object operate(final Object o) {
+  @Override
+public final Object operate(final Object o) {
     return o;
   }
  
-  public final void accept(TreeVisitor visitor) {
+  @Override
+public final void accept(TreeVisitor visitor) {
     // (this)
     visitor.visitWord(OpCodes.THIS_NAME);
     visitor.visitEnd();

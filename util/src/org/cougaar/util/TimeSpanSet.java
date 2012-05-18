@@ -44,7 +44,12 @@ public class TimeSpanSet
   extends ArrayListFoundation
   implements SortedSet, Serializable
 {
-  // constructors
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+
+// constructors
   public TimeSpanSet() {
     super();
   }
@@ -66,7 +71,8 @@ public class TimeSpanSet
   }
 
 
-  public boolean add(Object o) {
+  @Override
+public boolean add(Object o) {
     if (! (o instanceof TimeSpan))
       throw new IllegalArgumentException();
     TimeSpan timeSpan = (TimeSpan)o;
@@ -100,11 +106,13 @@ public class TimeSpanSet
     return true;
   }
 
-  public void add(int i, Object o) {
+  @Override
+public void add(int i, Object o) {
     throw new UnsupportedOperationException("TimeSpanSet.add(int index, Object o) is not supported.");
   }
 
-  public boolean addAll(Collection c) {
+  @Override
+public boolean addAll(Collection c) {
     boolean hasChanged = false;
 
     if (c instanceof List) {
@@ -126,18 +134,21 @@ public class TimeSpanSet
     return hasChanged;
   }
 
-  public boolean addAll(int index, Collection c) {
+  @Override
+public boolean addAll(int index, Collection c) {
     throw new UnsupportedOperationException("TimeSpanSet.addAll(int index, Collection c) is not supported.");
   }
 
-  public boolean contains(Object o) {
+  @Override
+public boolean contains(Object o) {
     if (o instanceof TimeSpan) {
       return find((TimeSpan)o) != -1;
     }
     return false;
   }
 
-  public boolean remove(Object o) {
+  @Override
+public boolean remove(Object o) {
     // find it faster
     if (o instanceof TimeSpan) {
       int i = find((TimeSpan)o);
@@ -149,11 +160,13 @@ public class TimeSpanSet
     }
   }
 
-  public Object set(int index, Object element) {
+  @Override
+public Object set(int index, Object element) {
     throw new UnsupportedOperationException("TimeSpanSet.set(int index, Object element) is not supported.");
   }
 
-  public String toString() {
+  @Override
+public String toString() {
     // do we want to change the implementation here?
     return super.toString();
   }
@@ -277,6 +290,11 @@ public class TimeSpanSet
    **/
   public final Collection intersectingSet(final long time) {
     return filter(new UnaryPredicate() {
+      /**
+       * 
+       */
+      private static final long serialVersionUID = 1L;
+
       public boolean execute(Object o) {
         TimeSpan ts = (TimeSpan) o;
         return (time >= ts.getStartTime() &&
@@ -291,6 +309,11 @@ public class TimeSpanSet
   public final Collection intersectingSet(final long startTime,
                                           final long endTime) {
     return filter(new UnaryPredicate() {
+      /**
+       * 
+       */
+      private static final long serialVersionUID = 1L;
+
       public boolean execute(Object o) {
         TimeSpan ts = (TimeSpan) o;
         return (ts.getStartTime()<endTime &&
@@ -312,6 +335,11 @@ public class TimeSpanSet
   public final Collection encapsulatedSet(final long startTime,
                                           final long endTime) {
     return filter(new UnaryPredicate() {
+      /**
+       * 
+       */
+      private static final long serialVersionUID = 1L;
+
       public boolean execute(Object o) {
         TimeSpan ts = (TimeSpan) o;
         return (ts.getStartTime()>=startTime &&
@@ -333,6 +361,11 @@ public class TimeSpanSet
   private Collection encapsulatingSet(final long startTime,
                                            final long endTime) {
     return filter(new UnaryPredicate() {
+      /**
+       * 
+       */
+      private static final long serialVersionUID = 1L;
+
       public boolean execute(Object o) {
         TimeSpan ts = (TimeSpan) o;
         return (startTime <= ts.getStartTime() &&

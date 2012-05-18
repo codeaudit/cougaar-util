@@ -46,6 +46,7 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
 /**
@@ -59,7 +60,12 @@ public class Spinner extends JPanel {
    * and mutator provide direct access to the numeric value.
    **/
 
-  /** An icon for the down arrow button. **/
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+
+/** An icon for the down arrow button. **/
   static Icon downIcon;
 
   /** An icon for the up arrow button. **/
@@ -119,7 +125,12 @@ public class Spinner extends JPanel {
    **/
   private class MyBasicArrowButton extends JComponent implements ActionListener, MouseListener {
 
-    /** A timer to repeated increment the spinner while the mouse is pressed. **/
+    /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+
+   /** A timer to repeated increment the spinner while the mouse is pressed. **/
     private Timer repeatTimer = new Timer(60, this);
 
     /** The basic increment -- always plus or minus one. **/
@@ -161,7 +172,8 @@ public class Spinner extends JPanel {
      * field.
      * @return the preferred size of this button.
      **/
-    public Dimension getPreferredSize() {
+    @Override
+   public Dimension getPreferredSize() {
       return new Dimension(icon.getIconWidth() + 6, entry.getPreferredSize().height / 2);
     }
 
@@ -224,7 +236,8 @@ public class Spinner extends JPanel {
      * Paint this button. The button is a 3D rectangle with an arrow
      * icon in it.
      **/
-    public void paintComponent(Graphics g) {
+    @Override
+   public void paintComponent(Graphics g) {
       Dimension size = this.getSize();
       g.setColor(this.getBackground());
       g.fill3DRect(0, 0, size.width, size.height, !pressed);
@@ -272,7 +285,7 @@ public class Spinner extends JPanel {
    **/
   public Spinner(int min, int max, int value) {
     super(new GridBagLayout());
-    entry.setHorizontalAlignment(JTextField.RIGHT);
+    entry.setHorizontalAlignment(SwingConstants.RIGHT);
     entry.addFocusListener(new FocusListener() {
       public void focusLost(FocusEvent e) {
         doIncrement(0);

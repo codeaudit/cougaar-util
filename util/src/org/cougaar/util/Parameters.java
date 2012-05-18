@@ -35,8 +35,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.cougaar.bootstrap.SystemProperties;
-import org.cougaar.util.log.Logging;
 import org.cougaar.util.log.Logger;
+import org.cougaar.util.log.Logging;
 
 /**
  * COUGAAR Parameter String utilities.

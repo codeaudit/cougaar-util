@@ -26,10 +26,8 @@
 
 package org.cougaar.lib.contract.lang.cache;
 
-import java.util.*;
-import java.lang.reflect.*;
-
-import org.cougaar.lib.contract.lang.*;
+import java.util.Collection;
+import java.util.Iterator;
 
 /** 
  * Class reflection utilities.

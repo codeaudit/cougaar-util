@@ -26,13 +26,11 @@
 
 package org.cougaar.util.log.log4j;
 
-import java.io.OutputStream;
 import java.io.PrintStream;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Category;
 import org.apache.log4j.Level;
-
 import org.cougaar.bootstrap.SystemProperties;
 
 /**
@@ -113,72 +111,94 @@ public final class StreamCapture extends PrintStream {
     }
   }
 
-  protected void finalize() throws java.lang.Throwable {
+  @Override
+protected void finalize() throws java.lang.Throwable {
     closeStream();
     super.finalize();
   }
 
-  public void println(char x) {
+  @Override
+public void println(char x) {
     log(String.valueOf(x));
   }
-  public void println(long x) {
+  @Override
+public void println(long x) {
     log(String.valueOf(x));
   }
-  public void write(int b) {
+  @Override
+public void write(int b) {
     log(String.valueOf(b));
   }
-  public void print(char[] parm1) {
+  @Override
+public void print(char[] parm1) {
     log(new String(parm1));
   }
-  public void println(float x) {
+  @Override
+public void println(float x) {
     log(String.valueOf(x));
   }
-  public void println(double x) {
+  @Override
+public void println(double x) {
     log(String.valueOf(x));
   }
-  public void println(Object x) {
+  @Override
+public void println(Object x) {
     log(x.toString());
   }
-  public void println(boolean x) {
+  @Override
+public void println(boolean x) {
     log(String.valueOf(x));
   }
-  public void println(char[] parm1) {
+  @Override
+public void println(char[] parm1) {
     log(new String(parm1));
   }
-  public void print(char c) {
+  @Override
+public void print(char c) {
     log(String.valueOf(c));
   }
-  public void print(long l) {
+  @Override
+public void print(long l) {
     log(String.valueOf(l));
   }
-  public void println(String x) {
+  @Override
+public void println(String x) {
     log(String.valueOf(x));
   }
-  public void print(Object obj) {
+  @Override
+public void print(Object obj) {
     log(obj.toString());
   }
-  public void print(double d) {
+  @Override
+public void print(double d) {
     log(String.valueOf(d));
   }
-  public void print(boolean b) {
+  @Override
+public void print(boolean b) {
     log(String.valueOf(b));
   }
-  public void println(int x) {
+  @Override
+public void println(int x) {
     log(String.valueOf(x));
   }
-  public void print(float f) {
+  @Override
+public void print(float f) {
     log(String.valueOf(f));
   }
-  public void println() {
+  @Override
+public void println() {
     log("");
   }
-  public void print(String s) {
+  @Override
+public void print(String s) {
     log(s);
   }
-  public void write(byte[] chars, int offset, int len) {
+  @Override
+public void write(byte[] chars, int offset, int len) {
     log(new String(chars, offset, len));
   }
-  public void print(int i) {
+  @Override
+public void print(int i) {
     log(String.valueOf(i));
   }
 

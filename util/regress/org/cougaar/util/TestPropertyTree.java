@@ -25,10 +25,10 @@
  */
 
 package org.cougaar.util;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import junit.framework.TestCase;
-import junit.framework.*;
 
 public class TestPropertyTree extends TestCase {
   private String str(Object o) {

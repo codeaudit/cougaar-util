@@ -72,7 +72,8 @@ public class LoggerControllerProxy implements LoggerController {
     return lc.removeLogTarget(outputType, deviceString);
   }
 
-  public String toString() {
+  @Override
+public String toString() {
     return lc.toString();
   }
 

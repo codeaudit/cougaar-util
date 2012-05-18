@@ -42,7 +42,12 @@ import javax.swing.JOptionPane;
  **/
 
 public class OptionPane extends JOptionPane {
-    public OptionPane(Object message, int messageType, int optionType,
+    /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+
+   public OptionPane(Object message, int messageType, int optionType,
                       Icon icon, Object[] options, Object initialValue)
     {
         super(message, messageType, optionType, icon, options, initialValue);
@@ -51,7 +56,8 @@ public class OptionPane extends JOptionPane {
     private Dimension prevSize;
     private Dimension prevResult;
 
-    public Dimension getPreferredSize() {
+    @Override
+   public Dimension getPreferredSize() {
         Dimension sz = super.getPreferredSize();
         if (!sz.equals(prevSize)) {
             prevSize = sz;

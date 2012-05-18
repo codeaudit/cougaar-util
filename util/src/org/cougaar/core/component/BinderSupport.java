@@ -45,7 +45,8 @@ public abstract class BinderSupport
     super(bf, childX);
   }
 
-  protected void attachChild(Object cd) {
+  @Override
+protected void attachChild(Object cd) {
     if (cd instanceof ComponentDescription) {
       childD = (ComponentDescription) cd;
       child = null;
@@ -115,7 +116,8 @@ public abstract class BinderSupport
    * Often, the
    * child.initialize() method will call back into the services api.
    */
-  public void initialize() {
+  @Override
+public void initialize() {
     if (child == null) {
       child = constructChild();
     }
@@ -128,32 +130,41 @@ public abstract class BinderSupport
     // cascade
     child.initialize();
   }
-  public void load() {
+  @Override
+public void load() {
     child.load();
   }
-  public void start() {
+  @Override
+public void start() {
     child.start();
   }
-  public void suspend() {
+  @Override
+public void suspend() {
     child.suspend();
   }
-  public void resume() {
+  @Override
+public void resume() {
     child.resume();
   }
-  public void stop() {
+  @Override
+public void stop() {
     child.stop();
   }
-  public void halt() {
+  @Override
+public void halt() {
     child.halt();
   }
-  public void unload() {
+  @Override
+public void unload() {
     child.unload();
   }
-  public int getModelState() {
+  @Override
+public int getModelState() {
     return child.getModelState();
   }
 
-  public Object getState() {
+  @Override
+public Object getState() {
     if (child instanceof StateObject) {
       return ((StateObject)child).getState();
     } else {
@@ -161,7 +172,8 @@ public abstract class BinderSupport
     }
   }
 
-  public void setState(Object state) {
+  @Override
+public void setState(Object state) {
     if (state == null) {
       return;
     }

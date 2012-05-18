@@ -25,8 +25,6 @@
  */
 package org.cougaar.tools.server.examples;
 
-import java.io.*;
-import java.util.*;
 
 /**
  * Simple test-process for <code>SystemAccess</code>'s use.

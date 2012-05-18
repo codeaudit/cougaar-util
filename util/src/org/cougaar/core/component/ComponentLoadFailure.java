@@ -30,7 +30,12 @@ package org.cougaar.core.component;
  **/
 public class ComponentLoadFailure extends ComponentRuntimeException
 {
-  public ComponentLoadFailure(String explanation, Object cd, Throwable nestedException) {
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+
+public ComponentLoadFailure(String explanation, Object cd, Throwable nestedException) {
     super(explanation, cd, nestedException);
   }
   

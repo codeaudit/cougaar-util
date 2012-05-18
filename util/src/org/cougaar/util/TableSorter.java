@@ -88,7 +88,11 @@ import javax.swing.table.TableModel;
 
 public abstract class TableSorter extends TableMap
 {
-    int             indexes[] = new int[0];
+    /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+   int             indexes[] = new int[0];
   /**
    * The columns to sort by. The last element is the primary
    * sort. Earlier elements are secondary sort.
@@ -107,7 +111,8 @@ public abstract class TableSorter extends TableMap
         setModel(model);
     }
 
-    public void setModel(TableModel model) {
+    @Override
+   public void setModel(TableModel model) {
         super.setModel(model); 
         reallocateIndexes(); 
     }
@@ -139,7 +144,8 @@ public abstract class TableSorter extends TableMap
             indexes[row] = row;
     }
 
-    public void tableChanged(TableModelEvent e)
+    @Override
+   public void tableChanged(TableModelEvent e)
     {
         reallocateIndexes();
 
@@ -160,7 +166,7 @@ public abstract class TableSorter extends TableMap
         compares = 0;
         // n2sort();
         // qsort(0, indexes.length-1);
-        shuttlesort((int[])indexes.clone(), indexes, 0, indexes.length);
+        shuttlesort(indexes.clone(), indexes, 0, indexes.length);
     }
 
     public void n2sort() {
@@ -234,13 +240,15 @@ public abstract class TableSorter extends TableMap
     // The mapping only affects the contents of the data rows.
     // Pass all requests to these rows through the mapping array: "indexes".
 
-    public Object getValueAt(int aRow, int aColumn)
+    @Override
+   public Object getValueAt(int aRow, int aColumn)
     {
         checkModel();
         return model.getValueAt(indexes[aRow], aColumn);
     }
 
-    public void setValueAt(Object aValue, int aRow, int aColumn)
+    @Override
+   public void setValueAt(Object aValue, int aRow, int aColumn)
     {
         checkModel();
         model.setValueAt(aValue, indexes[aRow], aColumn);
@@ -274,6 +282,7 @@ public abstract class TableSorter extends TableMap
         final JTable tableView = table; 
         tableView.setColumnSelectionAllowed(false); 
         MouseAdapter listMouseListener = new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
                 TableColumnModel columnModel = tableView.getColumnModel();
                 int viewColumn = columnModel.getColumnIndexAtX(e.getX()); 

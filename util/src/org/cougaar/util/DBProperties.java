@@ -32,7 +32,6 @@
 package org.cougaar.util;
 
 import java.io.BufferedInputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -60,7 +59,12 @@ import org.cougaar.util.log.Logging;
  * property that it uses.
  **/
 public abstract class DBProperties extends java.util.Properties {
-  protected static final Logger log = Logging.getLogger(DBProperties.class);
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+
+protected static final Logger log = Logging.getLogger(DBProperties.class);
 
   private String default_dbtype;
   private boolean debug = false;
@@ -350,7 +354,8 @@ public abstract class DBProperties extends java.util.Properties {
    * override the base class version and interpose parameter
    * replacements from cougaar.rc.
    **/
-  public void load(InputStream i) throws IOException {
+  @Override
+public void load(InputStream i) throws IOException {
     super.load(i);
     for (Enumeration e = propertyNames(); e.hasMoreElements(); ) {
       String name = (String) e.nextElement();
@@ -439,7 +444,8 @@ public abstract class DBProperties extends java.util.Properties {
     debug = newDebug;
   }
 
-  public String toString() {
+  @Override
+public String toString() {
     return name;
   }
 
@@ -459,26 +465,39 @@ public abstract class DBProperties extends java.util.Properties {
 
   /** A mutable DBProperties class **/
   private static class Mutable extends DBProperties {
-    public Mutable(DBProperties p) {
+    /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+   public Mutable(DBProperties p) {
       super(p);
     }
-    public Object clone() {
+    @Override
+   public Object clone() {
       return new Mutable(this);
     }
-    public DBProperties lock() {
+    @Override
+   public DBProperties lock() {
       return new Immutable(this);
     }
-    public DBProperties unlock() {
+    @Override
+   public DBProperties unlock() {
       return new Mutable(this);
     }
-    public boolean isLocked() {
+    @Override
+   public boolean isLocked() {
       return false;
     }
   }
 
   /** An immutable variation of DBProperties **/
   static class Immutable extends DBProperties {
-    public Immutable(DBProperties p) {
+    /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+
+   public Immutable(DBProperties p) {
       super(p);
       lockdown = true;
     }
@@ -489,49 +508,60 @@ public abstract class DBProperties extends java.util.Properties {
 
     private boolean lockdown = false;
 
-    public void load(InputStream isStream) throws IOException {
+    @Override
+   public void load(InputStream isStream) throws IOException {
       if (lockdown) {
         //log.error("Attempt to modify Immutable instance", new Throwable());
         throw new IllegalArgumentException("Immutable DBProperties instance");
       }
       super.load(isStream);
     }
-    public void clear() {
+    @Override
+   public void clear() {
       //log.error("Attempt to modify Immutable instance", new Throwable());
       throw new IllegalArgumentException("Immutable DBProperties instance");
     }
-    public void putAll(Map m) {
+    @Override
+   public void putAll(Map m) {
       //log.error("Attempt to modify Immutable instance", new Throwable());
       throw new IllegalArgumentException("Immutable DBProperties instance");
     }
-    public Object remove(Object key) {
+    @Override
+   public Object remove(Object key) {
       //log.error("Attempt to modify Immutable instance", new Throwable());
       throw new IllegalArgumentException("Immutable DBProperties instance");
     }
-    public Object put(Object key, Object value) {
+    @Override
+   public Object put(Object key, Object value) {
       if (lockdown) {
         //log.error("Attempt to modify Immutable instance", new Throwable());
         throw new IllegalArgumentException("Immutable DBProperties instance");
       }
       return super.put(key,value);
     }      
-    public Object clone() {
+    @Override
+   public Object clone() {
       return this;
     }
-    public void setDefaultDatabase(String dburl) {
+    @Override
+   public void setDefaultDatabase(String dburl) {
       //log.error("Attempt to modify Immutable instance", new Throwable());
       throw new IllegalArgumentException("Immutable DBProperties instance");
     }
-    public DBProperties lock() {
+    @Override
+   public DBProperties lock() {
       return this;
     }
-    public DBProperties unlock() {
+    @Override
+   public DBProperties unlock() {
       return new Mutable(this);
     }
-    public boolean isLocked() {
+    @Override
+   public boolean isLocked() {
       return true;
     }
-    public void addQueryFile(String qfile, String module) {
+    @Override
+   public void addQueryFile(String qfile, String module) {
       //log.error("Attempt to modify Immutable instance", new Throwable());
       throw new IllegalArgumentException("Immutable DBProperties instance");
     }

@@ -26,8 +26,6 @@
 
 package org.cougaar.util;
 
-import java.util.*;
-
 /**
  * A "memoization" utility - as long as the specified condition object
  * doesn't change, then the result doesn't change.

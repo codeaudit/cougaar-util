@@ -37,7 +37,11 @@ class InputStreamImpl
 extends UnicastRemoteObject 
 implements InputStreamDecl {
 
-  private InputStream in;
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+private InputStream in;
   private byte[] tmpBuf;
 
   public InputStreamImpl(

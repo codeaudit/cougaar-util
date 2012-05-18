@@ -28,7 +28,11 @@ package org.cougaar.core.component;
 
 /** Service event is a base class for all Service Events **/
 public abstract class ServiceEvent extends ComponentModelEvent {
-  private Class service;
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+private Class service;
 
   public ServiceEvent(ServiceBroker sb, Class service) {
     super(sb);

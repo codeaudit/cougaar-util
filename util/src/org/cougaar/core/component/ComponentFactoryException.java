@@ -31,7 +31,12 @@ package org.cougaar.core.component;
  **/
 public class ComponentFactoryException extends ComponentRuntimeException
 {
-  public ComponentFactoryException(String explanation, ComponentDescription cd, Throwable nestedException) {
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+
+public ComponentFactoryException(String explanation, ComponentDescription cd, Throwable nestedException) {
     super(explanation, cd, nestedException);
   }
   

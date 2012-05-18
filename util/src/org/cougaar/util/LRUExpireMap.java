@@ -48,7 +48,12 @@ import java.util.Map;
  */
 public class LRUExpireMap extends LinkedHashMap {
 
-  /** configuration controller */
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+
+/** configuration controller */
   public interface Config {
     /** the initial size for the map */
     int initialSize();
@@ -79,7 +84,8 @@ public class LRUExpireMap extends LinkedHashMap {
     this.watcher = watcher;
   }
 
-  public Object get(Object key) {
+  @Override
+public Object get(Object key) {
     return get(key, false);
   }
 
@@ -95,7 +101,7 @@ public class LRUExpireMap extends LinkedHashMap {
    * @return the value
    */
   public Object get(Object key, boolean bypass) {
-    Expirable eo = (Expirable) getExpirable(key, bypass);
+    Expirable eo = getExpirable(key, bypass);
     return (eo == null ? null : eo.value);
   }
 
@@ -105,7 +111,7 @@ public class LRUExpireMap extends LinkedHashMap {
    * @return -1 if the entry is not in the cache or has expired.
    */
   public long getExpirationTime(Object key) {
-    Expirable eo = (Expirable) getExpirable(key, false);
+    Expirable eo = getExpirable(key, false);
     return (eo == null ? -1 : eo.expireTime);
   }
 
@@ -145,7 +151,8 @@ public class LRUExpireMap extends LinkedHashMap {
    * @throws UnsupportedOperationException 
    *   Must specify an expiration time
    */
-  public Object put(Object key, Object value) {
+  @Override
+public Object put(Object key, Object value) {
     throw new UnsupportedOperationException(
         "Must specify an expiration time");
   }
@@ -174,7 +181,8 @@ public class LRUExpireMap extends LinkedHashMap {
    * Called by the LinkedHashMap when an entry is added,
    * this allows the cache to remove the LRU "eldest" entry.
    */
-  protected boolean removeEldestEntry(Map.Entry eldest) {
+  @Override
+protected boolean removeEldestEntry(Map.Entry eldest) {
     // check size
     int origSize = size();
     if (origSize < config.maxSize()) {
@@ -260,6 +268,10 @@ public class LRUExpireMap extends LinkedHashMap {
    */
   public static class Expirable 
     implements Serializable {
+      /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
       public final Object value;
       public final long putTime;
       public final long expireTime;
@@ -277,6 +289,7 @@ public class LRUExpireMap extends LinkedHashMap {
               now+")");
         }
       }
+      @Override
       public String toString() {
         return 
           "(updated="+putTime+

@@ -26,6 +26,11 @@
 
 package org.cougaar.util.log.log4j;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashSet;
+
 import org.apache.log4j.Category;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;
@@ -34,11 +39,6 @@ import org.cougaar.bootstrap.SystemProperties;
 import org.cougaar.util.StackElements;
 import org.cougaar.util.log.LoggerAdapter;
 import org.cougaar.util.log.Logging;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashSet;
 
 /**
  * Package-private log4j implementation of logger.
@@ -110,7 +110,8 @@ class LoggerImpl extends LoggerAdapter {
   /**
    * @see Logger.isEnabledFor see interface for notes
    */
-  public boolean isEnabledFor(int level) {
+  @Override
+public boolean isEnabledFor(int level) {
     if (level > WARN) {
       return true;
     } else {
@@ -119,7 +120,8 @@ class LoggerImpl extends LoggerAdapter {
     }
   }
 
-  public void log(int level, String message, Throwable t) {
+  @Override
+public void log(int level, String message, Throwable t) {
     Level p = Util.convertIntToLevel(level);
     if (checkForWrappers && !cat.isEnabledFor(p)) {
       Throwable th = new Throwable();
@@ -178,7 +180,8 @@ class LoggerImpl extends LoggerAdapter {
     }
   }
 
-  public String toString() {
+  @Override
+public String toString() {
     return
         "logger \"" + cat.getName() + "\" at " +
         (isDetailEnabled() ? "detail" :

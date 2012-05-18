@@ -148,7 +148,8 @@ public class PipedInputStream extends InputStream {
    * Read a single byte. Waits for the byte to be available if necessary.
    * @return the next byte in the buffer as an int.
    **/
-  public synchronized int read() throws IOException {
+  @Override
+public synchronized int read() throws IOException {
     if (closed) throw new IOException("Closed");
     while (space == buffer.length) {
       try {
@@ -171,7 +172,8 @@ public class PipedInputStream extends InputStream {
    * @param b the byte array to fill.
    * @return the number of bytes read or -1 if eof has been reached.
    **/
-  public synchronized int read(byte[] b) throws IOException {
+  @Override
+public synchronized int read(byte[] b) throws IOException {
     return read(b, 0, b.length);
   }
 
@@ -183,7 +185,8 @@ public class PipedInputStream extends InputStream {
    * @return the number of bytes read. If eof has been reached, -1 is
    * returned. if len is zero, then zero is returned.
    **/
-  public synchronized int read(byte[] b, int off, int len) throws IOException {
+  @Override
+public synchronized int read(byte[] b, int off, int len) throws IOException {
     if (closed) throw new IOException("Closed");
     int result = 0;
     while (len > 0) {

@@ -555,7 +555,8 @@ class RemoteProcessManagerImpl implements RemoteProcessManager {
         case DEAD: return "dead";
       }
     }
-    public String toString() {
+    @Override
+   public String toString() {
       return pd+", state="+getState(state);
     }
   }

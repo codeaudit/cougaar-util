@@ -30,6 +30,8 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.net.InetAddress;
+import java.net.URL;
 import java.util.AbstractMap;
 import java.util.AbstractSet;
 import java.util.ArrayList;
@@ -47,8 +49,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.net.URL;
-import java.net.InetAddress;
+
 import org.cougaar.bootstrap.SystemProperties;
 
 /**
@@ -116,7 +117,12 @@ public final class Arguments extends AbstractMap<String, List<String>>
     implements
         Serializable {
 
-    /** A singleton instance for an empty arguments */
+    /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+
+   /** A singleton instance for an empty arguments */
     public static final Arguments EMPTY_INSTANCE = new Arguments(null);
 
     /** @see toString(String,String) */
@@ -531,16 +537,19 @@ public final class Arguments extends AbstractMap<String, List<String>>
     // Required base class methods:
     //
 
-    public Set<Map.Entry<String, List<String>>> entrySet() {
+    @Override
+   public Set<Map.Entry<String, List<String>>> entrySet() {
         return m.entrySet();
     }
 
     // avoid linear scan through our "entrySet()":
-    public int size() {
+    @Override
+   public int size() {
         return m.size();
     }
 
-    public boolean containsKey(Object key) {
+    @Override
+   public boolean containsKey(Object key) {
         return (get(key) != null);
     }
 
@@ -687,7 +696,8 @@ public final class Arguments extends AbstractMap<String, List<String>>
     /**
      * @see #toString(String) Same as "{"+toString(null)+"}"
      */
-    public String toString() {
+    @Override
+   public String toString() {
         // return "{" + toString(null, null) + "}";
         return super.toString();
     }
@@ -1113,7 +1123,11 @@ public final class Arguments extends AbstractMap<String, List<String>>
      */
     private static final class OptimizedMapImpl extends
         AbstractMap<String, List<String>> implements OptimizedMap, Serializable {
-        private final String[] keys;
+        /**
+       * 
+       */
+      private static final long serialVersionUID = 1L;
+      private final String[] keys;
         private final String[] values;
 
         public OptimizedMapImpl(Map<String, List<String>> m) {
@@ -1142,13 +1156,16 @@ public final class Arguments extends AbstractMap<String, List<String>>
         }
 
         // required by our AbstractMap base class:
-        public Set<Map.Entry<String, List<String>>> entrySet() {
+        @Override
+      public Set<Map.Entry<String, List<String>>> entrySet() {
             return new AbstractSet<Map.Entry<String, List<String>>>() {
-                public int size() {
+                @Override
+               public int size() {
                     return keys.length;
                 }
 
-                public Iterator<Map.Entry<String, List<String>>> iterator() {
+                @Override
+               public Iterator<Map.Entry<String, List<String>>> iterator() {
                     return new Iterator<Map.Entry<String, List<String>>>() {
                         private int i = 0;
 
@@ -1184,7 +1201,8 @@ public final class Arguments extends AbstractMap<String, List<String>>
             };
         }
 
-        public boolean containsKey(Object key) {
+        @Override
+      public boolean containsKey(Object key) {
             for (int i = 0; i < keys.length; i++) {
                 if (key.equals(keys[i])) {
                     return true;

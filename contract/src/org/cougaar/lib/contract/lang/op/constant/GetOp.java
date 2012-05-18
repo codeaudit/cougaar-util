@@ -26,9 +26,13 @@
 
 package org.cougaar.lib.contract.lang.op.constant;
 
-import org.cougaar.lib.contract.lang.*;
-import org.cougaar.lib.contract.lang.op.OpCodes;
+import org.cougaar.lib.contract.lang.Op;
+import org.cougaar.lib.contract.lang.OpImpl;
+import org.cougaar.lib.contract.lang.OpParser;
+import org.cougaar.lib.contract.lang.ParseException;
+import org.cougaar.lib.contract.lang.TreeVisitor;
 import org.cougaar.lib.contract.lang.cache.ClassCache;
+import org.cougaar.lib.contract.lang.op.OpCodes;
 
 /**
  * Gets a constant state variable.
@@ -53,17 +57,23 @@ import org.cougaar.lib.contract.lang.cache.ClassCache;
 public final class GetOp
     extends OpImpl {
 
-  public String key;
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+public String key;
   public Object val;
   public Class clazz;
 
   public GetOp() {}
 
-  public final int getID() {
+  @Override
+public final int getID() {
     return OpCodes.GET_ID;
   }
 
-  public final Op parse(final OpParser p) throws ParseException {
+  @Override
+public final Op parse(final OpParser p) throws ParseException {
     Op u1 = p.nextOp();
     if ((u1 == null) ||
         (u1.getID() != OpCodes.CONSTANT_ID)) {
@@ -121,25 +131,30 @@ public final class GetOp
     return this;
   }
 
-  public final boolean isReturnBoolean() {
+  @Override
+public final boolean isReturnBoolean() {
     return (clazz == Boolean.TYPE);
   }
 
-  public final Class getReturnClass() {
+  @Override
+public final Class getReturnClass() {
     return clazz;
   }
 
-  public final boolean execute(final Object o) {
+  @Override
+public final boolean execute(final Object o) {
     // ignore o
     return ((Boolean)val).booleanValue();
   }
 
-  public final Object operate(final Object o) {
+  @Override
+public final Object operate(final Object o) {
     // ignore o, return val of type clazz
     return val;
   }
 
-  public final void setConst(final String key, final Object val) {
+  @Override
+public final void setConst(final String key, final Object val) {
     if ((this.key).equals(key)) {
       // check type
       if ((val != null) &&
@@ -153,7 +168,8 @@ public final class GetOp
     }
   }
 
-  public final void accept(TreeVisitor visitor) {
+  @Override
+public final void accept(TreeVisitor visitor) {
     // (get (key) [(type)])
     visitor.visitWord(OpCodes.GET_NAME);
     visitor.visitConstant(null, key);

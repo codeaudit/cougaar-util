@@ -26,9 +26,13 @@
 
 package org.cougaar.lib.contract.lang.op.reflect;
 
-import java.util.*;
-
-import org.cougaar.lib.contract.lang.*;
+import org.cougaar.lib.contract.lang.Op;
+import org.cougaar.lib.contract.lang.OpImpl;
+import org.cougaar.lib.contract.lang.OpParser;
+import org.cougaar.lib.contract.lang.ParseException;
+import org.cougaar.lib.contract.lang.TreeVisitor;
+import org.cougaar.lib.contract.lang.Type;
+import org.cougaar.lib.contract.lang.TypeList;
 import org.cougaar.lib.contract.lang.op.OpCodes;
 import org.cougaar.lib.contract.lang.op.logical.FalseOp;
 import org.cougaar.lib.contract.lang.op.logical.TrueOp;
@@ -43,7 +47,11 @@ public final class InstanceOfOp
     extends OpImpl 
     implements Type {
 
-  /** 
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+/** 
    * Multiple inheritance would be nice, in which case this class
    * could extend both <code>InstanceOfOp</code> and <code>TypeImpl</code>.
    */
@@ -74,11 +82,13 @@ public final class InstanceOfOp
     this(TypeImpl.getInstance(not, cl));
   }
 
-  public final int getID() {
+  @Override
+public final int getID() {
     return OpCodes.INSTANCEOF_ID;
   }
 
-  public final Op parse(final OpParser p) throws ParseException {
+  @Override
+public final Op parse(final OpParser p) throws ParseException {
     Op u1 = p.nextOp();
     if (u1 != null) {
       throw new ParseException(
@@ -137,7 +147,8 @@ public final class InstanceOfOp
     return type.toString(verbose);
   }
 
-  public final boolean execute(final Object o) {
+  @Override
+public final boolean execute(final Object o) {
     if (o == null) {
       return not;
     } else if (cl == Object.class) {
@@ -149,7 +160,8 @@ public final class InstanceOfOp
     }
   }
  
-  public final void accept(TreeVisitor visitor) {
+  @Override
+public final void accept(TreeVisitor visitor) {
     // (instanceofop)
     visitor.visitWord(type.toString(visitor.isVerbose()));
     visitor.visitEnd();

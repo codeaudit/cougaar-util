@@ -51,11 +51,17 @@ public class DemoMetalTheme extends DefaultMetalTheme {
   private final FontUIResource demoSmallFont = 
     new FontUIResource("Dialog", Font.PLAIN, 14); 
 
-  public FontUIResource getControlTextFont() { return demoControlFont;} 
-  public FontUIResource getSystemTextFont() { return demoSystemFont;} 
-  public FontUIResource getUserTextFont() { return demoUserFont;} 
-  public FontUIResource getMenuTextFont() { return demoControlFont;} 
-  public FontUIResource getWindowTitleFont() { return demoControlFont;} 
-  public FontUIResource getSubTextFont() { return demoSmallFont;} 
+  @Override
+public FontUIResource getControlTextFont() { return demoControlFont;} 
+  @Override
+public FontUIResource getSystemTextFont() { return demoSystemFont;} 
+  @Override
+public FontUIResource getUserTextFont() { return demoUserFont;} 
+  @Override
+public FontUIResource getMenuTextFont() { return demoControlFont;} 
+  @Override
+public FontUIResource getWindowTitleFont() { return demoControlFont;} 
+  @Override
+public FontUIResource getSubTextFont() { return demoSmallFont;} 
 } 
 

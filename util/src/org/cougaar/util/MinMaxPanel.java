@@ -38,8 +38,18 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
 public abstract class MinMaxPanel extends JPanel {
-  private JCheckBox enable = new JCheckBox();
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+private JCheckBox enable = new JCheckBox();
   private JProgressBar progress = new JProgressBar() {
+      /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+
+      @Override
       public Dimension getPreferredSize() {
         return new Dimension(100, super.getPreferredSize().height);
       }
@@ -117,11 +127,13 @@ public abstract class MinMaxPanel extends JPanel {
     progress.setString(((int) (max * (1.0f - completed))) + "");
   }
 
-  public void setEnabled(boolean b) {
+  @Override
+public void setEnabled(boolean b) {
     enable.setSelected(b);
   }
 
-  public boolean isEnabled() {
+  @Override
+public boolean isEnabled() {
     return enable.isSelected();
   }
 

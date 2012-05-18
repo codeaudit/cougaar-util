@@ -31,14 +31,13 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.beans.beancontext.*; /*make @see reference work*/
 
+import org.cougaar.util.Filters;
 import org.cougaar.util.GenericStateModel;
 import org.cougaar.util.GenericStateModelAdapter;
-import org.cougaar.util.RarelyModifiedList;
-import org.cougaar.util.Mappings;
 import org.cougaar.util.Mapping;
-import org.cougaar.util.Filters;
+import org.cougaar.util.Mappings;
+import org.cougaar.util.RarelyModifiedList;
 import org.cougaar.util.UnaryPredicate;
 import org.cougaar.util.log.Logger;
 import org.cougaar.util.log.Logging;
@@ -286,8 +285,7 @@ implements Container, StateObject
       return null;
     }
     if (!gotContainerView) {
-      ViewService vs = (ViewService)
-        serviceBroker.getService(this, ViewService.class, null);
+      ViewService vs = serviceBroker.getService(this, ViewService.class, null);
       if (vs != null) {
         ComponentView pv = vs.getComponentView();
         if (pv instanceof ContainerView) {
@@ -389,6 +387,11 @@ implements Container, StateObject
   }
 
   private static final UnaryPredicate pred_isComponentDescription = new UnaryPredicate() {
+      /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+
       public final boolean execute(Object o) { return o instanceof ComponentDescription; }};
 
   /** Get a List of all child components by description.
@@ -849,7 +852,8 @@ implements Container, StateObject
     }
   }
 
-  public void initialize() {
+  @Override
+public void initialize() {
     super.initialize();
     // not expecting any child components this early
     for (Iterator childBinders = binderIterator();
@@ -875,7 +879,8 @@ implements Container, StateObject
    * </ul>
    * in order.
    */
-  public void load() {
+  @Override
+public void load() {
     super.load();
     setExternalComponentDescriptions(findExternalComponentDescriptions());
     loadHighPriorityComponents();
@@ -885,7 +890,8 @@ implements Container, StateObject
     loadLowPriorityComponents();
   }
 
-  public void start() {
+  @Override
+public void start() {
     super.start();
     for (Iterator childBinders = binderIterator();
         childBinders.hasNext();
@@ -895,7 +901,8 @@ implements Container, StateObject
     }
   }
 
-  public void suspend() {
+  @Override
+public void suspend() {
     super.suspend();
     List childBinders = listBinders();
     for (int i = childBinders.size() - 1; i >= 0; i--) {
@@ -904,7 +911,8 @@ implements Container, StateObject
     }
   }
 
-  public void resume() {
+  @Override
+public void resume() {
     super.resume();
     for (Iterator childBinders = binderIterator();
         childBinders.hasNext();
@@ -914,7 +922,8 @@ implements Container, StateObject
     }
   }
 
-  public void stop() {
+  @Override
+public void stop() {
     super.stop();
     List childBinders = listBinders();
     for (int i = childBinders.size() - 1; i >= 0; i--) {
@@ -923,12 +932,14 @@ implements Container, StateObject
     }
   }
 
-  public void halt() {
+  @Override
+public void halt() {
     suspend();
     stop();
   }
 
-  public void unload() {
+  @Override
+public void unload() {
     super.unload();
 
     List childBinders = listBinders();
@@ -1041,6 +1052,7 @@ implements Container, StateObject
 
   private static class DefaultBinderFactory
     extends BinderFactorySupport {
+      @Override
       public Binder getBinder(Object child) {
         return new DefaultBinder(this, child);
       }
@@ -1050,7 +1062,8 @@ implements Container, StateObject
           public DefaultBinder(BinderFactory bf, Object child) {
             super(bf, child);
           }
-          protected BindingSite getBinderProxy() {
+          @Override
+         protected BindingSite getBinderProxy() {
             return this;
           }
         }

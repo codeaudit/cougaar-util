@@ -37,7 +37,12 @@ import org.cougaar.tools.server.RemoteListenableConfig;
 class RemoteListenableConfigWrapper 
 implements java.io.Serializable { 
 
-  private final OutputListenerDecl old;
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+
+private final OutputListenerDecl old;
 
   // let "rlc" make the "ol" transient
   private final RemoteListenableConfig rlc;

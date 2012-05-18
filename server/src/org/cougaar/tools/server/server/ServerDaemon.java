@@ -170,7 +170,8 @@ public class ServerDaemon {
             DEFAULT_TEMP_PATH);
     }
 
-    public String toString() {
+    @Override
+   public String toString() {
       return 
         "Server Configuration {"+
         "\n  verbose: "+verbose+

@@ -26,10 +26,15 @@
 
 package org.cougaar.lib.contract.lang.parser;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StreamTokenizer;
+import java.io.StringReader;
 
-import org.cougaar.lib.contract.lang.*;
+import org.cougaar.lib.contract.lang.ParseException;
+import org.cougaar.lib.contract.lang.TreeVisitor;
 
 /**
  * A "paren" semi-lisp styled <code>Op</code> parser which can be
@@ -92,7 +97,7 @@ readTokens:
       switch (token) {
         case StreamTokenizer.TT_EOF:
           break readTokens;
-        case (int)')':
+        case ')':
           // END
           if ((--depth) < 0) {
             // treat extra ")"s as "EndOfTree"
@@ -134,7 +139,7 @@ readTokens:
                 throw new ParseException(
                   "Parser received IO Exception \""+ioe+"\"");
               }
-              if (tok1 == (int)')') {
+              if (tok1 == ')') {
                 // typical string
               } else if (tok0 == StreamTokenizer.TT_EOF) {
                 break readTokens;

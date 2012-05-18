@@ -26,8 +26,9 @@
 
 package org.cougaar.util;
 
+import junit.framework.Test;
 import junit.framework.TestCase;
-import junit.framework.*;
+import junit.framework.TestSuite;
 
 public class UtilTest extends TestCase {
   public void test1() {

@@ -77,7 +77,8 @@ public class PipedOutputStream extends java.io.OutputStream {
    * @exception IOException if this stream is closed or not connected
    * or connected to a closed PipedInputStream.
    **/
-  public synchronized void write(int b) throws IOException {
+  @Override
+public synchronized void write(int b) throws IOException {
     if (closed) throw new IOException("Closed");
     if (pis == null) throw new IOException("Not Connected");
     pis.put(b);
@@ -90,7 +91,8 @@ public class PipedOutputStream extends java.io.OutputStream {
    * @exception IOException if this stream is closed or not connected
    * or connected to a closed PipedInputStream.
    **/
-  public synchronized void write(byte[] b, int off, int len) throws IOException {
+  @Override
+public synchronized void write(byte[] b, int off, int len) throws IOException {
     if (closed) throw new IOException("Closed");
     if (pis == null) throw new IOException("Not Connected");
     pis.put(b, off, len);
@@ -103,7 +105,8 @@ public class PipedOutputStream extends java.io.OutputStream {
    * @exception IOException if this stream is closed or not connected
    * or connected to a closed PipedInputStream.
    **/
-  public synchronized void write(byte[] b) throws IOException {
+  @Override
+public synchronized void write(byte[] b) throws IOException {
     if (closed) throw new IOException("Closed");
     if (pis == null) throw new IOException("Not Connected");
     pis.put(b, 0, b.length);
@@ -114,7 +117,8 @@ public class PipedOutputStream extends java.io.OutputStream {
    * the reader of the connected PipedInputStream.
    * @exception IOException if this stream is closed or not connected.
    **/
-  public synchronized void flush() throws IOException {
+  @Override
+public synchronized void flush() throws IOException {
     if (closed) throw new IOException("Closed");
     if (pis == null) throw new IOException("Not Connected");
     pis.flush();
@@ -125,7 +129,8 @@ public class PipedOutputStream extends java.io.OutputStream {
    * EOF when all the bytes have been read.
    * @exception IOException if this stream is already closed
    **/
-  public synchronized void close() throws IOException {
+  @Override
+public synchronized void close() throws IOException {
     if (closed) throw new IOException("Closed");
     if (pis != null) {
       pis.setEOF();

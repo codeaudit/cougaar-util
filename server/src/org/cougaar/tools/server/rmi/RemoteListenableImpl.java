@@ -42,7 +42,11 @@ class RemoteListenableImpl
 extends UnicastRemoteObject 
 implements RemoteListenableDecl {
 
-  private final RemoteListenable rl;
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+private final RemoteListenable rl;
 
   public RemoteListenableImpl(
       RemoteListenable rl) throws RemoteException {

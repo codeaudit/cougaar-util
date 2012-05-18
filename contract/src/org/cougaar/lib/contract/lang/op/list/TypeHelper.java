@@ -26,9 +26,14 @@
 
 package org.cougaar.lib.contract.lang.op.list;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
 
-import org.cougaar.lib.contract.lang.*;
+import org.cougaar.lib.contract.lang.OpParser;
+import org.cougaar.lib.contract.lang.Type;
+import org.cougaar.lib.contract.lang.TypeList;
 
 /**
  **/

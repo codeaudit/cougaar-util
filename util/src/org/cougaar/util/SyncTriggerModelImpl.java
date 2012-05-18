@@ -97,6 +97,7 @@ public final class SyncTriggerModelImpl implements TriggerModel {
       public void trigger() {
         runInnerTrigger();
       }
+      @Override
       public String toString() {
         return SyncTriggerModelImpl.this.toString();
       }
@@ -439,7 +440,8 @@ public final class SyncTriggerModelImpl implements TriggerModel {
     }
   }
 
-  public String toString() {
+  @Override
+public String toString() {
     int s = state;
     return 
       getState(s)+":"+
@@ -459,7 +461,8 @@ public final class SyncTriggerModelImpl implements TriggerModel {
     public synchronized void addRun() {
       runCounter++;
     }
-    public synchronized String toString() {
+    @Override
+   public synchronized String toString() {
       return
         "\nTRIGGER-PROFILE {"+
         "\n  #triggers:  "+trigCounter+

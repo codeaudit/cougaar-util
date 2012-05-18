@@ -26,7 +26,6 @@
 package org.cougaar.core.component;
 
 import java.util.Collection;
-import java.beans.beancontext.*; /*make @see reference work*/
 
 /** 
  * A Component which contains other components.

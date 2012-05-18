@@ -29,26 +29,23 @@ import java.io.CharArrayWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.URIResolver;
-import javax.xml.transform.sax.SAXResult;
-import javax.xml.transform.sax.SAXSource;
-import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.stream.StreamSource;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
@@ -657,6 +654,12 @@ public final class CommandLine {
     // record any "setProperty(..)" changes
     final Map m2 = m;
     final Properties props = new Properties(p) {
+      /**
+       * 
+       */
+      private static final long serialVersionUID = 1L;
+
+      @Override
       public Object put(Object key, Object value) {
         Object ret = super.put(key, value);
         if (debug) {
@@ -668,12 +671,15 @@ public final class CommandLine {
     };
     // wrap the bootstrapper to use our props
     Bootstrapper b = new Bootstrapper() {
+      @Override
       protected String getProperty(String key) {
         return props.getProperty(key);
       }
+      @Override
       protected String getProperty(String key, String def) {
         return props.getProperty(key, def);
       }
+      @Override
       protected Properties getProperties() {
         return props;
       }
@@ -821,7 +827,11 @@ public final class CommandLine {
   /** Java command data, including the -Ds */
   public static final class CommandData implements Serializable {
 
-    private final String command;
+    /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+   private final String command;
     private final List vm_parameters;
     private final String clazz;
     private final List prog_parameters;
@@ -867,7 +877,8 @@ public final class CommandLine {
     /** The arguments after the classname */
     public List getArguments() { return prog_parameters; }
 
-    public String toString() {
+    @Override
+   public String toString() {
       StringBuffer buf = new StringBuffer();
       if (command != null) {
         buf.append(command);
@@ -958,7 +969,8 @@ public final class CommandLine {
     }
 
     // begin element
-    public void startElement(
+    @Override
+   public void startElement(
         String namespaceURI,
         String localName,
         String qName,
@@ -987,7 +999,8 @@ public final class CommandLine {
       }
 
     // misc characters within an element, e.g. vm_parameter data
-    public void characters(char[] ch, int start, int length)
+    @Override
+   public void characters(char[] ch, int start, int length)
       throws SAXException {
         if (inString) {
           // inside string tag (e.g. vm_parameter), so save characters
@@ -996,7 +1009,8 @@ public final class CommandLine {
       }
 
     // end element
-    public void endElement(
+    @Override
+   public void endElement(
         String namespaceURI, String localName, String qName
         ) throws SAXException {
       if (localName.equals("node") ||

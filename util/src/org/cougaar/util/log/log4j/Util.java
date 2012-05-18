@@ -115,12 +115,12 @@ final class Util {
   public static final int convertLevelToInt(Level level) {
     switch (level.toInt()) {
       case DetailPriority.DETAIL_INT:return Logger.DETAIL;
-      case Level.DEBUG_INT:          return Logger.DEBUG;
-      case Level.INFO_INT:           return Logger.INFO;
-      case Level.WARN_INT:           return Logger.WARN;
-      case Level.ERROR_INT:          return Logger.ERROR;
+      case Priority.DEBUG_INT:          return Logger.DEBUG;
+      case Priority.INFO_INT:           return Logger.INFO;
+      case Priority.WARN_INT:           return Logger.WARN;
+      case Priority.ERROR_INT:          return Logger.ERROR;
       case ShoutPriority.SHOUT_INT:  return Logger.SHOUT;
-      case Level.FATAL_INT:          return Logger.FATAL;
+      case Priority.FATAL_INT:          return Logger.FATAL;
       default:                       return 0;
     }
   }

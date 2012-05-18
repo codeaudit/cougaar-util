@@ -37,7 +37,8 @@ public abstract class ContainedBinderSupport
   }
 
   // ComponentDescription getComponentDescription();
-  protected void setServiceBroker(ServiceBroker realsb) {
+  @Override
+protected void setServiceBroker(ServiceBroker realsb) {
     super.setServiceBroker(new ContainedServiceBroker(realsb));
   }
 
@@ -46,7 +47,8 @@ public abstract class ContainedBinderSupport
       super(delegate);
     }
     
-    protected Object getLocalService(Object requestor, final Class serviceClass, final ServiceRevokedListener srl) {
+    @Override
+   protected Object getLocalService(Object requestor, final Class serviceClass, final ServiceRevokedListener srl) {
       if (serviceClass == ContainedService.class) {
         if (requestor == getComponent()) {
           return new ContainedService() {

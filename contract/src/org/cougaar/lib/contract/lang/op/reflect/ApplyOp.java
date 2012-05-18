@@ -26,9 +26,12 @@
 
 package org.cougaar.lib.contract.lang.op.reflect;
 
-import java.util.*;
-
-import org.cougaar.lib.contract.lang.*;
+import org.cougaar.lib.contract.lang.Op;
+import org.cougaar.lib.contract.lang.OpImpl;
+import org.cougaar.lib.contract.lang.OpParser;
+import org.cougaar.lib.contract.lang.ParseException;
+import org.cougaar.lib.contract.lang.TreeVisitor;
+import org.cougaar.lib.contract.lang.TypeList;
 import org.cougaar.lib.contract.lang.op.OpCodes;
 
 /**
@@ -50,7 +53,12 @@ import org.cougaar.lib.contract.lang.op.OpCodes;
 public final class ApplyOp
     extends OpImpl {
 
-  public Op u1;
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+
+public Op u1;
 
   public Op u2;
 
@@ -67,11 +75,13 @@ public final class ApplyOp
     this.u2 = u2;
   }
 
-  public final int getID() {
+  @Override
+public final int getID() {
     return OpCodes.APPLY_ID;
   }
 
-  public final Op parse(final OpParser p) throws ParseException {
+  @Override
+public final Op parse(final OpParser p) throws ParseException {
     TypeList origTypeList = p.cloneTypeList();
     
     // typically u1 is a method...
@@ -117,16 +127,19 @@ public final class ApplyOp
     }
   }
 
-  public boolean execute(final Object o) {
+  @Override
+public boolean execute(final Object o) {
     return u2.execute(u1.operate(o));
   }
 
-  public final void setConst(final String key, final Object val) {
+  @Override
+public final void setConst(final String key, final Object val) {
     u1.setConst(key, val);
     u2.setConst(key, val);
   }
 
-  public final void accept(TreeVisitor visitor) {
+  @Override
+public final void accept(TreeVisitor visitor) {
     if (u1 != null) {
       if (!(visitor.isVerbose()) && (u2 != null)) {
         // special shorthand for method/fields

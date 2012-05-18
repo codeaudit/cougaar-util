@@ -26,14 +26,24 @@
 
 package org.cougaar.lib.contract.lang.op;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.cougaar.lib.contract.lang.*;
-import org.cougaar.lib.contract.lang.op.constant.*;
-import org.cougaar.lib.contract.lang.op.logical.*;
-import org.cougaar.lib.contract.lang.op.list.*;
-import org.cougaar.lib.contract.lang.op.reflect.*;
-import org.cougaar.lib.contract.lang.cache.ClassCache;
+import org.cougaar.lib.contract.lang.Op;
+import org.cougaar.lib.contract.lang.op.constant.ConstantOp;
+import org.cougaar.lib.contract.lang.op.constant.GetOp;
+import org.cougaar.lib.contract.lang.op.list.AllOp;
+import org.cougaar.lib.contract.lang.op.list.EmptyOp;
+import org.cougaar.lib.contract.lang.op.list.ExistsOp;
+import org.cougaar.lib.contract.lang.op.logical.AndOp;
+import org.cougaar.lib.contract.lang.op.logical.FalseOp;
+import org.cougaar.lib.contract.lang.op.logical.NotOp;
+import org.cougaar.lib.contract.lang.op.logical.OrOp;
+import org.cougaar.lib.contract.lang.op.logical.TrueOp;
+import org.cougaar.lib.contract.lang.op.reflect.ApplyOp;
+import org.cougaar.lib.contract.lang.op.reflect.InstanceOfOp;
+import org.cougaar.lib.contract.lang.op.reflect.ReflectOp;
+import org.cougaar.lib.contract.lang.op.reflect.ThisOp;
 
 public final class OpBuilder implements OpCodes {
 

@@ -36,7 +36,11 @@ import java.util.Date;
  */
 public class MutableTimeSpan implements NewTimeSpan, Serializable {
 
-  private long myStartTime = MIN_VALUE;
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+private long myStartTime = MIN_VALUE;
   private long myEndTime = MAX_VALUE;
 
   /**
@@ -85,7 +89,8 @@ public class MutableTimeSpan implements NewTimeSpan, Serializable {
    * @param object Object to compare
    * @return boolean if 'same' 
    */
-  public boolean equals(Object object) {
+  @Override
+public boolean equals(Object object) {
     if (object == this) {
       return true;
     }
@@ -99,11 +104,13 @@ public class MutableTimeSpan implements NewTimeSpan, Serializable {
 	    (getEndTime() == other.getEndTime()));
   }
       
-  public int hashCode() {
+  @Override
+public int hashCode() {
     return (int) (myStartTime + (myEndTime * 1000));
   }
 
-  public String toString() {
+  @Override
+public String toString() {
     return "[" + dateString(new Date(myStartTime)) + " - " + dateString(new Date(myEndTime)) + "]";
   }
 

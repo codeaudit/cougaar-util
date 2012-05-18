@@ -44,7 +44,11 @@ class RemoteProcessManagerImpl
   implements RemoteProcessManagerDecl 
 {
 
-  private final RemoteProcessManager rpm;
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+private final RemoteProcessManager rpm;
 
   public RemoteProcessManagerImpl(
       RemoteProcessManager rpm) throws RemoteException {

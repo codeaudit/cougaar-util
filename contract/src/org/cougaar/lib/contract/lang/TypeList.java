@@ -26,7 +26,7 @@
 
 package org.cougaar.lib.contract.lang;
 
-import java.util.*;
+import java.util.List;
 
 /**
  * Holds a list of <code>Type</code> assertions about the current Object, such

@@ -25,11 +25,10 @@
  */
 
 package org.cougaar.util;
-import java.util.*;
-import java.io.*;
+import java.io.IOException;
+import java.io.StringReader;
 
 import junit.framework.TestCase;
-import junit.framework.*;
 
 public class TestDBProperties extends TestCase {
 

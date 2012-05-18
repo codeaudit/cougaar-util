@@ -37,6 +37,10 @@ import java.io.Serializable;
 public class LogTarget implements Serializable {
 
   /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+/**
    * Generic target type identifiers.
    * <p>
    * The value of these constants may be modified in the future
@@ -92,7 +96,8 @@ public class LogTarget implements Serializable {
     return loggingLevel;
   }
 
-  public String toString() {
+  @Override
+public String toString() {
     return "logger \""+name+"\"";
   }
 }

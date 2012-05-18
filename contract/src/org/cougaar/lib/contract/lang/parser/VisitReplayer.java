@@ -26,9 +26,7 @@
 
 package org.cougaar.lib.contract.lang.parser;
 
-import java.util.*;
-
-import org.cougaar.lib.contract.lang.*;
+import org.cougaar.lib.contract.lang.TreeVisitor;
 
 /**
  * Uses a <code>VisitTokenizer</code> which controls a

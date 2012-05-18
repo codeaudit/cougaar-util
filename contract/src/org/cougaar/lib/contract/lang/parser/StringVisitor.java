@@ -26,7 +26,7 @@
 
 package org.cougaar.lib.contract.lang.parser;
 
-import org.cougaar.lib.contract.lang.*;
+import org.cougaar.lib.contract.lang.TreeVisitor;
 
 /**
  * A <code>TreeVisitor</code> with "pretty-printer" capability.

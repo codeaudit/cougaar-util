@@ -26,10 +26,16 @@
 
 package org.cougaar.lib.contract.lang.op.reflect;
 
-import java.util.*;
-import java.lang.reflect.*;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.cougaar.lib.contract.lang.*;
+import org.cougaar.lib.contract.lang.Op;
+import org.cougaar.lib.contract.lang.OpImpl;
+import org.cougaar.lib.contract.lang.OpParser;
+import org.cougaar.lib.contract.lang.ParseException;
+import org.cougaar.lib.contract.lang.TreeVisitor;
+import org.cougaar.lib.contract.lang.TypeList;
 import org.cougaar.lib.contract.lang.op.OpCodes;
 
 /** 
@@ -41,7 +47,11 @@ import org.cougaar.lib.contract.lang.op.OpCodes;
 public final class MethodOp
     extends OpImpl {
 
-  public Method meth;
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+public Method meth;
   public Op[] argOps;
   public Object[] argBuf;
 
@@ -50,14 +60,16 @@ public final class MethodOp
 
   public MethodOp() {}
 
-  public final int getID() {
+  @Override
+public final int getID() {
     return OpCodes.METHOD_ID;
   }
 
   /**
    * <code>ReflectOp</code> should use <tt>parseMethod</tt>.
    */
-  public final Op parse(final OpParser p) throws ParseException {
+  @Override
+public final Op parse(final OpParser p) throws ParseException {
     throw new ParseException("Internal use should be \"parseMethod\"");
   }
 
@@ -355,20 +367,24 @@ public final class MethodOp
     }
   }
 
-  public final boolean isReturnBoolean() {
+  @Override
+public final boolean isReturnBoolean() {
     return (getReturnClass() == Boolean.TYPE);
   }
 
-  public final Class getReturnClass() {
+  @Override
+public final Class getReturnClass() {
     return meth.getReturnType();
   }
 
-  public final boolean execute(final Object o) {
+  @Override
+public final boolean execute(final Object o) {
     Object ret = operate(o);
     return ((Boolean)ret).booleanValue();
   }
 
-  public final Object operate(final Object o) {
+  @Override
+public final Object operate(final Object o) {
     for (int i = 0; i < argBuf.length; i++) {
       argBuf[i] = (argOps[i]).operate(o);
     }
@@ -381,7 +397,8 @@ public final class MethodOp
     }
   }
 
-  public final void setConst(final String key, final Object val) {
+  @Override
+public final void setConst(final String key, final Object val) {
     for (int i = 0; i < argBuf.length; i++) {
       argOps[i].setConst(key, val);
     }
@@ -391,7 +408,8 @@ public final class MethodOp
     return ReflectOp.toString(meth, verbose);
   }
 
-  public final void accept(TreeVisitor visitor) {
+  @Override
+public final void accept(TreeVisitor visitor) {
     // (method op0 op1 .. opN)
     visitor.visitWord(getMethodString(visitor.isVerbose()));
     if (argOps == zeroOps) {

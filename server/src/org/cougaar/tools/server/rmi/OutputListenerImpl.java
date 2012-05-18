@@ -39,7 +39,11 @@ class OutputListenerImpl
 extends UnicastRemoteObject 
 implements OutputListenerDecl, java.rmi.server.Unreferenced {
 
-  private long ct;
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+private long ct;
   private OutputListener ol;
 
   public OutputListenerImpl(

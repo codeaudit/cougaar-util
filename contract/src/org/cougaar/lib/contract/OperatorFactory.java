@@ -27,7 +27,6 @@
 package org.cougaar.lib.contract;
 
 import java.io.FileReader;
-import java.io.PrintStream;
 
 /**
  * Factory which can <tt>create</tt> <code>Operator</code>s.
@@ -163,7 +162,8 @@ public abstract class OperatorFactory {
       final String errorMsg = e.toString();
       // create dummy factory that throws an Exception!
       return new OperatorFactory() {
-        public Operator create(int style, Object inObj) 
+        @Override
+      public Operator create(int style, Object inObj) 
             throws Exception {
           throw new UnsupportedOperationException(
             "OperatorFactory \""+classname+"\" not available!\n"+

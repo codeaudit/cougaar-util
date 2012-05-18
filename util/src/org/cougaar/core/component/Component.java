@@ -26,7 +26,6 @@
 package org.cougaar.core.component;
 
 import org.cougaar.util.GenericStateModel;
-import java.beans.beancontext.*; /*make @see reference work*/
 
 /** A Component is the base class of the Component and
  * Service Model.  Components form a strict hierarchy

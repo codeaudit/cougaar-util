@@ -26,20 +26,66 @@
  
 package org.cougaar.tools.server.examples;
 
-import java.util.*;
-import java.awt.*;
-import java.awt.datatransfer.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.RandomAccessFile;
 import java.net.URL;
-import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import javax.swing.*;
-import javax.swing.text.*;
-import javax.swing.border.*;
-import javax.swing.event.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
-import org.cougaar.tools.server.*;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.text.DefaultStyledDocument;
+import javax.swing.text.Document;
+
+import org.cougaar.tools.server.OutputBundle;
+import org.cougaar.tools.server.OutputListener;
+import org.cougaar.tools.server.OutputPolicy;
+import org.cougaar.tools.server.ProcessDescription;
+import org.cougaar.tools.server.RemoteFileSystem;
+import org.cougaar.tools.server.RemoteHost;
+import org.cougaar.tools.server.RemoteHostRegistry;
+import org.cougaar.tools.server.RemoteListenable;
+import org.cougaar.tools.server.RemoteListenableConfig;
+import org.cougaar.tools.server.RemoteProcess;
+import org.cougaar.tools.server.URLListener;
 import org.cougaar.tools.server.system.ProcessStatus;
 
 // import org.cougaar.tools.server.examples.DocumentOutputStream;
@@ -67,7 +113,12 @@ public class GuiConsole {
 
   protected class NodePanel extends JPanel {
 
-    private JTabbedPane nodePane;
+    /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+
+   private JTabbedPane nodePane;
 
     private JTextArea stdoutArea;
     private JScrollPane stdoutPane;
@@ -256,7 +307,7 @@ public class GuiConsole {
           });
 
       // label for NodePanel name
-      JLabel titleLabel = new JLabel(ConfigFileName, JLabel.CENTER);
+      JLabel titleLabel = new JLabel(ConfigFileName, SwingConstants.CENTER);
       titleLabel.setFont(new Font("sans", Font.BOLD, 16));
       titleLabel.setForeground(Color.black);
 
@@ -606,11 +657,12 @@ public class GuiConsole {
     private String getLogFileName(String prefix) {
       return 
         prefix + 
-        GuiConsole.this.fileDateFormat.format(new Date()) + 
+        GuiConsole.fileDateFormat.format(new Date()) + 
         ".log";
     }
 
-    public Dimension getPreferredSize() {
+    @Override
+   public Dimension getPreferredSize() {
       return new Dimension(850, 350);
     }
 
@@ -749,6 +801,7 @@ public class GuiConsole {
       frame.getContentPane().add(component);
       frame.addWindowListener(
           new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
               guiconsole.stop();
               System.exit(0);

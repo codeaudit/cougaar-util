@@ -25,10 +25,16 @@
  */
 package org.cougaar.tools.server.examples;
 
-import java.io.*;
-import java.util.*;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
-import org.cougaar.tools.server.system.*;
+import org.cougaar.tools.server.system.InvokeUtility;
+import org.cougaar.tools.server.system.JavaThreadDumper;
+import org.cougaar.tools.server.system.ProcessLauncher;
+import org.cougaar.tools.server.system.ProcessStatus;
+import org.cougaar.tools.server.system.ProcessStatusReader;
+import org.cougaar.tools.server.system.SystemAccessFactory;
 
 /**
  * Example usage of the "system" utilities.

@@ -26,9 +26,7 @@
 
 package org.cougaar.lib.contract.lang.type;
 
-import java.util.*;
-
-import org.cougaar.lib.contract.lang.*;
+import org.cougaar.lib.contract.lang.Type;
 import org.cougaar.lib.contract.lang.cache.ClassCache;
 
 /**
@@ -165,7 +163,8 @@ public class TypeImpl implements org.cougaar.lib.contract.lang.Type {
     }
   }
 
-  public final String toString() {
+  @Override
+public final String toString() {
     return toString(true);
   }
 
@@ -208,7 +207,8 @@ public class TypeImpl implements org.cougaar.lib.contract.lang.Type {
        (cl.equals(xcl)));
   }
 
-  public final boolean equals(final Object o) {
+  @Override
+public final boolean equals(final Object o) {
     return ((o instanceof Type) ? equals((Type)o) : false);
   }
 
@@ -234,7 +234,7 @@ public class TypeImpl implements org.cougaar.lib.contract.lang.Type {
    */
   public static Type random() {
     boolean rnot = (Math.random() > 0.5);
-    int rclIdx = (int)(Math.random() * (double)randomClassNames.length);
+    int rclIdx = (int)(Math.random() * randomClassNames.length);
     if (rclIdx >= randomClassNames.length) {
       rclIdx--;
     }

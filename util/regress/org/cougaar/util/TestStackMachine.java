@@ -25,16 +25,18 @@
  */
 
 package org.cougaar.util;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 
 import junit.framework.TestCase;
-import junit.framework.*;
 
 public class TestStackMachine extends TestCase {
   private class MySM extends StackMachine {
     private String seq = null;    // we'll accumulate the states here (yuck)
     String getSeq() { return seq; }
-    protected void _set(State s) {
+    @Override
+   protected void _set(State s) {
       if (seq == null) {
         seq = s.getKey();
       } else {
@@ -48,36 +50,42 @@ public class TestStackMachine extends TestCase {
   public void test_sm1() {
     MySM sm = new MySM();
             
-    sm.add(new StackMachine.SState("A") { public void invoke() { 
+    sm.add(new StackMachine.SState("A") { @Override
+   public void invoke() { 
       setVar("i", new Integer(1));
       call("X", getVar("i"), "B");
     }});
-    sm.add(new StackMachine.SState("B") { public void invoke() { 
+    sm.add(new StackMachine.SState("B") { @Override
+   public void invoke() { 
       Integer i = (Integer) getVar("i");
       //System.err.println(""+i+"*"+i+" = "+getResult());
       setVar("i", new Integer(1+i.intValue()));
       call("X", getVar("i"), "C");
     }});
-    sm.add(new StackMachine.SState("C") { public void invoke() { 
+    sm.add(new StackMachine.SState("C") { @Override
+   public void invoke() { 
       Integer i = (Integer) getVar("i");
       //System.err.println(""+i+"*"+i+" = "+getResult());
       setVar("i", new Integer(1+i.intValue()));
       call("X", getVar("i"), "D");
     }});
-    sm.add(new StackMachine.SState("D") { public void invoke() { 
+    sm.add(new StackMachine.SState("D") { @Override
+   public void invoke() { 
       Integer i = (Integer) getVar("i");
       //System.err.println(""+i+"*"+i+" = "+getResult());
       setVar("i", new Integer(1+i.intValue()));
       call("X", getVar("i"), "E");
     }});
-    sm.add(new StackMachine.SState("E") { public void invoke() { 
+    sm.add(new StackMachine.SState("E") { @Override
+   public void invoke() { 
       Integer i = (Integer) getVar("i");
       //System.err.println(""+i+"*"+i+" = "+getResult());
       transit("DONE");
     }});
 
     sm.add(new StackMachine.SState("X") {
-        public void invoke() {
+        @Override
+      public void invoke() {
           int arg = ((Integer)getArgument()).intValue();
           //System.err.println("In X("+arg+")");
           callReturn(new Integer(arg*arg));
@@ -95,13 +103,15 @@ public class TestStackMachine extends TestCase {
   public void test_sm2() {
     MySM sm = new MySM();
 
-    sm.add(new StackMachine.SState("T1") { public void invoke() {
+    sm.add(new StackMachine.SState("T1") { @Override
+   public void invoke() {
       setVar("Collection", new ArrayList());
       ArrayList stuff = new ArrayList();
       stuff.add("A"); stuff.add("B"); stuff.add("C"); stuff.add("D"); stuff.add("E");
       iterate(stuff, "Sub", "T2");
     }});
-    sm.add(new StackMachine.SState("T2") { public void invoke() {
+    sm.add(new StackMachine.SState("T2") { @Override
+   public void invoke() {
       //System.out.println("I collected: ");
       for(Iterator it = ((Collection) getVar("Collection")).iterator(); it.hasNext(); ) {
         it.next();
@@ -109,7 +119,8 @@ public class TestStackMachine extends TestCase {
       }
       transit("DONE");
     }});
-    sm.add(new StackMachine.SState("Sub") { public void invoke() {
+    sm.add(new StackMachine.SState("Sub") { @Override
+   public void invoke() {
       String s = (String) getArgument();
       s = "["+s+"]";
       // get the "Collection" var from two frames above (iterator counts).

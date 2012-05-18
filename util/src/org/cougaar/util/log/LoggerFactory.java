@@ -28,6 +28,7 @@ package org.cougaar.util.log;
 
 import java.util.Map;
 import java.util.Properties;
+
 import org.cougaar.bootstrap.SystemProperties;
 
 /** 

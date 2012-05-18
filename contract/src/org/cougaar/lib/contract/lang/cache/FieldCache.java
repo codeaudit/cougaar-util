@@ -26,10 +26,8 @@
 
 package org.cougaar.lib.contract.lang.cache;
 
-import java.util.*;
-import java.lang.reflect.*;
-
-import org.cougaar.lib.contract.lang.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 /** 
  * Field lookup cache.

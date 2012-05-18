@@ -28,12 +28,14 @@
 package org.cougaar.bootstrap;
 
 import java.io.FileReader;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.LineNumberReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -46,8 +48,6 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.security.PrivilegedAction;
-import java.security.AccessController;
 
 /**
  * Utility class to access system properties.
@@ -591,18 +591,25 @@ public class SystemProperties {
 
   private static final class PropertiesImpl extends Properties {
 
-    // use a singleton
+    /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+   // use a singleton
     private static final PropertiesImpl INSTANCE = new PropertiesImpl();
     private PropertiesImpl() {}
 
     // these methods do all the work:
-    public String getProperty(String name, String deflt) {
+    @Override
+   public String getProperty(String name, String deflt) {
       return SystemProperties.getProperty(name, deflt);
     }
-    public Object setProperty(String name, String value) {
+    @Override
+   public Object setProperty(String name, String value) {
       return SystemProperties.setProperty(name, value);
     }
-    public Enumeration propertyNames() {
+    @Override
+   public Enumeration propertyNames() {
       return SystemProperties.getPropertyNames();
     }
 
@@ -611,17 +618,21 @@ public class SystemProperties {
     //
 
     // from Properties:
-    public void load(InputStream inStream) throws IOException {
+    @Override
+   public void load(InputStream inStream) throws IOException {
       super.load(inStream); // this only calls our methods
     }
     // save calls "store()".  Here we comment-out this method to avoid a
     // compile-time deprecation warning.
     //public void save(OutputStream o, String s) { super.save(o, s); }
-    public void store(OutputStream out, String header) throws IOException {
+    @Override
+   public void store(OutputStream out, String header) throws IOException {
       super.store(out, header); // this only calls our methods
     }
-    public String getProperty(String name) { return getProperty(name, null); }
-    public void list(PrintStream out) {
+    @Override
+   public String getProperty(String name) { return getProperty(name, null); }
+    @Override
+   public void list(PrintStream out) {
       out.println("-- listing properties --");
       for (Iterator iter = entrySet().iterator(); iter.hasNext(); ) {
         Map.Entry me = (Map.Entry) iter.next();
@@ -633,7 +644,8 @@ public class SystemProperties {
         out.println(key + "=" + val);
       }
     }
-    public void list(PrintWriter out) {
+    @Override
+   public void list(PrintWriter out) {
       out.println("-- listing properties --");
       for (Iterator iter = entrySet().iterator(); iter.hasNext(); ) {
         Map.Entry me = (Map.Entry) iter.next();
@@ -647,23 +659,28 @@ public class SystemProperties {
     }
 
     // from Hashtable:
-    public int size() {
+    @Override
+   public int size() {
       int ret = 0;
       for (Enumeration en  = propertyNames(); en.hasMoreElements(); ) {
         ret++;
       }
       return ret;
     }
-    public boolean isEmpty() { return propertyNames().hasMoreElements(); }
-    public Enumeration keys() { return propertyNames(); }
-    public Enumeration elements() {
+    @Override
+   public boolean isEmpty() { return propertyNames().hasMoreElements(); }
+    @Override
+   public Enumeration keys() { return propertyNames(); }
+    @Override
+   public Enumeration elements() {
       final Iterator iter = values().iterator();
       return new Enumeration() {
         public boolean hasMoreElements() { return iter.hasNext(); }
         public Object nextElement() { return iter.next(); }
       };
     }
-    public boolean contains(Object o) {
+    @Override
+   public boolean contains(Object o) {
       for (Enumeration en  = propertyNames(); en.hasMoreElements(); ) {
         String key = (String) en.nextElement();
         String value = getProperty(key);
@@ -671,29 +688,38 @@ public class SystemProperties {
       }
       return false;
     }
-    public boolean containsValue(Object o) { return contains(o); }
-    public boolean containsKey(Object o) { return (get(o) != null); }
-    public Object get(Object o) {
+    @Override
+   public boolean containsValue(Object o) { return contains(o); }
+    @Override
+   public boolean containsKey(Object o) { return (get(o) != null); }
+    @Override
+   public Object get(Object o) {
       String s = (o instanceof String ? ((String) o) : null);
       return getProperty(s);
     }
-    public Object put(Object name, Object value) {
+    @Override
+   public Object put(Object name, Object value) {
       return setProperty((String) name, (String) value);
     }
-    public Object remove(Object o) { die(); return null; }
-    public void putAll(Map m) {
+    @Override
+   public Object remove(Object o) { die(); return null; }
+    @Override
+   public void putAll(Map m) {
       for (Iterator iter = m.entrySet().iterator(); iter.hasNext(); ) {
         Map.Entry me = (Map.Entry) iter.next();
         put(me.getKey(), me.getValue());
       }
     }
-    public void clear() {
+    @Override
+   public void clear() {
       for (Iterator iter = keySet().iterator(); iter.hasNext(); ) {
         remove(iter.next());
       }
     }
-    public Object clone() { die(); return null; }
-    public String toString() {
+    @Override
+   public Object clone() { die(); return null; }
+    @Override
+   public String toString() {
       boolean first = true;
       StringBuffer buf = new StringBuffer("{");
       for (Enumeration en = getPropertyNames(); en.hasMoreElements(); ) {
@@ -708,14 +734,16 @@ public class SystemProperties {
       buf.append("}");
       return buf.toString();
     }
-    public Set keySet() {
+    @Override
+   public Set keySet() {
       Set ret = new HashSet();
       for (Enumeration en  = propertyNames(); en.hasMoreElements(); ) {
         ret.add(en.nextElement());
       }
       return ret;
     }
-    public Set entrySet() {
+    @Override
+   public Set entrySet() {
       Set ret = new HashSet();
       for (Enumeration en  = propertyNames(); en.hasMoreElements(); ) {
         final String key = (String) en.nextElement();
@@ -730,17 +758,20 @@ public class SystemProperties {
             setProperty(key, this.value);
             return oldValue;
           }
-          public boolean equals(Object o) {
+          @Override
+         public boolean equals(Object o) {
             if (!(o instanceof Map.Entry)) return false;
             Map.Entry e = (Map.Entry) o;
             return eq(key, e.getKey()) && eq(value, e.getValue());
           }
-          public int hashCode() {
+          @Override
+         public int hashCode() {
             return 
               ((key   == null) ? 0 :   key.hashCode()) ^
               ((value == null) ? 0 : value.hashCode());
           }
-          public String toString() {
+          @Override
+         public String toString() {
             return key + "=" + value;
           }
           private boolean eq(Object o1, Object o2) {
@@ -751,15 +782,18 @@ public class SystemProperties {
       }
       return ret;
     }
-    public Collection values() {
+    @Override
+   public Collection values() {
       List ret = new ArrayList();
       for (Enumeration en  = propertyNames(); en.hasMoreElements(); ) {
         ret.add(getProperty((String) en.nextElement()));
       }
       return ret;
     }
-    public boolean equals(Object o) { die(); return false; }
-    public int hashCode() { die(); return 0; }
+    @Override
+   public boolean equals(Object o) { die(); return false; }
+    @Override
+   public int hashCode() { die(); return 0; }
 
     // block serialization
     private void writeObject(java.io.ObjectOutputStream s) { die(); }

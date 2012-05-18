@@ -25,10 +25,11 @@
  */
 
 package org.cougaar.util;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import junit.framework.TestCase;
-import junit.framework.*;
 
 public class TestMappings extends TestCase {
   public void test_map_iterator() {

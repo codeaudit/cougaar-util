@@ -27,14 +27,14 @@
 package org.cougaar.lib.contract.lang;
 
 import org.cougaar.lib.contract.Operator;
-
-import org.cougaar.lib.contract.lang.compare.*;
-
-import org.cougaar.lib.contract.lang.parser.*;
-
+import org.cougaar.lib.contract.lang.compare.Equal;
+import org.cougaar.lib.contract.lang.compare.Imply;
+import org.cougaar.lib.contract.lang.parser.ParenParser;
+import org.cougaar.lib.contract.lang.parser.StringVisitor;
+import org.cougaar.lib.contract.lang.parser.XMLBuilderVisitor;
+import org.cougaar.lib.contract.lang.parser.XMLParser;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
 /**
  * Base (abstract) implementation of <code>Op</code>.
@@ -43,7 +43,12 @@ import org.w3c.dom.Node;
  */
 public abstract class OpImpl implements Op {
 
-  public OpImpl() {}
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+
+public OpImpl() {}
 
   /**
    * Parser additions to <code>org.cougaar.lib.contract.Operator</code>
@@ -130,14 +135,16 @@ public abstract class OpImpl implements Op {
     return Equal.compute(this, oper);
   }
 
-  public final boolean equals(final Object o) {
+  @Override
+public final boolean equals(final Object o) {
     return 
       ((o instanceof Operator) ?
-       Equal.compute(this, (Operator)o) :
+       Equal.compute(this, o) :
        false);
   }
 
-  public final String toString() {
+  @Override
+public final String toString() {
     return toString(DEFAULT_STYLE);
   }
 

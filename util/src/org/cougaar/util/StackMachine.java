@@ -26,7 +26,6 @@
 
 package org.cougaar.util;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -44,14 +43,16 @@ public class StackMachine extends StateMachine {
 
     // psuedo-state for stack support
     add(new SState("POP") {
-        public void invoke() {
+        @Override
+      public void invoke() {
           Frame f = popFrame();
           setVar("RESULT", f.getRetval());
           transit(f.getReturnTag());
         }});
 
     add(new SState("ITERATE") {
-        public void invoke() {
+        @Override
+      public void invoke() {
           Object[] args = (Object[]) getArgument();
           Collection values = (Collection)args[0];
           String subTag = (String)args[1];
@@ -60,7 +61,8 @@ public class StackMachine extends StateMachine {
           transit("ITERATE1");
         }});
     add(new SState("ITERATE1") {
-        public void invoke() {
+        @Override
+      public void invoke() {
           Iterator it = (Iterator) getVar("it");
           if (it.hasNext()) {
             Object o = it.next();

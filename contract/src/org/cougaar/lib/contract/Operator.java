@@ -27,7 +27,6 @@
 package org.cougaar.lib.contract;
 
 import org.cougaar.util.UnaryPredicate;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 

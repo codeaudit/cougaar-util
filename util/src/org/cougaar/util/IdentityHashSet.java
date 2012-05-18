@@ -43,7 +43,11 @@ public class IdentityHashSet
 extends AbstractSet
 implements Set, Cloneable, Serializable
 {
-  private static final Object PRESENT = new Object();
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+private static final Object PRESENT = new Object();
   private final Map map;
 
   public IdentityHashSet() {
@@ -57,25 +61,32 @@ implements Set, Cloneable, Serializable
     addAll(c);
   }
 
-  public Iterator iterator() {
+  @Override
+public Iterator iterator() {
     return map.keySet().iterator();
   }
-  public int size() {
+  @Override
+public int size() {
     return map.size();
   }
-  public boolean isEmpty() {
+  @Override
+public boolean isEmpty() {
     return map.isEmpty();
   }
-  public boolean contains(Object o) {
+  @Override
+public boolean contains(Object o) {
     return map.containsKey(o);
   }
-  public boolean add(Object o) {
+  @Override
+public boolean add(Object o) {
     return map.put(o, PRESENT)==null;
   }
-  public boolean remove(Object o) {
+  @Override
+public boolean remove(Object o) {
     return map.remove(o)==PRESENT;
   }
-  public void clear() {
+  @Override
+public void clear() {
     map.clear();
   }
 }

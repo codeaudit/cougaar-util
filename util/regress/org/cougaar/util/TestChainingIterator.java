@@ -25,15 +25,19 @@
  */
 
 package org.cougaar.util;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
 
-import junit.framework.*;
+import junit.framework.TestCase;
 
 public class TestChainingIterator extends TestCase {
   private List a;
   private List b;
   private List c;
-  protected void setUp() {
+  @Override
+protected void setUp() {
     a = new ArrayList();
     a.add("A");
     a.add("B");
@@ -45,7 +49,8 @@ public class TestChainingIterator extends TestCase {
     c = new ArrayList();
   }
 
-  protected void tearDown() {
+  @Override
+protected void tearDown() {
     a = null;
     b = null;
     c = null;

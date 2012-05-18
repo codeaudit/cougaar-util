@@ -131,7 +131,8 @@ implements java.io.Serializable, Cloneable, Comparable
     this.destroyed = destroyed;
   }
 
-  public Object clone() {
+  @Override
+public Object clone() {
     try {
       return super.clone();
     } catch (CloneNotSupportedException e) {
@@ -148,7 +149,8 @@ implements java.io.Serializable, Cloneable, Comparable
     return ((diff == 0) ? 0 : ((diff < 0) ? -1 : 1));
   }
 
-  public String toString() {
+  @Override
+public String toString() {
     return "OutputBundle "+name+" at time "+timestamp;
   }
 

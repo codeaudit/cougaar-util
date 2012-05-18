@@ -40,7 +40,8 @@ public class FastString implements Externalizable {
   public FastString() {}
   public FastString(String s) { string = s; }
 
-  public String toString() {
+  @Override
+public String toString() {
     return string;
   }
 

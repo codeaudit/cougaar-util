@@ -26,9 +26,12 @@
 
 package org.cougaar.lib.contract.lang.type;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
-import org.cougaar.lib.contract.lang.*;
+import org.cougaar.lib.contract.lang.Type;
+import org.cougaar.lib.contract.lang.TypeList;
 
 /**
  * Holds a list of class assertions about the current Object, such
@@ -43,7 +46,8 @@ public class TypeListImpl implements TypeList {
     knownTypes = new ArrayList(2);
   }
 
-  public Object clone() {
+  @Override
+public Object clone() {
     TypeListImpl ntl = new TypeListImpl();
     ntl.wanted = wanted;
     // why can't I do
@@ -172,7 +176,8 @@ public class TypeListImpl implements TypeList {
     return (used ? ADD_USED : ADD_IGNORED);
   }
 
-  public String toString() {
+  @Override
+public String toString() {
     StringBuffer sb = new StringBuffer();
     sb.append("Type Info:\n");
     int ni = knownTypes.size();

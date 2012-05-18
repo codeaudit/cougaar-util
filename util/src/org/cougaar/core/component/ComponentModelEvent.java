@@ -26,14 +26,18 @@
 package org.cougaar.core.component;
 
 import java.util.EventObject;
-import java.beans.beancontext.*; /*make @see reference work*/
 
 /** Service event is a base class for all Service, Binder and Component 
  * Model Events, analogous.
  * @see java.beans.beancontext.BeanContextEvent
  **/
 public abstract class ComponentModelEvent extends EventObject {
-  public ComponentModelEvent(Object source) {
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+
+public ComponentModelEvent(Object source) {
     super(source);
   }
 

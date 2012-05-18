@@ -26,10 +26,14 @@
 
 package org.cougaar.lib.contract.lang.op.logical;
 
-import org.cougaar.lib.contract.lang.*;
+import org.cougaar.lib.contract.lang.Op;
+import org.cougaar.lib.contract.lang.OpImpl;
+import org.cougaar.lib.contract.lang.OpParser;
+import org.cougaar.lib.contract.lang.ParseException;
+import org.cougaar.lib.contract.lang.TreeVisitor;
+import org.cougaar.lib.contract.lang.Type;
 import org.cougaar.lib.contract.lang.op.OpBuilder;
 import org.cougaar.lib.contract.lang.op.OpCodes;
-import org.cougaar.lib.contract.lang.op.reflect.InstanceOfOp;
 
 /** 
  * "not" <code>Op</code> -- returns logical "!" of given <code>Op</code>.
@@ -37,15 +41,21 @@ import org.cougaar.lib.contract.lang.op.reflect.InstanceOfOp;
 public final class NotOp
     extends OpImpl {
 
-  public Op u1;
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+public Op u1;
 
   public NotOp() {}
 
-  public final int getID() {
+  @Override
+public final int getID() {
     return OpCodes.NOT_ID;
   }
 
-  public final Op parse(final OpParser p) throws ParseException {
+  @Override
+public final Op parse(final OpParser p) throws ParseException {
     Op u1 = p.nextOp();
     if (u1 == null) {
       throw new ParseException(
@@ -81,15 +91,18 @@ public final class NotOp
     }
   }
 
-  public final boolean execute(final Object o) {
+  @Override
+public final boolean execute(final Object o) {
     return (!(u1.execute(o)));
   }
 
-  public final void setConst(final String key, final Object val) {
+  @Override
+public final void setConst(final String key, final Object val) {
     u1.setConst(key, val);
   }
 
-  public final void accept(TreeVisitor visitor) {
+  @Override
+public final void accept(TreeVisitor visitor) {
     // (not op)
     visitor.visitWord(OpCodes.NOT_NAME);
     if (u1 != null) {

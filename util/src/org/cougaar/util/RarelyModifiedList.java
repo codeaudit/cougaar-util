@@ -26,7 +26,12 @@
 
 package org.cougaar.util;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 /**
  * A "double buffered" List implementation, optimized for 
@@ -51,7 +56,11 @@ import java.util.*;
 public class RarelyModifiedList 
   implements List, java.io.Serializable
 {
-  /** current backing list **/
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+/** current backing list **/
   private List back;
 
   public RarelyModifiedList() {
@@ -132,13 +141,15 @@ public class RarelyModifiedList
   public synchronized boolean containsAll(Collection c) {
     return back.containsAll(c);
   }
-  public synchronized boolean equals(Object o) {
+  @Override
+public synchronized boolean equals(Object o) {
     return back.equals(o);
   }
   public synchronized Object get(int i) {
     return back.get(i);
   }
-  public synchronized int hashCode() {
+  @Override
+public synchronized int hashCode() {
     return back.hashCode();
   }
   public synchronized int indexOf(Object o) {

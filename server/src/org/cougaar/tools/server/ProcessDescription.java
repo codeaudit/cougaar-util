@@ -158,18 +158,21 @@ implements java.io.Serializable
     return commandLineArgs;
   }
 
-  public String toString() { 
+  @Override
+public String toString() { 
     return 
       "Process \""+name+
       "\" of group \""+group+"\"";
   }
 
-  public int hashCode() {
+  @Override
+public int hashCode() {
     // could cache
     return name.hashCode();
   }
 
-  public boolean equals(Object o) {
+  @Override
+public boolean equals(Object o) {
     if (o == this) {
       return true;
     }

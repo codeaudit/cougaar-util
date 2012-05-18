@@ -31,7 +31,11 @@ package org.cougaar.lib.contract.lang;
  */
 public class ParseException extends Exception {
 
-  private StringBuffer trace;
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+private StringBuffer trace;
   private String cacheTrace;
 
   private ParseException() { }
@@ -63,7 +67,8 @@ public class ParseException extends Exception {
    * Override <code>java.lang.Exception</code>'s <tt>getMessage</tt> with
    * our custom trace message.
    */
-  public String getMessage() {
+  @Override
+public String getMessage() {
     if (cacheTrace == null) {
       cacheTrace = trace.toString();
     }

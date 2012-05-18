@@ -25,10 +25,9 @@
  */
 
 package org.cougaar.util;
-import java.util.*;
+import java.util.ArrayList;
 
 import junit.framework.TestCase;
-import junit.framework.*;
 
 public class TestNonOverlappingTimeSpanSet extends TestCase {
   public void test_notss () {
@@ -39,6 +38,7 @@ public class TestNonOverlappingTimeSpanSet extends TestCase {
       public X(long x){ start = x; end = x + 3;}
       public long getStartTime() { return start; }
       public long getEndTime() { return end;}
+      @Override
       public String toString() { return "{" + start + "-" + end + "}";}
     }
     
@@ -54,12 +54,14 @@ public class TestNonOverlappingTimeSpanSet extends TestCase {
         end = e;
       }
       
+      @Override
       public Object clone() {
         Fill fill = new Fill();
         fill.setTimeSpan(getStartTime(), getEndTime());
         return fill;
       }
 
+      @Override
       public String toString() { return "<"+ start + "-" + end+">";}
     }
 

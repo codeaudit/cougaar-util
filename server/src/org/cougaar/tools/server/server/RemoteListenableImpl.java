@@ -64,7 +64,8 @@ class RemoteListenableImpl implements RemoteListenable {
   private final Timer timer = new Timer();
 
   private final TimerTask sendTask = new TimerTask() {
-    public void run() {
+    @Override
+   public void run() {
       if (!(flushBuffer(false))) {
         cancel();
       }
@@ -465,7 +466,8 @@ class RemoteListenableImpl implements RemoteListenable {
       }
     }
 
-    public String toString() {
+    @Override
+   public String toString() {
       return url.toString();
     }
   }

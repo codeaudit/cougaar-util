@@ -37,7 +37,11 @@ class OutputStreamImpl
 extends UnicastRemoteObject 
 implements OutputStreamDecl {
 
-  private OutputStream out;
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+private OutputStream out;
 
   public OutputStreamImpl(
       OutputStream out) throws RemoteException {

@@ -196,7 +196,8 @@ implements ExtendedServiceBroker {
         public ComponentView getComponentView() {
           return view;
         }
-        public String toString() {
+        @Override
+      public String toString() {
           return "(view of "+view+")";
         }
       };
@@ -605,6 +606,7 @@ implements ExtendedServiceBroker {
       public Map getObtainedServices() {
         return ViewedServiceBroker.this.getObtainedServices();
       }
+      @Override
       public String toString() {
         return 
           "(component class="+
@@ -627,6 +629,7 @@ implements ExtendedServiceBroker {
       public List getChildViews() {
         return myBinder.getChildViews();
       }
+      @Override
       public String toString() {
         ComponentDescription desc = getComponentDescription();
         return 
@@ -685,14 +688,16 @@ implements ExtendedServiceBroker {
           return providerDesc;
         }
         public Map getIndirectlyAdvertisedServices() { return m; }
-        public String toString() {
+        @Override
+      public String toString() {
           return "(service-view id="+id+" timestamp="+t+
             " providerId="+providerId+" providerDesc="+providerDesc+
             " indirects="+m+")";
         }
       };
     }
-    public String toString() {
+    @Override
+   public String toString() {
       return toServiceView().toString();
     }
     private Map copyIndirectlyAddedServices() {
@@ -726,8 +731,10 @@ implements ExtendedServiceBroker {
       this.providerId = providerId;
       this.providerDesc = providerDesc;
     }
-    public int getProviderId() { return providerId; }
-    public ComponentDescription getProviderComponentDescription() {
+    @Override
+   public int getProviderId() { return providerId; }
+    @Override
+   public ComponentDescription getProviderComponentDescription() {
       return providerDesc;
     }
   }
@@ -739,9 +746,11 @@ implements ExtendedServiceBroker {
           ComponentDescription providerDesc) {
         super(providerId, providerDesc);
       }
+      @Override
       public Map getIndirectlyAddedServices() {
         return m;
       }
+      @Override
       public ServiceData findOrMakeIndirect(Class cl) {
         ServiceData ret = (ServiceData) m.get(cl);
         if (ret == null) {

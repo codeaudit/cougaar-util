@@ -53,13 +53,15 @@ public class CheckingBootstrapper extends Bootstrapper
   private static Pattern manPattern = Pattern.compile("^Manifest/(.*)\\.version$");
   private static Pattern kvPattern = Pattern.compile("^(\\w*)\\s*=\\s*(.*)$");
   
-  protected List filterURLs(List l) {
+  @Override
+protected List filterURLs(List l) {
     List o = super.filterURLs(l);
     scanAll();
     return o;
   }
 
-  protected boolean checkURL(URL url) {
+  @Override
+protected boolean checkURL(URL url) {
     boolean ok = super.checkURL(url);
     if (ok) {
       scanURL(url);

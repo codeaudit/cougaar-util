@@ -369,11 +369,13 @@ public class Log4jLoggerFactory
   }
 
   // ugh. bashing of static structure... sigh.
-  public void configure(Properties props) {
+  @Override
+public void configure(Properties props) {
     PropertyConfigurator.configure(props);
   }
   // ugh. bashing of static structure... sigh.
-  public void configure(Map m) {
+  @Override
+public void configure(Map m) {
     Properties p = new Properties();
     p.putAll(m);
     PropertyConfigurator.configure(p);
@@ -389,11 +391,13 @@ public class Log4jLoggerFactory
   /** called by the default implementation of createLogger to do the dirty work.
    * Should always create a new instance.
    **/
-  protected Logger instantiateLogger(Object requestor) {
+  @Override
+protected Logger instantiateLogger(Object requestor) {
     return new LoggerImpl(requestor);
   }
 
-  public LoggerController createLoggerController(String requestor) {
+  @Override
+public LoggerController createLoggerController(String requestor) {
     (new Throwable()).printStackTrace();
     return new LoggerControllerImpl(requestor);
   }

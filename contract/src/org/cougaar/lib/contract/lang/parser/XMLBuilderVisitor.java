@@ -26,15 +26,11 @@
 
 package org.cougaar.lib.contract.lang.parser;
 
-import java.io.*;
-import java.util.*;
-
-import org.cougaar.lib.contract.lang.*;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.Element;
 import org.apache.xerces.dom.DocumentImpl;
+import org.cougaar.lib.contract.lang.TreeVisitor;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 public class XMLBuilderVisitor 
     implements TreeVisitor {

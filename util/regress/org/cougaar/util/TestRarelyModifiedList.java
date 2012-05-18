@@ -25,10 +25,12 @@
  */
 
 package org.cougaar.util;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.List;
 
 import junit.framework.TestCase;
-import junit.framework.*;
 
 public class TestRarelyModifiedList extends TestCase {
 

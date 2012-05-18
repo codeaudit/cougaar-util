@@ -26,10 +26,10 @@
 package org.cougaar.core.component;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.HashMap;
+
 import org.cougaar.util.Arguments;
 
 /** A base class useful for creating components

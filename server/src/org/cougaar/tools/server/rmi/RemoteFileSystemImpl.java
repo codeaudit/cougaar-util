@@ -40,7 +40,11 @@ class RemoteFileSystemImpl
 extends UnicastRemoteObject 
 implements RemoteFileSystemDecl {
 
-  private RemoteFileSystem rfs;
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+private RemoteFileSystem rfs;
 
   public RemoteFileSystemImpl(
       RemoteFileSystem rfs) throws RemoteException {

@@ -32,7 +32,11 @@ package org.cougaar.core.component;
  */
 public final class StateTuple implements java.io.Serializable
 {
-  private final ComponentDescription cd;
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+private final ComponentDescription cd;
   private final Object state;
 
   public StateTuple(
@@ -64,7 +68,8 @@ public final class StateTuple implements java.io.Serializable
     return state;
   }
 
-  public String toString() {
+  @Override
+public String toString() {
     return 
       "Tuple {"+cd+", "+
       ((state != null) ? 

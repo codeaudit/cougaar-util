@@ -91,7 +91,11 @@ public interface TimeSpan
    * @see TimeSpans#getPoint(long)
    **/
   class Point implements TimeSpan, Serializable {
-    private long t;
+    /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+   private long t;
     public Point(long t) {
       if (t<MIN_VALUE || t>=MAX_VALUE) {
         throw new IllegalArgumentException("Bad TimeSpan.Point("+t+")");
@@ -100,7 +104,8 @@ public interface TimeSpan
     }
     public long getStartTime() { return t; }
     public long getEndTime() { return t+EPSILON; }
-    public String toString() {
+    @Override
+   public String toString() {
       return 
         "["+
         (t == MIN_VALUE ? "MIN_VALUE" :
@@ -114,7 +119,11 @@ public interface TimeSpan
    * @see TimeSpans#getSpan(long, long)
    **/
   class Span implements TimeSpan, Serializable {
-    private long t0, t1;
+    /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+   private long t0, t1;
     public Span(long t0, long t1) { 
       if (t0>=t1 || t0<MIN_VALUE || t1>MAX_VALUE) {
         throw new IllegalArgumentException("Bad TimeSpan.Span("+t0+","+t1+")");
@@ -123,7 +132,8 @@ public interface TimeSpan
     }
     public long getStartTime() { return t0; }
     public long getEndTime() { return t1; }
-    public String toString() {
+    @Override
+   public String toString() {
       return 
         "["+
         (t0 == MIN_VALUE ? "MIN_VALUE" : (new Date(t0)).toString())+
@@ -135,6 +145,12 @@ public interface TimeSpan
 
   /** a TimeSpan representing all representable time **/
   TimeSpan FOREVER = new Span(MIN_VALUE,MAX_VALUE) {
-    public String toString() { return "[forever]"; }
+    /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+
+   @Override
+   public String toString() { return "[forever]"; }
   };
 }

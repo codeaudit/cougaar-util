@@ -46,20 +46,25 @@ extends OutputStream {
   // delegate all the methods of OutputStream:
   //
 
-  public void write(byte[] b, int off, int length
+  @Override
+public void write(byte[] b, int off, int length
       ) throws IOException {
     osd.write(b, off, length);
   }
-  public void write(byte[] b) throws IOException {
+  @Override
+public void write(byte[] b) throws IOException {
     osd.write(b);
   }
-  public void write(int b) throws IOException {
+  @Override
+public void write(int b) throws IOException {
     osd.write(b);
   }
-  public void flush() throws IOException {
+  @Override
+public void flush() throws IOException {
     osd.flush();
   }
-  public void close() throws IOException {
+  @Override
+public void close() throws IOException {
     osd.close();
   }
 }

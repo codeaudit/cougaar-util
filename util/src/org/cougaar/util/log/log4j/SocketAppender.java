@@ -33,7 +33,6 @@ import java.net.Socket;
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Priority;
 import org.apache.log4j.spi.LoggingEvent;
-
 import org.cougaar.bootstrap.SystemProperties;
 
 /**
@@ -79,7 +78,8 @@ public class SocketAppender extends AppenderSkeleton {
   private StreamCapture stdOutCapture;
   private StreamCapture stdErrCapture;
 
-  public boolean requiresLayout() {
+  @Override
+public boolean requiresLayout() {
     return false;
   }
 
@@ -210,7 +210,8 @@ public class SocketAppender extends AppenderSkeleton {
     return text.replaceAll("<", "&lt;");
   }
 
-  protected void append(LoggingEvent event) {
+  @Override
+protected void append(LoggingEvent event) {
     if (!checkConnection()) {
       return;
     }
@@ -233,7 +234,8 @@ public class SocketAppender extends AppenderSkeleton {
     }
   }
 
-  public void close() {
+  @Override
+public void close() {
     if (stdOutCapture != null) {
       stdOutCapture.closeStream();
     }
@@ -251,7 +253,8 @@ public class SocketAppender extends AppenderSkeleton {
     }
   }
 
-  public void activateOptions() {
+  @Override
+public void activateOptions() {
     // create connection early if options were set by the log4j
     // PropertyConfigurator
     checkConnection();

@@ -162,22 +162,26 @@ public final class NodeEventTranslator {
     }
     OutputStream out = 
       new OutputStream() {
-        public void write(int b) {
+        @Override
+      public void write(int b) {
           String msg = Byte.toString((byte) b);
           l.add(new NodeEvent(NodeEvent.STANDARD_OUT, msg));
         }
-        public void write(byte[] b, int off, int len) {
+        @Override
+      public void write(byte[] b, int off, int len) {
           String msg = new String(b, off, len);
           l.add(new NodeEvent(NodeEvent.STANDARD_OUT, msg));
         }
       };
     OutputStream err = 
       new OutputStream() {
-        public void write(int b) {
+        @Override
+      public void write(int b) {
           String msg = Byte.toString((byte) b);
           l.add(new NodeEvent(NodeEvent.STANDARD_ERR, msg));
         }
-        public void write(byte[] b, int off, int len) {
+        @Override
+      public void write(byte[] b, int off, int len) {
           String msg = new String(b, off, len);
           l.add(new NodeEvent(NodeEvent.STANDARD_ERR, msg));
         }

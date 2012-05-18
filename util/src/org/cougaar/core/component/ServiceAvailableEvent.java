@@ -24,14 +24,18 @@
  * </copyright>
  */
 package org.cougaar.core.component;
-import java.beans.beancontext.*; /*make @see reference work*/
 
 /** ServiceAvailableEvent indicates that a new service is available
  * to clients of a ServiceBroker.
  * @see java.beans.beancontext.BeanContextServiceAvailableEvent
  **/
 public class ServiceAvailableEvent extends ServiceEvent {
-  /** Construct a ServiceAvailableEvent **/
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+
+/** Construct a ServiceAvailableEvent **/
   public ServiceAvailableEvent(ServiceBroker sb, Class addedService) {
     super(sb, addedService);
   }

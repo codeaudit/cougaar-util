@@ -145,7 +145,8 @@ public class ArrayListFoundation extends AbstractList
    *
    * @return  the number of elements in this list.
    */
-  public int size() {
+  @Override
+public int size() {
     return size;
   }
   
@@ -155,7 +156,8 @@ public class ArrayListFoundation extends AbstractList
    * @return  <tt>true</tt> if this list has no elements;
    *          <tt>false</tt> otherwise.
    */
-  public boolean isEmpty() {
+  @Override
+public boolean isEmpty() {
     return size == 0;
   }
   
@@ -164,7 +166,8 @@ public class ArrayListFoundation extends AbstractList
    *
    * @param elem element whose presence in this List is to be tested.
    */
-  public boolean contains(Object elem) {
+  @Override
+public boolean contains(Object elem) {
     return indexOf(elem) >= 0;
   }
   
@@ -177,7 +180,8 @@ public class ArrayListFoundation extends AbstractList
    *          list; returns <tt>-1</tt> if the object is not found.
    * @see     Object#equals(Object)
    */
-  public int indexOf(Object elem) {
+  @Override
+public int indexOf(Object elem) {
     if (elem == null) {
       for (int i = 0; i < size; i++)
         if (elementData[i]==null)
@@ -198,7 +202,8 @@ public class ArrayListFoundation extends AbstractList
    * @return  the index of the last occurrence of the specified object in
    *          this list; returns -1 if the object is not found.
    */
-  public int lastIndexOf(Object elem) {
+  @Override
+public int lastIndexOf(Object elem) {
     if (elem == null) {
       for (int i = size-1; i >= 0; i--)
         if (elementData[i]==null)
@@ -217,7 +222,8 @@ public class ArrayListFoundation extends AbstractList
    *
    * @return  a clone of this <tt>ArrayListFoundation</tt> instance.
    */
-  public Object clone() {
+  @Override
+public Object clone() {
     try { 
       ArrayListFoundation v = (ArrayListFoundation)super.clone();
       v.elementData = new Object[size];
@@ -237,7 +243,8 @@ public class ArrayListFoundation extends AbstractList
    * @return an array containing all of the elements in this list
    * 	       in the correct order.
    */
-  public Object[] toArray() {
+  @Override
+public Object[] toArray() {
     Object[] result = new Object[size];
     System.arraycopy(elementData, 0, result, 0, size);
     return result;
@@ -264,7 +271,8 @@ public class ArrayListFoundation extends AbstractList
    * @throws ArrayStoreException if the runtime type of a is not a supertype
    *         of the runtime type of every element in this list.
    */
-  public Object[] toArray(Object a[]) {
+  @Override
+public Object[] toArray(Object a[]) {
     if (a.length < size)
       a = (Object[])java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), 
                                                         size);
@@ -287,7 +295,8 @@ public class ArrayListFoundation extends AbstractList
    * @throws    IndexOutOfBoundsException if index is out of range <tt>(index
    * 		  &lt; 0 || index &gt;= size())</tt>.
    */
-  public Object get(int index) {
+  @Override
+public Object get(int index) {
     RangeCheck(index);
     
     return elementData[index];
@@ -303,7 +312,8 @@ public class ArrayListFoundation extends AbstractList
    * @throws    IndexOutOfBoundsException if index out of range
    *		  <tt>(index &lt; 0 || index &gt;= size())</tt>.
    */
-  public Object set(int index, Object element) {
+  @Override
+public Object set(int index, Object element) {
     RangeCheck(index);
     
     Object oldValue = elementData[index];
@@ -317,7 +327,8 @@ public class ArrayListFoundation extends AbstractList
    * @param o element to be appended to this list.
    * @return <tt>true</tt> (as per the general contract of Collection.add).
    */
-  public boolean add(Object o) {
+  @Override
+public boolean add(Object o) {
     ensureCapacity(size + 1);  // Increments modCount!!
     elementData[size++] = o;
     return true;
@@ -333,7 +344,8 @@ public class ArrayListFoundation extends AbstractList
    * @throws    IndexOutOfBoundsException if index is out of range
    *		  <tt>(index &lt; 0 || index &gt; size())</tt>.
    */
-  public void add(int index, Object element) {
+  @Override
+public void add(int index, Object element) {
     if (index > size || index < 0)
       throw new IndexOutOfBoundsException(
                                           "Index: "+index+", Size: "+size);
@@ -363,7 +375,8 @@ public class ArrayListFoundation extends AbstractList
    *         element.
    * 
    */
-  public boolean remove(Object o) {
+  @Override
+public boolean remove(Object o) {
     int removeIndex = -1;
 
     if (o == null) {
@@ -400,7 +413,8 @@ public class ArrayListFoundation extends AbstractList
    * @throws    IndexOutOfBoundsException if index out of range <tt>(index
    * 		  &lt; 0 || index &gt;= size())</tt>.
    */
-  public Object remove(int index) {
+  @Override
+public Object remove(int index) {
     RangeCheck(index);
     
     modCount++;
@@ -419,7 +433,8 @@ public class ArrayListFoundation extends AbstractList
    * Removes all of the elements from this list.  The list will
    * be empty after this call returns.
    */
-  public void clear() {
+  @Override
+public void clear() {
     modCount++;
     
     // Let gc do its work
@@ -442,7 +457,8 @@ public class ArrayListFoundation extends AbstractList
    * @throws    IndexOutOfBoundsException if index out of range <tt>(index
    *		  &lt; 0 || index &gt; size())</tt>.
    */
-  public boolean addAll(Collection c) {
+  @Override
+public boolean addAll(Collection c) {
     modCount++;
     int numNew = c.size();
     ensureCapacity(size + numNew);
@@ -476,7 +492,8 @@ public class ArrayListFoundation extends AbstractList
    * @throws    IndexOutOfBoundsException if index out of range <tt>(index
    *		  &lt; 0 || index &gt; size())</tt>.
    */
-  public boolean addAll(int index, Collection c) {
+  @Override
+public boolean addAll(int index, Collection c) {
     if (index > size || index < 0)
       throw new IndexOutOfBoundsException(
                                           "Index: "+index+", Size: "+size);
@@ -520,7 +537,8 @@ public class ArrayListFoundation extends AbstractList
    * @see #remove(Object)
    * @see #contains(Object)
    */
-  public boolean removeAll(Collection c) {
+  @Override
+public boolean removeAll(Collection c) {
     boolean modified = false;
 
     for (int i = 0; i < size; i++) {
@@ -548,7 +566,8 @@ public class ArrayListFoundation extends AbstractList
    * @see #remove(Object)
    * @see #contains(Object)
    */
-  public boolean retainAll(Collection c) {
+  @Override
+public boolean retainAll(Collection c) {
     boolean modified = false;
 
     for (int i = 0; i < size; i++) {
@@ -577,7 +596,8 @@ public class ArrayListFoundation extends AbstractList
    * 
    * @return a string representation of this collection.
    */
-  public String toString() {
+  @Override
+public String toString() {
     StringBuffer buf = new StringBuffer();
     buf.append("[");
     for (int i = 0; i < size; i++) {
@@ -613,7 +633,8 @@ public class ArrayListFoundation extends AbstractList
    * 
    * @return <tt>true</tt> if the specified object is equal to this list.
    */
-  public boolean equals(Object o) {
+  @Override
+public boolean equals(Object o) {
     if (o == this)
       return true;
     if (!(o instanceof List))
@@ -643,7 +664,8 @@ public class ArrayListFoundation extends AbstractList
    *
    * @return the hash code value for this list.
    */
-  public int hashCode() {
+  @Override
+public int hashCode() {
     int hashCode = 1;
     for (int i = 0; i < size; i++) {
       hashCode = 31*hashCode + (elementData[i] == null ? 
@@ -662,7 +684,8 @@ public class ArrayListFoundation extends AbstractList
    * @param fromIndex index of first element to be removed.
    * @param toIndex index after last element to be removed.
    */
-  protected void removeRange(int fromIndex, int toIndex) {
+  @Override
+protected void removeRange(int fromIndex, int toIndex) {
     modCount++;
     int numMoved = size - toIndex;
     System.arraycopy(elementData, toIndex, elementData, fromIndex,

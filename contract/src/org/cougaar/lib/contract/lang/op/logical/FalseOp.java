@@ -26,9 +26,11 @@
 
 package org.cougaar.lib.contract.lang.op.logical;
 
-import java.util.*;
-
-import org.cougaar.lib.contract.lang.*;
+import org.cougaar.lib.contract.lang.Op;
+import org.cougaar.lib.contract.lang.OpImpl;
+import org.cougaar.lib.contract.lang.OpParser;
+import org.cougaar.lib.contract.lang.ParseException;
+import org.cougaar.lib.contract.lang.TreeVisitor;
 import org.cougaar.lib.contract.lang.op.OpCodes;
 
 /** 
@@ -37,15 +39,21 @@ import org.cougaar.lib.contract.lang.op.OpCodes;
 public final class FalseOp 
     extends OpImpl {
 
-  public static final FalseOp singleInstance = new FalseOp();
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+public static final FalseOp singleInstance = new FalseOp();
 
   private FalseOp() {}
 
-  public final int getID() {
+  @Override
+public final int getID() {
     return OpCodes.FALSE_ID;
   }
 
-  public final Op parse(final OpParser p) throws ParseException {
+  @Override
+public final Op parse(final OpParser p) throws ParseException {
     Op u1 = p.nextOp();
     if (u1 != null) {
       throw new ParseException(
@@ -55,11 +63,13 @@ public final class FalseOp
     return this;
   }
 
-  public final boolean execute(final Object o) {
+  @Override
+public final boolean execute(final Object o) {
     return false;
   }
 
-  public final void accept(TreeVisitor visitor) {
+  @Override
+public final void accept(TreeVisitor visitor) {
     // (false)
     visitor.visitWord(OpCodes.FALSE_NAME);
     visitor.visitEnd();

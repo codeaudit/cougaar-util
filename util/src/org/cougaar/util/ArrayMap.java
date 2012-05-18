@@ -269,7 +269,8 @@ public class ArrayMap
     return null;
   }
 
-  public Object clone() {
+  @Override
+public Object clone() {
     try { 
       return super.clone();
     } catch (CloneNotSupportedException e) { 
@@ -301,7 +302,8 @@ public class ArrayMap
   public Set keySet() {
     if (keySet == null) {
       keySet = new AbstractSet() {
-        public Iterator iterator() {
+        @Override
+      public Iterator iterator() {
           final Iterator lIter = l.iterator();
           return new Iterator() {
             public boolean hasNext() {
@@ -315,16 +317,20 @@ public class ArrayMap
             }
           };
         }
-        public int size() {
+        @Override
+      public int size() {
           return l.size();
         }
-        public boolean contains(Object o) {
+        @Override
+      public boolean contains(Object o) {
           return containsKey(o);
         }
-        public boolean remove(Object o) {
+        @Override
+      public boolean remove(Object o) {
           return ArrayMap.this.remove(o) != null;
         }
-        public void clear() {
+        @Override
+      public void clear() {
           ArrayMap.this.clear();
         }
       };
@@ -335,7 +341,8 @@ public class ArrayMap
   public Collection values() {
     if (values==null) {
       values = new AbstractCollection() {
-        public Iterator iterator() {
+        @Override
+      public Iterator iterator() {
           final Iterator lIter = l.iterator();
           return new Iterator() {
             public boolean hasNext() {
@@ -349,13 +356,16 @@ public class ArrayMap
             }
           };
         }
-        public int size() {
+        @Override
+      public int size() {
           return l.size();
         }
-        public boolean contains(Object o) {
+        @Override
+      public boolean contains(Object o) {
           return containsValue(o);
         }
-        public void clear() {
+        @Override
+      public void clear() {
           ArrayMap.this.clear();
         }
       };
@@ -366,11 +376,13 @@ public class ArrayMap
   public Set entrySet() {
     if (entrySet==null) {
       entrySet = new AbstractSet() {
-        public Iterator iterator() {
+        @Override
+      public Iterator iterator() {
           return l.iterator();
         }
 
-        public boolean contains(Object o) {
+        @Override
+      public boolean contains(Object o) {
           if (o instanceof Map.Entry) {
             int n = l.size();
             for (int i = 0; i < n; i++) {
@@ -382,7 +394,8 @@ public class ArrayMap
           return false;
         }
 
-        public boolean remove(Object o) {
+        @Override
+      public boolean remove(Object o) {
           if (o instanceof Map.Entry) {
             int n = l.size();
             for (int i = 0; i < n; i++) {
@@ -395,11 +408,13 @@ public class ArrayMap
           return false;
         }
 
-        public int size() {
+        @Override
+      public int size() {
           return l.size();
         }
 
-        public void clear() {
+        @Override
+      public void clear() {
           ArrayMap.this.clear();
         }
       };
@@ -459,6 +474,10 @@ public class ArrayMap
   protected static class ArrayEntry 
     implements Map.Entry, Cloneable, java.io.Serializable {
 
+      /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
       public final Object key;
       public Object value;
 
@@ -481,6 +500,7 @@ public class ArrayMap
         return oldValue;
       }
 
+      @Override
       public Object clone() {
         try { 
           return super.clone();
@@ -490,6 +510,7 @@ public class ArrayMap
         }
       }
 
+      @Override
       public boolean equals(final Object o) {
         if (o == this) {
           return true;
@@ -507,18 +528,21 @@ public class ArrayMap
         }
       }
 
+      @Override
       public int hashCode() {
         return 
           (((key != null) ? key.hashCode() : 0) ^
            ((value != null) ? value.hashCode() : 0));
       }
 
+      @Override
       public String toString() {
         return key+"="+value;
       }
     }
 
-  public String toString() {
+  @Override
+public String toString() {
     int n = l.size();
     if (n > 0) {
       StringBuffer buf = new StringBuffer();

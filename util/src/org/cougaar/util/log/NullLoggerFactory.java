@@ -38,13 +38,17 @@ public class NullLoggerFactory
 {
   private static final LoggerController LC = new NullLoggerController();
 
-  public void configure(Properties props) {}
-  public void configure(Map m) {}
-  public Logger instantiateLogger(Object requestor) {
+  @Override
+public void configure(Properties props) {}
+  @Override
+public void configure(Map m) {}
+  @Override
+public Logger instantiateLogger(Object requestor) {
     return NullLogger.getLogger();
   }
 
-  public LoggerController createLoggerController(String requestor) {
+  @Override
+public LoggerController createLoggerController(String requestor) {
     return LC;
   }
 

@@ -69,7 +69,8 @@ public class ReusableThread extends Thread {
     protected void claim() {
     }
 
-  public final void run() {
+  @Override
+public final void run() {
     while (true) {
       synchronized (runLock) {
 	  claim();
@@ -87,7 +88,8 @@ public class ReusableThread extends Thread {
     }
   }
 
-  public void start() throws IllegalThreadStateException {
+  @Override
+public void start() throws IllegalThreadStateException {
     synchronized (runLock) {
       if (isRunning) 
         throw new IllegalThreadStateException("ReusableThread already started: "+

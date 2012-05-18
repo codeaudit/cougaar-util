@@ -25,10 +25,7 @@
  */
 
 package org.cougaar.util;
-import java.util.*;
-
 import junit.framework.TestCase;
-import junit.framework.*;
 
 public class TestTimeSpanSet extends TestCase {
   private class X implements TimeSpan {
@@ -42,7 +39,8 @@ public class TestTimeSpanSet extends TestCase {
     public void setTimeSpan(long s, long e) {start = s; end = e;}
     public String getText() { return text;}
     public void setText(String t) { text = t; }
-    public String toString() { return text+"/"+start+"-"+end;}
+    @Override
+   public String toString() { return text+"/"+start+"-"+end;}
   }
 
   public void test_TSS() {

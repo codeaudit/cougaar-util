@@ -26,10 +26,7 @@
 
 package org.cougaar.lib.contract.lang.parser;
 
-import java.io.*;
-import java.util.*;
-
-import org.cougaar.lib.contract.lang.*;
+import org.cougaar.lib.contract.lang.TreeVisitor;
 
 /**
  * A <code>TreeVisitor</code> that buffers the visits to an array and

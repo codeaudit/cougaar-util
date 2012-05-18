@@ -27,9 +27,17 @@
 package org.cougaar.lib.contract.lang.op.list;
 
 import java.lang.reflect.Array;
-import java.util.*;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
 
-import org.cougaar.lib.contract.lang.*;
+import org.cougaar.lib.contract.lang.Op;
+import org.cougaar.lib.contract.lang.OpImpl;
+import org.cougaar.lib.contract.lang.OpParser;
+import org.cougaar.lib.contract.lang.ParseException;
+import org.cougaar.lib.contract.lang.TreeVisitor;
+import org.cougaar.lib.contract.lang.TypeList;
 import org.cougaar.lib.contract.lang.op.OpCodes;
 
 /** 
@@ -42,17 +50,24 @@ import org.cougaar.lib.contract.lang.op.OpCodes;
 public final class ExistsOp
     extends OpImpl {
 
-  public Op u;
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+
+public Op u;
 
   public int expected_id;
 
   public ExistsOp() {}
 
-  public final int getID() {
+  @Override
+public final int getID() {
     return OpCodes.EXISTS_ID;
   }
 
-  public final Op parse(final OpParser p) throws ParseException {
+  @Override
+public final Op parse(final OpParser p) throws ParseException {
     TypeList origTypeList = p.cloneTypeList();
 
     // get expected list type
@@ -91,7 +106,8 @@ public final class ExistsOp
    * @param o A List, Enumeration, etc
    * @return true if any element of o makes u.execute be true
    */
-  public final boolean execute(final Object o) {
+  @Override
+public final boolean execute(final Object o) {
     if (o == null) {
       return false;
     } else {
@@ -159,11 +175,13 @@ public final class ExistsOp
     }
   }
 
-  public final void setConst(final String key, final Object val) {
+  @Override
+public final void setConst(final String key, final Object val) {
     u.setConst(key, val);
   }
 
-  public final void accept(TreeVisitor visitor) {
+  @Override
+public final void accept(TreeVisitor visitor) {
     // (exists op)
     visitor.visitWord(OpCodes.EXISTS_NAME);
     if (u != null) {

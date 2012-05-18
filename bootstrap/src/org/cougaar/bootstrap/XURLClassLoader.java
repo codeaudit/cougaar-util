@@ -34,6 +34,7 @@ import java.util.NoSuchElementException;
 import java.util.jar.Attributes;
 import java.util.jar.Attributes.Name;
 import java.util.jar.Manifest;
+
 import sun.misc.Resource;
 import sun.misc.URLClassPath;
 import sun.net.www.ParseUtil;
@@ -184,7 +185,8 @@ public class XURLClassLoader extends SecureClassLoader {
      * @return the resulting class
      * @exception ClassNotFoundException if the class could not be found
      */
-    protected Class findClass(final String name)
+    @Override
+   protected Class findClass(final String name)
 	 throws ClassNotFoundException
     {
 	try {
@@ -347,7 +349,8 @@ public class XURLClassLoader extends SecureClassLoader {
      * @return a <code>URL</code> for the resource, or <code>null</code> 
      * if the resource could not be found.
      */
-    public URL findResource(final String name) {
+    @Override
+   public URL findResource(final String name) {
 	/*
 	 * The same restriction to finding classes applies to resources
 	 */
@@ -369,7 +372,8 @@ public class XURLClassLoader extends SecureClassLoader {
      * @exception IOException if an I/O exception occurs
      * @return an <code>Enumeration</code> of <code>URL</code>s
      */
-    public Enumeration findResources(final String name) throws IOException {
+    @Override
+   public Enumeration findResources(final String name) throws IOException {
         final Enumeration e = ucp.getResources(name, true);
 
 	return new Enumeration() {
@@ -421,7 +425,8 @@ public class XURLClassLoader extends SecureClassLoader {
      * @param codesource the codesource
      * @return the permissions granted to the codesource
      */
-    protected PermissionCollection getPermissions(CodeSource codesource)
+    @Override
+   protected PermissionCollection getPermissions(CodeSource codesource)
     {
 	PermissionCollection perms = super.getPermissions(codesource);
 
@@ -545,7 +550,8 @@ final class FactoryXURLClassLoader extends XURLClassLoader {
 	super(urls);
     }
 
-    public final synchronized Class loadClass(String name, boolean resolve)
+    @Override
+   public final synchronized Class loadClass(String name, boolean resolve)
 	throws ClassNotFoundException
     {
 	// First check if we have permission to access the package. This

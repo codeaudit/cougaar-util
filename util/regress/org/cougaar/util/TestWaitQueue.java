@@ -25,10 +25,9 @@
  */
 
 package org.cougaar.util;
-import java.util.*;
+import java.util.ArrayList;
 
 import junit.framework.TestCase;
-import junit.framework.*;
 
 public class TestWaitQueue extends TestCase {
   private long sleep_millis = 500; /*half a second*/

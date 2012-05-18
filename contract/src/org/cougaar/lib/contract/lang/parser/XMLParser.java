@@ -26,14 +26,18 @@
 
 package org.cougaar.lib.contract.lang.parser;
 
-import java.io.*;
-import java.util.*;
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringReader;
 
 import org.apache.xerces.parsers.DOMParser;
-
-import org.cougaar.lib.contract.lang.*;
-
-import org.w3c.dom.*;
+import org.cougaar.lib.contract.lang.ParseException;
+import org.cougaar.lib.contract.lang.TreeVisitor;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 /**
@@ -140,7 +144,7 @@ public class XMLParser {
         }
         break;
       }
-      subNode = (Node)nlist.item(i);
+      subNode = nlist.item(i);
       if (subNode.getNodeType() == Node.ELEMENT_NODE) {
         // recurse!
         parseElem(visitor, (Element)subNode);
@@ -201,7 +205,7 @@ public class XMLParser {
     if (constVal == null) {
       NodeList nlist = elem.getChildNodes();
       if (nlist.getLength() == 1) {
-        Node subNode = (Node)nlist.item(0);
+        Node subNode = nlist.item(0);
         if (subNode.getNodeType() != Node.ELEMENT_NODE) {
           String nval = subNode.getNodeValue();
           if (nval != null) {

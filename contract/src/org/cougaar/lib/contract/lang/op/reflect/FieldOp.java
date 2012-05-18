@@ -26,10 +26,14 @@
 
 package org.cougaar.lib.contract.lang.op.reflect;
 
-import java.util.*;
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
-import org.cougaar.lib.contract.lang.*;
+import org.cougaar.lib.contract.lang.Op;
+import org.cougaar.lib.contract.lang.OpImpl;
+import org.cougaar.lib.contract.lang.OpParser;
+import org.cougaar.lib.contract.lang.ParseException;
+import org.cougaar.lib.contract.lang.TreeVisitor;
 import org.cougaar.lib.contract.lang.op.OpCodes;
 import org.cougaar.lib.contract.lang.op.constant.ConstantOp;
 
@@ -40,18 +44,24 @@ import org.cougaar.lib.contract.lang.op.constant.ConstantOp;
 public final class FieldOp
     extends OpImpl {
 
-  public Field field;
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+public Field field;
 
   public FieldOp() {}
 
-  public final int getID() {
+  @Override
+public final int getID() {
     return OpCodes.FIELD_ID;
   }
 
   /**
    * <code>ReflectOp</code> should use <tt>parseField</tt>.
    */
-  public final Op parse(final OpParser p) throws ParseException {
+  @Override
+public final Op parse(final OpParser p) throws ParseException {
     throw new ParseException("Internal use should be \"parseField\"");
   }
 
@@ -104,20 +114,24 @@ public final class FieldOp
     return this;
   }
 
-  public final boolean isReturnBoolean() {
+  @Override
+public final boolean isReturnBoolean() {
     return (getReturnClass() == Boolean.TYPE);
   }
 
-  public final Class getReturnClass() {
+  @Override
+public final Class getReturnClass() {
     return field.getType();
   }
 
-  public final boolean execute(final Object o) {
+  @Override
+public final boolean execute(final Object o) {
     Object ret = operate(o);
     return ((Boolean)ret).booleanValue();
   }
 
-  public final Object operate(final Object o) {
+  @Override
+public final Object operate(final Object o) {
     try {
       return field.get(o);
     } catch (Exception e) {
@@ -131,7 +145,8 @@ public final class FieldOp
     return ReflectOp.toString(field, verbose);
   }
 
-  public final void accept(TreeVisitor visitor) {
+  @Override
+public final void accept(TreeVisitor visitor) {
     // (field)
     visitor.visitWord(getFieldString(visitor.isVerbose()));
     visitor.visitEnd();

@@ -35,6 +35,11 @@ import javax.swing.text.PlainDocument;
 
 public class NumericListDocument extends PlainDocument {
   /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+
+/**
    * Default constructor creates a NumericListDocument holding a single zero value.
    **/
   public NumericListDocument() {
@@ -51,7 +56,8 @@ public class NumericListDocument extends PlainDocument {
    * @param s the string to insert -- all characters must be decimal digits.
    * @param attrs the set of attributes fo the inserted characters.
    **/
-  public void insertString(int offset, String s, AttributeSet attrs) throws BadLocationException {
+  @Override
+public void insertString(int offset, String s, AttributeSet attrs) throws BadLocationException {
     for (int i = 0, n = s.length(); i < n; i++) {
       char c = s.charAt(i);
       if ((c < '0' || c > '9') && c != ',' && c != ' ') {

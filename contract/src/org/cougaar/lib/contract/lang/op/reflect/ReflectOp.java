@@ -26,11 +26,20 @@
 
 package org.cougaar.lib.contract.lang.op.reflect;
 
-import java.util.*;
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.List;
 
-import org.cougaar.lib.contract.lang.*;
-import org.cougaar.lib.contract.lang.cache.*;
+import org.cougaar.lib.contract.lang.Op;
+import org.cougaar.lib.contract.lang.OpImpl;
+import org.cougaar.lib.contract.lang.OpParser;
+import org.cougaar.lib.contract.lang.ParseException;
+import org.cougaar.lib.contract.lang.TreeVisitor;
+import org.cougaar.lib.contract.lang.TypeList;
+import org.cougaar.lib.contract.lang.cache.ClassCache;
+import org.cougaar.lib.contract.lang.cache.FieldCache;
+import org.cougaar.lib.contract.lang.cache.MethodCache;
 import org.cougaar.lib.contract.lang.op.OpCodes;
 
 /** 
@@ -41,7 +50,12 @@ import org.cougaar.lib.contract.lang.op.OpCodes;
 public final class ReflectOp
     extends OpImpl {
 
-  /** optional "Class" **/
+  /**
+    * 
+    */
+   private static final long serialVersionUID = 1L;
+
+/** optional "Class" **/
   private Class clazz;
 
   /** optional method Class args **/
@@ -126,11 +140,13 @@ public final class ReflectOp
     }
   }
 
-  public final int getID() {
+  @Override
+public final int getID() {
     return OpCodes.REFLECT_ID;
   }
 
-  public final Op parse(final OpParser p) throws ParseException {
+  @Override
+public final Op parse(final OpParser p) throws ParseException {
 
     // FIXME taking first matching method, which might be overridden
     // for a better match in some other TypeList entry!
@@ -333,27 +349,33 @@ public final class ReflectOp
    * <code>FieldOp</code> -- all non-<tt>parse</tt> methods should
    * not be called!
    */
-  public final boolean isReturnBoolean() {
+  @Override
+public final boolean isReturnBoolean() {
     throw new UnsupportedOperationException();
   }
 
-  public final Class getReturnClass() {
+  @Override
+public final Class getReturnClass() {
     throw new UnsupportedOperationException();
   }
 
-  public final boolean execute(final Object o) {
+  @Override
+public final boolean execute(final Object o) {
     throw new UnsupportedOperationException();
   }
 
-  public final Object operate(final Object o) {
+  @Override
+public final Object operate(final Object o) {
     throw new UnsupportedOperationException();
   }
 
-  public final void setConst(final String key, final Object val) {
+  @Override
+public final void setConst(final String key, final Object val) {
     throw new UnsupportedOperationException();
   }
 
-  public final void accept(TreeVisitor visitor) {
+  @Override
+public final void accept(TreeVisitor visitor) {
     // (reflectop)
     visitor.visitWord(getReflectString(visitor.isVerbose()));
     visitor.visitEnd();

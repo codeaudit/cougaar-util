@@ -26,10 +26,7 @@
 
 package org.cougaar.lib.contract.lang.parser;
 
-import java.io.*;
-import java.util.*;
-
-import org.cougaar.lib.contract.lang.*;
+import java.util.Stack;
 
 /**
  * Creates a <code>TreeVisitor</code> that has XML as a <tt>toString</tt>.
@@ -148,7 +145,8 @@ public class XMLStringVisitor implements StringVisitor {
   public final void visitEndOfTree() {
   }
 
-  public String toString() {
+  @Override
+public String toString() {
     return sb.toString();
   }
 }
