@@ -43,12 +43,10 @@ implements OutputListenerDecl, java.rmi.server.Unreferenced {
     * 
     */
    private static final long serialVersionUID = 1L;
-private long ct;
   private OutputListener ol;
 
   public OutputListenerImpl(
       OutputListener ol) throws RemoteException {
-    ct = System.currentTimeMillis();
     //System.out.println("\n\nCreated <"+ct+"> "+ol);
     this.ol = ol;
   }

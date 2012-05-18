@@ -42,13 +42,11 @@ class RemoteFileSystemImpl implements RemoteFileSystem {
 
   private static String dotPath = "."+File.separatorChar;
 
-  private final boolean verbose;
   private final String tempPath;
 
   public RemoteFileSystemImpl(
       boolean verbose,
       String tempPath) {
-    this.verbose = verbose;
     this.tempPath = calculateTempPath(tempPath);
   }
 

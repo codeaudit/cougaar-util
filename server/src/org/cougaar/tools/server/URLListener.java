@@ -369,7 +369,7 @@ public class URLListener {
   }
 
   private OutputBundle readOutputBundle(
-      ObjectInputStream ois) throws IOException {
+      ObjectInputStream ois) {
     Object o;
     try {
       o = ois.readObject();

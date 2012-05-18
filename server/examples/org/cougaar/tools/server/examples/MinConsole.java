@@ -152,7 +152,7 @@ public class MinConsole {
       System.out.println(
           "****************************************************\n"+
           "Re-launch process \""+procId+"\"");
-      RemoteProcess proc2 = createProcess(rhost, desc);
+         createProcess(rhost, desc);
 
       System.out.println(
           "****************************************************\n"+

@@ -42,7 +42,7 @@ implements java.io.Serializable
 
   // Make the props and args mutable.  This simplifies 
   // some client code, but is generally a bad idea.
-  private static final boolean MAKE_IMMUTABLE = false;
+  private static final boolean MAKE_IMMUTABLE = Boolean.getBoolean("org.cougaar.tools.server.immutable");
 
   private final String name;
   private final String group;

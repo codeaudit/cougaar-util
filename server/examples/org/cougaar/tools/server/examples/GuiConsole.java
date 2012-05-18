@@ -121,7 +121,6 @@ public class GuiConsole {
    private JTabbedPane nodePane;
 
     private JTextArea stdoutArea;
-    private JScrollPane stdoutPane;
     private Box buttons;
     private JPanel buttons1;
 
@@ -156,10 +155,9 @@ public class GuiConsole {
     URLListener ul;
 
     public NodePanel(
-        RemoteHostRegistry remoteHostReg) throws IOException {
+        RemoteHostRegistry remoteHostReg) {
 
       stdoutArea = new JTextArea();
-      stdoutPane = new JScrollPane(stdoutArea);
       buttons = Box.createVerticalBox();
       buttons1 = new JPanel();
       buttons2 = new JPanel(new GridLayout(3,3));
@@ -741,7 +739,7 @@ public class GuiConsole {
 
   public Component init(
       RemoteHostRegistry remoteHostReg,
-      String args[]) throws IOException {
+      String args[]) {
     int l = args.length;
     if (l < 2) {
       System.err.println(
@@ -808,7 +806,7 @@ public class GuiConsole {
             }
           });
       frame.pack();
-      frame.show();
+      frame.setVisible(true);
 
       // start the guiconsole
       guiconsole.start();

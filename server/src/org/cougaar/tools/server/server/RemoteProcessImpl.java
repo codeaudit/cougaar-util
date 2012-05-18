@@ -67,8 +67,6 @@ implements RemoteProcess {
   private static final long MAX_DESTROY_TIMEOUT = 5*1000;
 
   private final ProcessDescription pd;
-  private final String[] cmdLine;
-  private final String[] envVars;
   private final ProcessDestroyedListener pdl;
   private final RemoteListenable rl;
 
@@ -125,8 +123,6 @@ implements RemoteProcess {
 
     // save arguments
     this.pd = pd;
-    this.cmdLine = cmdLine;
-    this.envVars = envVars;
     this.pdl = pdl;
     this.myRL = new RemoteListenableImpl(
         pd.getName(), new MyBufferWatcher(), rlc);
@@ -168,7 +164,7 @@ implements RemoteProcess {
             ((i < (n-1)) ? " \\" : ""));
       }
       System.err.println("with environment:");
-      int nEnvVars = ((envVars != null) ? envVars.length : 0);
+      int nEnvVars = envVars.length;
       for (int i = 0; i < nEnvVars; i++) {
         System.err.println("  "+envVars[i]);
       }

@@ -191,14 +191,6 @@ public class SystemAccess {
     }
   }
 
-  private static void unmarkProcesses(
-      ProcessStatus[] psa) {
-    for (int i = 0; i < psa.length; i++) {
-      ProcessStatus pi = psa[i];
-      pi.unmark();
-    }
-  }
-
   private static void markProcesses(
       ProcessStatus[] psa,
       long pid) {
