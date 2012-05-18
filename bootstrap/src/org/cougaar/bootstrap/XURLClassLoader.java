@@ -466,19 +466,17 @@ public class XURLClassLoader extends SecureClassLoader {
 	// make sure the person that created this class loader
 	// would have this permission
 
-	if (p != null) {
-	    final SecurityManager sm = System.getSecurityManager();
-	    if (sm != null) {
-		final Permission fp = p;
-		AccessController.doPrivileged(new PrivilegedAction() {
-		    public Object run() throws SecurityException {
-			sm.checkPermission(fp);
-			return null;
-		    }
-		}, acc);
-	    }
-	    perms.add(p);
+	final SecurityManager sm = System.getSecurityManager();
+	if (sm != null) {
+	   final Permission fp = p;
+	   AccessController.doPrivileged(new PrivilegedAction() {
+	      public Object run() throws SecurityException {
+	         sm.checkPermission(fp);
+	         return null;
+	      }
+	   }, acc);
 	}
+	perms.add(p);
 	return perms;
     }
 

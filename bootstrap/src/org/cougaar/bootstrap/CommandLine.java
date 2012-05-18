@@ -447,7 +447,6 @@ public final class CommandLine {
     String clazz = null;
     List prog_parameters = Collections.EMPTY_LIST;
     Map m = new LinkedHashMap();
-    boolean hasBootpath = false;
     String node = node_name;
     for (int x = 0; x < 4; x++) {
       CommandData cd =
@@ -491,9 +490,6 @@ public final class CommandLine {
             m.put(s1, s2);
           }
         } else {
-          if (s.startsWith("-Xbootclasspath")) {
-            hasBootpath = true;
-          }
           m.put(s, null);
         }
       }

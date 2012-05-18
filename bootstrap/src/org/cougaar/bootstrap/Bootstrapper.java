@@ -252,7 +252,6 @@ public class Bootstrapper
 
   /** Operating specific path separator */
   private static final char OS_SEP_CHAR = File.pathSeparatorChar;
-  private static final String OS_SEP = File.pathSeparator;
 
   /** Standardized path separator, which works on both Linux and Windows */
   private static final char STD_SEP_CHAR = ',';

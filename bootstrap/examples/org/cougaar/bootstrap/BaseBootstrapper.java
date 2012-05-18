@@ -60,10 +60,10 @@ public class BaseBootstrapper
 
   protected void setPolicy() {}
   protected void setSecurityManager() {
-    String key = getNodename();
+     getNodename();
   }
   protected void createJarVerificationLog() {
-    String key = getNodename();
+     getNodename();
   }
   protected void loadCryptoProviders() {
   }
