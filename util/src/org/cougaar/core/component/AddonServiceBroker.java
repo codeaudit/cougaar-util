@@ -129,7 +129,6 @@ public class AddonServiceBroker
         }
         return sr;
       }
-      s = null;
     } else {
       s = delegate.getService(requestor, serviceClass, srl);
     }

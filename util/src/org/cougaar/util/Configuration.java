@@ -182,7 +182,7 @@ public final class Configuration {
   private static final URL filenameToURL(String s) throws MalformedURLException {
     try {
       File f = new File(s);
-      return f.getCanonicalFile().toURL();
+      return f.getCanonicalFile().toURI().toURL();
     } catch (Exception e) {
       throw new MalformedURLException("Cannot convert string to file URL "+s);
     }

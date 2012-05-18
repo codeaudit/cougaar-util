@@ -659,10 +659,12 @@ implements ExtendedServiceBroker {
     public void release() {
       timestamp = 0;
     }
-    public void obtain() {
+    @SuppressWarnings("unused")
+   public void obtain() {
       timestamp = System.currentTimeMillis();
     }
-    public int getId() { return id; }
+    @SuppressWarnings("unused")
+   public int getId() { return id; }
     public long getTimestamp() { return timestamp; }
     public int getProviderId() { return 0; }
     public ComponentDescription getProviderComponentDescription() {

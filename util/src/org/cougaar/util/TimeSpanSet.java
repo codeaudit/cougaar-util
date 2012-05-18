@@ -26,7 +26,6 @@
 
 package org.cougaar.util;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -42,7 +41,7 @@ import java.util.SortedSet;
  **/
 public class TimeSpanSet
   extends ArrayListFoundation
-  implements SortedSet, Serializable
+  implements SortedSet
 {
   /**
     * 

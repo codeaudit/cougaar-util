@@ -78,8 +78,6 @@ public class TestStackMachine extends TestCase {
     }});
     sm.add(new StackMachine.SState("E") { @Override
    public void invoke() { 
-      Integer i = (Integer) getVar("i");
-      //System.err.println(""+i+"*"+i+" = "+getResult());
       transit("DONE");
     }});
 

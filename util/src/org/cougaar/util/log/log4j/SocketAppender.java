@@ -31,7 +31,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import org.apache.log4j.AppenderSkeleton;
-import org.apache.log4j.Priority;
 import org.apache.log4j.spi.LoggingEvent;
 import org.cougaar.bootstrap.SystemProperties;
 
@@ -64,7 +63,6 @@ import org.cougaar.bootstrap.SystemProperties;
  */
 public class SocketAppender extends AppenderSkeleton {
 
-  private static final int SHOUT_INT = Priority.ERROR_INT+1;
 
   private boolean hasOptHost = false;
   private boolean hasOptPort = false;

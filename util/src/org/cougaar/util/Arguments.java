@@ -1001,7 +1001,7 @@ public final class Arguments extends AbstractMap<String, List<String>>
         }
         if (!(o instanceof Class)) {
             throw new IllegalArgumentException("Expecting null, a String, or a Class, not "
-                    + (o == null ? "null" : (o.getClass().getName()) + " " + o));
+                    + ((o.getClass().getName()) + " " + o));
         }
         List<String> ret = new ArrayList<String>();
         for (Class cl = (Class) o; cl != null; cl = cl.getSuperclass()) {
@@ -1211,7 +1211,8 @@ public final class Arguments extends AbstractMap<String, List<String>>
             return false;
         }
 
-        public List<String> get(String key) {
+        @SuppressWarnings("unused")
+      public List<String> get(String key) {
             for (int i = 0; i < keys.length; i++) {
                 if (key.equals(keys[i])) {
                     return Collections.singletonList(values[i]);

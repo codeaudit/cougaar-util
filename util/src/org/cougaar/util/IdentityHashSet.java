@@ -32,7 +32,6 @@ import java.util.Collection;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Hash set based upon object "==" identity.
@@ -41,7 +40,7 @@ import java.util.Set;
  */
 public class IdentityHashSet 
 extends AbstractSet
-implements Set, Cloneable, Serializable
+implements Cloneable, Serializable
 {
   /**
     * 

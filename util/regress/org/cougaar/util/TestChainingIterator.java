@@ -35,7 +35,6 @@ import junit.framework.TestCase;
 public class TestChainingIterator extends TestCase {
   private List a;
   private List b;
-  private List c;
   @Override
 protected void setUp() {
     a = new ArrayList();
@@ -46,14 +45,12 @@ protected void setUp() {
     b.add("C");
     b.add("D");
     
-    c = new ArrayList();
   }
 
   @Override
 protected void tearDown() {
     a = null;
     b = null;
-    c = null;
   }
 
   private void traverseAB(Iterator x) {

@@ -84,7 +84,7 @@ public class OptionPane extends JOptionPane {
 
         pane.selectInitialValue();
 
-        dialog.show();
+        dialog.setVisible(true);
 
         Object selectedValue = pane.getValue();
 
@@ -126,7 +126,7 @@ public class OptionPane extends JOptionPane {
 
         pane.selectInitialValue();
         dialog.pack();              // This makes the difference!
-        dialog.show();
+        dialog.setVisible(true);
 
         Object value = pane.getInputValue();
 

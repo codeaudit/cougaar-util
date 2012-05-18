@@ -37,8 +37,10 @@ public class TestTimeSpanSet extends TestCase {
     public long getStartTime() { return start; }
     public long getEndTime() { return end;}
     public void setTimeSpan(long s, long e) {start = s; end = e;}
-    public String getText() { return text;}
-    public void setText(String t) { text = t; }
+    @SuppressWarnings("unused")
+   public String getText() { return text;}
+    @SuppressWarnings("unused")
+   public void setText(String t) { text = t; }
     @Override
    public String toString() { return text+"/"+start+"-"+end;}
   }

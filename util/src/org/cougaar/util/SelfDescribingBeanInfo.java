@@ -29,7 +29,6 @@ package org.cougaar.util;
 import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
 import java.beans.EventSetDescriptor;
-import java.beans.IntrospectionException;
 import java.beans.MethodDescriptor;
 import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
@@ -55,7 +54,7 @@ public class SelfDescribingBeanInfo implements BeanInfo {
     Collection pds = new ArrayList();
     try {
       addPropertyDescriptors(pds);
-    } catch (IntrospectionException ie) {
+    } catch (RuntimeException ie) {
       System.err.println("Warning: Caught exception while introspecting on "+this.getClass());
       ie.printStackTrace();
     }
@@ -66,7 +65,7 @@ public class SelfDescribingBeanInfo implements BeanInfo {
    * to the collection c.  Make sure that overridden methods call super 
    * as appropriate.
    **/
-  protected void addPropertyDescriptors(Collection c) throws IntrospectionException {
+  protected void addPropertyDescriptors(Collection c) {
   }
 
 }

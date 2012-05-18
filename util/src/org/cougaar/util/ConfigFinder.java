@@ -381,7 +381,7 @@ public class ConfigFinder {
    * Note that this must actually attempt to open the various URLs
    * under consideration, so this is <em>not</em> an inexpensive operation.
    **/
-  public URL find(String aURL) throws IOException {
+  public URL find(String aURL) {
     synchronized (urlCache) {
       URL u = (URL) urlCache.get(aURL);
       if (u != null) {

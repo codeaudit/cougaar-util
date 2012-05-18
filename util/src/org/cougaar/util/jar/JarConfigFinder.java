@@ -38,7 +38,6 @@ import java.io.InputStream;
 import java.net.JarURLConnection;
 import java.net.URI;
 import java.net.URL;
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -292,8 +291,7 @@ public InputStream open(String aURL)
    * @param aURL The name of a file being searched
    **/
   @Override
-public URL find(String aURL)
-  throws IOException {
+public URL find(String aURL) {
     // The resolveUrl() method checks that the
     // signature was valid, so we do not check again
     URL theURL = resolveUrl(aURL);
@@ -399,11 +397,11 @@ public URL find(String aURL)
         File f = new File(aFileName);
         if (f.isAbsolute() && !jarFilesOnly()) {
           try {
-            if (isValidUrl(f.toURL())) {
-              addFileEntryToCache(f.getName(), f.toURL());
+            if (isValidUrl(f.toURI().toURL())) {
+              addFileEntryToCache(f.getName(), f.toURI().toURL());
               // Is there a match?
               if (f.getPath().equals(aFileName)) {
-                theURL = f.toURL();
+                theURL = f.toURI().toURL();
               }
             }
           } catch (Exception e) {
@@ -515,27 +513,12 @@ public URL find(String aURL)
     }
   }
   
-  private void deleteDirectory(File file) {
-    if (file == null || !file.exists()) {
-      return;
-    }
-    if (file.isFile()) {
-      file.delete();
-    }
-    else {
-      File subfiles[] = file.listFiles();
-      for (int i = 0 ; i < subfiles.length ; i++) {
-        deleteDirectory(subfiles[i]);
-      }
-    }
-  }
-  
   /**
    * Copy a file contained in a Jar file so that it can be opened using
    * a <class>File</class> handle.
    */
   protected File copyFileToTempDirectory(URL aUrl, String aFilename)
-  throws IOException, GeneralSecurityException {
+  throws IOException {
     if (getLogger().isDebugEnabled()) {
       getLogger().debug("Copying " + aUrl + " to temp directory");
     }
@@ -650,8 +633,7 @@ public URL find(String aURL)
    * Check the integrity of a jar file. Do nothing in the base
    * implementation.
    */
-  protected void verifyJarFile(JarFile aJarFile)
-  throws GeneralSecurityException {
+  protected void verifyJarFile(JarFile aJarFile) {
   }
   
   /**
@@ -669,8 +651,7 @@ public URL find(String aURL)
    * @exception GeneralSecurityException if there was a problem while checking
    *                the integrity of the input stream.
    */
-  protected void verifyInputStream(URL aURL)
-  throws IOException, GeneralSecurityException {
+  protected void verifyInputStream(URL aURL) {
   }
   
   private void addFileEntryToCache(String aFileName, URL aURL) {
@@ -718,11 +699,11 @@ public URL find(String aURL)
           // This is not a Jar file, or the file could not be read
           if (!jarFilesOnly() && aFileName != null) {
             try {
-              if (isValidUrl(aFile.toURL())) {
-                addFileEntryToCache(aFile.getName(), aFile.toURL());
+              if (isValidUrl(aFile.toURI().toURL())) {
+                addFileEntryToCache(aFile.getName(), aFile.toURI().toURL());
                 // Is there a match?
                 if (aFile.getPath().equals(aFileName)) {
-                  theURL = aFile.toURL();
+                  theURL = aFile.toURI().toURL();
                 }
               }
             } catch (Exception e) {
@@ -734,7 +715,7 @@ public URL find(String aURL)
           // This is a Jar file.
           // Add the new jar file to the list of jar files.
           try {
-            JarFileInfo entry = appendJarFile(aFile.toURL());
+            JarFileInfo entry = appendJarFile(aFile.toURI().toURL());
             if (aFileName != null) {
               theURL = locateFileInJarFile(aFileName, entry);
             }
@@ -758,7 +739,7 @@ public URL find(String aURL)
           if (aJar != null) {
             // Add the new jar file to the list of jar files.
             try {
-              JarFileInfo entry = appendJarFile(jarFiles[i].toURL());
+              JarFileInfo entry = appendJarFile(jarFiles[i].toURI().toURL());
               if (aFileName != null) {
                 URL aURL = locateFileInJarFile(aFileName, entry);
                 if (aURL != null && theURL == null) {
@@ -782,11 +763,11 @@ public URL find(String aURL)
           for (int i = 0 ; i < files.length ; i++) {
             try {
               File confFile = files[i];
-              if (isValidUrl(confFile.toURL())) {
-                addFileEntryToCache(confFile.getName(), confFile.toURL());
+              if (isValidUrl(confFile.toURI().toURL())) {
+                addFileEntryToCache(confFile.getName(), confFile.toURI().toURL());
                 // Is there a match?
                 if (confFile.getName().equals(aFileName)) {
-                  theURL = confFile.toURL();
+                  theURL = confFile.toURI().toURL();
                 }
               }
             }
@@ -810,7 +791,8 @@ public URL find(String aURL)
     try {
       JarURLConnection juc = (JarURLConnection)base.openConnection();
       juc.setUseCaches(false);
-      JarFile jf = juc.getJarFile();
+      // called for side-effect
+      juc.getJarFile();
       // This is a Jar file.
       // Add the new jar file to the list of jar files.
       JarFileInfo entry = appendJarFile(juc.getURL());

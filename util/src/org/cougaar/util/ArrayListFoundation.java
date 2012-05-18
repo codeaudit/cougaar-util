@@ -59,7 +59,7 @@ import java.util.List;
  */
 
 public class ArrayListFoundation extends AbstractList 
-  implements List, Cloneable, java.io.Serializable 
+  implements Cloneable, java.io.Serializable 
 {
   private static final long serialVersionUID = 1203987682910938923L;
 

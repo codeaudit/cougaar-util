@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import junit.framework.TestCase;
 
 public class TestWaitQueue extends TestCase {
-  private long sleep_millis = 500; /*half a second*/
 
   public void test_wq() {
     ArrayList keys = new ArrayList();
