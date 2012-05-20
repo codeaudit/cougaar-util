@@ -30,272 +30,305 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
+import java.util.List;
 
 import org.cougaar.util.annotations.Cougaar;
 import org.cougaar.util.log.Logger;
 import org.cougaar.util.log.Logging;
 
-/** A collection of utilities to be used for binding components
+/**
+ * A collection of utilities to be used for binding components
  **/
 
-public abstract class BindingUtility {
+public final class BindingUtility {
 
-  public static boolean activate(Object child, BindingSite bindingSite, ServiceBroker serviceBroker) {
-    setBindingSite(child, bindingSite);
-    setServices(child, serviceBroker);
-    initialize(child);
-    load(child);
-    start(child);
-    return true;
-  }
+   private static final Logger logger = Logging.getLogger(BindingUtility.class);
+   
+   private final Object target;
+   private final Class targetClass;
+   private final ServiceBroker broker;
+   private final BindingSite bindingSite;
+   private final List<ServiceSetFailure> serviceFailures = new ArrayList<ServiceSetFailure>();
+   private final List<ServiceSetter> serviceSetters = new ArrayList<ServiceSetter>();
+   
+   private BindingUtility(Object child, BindingSite bindingSite, ServiceBroker serviceBroker) {
+      this.target = child;
+      this.targetClass = child.getClass();
+      this.bindingSite = bindingSite;
+      this.broker = serviceBroker;
+   }
+   
+   /**
+    * Sets the binding site of the child to the specified object if possible.
+    * 
+    * @return success or failure.
+    **/
+   public static boolean setBindingSite(Object child, BindingSite bindingSite) {
+      return new BindingUtility(child, bindingSite, null).setTargetBindingSite();
+   }
 
-  /** Sets a the binding site of the child to the specified object
-   * if possible.
-   * @return true on success
-   **/
-  public static boolean setBindingSite(Object child, BindingSite bindingSite) { 
-    Class childClass = child.getClass();
-    try {
-      Method m;
-      try {
-        m = childClass.getMethod("setBindingSite", new Class[]{BindingSite.class});
-      } catch (NoSuchMethodException e) {
-        return false;
-      }
+   /**
+    * Configure the services for the child.
+    * 
+    * @return success or failure.
+    */
+   public static boolean setServices(Object child, ServiceBroker serviceBroker) {
+      return new BindingUtility(child, null, serviceBroker).setTargetServices();
+   }
+   
+   /**
+    * Set the binding site, configure the services and load the child.
+    * 
+    * @return success or failure.
+    */
+   public static boolean activate(Object child, BindingSite bindingSite, ServiceBroker serviceBroker) {
+      return new BindingUtility(child, bindingSite, serviceBroker).activateTarget();
+   }
 
-      m.invoke(child, new Object[]{bindingSite});
+   private boolean activateTarget() {
+      setTargetBindingSite();
+      setTargetServices();
+      invoke("initialize");
+      invoke("load");
+      invoke("start");
       return true;
-    } catch (Exception e) {
-      throw new ComponentLoadFailure("Couldn't set BindingSite", child, e);
-    }
-  }
-
-  public static boolean setServiceBroker(Object child, ServiceBroker serviceBroker) {
-    Class childClass = child.getClass();
-    try {
-      Method m;
+   }
+   
+   private boolean setTargetBindingSite() {
       try {
-        m = childClass.getMethod("setServiceBroker", new Class[]{ServiceBroker.class});
+         Method setBindingSite;
+         try {
+            setBindingSite = targetClass.getMethod("setBindingSite", BindingSite.class);
+         } catch (NoSuchMethodException e) {
+            return false;
+         }
+
+         setBindingSite.invoke(target, bindingSite);
+         return true;
+      } catch (Exception e) {
+         throw new ComponentLoadFailure("Couldn't set BindingSite", target, e);
+      }
+   }
+   
+   private boolean setTargetServices() {
+      try {
+         // first set the service broker, acting as if ServiceBroker
+         // implements Service (which it may become someday).
+         setServiceBroker();
+         addAnnotatedSetters();
+         addReflectiveSetters();
+         // call the setters if we haven't failed yet
+         if (serviceFailures.isEmpty()) {
+            for (ServiceSetter setter : serviceSetters) {
+               setter.invoke(serviceFailures);
+            }
+         }
+         // if we've got any failures, report on them
+         if (!serviceFailures.isEmpty()) {
+            logger.error("Component " + target + " could not be provided with all required services");
+            for (ServiceSetFailure failure : serviceFailures) {
+               failure.log();
+            }
+            // now release any services we had grabbed
+            for (ServiceSetter setter : serviceSetters) {
+               try {
+                  setter.release(broker, target);
+               } catch (RuntimeException t) {
+                  logger.error("Failed to release service " + setter + " while backing out initialization of " + target, t);
+               }
+            }
+         }
+         return !serviceFailures.isEmpty();
+      } catch (RuntimeException e) {
+         throw new ComponentLoadFailure("Couldn't set services", target, e);
+      }
+   }
+
+   private void invoke(String methodName) {
+      try {
+         Method method = targetClass.getMethod(methodName);
+         method.invoke(target);
+      } catch (InvocationTargetException e) {
+         throw new ComponentRuntimeException("failed while calling " + methodName + "()", target, e.getCause());
+      } catch (RuntimeException e) {
+         throw new ComponentRuntimeException("failed to call " + methodName + "()", target, e);
+      } catch (IllegalAccessException e) {
+         throw new ComponentRuntimeException("failed while calling " + methodName + "()", target, e.getCause());
       } catch (NoSuchMethodException e) {
-        return false;
+         return;
       }
+   }
 
-      m.invoke(child, new Object[]{serviceBroker});
-      return true;
-    } catch (Exception e) {
-      throw new ComponentLoadFailure("Couldn't set ServiceBroker", child, e);
-    }
-  }
+   private boolean setServiceBroker() {
+      try {
+         Method setServiceBroker;
+         try {
+            setServiceBroker = targetClass.getMethod("setServiceBroker", ServiceBroker.class);
+         } catch (NoSuchMethodException e) {
+            return false;
+         }
 
-  private static class SetServiceInvocation {
-    final Field f;
-    final Method m;
-    final Object o;
-    final Object service;
-    final Class p;
-
-    SetServiceInvocation(Method m, Object o, Object s, Class p) {
-      this.m = m; this.o = o; this.service = s; this.p = p;
-      this.f = null;
-    }
-    
-    SetServiceInvocation(Field f, Object o, Object s, Class p) {
-      this.f = f; this.o = o; this.service = s; this.p = p;
-      this.m = null;
-    }
-    
-    void invoke() throws InvocationTargetException, IllegalAccessException {
-      // we shouldn't have been here if service is null.
-      assert service != null;
-      if (m != null) {
-        Object[] args = new Object[] { service };
-        m.invoke(o, args);
-      } else if (f != null){
-        f.set(o, service);
+         setServiceBroker.invoke(target, broker);
+         return true;
+      } catch (Exception e) {
+         throw new ComponentLoadFailure("Couldn't set ServiceBroker", target, e);
       }
-    }
-    void release(ServiceBroker b, Object child) {
-      b.releaseService(child,p,service);
-    }
-  }
+   }
 
-  public static boolean setServices(Object child, ServiceBroker servicebroker) {
-    // first set the service broker, acting as if ServiceBroker
-    // implements Service (which it may become someday).
-    setServiceBroker(child, servicebroker);
-
-    Class childClass = child.getClass();
-    // failures are Object[] tuples of Service and Throwable
-    ArrayList failures = new ArrayList(1); // remember the errors if we have to bail out
-
-    ArrayList ssi = new ArrayList();
-
-    try {
-      Collection<Field> fields = Cougaar.getAnnotatedFields(childClass, Cougaar.ObtainService.class);
-      for (final Field field : fields) {
-          Class<?> fieldClass = field.getType();
-          if (Service.class.isAssignableFrom(fieldClass)) {
-              final Object fc = child;
-              ServiceRevokedListener srl = new ServiceRevokedListener() {
-                  public void serviceRevoked(ServiceRevokedEvent re) {
-                      try {
-                          field.set(fc, null);
-                      } catch (Throwable t) {
-                          Logger logger = Logging.getLogger(BindingUtility.class);
-                          logger.error("Component "+fc+" annotated field "+field+" fails with null" , t);
-                      }
+   private void addReflectiveSetters() {
+      for (Method method : targetClass.getMethods()) {
+         String methodName = method.getName();
+         if ("setBindingSite".equals(methodName)) {
+            continue;
+         }
+         if ("setServiceBroker".equals(methodName)) {
+            continue;
+         }
+         Class[] params = method.getParameterTypes();
+         if (methodName.startsWith("set") && params.length == 1) {
+            Class serviceClass = params[0];
+            if (Service.class.isAssignableFrom(serviceClass)) {
+               String serviceClassName = serviceClass.getSimpleName();
+               if (methodName.endsWith(serviceClassName)) {
+                  // ok: m is a "public setX(X)" method where X is a Service.
+                  // create the revocation listener
+                  ServiceRevokedListener srl = new MethodServiceRevokedListener(method);
+                  // Let's try getting the service...
+                  Service service = broker.getService(target, serviceClass, srl);
+                  if (service == null) {
+                     new ServiceSetFailure(serviceClass, "No service for " + serviceClass);
+                  } else {
+                     serviceSetters.add(new ServiceSetter(method, service, serviceClass));
                   }
-              };
-              try {
-                  Object service = servicebroker.getService(child, fieldClass, srl);
-                  if (service == null) throw new Throwable("No service for "+fieldClass);
-                  // remember the services to set for the second pass
-                  ssi.add(new SetServiceInvocation(field, child, service, fieldClass));
-              } catch (Throwable t) {
-                  Object[] fail = new Object[] {fieldClass, t};
-                  failures.add(fail);
-                  break;          // break out of the loop
-              }
-          } else if (ServiceBroker.class.equals(fieldClass)) {
-              try {
-                  field.set(child, servicebroker);
-              } catch (Throwable t) {
-                  Logger logger = Logging.getLogger(BindingUtility.class);
-                  logger.error("Component "+child+" annotated field "+field+" fails with ServiceBroker" , t);
-              }
-          }
+               }
+            }
+         }
       }
-      Method[] methods = childClass.getMethods();
+   }
 
-      int l = methods.length;
-      for (int i=0; i<l; i++) { // look at all the methods
-        Method m = methods[i];
-        String s = m.getName();
-        if ("setBindingSite".equals(s)) continue;
-        if ("setServiceBroker".equals(s)) continue;
-        Class[] params = m.getParameterTypes();
-        if (s.startsWith("set") &&
-            params.length == 1) {
-          Class p = params[0];
-          if (Service.class.isAssignableFrom(p)) {
-            String pname = p.getName();
-            {                     // trim the package off the classname
-              int dot = pname.lastIndexOf(".");
-              if (dot>-1) pname = pname.substring(dot+1);
+   private void addAnnotatedSetters() {
+      Collection<Field> fields = Cougaar.getAnnotatedFields(targetClass, Cougaar.ObtainService.class);
+      for (Field field : fields) {
+         Class fieldClass = field.getType();
+         if (Service.class.isAssignableFrom(fieldClass)) {
+            ServiceRevokedListener srl = new FieldServiceRevokedListener(field, target);
+            Service service = broker.getService(target, fieldClass, srl);
+            if (service == null) {
+               new ServiceSetFailure(fieldClass, "No service for " + fieldClass);
+               break;
+            } else {
+               serviceSetters.add(new ServiceSetter(field, service, fieldClass));
             }
-            
-            if (s.endsWith(pname)) { 
-              // ok: m is a "public setX(X)" method where X is a Service.
-              // create the revocation listener
-              final Method fm = m;
-              final Object fc = child;
-              ServiceRevokedListener srl = new ServiceRevokedListener() {
-                  public void serviceRevoked(ServiceRevokedEvent sre) {
-                    Object[] args = new Object[] { null };
-                    try {
-                      fm.invoke(fc, args);
-                    } catch (Throwable e) {
-                      Logger logger = Logging.getLogger(BindingUtility.class);
-                      logger.error("Component "+fc+" service setter "+fm+" fails on null argument", e);
-                    }
-                  }
-                };
-              // Let's try getting the service...
-              try {
-                Object service = servicebroker.getService(child, p, srl);
-                if (service == null) throw new Throwable("No service for "+p);
 
-                // remember the services to set for the second pass
-                ssi.add(new SetServiceInvocation(m,child,service,p));
-              } catch (Throwable t) {
-                Object[] fail = new Object[] {p,t};
-                failures.add(fail);
-                break;          // break out of the loop
-              }
+         } else if (ServiceBroker.class.equals(fieldClass)) {
+            try {
+               field.set(target, broker);
+            } catch (Exception e) {
+               logger.error("Component " + target + " annotated field " + field + " fails with ServiceBroker", e);
             }
-          }
-        }
+         }
+      }
+   }
+
+   private class ServiceSetter {
+      private final Field targetField;
+      private final Method setter;
+      private final Service service;
+      private final Class serviceClass;
+
+      ServiceSetter(Method setter, Service service, Class serviceClass) {
+         this.setter = setter;
+         this.service = service;
+         this.serviceClass = serviceClass;
+         this.targetField = null;
       }
 
-      // call the setters if we haven't failed yet
-      if (failures.size() == 0) {
-        for (Iterator it = ssi.iterator(); it.hasNext(); ) {
-          SetServiceInvocation setter = (SetServiceInvocation) it.next();
-          try {
-            setter.invoke();
-          } catch (Throwable t) {
-            Object[] fail = new Object[] {setter.p, t};
-            failures.add(fail);
-          }
-        }
+      ServiceSetter(Field targetField, Service service, Class serviceClass) {
+         this.targetField = targetField;
+         this.service = service;
+         this.serviceClass = serviceClass;
+         this.setter = null;
+      }
+
+      void invoke(List<ServiceSetFailure> failures) {
+         // we shouldn't have been here if service is null.
+         assert service != null;
+         try {
+            if (setter != null) {
+               setter.invoke(target, service);
+            } else if (targetField != null) {
+               targetField.set(target, service);
+            }
+         } catch (Exception e) {
+            new ServiceSetFailure(serviceClass, e);
+         }
+      }
+
+      void release(ServiceBroker broker, Object child) {
+         broker.releaseService(child, serviceClass, service);
+      }
+
+      @Override
+      public String toString() {
+         return serviceClass.toString();
+      }
+
+   }
+
+   private final class ServiceSetFailure {
+      private final Class serviceClass;
+      private final Exception failure;
+
+      ServiceSetFailure(Class serviceClass, Exception failure) {
+         this.serviceClass = serviceClass;
+         this.failure = failure;
+         serviceFailures.add(this);
       }
       
-      // if we've got any failures, report on them
-      if (failures.size() > 0) {
-        Logger logger = Logging.getLogger(BindingUtility.class);
-        logger.error("Component "+child+" could not be provided with all required services");
-        for (Iterator it = failures.iterator(); it.hasNext(); ){
-          Object[] fail = (Object[]) it.next();
-          logger.error("Component "+child+" Failed service "+fail[0], (Throwable) fail[1]);
-        }
-        // now release any services we had grabbed
-        for (Iterator it = ssi.iterator(); it.hasNext(); ) {
-          SetServiceInvocation setter = (SetServiceInvocation) it.next();
-          try {
-            setter.release(servicebroker, child);
-          } catch (Throwable t) {
-            logger.error("Failed to release service "+setter.p+" while backing out initialization of "+child, t);
-          }
-        }
+      ServiceSetFailure(Class serviceClass, String errorMessage) {
+         this(serviceClass, new Exception(errorMessage));
+         serviceFailures.add(this);
       }
-    } catch (Throwable e) {
-      // probably this cannot happen any more
-      throw new ComponentLoadFailure("Couldn't get services", child, e);
-    }
 
-    if (failures.size() > 0) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  /** Run initialize on the child component if possible **/
-  public static boolean initialize(Object child) { 
-    return call0(child, "initialize");
-  }
-
-  /** Run load on the child component if possible **/
-  public static boolean load(Object child) { 
-    return call0(child, "load");
-  }
-
-  /** Run start on the child component if possible **/
-  public static boolean start(Object child) { 
-    return call0(child, "start");
-  }
-
-  public static boolean call0(Object child, String method) {
-    Class childClass = child.getClass();
-    Method init = null;
-    try {
-      try {
-        init = childClass.getMethod(method, (Class[]) null);
-      } catch (NoSuchMethodException e1) { }
-      if (init != null) {
-        init.invoke(child, new Object[] {});
-        return true;
+      void log() {
+         logger.error("Faild to set service " + serviceClass, failure);
       }
-    } catch (java.lang.reflect.InvocationTargetException ite) {
-      throw new ComponentRuntimeException("failed while calling "+method+"()", 
-                                          child,
-                                          ite.getCause());
-    } catch (Exception e) {
-      throw new ComponentRuntimeException("failed to call "+method+"()", 
-                                          child,
-                                          e);
-    }
-    return false;
-  }
+
+   }
+
+   private final class MethodServiceRevokedListener
+         implements ServiceRevokedListener {
+      private final Method setter;
+
+      private MethodServiceRevokedListener(Method setter) {
+         this.setter = setter;
+      }
+
+      public void serviceRevoked(ServiceRevokedEvent sre) {
+         try {
+            setter.invoke(target, (Object) null);
+         } catch (Exception e) {
+            logger.error("Component " + target + " service setter " + setter + " fails on null argument", e);
+         }
+      }
+   }
+
+   private static final class FieldServiceRevokedListener
+         implements ServiceRevokedListener {
+      private final Field targetField;
+      private final Object targetObject;
+
+      private FieldServiceRevokedListener(Field field, Object object) {
+         this.targetField = field;
+         this.targetObject = object;
+      }
+
+      public void serviceRevoked(ServiceRevokedEvent re) {
+         try {
+            targetField.set(targetObject, null);
+         } catch (Exception e) {
+            logger.error("Component " + targetObject + " annotated field " + targetField + " fails with null", e);
+         }
+      }
+   }
 }
