@@ -257,7 +257,11 @@ public class Cougaar {
     public @interface Resolver {
     }
 
-    // Obtaining services, TBD
+   /**
+    * This annotation should be attached to public fields whose value should be
+    * assigned to the registered service of the field's type.  The field type
+    * <em>must</em> implement the interface {@link org.cougaar.core.component.Service}.
+    */
     @Retention(RetentionPolicy.RUNTIME)
     public @interface ObtainService {
     }
