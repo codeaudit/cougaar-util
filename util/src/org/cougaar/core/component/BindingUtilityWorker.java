@@ -17,8 +17,8 @@ import org.cougaar.util.log.Logger;
 import org.cougaar.util.log.Logging;
 
 class BindingUtilityWorker {
-   private static final Logger logger = Logging.getLogger(BindingUtility.class);
    private static final int POOL_SIZE = 10;
+   /* Use a pool to avoid to creating more of these very short-lived objects than necessary, */
    private static final List<BindingUtilityWorker> pool = new ArrayList<BindingUtilityWorker>(POOL_SIZE);
 
    static {
@@ -56,6 +56,13 @@ class BindingUtilityWorker {
 
    private BindingUtilityWorker() {
       // not instantiable except in the pool.
+   }
+
+   /*
+    * On-demand logger, intentionally for BindingUtility rather than worker class.
+    */
+   private static Logger getLogger() {
+      return Logging.getLogger(BindingUtility.class);
    }
 
    private void reinit(Object child, BindingSite bindingSite, ServiceBroker serviceBroker) {
@@ -111,9 +118,10 @@ class BindingUtilityWorker {
          }
          // if we've got any failures, report on them
          if (!serviceFailures.isEmpty()) {
+            Logger logger = getLogger();
             logger.error("Component " + target + " could not be provided with all required services");
             for (ServiceSetFailure failure : serviceFailures) {
-               failure.log();
+               failure.log(logger);
             }
             // now release any services we had grabbed
             for (ServiceSetter setter : serviceSetters) {
@@ -210,7 +218,7 @@ class BindingUtilityWorker {
             try {
                field.set(target, broker);
             } catch (Exception e) {
-               logger.error("Component " + target + " annotated field " + field + " fails with ServiceBroker", e);
+               getLogger().error("Component " + target + " annotated field " + field + " fails with ServiceBroker", e);
             }
          }
       }
@@ -295,7 +303,7 @@ class BindingUtilityWorker {
          this(serviceClass, new Exception(errorMessage));
       }
 
-      void log() {
+      void log(Logger logger) {
          logger.error("Faild to set service " + serviceClass, failure);
       }
    }
@@ -314,7 +322,7 @@ class BindingUtilityWorker {
          try {
             setter.invoke(targetObject, (Object) null);
          } catch (Exception e) {
-            logger.error("Component " + targetObject + " service setter " + setter + " fails on null argument", e);
+            getLogger().error("Component " + targetObject + " service setter " + setter + " fails on null argument", e);
          }
       }
    }
@@ -333,7 +341,7 @@ class BindingUtilityWorker {
          try {
             targetField.set(targetObject, null);
          } catch (Exception e) {
-            logger.error("Component " + targetObject + " annotated field " + targetField + " fails with null", e);
+            getLogger().error("Component " + targetObject + " annotated field " + targetField + " fails with null", e);
          }
       }
    }
