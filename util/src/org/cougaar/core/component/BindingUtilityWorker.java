@@ -115,18 +115,21 @@ class BindingUtilityWorker {
          }
          if (!serviceFailures.isEmpty()) {
             /*
-             * One or more services couldn't be set.
-             * 
-             * For now just log the failure, on the assumption that the services
-             * missed this time around will get set later when some other
-             * components loads.
-             * 
-             * If some service never gets set, that will presumably cause an NPE at some point.
+             * One or more services couldn't be set. Log failures
+             * and release the services we did get.
              */
             Logger logger = getLogger();
             logger.error("Component " + target + " could not be provided with all required services");
             for (ServiceSetFailure failure : serviceFailures) {
                failure.log(logger);
+            }
+            
+            for (ServiceSetter setter : serviceSetters) {
+               try {
+                  setter.release(broker, target);
+               } catch (RuntimeException t) {
+                  logger.error("Failed to release service " + setter + " while backing out initialization of " + target, t);
+               }
             }
          }
       } catch (RuntimeException e) {
@@ -173,15 +176,6 @@ class BindingUtilityWorker {
       for (Field field : fields) {
          Class fieldClass = field.getType();
          if (Service.class.isAssignableFrom(fieldClass)) {
-            try {
-               if (field.get(target) != null) {
-                  /* already has a value, don't clobber it. */
-                  getLogger().warn(target + " already has a value for " + field.getName());
-                  continue;
-               }
-            } catch (Exception e) {
-               /* Couldn't get field value to test, I guess that's ok... */
-            }
             ServiceRevokedListener srl = new FieldServiceRevokedListener(field, target);
             Service service = broker.getService(target, fieldClass, srl);
             if (service == null) {
@@ -215,18 +209,7 @@ class BindingUtilityWorker {
             if (Service.class.isAssignableFrom(serviceClass)) {
                String serviceClassName = serviceClass.getSimpleName();
                if (methodName.endsWith(serviceClassName)) {
-                  /*
-                   * method name is a "public setX(X)" method where X is a
-                   * Service.
-                   * 
-                   * XXX: We might have invoked this same method earlier!
-                   * 
-                   * Ideally we should test to see if the target already has a
-                   * value for this service but there's no clear way to do that
-                   * via reflection. For now that will be up to the setter
-                   * methods. Where possible we should replace these with
-                   * annotated fields, since those can be checked.
-                   */
+                  // method name is a "public setX(X)" method where X is a Service.
                   ServiceRevokedListener srl = new MethodServiceRevokedListener(method, target);
                   Service service = broker.getService(target, serviceClass, srl);
                   if (service == null) {
@@ -260,6 +243,10 @@ class BindingUtilityWorker {
          } catch (Exception e) {
             failures.add(new ServiceSetFailure(serviceClass, e));
          }
+      }
+
+      void release(ServiceBroker broker, Object child) {
+         broker.releaseService(child, serviceClass, service);
       }
 
       @Override
