@@ -26,8 +26,6 @@
 
 package org.cougaar.util;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,21 +45,10 @@ public class TestAnnotations extends TestCase {
     private static final String PARAMS =
             "SimpleParam=1, SimpleParam=100, ListParam=a, ListParam=b ";
 
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface TestArgGroup {
-        Argument.GroupRole role() default Argument.GroupRole.MEMBER;
-
-        Argument.GroupIterationPolicy policy() default Argument.GroupIterationPolicy.FIRST_UP;
-    }
-
     @Cougaar.ArgGroup(role=Argument.GroupRole.OWNER, name=GROUP_NAME)
     public List<Arguments> groupOwner;
 
-    @TestArgGroup(role=Argument.GroupRole.OWNER)
-    public List<Arguments> testArgGroupOwner;
-
     @Cougaar.Arg(name="SimpleParam")
-    @TestArgGroup()
     public int simple;
 
     @Cougaar.Arg(name="SimpleDefaultedParam", defaultValue="10")
@@ -107,7 +94,6 @@ public class TestAnnotations extends TestCase {
         list = null;
         defaultedList = null;
         defaultedListNull = new ArrayList<String>();
-        testArgGroupOwner = null;
         groupOwner = null;
     }
 
@@ -140,19 +126,12 @@ public class TestAnnotations extends TestCase {
     }
 
     public void test_groups() {
-        assertNull(testArgGroupOwner);
         assertNull(groupOwner);
         assertNull(list);
         Arguments arguments = new Arguments(PARAMS);
         setAll(arguments);
-        assertNotNull(testArgGroupOwner);
-        assertEquals(testArgGroupOwner.size(), 2);
         assertNotNull(groupOwner);
         assertEquals(groupOwner.size(), 2);
-        setGroup(testArgGroupOwner, 1);
-        assertEquals(simple, 100);
-        setGroup(testArgGroupOwner, 0);
-        assertEquals(simple, 1);
 
         assertNotNull(list);
         assertEquals(list.size(), 2);
