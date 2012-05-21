@@ -188,7 +188,7 @@ class BindingUtilityWorker {
                   // create the revocation listener
                   ServiceRevokedListener srl = new MethodServiceRevokedListener(method, target);
                   // Let's try getting the service...
-                  Service service = (org.cougaar.core.component.Service)broker.getService((org.cougaar.core.component.Service)target, serviceClass, srl); // djw: added casts to org.cougaar.core.component.Service
+                  Service service = broker.getService(target, serviceClass, srl);
                   if (service == null) {
                      serviceFailures.add(new ServiceSetFailure(serviceClass, "No service for " + serviceClass));
                   } else {
@@ -206,7 +206,7 @@ class BindingUtilityWorker {
          Class fieldClass = field.getType();
          if (Service.class.isAssignableFrom(fieldClass)) {
             ServiceRevokedListener srl = new FieldServiceRevokedListener(field, target);
-            Service service = (org.cougaar.core.component.Service)broker.getService((org.cougaar.core.component.Service)target, fieldClass, srl); // djw: added casts to org.cougaar.core.component.Service
+            Service service = broker.getService(target, fieldClass, srl);
             if (service == null) {
                serviceFailures.add(new ServiceSetFailure(fieldClass, "No service for " + fieldClass));
                break;
