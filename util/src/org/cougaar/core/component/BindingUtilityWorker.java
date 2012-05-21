@@ -78,13 +78,12 @@ class BindingUtilityWorker {
       inUse = false;
    }
 
-   boolean activateTarget() {
+   void activateTarget() {
       setTargetBindingSite();
       setTargetServices();
       invoke("initialize");
       invoke("load");
       invoke("start");
-      return true;
    }
 
    boolean setTargetBindingSite() {
@@ -103,7 +102,7 @@ class BindingUtilityWorker {
       }
    }
 
-   boolean setTargetServices() {
+   void setTargetServices() {
       try {
          // first set the service broker, acting as if ServiceBroker
          // implements Service (which it may become someday).
@@ -130,10 +129,8 @@ class BindingUtilityWorker {
                failure.log(logger);
             }
          }
-         return true;
       } catch (RuntimeException e) {
          getLogger().error("Couldn't set services for " + target, e);
-         return false;
       }
    }
 

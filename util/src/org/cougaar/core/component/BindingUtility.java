@@ -42,34 +42,30 @@ public final class BindingUtility {
     * 
     * @return success or failure.
     **/
-   public static boolean setBindingSite(Object child, BindingSite bindingSite) {
+   public static void setBindingSite(Object child, BindingSite bindingSite) {
       BindingUtilityWorker instance = BindingUtilityWorker.getInstance(child, bindingSite, null);
-      boolean status = instance.setTargetBindingSite();
+      instance.setTargetBindingSite();
       instance.free();
-      return status;
    }
 
    /**
     * Configure the services for the child.
-    * 
-    * @return success or failure.
     */
-   public static boolean setServices(Object child, ServiceBroker serviceBroker) {
+   public static void setServices(Object child, ServiceBroker serviceBroker) {
       BindingUtilityWorker instance = BindingUtilityWorker.getInstance(child, null, serviceBroker);
-      boolean status = instance.setTargetServices();
+      instance.setTargetServices();
       instance.free();
-      return status;
    }
 
    /**
     * Set the binding site, configure the services and load the child.
     * 
-    * @return success or failure.
+    * @return meaningless value, has always been hardwired to be true.
     */
    public static boolean activate(Object child, BindingSite bindingSite, ServiceBroker serviceBroker) {
       BindingUtilityWorker instance = BindingUtilityWorker.getInstance(child, bindingSite, serviceBroker);
-      boolean status = instance.activateTarget();
+      instance.activateTarget();
       instance.free();
-      return status;
+      return true;
    }
 }
