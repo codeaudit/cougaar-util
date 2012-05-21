@@ -110,31 +110,30 @@ class BindingUtilityWorker {
          setServiceBroker();
          addAnnotatedSetters();
          addReflectiveSetters();
-         // call the setters if we haven't failed yet
-         if (serviceFailures.isEmpty()) {
-            for (ServiceSetter setter : serviceSetters) {
-               setter.invoke(target, serviceFailures);
-            }
+
+         for (ServiceSetter setter : serviceSetters) {
+            setter.invoke(target, serviceFailures);
          }
-         // if we've got any failures, report on them
          if (!serviceFailures.isEmpty()) {
+            /*
+             * One or more services couldn't be set.
+             * 
+             * For now just log the failure, on the assumption that the services
+             * missed this time around will get set later when some other
+             * components loads.
+             * 
+             * If some service never gets set, that will presumably cause an NPE at some point.
+             */
             Logger logger = getLogger();
             logger.error("Component " + target + " could not be provided with all required services");
             for (ServiceSetFailure failure : serviceFailures) {
                failure.log(logger);
             }
-            // now release any services we had grabbed
-            for (ServiceSetter setter : serviceSetters) {
-               try {
-                  setter.release(broker, target);
-               } catch (RuntimeException t) {
-                  logger.error("Failed to release service " + setter + " while backing out initialization of " + target, t);
-               }
-            }
          }
-         return !serviceFailures.isEmpty();
+         return true;
       } catch (RuntimeException e) {
-         throw new ComponentLoadFailure("Couldn't set services", target, e);
+         getLogger().error("Couldn't set services for " + target, e);
+         return false;
       }
    }
 
@@ -169,13 +168,48 @@ class BindingUtilityWorker {
       }
    }
 
+   /*
+    * Set fields tagged with @Service annotation
+    */
+   private void addAnnotatedSetters() {
+      Collection<Field> fields = Cougaar.getAnnotatedFields(targetClass, Cougaar.ObtainService.class);
+      for (Field field : fields) {
+         Class fieldClass = field.getType();
+         if (Service.class.isAssignableFrom(fieldClass)) {
+            try {
+               if (field.get(target) != null) {
+                  /* already has a value, don't clobber it. */
+                  getLogger().warn(target + " already has a value for " + field.getName());
+                  continue;
+               }
+            } catch (Exception e) {
+               /* Couldn't get field value to test, I guess that's ok... */
+            }
+            ServiceRevokedListener srl = new FieldServiceRevokedListener(field, target);
+            Service service = broker.getService(target, fieldClass, srl);
+            if (service == null) {
+               serviceFailures.add(new ServiceSetFailure(fieldClass, "No service for " + fieldClass));
+            } else {
+               serviceSetters.add(new FieldSetter(field, service, fieldClass));
+            }
+   
+         } else if (ServiceBroker.class.equals(fieldClass)) {
+            try {
+               field.set(target, broker);
+            } catch (Exception e) {
+               getLogger().error("Component " + target + " annotated field " + field + " fails with ServiceBroker", e);
+            }
+         }
+      }
+   }
+   
+   /*
+    * Invoke setters for Services.  Can't use Introspector since no getters.
+    */
    private void addReflectiveSetters() {
       for (Method method : targetClass.getMethods()) {
          String methodName = method.getName();
-         if ("setBindingSite".equals(methodName)) {
-            continue;
-         }
-         if ("setServiceBroker".equals(methodName)) {
+         if ("setBindingSite".equals(methodName) || "setServiceBroker".equals(methodName)) {
             continue;
          }
          Class[] params = method.getParameterTypes();
@@ -184,10 +218,19 @@ class BindingUtilityWorker {
             if (Service.class.isAssignableFrom(serviceClass)) {
                String serviceClassName = serviceClass.getSimpleName();
                if (methodName.endsWith(serviceClassName)) {
-                  // ok: m is a "public setX(X)" method where X is a Service.
-                  // create the revocation listener
+                  /*
+                   * method name is a "public setX(X)" method where X is a
+                   * Service.
+                   * 
+                   * XXX: We might have invoked this same method earlier!
+                   * 
+                   * Ideally we should test to see if the target already has a
+                   * value for this service but there's no clear way to do that
+                   * via reflection. For now that will be up to the setter
+                   * methods. Where possible we should replace these with
+                   * annotated fields, since those can be checked.
+                   */
                   ServiceRevokedListener srl = new MethodServiceRevokedListener(method, target);
-                  // Let's try getting the service...
                   Service service = broker.getService(target, serviceClass, srl);
                   if (service == null) {
                      serviceFailures.add(new ServiceSetFailure(serviceClass, "No service for " + serviceClass));
@@ -195,30 +238,6 @@ class BindingUtilityWorker {
                      serviceSetters.add(new MethodSetter(method, service, serviceClass));
                   }
                }
-            }
-         }
-      }
-   }
-
-   private void addAnnotatedSetters() {
-      Collection<Field> fields = Cougaar.getAnnotatedFields(targetClass, Cougaar.ObtainService.class);
-      for (Field field : fields) {
-         Class fieldClass = field.getType();
-         if (Service.class.isAssignableFrom(fieldClass)) {
-            ServiceRevokedListener srl = new FieldServiceRevokedListener(field, target);
-            Service service = broker.getService(target, fieldClass, srl);
-            if (service == null) {
-               serviceFailures.add(new ServiceSetFailure(fieldClass, "No service for " + fieldClass));
-               break;
-            } else {
-               serviceSetters.add(new FieldSetter(field, service, fieldClass));
-            }
-
-         } else if (ServiceBroker.class.equals(fieldClass)) {
-            try {
-               field.set(target, broker);
-            } catch (Exception e) {
-               getLogger().error("Component " + target + " annotated field " + field + " fails with ServiceBroker", e);
             }
          }
       }
@@ -244,10 +263,6 @@ class BindingUtilityWorker {
          } catch (Exception e) {
             failures.add(new ServiceSetFailure(serviceClass, e));
          }
-      }
-
-      void release(ServiceBroker broker, Object child) {
-         broker.releaseService(child, serviceClass, service);
       }
 
       @Override
@@ -292,19 +307,20 @@ class BindingUtilityWorker {
 
    private static final class ServiceSetFailure {
       private final Class serviceClass;
-      private final Exception failure;
+      private final String message;
 
       ServiceSetFailure(Class serviceClass, Exception failure) {
          this.serviceClass = serviceClass;
-         this.failure = failure;
+         this.message = failure.getMessage();
       }
 
       ServiceSetFailure(Class serviceClass, String errorMessage) {
-         this(serviceClass, new Exception(errorMessage));
+         this.serviceClass = serviceClass;
+         this.message = errorMessage;
       }
 
       void log(Logger logger) {
-         logger.error("Faild to set service " + serviceClass, failure);
+         logger.error("Faild to set service " + serviceClass + ": " + message);
       }
    }
 
