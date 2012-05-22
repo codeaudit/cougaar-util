@@ -53,9 +53,19 @@ public final class BindingUtility {
     */
    public static void setServices(Object child, ServiceBroker serviceBroker) {
       BindingUtilityWorker instance = BindingUtilityWorker.getInstance(child, null, serviceBroker);
-      instance.setTargetServices();
+      instance.setTargetServices(false);
       instance.free();
    }
+   
+   /**
+    * Configure any annotated services for the child that haven't already been set.
+    */
+   public static void setUnboundServices(Object child, ServiceBroker serviceBroker) {
+      BindingUtilityWorker instance = BindingUtilityWorker.getInstance(child, null, serviceBroker);
+      instance.setTargetServices(true);
+      instance.free();
+   }
+
 
    /**
     * Set the binding site, configure the services and load the child.

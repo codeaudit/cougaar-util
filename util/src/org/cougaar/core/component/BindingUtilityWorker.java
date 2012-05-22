@@ -80,7 +80,7 @@ class BindingUtilityWorker {
 
    void activateTarget() {
       setTargetBindingSite();
-      setTargetServices();
+      setTargetServices(false);
       invoke("initialize");
       invoke("load");
       invoke("start");
@@ -102,14 +102,15 @@ class BindingUtilityWorker {
       }
    }
 
-   void setTargetServices() {
+   void setTargetServices(boolean unboundOnly) {
       try {
          // first set the service broker, acting as if ServiceBroker
          // implements Service (which it may become someday).
          setServiceBroker();
-         addAnnotatedSetters();
-         addReflectiveSetters();
-
+         addAnnotatedSetters(unboundOnly);
+         if (!unboundOnly) {
+            addReflectiveSetters();
+         }
          for (ServiceSetter setter : serviceSetters) {
             setter.invoke(target, serviceFailures);
          }
@@ -171,11 +172,21 @@ class BindingUtilityWorker {
    /*
     * Set fields tagged with @Service annotation
     */
-   private void addAnnotatedSetters() {
+   private void addAnnotatedSetters(boolean unboundOnly) {
       Collection<Field> fields = Cougaar.getAnnotatedFields(targetClass, Cougaar.ObtainService.class);
       for (Field field : fields) {
          Class fieldClass = field.getType();
          if (Service.class.isAssignableFrom(fieldClass)) {
+            if (unboundOnly) {
+               // continue if field already has a value
+               try {
+                  if (field.get(target) != null) {
+                     continue;
+                  }
+               } catch (Exception e) {
+                  // <shrug> keep going
+               }
+            }
             ServiceRevokedListener srl = new FieldServiceRevokedListener(field, target);
             Service service = broker.getService(target, fieldClass, srl);
             if (service == null) {
