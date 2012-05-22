@@ -119,7 +119,7 @@ class BindingUtilityWorker {
              * and release the services we did get.
              */
             Logger logger = getLogger();
-            logger.error("Component " + target + " could not be provided with all required services");
+            logger.warn("Component " + target + " could not be provided with all required services");
             for (ServiceSetFailure failure : serviceFailures) {
                failure.log(logger);
             }
@@ -291,20 +291,23 @@ class BindingUtilityWorker {
 
    private static final class ServiceSetFailure {
       private final Class serviceClass;
+      private final int level;
       private final String message;
 
       ServiceSetFailure(Class serviceClass, Exception failure) {
          this.serviceClass = serviceClass;
+         this.level = Logger.ERROR;
          this.message = failure.getMessage();
       }
 
       ServiceSetFailure(Class serviceClass, String errorMessage) {
          this.serviceClass = serviceClass;
          this.message = errorMessage;
+         this.level = Logger.WARN;
       }
 
       void log(Logger logger) {
-         logger.error("Faild to set service " + serviceClass + ": " + message);
+         logger.log(level, "Faild to set service " + serviceClass + ": " + message);
       }
    }
 
