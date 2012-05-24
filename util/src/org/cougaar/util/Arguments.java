@@ -885,8 +885,8 @@ public final class Arguments extends AbstractMap<String, List<String>>
             String s = (String) oi;
             int sep = s.indexOf('=');
             if (sep < 0) {
-                throw new IllegalArgumentException("Missing a \"=\" separator for \""
-                        + s + "\"");
+               // Not a name=val arg, skip it
+                continue;
             }
             String key = s.substring(0, sep).trim();
             String value = s.substring(sep + 1).trim();
