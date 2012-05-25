@@ -220,8 +220,8 @@ public class Cougaar {
 
     /**
      * This annotation should be attached to a public data member to initialize
-     * it from an argument element in the society xml.  If a name() is not
-     * provided the field name will be used as the argument name.
+     * it from an argument element in the society xml.  If a {@link #name()} is not
+     * provided, or is provided as "", the field name will be used as the argument name.
      */
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Arg {
@@ -310,20 +310,27 @@ public class Cougaar {
         String when() default NO_VALUE;
     }
 
-    /**
-    * Attach this to a method with one argument to run thoe body of the method
-    * on each instance matching a blackboard query that uses the given predicate
-    * method.
+   /**
+    * Attach this to a public method with at least one argument to run the body
+    * of the method on each instance matching a blackboard query that uses the
+    * given predicate method.
     * 
-    * The plugin is responsible for supplying a method to invoke all such
-    * queries.
+    * Invoking such a query would generally be done with the
+    * <code>runQuery</code> method in <code>AnnotatedSubscriptionsPlugin</code>
+    * passing the name as the argument. Contextual arguments can be included as
+    * varargs.
+    * 
+    * Queries will always be filtered by the type of the first parameter of the
+    * method being annotated. For further filtering you can provide the name of
+    * boolean-valued method of one argument as the {@link #where()}.
+    * 
+    * If a {@link #name()} is not provided, or is provided as "", the name will
+    * be taken from the name of the method being annotated.
     */
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Query {
        String name() default "";
-       /**
-        * @return the name of a predicate method
-        */
+
        String where() default NO_VALUE;
     }
     
