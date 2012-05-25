@@ -220,11 +220,12 @@ public class Cougaar {
 
     /**
      * This annotation should be attached to a public data member to initialize
-     * it from an argument element in the society xml.
+     * it from an argument element in the society xml.  If a name() is not
+     * provided the field name will be used as the argument name.
      */
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Arg {
-        String name();
+        String name() default "";
 
         boolean required() default true;
 

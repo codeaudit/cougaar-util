@@ -127,10 +127,16 @@ public class Argument {
         return null;
     }
 
+    
+    private String getArgumentName(Field field, Cougaar.Arg arg) {
+       String name = arg.name();
+       return name.isEmpty() ? field.getName() : name;
+    }
+    
     private void setSequenceFieldFromSpec(Field field, Object object, Cougaar.Arg spec)
             throws ParseException, IllegalAccessException, IllegalStateException {
         String defaultValue = spec.defaultValue();
-        String key = spec.name();
+        String key = getArgumentName(field, spec);
         boolean isRequired = spec.required() && Cougaar.NO_VALUE.equals(defaultValue);
         List<String> rawValues = null;
         if (args.containsKey(key)) {
@@ -165,7 +171,7 @@ public class Argument {
     private void setSimpleFieldFromSpec(Field field, Object object, Cougaar.Arg spec)
             throws ParseException, IllegalAccessException, IllegalStateException {
         String defaultValue = spec.defaultValue();
-        String key = spec.name();
+        String key = getArgumentName(field, spec);;
         boolean isRequired = spec.required() && Cougaar.NO_VALUE.equals(defaultValue);
         String rawValue;
         if (args.containsKey(key)) {
@@ -196,14 +202,14 @@ public class Argument {
             }
         } catch (IllegalAccessException e) {
             String exceptionMsg = e.getMessage();
-            String msg = "Couldn't set field " + field.getName() + " from argument " + spec.name();
+            String msg = "Couldn't set field " + field.getName() + " from argument " + getArgumentName(field, spec);;
             if (exceptionMsg != null) {
                 msg += ": " + exceptionMsg;
             }
             throw new IllegalAccessException(msg);
         } catch (IllegalArgumentException e) {
             String exceptionMsg = e.getMessage();
-            String msg = "Couldn't set field " + field.getName() + " from argument " + spec.name();
+            String msg = "Couldn't set field " + field.getName() + " from argument " + getArgumentName(field, spec);;
             if (exceptionMsg != null) {
                 msg += ": " + exceptionMsg;
             }
@@ -240,7 +246,7 @@ public class Argument {
             throws ParseException, IllegalAccessException, IllegalStateException {
         for (Field field : getArgFields(object)) {
             Cougaar.Arg spec = field.getAnnotation(Cougaar.Arg.class);
-            String argName = spec.name();
+            String argName = getArgumentName(field, spec);;
             if (args.containsKey(argName)) {
                 setFieldFromSpec(field, spec, object);
             }
@@ -268,7 +274,7 @@ public class Argument {
                             members = new LinkedHashSet<String>();
                             groupMembers.put(group, members);
                         }
-                        members.add(spec.name());
+                        members.add(getArgumentName(field, spec));
                     }
                 }
             } else {
