@@ -320,7 +320,7 @@ public class Cougaar {
     */
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Query {
-       String name();
+       String name() default "";
        /**
         * @return the name of a predicate method
         */
