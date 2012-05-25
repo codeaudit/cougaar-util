@@ -311,6 +311,22 @@ public class Cougaar {
     }
 
     /**
+    * Attach this to a method with one argument to run thoe body of the method
+    * on each instance matching a blackboard query that uses the given predicate
+    * method.
+    * 
+    * The plugin is responsible for supplying a method to invoke all such
+    * queries.
+    */
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface Query {
+       /**
+        * @return the name of a predicate method
+        */
+       String where() default NO_VALUE;
+    }
+    
+    /**
      * Attaching this kind of annotation to a public method causes it to be used
      * as a filter for an {@link Execute} method with a matching {@link Execute#when}.
      * 
