@@ -188,7 +188,7 @@ class BindingUtilityWorker {
                }
             }
             ServiceRevokedListener srl = new FieldServiceRevokedListener(field, target);
-            Service service = broker.getService(target, fieldClass, srl);
+            Service service = (Service) broker.getService(target, fieldClass, srl);
             if (service == null) {
                serviceFailures.add(new ServiceSetFailure(fieldClass, "No service for " + fieldClass));
             } else {
@@ -222,7 +222,7 @@ class BindingUtilityWorker {
                if (methodName.endsWith(serviceClassName)) {
                   // method name is a "public setX(X)" method where X is a Service.
                   ServiceRevokedListener srl = new MethodServiceRevokedListener(method, target);
-                  Service service = broker.getService(target, serviceClass, srl);
+                  Service service = (Service) broker.getService(target, serviceClass, srl);
                   if (service == null) {
                      serviceFailures.add(new ServiceSetFailure(serviceClass, "No service for " + serviceClass));
                   } else {
