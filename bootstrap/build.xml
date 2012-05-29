@@ -452,9 +452,7 @@
     <target name="really-compile" depends="prepare, defrunner, check-sources" if="has.src">
       <mkdir dir="${module.classes}" />
       <available property="has.build" file="${module.classes}"/>
-      <!-- source=1.4 required for asserts -->
       <javac srcdir="${src}" destdir="${module.classes}"
-	     source="1.4"
 	     includeAntRuntime="no"
 	     debug="${build.compiler.debug}"
 	     optimize="${build.compiler.optimize}"
