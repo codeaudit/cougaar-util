@@ -30,14 +30,15 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /** Useful for cheaply indicating empty sets */
-public class EmptyIterator implements Iterator {
+public class EmptyIterator<E> implements Iterator<E> {
   public final boolean hasNext() { return false; }
-  public final Object next() { throw new NoSuchElementException(); }
+  public final E next() { throw new NoSuchElementException(); }
   public final void remove() { }
 
-  public static final Iterator emptyIterator = new EmptyIterator();
-  public static final Iterator iterator() {
-    return emptyIterator;
+  public static final Iterator<?> emptyIterator = new EmptyIterator();
+  @SuppressWarnings("unchecked")
+  public static final <E> Iterator<E> iterator() {
+    return (Iterator<E>) emptyIterator;
   }
 }
       

@@ -33,10 +33,16 @@ import java.util.Iterator;
  * objects.
  **/
 public class Empty {
-  public static final Enumeration enumeration = new EmptyEnumeration();
-  public static final Enumeration elements() { return enumeration; }
+  public static final Enumeration<?> enumeration = new EmptyEnumeration();
+  @SuppressWarnings("unchecked")
+  public static final <T> Enumeration<T> elements() {
+      return (Enumeration<T>) enumeration;
+  }
 
-  public static final Iterator iterator = new EmptyIterator();
-  public static final Iterator iterator() { return iterator; }
+  public static final Iterator<?> iterator = new EmptyIterator();
+  @SuppressWarnings("unchecked")
+  public static final <T> Iterator<T> iterator() {
+      return (Iterator<T>) iterator;
+  }
 }
       

@@ -35,7 +35,7 @@ package org.cougaar.util;
  * with Objectspace's JGL package.
  */
 
-public interface UnaryPredicate extends java.io.Serializable {
+public interface UnaryPredicate<E> extends java.io.Serializable {
   /** @return true iff the object "passes" the predicate */
   boolean execute(Object o);
 }

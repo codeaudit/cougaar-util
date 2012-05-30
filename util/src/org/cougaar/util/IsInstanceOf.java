@@ -9,14 +9,14 @@ package org.cougaar.util;
 /**                                                                         
  * General purpose dynamic 'instanceof' predicate.                                   
  */
-public class IsInstanceOf implements UnaryPredicate {
+public class IsInstanceOf<T> implements UnaryPredicate<T> {
     /**
     * 
     */
    private static final long serialVersionUID = 1L;
-   private final Class<?> match;
+   private final Class<T> match;
 
-    public IsInstanceOf(Class<?> match) {
+    public IsInstanceOf(Class<T> match) {
         this.match = match;
     }
 

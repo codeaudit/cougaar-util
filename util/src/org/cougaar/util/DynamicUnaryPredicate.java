@@ -35,5 +35,5 @@ package org.cougaar.util;
  * detect changes in subscription membership.
  */
 
-public interface DynamicUnaryPredicate extends UnaryPredicate {
+public interface DynamicUnaryPredicate<T> extends UnaryPredicate<T> {
 }

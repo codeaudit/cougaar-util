@@ -35,11 +35,11 @@ import java.util.Iterator;
  * implementation.
  **/
 
-public final class Enumerator implements Enumeration {
-  private Iterator i;
-  public Enumerator(Iterator i) { this.i = i; }
-  public Enumerator(Collection c) { this.i = c.iterator(); }
+public final class Enumerator<T> implements Enumeration<T> {
+  private Iterator<T> i;
+  public Enumerator(Iterator<T> i) { this.i = i; }
+  public Enumerator(Collection<T> c) { this.i = c.iterator(); }
   public final boolean hasMoreElements() { return i.hasNext(); }
-  public final Object nextElement() { return i.next(); }
+  public final T nextElement() { return i.next(); }
 }
       

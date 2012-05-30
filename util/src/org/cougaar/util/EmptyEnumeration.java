@@ -30,18 +30,21 @@ import java.util.Enumeration;
 import java.util.NoSuchElementException;
 
 /** Useful for cheaply indicating empty sets */
-public class EmptyEnumeration implements Enumeration {
+public class EmptyEnumeration<E> implements Enumeration<E> {
   public final boolean hasMoreElements() { return false; }
-  public final Object nextElement() throws NoSuchElementException { 
+  public final E nextElement() throws NoSuchElementException { 
     throw new NoSuchElementException();
   }
-  public static final Enumeration elements() {
-    return defaultEnumeration;
+  @SuppressWarnings("unchecked")
+  public static final <E> Enumeration<E> elements() {
+    return (Enumeration<E>) defaultEnumeration;
   }
 
-  public static final Enumeration defaultEnumeration = new EmptyEnumeration();
-  public static final Enumeration getEnumeration() {
-    return defaultEnumeration;
+  public static final Enumeration<?> defaultEnumeration =
+      new EmptyEnumeration();
+  @SuppressWarnings("unchecked")
+  public static final <E> Enumeration<E> getEnumeration() {
+    return (Enumeration<E>) defaultEnumeration;
   }
 
 }
