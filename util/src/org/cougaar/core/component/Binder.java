@@ -44,7 +44,7 @@ import org.cougaar.util.GenericStateModel;
  **/
 
 public interface Binder 
-  extends GenericStateModel, StateObject // BindingSite 
+  extends GenericStateModel, StateObject, SubscriptionLifeCycle// BindingSite 
 {
   /** Get the ComponentDescription of the bound component.
    * The returned value may be null if the component was
@@ -53,6 +53,5 @@ public interface Binder
    * up to parents.
    */
   ComponentDescription getComponentDescription();
-
 }
 

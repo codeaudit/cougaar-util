@@ -44,6 +44,12 @@ public abstract class BinderWrapper
   }
 
   @Override
+  public void startSubscriptions() {
+     child.startSubscriptions();
+  }
+
+  
+  @Override
 protected void attachChild(Object cd) {
     if (cd instanceof Binder) {
       child = (Binder) cd;

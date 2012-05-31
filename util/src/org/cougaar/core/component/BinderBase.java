@@ -45,6 +45,10 @@ public abstract class BinderBase
   protected void setServiceBroker(ServiceBroker sb) {
     servicebroker = sb;
   }
+  
+  public void startSubscriptions() {
+     // no-op by default, override where appropriate
+  }
 
   public void setBindingSite(BindingSite bs) {
     if (bs instanceof ContainerAPI) {

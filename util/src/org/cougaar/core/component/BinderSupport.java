@@ -44,6 +44,13 @@ public abstract class BinderSupport
   protected BinderSupport(BinderFactory bf, Object childX) {
     super(bf, childX);
   }
+  
+  @Override
+public void startSubscriptions() {
+     if (child instanceof SubscriptionLifeCycle) {
+        ((SubscriptionLifeCycle) child).startSubscriptions();
+     }
+  }
 
   @Override
 protected void attachChild(Object cd) {
