@@ -318,7 +318,7 @@ class BindingUtilityWorker {
       }
 
       void log(Logger logger) {
-         logger.log(level, "Faild to set service " + serviceClass + ": " + message);
+         logger.log(level, "Failed to set service " + serviceClass + ": " + message);
       }
    }
 
