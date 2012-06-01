@@ -27,7 +27,6 @@ package org.cougaar.core.component;
 
 /** ServiceAvailableEvent indicates that a new service is available
  * to clients of a ServiceBroker.
- * @see java.beans.beancontext.BeanContextServiceAvailableEvent
  **/
 public class ServiceAvailableEvent extends ServiceEvent {
   /**

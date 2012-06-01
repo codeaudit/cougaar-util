@@ -729,7 +729,7 @@ public final class Arguments extends AbstractMap<String, List<String>>
      *   A=B&amp;X=V0&amp;X=V1&amp;X=V2
      * and:
      *   "{" + toString("$key=$vlist", ", ") + "}";
-     * would return the standard {@link Map#toString} format:
+     * would return the standard {@link AbstractMap#toString} format:
      *   {A=[B], X=[V0, V1, V2]}
      * </pre>
      * 

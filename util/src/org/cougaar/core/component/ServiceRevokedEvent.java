@@ -27,7 +27,6 @@ package org.cougaar.core.component;
 
 /** ServiceRevokedEvent indicates that a service has been 
  * revoked in a service context.
- * @see java.beans.beancontext.BeanContextServiceRevokedEvent
  **/
 public class ServiceRevokedEvent extends ServiceEvent {
   /**

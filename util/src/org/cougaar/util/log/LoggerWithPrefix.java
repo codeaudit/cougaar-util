@@ -28,9 +28,6 @@ package org.cougaar.util.log;
 
 /**
  * A Logger wrapper that adds a prefix to all logging messages.
- *
- * @see org.cougaar.core.logging.LoggingServiceWithPrefix equivalent wrapper
- *   for the LoggingService
  */
 public class LoggerWithPrefix extends LoggerAdapter {
 

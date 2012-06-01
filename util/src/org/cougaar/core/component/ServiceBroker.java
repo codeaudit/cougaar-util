@@ -30,8 +30,6 @@ import java.util.Iterator;
 /** Cougaar component Service Broker.
  * Note that this was previously called Services in deference to
  * the analogous BeanContextServices object.
- *
- * @see java.beans.beancontext.BeanContextServices 
  **/
 public interface ServiceBroker {
   /** Add a ServiceListener to this Services Context. **/

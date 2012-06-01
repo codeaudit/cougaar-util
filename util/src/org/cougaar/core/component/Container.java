@@ -53,8 +53,6 @@ import java.util.Collection;
  * a ContainerAPI callable by associated Binders (and BinderFactories).
  * In turn, any Container may invoke a required BinderAPI on any of its
  * associated Binders.
- *
- * @see java.beans.beancontext.BeanContext
  **/
 public interface Container extends Component, Collection
 {

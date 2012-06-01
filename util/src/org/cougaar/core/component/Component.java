@@ -57,7 +57,6 @@ import org.cougaar.util.GenericStateModel;
  * where x is the binder chosen for this component.
  * <p>
  * Component is similar to BeanContextChild.
- * @see BeanContextChild
  **/
 public interface Component 
   extends GenericStateModel

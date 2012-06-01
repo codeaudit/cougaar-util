@@ -29,7 +29,6 @@ import java.util.EventObject;
 
 /** Service event is a base class for all Service, Binder and Component 
  * Model Events, analogous.
- * @see java.beans.beancontext.BeanContextEvent
  **/
 public abstract class ComponentModelEvent extends EventObject {
   /**

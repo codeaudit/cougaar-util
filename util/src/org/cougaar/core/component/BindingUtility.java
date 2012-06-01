@@ -39,8 +39,6 @@ public final class BindingUtility {
 
    /**
     * Sets the binding site of the child to the specified object if possible.
-    * 
-    * @return success or failure.
     **/
    public static void setBindingSite(Object child, BindingSite bindingSite) {
       BindingUtilityWorker instance = BindingUtilityWorker.getInstance(child, bindingSite, null);
