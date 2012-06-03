@@ -274,5 +274,9 @@ protected ContainerAPI getContainerProxy() { return myContainerProxy; }
               client.equals(((ServiceTuple)o).client) &&
               serviceClass.equals(((ServiceTuple)o).serviceClass));
     }
+   @Override
+   public int hashCode() {
+      return ((ServiceTuple)client).hashCode() +  serviceClass.hashCode() ; 
+   }
   }
 }
