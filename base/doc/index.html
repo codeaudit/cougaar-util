@@ -26,10 +26,10 @@
     <ul>
       <li> <a href="#introduction">Introduction</a></li>
       <li> <a href="#license">License</a></li>
-      <li> <a href="#contents">Contents</a></li>
       <li> <a href="#what_is_new">What's New in this Release?</a></li>
       <li> <a href="#requirements">Requirements</a></li>
       <li> <a href="#installation">Installation</a></li>
+      <li> <a href="#contents">Contents</a></li>
       <li> <a href="#documentation">Documentation</a></li>
       <li> <a href="#support">Support</a></li>  
     </ul>
@@ -50,12 +50,6 @@
     <h2> <a name="license"></a>License</h2>
     Cougaar uses the BSD-style "Cougaar Open Source License" (COSL).
     Please see the <a href="License.txt">License.txt</a> (<a href="http://cougaar.org/wp/license/">online version</a>).
-    <p>
-
-    <!-- CONTENTS -->
-    <h2> <a name="contents"></a>Contents</h2>
-    For documentation on the various zip, jar, and config files included in this release,
-    please see the <a href="Contents.html">Contents File</a>.
     <p>
 
     <!-- WHAT_IS_NEW -->
@@ -85,6 +79,66 @@
     Please see the Installation Guide and Overview Slides.
     <p>
 
+    <!-- CONTENTS -->
+    <h2> <a name="contents"></a>Contents</h2>
+    For documentation on the various zip, jar, and config files included in this release,
+    please see the <a href="Contents.html">Contents File</a>.
+    <p>
+Contents of this Cougaar Release</h2>
+<p>This file documents the contents of this release and the general layout of Cougaar software modules. When you download a Cougaar release, there are several logical pieces.</p>
+<h3><a name="BUILD_ORGANIZATION"></a> BUILD ORGANIZATION</h3>
+<p>Cougaar is divided into modules, from the various <a href="http://cougaar.org/" target="_top">cougaar.org</a> projects that make up <a href="http://cougaar.org/wp/documentation/projects/#CougaarSE" target="_top">CougaarSE</a>. This is a list of the various zip files available from releases.</p>
+<table id="table1" rules="rows" border="1" cellpadding="0" cellspacing="0">
+<tbody>
+<tr>
+<td bgcolor="#ffffff" valign="top">cougaar.zip</td>
+<td bgcolor="#ffffff" valign="top">Cougaar runtime - all "lib/" (runtime jars) and "clib/" (build-time jars) jar files, run scripts ("bin/", configuration files ("configs/", including the usual configs/common directory), and minimum documentation ("doc/"). Additionally, most modules (see below) include directories with additional documentation and configuration files. Javadoc and source code is not included.</td>
+</tr>
+<tr>
+<td bgcolor="#edf4f9" valign="top">cougaar-support.zip</td>
+<td bgcolor="#edf4f9" valign="top">Third-party supporting jar files. Unpacks into "sys/" subdirectory where the Cougaar Bootstrapper will find them, without modifying your CLASSPATH. Built from the "jars" module in the <a href="http://cougaar.org/wp/documentation/projects/#core" target="_top">Cougaar core</a> project.</td>
+</tr>
+<tr>
+<td bgcolor="#ffffff" valign="top">cougaar-api.zip</td>
+<td bgcolor="#ffffff" valign="top">The Javadoc for all the main cougaar classes in one place. Unpacks to "/doc/api", putting the Javadoc with the module where the source originates.</td>
+</tr>
+<tr>
+<td bgcolor="#edf4f9" valign="top">cougaar-src.zip</td>
+<td bgcolor="#edf4f9" valign="top">Source code for each "lib/" module. Unpacks to per-module directories, as in core/src/…. Often include JUnit tests in a "regress" sub-directory, and examples.</td>
+</tr>
+<tr>
+<td bgcolor="#ffffff" valign="top">md5sums.txt</td>
+<td bgcolor="#ffffff" valign="top">MD5 checksums for all the above zips.</td>
+</tr>
+<tr>
+<td bgcolor="#edf4f9" valign="top">build.out</td>
+<td bgcolor="#edf4f9" valign="top">Output of the build process</td>
+</tr>
+<tr>
+<td bgcolor="#ffffff" valign="top">errors.out</td>
+<td bgcolor="#ffffff" valign="top">Error output of the build process, including deprecation warnings.</td>
+</tr>
+</tbody>
+</table>
+<p>Notes:</p>
+<ul>
+<li>You'll need cougaar.zip and cougaar-support.zip (the first time) to get a runnable system. The rest are extras. Furthermore, the cougaar-support contents do not change very often.</li>
+<li>The zips are designed to be unpacked in the same directory, e.g. on UNIX:
+<pre> mkdir cougaar
+ cd cougaar
+ unzip /tmp/cougaar.zip
+ unzip /tmp/cougaar-support.zip
+ setenv COUGAAR_INSTALL_PATH `pwd`</pre>
+</li>
+<li>The zips include version information in their respective "Manifest/" directories. The content looks something like:
+<pre> NAME=cougaar-support
+ COMMENT=cougaar thirdparty jars
+ REPOSITORY_TAG=V10_0 # CVS branch
+ REPOSITORY_TIME=1/28/2003 13:00:08 # CVS checkout time
+ ARCHIVE_TIME=1/28/2003 13:29:27 # zip time</pre>
+<p>All your zips should have the same REPOSITORY_TAG and REPOSITORY_TIME. Each generated "lib/*.jar" file also contains its version information.</p>
+</li>
+</ul>
     <!-- DOCUMENTATION -->
     <h2> <a name="documentation"></a>Documentation</h2>
 

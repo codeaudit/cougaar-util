@@ -1,0 +1,490 @@
+<p><img src="cougaar.png" alt="cougaar" width="150" height="130" /></p>
+
+This FAQ covers high-level Cougaar questions, such as "What is Cougaar?", high-level technical questions, and licensing issues.
+<h3><a name="General_Overview"></a> General Overview</h3>
+<ul>
+	<li><a href="#whatis">What is Cougaar?</a></li>
+	<li><a href="#standfor">What does Cougaar stand for?</a></li>
+	<li><a href="#history">What is the history of Cougaar?</a></li>
+	<li><a href="#users">Who uses Cougaar?</a></li>
+	<li><a href="#code">Where can I find Cougaar source code?</a></li>
+	<li><a href="#project">Does Cougaar have a project site?</a></li>
+	<li><a href="#involved">How can I get involved in Cougaar?</a></li>
+	<li><a href="#faq">How can I add to or correct this FAQ or report issues with the Cougaar web site?</a></li>
+</ul>
+<h3><a name="Getting_Started_Newbies_FAQ"></a> Getting Started (Newbies) FAQ</h3>
+<ul>
+	<li><a href="#install">How do I install Cougaar?</a></li>
+	<li><a href="#reqs">What are the system requirements to run Cougaar?</a></li>
+	<li><a href="#problems1">What are some commonly reported problems?</a></li>
+	<li><a href="#bugs">How do I report bugs?</a></li>
+	<li><a href="#tutorials">Where can I find tutorials on writing Cougaar applications?</a></li>
+</ul>
+<h3><a name="High_level_Technical_FAQ"></a> High-level Technical FAQ</h3>
+<ul>
+	<li><a href="#agent">What is an Agent?</a></li>
+	<li><a href="#blackboard">What is a Blackboard?</a></li>
+	<li><a href="#component">What is the Cougaar Component Model?</a></li>
+	<li><a href="#mts">Which Message Transport protocols are supported?</a></li>
+	<li><a href="#naming">How do Cougaar agents find one another?</a></li>
+	<li><a href="#servlet">Does Cougaar support HTTP interactions?</a></li>
+	<li><a href="#domain">What is a Cougaar Domain?</a></li>
+	<li><a href="#planning">Does Cougaar support planning and execution?</a></li>
+	<li><a href="#kqml">Does Cougaar support KQML, ACL, or other high-level knowledge representations?</a></li>
+	<li><a href="#bootstrap">What is the Cougaar Bootstrapper?</a></li>
+	<li><a href="#docs">Where can I find additional technical documentation?</a></li>
+</ul>
+<h3><a name="Cougaar_and_other_Technologies"></a> Cougaar and other Technologies</h3>
+<ul>
+	<li><a href="#other">How is Cougaar different than other Agent / P2P technologies?</a></li>
+	<li><a href="#future">What is the future plan for Cougaar?</a></li>
+	<li><a href="#jin">How does Cougaar compare with JXTA?</a></li>
+	<li><a href="#jini">How does Cougaar compare with JINI?</a></li>
+	<li><a href="#aglets">How does Cougaar compare with Aglets?</a></li>
+	<li><a href="#fipa">How does Cougaar compare with FIPA and JSR 87?</a></li>
+	<li><a href="#grid">How does Cougaar compare with Grid Computing?</a></li>
+	<li><a href="#comparetomcat">How does it compare to Tomcat Servlet, Jetty Servlet, Spring-context, Java Beans, Camel-context, ActiveMQ?</a></li>
+	<li><a href="#comparespring">What is comparable to Spring's pool of entities?</a></li>
+	<li><a href="#comparecamel">How does it compare to Camel?</a></li>
+	<li><a href="#comparetibco">How does it compare to Tibco?</a></li>
+	<li><a href="#compareservicemix">How does it compare to ServiceMix - an open source ESB from Apache?</a></li>
+</ul>
+<h3><a name="Commonly_Reported_Problems"></a> Commonly Reported Problems</h3>
+<ul>
+	<li><a href="#cip">What is the $COUGAAR_INSTALL_PATH?</a></li>
+	<li><a href="#version">Cougaar throws a UnsupportedClassVersionError when started</a></li>
+	<li><a href="#noclassdef">Cougaar throws a NoClassDefFoundError in my test</a></li>
+	<li><a href="#config">Cougaar throws a FileNotFoundException when looking for my node ".xml"</a></li>
+	<li><a href="#dots">Cougaar prints weird "SHOUT DOTS - ++-.-+-" output</a></li>
+	<li><a href="#nsconfig">The message transport prints endless "!"s instead of sending messages</a></li>
+	<li><a href="#debughints">What are some debugging steps?</a></li>
+	<li><a href="#javaiopatch">What is the javaiopatch and do I need it?</a></li>
+	<li><a href="#help">Where can I find additional help?</a></li>
+</ul>
+<h3><a name="License_FAQ"></a> License FAQ</h3>
+<ul>
+	<li><a href="#license">What is the license model for Cougaar?</a></li>
+	<li><a href="#gpl">Is the Cougaar license model compatible with other open source licenses?</a></li>
+	<li><a href="#cost">Is there any cost to using Cougaar?</a></li>
+	<li><a href="#contribute">Can I contribute code to Cougaar?</a></li>
+	<li><a href="#proprietary">Can I develop proprietary products using Cougaar?</a></li>
+</ul>
+
+<hr />
+
+<h3><a name="General_Overview_AN1"></a> <a name="overview"></a>General Overview</h3>
+<a name="whatis"></a><strong>Q: What is Cougaar?</strong></p>
+
+<p><strong>A:</strong> Cougaar is a Java-based architecture for the construction of highly scalable distributed <a href="#agent">agent</a>-based applications. Cougaar is the product of a multi-year <a href="http://www.darpa.mil/" target="_top">DARPA</a> research project to develop an <a href="#license">open-source</a> agent-based architecture that supports applications ranging from small-scale systems to large-scale highly-survivable distributed systems. Cougaar includes an advanced core architecture and a variety of of components that simplify the development, visualization, and management of complex distributed applications.</p>
+
+<p>For additional details, please see our <a href="http://cougaar.org/doc/12_4/online/CougaarOverview.ppt">Cougaar Overview</a> slides.</p>
+
+<p><a name="standfor"></a><strong>Q: What does COUGAAR stand for?</strong></p>
+
+<p><strong>A:</strong> COUGAAR is an acronym for "Cognitive Agent Architecture," due to the Cougaar <a href="#planning">planning domain</a>'s model of Tasks, Workflows, Expansion, and Aggregation. This is a legacy definition, since the architecture has been refactored to a comprehensive agent-based middleware that also supports non-planning applications.</p>
+
+<p><a name="history"></a><strong>Q: What is the history of Cougaar?</strong></p>
+
+<p><strong>A:</strong> Cougaar started in 1996 as ALP, "The Advanced Logistics Project," which was a DARPA funded project to model military logistics using distributed agent technologies. <a href="http://www.bbn.com/" target="_top">BBN </a> was the primary contractor and continues as a key Cougaar developer.</p>
+
+<p>In 2001 ALP transitioned to a new DARPA project, <a href="http://web.archive.org/web/20050829214650/http://dtsn.darpa.mil/ixo/programdetail.asp?progid=34" target="_top">Ultra*Log</a>, to enhance the scalability, security, and survivability of the underlying agent system. Cougaar was the underlying architecture of Ultra*Log and contains most of the logistics domain code. Ultra*Log concluded at the end of 2004, at which time Cougaar became a purely open source project, though it may continue under one or more defense-sponsored projects.</p>
+
+<p>The open source community has adopted Cougaar in non-military applications ranging from embedded sensor webs to business intelligence applications. Some uses were <a href="http://cougaar.org/wp/documentation/conferences/opencougaar2004/">presented at Open Cougaar 2004</a>.</p>
+
+<p><a name="users"></a><strong>Q: Who uses Cougaar?</strong></p>
+
+<p><strong>A:</strong> The primary client of Cougaar has been the US military, but the architecture is component-based and has been used by the open source community for other agent-based applications, including commercial applications.</p>
+
+<p>Please see our <a href="#project">project site</a> for the latest news on open source project activity.</p>
+
+<p><a name="code"></a><strong>Q: Where can I find Cougaar source code?</strong></p>
+
+<p><strong>A:</strong> Cougaar is an <a href="#license">open source</a> project. Release builds and source code are available on our website: <a href="http://cougaar.org/" target="_top">http://cougaar.org</a>. A GIT tree and other downloads are also available on the same site.</p>
+
+<p><a name="project"></a><strong>Q: Does Cougaar have a project site?</strong></p>
+
+<p><strong>A:</strong> Yes, Information on Cougaar projects can be found at <a href="http://cougaar.org/wp/projects">Cougaar Projects</a>.</p>
+
+<p>All Cougaar projects hosted on "cougaar.org" are subject to the <a href="#license">Cougaar Open Source License</a>.</p>
+
+<p><a name="involved"></a><strong>Q: How can I get involved in Cougaar?</strong></p>
+
+<p><strong>A:</strong> Our (<a href="http://cougaar.org/forums/">community forum</a>) is an open forum for general questions and specific technical discussion. <em>Note: The forum only available to limited users currently.</em></p>
+
+<p><a name="faq"></a><strong>Q: How can I add to or correct this FAQ or report issues with the Cougaar web site?</strong></p>
+
+<p><strong>A:</strong> Please post questions to <a href="http://cougaar.org/forums/">community forum</a>. <em>Note: The forum only available to limited users currently.</em></p>
+
+<p><hr /></p>
+
+<h3><a name="Getting_Started_Newbies_FAQ_AN1"></a>Getting Started (Newbies) FAQ</h3>
+<a name="install"></a><strong>Q: How do I install Cougaar?</strong></p>
+
+<p><strong>A:</strong> Please see our <a href="http://cougaar.org/wp/documentation/installing/">Installation Guide</a>.</p>
+
+<p><a name="reqs"></a><strong>Q: What are the system requirements to run Cougaar?</strong></p>
+
+<p><strong>A:</strong> Cougaar requires <a href="http://java.sun.com/" target="_top">Java 1.5</a> or later. Any machine capable of running Java 1.5 or 1.6 should suffice. The Cougaar architecture team originally developed Cougaar on Windows 98/NT/XP, Linux, Mac OS X, and Java-1.4-capable PDAs. As of 2012, it uses CentOS 5.6, Mac OS X 10.7, and soon Windows 7.</p>
+
+<p>There was also a <a href="http://cougaar.org/wp/documentation/projects/#CougaarMicro">micro-edition of Cougaar</a> that ran on a Java KVM, CougaarME, but it is not longer available. This FAQ covers the JavaSE version of Cougaar.</p>
+
+<p>Cougaar can be configured as a non-distributed system, so network connectivity is not required.</p>
+
+<p><a name="problems1"></a><strong>Q: What are some commonly reported problems?</strong></p>
+
+<p><strong>A:</strong> Please see the <a href="#problems">"Commonly Reported Problems"</a> section in this FAQ.</p>
+
+<p><a name="bugs"></a><strong>Q: How do I report bugs?</strong></p>
+
+<p><strong>A:</strong> Email <a href="mailto:support@cougaar.org">support@cougaar.org</a></p>
+
+<p><a name="tutorials"></a><strong>Q: Where can I find tutorials on writing Cougaar applications?</strong></p>
+
+<p><strong>A:</strong> Tutorials and code examples are available on our website's <a href="http://cougaar.org/wp/documentation/tutorials/">tutorial list</a>. We have also conducted Cougaar training classes in the past.</p>
+
+<p><hr /></p>
+
+<h3><a name="High_level_Technical_FAQ_AN1"></a> <a name="tech"></a>High-level Technical FAQ</h3>
+<p>This section of the FAQ covers high-level technical questions. Please see our <a href="#docs">documentation page</a> for additional technical references.</p>
+
+<p><a name="agent"></a><strong>Q: What is an Agent?</strong></p>
+
+<p><strong>A:</strong> Cougaar defines an Agent as a software entity which autonomously communicates with other software Agents to achieve domain-specific functionality. Multiple agents often collaborate as peers in a Peer-to-Pee distributed network. The complexity of each agent can range from simple embedded sensors to a highly complex artificial intelligence application.</p>
+
+<p>Cougaar is a framework for developing distributed multi-agent applications. The Cougaar architecture includes components to support agent-to-agent messaging, naming, mobility, blackboards, external UIs, and additional (pluggable) capabilities. Developer write components, also called "plugins", which are loaded into agents to define their behavior. The Cougaar Component Model allows the developer to configure Cougaar to match both their domain and system requirements / constraints.</p>
+
+<p>Additional information on agent-based computing can be found at <a href="http://www.multiagent.com/" target="_top">http://www.multiagent.com</a> and <a href="http://agents.umbc.edu/" target="_top">http://agents.umbc.edu</a></p>
+
+<p><a name="blackboard"></a><strong>Q: What is a Blackboard?</strong></p>
+
+<p><strong>A:</strong> A Blackboard is an agent-local memory store that supports publish/subscribe semantics. Components within the agent can add/change/remove objects from the blackboard and subscribe to local add/change/remove notification. Agent <a href="#domain">domains</a> monitor the local blackboard and can send messages to other agents and alter the blackboard when the local agent receives messages.</p>
+
+<p>The primary benefit of an agent blackboard is that it abstracts the message transport from the plugins. The Cougaar infrastructure provides the blackboard and message transport, which frees developers to concentrate on the domain-specific issues of their application.</p>
+
+<p>Another benefit of the publish/subscribe pattern is that it encourages developers to write components that publish actions and asynchronously wake when the answer arrives, instead of wiring components together with blocking method-call APIs. The publish/subscribe pattern offers greater parallelism and scalability.</p>
+
+<p>Cougaar blackboards are agent-local to assure scalability. A globally shared blackboard (e.g. JavaSpaces or JMS) is a single point of failure and a considerable performance bottleneck.</p>
+
+<p>Cougaar blackboards also support automatic persistence, rehydration, and dynamic reconciliation. Persistence can be configured in an optimized "lazy" mode, where periodic blackboard "delta" snapshots are captured to reduce persistence I/O overhead. Rehydration allows a restarted agent to resume its state from the most recent persistence snapshot. Dynamic reconciliation allows an agent to recover from partial or full persistence state loss by scanning the blackboards of agents that it has communicated with in the past.</p>
+
+<p><a name="component"></a><strong>Q: What is the Cougaar Component Model?</strong></p>
+
+<p><strong>A:</strong> The Cougaar Component Model is a service-based framework that is used to connect components together at runtime. Cougaar agents use the Cougaar Component Model to dynamically load components and advertise new service capabilities.</p>
+
+<p>The Cougaar Component Model is similar to <a href="http://en.wikipedia.org/wiki/JavaBean">Java Beans</a>, in that the Cougaar Component Model defines a component hierarchy and service APIs. Cougaar's Component Model features no Swing UI dependencies, reduced thread locking, better service management, and adds service binders.</p>
+
+<p>The Cougaar Component Model supports pluggable components that can be added and removed at runtime. Components specify a point in a containment hierarchy. Service APIs are advertised through Service Brokers, and Components can obtain these Services at runtime. Binders are pluggable Service proxies which can be placed in between the Services and the Components to add security and manage Service usage. Additional details are provided in the Cougaar Architecture Document.</p>
+
+<p>The Cougaar Component Model can also be used in non-agent applications as a highly generic pluggable service-based framework.</p>
+
+<p><a name="mts"></a><strong>Q: Which Message Transport protocols are supported?</strong></p>
+
+<p><strong>A:</strong> The Cougaar architecture includes a Message Transport with pluggable "Link Protocols". The standard protocols are:
+<ul>
+	<li><a name="mts"></a>Loopback in-memory transport (for intra-node traffic)</li>
+	<li><a name="mts"></a>RMI</li>
+	<li><a name="mts"></a>SSL-encrypted RMI</li>
+	<li><a name="mts"></a>CORBA</li>
+	<li><a name="mts"></a>HTTP</li>
+	<li><a name="mts"></a>SOAP</li>
+	<li><a name="mts"></a>JMS</li>
+	<li>XMPP (Jabber)</li>
+</ul>
+Additional Ultra*Log protocols include plain TCP Sockets, UDP, SMTP, and NNTP. Third-party developers can write new link protocols and plugin them into Cougaar.</p>
+
+<p>Components can also advertise services for additional I/O access, such as a JDBC service or <a href="#jxta">JXTA </a>service.</p>
+
+<p><a name="naming"></a><strong>Q: How do Cougaar agents find one another?</strong></p>
+
+<p><strong>A:</strong> Cougaar includes distributed naming support for finding other Cougaar agents. The current implementation includes an in-band "White Pages", which is a DNS-styled distributed registry of agent protocol addresses, and a "Yellow Pages", which is a UDDI-based repository for dynamic service discovery. Additional discovery protocols can be added by using pluggable Cougaar components (e.g. JNDI or JXTA).</p>
+
+<p><a name="servlet"></a><strong>Q: Does Cougaar support HTTP interactions?</strong></p>
+
+<p><strong>A:</strong> Yes, Cougaar includes a component-based Servlet server, an embedded variant of <a href="http://jakarta.apache.org/tomcat" target="_top">Tomcat</a>. Components can obtain the "ServletService" and register an HTTP path within that agent. For example, a component within agent "Test" can register the path "/x", which will be accessable as "http://localhost:8800/$Test/x". The Cougaar naming service redirects requests to the node running the specified agent. The port and HTTP/HTTPS configuration can be configured within Cougaar and Tomcat XML files.</p>
+
+<p>Servlets are often preferred over popup UIs, such as Swing, to ensure scalability and agent mobility. External browsers and Swing-based UI applications are typically used to monitor agent progress.</p>
+
+<p><a name="domain"></a><strong>Q: What is a Cougaar Domain?</strong></p>
+
+<p><strong>A:</strong> A Cougaar Domain is a suite of pluggable components that support an application developer. A Domain includes data structures, blackboard messaging "Logic Providers", and utility components.</p>
+
+<p>The "root" domain is always loaded by the Cougaar architecture. The root domain implements a minimal "Relay" API for agent-to-agent message transport.</p>
+
+<p>Additional domains can be developed and plugged into the Cougaar Architecture, such as the planning domain.</p>
+
+<p><a name="planning"></a><strong>Q: Does Cougaar support planning and execution?</strong></p>
+
+<p><strong>A:</strong> Yes, Cougaar includes a "planning" domain and support libraries.</p>
+
+<p>The planning-specific data structures include tasks, workflows, schedules, multi-point scoring functions, and other objects. Property-based assets are also supported, which allows a developer to define physical assets by dynamic properties (e.g. "can move on water") instead of a fixed hierarchical taxonomy (e.g. "is a boat"). The domain includes blackboard support that helps automate the behavior of these data structures, such as recursive deletion of subtasks when a parent task is deleted.</p>
+
+<p>Utility components include rule-based workflow expanders/aggregators, GA-based schedule optimizers called Vishnu (no link available), and inventory models.</p>
+
+<p>Plan execution is supported by the advance of a simulated global "planning" clock. Components can schedule alarms to wake them in either planning-time or wallclock-time. The planning-time can either be advanced by a simple global broadcast or developer-defined per-agent components that are backed by a more complex mechanism.</p>
+
+<p><a name="kqml"></a><strong>Q: Does Cougaar support KQML, ACL, or other high-level knowledge representations?</strong></p>
+
+<p><strong>A:</strong> Not directly -- Cougaar is an architecture that uses Java-based message representation. The contents of the message are defined by pluggable Cougaar domain components. Cougaar includes domain support for planning and logistics, including a rich language of tasks, relationship schedules, and physical-asset property groups.</p>
+
+<p>Cougaar as a project has focused on highly-scalable architecture capibilities and pluggable component-based design. Compliance with standards-based APIs for high-level knowledge representations and domain specific languages has been a low priority.</p>
+
+<p>Please see the notes below on <a href="#fipa">FIPA agent standards</a>.</p>
+
+<p><a name="bootstrap"></a><strong>Q: What is the Cougaar Bootstrapper?</strong></p>
+
+<p><strong>A:</strong> The Cougaar Bootstrapper is an executable JAR that is used instead of the Java "-classpath".</p>
+
+<p>The Bootstrapper scans the <a href="#cip">$COUGAAR_INSTALL_PATH</a>'s "lib/" and "sys/" subdirectories for all ".jar" files and loads them as if they were specified in the Java "-classpath". By convention the lib directory contains Cougaar JAR files, and the sys directory contains third-party JAR files. Developers can add new JAR files to the lib and sys directories. Another option is to specify the system property -Dorg.cougaar.class.path= <em>PATH</em>, which acts in a similar fashion as Java's "-classpath".</p>
+
+<p>Typical usage is illustrated in the Cougaar startup script (bin/Node):
+<pre>java
+ -Dorg.cougaar.install.path=$COUGAAR_INSTALL_PATH
+ [additional -D properties]
+ -jar $COUGAAR_INSTALL_PATH/lib/bootstrap.jar
+ org.cougaar.core.node.Node              # or any other class
+ [additional command-line arguments]</pre>
+Of course, you can configure Cougaar to not use the bootstrapper and instead specify all the required jars in the Java "-classpath". This tends to be annoying if you have lots of JAR files.</p>
+
+<p>The bootstrapper is a generic utility that is used by Cougaar Agents and several non-Cougaar UIs.</p>
+
+<p><a name="docs"></a><strong>Q: Where can I find additional technical documentation?</strong></p>
+
+<p><strong>A:</strong> Please visit our <a href="http://cougaar.org/wp/documentation/">documentation page</a>.</p>
+
+<p><hr /></p>
+
+<h3><a name="Cougaar_and_other_Technologi_AN1"></a>Cougaar and other Technologies</h3>
+<p><a name="other"></a><strong>Q: How is Cougaar different than other Agent/P2P technologies?</strong></p>
+
+<p><strong>A:</strong> Cougaar is a highly configurable architecture with many capabilities, which makes it difficult to sum up. Here are some characteristics that we find unique:</p>
+
+<p>The Cougaar Component Model allows a Cougaar agent to be tailored from minimal single-host embedded applications to highly distributed heavy-weight applications. The service-based framework allows developers to add new components without altering the architecture APIs.</p>
+
+<p>Cougaar is a stable architecture that is currently on version 12.4.</p>
+
+<p>The Cougaar architecture is built with scalability in mind. Under the Ultra*Log project, Cougaar agent societies of over 200 agents running on 30 machines have coordinated to develop complex military logistics plans.</p>
+
+<p>Cougaar adds the concept of agent-local <a href="#blackboard">blackboards</a>, which abstracts the message transport from the application developer.</p>
+
+<p><a name="future"></a><strong>Q: What is the future plan for Cougaar?</strong></p>
+
+<p><strong>A:</strong> DARPA has funded Cougaar as a research project in agent-based systems. These capabilities have been of primary interest:
+<ul>
+	<li>Scalability to 1000+ agents over 100+ hosts</li>
+	<li>Survivability to attack (robustness, security, adaptivity)</li>
+	<li>Utilization of degraded network capabilities and other resources</li>
+	<li>Distributed debugging and runtime management</li>
+	<li>Design patterns for highly distributed agent systems</li>
+	<li>Relevance to future military logistics planning systems</li>
+</ul>
+Cougaar remains an open source project and may continue to be sponsored under one or more defense projects.</p>
+
+<p>The open source community has influenced Cougaar's design to be more composable and domain-neutral. For example, the open source community has enhanced the Cougaar planning domain to better handle planning constraints. For ideas on future plans, see our <a href="http://cougaar.org/wp/roadmap/">Cougaar Roadmap</a> page.</p>
+
+<p>Additional projects have focused on embedding Cougaar as network-aware middleware. This has guided Cougaar to develop minimal footprint configurations and enhanced message transport capabilities.</p>
+
+<p><a name="jxta"></a><strong>Q: How does Cougaar compare with JXTA?</strong></p>
+
+<p><strong>A:</strong> <a href="http://java.net/projects/jxta" target="_top">JXTA</a> is a Peer-to-Peer framework for distributed applications. JXTA supports peer group communications and dynamic discovery protocols.</p>
+
+<p>Cougaar features agent communities, which act as simple group-based communications. Service discovery within Cougaar uses a UDDI <a href="#naming">YellowPages</a>. In the future Cougaar might explore LAN discovery protocols (such as <a href="#jini">JINI</a>) and enhanced peer-based group communications. For now JXTA can be embedded within Cougaar as a pluggable component.</p>
+
+<p><a name="jini"></a><strong>Q: How does Cougaar compare with JINI?</strong></p>
+
+<p><strong>A:</strong> <a href="http://www.sun.com/software/jini/" target="_top">JINI</a> is a framework for advertising services on the local network and a discovery mechanism for systems to obtain and lease those services. <a href="http://www.rio-project.org/" target="_top">RIO </a> is an architecture that simplifies JINI development and deployment.</p>
+
+<p>Cougaar agents uses <a href="#naming">distributed naming</a> to find other agents, similar to the Internet DNS and UDDI. In contrast, JINI utilizes on LAN-local discovery protocols, where each JINI peer is scoped to the local network.</p>
+
+<p>Cougaar agents must define their services using agent-specific messages, which are free to define leasing structures and domain-specific service negotiation. JINI defines services as RMI Objects and has a built-in intra-agent service model.</p>
+
+<p><a name="aglets"></a><strong>Q: How does Cougaar compare with Aglets?</strong></p>
+
+<p><strong>A:</strong> <a href="http://www.trl.ibm.com/aglets/index_e.htm" target="_top">Aglets</a> is the IBM framework for mobile agent applications. The primary job of Aglet agents is to "roam the Internet" and execute on remote hosts.</p>
+
+<p>Cougaar also supports agent mobility, primarily for load balancing, but this isn't the focal point of the Cougaar architecture. The <a href="#component">Cougaar Component Model</a> and <a href="#blackboard">blackboard</a> offer greater support for complex agents.</p>
+
+<p><a name="fipa"></a><strong>Q: How does Cougaar compare with FIPA and JSR 87?</strong></p>
+
+<p><strong>A:</strong> <a href="http://www.fipa.org/" target="_top">FIPA</a> defines an interaction standard for heterogeneous agent systems. <a href="http://jcp.org/en/jsr/detail?id=087" target="_top">JSR 87</a> is the Java Specification Request to define a "javax.agent" API that corresponds to the FIPA specification. Popular FIPA-compliant architectures include <a href="http://fipa-os.sourceforge.net/" target="_top">FIPA-OS</a> and <a href="http://jade.cselt.it/" target="_top">Jade</a>.</p>
+
+<p>Cougaar currently implements neither API, although this could be implemented if there was sufficient demand. The "javax.agent" API is fairly simple. To date, Cougaar developers have been content to stay within the bounds of Cougaar agents and non-agent systems (e.g. JDBC).</p>
+
+<p>The Cougaar <a href="#mts">message transport</a> and <a href="#domain">domains</a> are pluggable components, so it's possible to replace these components with alternate implementations or write a translation bridge.</p>
+
+<p><a name="grid"></a><strong>Q: How does Cougaar compare with Grid Computing?</strong></p>
+
+<p><strong>A:</strong> <a href="http://www.gridcomputingplanet.com/faq/" target="_top">Grid Computing</a> is a branch of peer-to-peer computing that utilizes spare cycles on distributed machines (i.e. "compute farms"). A classic example is the <a href="http://setiathome.ssl.berkeley.edu/" target="_top">SETI@Home</a> project. There are many grid architectures (Sun, IBM, OGSA, etc) that offer vastly different capabilities, from lightweight number-crunching engines to enterprise solutions.</p>
+
+<p>Cougaar, as a flexable peer-to-peer architecture, could be used as a grid engine. The primary difference between Cougaar and most grid engines is that Cougaar developers often write autonomous, heterogeneous agents instead of anonymous computing clients.</p>
+
+<p>A Cougaar-to-OSGA bridge should be possible and would make an interesting <a name="#project"></a> project.</p>
+
+<p><a name="comparetomcat"></a><strong>Q: How does it compare to Tomcat Servlet, Jetty Servlet, Spring-context, Java Beans, Camel-context, ActiveMQ?</strong>
+<strong>A:</strong> Cougaar is a distributed framework on which domain specific "overlay systems" can be constructed. Cougaar is modularized using a component system that predates Spring, OSGI, NetBeans Modules. Cougaar has some SOA features that are not available in these frame works, such as service binders and the Aspect Pattern, that allow local instances to be composed with "cross cutting". Also, Cougaar runtime is aware of its environment which makes it easier to write adaptive distributed code.</p>
+
+<p>Cougaar has its own container framework that is NOT OSGI compliant, but has similar features.</p>
+
+<p>The ESB/SOA world took a server oriented and message bus oriented direction. This design space is well covered, but in some sense Cougaar complements. Cougaar can hook into these frameworks either as a distributed data gathering system with intelligent preprocessing. Cougaar could also implement a dissemination system to get data to remote users. Lastly the ESB to ESB link could use Cougaar, but a lot of ESB work has been done in this space, so I would not recommend doing this unless the inter-ESB service needed to be Disruption Tolerant.</p>
+
+<p>Cougaar should NOT be used in the central server. Existing tools have that design space covered.</p>
+
+<p><a name="comparespring"></a><strong>Q: What is comparable to Spring's pool of entities?</strong>
+<strong>A:</strong> Cougaar has a similar feature, but for distributed societies of agents (group of components), in addition to configuring a single server. No one has integrated Cougaar to use the Spring framework, but this is doable and desirable.</p>
+
+<p><a name="comparecamel"></a><strong>Q: How does it compare to Camel?</strong>
+<strong>A:</strong> The Cougaar Message Transport is the equivalent to Camel.
+Cougaar does not have explicit process definitions. Cougaar tried to be more dynamic, robust, and adaptive, but in a much smaller context.</p>
+
+<p>Cougaar MTS supports several transports (RMI, HTTP, JMS, DTN, Jabber, Mail, ...) and could use Camel as a transport mechanism to interface Cougaar to an ESB. The existing Cougaar tutorials do not cover all of them.</p>
+
+<p>A lot of work in Cougaar was done to decouple the application code from the environment code. This allows the agents to be situated in different environments with only configuration changes. Camel has the same goal but in a message bus oriented world-view.</p>
+
+<p><a name="comparecamel"></a><strong>Q: How does it compare to Tibco?</strong>
+<strong>A:</strong> The TIBCO Enterprise Service Bus is very powerful but expensive.
+BBN created a link protocol for Tibco. Tibco protocol is not open source. Cougaar uses the open source JMS as a message system as a inter-agent transport.</p>
+
+<p><a name="compareservicemix"></a>How does it compare to ServiceMix - an open source ESB from Apache?
+<strong>A:</strong> Again, Cougaar's niche is to make distributed systems, in particular, intelligent data gathering and control. Service Mix is really good at central servers and we do not recommend using Cougaar as a central server.</p>
+
+<p><hr /></p>
+
+<h3><a name="Commonly_Reported_Problems_AN1"></a>Commonly Reported Problems</h3>
+<p><a name="cip"></a><strong>Q: What is the $COUGAAR_INSTALL_PATH?</strong></p>
+
+<p><strong>A:</strong> The $COUGAAR_INSTALL_PATH is an environment variable that specifies the path of your Cougaar installation. It corresponds to the -Dorg.cougaar.install.path Java system property. This system property is used to configure the <a href="#bootstrap">Cougaar Bootstrapper</a> and <a href="#config">ConfigFinder</a></p>
+
+<p><a name="version"></a><strong>Q: Cougaar throws a UnsupportedClassVersionError when started</strong></p>
+
+<p><strong>A:</strong> Cougaar requires <a href="#req">Java 1.4</a> or later. An earlier Java version will throw an UnsupportedClassVersionError with a message such as (Unsupported major.minor version 48.0).</p>
+
+<p><a name="noclassdef"></a><strong>Q: Cougaar throws a NoClassDefFoundError in my test</strong></p>
+
+<p><strong>A:</strong> This is often caused by misuse of the <a href="#bootstrap">Cougaar Bootstapper</a> verses the Java "-classpath". New jars must be added to the $COUGAAR_INSTALL_PATH/lib or $COUGAAR_INSTALL_PATH/sys directories, or a -Dorg.cougaar.class.path Java system property can be used. See the notes on the <a href="#bootstrapper">Cougaar Bootstrapper</a>.</p>
+
+<p><a name="config"></a><strong>Q: Cougaar throws a FileNotFoundException when looking for my node ".xml"</strong></p>
+
+<p><strong>A:</strong> Try running from the directory containing the configuration files.</p>
+
+<p>Cougaar has a ConfigFinder class that is used to find the ".xml" files. The default path is:
+<pre><a name="config"></a>    $CWD;$HOME/.alp;$COUGAAR_INSTALL_PATH/configs/common</pre>
+<a name="config"></a> Developers can override this path by setting the -Dorg.cougaar.config.path Java system property.</p>
+
+<p><a name="dots"></a><strong>Q: Cougaar prints weird "SHOUT [DOTS] - ++-.-+-" output</strong></p>
+
+<p><strong>A:</strong> This is a normal progress indicator. Each character represents an action by the agent:
+<code>
+*+* An agent sent a message
+*-* An agent received a message
+*.* A "dot" is printed every 5 seconds (lots of dots probably means the node is idle)
+*P* The blackboard was scheduled to persist (does nothing if persistence is disabled)
+*R* A planning task was rescinded</code></p>
+
+<p>A new line is started when either the line exceeds 50 characters or logging output is printed. See the <a href="http://cougaar.org/doc/11_4/online/CDG_11_4.pdf">CougaarDeveloperGuide</a> for additional details and configuration options.</p>
+
+<p><a name="nsconfig"></a><strong>Q: The message transport prints endless "!"s instead of sending messages</strong></p>
+
+<p><strong>A:</strong> All Cougaar nodes must specify the name server's host and port address, either in the -Dorg.cougaar.core.name.server= <em>host:port</em>Java system property or in the $COUGAAR_INSTALL_PATH/configs/common/alpreg.ini configuration file. The "!" standard output indicates that the local node can't access the Cougaar name server.</p>
+
+<p>Sometimes this is caused by IP hostname confusion, where one machine will respond to 'hostname' with "localhost.localdomain" instead of the correct host name. Try sending a ping from one machine to the next, to verify that the host names are correct and that network firewalls are not blocking the agents. Debug output can be generated from within Cougaar by enabling the -Dorg.cougaar.nameserver.verbosity=2 Java system property.</p>
+
+<p>If the above fails, you can specify the IP address instead of the host name.</p>
+
+<p><a name="debughints"></a><strong>Q: What are some debugging steps?</strong></p>
+
+<p><strong>A:</strong> Some steps for debugging Cougaar applications are:
+<ol>
+	<li>Enable the debug features in the eclipse arguments or in the runtime config definition from the command line. Set the default node template:
+<ul>
+	<li>On a single node:
+<code>-Dorg.cougaar.society.xsl.param.template=single_debug
+-Dorg.cougaar.society.xsl.param.planning=true</code></li>
+	<li>For a lan configuration:
+<code>-Dorg.cougaar.society.xsl.param.template=lan
+-Dorg.cougaar.society.xsl.param.planning=true</code></li>
+</ul>
+</li>
+	<li>In a web browser bring up the servlets (note multiple running nodes on the same host will increment the port):
+<code>http://localhost:8800</code></li>
+	<li>click on "Local agents on node"</li>
+	<li>click on "Node1" to see system servlets
+<ul>
+	<li>To show stuck threads:
+<code>/$Node1/threads/top</code></li>
+	<li>To see the registered agents in the name service
+<code>/$Node1/wp
+recursive dump
+submit</code></li>
+	<li>To see if agents are sending messages
+<code>/$Node1/metrics/agent/load
+/$Node1/metrics/remote/agents</code></li>
+	<li>To see blackboard items in an agent
+<ol>
+	<li>select agent<code>/$Node1/agents
+/$AgentA</code></li>
+	<li>Open task servlet
+<code>/tasks</code></li>
+	<li>View Black board objects
+<ol>
+	<li>Change "Tasks" selector to "UniqueObjects"</li>
+	<li>Press "Search"</li>
+</ol>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+	<li>To help with threading issues, swap in the trivial thread service for the full thread service (<em>As of 3/16/2012, the Trivial Thread Service is not working; a bug report has been created</em>). If you still get missing blackboard items, then it is a blackboard problem and not a thread service problem.
+<ul>
+	<li>Edit the XSL template file in TrimCougaar/configs/common/SimpleAgent.xsl
+<ol>
+	<li>Add a "new_template", on based the single-debug template.</li>
+	<li>Change
+<code>threadService=full,</code>
+to
+<code>threadService=trivial,</code></li>
+	<li>In eclipse arguments, set the default node template to "new_template"
+<code>-Dorg.cougaar.society.xsl.param.template=new_template</code></li>
+</ol>
+</li>
+</ul>
+</li>
+	<li>Alternatively for thread issues, if you suspect there is a race condition, you can insert sleeps rather than increasing logging levels.</li>
+	<li>A moderately common developer error is to incorrectly assume that all updates to objects happen in a single transaction. They can take multiple transactions, especially with multiple threads writing.</li>
+</ol>
+<a name="javaiopatch"></a><strong>Q: What is the javaiopatch and do I need it?</strong></p>
+
+<p>You might see in older Cougaar documentation or examples:
+<pre>&lt;!-- Use our JDK over-rides for persistence  --&gt; 
+&lt;vm_parameter&gt;-Xbootclasspath/p:"$COUGAAR_INSTALL_PATH/lib/javaiopatch.jar"&lt;/vm_parameter&gt;</pre>
+This is no longer necessary as Sun has fixed the underlying problem.  Try removing that line in the society definition, or replace with:
+<pre>
+&lt;vm_parameter
+   name="-Dorg.cougaar.core.persistence.verifyJavaIOPatch"
+   value="false"/&gt;</pre>
+<a name="help"></a><strong>Q: Where can I find additional help?</strong></p>
+
+<p><strong>A:</strong> Our (<a href="http://cougaar.org/forums/">community forum</a>) is an open forum for general questions and specific technical discussion. <em>Note: The forum only available to limited users currently.</em> The <a href="http://cougaar.org/wp/documentation/tutorials/">tutorials</a> will help new users.</p>
+
+<p><hr /></p>
+
+<p><a name="license"></a>
+<h3><a name="License_FAQ_AN1"></a> <a name="license"></a>License FAQ</h3>
+<p><a name="model"></a><strong>Q: What is the license model for Cougaar?</strong></p>
+
+<p><strong>A:</strong> Cougaar has an open source license modeled after the <a href="http://www.opensource.org/licenses/bsd-license.php" target="_top">OSI approved BSD License</a>. The Cougaar License can be found at <a href="http://cougaar.org/wp/license/" target="_top">License Text</a>.</p>
+
+<p><a name="gpl"></a><strong>Q: Is the Cougaar license model compatible other open source licenses?</strong></p>
+
+<p><strong>A:</strong> The Cougaar license was updated in Cougaar release 11.0 to closely mirror the <a href="http://www.opensource.org/licenses/bsd-license.php" target="_top">OSI approved BSD License</a>. The primary difference between the BSD License and the Cougaar License is the addition a DARPA acknowledgement and endorsement restriction. If you have any questions, please contact us.</p>
+
+<p><a name="cost"></a><strong>Q: Is there any cost to using Cougaar?</strong></p>
+
+<p><strong>A:</strong> No.</p>
+
+<p><a name="contribute"></a><strong>Q: Can I contribute code to Cougaar?</strong></p>
+
+<p><strong>A:</strong> Yes, and you are encouraged to do so. Our <a href="#project">project site</a> contains submission instructions.</p>
+
+<p><a name="proprietary"></a><strong>Q: Can I develop proprietary products using Cougaar?</strong></p>
+
+<p><strong>A:</strong> Yes. Derivative works (modifications to Cougaar source code itself) must preserve the Cougaar License and be submitted back to our website. All other products can be proprietary, adopt the Cougaar license, or adopt any other license. Of course, see the <a href="#license">license</a> for a definitive answer.
