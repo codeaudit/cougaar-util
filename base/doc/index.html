@@ -59,62 +59,8 @@
 
 <ul>
         <li>Cougaar repository converted from CVS to Git with the retention of all checkin messages, tags, and branches.  cougaar.org hosts external <a title="Modules in Git Repositories" href="http://cougaar.org/wp/documentation/modules-in-git-repositories/">Git repositories</a>.</li>
-        <li>Annotations for easy specification of Plugin Parameters, Subscriptions, Service Bindings and Queries.  Some tutorials have been updated to use annotations.   See <a href="http://cougaar.org/wp/query-annotations/">Query Annotations</a>.</li>
-        <li>Generics support for black board subscriptions and predicates that reduces runtime checking of instanceof and subsequent casting.  The new API looks like:
-<pre>public interface UnaryPredicate&lt;T&gt; {
-  boolean execute(Object o);  // can't be "(T o)"!
-}
-public interface BlackboardService { ...
-  &lt;T&gt; IncrementalSubscription&lt;T&gt; 
-         subscribe(UnaryPredicate&lt;T&gt; u);
-}
-public interface Subscription&lt;T&gt; { ...
-}
-public interface IncrementalSubscription&lt;T&gt; 
-  extends Subscription&lt;T&gt; {
-  ...
-  Collection&lt;T&gt; getAddedCollection();
-}
-
-... MyExamplePlugin ... { ...
-private IncrementalSubscription&lt;Task&gt; taskSub;
-  ...
- taskSub = blackboard.subscribe(new UnaryPredicate&lt;Task&gt;() {
-   public boolean execute(Object o) {
-     return (o instanceof Task);
-   }
- });
-  ...
-  for (Task t : taskSub.getAddedCollection()) { ... }
-}</pre>
-Contrast that with the previous APIs (note the extra casts using the previous APIs):
-<pre>public interface UnaryPredicate {
-  boolean execute(Object o);
-}
-public interface BlackboardService { ...
-  Subscription subscribe(UnaryPredicate u);
-}
-public interface Subscription { ...
-}
-public interface IncrementalSubscription extends Subscription {
-  ...
-  Collection getAddedCollection();
-}
-
-... MyExamplePlugin ... { ...
-private IncrementalSubscription taskSub;
-  ...
-  taskSub = (IncrementalSubscription) blackboard.subscribe(new
-UnaryPredicate() {
-    public boolean execute(Object o) {
-      return (o instanceof Task);
-   }
-  });
-  ...
-  for (Object o : taskSub.getAddedCollection()) {
-    Task t = (Task) o; ...
-  }
-}</pre></li>
+        <li>Annotations for easy specification of Plugin Parameters, Subscriptions, Service Bindings and Queries.  Annotations work in both in plugins and in non-plugin servlets.  Some tutorials have been updated to use annotations.   See <a href="http://cougaar.org/wp/special-topics/query-annotations/">Query Annotations</a>.  The @Arg annotation now allows you to omit the <code>name</code> parameter if it's the same as the field name.</li>
+        <li>Generics support for black board subscriptions and predicates that reduces runtime checking of instanceof and subsequent casting.  See <a href="http://cougaar.org/wp/documentation/special-topics/generics/">Generics</a>.</li>
         <li>Updated tutorials and examples.
 The tutorials have been modified to use the new APIs.  See examples:<ul>
             <li><code>ping/src/org/cougaar/demo/ping/*.java</code></li>
@@ -142,6 +88,7 @@ public setHelloService(HelloService service) {
         <li>Various parts of the off-line html documentation that is distributed with Cougaar have been updated to remove references to non-current parts of Cougaar. The most up to date documentation is on <a href="http://cougaar.org/wp/documentation/">cougaar.org</a></li>
         <li>Additional data types are available for plug-in arguments: <code>Boolean</code>, <code>INET_ADDR</code> and <code>URL</code>.</li>
         <li>Configuration files of type <code>.iml</code> and <code>.ipr</code> for the long unsupported IDEA IDE have been deleted.</li>
+        <li>Eclipse launchers were added for the Pizza tutorial.</li>
 </ul>
 Release notes for older Cougaar revisions can be found in the <a title="Release History" href="http://cougaar.org/wp/documentation/release-history/">Release History</a>.
 <h2><a name="Requirements"></a> <a name="requirements"></a>Requirements</h2>
