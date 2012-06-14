@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.cougaar.util.annotations.Cougaar;
+import org.cougaar.util.annotations.Cougaar.ObtainService;
 import org.cougaar.util.log.Logger;
 import org.cougaar.util.log.Logging;
 
@@ -135,6 +136,26 @@ class BindingUtilityWorker {
          }
       } catch (RuntimeException e) {
          getLogger().error("Couldn't set services for " + target, e);
+      }
+   }
+   
+   void releaseAnnotatedServices() {
+      Collection<Field> fields = Cougaar.getAnnotatedFields(targetClass, Cougaar.ObtainService.class);
+      for (Field field : fields) {
+         ObtainService annotation = field.getAnnotation(Cougaar.ObtainService.class);
+         if (!annotation.releaseOnUnload()) {
+            continue;
+         }
+         Class fieldClass = field.getType();
+         try {
+            Object service = field.get(target);
+            if (service != null) {
+               broker.releaseService(target, fieldClass, service);
+               field.set(target, null);
+            }
+         } catch (Exception e) {
+            getLogger().warn("Failed to release service "  + fieldClass+ " from " + target); 
+         }
       }
    }
 

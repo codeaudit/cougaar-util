@@ -265,6 +265,11 @@ public class Cougaar {
     */
     @Retention(RetentionPolicy.RUNTIME)
     public @interface ObtainService {
+       
+       /**
+        * If true, try to release the service when the component is unloaded.
+        */
+       boolean releaseOnUnload() default false;
     }
 
     // Execution annotations

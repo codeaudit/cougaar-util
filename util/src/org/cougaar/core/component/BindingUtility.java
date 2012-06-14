@@ -63,6 +63,14 @@ public final class BindingUtility {
       instance.setTargetServices(true);
       instance.free();
    }
+   
+   /**
+    * Release any services obtained via {@link Cougaar.ObtainService} annotations.
+    */
+   public static void releaseAnnotatedServices(Object child, ServiceBroker serviceBroker) {
+      BindingUtilityWorker instance = BindingUtilityWorker.getInstance(child, null, serviceBroker);
+      instance.releaseAnnotatedServices();
+   }
 
 
    /**
