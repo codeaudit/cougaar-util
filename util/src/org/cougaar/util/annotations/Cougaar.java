@@ -269,7 +269,7 @@ public class Cougaar {
        /**
         * If true, try to release the service when the component is unloaded.
         */
-       boolean releaseOnUnload() default false;
+       boolean releaseOnUnload() default true;
     }
 
     // Execution annotations
