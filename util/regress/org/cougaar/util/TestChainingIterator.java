@@ -86,6 +86,7 @@ protected void tearDown() {
     try {
       x.next();
     } catch (NoSuchElementException e) {
+       return;
     }
     fail();
   }
