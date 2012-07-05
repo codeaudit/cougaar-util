@@ -66,6 +66,7 @@ import org.xml.sax.InputSource;
  *   $CWD signifies &lt;user.dir&gt;
  *   $HOME signifies &lt;user.home&gt;
  *   $MOD signifies the name of a Cougaar module - a sub-directory of $INSTALL
+ *   $JAR is the runtime class path
  * </pre>
  * The default value for org.cougaar.config.path is defined in the static
  * variable DEFAULT_CONFIG_PATH:
@@ -100,6 +101,7 @@ import org.xml.sax.InputSource;
  *   <li>$INSTALL/$MOD/configs</li>
  *   <li>$INSTALL/$MOD/data/$CONFIG</li>
  *   <li>$INSTALL/$MOD/data</li>
+ *   <li>$JARS/configs/common</li>
  * </ul>
  * <br>
  *
@@ -181,6 +183,7 @@ public class ConfigFinder {
    *   <li>$INSTALL/$module/configs</li>
    *   <li>$INSTALL/$module/data/$CONFIG</li>
    *   <li>$INSTALL/$module/data</li>
+   *   <li>$JARS/configs/common</li>
    * </ul>
    *
    * @param module name of the module to use for module-specific configs.  If null, 
@@ -240,7 +243,14 @@ public class ConfigFinder {
 
     // resolve and remove duplicates
     List expanded = new ArrayList(v.size());
-    List resolved = new ArrayList(v.size());
+    List<URL> resolved = new ArrayList<URL>(v.size());
+    // First entry includes the standard resources in the Cougaar project
+    try {
+      resolved.add(new URL("file:/IN_COUGAAR_JARS/configs/common/"));
+   } catch (MalformedURLException e) {
+      // TODO log this failure
+      e.printStackTrace();
+   }
     for (int i = 0; i < v.size(); i++) {
       String vi = (String) v.get(i);
       String ei = Configuration.substituteProperties(vi, properties);

@@ -61,7 +61,8 @@ public final class Configuration {
     "$SOCIETY/configs/$CONFIG"+ SEP+
     "$SOCIETY/configs/common"+  SEP+
     "$INSTALL/configs/$CONFIG"+ SEP+
-    "$INSTALL/configs/common";
+    "$INSTALL/configs/common"+  SEP+
+    "resource://configs/common";
 
   // these are initialized at the end
   private static Map defaultProperties;
