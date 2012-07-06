@@ -130,7 +130,10 @@ public class Argument {
     
     private String getArgumentName(Field field, Cougaar.Arg arg) {
        String name = arg.name();
-       return name.isEmpty() ? field.getName() : name;
+       /* If no name is provided, use the field name.
+        * 
+        * Avoid String#isEmpty() for the test, doesn't work in at least some versions of Android */
+       return name.length() == 0 ? field.getName() : name;
     }
     
     private void setSequenceFieldFromSpec(Field field, Object object, Cougaar.Arg spec)
